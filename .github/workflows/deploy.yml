@@ -1,0 +1,60 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  NODE_VERSION: '22.x'
+  DEPLOY_PATH: /opt/tools-central
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build:all
+
+      - name: Prepare deployment structure
+        run: |
+          mkdir -p deploy/site
+          cp -r dist/tools-central/browser/* deploy/site/
+          cp docker/docker-compose.yml deploy/
+          cp docker/nginx.conf deploy/
+
+      - name: Deploy to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "deploy/*"
+          target: ${{ env.DEPLOY_PATH }}
+          strip_components: 1
+          rm: true
+
+      - name: Start/Restart container
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            cd ${{ env.DEPLOY_PATH }}
+            docker compose down || true
+            docker compose up -d
+            docker ps | grep tools-central

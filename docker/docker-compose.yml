@@ -1,0 +1,15 @@
+services:
+  tools-central:
+    image: nginx:alpine
+    container_name: tools-central
+    restart: unless-stopped
+    volumes:
+      - ./site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - npm_network
+
+networks:
+  npm_network:
+    external: true
+    name: nginx-proxy-network

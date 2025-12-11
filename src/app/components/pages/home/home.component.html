@@ -1,17 +1,90 @@
-<section class="home">
-  <h1 i18n="@@home_title">Outils en ligne pour le quotidien</h1>
-
-  <p i18n="@@home_subtitle">
-    Tools Central proposera bientôt des outils simples et rapides : compression d'image,
-    calculateurs, conversions, et bien plus encore.
-  </p>
-
-  <div class="tools-grid">
-    <article class="tool-card">
-      <h2 i18n="@@home_teaser_title">Premier outil à venir</h2>
-      <p i18n="@@home_teaser_desc">
-        La compression d'image sera le premier outil disponible sur Tools Central.
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-badge" i18n="@@hero_badge">Bientôt disponible</span>
+      <h1 i18n="@@hero_title">Vos outils en ligne,<br>simples et efficaces</h1>
+      <p class="hero-subtitle" i18n="@@hero_subtitle">
+        Tools Central réunit tous les outils du quotidien en un seul endroit.
+        Compression d'image, calculateurs, conversions et bien plus encore.
       </p>
-    </article>
+      <div class="hero-cta">
+        <p-button
+          label="Découvrir les outils"
+          i18n-label="@@hero_cta"
+          icon="pi pi-arrow-down"
+          severity="contrast"
+          size="large"
+          (onClick)="scrollToTools()"
+        />
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-icon-grid">
+        <div class="floating-icon"><i class="pi pi-image"></i></div>
+        <div class="floating-icon"><i class="pi pi-calculator"></i></div>
+        <div class="floating-icon"><i class="pi pi-palette"></i></div>
+        <div class="floating-icon"><i class="pi pi-qrcode"></i></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="tools-section" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <h2 i18n="@@tools_section_title">Outils à venir</h2>
+      <p i18n="@@tools_section_subtitle">
+        Découvrez les premiers outils qui seront disponibles sur Tools Central
+      </p>
+    </div>
+
+    <div class="tools-grid">
+      @for (tool of tools; track tool.titleKey) {
+        <article class="tool-card">
+          <div class="tool-icon">
+            <i class="pi" [ngClass]="tool.icon"></i>
+          </div>
+          <h3>{{ tool.title }}</h3>
+          <p>{{ tool.description }}</p>
+          @if (!tool.available) {
+            <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+          }
+        </article>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 i18n="@@features_title">Pourquoi Tools Central ?</h2>
+      <p i18n="@@features_subtitle">
+        Des outils pensés pour vous simplifier la vie
+      </p>
+    </div>
+
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi" [ngClass]="feature.icon"></i>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2 i18n="@@cta_title">Restez informé</h2>
+      <p i18n="@@cta_subtitle">
+        Les premiers outils arrivent très bientôt. Revenez nous voir !
+      </p>
+    </div>
   </div>
 </section>

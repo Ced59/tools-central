@@ -1,20 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './services/theme.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
-    selector: 'app-root',
-    imports: [RouterOutlet],
-    template: `
+  selector: 'app-root',
+  imports: [RouterOutlet, ButtonModule],
+  template: `
     <div class="app-root">
       <header class="app-header">
-        <div class="header-inner">
-          <div class="brand">
-            <a href="/fr/" class="brand-link">Tools Central</a>
+        <div class="header-inner container">
+          <a href="/" class="brand">
+            <i class="pi pi-wrench"></i>
+            <span>Tools Central</span>
+          </a>
+
+          <div class="header-actions">
+            <nav class="lang-switcher">
+              <a href="/fr/" class="lang-link">FR</a>
+              <a href="/en/" class="lang-link">EN</a>
+              <a href="/de/" class="lang-link">DE</a>
+            </nav>
+
+            <p-button
+              [icon]="themeService.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
+              [rounded]="true"
+              [text]="true"
+              severity="secondary"
+              (onClick)="themeService.toggleTheme()"
+              [attr.aria-label]="themeService.isDarkMode() ? 'Activer le mode clair' : 'Activer le mode sombre'"
+            />
           </div>
-          <nav class="lang-switcher">
-            <a href="/fr/" class="lang-link">FR</a>
-            <a href="/en/" class="lang-link">EN</a>
-          </nav>
         </div>
       </header>
 
@@ -23,11 +39,92 @@ import { RouterOutlet } from '@angular/router';
       </main>
 
       <footer class="app-footer">
-        <small>&copy; {{ year }} – Tools Central</small>
+        <div class="container">
+          <small>&copy; {{ year }} Tools Central – Outils en ligne gratuits</small>
+        </div>
       </footer>
     </div>
-  `
+  `,
+  styles: [`
+    .app-root {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--surface-card);
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-color);
+      text-decoration: none;
+
+      i {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .lang-link {
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-color-secondary);
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: var(--primary-color);
+        color: white;
+      }
+    }
+
+    .app-main {
+      flex: 1;
+    }
+
+    .app-footer {
+      background: var(--surface-card);
+      border-top: 1px solid var(--border-color);
+      padding: 1.5rem 0;
+      text-align: center;
+      color: var(--text-color-secondary);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+  `]
 })
 export class AppComponent {
+  themeService = inject(ThemeService);
   year = new Date().getFullYear();
 }
