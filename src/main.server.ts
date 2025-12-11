@@ -15,5 +15,5 @@ const serverConfig: ApplicationConfig = {
 const config = mergeApplicationConfig(appConfig, serverConfig);
 
 export default function bootstrap() {
-  return bootstrapApplication(AppComponent, {...config, providers: [provideZoneChangeDetection(), ...config.providers]}, context);
+  return bootstrapApplication(AppComponent, {...config, providers: [provideZoneChangeDetection(), ...config.providers]});
 }
