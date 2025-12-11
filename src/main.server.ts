@@ -1,5 +1,5 @@
 import { ApplicationConfig, mergeApplicationConfig } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { bootstrapApplication, BootstrapContext } from '@angular/platform-browser';
 import { provideServerRendering } from '@angular/platform-server';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app/app.component';
@@ -15,5 +15,5 @@ const serverConfig: ApplicationConfig = {
 const config = mergeApplicationConfig(appConfig, serverConfig);
 
 export default function bootstrap() {
-  return bootstrapApplication(AppComponent, config);
+  return bootstrapApplication(AppComponent, config, context);
 }

@@ -2,10 +2,9 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-  standalone: true,
-  selector: 'app-root',
-  imports: [RouterOutlet],
-  template: `
+    selector: 'app-root',
+    imports: [RouterOutlet],
+    template: `
     <div class="app-root">
       <header class="app-header">
         <div class="header-inner">
