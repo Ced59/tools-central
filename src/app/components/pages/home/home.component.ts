@@ -1,26 +1,48 @@
 import { Component } from '@angular/core';
-import { NgClass } from '@angular/common';
-import { CardModule } from 'primeng/card';
+import { NgFor } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
-
-interface Tool {
-  icon: string;
-  titleKey: string;
-  title: string;
-  descKey: string;
-  description: string;
-  available: boolean;
-}
+import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
 
 @Component({
   selector: 'app-home',
-  imports: [CardModule, ButtonModule],
+  standalone: true,
+  imports: [NgFor, ButtonModule, CategoryCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
 
-  scrollToTools(): void {
-    document.getElementById('tools')?.scrollIntoView({ behavior: 'smooth' });
+  availableCategories: CategoryItem[] = [
+    {
+      id: 'math',
+      title: $localize`:@@cat_math_title:Mathématiques`,
+      description: $localize`:@@cat_math_desc:Pourcentages, règles de trois, conversions...`,
+      icon: 'pi pi-calculator',
+      route: '/categories/math',
+      available: true
+    }
+  ];
+
+  comingSoonCategories: CategoryItem[] = [
+    {
+      id: 'text',
+      title: $localize`:@@cat_text_title:Texte`,
+      description: $localize`:@@cat_text_desc:Compteurs, formatage, nettoyage de texte...`,
+      icon: 'pi pi-file-edit',
+      route: '/categories/text',
+      available: false
+    },
+    {
+      id: 'image',
+      title: $localize`:@@cat_image_title:Image`,
+      description: $localize`:@@cat_image_desc:Compression, redimensionnement, optimisation...`,
+      icon: 'pi pi-image',
+      route: '/categories/image',
+      available: false
+    }
+  ];
+
+  scrollToCategories(): void {
+    document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
   }
 }

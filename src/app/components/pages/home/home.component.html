@@ -14,168 +14,89 @@
 
       <div class="hero-cta">
         <p-button
-          label="Découvrir les outils"
+          label="Découvrir les catégories"
           i18n-label="@@hero_cta"
           icon="pi pi-arrow-down"
           severity="contrast"
           size="large"
-          (onClick)="scrollToTools()"
+          (onClick)="scrollToCategories()"
         ></p-button>
       </div>
     </div>
 
     <div class="hero-visual">
       <div class="hero-icon-grid">
-        <div class="floating-icon">
-          <i class="pi pi-image"></i>
-        </div>
-        <div class="floating-icon">
-          <i class="pi pi-calculator"></i>
-        </div>
-        <div class="floating-icon">
-          <i class="pi pi-palette"></i>
-        </div>
-        <div class="floating-icon">
-          <i class="pi pi-qrcode"></i>
-        </div>
+        <div class="floating-icon"><i class="pi pi-image"></i></div>
+        <div class="floating-icon"><i class="pi pi-calculator"></i></div>
+        <div class="floating-icon"><i class="pi pi-palette"></i></div>
+        <div class="floating-icon"><i class="pi pi-qrcode"></i></div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="tools-section" id="tools">
+<!-- ✅ Catégories disponibles -->
+<section class="tools-section" id="categories">
   <div class="container">
+
     <div class="section-header">
-      <h2 i18n="@@tools_section_title">Outils à venir</h2>
-      <p i18n="@@tools_section_subtitle">
-        Découvrez les premiers outils qui seront disponibles sur Tools Central
-      </p>
+      <h2 i18n="@@cats_available_title">Catégories disponibles</h2>
+      <p i18n="@@cats_available_subtitle">Accédez aux outils déjà utilisables</p>
     </div>
 
     <div class="tools-grid">
-      <!-- Compression d'image -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-image"></i>
-        </div>
-        <h3 i18n="@@tool_compress_title">Compression d'image</h3>
-        <p i18n="@@tool_compress_desc">
-          Réduisez la taille de vos images sans perte de qualité visible.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
-
-      <!-- Calculateurs -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-calculator"></i>
-        </div>
-        <h3 i18n="@@tool_calc_title">Calculateurs</h3>
-        <p i18n="@@tool_calc_desc">
-          Pourcentages, TVA, conversions et calculs du quotidien.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
-
-      <!-- Conversions -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-arrows-h"></i>
-        </div>
-        <h3 i18n="@@tool_convert_title">Conversions</h3>
-        <p i18n="@@tool_convert_desc">
-          Convertissez unités, devises et formats en un clic.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
-
-      <!-- Outils couleur -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-palette"></i>
-        </div>
-        <h3 i18n="@@tool_color_title">Outils couleur</h3>
-        <p i18n="@@tool_color_desc">
-          Palettes, picker et conversions HEX/RGB/HSL.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
-
-      <!-- Outils texte -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-file-edit"></i>
-        </div>
-        <h3 i18n="@@tool_text_title">Outils texte</h3>
-        <p i18n="@@tool_text_desc">
-          Compteur de mots, formatage et manipulation de texte.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
-
-      <!-- Générateur QR Code -->
-      <article class="tool-card">
-        <div class="tool-icon">
-          <i class="pi pi-qrcode"></i>
-        </div>
-        <h3 i18n="@@tool_qr_title">Générateur QR Code</h3>
-        <p i18n="@@tool_qr_desc">
-          Créez des QR codes personnalisés instantanément.
-        </p>
-        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-      </article>
+      <app-category-card
+        *ngFor="let c of availableCategories"
+        [category]="c"
+      />
     </div>
+
+    <div class="section-header" style="margin-top: 3.5rem;">
+      <h2 i18n="@@cats_soon_title">Catégories à venir</h2>
+      <p i18n="@@cats_soon_subtitle">De nouvelles catégories d'outils arrivent progressivement</p>
+    </div>
+
+    <div class="tools-grid">
+      <app-category-card
+        *ngFor="let c of comingSoonCategories"
+        [category]="c"
+      />
+    </div>
+
   </div>
 </section>
+
 
 <section class="features-section">
   <div class="container">
     <div class="section-header">
       <h2 i18n="@@features_title">Pourquoi Tools Central ?</h2>
-      <p i18n="@@features_subtitle">
-        Des outils pensés pour vous simplifier la vie
-      </p>
+      <p i18n="@@features_subtitle">Des outils pensés pour vous simplifier la vie</p>
     </div>
 
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon">
-          <i class="pi pi-bolt"></i>
-        </div>
+        <div class="feature-icon"><i class="pi pi-bolt"></i></div>
         <h3 i18n="@@feature_fast_title">Ultra rapide</h3>
-        <p i18n="@@feature_fast_desc">
-          Traitement instantané, directement dans votre navigateur.
-        </p>
+        <p i18n="@@feature_fast_desc">Traitement instantané, directement dans votre navigateur.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">
-          <i class="pi pi-lock"></i>
-        </div>
+        <div class="feature-icon"><i class="pi pi-lock"></i></div>
         <h3 i18n="@@feature_private_title">100% privé</h3>
-        <p i18n="@@feature_private_desc">
-          Vos fichiers ne quittent jamais votre appareil.
-        </p>
+        <p i18n="@@feature_private_desc">Vos fichiers ne quittent jamais votre appareil.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">
-          <i class="pi pi-wallet"></i>
-        </div>
+        <div class="feature-icon"><i class="pi pi-wallet"></i></div>
         <h3 i18n="@@feature_free_title">Gratuit</h3>
-        <p i18n="@@feature_free_desc">
-          Tous les outils sont gratuits, sans limite d'utilisation.
-        </p>
+        <p i18n="@@feature_free_desc">Tous les outils sont gratuits, sans limite d'utilisation.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon">
-          <i class="pi pi-user"></i>
-        </div>
+        <div class="feature-icon"><i class="pi pi-user"></i></div>
         <h3 i18n="@@feature_no_signup_title">Sans inscription</h3>
-        <p i18n="@@feature_no_signup_desc">
-          Aucun compte requis, utilisez les outils immédiatement.
-        </p>
+        <p i18n="@@feature_no_signup_desc">Aucun compte requis, utilisez les outils immédiatement.</p>
       </div>
     </div>
   </div>
@@ -185,9 +106,7 @@
   <div class="container">
     <div class="cta-content">
       <h2 i18n="@@cta_title">Restez informé</h2>
-      <p i18n="@@cta_subtitle">
-        Les premiers outils arrivent très bientôt. Revenez nous voir !
-      </p>
+      <p i18n="@@cta_subtitle">Les premiers outils arrivent très bientôt. Revenez nous voir !</p>
     </div>
   </div>
 </section>
