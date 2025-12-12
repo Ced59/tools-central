@@ -144,6 +144,9 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 })
 export class AppComponent {
   themeService = inject(ThemeService);
+
+  year = new Date().getFullYear();
+
   platformId = inject(PLATFORM_ID);
 
   localeOptions: LocaleOption[] = [...LOCALES];
