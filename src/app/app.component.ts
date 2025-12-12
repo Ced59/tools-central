@@ -2,22 +2,23 @@ import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './services/theme.service';
 import { ButtonModule } from 'primeng/button';
+import {NgOptimizedImage} from "@angular/common";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule],
+  imports: [RouterOutlet, ButtonModule, NgOptimizedImage],
   template: `
     <div class="app-root">
       <header class="app-header">
         <div class="header-inner container">
           <a href="/" class="brand" aria-label="Tools Central">
             <img
-              src="icons/tools.png"
+              ngSrc="/assets/icons/tools.png"
               alt=""
               class="brand-icon"
               width="32"
               height="32"
-              loading="lazy"
+              priority
             />
             <span class="brand-text">Tools Central</span>
           </a>
@@ -59,6 +60,7 @@ import { ButtonModule } from 'primeng/button';
       </footer>
     </div>
   `,
+  standalone: true,
   styles: [`
     .app-root {
       min-height: 100vh;
