@@ -14,7 +14,7 @@ interface Tool {
 
 @Component({
   selector: 'app-home',
-  imports: [NgClass, CardModule, ButtonModule],
+  imports: [CardModule, ButtonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

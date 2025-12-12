@@ -10,13 +10,24 @@ import { ButtonModule } from 'primeng/button';
     <div class="app-root">
       <header class="app-header">
         <div class="header-inner container">
-          <a href="/" class="brand">
-            <i class="pi pi-wrench"></i>
-            <span>Tools Central</span>
+          <a href="/" class="brand" aria-label="Tools Central">
+            <img
+              src="/icons/tools.png"
+              alt=""
+              class="brand-icon"
+              width="32"
+              height="32"
+              loading="lazy"
+            />
+            <span class="brand-text">Tools Central</span>
           </a>
 
           <div class="header-actions">
-            <nav class="lang-switcher">
+            <nav
+              class="lang-switcher"
+              aria-label="Sélecteur de langue"
+              i18n-aria-label="@@lang_switcher_aria"
+            >
               <a href="/fr/" class="lang-link">FR</a>
               <a href="/en/" class="lang-link">EN</a>
               <a href="/de/" class="lang-link">DE</a>
@@ -28,7 +39,10 @@ import { ButtonModule } from 'primeng/button';
               [text]="true"
               severity="secondary"
               (onClick)="themeService.toggleTheme()"
-              [attr.aria-label]="themeService.isDarkMode() ? 'Activer le mode clair' : 'Activer le mode sombre'"
+              [attr.aria-label]="themeService.isDarkMode()
+                ? 'Activer le mode clair'
+                : 'Activer le mode sombre'"
+              i18n-attr.aria-label="@@aria_light_mode"
             />
           </div>
         </div>
@@ -73,16 +87,21 @@ import { ButtonModule } from 'primeng/button';
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       font-size: 1.25rem;
       font-weight: 700;
       color: var(--text-color);
       text-decoration: none;
+    }
 
-      i {
-        color: var(--primary-color);
-        font-size: 1.5rem;
-      }
+    .brand-icon {
+      border-radius: 12px;
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      letter-spacing: 0.02em;
     }
 
     .header-actions {
@@ -103,11 +122,11 @@ import { ButtonModule } from 'primeng/button';
       font-weight: 500;
       color: var(--text-color-secondary);
       transition: all 0.2s ease;
+    }
 
-      &:hover {
-        background: var(--primary-color);
-        color: white;
-      }
+    .lang-link:hover {
+      background: var(--primary-color);
+      color: #fff;
     }
 
     .app-main {

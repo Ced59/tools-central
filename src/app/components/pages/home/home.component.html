@@ -2,11 +2,16 @@
   <div class="container">
     <div class="hero-content">
       <span class="hero-badge" i18n="@@hero_badge">Bientôt disponible</span>
-      <h1 i18n="@@hero_title">Vos outils en ligne,<br>simples et efficaces</h1>
+
+      <h1 i18n="@@hero_title">
+        Vos outils en ligne,<br />simples et efficaces
+      </h1>
+
       <p class="hero-subtitle" i18n="@@hero_subtitle">
         Tools Central réunit tous les outils du quotidien en un seul endroit.
         Compression d'image, calculateurs, conversions et bien plus encore.
       </p>
+
       <div class="hero-cta">
         <p-button
           label="Découvrir les outils"
@@ -15,15 +20,24 @@
           severity="contrast"
           size="large"
           (onClick)="scrollToTools()"
-        />
+        ></p-button>
       </div>
     </div>
+
     <div class="hero-visual">
       <div class="hero-icon-grid">
-        <div class="floating-icon"><i class="pi pi-image"></i></div>
-        <div class="floating-icon"><i class="pi pi-calculator"></i></div>
-        <div class="floating-icon"><i class="pi pi-palette"></i></div>
-        <div class="floating-icon"><i class="pi pi-qrcode"></i></div>
+        <div class="floating-icon">
+          <i class="pi pi-image"></i>
+        </div>
+        <div class="floating-icon">
+          <i class="pi pi-calculator"></i>
+        </div>
+        <div class="floating-icon">
+          <i class="pi pi-palette"></i>
+        </div>
+        <div class="floating-icon">
+          <i class="pi pi-qrcode"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -39,18 +53,77 @@
     </div>
 
     <div class="tools-grid">
-      @for (tool of tools; track tool.titleKey) {
-        <article class="tool-card">
-          <div class="tool-icon">
-            <i class="pi" [ngClass]="tool.icon"></i>
-          </div>
-          <h3>{{ tool.title }}</h3>
-          <p>{{ tool.description }}</p>
-          @if (!tool.available) {
-            <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
-          }
-        </article>
-      }
+      <!-- Compression d'image -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-image"></i>
+        </div>
+        <h3 i18n="@@tool_compress_title">Compression d'image</h3>
+        <p i18n="@@tool_compress_desc">
+          Réduisez la taille de vos images sans perte de qualité visible.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
+
+      <!-- Calculateurs -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-calculator"></i>
+        </div>
+        <h3 i18n="@@tool_calc_title">Calculateurs</h3>
+        <p i18n="@@tool_calc_desc">
+          Pourcentages, TVA, conversions et calculs du quotidien.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
+
+      <!-- Conversions -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-arrows-h"></i>
+        </div>
+        <h3 i18n="@@tool_convert_title">Conversions</h3>
+        <p i18n="@@tool_convert_desc">
+          Convertissez unités, devises et formats en un clic.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
+
+      <!-- Outils couleur -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-palette"></i>
+        </div>
+        <h3 i18n="@@tool_color_title">Outils couleur</h3>
+        <p i18n="@@tool_color_desc">
+          Palettes, picker et conversions HEX/RGB/HSL.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
+
+      <!-- Outils texte -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-file-edit"></i>
+        </div>
+        <h3 i18n="@@tool_text_title">Outils texte</h3>
+        <p i18n="@@tool_text_desc">
+          Compteur de mots, formatage et manipulation de texte.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
+
+      <!-- Générateur QR Code -->
+      <article class="tool-card">
+        <div class="tool-icon">
+          <i class="pi pi-qrcode"></i>
+        </div>
+        <h3 i18n="@@tool_qr_title">Générateur QR Code</h3>
+        <p i18n="@@tool_qr_desc">
+          Créez des QR codes personnalisés instantanément.
+        </p>
+        <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+      </article>
     </div>
   </div>
 </section>
@@ -65,15 +138,45 @@
     </div>
 
     <div class="features-grid">
-      @for (feature of features; track feature.title) {
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi" [ngClass]="feature.icon"></i>
-          </div>
-          <h3>{{ feature.title }}</h3>
-          <p>{{ feature.description }}</p>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="pi pi-bolt"></i>
         </div>
-      }
+        <h3 i18n="@@feature_fast_title">Ultra rapide</h3>
+        <p i18n="@@feature_fast_desc">
+          Traitement instantané, directement dans votre navigateur.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="pi pi-lock"></i>
+        </div>
+        <h3 i18n="@@feature_private_title">100% privé</h3>
+        <p i18n="@@feature_private_desc">
+          Vos fichiers ne quittent jamais votre appareil.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="pi pi-wallet"></i>
+        </div>
+        <h3 i18n="@@feature_free_title">Gratuit</h3>
+        <p i18n="@@feature_free_desc">
+          Tous les outils sont gratuits, sans limite d'utilisation.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <i class="pi pi-user"></i>
+        </div>
+        <h3 i18n="@@feature_no_signup_title">Sans inscription</h3>
+        <p i18n="@@feature_no_signup_desc">
+          Aucun compte requis, utilisez les outils immédiatement.
+        </p>
+      </div>
     </div>
   </div>
 </section>

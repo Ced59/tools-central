@@ -2,18 +2,71 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Tools Central</title>
+  <title i18n="@@meta_title">Tools Central – Outils en ligne gratuits</title>
+
   <base href="/">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Tools Central - Outils en ligne gratuits : compression d'image, calculateurs, conversions et plus encore.">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <meta name="description"
+        i18n="@@meta_description"
+        content="Tools Central réunit tous vos outils en ligne du quotidien : compression d'image, calculateurs, conversions et bien plus encore.">
+  <meta name="robots" content="index,follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://tools-central.com/">
+
+  <!-- Hreflang (mêmes balises pour chaque version locale, c'est normal) -->
+  <link rel="alternate" href="https://tools-central.com/fr/" hreflang="fr">
+  <link rel="alternate" href="https://tools-central.com/en/" hreflang="en">
+  <link rel="alternate" href="https://tools-central.com/de/" hreflang="de">
+  <link rel="alternate" href="https://tools-central.com/" hreflang="x-default">
+
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+  <!-- iOS / Apple -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- Android / PWA -->
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- Theme colors (optionnel mais conseillé) -->
+  <meta name="theme-color" content="#6f2dfd">
+  <meta name="apple-mobile-web-app-status-bar" content="#6f2dfd">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tools Central – Outils en ligne gratuits">
+  <meta property="og:description"
+        content="Compression d'image, calculateurs, conversions et plus encore, directement dans votre navigateur.">
+  <meta property="og:url" content="https://tools-central.com/">
+  <meta property="og:site_name" content="Tools Central">
+  <meta property="og:image" content="https://tools-central.com/assets/og-preview.png">
+
+  <!-- JSON-LD Organization -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Tools Central",
+      "url": "https://tools-central.com",
+      "logo": "https://tools-central.com/assets/logo.png"
+    }
+  </script>
+
+  <!-- Thème (pré-appliquer le dark mode côté SSR/CSR) -->
   <script>
     (function() {
       const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersDark = window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
       if (saved === 'dark' || (!saved && prefersDark)) {
         document.documentElement.classList.add('dark-mode');
       }
