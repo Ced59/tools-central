@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
 
     provideMatomo(
       {
-        siteId: 2,
+        siteId: 3,
         trackerUrl: 'https://matomo.cedric-caudron.com',
       },
       withRouter()
