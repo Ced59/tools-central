@@ -1,12 +1,25 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
 import { ThemeService } from './services/theme.service';
+
 import { ButtonModule } from 'primeng/button';
-import {NgOptimizedImage} from "@angular/common";
+import { SelectModule } from 'primeng/select';
+
+import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ButtonModule, NgOptimizedImage],
+  standalone: true,
+  imports: [
+    RouterOutlet,
+    ButtonModule,
+    NgOptimizedImage,
+    FormsModule,
+    SelectModule
+  ],
   template: `
     <div class="app-root">
       <header class="app-header">
@@ -24,15 +37,37 @@ import {NgOptimizedImage} from "@angular/common";
           </a>
 
           <div class="header-actions">
-            <nav
-              class="lang-switcher"
-              aria-label="Sélecteur de langue"
+            <p-select
+              [options]="localeOptions"
+              [(ngModel)]="selectedLocale"
+              optionLabel="nameNative"
+              [filter]="true"
+              filterBy="nameNative,locale"
+              (onChange)="onLocaleChange(selectedLocale)"
+              aria-label="Language"
               i18n-aria-label="@@lang_switcher_aria"
             >
-              <a href="/fr/" class="lang-link">FR</a>
-              <a href="/en/" class="lang-link">EN</a>
-              <a href="/de/" class="lang-link">DE</a>
-            </nav>
+              <ng-template pTemplate="selectedItem" let-item>
+                <div class="lang-item">
+                  <span class="flag-emoji">{{ item.emoji }}</span>
+                  <span class="lang-text">{{ item.nameNative }}</span>
+                </div>
+              </ng-template>
+
+              <ng-template pTemplate="item" let-item>
+                <div class="lang-item">
+                  <img
+                    class="flag"
+                    [src]="'/assets/flags/' + item.flag + '.svg'"
+                    width="18"
+                    height="14"
+                    alt=""
+                  />
+                  <span class="lang-text">{{ item.nameNative }}</span>
+                  <span class="lang-locale">{{ item.locale }}</span>
+                </div>
+              </ng-template>
+            </p-select>
 
             <p-button
               [icon]="themeService.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
@@ -60,18 +95,11 @@ import {NgOptimizedImage} from "@angular/common";
       </footer>
     </div>
   `,
-  standalone: true,
   styles: [`
-    .app-root {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    .app-root { min-height: 100vh; display: flex; flex-direction: column; }
 
     .app-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      position: sticky; top: 0; z-index: 100;
       background: var(--surface-card);
       border-bottom: 1px solid var(--border-color);
       backdrop-filter: blur(10px);
@@ -87,53 +115,22 @@ import {NgOptimizedImage} from "@angular/common";
     }
 
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--text-color);
-      text-decoration: none;
+      display: flex; align-items: center; gap: 0.6rem;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--text-color); text-decoration: none;
     }
 
-    .brand-icon {
-      border-radius: 12px;
-      display: block;
-      flex-shrink: 0;
-    }
+    .brand-icon { border-radius: 12px; display: block; flex-shrink: 0; }
+    .brand-text { letter-spacing: 0.02em; }
 
-    .brand-text {
-      letter-spacing: 0.02em;
-    }
+    .header-actions { display: flex; align-items: center; gap: 1rem; }
 
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
+    .lang-item { display: flex; align-items: center; gap: 0.6rem; }
+    .flag-emoji { font-size: 1.1rem; line-height: 1; }
+    .lang-text { font-weight: 500; }
+    .lang-locale { margin-left: auto; opacity: 0.6; font-size: 0.85rem; }
 
-    .lang-switcher {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .lang-link {
-      padding: 0.35rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: var(--text-color-secondary);
-      transition: all 0.2s ease;
-    }
-
-    .lang-link:hover {
-      background: var(--primary-color);
-      color: #fff;
-    }
-
-    .app-main {
-      flex: 1;
-    }
+    .app-main { flex: 1; }
 
     .app-footer {
       background: var(--surface-card);
@@ -147,5 +144,24 @@ import {NgOptimizedImage} from "@angular/common";
 })
 export class AppComponent {
   themeService = inject(ThemeService);
+
   year = new Date().getFullYear();
+
+  localeOptions: LocaleOption[] = [...LOCALES];
+  selectedLocale!: LocaleOption;
+
+  ngOnInit() {
+    const firstSegment = (location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
+    this.selectedLocale = LOCALES.find((l: LocaleOption) => l.locale === firstSegment) ?? LOCALES[0];
+  }
+
+  onLocaleChange(option: LocaleOption) {
+    const locale = option.locale;
+
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length > 0) parts[0] = locale;
+    else parts.push(locale);
+
+    location.assign('/' + parts.join('/') + location.search + location.hash);
+  }
 }
