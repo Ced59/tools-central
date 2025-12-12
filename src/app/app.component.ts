@@ -12,7 +12,7 @@ import { ButtonModule } from 'primeng/button';
         <div class="header-inner container">
           <a href="/" class="brand" aria-label="Tools Central">
             <img
-              src="/icons/tools.png"
+              src="icons/tools.png"
               alt=""
               class="brand-icon"
               width="32"
