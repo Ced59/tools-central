@@ -9,7 +9,8 @@
     "test": "ng test",
     "serve:ssr:tools-central": "node dist/tools-central/server/server.mjs",
     "extract-i18n": "ng extract-i18n --project=tools-central",
-    "build:all": "npm run build"
+    "build:all": "npm run build && npm run postbuild:seo",
+    "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs"
   },
   "private": true,
   "dependencies": {
