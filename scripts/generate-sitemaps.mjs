@@ -6,53 +6,78 @@ const ANGULAR_JSON = path.resolve("angular.json");
 const PROJECT_NAME = "tools-central";
 const SITE = "https://tools-central.com";
 
-// Routes par langue (à enrichir plus tard)
-const routes = ["/"];
-
-const now = new Date().toISOString();
-
-// ---------- helpers ----------
+// Exclusions (à adapter)
+const EXCLUDED_FILES = new Set([
+  "index.html", // ⚠️ on le garde MAIS traité à part (racine locale)
+  "robots.txt",
+  "sitemap.xml",
+]);
+const EXCLUDED_HTML_BASENAMES = new Set([
+  "404.html",
+]);
 
 function readAngularLocales() {
-  if (!fs.existsSync(ANGULAR_JSON)) {
-    throw new Error("angular.json not found");
-  }
-
   const angular = JSON.parse(fs.readFileSync(ANGULAR_JSON, "utf8"));
   const project = angular.projects?.[PROJECT_NAME];
+  if (!project?.i18n) throw new Error(`No i18n config for "${PROJECT_NAME}"`);
 
-  if (!project?.i18n) {
-    throw new Error(`No i18n config found for project "${PROJECT_NAME}"`);
-  }
-
-  const sourceLocale = project.i18n.sourceLocale;
-  const locales = Object.keys(project.i18n.locales || {});
-
+  const sourceLocale = project.i18n.sourceLocale; // ex: "fr"
+  const locales = Object.keys(project.i18n.locales || {}); // ex: ["en","de"]
   return [sourceLocale, ...locales];
 }
 
-function ensureDir(p) {
-  fs.mkdirSync(p, { recursive: true });
+function walkFiles(dir) {
+  const out = [];
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const e of entries) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...walkFiles(p));
+    else out.push(p);
+  }
+  return out;
 }
 
-function writeFile(filePath, content) {
-  fs.writeFileSync(filePath, content, "utf8");
-  console.log(`✅ wrote ${path.relative(process.cwd(), filePath)}`);
+function toPosix(p) {
+  return p.split(path.sep).join("/");
 }
 
-function url(locale, route) {
-  const suffix = route === "/" ? "/" : route;
-  return `${SITE}/${locale}${suffix}`;
+function normalizeUrlPath(urlPath) {
+  // on force un trailing slash (recommandé quand tu publies des index.html)
+  if (!urlPath.endsWith("/")) urlPath += "/";
+  // évite les doubles slashes
+  return urlPath.replace(/\/{2,}/g, "/");
 }
 
-function buildUrlset(urls) {
+function routeFromHtmlFile(locale, filePath) {
+  // filePath: dist/.../browser/<locale>/.../(index).html
+  const base = path.join(DIST_DIR, locale);
+  const rel = toPosix(path.relative(base, filePath)); // ex: "categories/math/index.html"
+  const name = path.basename(rel);
+
+  if (!rel.endsWith(".html")) return null;
+  if (EXCLUDED_HTML_BASENAMES.has(name)) return null;
+
+  // index.html => route du dossier
+  if (name === "index.html") {
+    const dirRel = rel.slice(0, -"index.html".length); // "" ou "categories/math/"
+    const route = "/" + locale + "/" + dirRel;
+    return normalizeUrlPath(route);
+  }
+
+  // foo.html => /foo/
+  const withoutExt = rel.replace(/\.html$/, ""); // "foo" ou "a/b/foo"
+  const route = "/" + locale + "/" + withoutExt;
+  return normalizeUrlPath(route);
+}
+
+function buildUrlset(urlEntries) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls
+${urlEntries
     .map(
-      (u) => `  <url>
-    <loc>${u}</loc>
-    <lastmod>${now}</lastmod>
+      ({ loc, lastmod }) => `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
   </url>`
     )
     .join("\n")}
@@ -61,6 +86,7 @@ ${urls
 }
 
 function buildSitemapIndex(items) {
+  const now = new Date().toISOString();
   return `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${items
@@ -75,26 +101,55 @@ ${items
 `;
 }
 
-// ---------- main ----------
+function writeFile(filePath, content) {
+  fs.writeFileSync(filePath, content, "utf8");
+  console.log(`✅ wrote ${path.relative(process.cwd(), filePath)}`);
+}
 
-ensureDir(DIST_DIR);
+// ---------- main ----------
+if (!fs.existsSync(DIST_DIR)) {
+  throw new Error(`DIST_DIR not found: ${DIST_DIR} (build first)`);
+}
 
 const locales = readAngularLocales();
-console.log("🌍 Locales from angular.json:", locales.join(", "));
+console.log("🌍 Locales:", locales.join(", "));
 
-// 1) sitemap par langue
 const sitemapFiles = [];
 
 for (const locale of locales) {
-  const urls = routes.map((r) => url(locale, r));
-  const xml = buildUrlset(urls);
+  const localeDir = path.join(DIST_DIR, locale);
+  if (!fs.existsSync(localeDir)) {
+    console.warn(`⚠️ missing locale folder: ${localeDir}`);
+    continue;
+  }
 
+  const files = walkFiles(localeDir).filter((f) => f.endsWith(".html"));
+  const entries = [];
+
+  for (const f of files) {
+    const route = routeFromHtmlFile(locale, f);
+    if (!route) continue;
+
+    // route => URL
+    const loc = SITE + route;
+
+    // lastmod = mtime du fichier
+    const stat = fs.statSync(f);
+    const lastmod = stat.mtime.toISOString();
+
+    entries.push({ loc, lastmod });
+  }
+
+  // dédoublonne + trie (stable)
+  const uniq = new Map(entries.map((e) => [e.loc, e]));
+  const sorted = [...uniq.values()].sort((a, b) => a.loc.localeCompare(b.loc));
+
+  const xml = buildUrlset(sorted);
   const filename = `sitemap-${locale}.xml`;
   writeFile(path.join(DIST_DIR, filename), xml);
 
   sitemapFiles.push({ loc: `${SITE}/${filename}` });
 }
 
-// 2) sitemap index (root)
 const indexXml = buildSitemapIndex(sitemapFiles);
 writeFile(path.join(DIST_DIR, "sitemap.xml"), indexXml);
