@@ -1,9 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ThemeService } from './services/theme.service';
+import { SeoService } from './services/seo/seo.service';
 
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -13,26 +14,13 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    ButtonModule,
-    NgOptimizedImage,
-    FormsModule,
-    SelectModule
-  ],
+  imports: [RouterOutlet, ButtonModule, NgOptimizedImage, FormsModule, SelectModule],
   template: `
     <div class="app-root">
       <header class="app-header">
         <div class="header-inner container">
-          <a href="/" class="brand" aria-label="Tools Central">
-            <img
-              ngSrc="/assets/icons/tools.png"
-              alt=""
-              class="brand-icon"
-              width="32"
-              height="32"
-              priority
-            />
+          <a href="/fr/" class="brand" aria-label="Tools Central">
+            <img ngSrc="/assets/icons/tools.png" alt="" class="brand-icon" width="32" height="32" priority />
             <span class="brand-text">Tools Central</span>
           </a>
 
@@ -49,20 +37,14 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
             >
               <ng-template pTemplate="selectedItem" let-item>
                 <div class="lang-item">
-                  <span class="flag-emoji">{{ item.emoji }}</span>
+                  <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
                   <span class="lang-text">{{ item.nameNative }}</span>
                 </div>
               </ng-template>
 
               <ng-template pTemplate="item" let-item>
                 <div class="lang-item">
-                  <img
-                    class="flag"
-                    [src]="'/assets/flags/' + item.flag + '.svg'"
-                    width="18"
-                    height="14"
-                    alt=""
-                  />
+                  <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
                   <span class="lang-text">{{ item.nameNative }}</span>
                   <span class="lang-locale">{{ item.locale }}</span>
                 </div>
@@ -144,6 +126,8 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 })
 export class AppComponent {
   themeService = inject(ThemeService);
+  seo = inject(SeoService);
+  private platformId = inject(PLATFORM_ID);
 
   year = new Date().getFullYear();
 
@@ -151,14 +135,24 @@ export class AppComponent {
   selectedLocale!: LocaleOption;
 
   ngOnInit() {
+    // Active canonical/hreflang auto sur chaque navigation (SSR ok)
+    this.seo.init();
+
+    if (!isPlatformBrowser(this.platformId)) {
+      this.selectedLocale = LOCALES[0];
+      return;
+    }
+
     const firstSegment = (location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
-    this.selectedLocale = LOCALES.find((l: LocaleOption) => l.locale === firstSegment) ?? LOCALES[0];
+    this.selectedLocale = LOCALES.find(l => l.locale === firstSegment) ?? LOCALES[0];
   }
 
   onLocaleChange(option: LocaleOption) {
-    const locale = option.locale;
+    if (!isPlatformBrowser(this.platformId)) return;
 
+    const locale = option.locale;
     const parts = location.pathname.split('/').filter(Boolean);
+
     if (parts.length > 0) parts[0] = locale;
     else parts.push(locale);
 

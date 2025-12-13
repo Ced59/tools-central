@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
-import { NgFor } from '@angular/common';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { NgFor, isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
+import { SeoService } from '../../../services/seo/seo.service';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,8 @@ import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+  private seo = inject(SeoService);
+  private platformId = inject(PLATFORM_ID);
 
   availableCategories: CategoryItem[] = [
     {
@@ -42,7 +45,16 @@ export class HomeComponent {
     }
   ];
 
+  ngOnInit() {
+    this.seo.setPageSeo({
+      title: $localize`:@@meta_title_home:Tools Central – Outils en ligne gratuits`,
+      description: $localize`:@@meta_description_home:Tools Central réunit tous les outils du quotidien en un seul endroit. Compression d'image, calculateurs, conversions et bien plus encore.`,
+      ogImageAbs: 'https://tools-central.com/assets/og-preview.png'
+    });
+  }
+
   scrollToCategories(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     document.getElementById('categories')?.scrollIntoView({ behavior: 'smooth' });
   }
 }
