@@ -45,7 +45,7 @@ function indexUnits(xlfObj) {
   return map;
 }
 
-function ensureTarget(unit, defaultText = "TODO") {
+function ensureTarget(unit, defaultText = "@@TODO_TRANSLATE@@") {
   // XLF2: unit.segment.target
   const seg = unit.segment ?? {};
   if (!seg.target) {
