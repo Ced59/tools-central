@@ -1,6 +1,6 @@
-import {Component, inject, PLATFORM_ID} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {isPlatformBrowser, NgOptimizedImage} from '@angular/common';
+import { NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ThemeService } from './services/theme.service';
@@ -147,28 +147,21 @@ export class AppComponent {
 
   year = new Date().getFullYear();
 
-  platformId = inject(PLATFORM_ID);
-
   localeOptions: LocaleOption[] = [...LOCALES];
   selectedLocale!: LocaleOption;
 
   ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      // SSR/prerender : on ne touche pas à location
-      this.selectedLocale = LOCALES[0]; // fr par défaut (ou autre)
-      return;
-    }
-
-    const firstSegment = (window.location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
-    this.selectedLocale = LOCALES.find(l => l.locale === firstSegment) ?? LOCALES[0];
+    const firstSegment = (location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
+    this.selectedLocale = LOCALES.find((l: LocaleOption) => l.locale === firstSegment) ?? LOCALES[0];
   }
 
   onLocaleChange(option: LocaleOption) {
-    if (!isPlatformBrowser(this.platformId)) return;
-
     const locale = option.locale;
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    if (parts.length > 0) parts[0] = locale; else parts.push(locale);
-    window.location.assign('/' + parts.join('/') + window.location.search + window.location.hash);
+
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length > 0) parts[0] = locale;
+    else parts.push(locale);
+
+    location.assign('/' + parts.join('/') + location.search + location.hash);
   }
 }
