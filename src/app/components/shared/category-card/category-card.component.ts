@@ -36,9 +36,7 @@ export interface CategoryItem {
         *ngIf="!category.available"
         class="tool-badge"
         i18n="@@coming_soon"
-      >
-        Prochainement
-      </span>
+      >Prochainement</span>
     </article>
   `,
   styles: [`

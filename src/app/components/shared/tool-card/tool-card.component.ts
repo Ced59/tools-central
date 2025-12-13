@@ -36,9 +36,7 @@ export interface ToolCardItem {
         *ngIf="!tool.available"
         class="tool-badge"
         i18n="@@coming_soon"
-      >
-        Prochainement
-      </span>
+      >Prochainement</span>
     </article>
   `,
   styles: [`
