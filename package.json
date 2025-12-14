@@ -20,7 +20,7 @@
     "i18n:extract-and-sync": "npm run extract-i18n && npm run i18n:sync",
     "i18n:prepare": "npm run i18n:extract-and-sync && npm run i18n:aggregate",
 
-    "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && ng run tools-central:prerender && npm run postbuild:seo",
+    "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs"
   },
   "dependencies": {
