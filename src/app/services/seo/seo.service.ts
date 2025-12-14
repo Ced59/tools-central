@@ -74,19 +74,20 @@ export class SeoService {
 
   private applyLinks(currentPath: string): void {
     const canonicalPath = this.normalizeCanonical(currentPath);
-    const canonicalAbs = this.toAbsUrl(canonicalPath);
-    this.links.setCanonical(canonicalAbs);
+    this.links.setCanonical(this.toAbsUrl(canonicalPath));
 
-    const {restPath} = this.splitLocale(currentPath);
-    const rest = restPath; // sans locale, sans leading slash
+    const { locale, restPath } = this.splitLocale(currentPath);
+    const currentLocale = locale ?? this.defaultLocale;
+
+    this.doc.documentElement.lang = currentLocale; // ✅ ici (SSR + CSR)
 
     const hreflangs = LOCALES.map(l => ({
       hreflang: l.locale as string,
-      hrefAbs: this.toAbsUrl(this.buildLocalePath(l.locale, rest))
+      hrefAbs: this.toAbsUrl(this.buildLocalePath(l.locale, restPath))
     }));
 
-    const xDefaultPath = this.buildXDefaultPath(rest);
-    hreflangs.push({hreflang: 'x-default', hrefAbs: this.toAbsUrl(xDefaultPath)});
+    const xDefaultPath = this.buildXDefaultPath(restPath);
+    hreflangs.push({ hreflang: 'x-default', hrefAbs: this.toAbsUrl(xDefaultPath) });
 
     this.links.setHreflangs(hreflangs);
   }
