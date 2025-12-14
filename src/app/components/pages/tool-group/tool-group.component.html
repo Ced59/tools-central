@@ -1,0 +1,67 @@
+<section class="page-hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-icon" *ngIf="group">
+        <i [class]="group.icon"></i>
+      </div>
+
+      <h1>{{ group?.title }}</h1>
+      <p class="hero-subtitle">{{ group?.description }}</p>
+    </div>
+  </div>
+</section>
+
+<section class="tools-section">
+  <div class="container">
+
+    <!-- Outils disponibles -->
+    <div class="section-block" *ngIf="availableTools.length > 0">
+      <div class="section-header">
+        <span class="section-badge available">
+          <i class="pi pi-check-circle"></i>
+          <span i18n="@@available_now">Disponible</span>
+        </span>
+        <h2 i18n="@@tools_available_title">Outils disponibles</h2>
+        <p i18n="@@tools_available_subtitle">Accédez aux outils déjà utilisables</p>
+      </div>
+
+      <div class="tools-grid">
+        <app-tool-card *ngFor="let t of availableTools" [tool]="t" />
+      </div>
+    </div>
+
+    <!-- Outils à venir -->
+    <div class="section-block" *ngIf="comingSoonTools.length > 0">
+      <div class="section-header">
+        <span class="section-badge coming-soon">
+          <i class="pi pi-clock"></i>
+          <span i18n="@@coming_soon_label">Bientôt</span>
+        </span>
+        <h2 i18n="@@tools_soon_title">Outils à venir</h2>
+        <p i18n="@@tools_soon_subtitle">De nouveaux outils arrivent bientôt</p>
+      </div>
+
+      <div class="tools-grid">
+        <app-tool-card *ngFor="let t of comingSoonTools" [tool]="t" />
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="section-block" *ngIf="availableTools.length === 0 && comingSoonTools.length === 0">
+      <div class="section-header">
+        <h2 i18n="@@tools_none_title">Aucun outil pour le moment</h2>
+        <p i18n="@@tools_none_subtitle">Cette sous-catégorie sera remplie progressivement.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="back-section">
+  <div class="container">
+    <a [routerLink]="['/categories', categoryId]" class="back-link">
+      <i class="pi pi-arrow-left"></i>
+      <span i18n="@@back_to_categories">Retour aux catégories</span>
+    </a>
+  </div>
+</section>

@@ -5,14 +5,22 @@ export const routes: Routes = [
 
   { path: 'categories', loadComponent: () => import('./components/pages/categories/categories.component').then(m => m.CategoriesComponent) },
 
-  // Outil (le wrapper)
-  { path: 'categories/:idCategory/:idTool', loadComponent: () => import('./components/pages/tools/tool/tool.component').then(m => m.ToolComponent) },
+  // Outil atomique (wrapper) - 3 segments
+  {
+    path: 'categories/:idCategory/:idGroup/:idTool',
+    loadComponent: () => import('./components/pages/tools/tool/tool.component').then(m => m.ToolComponent),
+  },
 
-  // Liste des tools d’une catégorie
+  // Liste des tools atomiques d’un group (sous-catégorie) - 2 segments
+  {
+    path: 'categories/:idCategory/:idGroup',
+    loadComponent: () => import('./components/pages/tool-group/tool-group.component').then(m => m.ToolGroupComponent),
+  },
+
+  // Liste des groups d’une catégorie - 1 segment
   {
     path: 'categories/:idCategory',
-    loadComponent: () =>
-      import('./components/pages/category/category.component').then(m => m.CategoryComponent),
+    loadComponent: () => import('./components/pages/category/category.component').then(m => m.CategoryComponent),
   },
 
   { path: '**', redirectTo: '' },
