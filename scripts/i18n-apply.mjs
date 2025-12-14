@@ -52,20 +52,31 @@ function getOrCreateSegment(unit) {
   return unit.segment;
 }
 
-function setTarget(unit, text, state = "translated") {
+function setTarget(unit, value, state = "translated") {
   const seg = getOrCreateSegment(unit);
 
-  // keep target object (to store state)
-  if (!seg.target) {
-    seg.target = { "#text": text, "@_state": state };
+  // Cas string classique
+  if (typeof value === "string") {
+    if (!seg.target) {
+      seg.target = { "#text": value, "@_state": state };
+      return;
+    }
+    if (typeof seg.target === "string") {
+      seg.target = { "#text": seg.target };
+    }
+    seg.target["#text"] = value;
+    seg.target["@_state"] = state;
     return;
   }
-  if (typeof seg.target === "string") {
-    seg.target = { "#text": seg.target };
+
+  // Cas "rich text" (pc + #text) => on remplace target en gardant la structure
+  if (value && typeof value === "object") {
+    // Important: on ajoute l'état sans casser la structure
+    seg.target = { ...value, "@_state": state };
+    return;
   }
 
-  seg.target["#text"] = text;
-  seg.target["@_state"] = state;
+  // sinon ignore
 }
 
 // ---- args
@@ -96,8 +107,23 @@ for (const [locale, items] of Object.entries(locales)) {
 
   for (const item of items) {
     const id = item?.id;
-    const translatedTarget = (item?.translatedTarget ?? "").trim();
-    if (!id || !translatedTarget) continue;
+    const translatedTargetRaw = item?.translatedTarget;
+
+// string -> trim
+    const translatedTarget =
+      typeof translatedTargetRaw === "string"
+        ? translatedTargetRaw.trim()
+        : translatedTargetRaw;
+
+// skip si vide
+    const isEmptyString = typeof translatedTarget === "string" && translatedTarget.length === 0;
+    const isEmptyObject =
+      translatedTarget && typeof translatedTarget === "object"
+        ? (translatedTarget["#text"] ?? "").toString().trim().length === 0 && !translatedTarget.pc
+        : false;
+
+    if (!id || translatedTarget == null || isEmptyString || isEmptyObject) continue;
+
 
     const unit = map.get(id);
     if (!unit) {

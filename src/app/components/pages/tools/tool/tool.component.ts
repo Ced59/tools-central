@@ -2,15 +2,26 @@ import { Component, Type } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
 
-
-import {PercentagesToolComponent} from "../math/percentages/percentages.component";
-import {TOOLS} from "../../../../data/tools";
+import {ATOMIC_TOOLS} from "../../../../data/atomic-tools";
+import {
+  PercentageVariationToolComponent
+} from "../math/percentages/percentage-variation-tool/percentage-variation-tool.component";
+import {
+  PercentageDiscountToolComponent
+} from "../math/percentages/percentage-discount-tool/percentage-discount-tool.component";
 
 
 // Registry: (categoryId/toolId) -> composant
-const TOOL_COMPONENTS: Record<string, Record<string, Type<unknown>>> = {
+// Registry: category -> group -> tool -> component
+const TOOL_COMPONENTS: Record<
+  string,
+  Record<string, Record<string, Type<unknown>>>
+> = {
   math: {
-    percentages: PercentagesToolComponent,
+    percentages: {
+      'percentage-variation': PercentageVariationToolComponent,
+      'percentage-discount': PercentageDiscountToolComponent,
+    },
   },
 };
 
@@ -40,15 +51,23 @@ export class ToolComponent {
 
   constructor(route: ActivatedRoute) {
     const idCategory = route.snapshot.paramMap.get('idCategory') ?? '';
+    const idGroup = route.snapshot.paramMap.get('idGroup') ?? '';
     const idTool = route.snapshot.paramMap.get('idTool') ?? '';
 
-    // Optionnel: vérifier l’existence dans TOOLS + available
-    const tool = TOOLS.find(t => t.category === idCategory && t.id === idTool);
+    // 1️⃣ Vérifie que l’outil existe et est disponible
+    const tool = ATOMIC_TOOLS.find(t =>
+      t.category === idCategory &&
+      t.group === idGroup &&
+      t.id === idTool
+    );
+
     if (!tool || !tool.available) {
       this.toolComponent = null;
       return;
     }
 
-    this.toolComponent = TOOL_COMPONENTS[idCategory]?.[idTool] ?? null;
+    // 2️⃣ Résout le composant métier réel
+    this.toolComponent =
+      TOOL_COMPONENTS[idCategory]?.[idGroup]?.[idTool] ?? null;
   }
 }
