@@ -11,7 +11,6 @@ import { ButtonModule } from 'primeng/button';
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 
 type Example = {
-  label: string;
   percent: number;
   base: number;
 };
@@ -37,10 +36,10 @@ export class PercentageOfNumberToolComponent {
   private fb = new FormBuilder();
 
   examples: Example[] = [
-    { label: $localize`:@@pct_of_ex1:20% de 80`, percent: 20, base: 80 },
-    { label: $localize`:@@pct_of_ex2:7,5% de 1 200`, percent: 7.5, base: 1200 },
-    { label: $localize`:@@pct_of_ex3:15% de 199,99`, percent: 15, base: 199.99 },
-    { label: $localize`:@@pct_of_ex4:2% de 5 000`, percent: 2, base: 5000 },
+    { percent: 20, base: 80 },
+    { percent: 7.5, base: 1200 },
+    { percent: 15, base: 199.99 },
+    { percent: 2, base: 5000 },
   ];
 
   form = this.fb.group({
@@ -68,7 +67,6 @@ export class PercentageOfNumberToolComponent {
       const nextB = v.base ?? null;
       const nextPrec = v.precision ?? 2;
 
-      // Détection du champ modifié (priorité : percent > base > precision)
       if (nextP !== prevP) this.lastChanged.set('percent');
       else if (nextB !== prevB) this.lastChanged.set('base');
       else if (nextPrec !== prevPrec) this.lastChanged.set('precision');
@@ -82,7 +80,6 @@ export class PercentageOfNumberToolComponent {
     });
   }
 
-  // --- Choix automatique du step affiché
   // base => step "Résultat", percent => step "Coefficient"
   readonly activeFormulaStepId = computed(() => {
     const manual = this.manualStepId();
@@ -93,7 +90,6 @@ export class PercentageOfNumberToolComponent {
     if (last === 'percent') return 's1';
     return null;
   });
-
 
   readonly coefficient = computed(() => {
     const p = this.percentSig();
@@ -121,20 +117,21 @@ export class PercentageOfNumberToolComponent {
     const coef = p / 100;
     const res = y * coef;
 
+    // ⚠️ IMPORTANT: pas de texte localisé ici (pas de "Coefficient"/"Résultat" dans le latex),
+    // sinon ça pousserait à refaire du $localize runtime.
+    // On reste sur une écriture "cours de maths" purement math.
     return [
       {
         id: 's1',
         latex: String.raw`\begin{aligned}
-\text{Coefficient} &= \dfrac{ {{p}} }{100} \\[0.6em]
-&= {{coef}}
+\dfrac{ {{p}} }{100} &= {{coef}}
 \end{aligned}`,
         vars: { p, coef },
       },
       {
         id: 's2',
         latex: String.raw`\begin{aligned}
-\text{Résultat} &= {{y}} \times {{coef}} \\[0.6em]
-&= {{res}}
+{{y}} \times {{coef}} &= {{res}}
 \end{aligned}`,
         vars: { y, coef, res },
       },
@@ -147,7 +144,7 @@ export class PercentageOfNumberToolComponent {
 
   reset() {
     this.form.reset({ percent: 20, base: 80, precision: 2 });
-    this.lastChanged.set(null); // optionnel
+    this.lastChanged.set(null);
   }
 
   fmt(n: number | null): string {
@@ -158,7 +155,4 @@ export class PercentageOfNumberToolComponent {
   onFormulaStepChanged(id: string) {
     this.manualStepId.set(id);
   }
-
-
-  protected readonly $localize = $localize;
 }

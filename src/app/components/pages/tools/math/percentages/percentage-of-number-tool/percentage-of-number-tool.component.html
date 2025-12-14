@@ -102,15 +102,14 @@
         <div class="divider"></div>
 
         <tc-math-formula
-          [label]="$localize`:@@tool_formula_title:Formule`"
+          label="Formule"
+          i18n-label="@@tool_formula_title"
           mode="steps"
           [precision]="form.controls.precision.value ?? 2"
           [steps]="formulaSteps()"
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
-        />
-
-
+        ></tc-math-formula>
 
         <div class="actions">
           <p-button
@@ -139,8 +138,14 @@
           class="example-btn"
           (click)="applyExample(ex)"
         >
-          <span class="ex-label">{{ ex.label }}</span>
-          <span class="ex-values">{{ ex.percent }}% • {{ ex.base }}</span>
+          <!-- ✅ label traduisible via placeholders -->
+          <span class="ex-label" i18n="@@pct_of_example_label">
+            {{ ex.percent }}% de {{ ex.base }}
+          </span>
+
+          <span class="ex-values">
+            {{ ex.percent }}% • {{ ex.base }}
+          </span>
         </button>
       </div>
     </div>
@@ -156,13 +161,18 @@
 
       <div class="explain-content">
         <tc-math-formula
-          [label]="$localize`:@@tool_formula_title:Formule`"
+          label="Formule"
+          i18n-label="@@tool_formula_title"
           mode="katex"
-          [latex]="$localize`:@@pct_of_formula_katex:\\text{Résultat}=\\text{Valeur}\\times\\dfrac{\\text{Pourcentage}}{100}`"
-        />
+          latex="\text{Résultat}=\text{Valeur}\times\dfrac{\text{Pourcentage}}{100}"
+          i18n-latex="@@pct_of_formula_katex"
+        ></tc-math-formula>
 
         <ol class="steps-list">
-          <li i18n="@@pct_of_step1">Transformez le pourcentage en coefficient : <strong>p ÷ 100</strong></li>
+          <li i18n="@@pct_of_step1">
+            Transformez le pourcentage en coefficient :
+            <strong>p ÷ 100</strong>
+          </li>
           <li i18n="@@pct_of_step2">Multipliez la valeur par ce coefficient</li>
         </ol>
 

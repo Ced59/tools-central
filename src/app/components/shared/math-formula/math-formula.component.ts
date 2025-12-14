@@ -50,16 +50,8 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
   showStepsNav = input<boolean>(true);
   displayMode = input<boolean>(true);
 
-  /**
-   * Step forcé par le parent (id).
-   * Si null => mode "auto" via activeIndex interne.
-   */
   activeStepId = input<string | null>(null);
 
-  /**
-   * Emit l'id du step choisi (clic sur 1/2).
-   * Alias explicite => évite toute ambiguïté de binding.
-   */
   stepChange = output<string>({ alias: 'stepChange' });
 
   activeIndex = signal(0);
@@ -69,18 +61,15 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
   katexHost?: ElementRef<HTMLElement>;
 
   constructor() {
-    // Sync: si le parent force un id, on aligne aussi activeIndex (pour que le dot actif suive)
     effect(() => {
       const forcedId = this.activeStepId();
       const s = this.steps();
-
       if (forcedId && s?.length) {
         const idx = s.findIndex(x => x.id === forcedId);
         if (idx >= 0) this.activeIndex.set(idx);
       }
     });
 
-    // Re-render KaTeX quand le latex résolu / step / mode / display change
     effect(() => {
       void this.resolvedLatex();
       void this.displayMode();
@@ -93,8 +82,6 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
   activeStep = computed(() => {
     const s = this.steps();
     if (!s?.length) return null;
-
-    // le vrai step affiché est piloté par activeIndex (qui est sync si activeStepId est fourni)
     const i = this.activeIndex();
     return s[Math.min(Math.max(i, 0), s.length - 1)];
   });
@@ -189,6 +176,7 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     if (!Number.isFinite(n)) return String.raw`\text{?}`;
 
     const p = Math.min(Math.max(precision, 0), 10);
+
     const factor = Math.pow(10, p);
     const rounded = Math.round((n + Number.EPSILON) * factor) / factor;
 
