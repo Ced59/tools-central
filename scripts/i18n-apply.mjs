@@ -30,6 +30,7 @@ function writeXlf(filePath, obj) {
   fs.writeFileSync(filePath, xml, "utf8");
 }
 
+
 function getFileNode(xlfObj) {
   const file = xlfObj?.xliff?.file;
   if (!file) throw new Error("Invalid XLF: missing xliff.file");
