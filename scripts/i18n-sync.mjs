@@ -59,13 +59,6 @@ function normalizeTargetToObject(seg) {
   return seg.target;
 }
 
-function getTargetText(unit) {
-  const t = unit?.segment?.target;
-  if (!t) return "";
-  if (typeof t === "string") return t;
-  return t["#text"] ?? "";
-}
-
 function getTargetState(unit) {
   const t = unit?.segment?.target;
   if (!t || typeof t === "string") return "";
@@ -83,12 +76,13 @@ function setTargetState(unit, state) {
 
 function ensureTarget(unit, defaultText = "TODO", stateIfCreated = "new") {
   const seg = getOrCreateSegment(unit);
+
   if (!seg.target) {
     seg.target = { "#text": defaultText, "@_state": stateIfCreated };
   } else {
-    // normalize into object so we can attach state safely later
     normalizeTargetToObject(seg);
   }
+
   return unit;
 }
 
@@ -169,10 +163,9 @@ for (const locale of targetLocales) {
     const unit = targetUnits.get(id);
 
     // ensure target exists (do NOT overwrite existing translation)
-    const beforeTarget = unit?.segment?.target ? 1 : 0;
+    const hadTarget = !!unit?.segment?.target;
     ensureTarget(unit, "TODO", "new");
-    const afterTarget = unit?.segment?.target ? 1 : 0;
-    if (!beforeTarget && afterTarget) ensuredTargetCount++;
+    if (!hadTarget && unit?.segment?.target) ensuredTargetCount++;
 
     // detect source change
     const srcSource = getSourceValue(srcUnit);
@@ -182,8 +175,7 @@ for (const locale of targetLocales) {
       // update locale source to match source-locale file
       setSourceValue(unit, JSON.parse(JSON.stringify(srcSource)));
 
-      // mark as needs-review, but keep existing translation text
-      // (avoid overriding 'new' if it's already TODO newly created)
+      // mark as needs-review, but keep existing translation
       const currentState = getTargetState(unit);
       if (currentState !== "new") {
         setTargetState(unit, "needs-review");

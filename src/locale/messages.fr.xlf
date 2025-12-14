@@ -9,25 +9,103 @@
         <source>Language</source>
       </segment>
     </unit>
-    <unit id="1347514233695064568">
+    <unit id="categories_page_title">
       <notes>
-        <note category="location">src/app/components/pages/categories/categories.component.ts:14,15</note>
+        <note category="location">src/app/components/pages/categories/categories.component.html:7,8</note>
+      </notes>
+      <segment>
+        <source>Toutes les catégories</source>
+      </segment>
+    </unit>
+    <unit id="categories_page_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:9,12</note>
+      </notes>
+      <segment>
+        <source> Explorez nos outils classés par thématique </source>
+      </segment>
+    </unit>
+    <unit id="available_now">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:23,25</note>
+        <note category="location">src/app/components/pages/category/category.component.html:21,23</note>
+      </notes>
+      <segment>
+        <source>Disponible</source>
+      </segment>
+    </unit>
+    <unit id="cats_available_title">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:25,26</note>
+        <note category="location">src/app/components/pages/home/home.component.html:54,55</note>
       </notes>
       <segment>
         <source>Catégories disponibles</source>
       </segment>
     </unit>
-    <unit id="7906329186771173956">
+    <unit id="cats_available_subtitle">
       <notes>
-        <note category="location">src/app/components/pages/categories/categories.component.ts:15,16</note>
+        <note category="location">src/app/components/pages/categories/categories.component.html:26,29</note>
+        <note category="location">src/app/components/pages/home/home.component.html:55,58</note>
       </notes>
       <segment>
-        <source>Choisissez une catégorie d&apos;outils</source>
+        <source>Accédez aux outils déjà utilisables</source>
+      </segment>
+    </unit>
+    <unit id="coming_soon_label">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:42,44</note>
+        <note category="location">src/app/components/pages/category/category.component.html:37,39</note>
+      </notes>
+      <segment>
+        <source>Bientôt</source>
+      </segment>
+    </unit>
+    <unit id="cats_soon_title">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:44,45</note>
+        <note category="location">src/app/components/pages/home/home.component.html:66,67</note>
+      </notes>
+      <segment>
+        <source>Catégories à venir</source>
+      </segment>
+    </unit>
+    <unit id="cats_soon_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:45,48</note>
+        <note category="location">src/app/components/pages/home/home.component.html:67,70</note>
+      </notes>
+      <segment>
+        <source>De nouvelles catégories arrivent régulièrement</source>
+      </segment>
+    </unit>
+    <unit id="back_to_home">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.html:63,65</note>
+      </notes>
+      <segment>
+        <source>Retour à l&apos;accueil</source>
+      </segment>
+    </unit>
+    <unit id="meta_title_categories">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.ts:37</note>
+      </notes>
+      <segment>
+        <source>Catégories d&apos;outils – Tools Central</source>
+      </segment>
+    </unit>
+    <unit id="meta_description_categories">
+      <notes>
+        <note category="location">src/app/components/pages/categories/categories.component.ts:38</note>
+      </notes>
+      <segment>
+        <source>Découvrez toutes les catégories d&apos;outils disponibles sur Tools Central.</source>
       </segment>
     </unit>
     <unit id="tools_available_title">
       <notes>
-        <note category="location">src/app/components/pages/category/category.component.ts:21,22</note>
+        <note category="location">src/app/components/pages/category/category.component.html:23,24</note>
       </notes>
       <segment>
         <source>Outils disponibles</source>
@@ -35,7 +113,7 @@
     </unit>
     <unit id="tools_available_subtitle">
       <notes>
-        <note category="location">src/app/components/pages/category/category.component.ts:22,25</note>
+        <note category="location">src/app/components/pages/category/category.component.html:24,27</note>
       </notes>
       <segment>
         <source>Accédez aux outils déjà utilisables</source>
@@ -43,7 +121,7 @@
     </unit>
     <unit id="tools_soon_title">
       <notes>
-        <note category="location">src/app/components/pages/category/category.component.ts:30,31</note>
+        <note category="location">src/app/components/pages/category/category.component.html:39,40</note>
       </notes>
       <segment>
         <source>Outils à venir</source>
@@ -51,10 +129,18 @@
     </unit>
     <unit id="tools_soon_subtitle">
       <notes>
-        <note category="location">src/app/components/pages/category/category.component.ts:31,34</note>
+        <note category="location">src/app/components/pages/category/category.component.html:40,43</note>
       </notes>
       <segment>
         <source>De nouveaux outils arrivent bientôt</source>
+      </segment>
+    </unit>
+    <unit id="back_to_categories">
+      <notes>
+        <note category="location">src/app/components/pages/category/category.component.html:55,58</note>
+      </notes>
+      <segment>
+        <source>Retour aux catégories</source>
       </segment>
     </unit>
     <unit id="hero_badge">
@@ -78,52 +164,28 @@
         <note category="location">src/app/components/pages/home/home.component.html:11,13</note>
       </notes>
       <segment>
-        <source>Tools Central réunit tous les outils du quotidien en un seul endroit. Compression d&apos;image, calculateurs, conversions et bien plus encore.</source>
+        <source> Tools Central réunit tous les outils du quotidien en un seul endroit. Compression d&apos;image, calculateurs, conversions et bien plus encore. </source>
       </segment>
     </unit>
     <unit id="hero_cta">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:17,18</note>
+        <note category="location">src/app/components/pages/home/home.component.html:27,28</note>
       </notes>
       <segment>
         <source>Découvrir les catégories</source>
       </segment>
     </unit>
-    <unit id="cats_available_title">
+    <unit id="hero_all_categories">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:43,44</note>
+        <note category="location">src/app/components/pages/home/home.component.html:36,37</note>
       </notes>
       <segment>
-        <source>Catégories disponibles</source>
-      </segment>
-    </unit>
-    <unit id="cats_available_subtitle">
-      <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:44,47</note>
-      </notes>
-      <segment>
-        <source>Accédez aux outils déjà utilisables</source>
-      </segment>
-    </unit>
-    <unit id="cats_soon_title">
-      <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:55,56</note>
-      </notes>
-      <segment>
-        <source>Catégories à venir</source>
-      </segment>
-    </unit>
-    <unit id="cats_soon_subtitle">
-      <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:56,59</note>
-      </notes>
-      <segment>
-        <source>De nouvelles catégories d&apos;outils arrivent progressivement</source>
+        <source>Voir toutes les catégories</source>
       </segment>
     </unit>
     <unit id="features_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:73,74</note>
+        <note category="location">src/app/components/pages/home/home.component.html:84,85</note>
       </notes>
       <segment>
         <source>Pourquoi Tools Central ?</source>
@@ -131,7 +193,7 @@
     </unit>
     <unit id="features_subtitle">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:74,77</note>
+        <note category="location">src/app/components/pages/home/home.component.html:85,88</note>
       </notes>
       <segment>
         <source>Des outils pensés pour vous simplifier la vie</source>
@@ -139,7 +201,7 @@
     </unit>
     <unit id="feature_fast_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:80,81</note>
+        <note category="location">src/app/components/pages/home/home.component.html:91,92</note>
       </notes>
       <segment>
         <source>Ultra rapide</source>
@@ -147,7 +209,7 @@
     </unit>
     <unit id="feature_fast_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:81,84</note>
+        <note category="location">src/app/components/pages/home/home.component.html:92,95</note>
       </notes>
       <segment>
         <source>Traitement instantané, directement dans votre navigateur.</source>
@@ -155,7 +217,7 @@
     </unit>
     <unit id="feature_private_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:86,87</note>
+        <note category="location">src/app/components/pages/home/home.component.html:97,98</note>
       </notes>
       <segment>
         <source>100% privé</source>
@@ -163,7 +225,7 @@
     </unit>
     <unit id="feature_private_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:87,90</note>
+        <note category="location">src/app/components/pages/home/home.component.html:98,101</note>
       </notes>
       <segment>
         <source>Vos fichiers ne quittent jamais votre appareil.</source>
@@ -171,7 +233,7 @@
     </unit>
     <unit id="feature_free_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:92,93</note>
+        <note category="location">src/app/components/pages/home/home.component.html:103,104</note>
       </notes>
       <segment>
         <source>Gratuit</source>
@@ -179,7 +241,7 @@
     </unit>
     <unit id="feature_free_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:93,96</note>
+        <note category="location">src/app/components/pages/home/home.component.html:104,107</note>
       </notes>
       <segment>
         <source>Tous les outils sont gratuits, sans limite d&apos;utilisation.</source>
@@ -187,7 +249,7 @@
     </unit>
     <unit id="feature_no_signup_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:98,99</note>
+        <note category="location">src/app/components/pages/home/home.component.html:109,110</note>
       </notes>
       <segment>
         <source>Sans inscription</source>
@@ -195,7 +257,7 @@
     </unit>
     <unit id="feature_no_signup_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:99,102</note>
+        <note category="location">src/app/components/pages/home/home.component.html:110,113</note>
       </notes>
       <segment>
         <source>Aucun compte requis, utilisez les outils immédiatement.</source>
@@ -203,7 +265,7 @@
     </unit>
     <unit id="cta_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:108,109</note>
+        <note category="location">src/app/components/pages/home/home.component.html:119,120</note>
       </notes>
       <segment>
         <source>Restez informé</source>
@@ -211,7 +273,7 @@
     </unit>
     <unit id="cta_subtitle">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.html:109,111</note>
+        <note category="location">src/app/components/pages/home/home.component.html:120,122</note>
       </notes>
       <segment>
         <source>Les premiers outils arrivent très bientôt. Revenez nous voir !</source>
@@ -219,7 +281,7 @@
     </unit>
     <unit id="cat_math_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:21</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:25</note>
         <note category="location">src/app/data/categories.ts:12</note>
       </notes>
       <segment>
@@ -228,7 +290,7 @@
     </unit>
     <unit id="cat_math_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:22</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:26</note>
         <note category="location">src/app/data/categories.ts:13</note>
       </notes>
       <segment>
@@ -237,7 +299,7 @@
     </unit>
     <unit id="cat_text_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:32</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:36</note>
         <note category="location">src/app/data/categories.ts:19</note>
       </notes>
       <segment>
@@ -246,7 +308,7 @@
     </unit>
     <unit id="cat_text_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:33</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:37</note>
         <note category="location">src/app/data/categories.ts:20</note>
       </notes>
       <segment>
@@ -255,7 +317,7 @@
     </unit>
     <unit id="cat_image_title">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:40</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:44</note>
         <note category="location">src/app/data/categories.ts:26</note>
       </notes>
       <segment>
@@ -264,7 +326,7 @@
     </unit>
     <unit id="cat_image_desc">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:41</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:45</note>
         <note category="location">src/app/data/categories.ts:27</note>
       </notes>
       <segment>
@@ -273,7 +335,7 @@
     </unit>
     <unit id="meta_title_home">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:50</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:54</note>
       </notes>
       <segment>
         <source>Tools Central – Outils en ligne gratuits</source>
@@ -281,7 +343,7 @@
     </unit>
     <unit id="meta_description_home">
       <notes>
-        <note category="location">src/app/components/pages/home/home.component.ts:51</note>
+        <note category="location">src/app/components/pages/home/home.component.ts:55</note>
       </notes>
       <segment>
         <source>Tools Central réunit tous les outils du quotidien en un seul endroit. Compression d&apos;image, calculateurs, conversions et bien plus encore.</source>
@@ -300,7 +362,7 @@
         <note category="location">src/app/components/pages/tools/math/percentages/percentages.component.ts:10</note>
       </notes>
       <segment>
-        <source>Plusieurs outils autour des pourcentages arriveront ici.</source>
+        <source> Plusieurs outils autour des pourcentages arriveront ici. </source>
       </segment>
     </unit>
     <unit id="753770514700506985">
@@ -321,8 +383,8 @@
     </unit>
     <unit id="open_tool">
       <notes>
-        <note category="location">src/app/components/shared/category-card/category-card.component.ts:32,34</note>
-        <note category="location">src/app/components/shared/tool-card/tool-card.component.ts:32,34</note>
+        <note category="location">src/app/components/shared/category-card/category-card.component.ts:51</note>
+        <note category="location">src/app/components/shared/tool-card/tool-card.component.html:43</note>
       </notes>
       <segment>
         <source>Ouvrir</source>
@@ -330,11 +392,19 @@
     </unit>
     <unit id="coming_soon">
       <notes>
-        <note category="location">src/app/components/shared/category-card/category-card.component.ts:40,42</note>
-        <note category="location">src/app/components/shared/tool-card/tool-card.component.ts:40,42</note>
+        <note category="location">src/app/components/shared/category-card/category-card.component.ts:54,56</note>
+        <note category="location">src/app/components/shared/tool-card/tool-card.component.html:26,29</note>
       </notes>
       <segment>
         <source>Prochainement</source>
+      </segment>
+    </unit>
+    <unit id="open_category_aria">
+      <notes>
+        <note category="location">src/app/components/shared/category-card/category-card.component.ts:162</note>
+      </notes>
+      <segment>
+        <source>Ouvrir la catégorie <ph id="0" equiv="PH" disp="this.category.title"/></source>
       </segment>
     </unit>
     <unit id="tool_percentages_title">

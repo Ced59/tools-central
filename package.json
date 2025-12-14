@@ -1,20 +1,28 @@
 {
   "name": "tools-central",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
     "ng": "ng",
     "i18n:locales": "node scripts/generate-locales.mjs",
+
     "start": "npm run i18n:locales && ng serve",
     "build": "npm run i18n:locales && ng build",
     "watch": "npm run i18n:locales && ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:tools-central": "node dist/tools-central/server/server.mjs",
+
     "extract-i18n": "ng extract-i18n --project=tools-central",
-    "extract-i18n:all": "npm run extract-i18n && node scripts/i18n-sync.mjs",
+    "i18n:sync": "node scripts/i18n-sync.mjs",
+    "i18n:aggregate": "node scripts/i18n-aggregate.mjs",
+    "i18n:apply": "node scripts/i18n-apply.mjs dist/i18n/translations.todo.json ",
+
+    "i18n:extract-and-sync": "npm run extract-i18n && npm run i18n:sync",
+    "i18n:prepare": "npm run i18n:extract-and-sync && npm run i18n:aggregate",
+
     "build:all": "npm run build && npm run postbuild:seo",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^21.0.4",
     "@angular/common": "^21.0.4",
