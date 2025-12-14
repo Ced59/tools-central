@@ -19,7 +19,7 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
     <div class="app-root">
       <header class="app-header">
         <div class="header-inner container">
-          <a href="/fr/" class="brand" aria-label="Tools Central">
+          <a [attr.href]="homeHref" class="brand" aria-label="Tools Central">
             <img ngSrc="/assets/icons/tools.png" alt="" class="brand-icon" width="32" height="32" priority />
             <span class="brand-text">Tools Central</span>
           </a>
@@ -134,6 +134,8 @@ export class AppComponent {
   localeOptions: LocaleOption[] = [...LOCALES];
   selectedLocale!: LocaleOption;
 
+  homeHref = '/fr/';
+
   ngOnInit() {
     // Active canonical/hreflang auto sur chaque navigation (SSR ok)
     this.seo.init();
@@ -145,16 +147,18 @@ export class AppComponent {
 
     const firstSegment = (location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
     this.selectedLocale = LOCALES.find(l => l.locale === firstSegment) ?? LOCALES[0];
+    this.homeHref = `/${this.selectedLocale.locale}/`;
   }
 
   onLocaleChange(option: LocaleOption) {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const locale = option.locale;
-    const parts = location.pathname.split('/').filter(Boolean);
+    this.selectedLocale = option;
+    this.homeHref = `/${option.locale}/`;
 
-    if (parts.length > 0) parts[0] = locale;
-    else parts.push(locale);
+    const parts = location.pathname.split('/').filter(Boolean);
+    if (parts.length > 0) parts[0] = option.locale;
+    else parts.push(option.locale);
 
     location.assign('/' + parts.join('/') + location.search + location.hash);
   }
