@@ -1,6 +1,3 @@
-import '@angular/common/locales/global/pt';
-import '@angular/common/locales/global/pt-BR';
-
 import '@angular/platform-server/init';
 
 import { provideServerRendering } from '@angular/ssr';

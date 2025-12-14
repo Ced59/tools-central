@@ -1,0 +1,175 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-percentage"></i>
+        </div>
+        <h1 i18n="@@pct_of_title">Pourcentage d’un nombre</h1>
+        <p class="hero-subtitle" i18n="@@pct_of_subtitle">
+          Calcule rapidement X% d’une valeur (X% de Y).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="percent" i18n="@@pct_of_percent">Pourcentage</label>
+          <p-inputNumber
+            inputId="percent"
+            [formControl]="form.controls.percent"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            suffix="%"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_of_percent_hint">
+            Ex : 15, 7,5, 20…
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="base" i18n="@@pct_of_base">Valeur</label>
+          <p-inputNumber
+            inputId="base"
+            [formControl]="form.controls.base"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_of_base_hint">
+            Ex : 80, 1 200, 199,99…
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">
+            Arrondi
+          </small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_of_coef_label">Coefficient</span>
+            <span class="result-value">{{ fmt(coefficient()) }}</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pct_of_result_label">Résultat</span>
+            <span class="result-value">{{ fmt(result()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_of_onepct_label">Valeur de 1%</span>
+            <span class="result-value">{{ fmt(onePercentValue()) }}</span>
+          </div>
+        </div>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">{{ ex.percent }}% • {{ ex.base }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_of_definition_sub">
+          Un pourcentage est une proportion “sur 100”.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <div class="formula-box">
+          <span class="formula-label" i18n="@@tool_formula_title">Formule</span>
+          <span class="formula-text" i18n="@@pct_of_formula">
+            Résultat = Valeur × Pourcentage ÷ 100
+          </span>
+        </div>
+
+        <ol class="steps-list">
+          <li i18n="@@pct_of_step1">Transformez le pourcentage en coefficient : <strong>p ÷ 100</strong></li>
+          <li i18n="@@pct_of_step2">Multipliez la valeur par ce coefficient</li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_of_note">
+            Exemple : 15% = 0,15. Donc 15% de 200 = 200 × 0,15 = 30.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

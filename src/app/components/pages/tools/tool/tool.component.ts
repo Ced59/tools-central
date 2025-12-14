@@ -7,8 +7,9 @@ import {
   PercentageVariationToolComponent
 } from "../math/percentages/percentage-variation-tool/percentage-variation-tool.component";
 import {
-  PercentageDiscountToolComponent
-} from "../math/percentages/percentage-discount-tool/percentage-discount-tool.component";
+  PercentageOfNumberToolComponent
+} from "../math/percentages/percentage-of-number-tool/percentage-of-number-tool.component";
+
 
 
 // Registry: (categoryId/toolId) -> composant
@@ -20,7 +21,7 @@ const TOOL_COMPONENTS: Record<
   math: {
     percentages: {
       'percentage-variation': PercentageVariationToolComponent,
-      'percentage-discount': PercentageDiscountToolComponent,
+      'percentage-of-number': PercentageOfNumberToolComponent
     },
   },
 };
