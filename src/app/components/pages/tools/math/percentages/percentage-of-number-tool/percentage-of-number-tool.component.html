@@ -99,6 +99,19 @@
           </div>
         </div>
 
+        <div class="divider"></div>
+
+        <tc-math-formula
+          [label]="$localize`:@@tool_formula_title:Formule`"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        />
+
+
+
         <div class="actions">
           <p-button
             type="button"
@@ -142,12 +155,11 @@
       </div>
 
       <div class="explain-content">
-        <div class="formula-box">
-          <span class="formula-label" i18n="@@tool_formula_title">Formule</span>
-          <span class="formula-text" i18n="@@pct_of_formula">
-            Résultat = Valeur × Pourcentage ÷ 100
-          </span>
-        </div>
+        <tc-math-formula
+          [label]="$localize`:@@tool_formula_title:Formule`"
+          mode="katex"
+          [latex]="$localize`:@@pct_of_formula_katex:\\text{Résultat}=\\text{Valeur}\\times\\dfrac{\\text{Pourcentage}}{100}`"
+        />
 
         <ol class="steps-list">
           <li i18n="@@pct_of_step1">Transformez le pourcentage en coefficient : <strong>p ÷ 100</strong></li>

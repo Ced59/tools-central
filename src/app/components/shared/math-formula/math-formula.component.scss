@@ -1,0 +1,88 @@
+.formula-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: var(--surface-ground);
+  border: 1px solid var(--border-color);
+  margin-bottom: 1.25rem;
+}
+
+.formula-label {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+.formula-text {
+  font-size: 0.95rem;
+  color: var(--text-color-secondary);
+  line-height: 1.5;
+}
+
+.steps-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--text-color-secondary);
+
+  &.is-active {
+    border-color: var(--primary-color);
+    color: var(--text-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+}
+
+.step-meta {
+  margin-top: 0.25rem;
+}
+
+.step-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.step-sub {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.formula-katex {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  padding: 0.75rem 0.75rem;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+
+/* Ajustements KaTeX */
+:host ::ng-deep .katex {
+  font-size: 1.02em;
+}
+
+/* Centrer les formules en display */
+:host ::ng-deep .katex-display {
+  width: 100%;
+  text-align: center;
+}
+
+/* et l’inline KaTeX doit rester centré */
+:host ::ng-deep .katex-display > .katex {
+  display: inline-block;
+}
+

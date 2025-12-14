@@ -1,0 +1,34 @@
+<div class="formula-box">
+  <span class="formula-label" *ngIf="label()">{{ label() }}</span>
+
+  <div
+    class="steps-nav"
+    *ngIf="mode() === 'steps' && showStepsNav() && stepCount() > 1"
+  >
+    <button
+      type="button"
+      class="step-dot"
+      *ngFor="let _ of steps()!; let i = index"
+      [class.is-active]="i === activeIndex()"
+      (click)="setStep(i)"
+      [attr.aria-label]="'Step ' + (i + 1)"
+    >
+      {{ i + 1 }}
+    </button>
+  </div>
+
+  <div #katexHost class="formula-katex" *ngIf="resolvedLatex()"></div>
+
+  <div class="formula-text" *ngIf="!resolvedLatex() && resolvedPlain() as p">
+    {{ p }}
+  </div>
+
+  <div class="formula-text" *ngIf="resolvedLatex() && !katexOk()">
+    —
+  </div>
+
+  <div class="step-meta" *ngIf="mode() === 'steps' && activeStep() as s">
+    <div class="step-title" *ngIf="s.title">{{ s.title }}</div>
+    <div class="step-sub" *ngIf="s.subtitle">{{ s.subtitle }}</div>
+  </div>
+</div>
