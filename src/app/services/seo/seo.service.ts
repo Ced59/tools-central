@@ -67,9 +67,7 @@ export class SeoService {
 
     // Lang html (utile)
     const currentLocale = this.getLocaleFromPath(urlPath) ?? this.defaultLocale;
-    if (isPlatformBrowser(this.platformId)) {
-      this.doc.documentElement.lang = currentLocale;
-    }
+    this.doc.documentElement.lang = currentLocale;
   }
 
   private applyLinks(currentPath: string): void {
