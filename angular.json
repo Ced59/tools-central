@@ -84,7 +84,13 @@
             "ssr": {
               "entry": "server.ts"
             },
-            "prerender": true,
+            "prerender": {
+              "builder": "@angular/build:prerender",
+              "options": {
+                "buildTarget": "tools-central:build:production",
+                "routesFile": "dist/prerender-routes.txt"
+              }
+            },
             "localize": [
               "fr",
               "en", "es",
