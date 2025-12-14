@@ -1,1 +1,47 @@
-<p>tool-card works!</p>
+<article
+  class="tool-card"
+  [class.is-disabled]="!tool.available"
+  [class.is-clickable]="tool.available"
+>
+  <!-- Overlay cliquable sur toute la card -->
+
+  <a
+    *ngIf="tool.available"
+    class="card-overlay"
+    [routerLink]="tool.route"
+    [attr.aria-label]="tool.title"
+  >
+    <span class="sr-only">{{ tool.title }}</span>
+  </a>
+
+  <div class="card-header">
+    <div class="tool-icon">
+      <i [class]="tool.icon"></i>
+    </div>
+
+    <span
+      *ngIf="!tool.available"
+      class="tool-badge"
+      i18n="@@coming_soon"
+    >Prochainement</span>
+  </div>
+
+  <h3>{{ tool.title }}</h3>
+  <p>{{ tool.description }}</p>
+
+  <div class="card-footer">
+    <p-button
+      *ngIf="tool.available"
+      class="open-btn"
+      [routerLink]="tool.route"
+      icon="pi pi-arrow-right"
+      iconPos="right"
+      size="small"
+      severity="secondary"
+      [outlined]="true"
+      label="Ouvrir"
+      i18n-label="@@open_tool"
+      (click)="$event.stopPropagation()"
+    ></p-button>
+  </div>
+</article>

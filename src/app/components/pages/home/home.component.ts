@@ -3,17 +3,21 @@ import { NgFor, isPlatformBrowser } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
 import { SeoService } from '../../../services/seo/seo.service';
+import {RouterLink} from "@angular/router";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgFor, ButtonModule, CategoryCardComponent],
+  imports: [NgFor, ButtonModule, CategoryCardComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   private seo = inject(SeoService);
   private platformId = inject(PLATFORM_ID);
+
+  /** ✅ Route "relative" : Angular i18n préfixe déjà /de, /en, etc. */
+  categoriesRoute = '/categories';
 
   availableCategories: CategoryItem[] = [
     {

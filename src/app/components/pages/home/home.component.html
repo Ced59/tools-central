@@ -11,17 +11,6 @@
         Tools Central réunit tous les outils du quotidien en un seul endroit.
         Compression d'image, calculateurs, conversions et bien plus encore.
       </p>
-
-      <div class="hero-cta">
-        <p-button
-          label="Découvrir les catégories"
-          i18n-label="@@hero_cta"
-          icon="pi pi-arrow-down"
-          severity="contrast"
-          size="large"
-          (onClick)="scrollToCategories()"
-        ></p-button>
-      </div>
     </div>
 
     <div class="hero-visual">
@@ -31,6 +20,28 @@
         <div class="floating-icon"><i class="pi pi-palette"></i></div>
         <div class="floating-icon"><i class="pi pi-qrcode"></i></div>
       </div>
+    </div>
+
+    <div class="hero-cta">
+      <p-button
+        label="Découvrir les catégories"
+        i18n-label="@@hero_cta"
+        icon="pi pi-arrow-down"
+        severity="contrast"
+        size="large"
+        (onClick)="scrollToCategories()"
+      ></p-button>
+
+      <p-button
+        label="Voir toutes les catégories"
+        i18n-label="@@hero_all_categories"
+        icon="pi pi-arrow-right"
+        iconPos="right"
+        severity="contrast"
+        size="large"
+        [outlined]="true"
+        [routerLink]="categoriesRoute"
+      ></p-button>
     </div>
   </div>
 </section>

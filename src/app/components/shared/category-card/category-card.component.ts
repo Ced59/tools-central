@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ButtonModule } from "primeng/button";
 
 export interface CategoryItem {
   id: string;
@@ -14,9 +14,22 @@ export interface CategoryItem {
 @Component({
   selector: 'app-category-card',
   standalone: true,
-  imports: [NgIf, RouterLink],
+  imports: [RouterLink, ButtonModule],
   template: `
-    <article class="tool-card" [class.is-disabled]="!category.available">
+    <article
+      class="tool-card"
+      [class.is-disabled]="!category.available"
+      [class.is-clickable]="category.available"
+    >
+      <!-- ✅ Overlay cliquable sur toute la card si dispo -->
+      @if (category.available) {
+        <a
+          class="card-overlay"
+          [routerLink]="category.route"
+          [attr.aria-label]="getAriaLabel()"
+        ></a>
+      }
+
       <div class="tool-icon">
         <i [class]="category.icon"></i>
       </div>
@@ -24,19 +37,23 @@ export interface CategoryItem {
       <h3>{{ category.title }}</h3>
       <p>{{ category.description }}</p>
 
-      <a
-        *ngIf="category.available"
-        class="tool-link"
-        [routerLink]="category.route"
-      >
-        <span i18n="@@open_tool">Ouvrir</span> →
-      </a>
-
-      <span
-        *ngIf="!category.available"
-        class="tool-badge"
-        i18n="@@coming_soon"
-      >Prochainement</span>
+      <div class="actions">
+        @if (category.available) {
+          <p-button
+            class="open-btn"
+            [routerLink]="category.route"
+            icon="pi pi-arrow-right"
+            iconPos="right"
+            size="small"
+            severity="secondary"
+            [outlined]="true"
+            label="Ouvrir"
+            i18n-label="@@open_tool"
+          ></p-button>
+        } @else {
+          <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
+        }
+      </div>
     </article>
   `,
   styles: [`
@@ -48,12 +65,28 @@ export interface CategoryItem {
       transition: all 0.3s ease;
       position: relative;
       min-height: 170px;
+      overflow: hidden;
     }
 
-    .tool-card:hover {
+    .tool-card.is-clickable:hover {
       transform: translateY(-4px);
       box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
       border-color: var(--primary-color);
+    }
+
+    /* ✅ Overlay pour rendre toute la carte cliquable */
+    .card-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: 16px;
+      text-decoration: none;
+      outline: none;
+    }
+
+    /* focus clavier visible */
+    .card-overlay:focus-visible {
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
     }
 
     .tool-icon {
@@ -65,6 +98,8 @@ export interface CategoryItem {
       align-items: center;
       justify-content: center;
       margin-bottom: 1.25rem;
+      position: relative;
+      z-index: 2;
     }
 
     .tool-icon i {
@@ -77,6 +112,8 @@ export interface CategoryItem {
       font-weight: 600;
       color: var(--text-color);
       margin-bottom: 0.5rem;
+      position: relative;
+      z-index: 2;
     }
 
     p {
@@ -84,12 +121,26 @@ export interface CategoryItem {
       font-size: 0.95rem;
       line-height: 1.5;
       margin-bottom: 1rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: .75rem;
+      position: relative;
+      z-index: 2; /* ✅ au-dessus de l'overlay */
+    }
+
+    /* ✅ Important: bouton cliquable au-dessus de l'overlay */
+    .open-btn {
+      position: relative;
+      z-index: 3;
     }
 
     .tool-badge {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
       padding: 0.25rem 0.75rem;
       background: var(--surface-ground);
       border: 1px solid var(--border-color);
@@ -99,19 +150,6 @@ export interface CategoryItem {
       color: var(--text-color-secondary);
     }
 
-    .tool-link {
-      display: inline-flex;
-      gap: .35rem;
-      font-weight: 600;
-      color: var(--primary-color);
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
-
-    .tool-link:hover {
-      color: var(--primary-color-lighter);
-    }
-
     .is-disabled {
       opacity: 0.9;
     }
@@ -119,4 +157,8 @@ export interface CategoryItem {
 })
 export class CategoryCardComponent {
   @Input({ required: true }) category!: CategoryItem;
+
+  getAriaLabel(): string {
+    return $localize`:@@open_category_aria:Ouvrir la catégorie ${this.category.title}`;
+  }
 }

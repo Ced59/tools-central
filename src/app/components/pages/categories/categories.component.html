@@ -1,1 +1,66 @@
-<p>categories works!</p>
+<section class="page-hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-icon">
+        <i class="pi pi-th-large"></i>
+      </div>
+      <h1 i18n="@@categories_page_title">Toutes les catégories</h1>
+      <p class="hero-subtitle" i18n="@@categories_page_subtitle">
+        Explorez nos outils classés par thématique
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="categories-section">
+  <div class="container">
+
+    <!-- Catégories disponibles -->
+    <div class="section-block" *ngIf="availableCategories.length > 0">
+      <div class="section-header">
+        <span class="section-badge available">
+          <i class="pi pi-check-circle"></i>
+          <span i18n="@@available_now">Disponible</span>
+        </span>
+        <h2 i18n="@@cats_available_title">Prêt à utiliser</h2>
+        <p i18n="@@cats_available_subtitle">Accédez aux outils déjà utilisables</p>
+      </div>
+
+      <div class="categories-grid">
+        <app-category-card
+          *ngFor="let c of availableCategories"
+          [category]="c"
+        />
+      </div>
+    </div>
+
+    <!-- Catégories à venir -->
+    <div class="section-block" *ngIf="comingSoonCategories.length > 0">
+      <div class="section-header">
+        <span class="section-badge coming-soon">
+          <i class="pi pi-clock"></i>
+          <span i18n="@@coming_soon_label">Bientôt</span>
+        </span>
+        <h2 i18n="@@cats_soon_title">En préparation</h2>
+        <p i18n="@@cats_soon_subtitle">De nouvelles catégories arrivent régulièrement</p>
+      </div>
+
+      <div class="categories-grid">
+        <app-category-card
+          *ngFor="let c of comingSoonCategories"
+          [category]="c"
+        />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="back-section">
+  <div class="container">
+    <a routerLink="/" class="back-link">
+      <i class="pi pi-arrow-left"></i>
+      <span i18n="@@back_to_home">Retour à l'accueil</span>
+    </a>
+  </div>
+</section>

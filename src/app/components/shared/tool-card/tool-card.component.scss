@@ -1,0 +1,144 @@
+.tool-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+
+  @media (max-width: 640px) {
+    padding: 1.25rem;
+    min-height: 160px;
+  }
+}
+
+.tool-card.is-clickable:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(99, 102, 241, 0.15);
+  border-color: var(--primary-color);
+}
+
+.tool-card.is-disabled {
+  opacity: 0.75;
+}
+
+// Overlay cliquable - couvre toute la card
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 16px;
+  text-decoration: none;
+  outline: none;
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.35);
+  }
+}
+
+// Contenu au-dessus visuellement mais laisse passer les clics
+.card-header,
+h3,
+p {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.tool-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-color-lighter));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 1.25rem;
+    color: white;
+  }
+
+  @media (max-width: 640px) {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+
+    i {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.tool-badge {
+  padding: 0.3rem 0.75rem;
+  background: var(--surface-ground);
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+}
+
+h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.35rem;
+
+  @media (max-width: 640px) {
+    font-size: 1rem;
+  }
+}
+
+p {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  flex: 1;
+
+  @media (max-width: 640px) {
+    font-size: 0.85rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+// Footer et bouton cliquables au-dessus de l'overlay
+.card-footer {
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.open-btn {
+  pointer-events: auto;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.tool-card.is-clickable {
+  cursor: pointer;
+}
