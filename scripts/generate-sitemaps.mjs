@@ -94,25 +94,32 @@ function extractCategoryIdsFromTs(tsContent) {
   return [...new Set(ids)];
 }
 
+function pick(block, keys) {
+  for (const k of keys) {
+    const m = block.match(new RegExp(`${k}\\s*:\\s*['"]([^'"]+)['"]`));
+    if (m?.[1]) return m[1];
+  }
+  return undefined;
+}
+
 function extractToolsFromTs(tsContent) {
-  // On récupère des blocs d'objets et on extrait id/category/available
-  // Adapté à ton style actuel (objets simples dans un array).
   const tools = [];
 
   const objectBlocks = tsContent.match(/\{[\s\S]*?\}/g) || [];
   for (const block of objectBlocks) {
-    const id = block.match(/id\s*:\s*['"]([^'"]+)['"]/)?.[1];
-    const category = block.match(/category\s*:\s*['"]([^'"]+)['"]/)?.[1];
+    const idTool = pick(block, ["idTool", "toolId", "id"]);
+    const idCategory = pick(block, ["idCategory", "categoryId", "category"]);
+    const idGroup = pick(block, ["idGroup", "groupId", "group"]);
+
     const availableRaw = block.match(/available\s*:\s*(true|false)/)?.[1];
     const available = availableRaw ? availableRaw === "true" : undefined;
 
-    if (id && category) {
-      tools.push({ id, category, available });
+    if (idTool && idCategory && idGroup) {
+      tools.push({ idTool, idCategory, idGroup, available });
     }
   }
 
-  // dédoublonne (category+id)
-  const uniq = new Map(tools.map(t => [`${t.category}:${t.id}`, t]));
+  const uniq = new Map(tools.map(t => [`${t.idCategory}:${t.idGroup}:${t.idTool}`, t]));
   return [...uniq.values()];
 }
 
@@ -134,7 +141,12 @@ function computeDynamicRoutes() {
     const toolTs = fs.readFileSync(TOOLS_TS, "utf8");
     for (const t of extractToolsFromTs(toolTs)) {
       if (!INCLUDE_COMING_SOON_TOOLS && t.available === false) continue;
-      routes.add(`/categories/${t.category}/${t.id}`);
+
+      // page groupe (2 segments)
+      routes.add(`/categories/${t.idCategory}/${t.idGroup}`);
+
+      // page outil (3 segments)
+      routes.add(`/categories/${t.idCategory}/${t.idGroup}/${t.idTool}`);
     }
   }
 
