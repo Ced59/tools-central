@@ -86,11 +86,6 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     return s[Math.min(Math.max(i, 0), s.length - 1)];
   });
 
-  /**
-   * ✅ Important : on normalise le LaTeX i18n avant rendu KaTeX.
-   * - corrige "\\text" -> "\text" (sinon KaTeX affiche "text")
-   * - corrige TAB réel "\t" + "ext" -> "\text" (cas build/i18n)
-   */
   resolvedLatex = computed(() => {
     const mode = this.mode();
     const step = this.activeStep();
@@ -101,6 +96,7 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     const vars = (mode === 'steps' ? step?.vars : this.vars()) ?? {};
     const injected = this.injectVars(raw, vars, this.precision());
 
+    // ✅ Normalisation i18n (ICU) + échappements avant KaTeX
     return this.normalizeLatex(injected);
   });
 
@@ -155,48 +151,6 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  /**
-   * Normalisation KaTeX / i18n :
-   * - Si ton XLF contient "\\text{...}", KaTeX lit "\\" comme retour à la ligne => il reste "text".
-   * - Si une string JS contient "\text", le "\t" peut devenir un TAB réel.
-   * On harmonise tout vers "\text", "\times", etc.
-   */
-  private normalizeLatex(input: string): string {
-    let s = input;
-
-    // 1) Convertit les TAB réels + "ext"/"imes" en commandes (cas "\text" mangé en "\t")
-    //    Ici, \t dans la regex = caractère TAB.
-    s = s
-      .replace(/\text\b/g, '\\text')
-      .replace(/\times\b/g, '\\times');
-
-    // 2) Réduit les commandes sur-échappées : \\text, \\\text, etc. => \text
-    //    (on collapse toute séquence de 2+ backslashes devant la commande)
-    const collapse = (cmd: string) => {
-      const re = new RegExp(String.raw`\\{2,}${cmd}\b`, 'g');
-      s = s.replace(re, `\\${cmd}`);
-    };
-
-    for (const cmd of [
-      'text',
-      'times',
-      'dfrac',
-      'frac',
-      'mathrm',
-      'left',
-      'right',
-      'begin',
-      'end',
-    ]) {
-      collapse(cmd);
-    }
-
-    // 3) Pourcentages sur-échappés (\\% => \%)
-    s = s.replace(/\\{2,}%/g, '\\%');
-
-    return s;
-  }
-
   private injectVars(
     latex: string,
     vars: Record<string, number | string | null | undefined>,
@@ -206,7 +160,6 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
       const v = vars[key];
 
       if (v === null || v === undefined || v === '') {
-        // ✅ String.raw évite le piège "\t" => TAB
         return String.raw`\text{${key}}`;
       }
 
@@ -215,7 +168,6 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
         return s === '-0' ? '0' : s;
       }
 
-      // Texte injecté : on protège KaTeX
       return String(v)
         .replace(/\\/g, '\\\\')
         .replace(/_/g, '\\_')
@@ -233,5 +185,51 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
 
     const s = rounded.toFixed(p);
     return s.replace(/\.?0+$/, (m) => (m.startsWith('.') ? '' : m));
+  }
+
+  /**
+   * ✅ Corrige les effets de bord Angular i18n sur les formules KaTeX
+   * - ICU: protège/restaure les accolades { } via entités HTML
+   * - \t: possible TAB si \text a été interprété comme séquence d'échappement
+   * - \\text: sur-échappement => \text
+   */
+  private normalizeLatex(input: string): string {
+    let s = input;
+
+    // 1) Restaure accolades encodées (pour éviter ICU Angular i18n)
+    s = s
+      .replace(/&#123;/g, '{')
+      .replace(/&#125;/g, '}')
+      .replace(/&lbrace;/g, '{')
+      .replace(/&rbrace;/g, '}');
+
+    // 2) Répare le cas où \text a été mangé en TAB + "ext"
+    //    (ici "\t" dans la regex = caractère TAB)
+    s = s.replace(/\text\b/g, '\\text').replace(/\times\b/g, '\\times');
+
+    // 3) Réduit les commandes sur-échappées : \\text, \\\text... => \text
+    const collapseCmd = (cmd: string) => {
+      const re = new RegExp(String.raw`\\{2,}${cmd}\b`, 'g');
+      s = s.replace(re, `\\${cmd}`);
+    };
+
+    for (const cmd of [
+      'text',
+      'times',
+      'dfrac',
+      'frac',
+      'mathrm',
+      'left',
+      'right',
+      'begin',
+      'end',
+    ]) {
+      collapseCmd(cmd);
+    }
+
+    // 4) Pourcentages sur-échappés (\\% => \%)
+    s = s.replace(/\\{2,}%/g, '\\%');
+
+    return s;
   }
 }

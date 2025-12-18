@@ -76,12 +76,16 @@ function looksLikeKatex(id, value) {
 function escapeKatexForXlfString(s) {
   if (typeof s !== "string" || s.length === 0) return s;
 
-  // Si un vrai caractère TAB est présent (rare), on le remplace par \t littéral.
-  // Puis on fera le doublage => \\t dans le XLF.
-  let out = s.replace(/\t/g, "\\t");
+  // ✅ Protéger les accolades contre ICU Angular i18n
+  // (Angular i18n traite { } comme syntaxe ICU)
+  let out = s
+    .replace(/{/g, "&#123;")
+    .replace(/}/g, "&#125;");
+
+  // Si un vrai caractère TAB est présent, on le remplace par \t littéral.
+  out = out.replace(/\t/g, "\\t");
 
   // Double uniquement les backslashes non déjà doublés
-  // Node 18+ supporte le lookbehind.
   out = out.replace(/(?<!\\)\\(?!\\)/g, "\\\\");
   return out;
 }
