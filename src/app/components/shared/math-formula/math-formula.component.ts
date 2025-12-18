@@ -164,22 +164,35 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
   private normalizeLatex(input: string): string {
     let s = input;
 
-    // 1) Over-escape : \\text -> \text (idem commandes fréquentes)
-    s = s
-      .replace(/\\\\text\b/g, '\\text')
-      .replace(/\\\\times\b/g, '\\times')
-      .replace(/\\\\dfrac\b/g, '\\dfrac')
-      .replace(/\\\\frac\b/g, '\\frac')
-      .replace(/\\\\mathrm\b/g, '\\mathrm')
-      .replace(/\\\\left\b/g, '\\left')
-      .replace(/\\\\right\b/g, '\\right')
-      .replace(/\\\\%/g, '\\%');
-
-    // 2) TAB réel : "\text" peut devenir [TAB]+"ext"
-    // En regex JS, \t matche un caractère TAB.
+    // 1) Convertit les TAB réels + "ext"/"imes" en commandes (cas "\text" mangé en "\t")
+    //    Ici, \t dans la regex = caractère TAB.
     s = s
       .replace(/\text\b/g, '\\text')
       .replace(/\times\b/g, '\\times');
+
+    // 2) Réduit les commandes sur-échappées : \\text, \\\text, etc. => \text
+    //    (on collapse toute séquence de 2+ backslashes devant la commande)
+    const collapse = (cmd: string) => {
+      const re = new RegExp(String.raw`\\{2,}${cmd}\b`, 'g');
+      s = s.replace(re, `\\${cmd}`);
+    };
+
+    for (const cmd of [
+      'text',
+      'times',
+      'dfrac',
+      'frac',
+      'mathrm',
+      'left',
+      'right',
+      'begin',
+      'end',
+    ]) {
+      collapse(cmd);
+    }
+
+    // 3) Pourcentages sur-échappés (\\% => \%)
+    s = s.replace(/\\{2,}%/g, '\\%');
 
     return s;
   }

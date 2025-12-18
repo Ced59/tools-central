@@ -11,7 +11,7 @@
       *ngFor="let _ of steps()!; let i = index"
       [class.is-active]="i === activeIndex()"
       (click)="setStep(i)"
-      [attr.aria-label]="'Step ' + (i + 1)"
+      [attr.aria-label]="'Step ' + (i + 1)" i18n-attr.aria-label="@@formula_step_aria"
     >
       {{ i + 1 }}
     </button>
