@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
 import { SeoService } from '../../../services/seo/seo.service';
 import {RouterLink} from "@angular/router";
+import {CATEGORIES} from "../../../data/categories";
 
 @Component({
   selector: 'app-home',
@@ -19,35 +20,18 @@ export class HomeComponent {
   /** ✅ Route "relative" : Angular i18n préfixe déjà /de, /en, etc. */
   categoriesRoute = '/categories';
 
-  availableCategories: CategoryItem[] = [
-    {
-      id: 'math',
-      title: $localize`:@@cat_math_title:Mathématiques`,
-      description: $localize`:@@cat_math_desc:Pourcentages, règles de trois, conversions...`,
-      icon: 'pi pi-calculator',
-      route: '/categories/math',
-      available: true
-    }
-  ];
+  private readonly allCategories: CategoryItem[] = CATEGORIES.map((c) => ({
+    id: c.id,
+    title: c.title,
+    description: c.description,
+    icon: c.icon,
+    route: `/categories/${c.id}`,
+    available: c.available,
+  }));
 
-  comingSoonCategories: CategoryItem[] = [
-    {
-      id: 'text',
-      title: $localize`:@@cat_text_title:Texte`,
-      description: $localize`:@@cat_text_desc:Compteurs, formatage, nettoyage de texte...`,
-      icon: 'pi pi-file-edit',
-      route: '/categories/text',
-      available: false
-    },
-    {
-      id: 'image',
-      title: $localize`:@@cat_image_title:Image`,
-      description: $localize`:@@cat_image_desc:Compression, redimensionnement, optimisation...`,
-      icon: 'pi pi-image',
-      route: '/categories/image',
-      available: false
-    }
-  ];
+  /** ✅ plus de duplication */
+  availableCategories = this.allCategories.filter((c) => c.available);
+  comingSoonCategories = this.allCategories.filter((c) => !c.available);
 
   ngOnInit() {
     this.seo.setPageSeo({

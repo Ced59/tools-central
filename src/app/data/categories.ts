@@ -19,7 +19,7 @@ export const CATEGORIES: ToolCategory[] = [
     title: $localize`:@@cat_text_title:Texte`,
     description: $localize`:@@cat_text_desc:Compteurs, formatage, nettoyage de texte...`,
     icon: 'pi pi-file-edit',
-    available: false,
+    available: true,
   },
   {
     id: 'image',
