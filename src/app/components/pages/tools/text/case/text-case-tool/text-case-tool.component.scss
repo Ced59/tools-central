@@ -1,5 +1,7 @@
+@use 'tool-page' as tp;
+
 /* =========================================================
-   ✅ Socle "charte outils" (dupliqué comme les pourcentages)
+   ✅ Socle "charte outils" (refacto ISO)
    ========================================================= */
 
 .tool-page {
@@ -66,40 +68,7 @@
   padding-top: 1.6rem;
 }
 
-/* Card */
-.tool-card {
-  background: var(--surface-card);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.25rem;
-
-  @media (max-width: 768px) {
-    padding: 1.25rem;
-    border-radius: 14px;
-  }
-}
-
-.card-header {
-  margin-bottom: 1.25rem;
-
-  &.centered {
-    text-align: center;
-  }
-
-  h2 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin: 0 0 0.25rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: var(--text-color-secondary);
-    margin: 0;
-  }
-}
+@include tp.tool-card;
 
 .divider {
   height: 1px;
@@ -107,38 +76,7 @@
   margin: 1.25rem 0;
 }
 
-/* Retour */
-.back-section {
-  padding-top: 0.5rem;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color-secondary);
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  transition: color 0.2s ease, background 0.2s ease;
-
-  i {
-    font-size: 0.85rem;
-    transition: transform 0.2s ease;
-  }
-
-  &:hover {
-    color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.08);
-
-    i {
-      transform: translateX(-3px);
-    }
-  }
-}
-
+@include tp.back;
 
 /* =========================================================
    ✅ Styles spécifiques "Text Case"
@@ -218,7 +156,6 @@
   }
 }
 
-
 .actions-explain {
   display: grid;
   grid-template-columns: 1fr;
@@ -248,42 +185,4 @@
   }
 }
 
-// Examples
-.examples-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
-
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.example-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  background: var(--surface-ground);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
-
-  &:hover {
-    border-color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.05);
-  }
-
-  .ex-label {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: var(--primary-color);
-  }
-
-  .ex-values {
-    font-size: 0.85rem;
-    color: var(--text-color-secondary);
-  }
-}
+@include tp.examples;

@@ -187,27 +187,27 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Exemples -->
-  <div class="tool-card">
-    <div class="card-header centered">
-      <h2 i18n="@@text_case_examples_title">Exemples</h2>
-      <p i18n="@@text_case_examples_sub">
-        Cliquez sur un exemple pour pré-remplir le texte et tester une action.
-      </p>
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@text_case_examples_title">Exemples</h2>
+        <p i18n="@@text_case_examples_sub">
+          Cliquez sur un exemple pour pré-remplir le texte et tester une action.
+        </p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          type="button"
+          class="example-btn"
+          *ngFor="let ex of examples"
+          (click)="applyExample(ex)"
+        >
+          {{ ex.label }}
+        </button>
+      </div>
     </div>
 
-    <div class="examples-grid">
-      <button
-        type="button"
-        class="example-btn"
-        *ngFor="let ex of examples"
-        (click)="applyExample(ex)"
-      >
-        {{ ex.label }}
-      </button>
-    </div>
   </div>
-
 </section>
