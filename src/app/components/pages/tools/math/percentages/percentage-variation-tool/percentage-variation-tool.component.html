@@ -79,11 +79,17 @@
       <div class="results-section">
         <div class="results-header">
           <h3 i18n="@@pct_var_results">Résultats</h3>
+
           <p-tag
             *ngIf="trend() !== null && !isInitialZero()"
             [severity]="tagSeverity()"
-            [value]="trendLabel()"
-          />
+          >
+            <ng-container [ngSwitch]="trendKey()">
+              <span *ngSwitchCase="'up'" i18n="@@pct_var_up">Hausse</span>
+              <span *ngSwitchCase="'down'" i18n="@@pct_var_down">Baisse</span>
+              <span *ngSwitchDefault i18n="@@pct_var_flat">Stable</span>
+            </ng-container>
+          </p-tag>
         </div>
 
         <div class="results-grid">
@@ -105,6 +111,19 @@
             <span class="result-value">{{ fmt(multiplier()) }}</span>
           </div>
         </div>
+
+        <div class="divider"></div>
+
+        <!-- ✅ Formule step-by-step (comme "Pourcentage d’un nombre") -->
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
 
         <div class="actions">
           <p-button
@@ -133,6 +152,7 @@
           class="example-btn"
           (click)="applyExample(ex)"
         >
+          <!-- ✅ plus de $localize runtime -->
           <span class="ex-label">{{ ex.label }}</span>
           <span class="ex-values">{{ ex.initial }} → {{ ex.final }}</span>
         </button>
@@ -149,12 +169,14 @@
       </div>
 
       <div class="explain-content">
-        <div class="formula-box">
-          <span class="formula-label" i18n="@@pct_var_formula_title">Formule</span>
-          <span class="formula-text" i18n="@@pct_var_formula_text">
-            Variation (%) = (Final − Initial) ÷ Initial × 100
-          </span>
-        </div>
+        <!-- ✅ Formule KaTeX i18n -->
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@pct_var_formula_title"
+          mode="katex"
+          latex="\text{Variation}(\%)=\dfrac{\text{Final}-\text{Initial}}{\text{Initial}}\times 100"
+          i18n-latex="@@pct_var_formula_katex"
+        ></tc-math-formula>
 
         <ol class="steps-list">
           <li i18n="@@pct_var_step1">Calculez l'écart : <strong>final − initial</strong></li>
@@ -166,7 +188,7 @@
           <i class="pi pi-lightbulb"></i>
           <span i18n="@@pct_var_note">
             Résultat positif = hausse, négatif = baisse.
-            Le coefficient vaut <strong>1 + variation/100</strong>.
+            Le coefficient vaut <strong>final ÷ initial</strong>.
           </span>
         </div>
       </div>
