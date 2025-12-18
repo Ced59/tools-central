@@ -86,6 +86,11 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     return s[Math.min(Math.max(i, 0), s.length - 1)];
   });
 
+  /**
+   * ✅ Important : on normalise le LaTeX i18n avant rendu KaTeX.
+   * - corrige "\\text" -> "\text" (sinon KaTeX affiche "text")
+   * - corrige TAB réel "\t" + "ext" -> "\text" (cas build/i18n)
+   */
   resolvedLatex = computed(() => {
     const mode = this.mode();
     const step = this.activeStep();
@@ -94,7 +99,9 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     if (!raw) return null;
 
     const vars = (mode === 'steps' ? step?.vars : this.vars()) ?? {};
-    return this.injectVars(raw, vars, this.precision());
+    const injected = this.injectVars(raw, vars, this.precision());
+
+    return this.normalizeLatex(injected);
   });
 
   resolvedPlain = computed(() => {
@@ -148,6 +155,35 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
     }
   }
 
+  /**
+   * Normalisation KaTeX / i18n :
+   * - Si ton XLF contient "\\text{...}", KaTeX lit "\\" comme retour à la ligne => il reste "text".
+   * - Si une string JS contient "\text", le "\t" peut devenir un TAB réel.
+   * On harmonise tout vers "\text", "\times", etc.
+   */
+  private normalizeLatex(input: string): string {
+    let s = input;
+
+    // 1) Over-escape : \\text -> \text (idem commandes fréquentes)
+    s = s
+      .replace(/\\\\text\b/g, '\\text')
+      .replace(/\\\\times\b/g, '\\times')
+      .replace(/\\\\dfrac\b/g, '\\dfrac')
+      .replace(/\\\\frac\b/g, '\\frac')
+      .replace(/\\\\mathrm\b/g, '\\mathrm')
+      .replace(/\\\\left\b/g, '\\left')
+      .replace(/\\\\right\b/g, '\\right')
+      .replace(/\\\\%/g, '\\%');
+
+    // 2) TAB réel : "\text" peut devenir [TAB]+"ext"
+    // En regex JS, \t matche un caractère TAB.
+    s = s
+      .replace(/\text\b/g, '\\text')
+      .replace(/\times\b/g, '\\times');
+
+    return s;
+  }
+
   private injectVars(
     latex: string,
     vars: Record<string, number | string | null | undefined>,
@@ -157,6 +193,7 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
       const v = vars[key];
 
       if (v === null || v === undefined || v === '') {
+        // ✅ String.raw évite le piège "\t" => TAB
         return String.raw`\text{${key}}`;
       }
 
@@ -165,6 +202,7 @@ export class MathFormulaComponent implements AfterViewInit, OnChanges {
         return s === '-0' ? '0' : s;
       }
 
+      // Texte injecté : on protège KaTeX
       return String(v)
         .replace(/\\/g, '\\\\')
         .replace(/_/g, '\\_')
