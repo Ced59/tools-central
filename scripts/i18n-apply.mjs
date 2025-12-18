@@ -30,7 +30,6 @@ function writeXlf(filePath, obj) {
   fs.writeFileSync(filePath, xml, "utf8");
 }
 
-
 function getFileNode(xlfObj) {
   const file = xlfObj?.xliff?.file;
   if (!file) throw new Error("Invalid XLF: missing xliff.file");
@@ -52,6 +51,57 @@ function getOrCreateSegment(unit) {
   return unit.segment;
 }
 
+/**
+ * Détecte "c'est du KaTeX" :
+ * - id qui finit par _katex (ton conventionnement actuel)
+ * - ou présence de commandes latex typiques dans la source/target
+ */
+function looksLikeKatex(id, value) {
+  if ((id ?? "").endsWith("_katex")) return true;
+
+  const s = typeof value === "string"
+    ? value
+    : (value && typeof value === "object" ? (value["#text"] ?? "") : "");
+
+  // heuristique légère (évite d’over-escape du texte normal)
+  return /\\(text|mathrm|dfrac|frac|times|begin|end|left|right|%)/.test(s);
+}
+
+/**
+ * IMPORTANT:
+ * - On veut écrire \\text dans le XLF pour éviter que \text => \t (TAB) dans du JS généré.
+ * - Idempotent: ne double que les backslashes "simples" (pas ceux déjà doublés).
+ * - Répare aussi une tabulation réelle si elle s'est déjà glissée.
+ */
+function escapeKatexForXlfString(s) {
+  if (typeof s !== "string" || s.length === 0) return s;
+
+  // Si un vrai caractère TAB est présent (rare), on le remplace par \t littéral.
+  // Puis on fera le doublage => \\t dans le XLF.
+  let out = s.replace(/\t/g, "\\t");
+
+  // Double uniquement les backslashes non déjà doublés
+  // Node 18+ supporte le lookbehind.
+  out = out.replace(/(?<!\\)\\(?!\\)/g, "\\\\");
+  return out;
+}
+
+function escapeKatexForXlf(value) {
+  if (typeof value === "string") return escapeKatexForXlfString(value);
+
+  // Cas "rich text" (pc + #text, éventuellement ph)
+  if (value && typeof value === "object") {
+    const cloned = { ...value };
+    if (typeof cloned["#text"] === "string") {
+      cloned["#text"] = escapeKatexForXlfString(cloned["#text"]);
+    }
+    // Si jamais tu ajoutes des champs texte ailleurs (rare), on peut étendre ici.
+    return cloned;
+  }
+
+  return value;
+}
+
 function setTarget(unit, value, state = "translated") {
   const seg = getOrCreateSegment(unit);
 
@@ -69,14 +119,11 @@ function setTarget(unit, value, state = "translated") {
     return;
   }
 
-  // Cas "rich text" (pc + #text) => on remplace target en gardant la structure
+  // Cas "rich text"
   if (value && typeof value === "object") {
-    // Important: on ajoute l'état sans casser la structure
     seg.target = { ...value, "@_state": state };
     return;
   }
-
-  // sinon ignore
 }
 
 // ---- args
@@ -109,13 +156,11 @@ for (const [locale, items] of Object.entries(locales)) {
     const id = item?.id;
     const translatedTargetRaw = item?.translatedTarget;
 
-// string -> trim
     const translatedTarget =
       typeof translatedTargetRaw === "string"
         ? translatedTargetRaw.trim()
         : translatedTargetRaw;
 
-// skip si vide
     const isEmptyString = typeof translatedTarget === "string" && translatedTarget.length === 0;
     const isEmptyObject =
       translatedTarget && typeof translatedTarget === "object"
@@ -124,14 +169,18 @@ for (const [locale, items] of Object.entries(locales)) {
 
     if (!id || translatedTarget == null || isEmptyString || isEmptyObject) continue;
 
-
     const unit = map.get(id);
     if (!unit) {
       missingUnits++;
       continue;
     }
 
-    setTarget(unit, translatedTarget, "translated");
+    // ✅ Escape KaTeX automatiquement au moment d'écrire dans le XLF
+    const finalValue = looksLikeKatex(id, translatedTarget)
+      ? escapeKatexForXlf(translatedTarget)
+      : translatedTarget;
+
+    setTarget(unit, finalValue, "translated");
     applied++;
     appliedInLocale++;
   }
