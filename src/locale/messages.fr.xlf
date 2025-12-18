@@ -476,9 +476,19 @@
         <source>Valeur de 1%</source>
       </segment>
     </unit>
+    <unit id="tool_formula_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:105,106</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:164,165</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:119,120</note>
+      </notes>
+      <segment>
+        <source>Formule</source>
+      </segment>
+    </unit>
     <unit id="tool_reset">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:109,110</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:121,122</note>
       </notes>
       <segment>
         <source>Réinitialiser</source>
@@ -486,7 +496,7 @@
     </unit>
     <unit id="tool_examples">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:119,120</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:131,132</note>
       </notes>
       <segment>
         <source>Exemples</source>
@@ -494,15 +504,23 @@
     </unit>
     <unit id="tool_examples_sub">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:120,123</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:132,135</note>
       </notes>
       <segment>
         <source>Cliquez pour pré-remplir</source>
       </segment>
     </unit>
+    <unit id="pct_of_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:143,144</note>
+      </notes>
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ ex.percent }}"/>% de <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.base }}"/> </source>
+      </segment>
+    </unit>
     <unit id="tool_definition_title">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:138,139</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:156,157</note>
       </notes>
       <segment>
         <source>Définition &amp; méthode</source>
@@ -510,39 +528,31 @@
     </unit>
     <unit id="pct_of_definition_sub">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:140,142</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:158,160</note>
       </notes>
       <segment>
         <source> Un pourcentage est une proportion “sur 100”. </source>
       </segment>
     </unit>
-    <unit id="tool_formula_title">
+    <unit id="pct_of_formula_katex">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:146,147</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:167,168</note>
       </notes>
       <segment>
-        <source>Formule</source>
-      </segment>
-    </unit>
-    <unit id="pct_of_formula">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:148,149</note>
-      </notes>
-      <segment>
-        <source> Résultat = Valeur × Pourcentage ÷ 100 </source>
+        <source>\text{Résultat}=\text{Valeur}\times\dfrac{\text{Pourcentage}}{100}</source>
       </segment>
     </unit>
     <unit id="pct_of_step1">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:153,154</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:173,176</note>
       </notes>
       <segment>
-        <source>Transformez le pourcentage en coefficient : <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">p ÷ 100</pc></source>
+        <source> Transformez le pourcentage en coefficient : <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">p ÷ 100</pc></source>
       </segment>
     </unit>
     <unit id="pct_of_step2">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:154,157</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:176,179</note>
       </notes>
       <segment>
         <source>Multipliez la valeur par ce coefficient</source>
@@ -550,7 +560,7 @@
     </unit>
     <unit id="pct_of_note">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:160,161</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:182,183</note>
       </notes>
       <segment>
         <source> Exemple : 15% = 0,15. Donc 15% de 200 = 200 × 0,15 = 30. </source>
@@ -558,43 +568,11 @@
     </unit>
     <unit id="back_to_tools">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:170,172</note>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:179,181</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:192,194</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:201,203</note>
       </notes>
       <segment>
         <source>Retour aux outils</source>
-      </segment>
-    </unit>
-    <unit id="pct_of_ex1">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.ts:36</note>
-      </notes>
-      <segment>
-        <source>20% de 80</source>
-      </segment>
-    </unit>
-    <unit id="pct_of_ex2">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.ts:37</note>
-      </notes>
-      <segment>
-        <source>7,5% de 1 200</source>
-      </segment>
-    </unit>
-    <unit id="pct_of_ex3">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.ts:38</note>
-      </notes>
-      <segment>
-        <source>15% de 199,99</source>
-      </segment>
-    </unit>
-    <unit id="pct_of_ex4">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.ts:39</note>
-      </notes>
-      <segment>
-        <source>2% de 5 000</source>
       </segment>
     </unit>
     <unit id="pct_var_title">
@@ -671,167 +649,15 @@
     </unit>
     <unit id="pct_var_results">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:81,83</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:81,84</note>
       </notes>
       <segment>
         <source>Résultats</source>
       </segment>
     </unit>
-    <unit id="pct_var_delta_label">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:91,92</note>
-      </notes>
-      <segment>
-        <source>Écart</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_pct_label">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:96,97</note>
-      </notes>
-      <segment>
-        <source>Variation</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_div0">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:99,100</note>
-      </notes>
-      <segment>
-        <source> Division par 0 </source>
-      </segment>
-    </unit>
-    <unit id="pct_var_mult_label">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:104,105</note>
-      </notes>
-      <segment>
-        <source>Coefficient</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_reset">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:116,117</note>
-      </notes>
-      <segment>
-        <source>Réinitialiser</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_examples">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:126,127</note>
-      </notes>
-      <segment>
-        <source>Exemples</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_examples_sub">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:127,130</note>
-      </notes>
-      <segment>
-        <source>Cliquez pour pré-remplir</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_definition_title">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:145,146</note>
-      </notes>
-      <segment>
-        <source>Définition &amp; méthode</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_definition_sub">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:147,149</note>
-      </notes>
-      <segment>
-        <source> La variation en pourcentage mesure le changement relatif entre deux valeurs. </source>
-      </segment>
-    </unit>
-    <unit id="pct_var_formula_title">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:153,154</note>
-      </notes>
-      <segment>
-        <source>Formule</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_formula_text">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:155,157</note>
-      </notes>
-      <segment>
-        <source> Variation (%) = (Final − Initial) ÷ Initial × 100 </source>
-      </segment>
-    </unit>
-    <unit id="pct_var_step1">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:160,161</note>
-      </notes>
-      <segment>
-        <source>Calculez l&apos;écart : <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final − initial</pc></source>
-      </segment>
-    </unit>
-    <unit id="pct_var_step2">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:161,162</note>
-      </notes>
-      <segment>
-        <source>Divisez par la valeur initiale</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_step3">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:162,165</note>
-      </notes>
-      <segment>
-        <source>Multipliez par 100 pour obtenir le pourcentage</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_note">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:168,171</note>
-      </notes>
-      <segment>
-        <source> Résultat positif = hausse, négatif = baisse. Le coefficient vaut <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">1 + variation/100</pc>. </source>
-      </segment>
-    </unit>
-    <unit id="pct_var_ex1">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:40</note>
-      </notes>
-      <segment>
-        <source>Prix 80 → 100</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_ex2">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:41</note>
-      </notes>
-      <segment>
-        <source>Population 1 250 → 1 150</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_ex3">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:42</note>
-      </notes>
-      <segment>
-        <source>CA 12 000 → 15 600</source>
-      </segment>
-    </unit>
-    <unit id="pct_var_ex4">
-      <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:43</note>
-      </notes>
-      <segment>
-        <source>Note 14 → 16</source>
-      </segment>
-    </unit>
     <unit id="pct_var_up">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:54</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:88,89</note>
       </notes>
       <segment>
         <source>Hausse</source>
@@ -839,7 +665,7 @@
     </unit>
     <unit id="pct_var_down">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:55</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:89,90</note>
       </notes>
       <segment>
         <source>Baisse</source>
@@ -847,10 +673,130 @@
     </unit>
     <unit id="pct_var_flat">
       <notes>
-        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.ts:56</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:90,91</note>
       </notes>
       <segment>
         <source>Stable</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_delta_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:97,98</note>
+      </notes>
+      <segment>
+        <source>Écart</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_pct_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:102,103</note>
+      </notes>
+      <segment>
+        <source>Variation</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_div0">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:105,106</note>
+      </notes>
+      <segment>
+        <source> Division par 0 </source>
+      </segment>
+    </unit>
+    <unit id="pct_var_mult_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:110,111</note>
+      </notes>
+      <segment>
+        <source>Coefficient</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_reset">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:135,136</note>
+      </notes>
+      <segment>
+        <source>Réinitialiser</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_examples">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:145,146</note>
+      </notes>
+      <segment>
+        <source>Exemples</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_examples_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:146,149</note>
+      </notes>
+      <segment>
+        <source>Cliquez pour pré-remplir</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_definition_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:165,166</note>
+      </notes>
+      <segment>
+        <source>Définition &amp; méthode</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:167,169</note>
+      </notes>
+      <segment>
+        <source> La variation en pourcentage mesure le changement relatif entre deux valeurs. </source>
+      </segment>
+    </unit>
+    <unit id="pct_var_formula_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:174,175</note>
+      </notes>
+      <segment>
+        <source>Formule</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:177,178</note>
+      </notes>
+      <segment>
+        <source>\text{Variation}(\%)=\dfrac{\text{Final}-\text{Initial}}{\text{Initial}}\times 100</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:182,183</note>
+      </notes>
+      <segment>
+        <source>Calculez l&apos;écart : <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final − initial</pc></source>
+      </segment>
+    </unit>
+    <unit id="pct_var_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:183,184</note>
+      </notes>
+      <segment>
+        <source>Divisez par la valeur initiale</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:184,187</note>
+      </notes>
+      <segment>
+        <source>Multipliez par 100 pour obtenir le pourcentage</source>
+      </segment>
+    </unit>
+    <unit id="pct_var_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:190,193</note>
+      </notes>
+      <segment>
+        <source> Résultat positif = hausse, négatif = baisse. Le coefficient vaut <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final ÷ initial</pc>. </source>
       </segment>
     </unit>
     <unit id="753770514700506985">

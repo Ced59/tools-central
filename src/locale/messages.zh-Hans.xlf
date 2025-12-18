@@ -756,10 +756,10 @@ Calculez l&apos;écart :        </source>
       </notes>
       <segment>
         <source>
-          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">1 + variation/100</pc>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final ÷ initial</pc>
 Résultat positif = hausse, négatif = baisse. Le coefficient vaut.        </source>
         <target state="translated">
-          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">1 + 变化/100</pc>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final ÷ initial</pc>
 结果为正表示上升，为负表示下降。系数为：        </target>
       </segment>
     </unit>
@@ -1314,6 +1314,39 @@ Transformez le pourcentage en coefficient :        </source>
       <segment>
         <source>2% de 5 000</source>
         <target state="translated">5 000的2%</target>
+      </segment>
+    </unit>
+    <unit id="pct_of_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:143,144</note>
+      </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.percent }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.base }}"></ph>
+% de        </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.percent }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.base }}"></ph>
+% 的        </target>
+      </segment>
+    </unit>
+    <unit id="pct_of_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:167,168</note>
+      </notes>
+      <segment>
+        <source>\text{Résultat}=\text{Valeur}\times\dfrac{\text{Pourcentage}}{100}</source>
+        <target state="translated">\text{结果}=\text{数值}\times\dfrac{\text{百分比}}{100}</target>
+      </segment>
+    </unit>
+    <unit id="pct_var_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:177,178</note>
+      </notes>
+      <segment>
+        <source>\text{Variation}(\%)=\dfrac{\text{Final}-\text{Initial}}{\text{Initial}}\times 100</source>
+        <target state="translated">\text{变化}(\%)=\dfrac{\text{最终}-\text{初始}}{\text{初始}}\times 100</target>
       </segment>
     </unit>
   </file>
