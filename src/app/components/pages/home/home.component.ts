@@ -5,6 +5,7 @@ import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/
 import { SeoService } from '../../../services/seo/seo.service';
 import {RouterLink} from "@angular/router";
 import {CATEGORIES} from "../../../data/categories";
+import { routes } from '../../../data/routes';
 
 @Component({
   selector: 'app-home',
@@ -18,14 +19,14 @@ export class HomeComponent {
   private platformId = inject(PLATFORM_ID);
 
   /** ✅ Route "relative" : Angular i18n préfixe déjà /de, /en, etc. */
-  categoriesRoute = '/categories';
+  categoriesRoute = routes.categories;
 
   private readonly allCategories: CategoryItem[] = CATEGORIES.map((c) => ({
     id: c.id,
     title: c.title,
     description: c.description,
     icon: c.icon,
-    route: `/categories/${c.id}`,
+    route: routes.category(c.id),
     available: c.available,
   }));
 

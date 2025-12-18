@@ -9,19 +9,22 @@ import {
 import {
   PercentageOfNumberToolComponent
 } from "../math/percentages/percentage-of-number-tool/percentage-of-number-tool.component";
+import {TextCaseToolComponent} from "../text/case/text-case-tool/text-case-tool.component";
 
 
 
 // Registry: (categoryId/toolId) -> composant
 // Registry: category -> group -> tool -> component
-const TOOL_COMPONENTS: Record<
-  string,
-  Record<string, Record<string, Type<unknown>>>
-> = {
+const TOOL_COMPONENTS: Record<string, Record<string, Record<string, Type<unknown>>>> = {
   math: {
     percentages: {
       'percentage-variation': PercentageVariationToolComponent,
       'percentage-of-number': PercentageOfNumberToolComponent
+    },
+  },
+  text: {
+    case: {
+      'text-case': TextCaseToolComponent,
     },
   },
 };

@@ -27,4 +27,13 @@ export const TOOL_GROUPS: ToolGroup[] = [
     route: '/categories/math/vat',
     available: false,
   },
+  {
+    id: 'case',
+    category: 'text',
+    title: $localize`:@@group_text_case_title:Casse du texte`,
+    description: $localize`:@@group_text_case_desc:Majuscules, minuscules, inversion, capitalisation…`,
+    icon: 'pi pi-sort-alpha-down',
+    route: '/categories/text/case',
+    available: true,
+  },
 ];

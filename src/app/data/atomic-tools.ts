@@ -115,4 +115,14 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     route: '/categories/math/percentages/percentage-ratio',
     available: false,
   },
+  {
+    id: 'text-case',
+    category: 'text',
+    group: 'case',
+    title: $localize`:@@tool_text_case_title:Mettre en majuscule / minuscule`,
+    description: $localize`:@@tool_text_case_desc:Convertir la casse du texte selon la langue (locale).`,
+    icon: 'pi pi-sort-alpha-down',
+    route: '/categories/text/case/text-case',
+    available: true,
+  },
 ];

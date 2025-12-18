@@ -1,0 +1,213 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-sort-alpha-down"></i>
+        </div>
+        <h1 i18n="@@text_case_h1">Majuscules / Minuscules</h1>
+        <p class="hero-subtitle" i18n="@@text_case_subtitle">
+          Convertissez la casse du texte en respectant la langue (locale).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+    <!-- Carte conversion -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@text_case_card_title">Convertisseur</h2>
+      </div>
+
+      <div class="text-grid">
+        <!-- Entrée -->
+        <div class="field">
+          <label for="input" i18n="@@text_case_input_label">Texte</label>
+
+          <textarea
+            id="input"
+            pTextarea
+            [autoResize]="true"
+            rows="8"
+            [formControl]="form.controls.input"
+            placeholder="Collez votre texte ici…"
+            i18n-placeholder="@@text_case_input_placeholder"
+            class="input-full"
+          ></textarea>
+
+          <small class="hint" i18n="@@text_case_input_hint">
+            Astuce : le turc a des règles spéciales (i/İ, I/ı) — la locale est prise en compte.
+          </small>
+        </div>
+
+        <!-- Sortie -->
+        <div class="field">
+          <label i18n="@@text_case_output_label">Résultat</label>
+
+          <div class="output-box">
+            <pre class="output-pre">{{ output() }}</pre>
+          </div>
+
+          <!-- ✅ Action sans effet -->
+          <small class="hint" *ngIf="input() && !actionHasEffect()" i18n="@@text_case_hint_no_change">
+            Aucun changement : le texte est déjà dans le format “{{ modeLabel() }}” (ou aucun caractère n’est concerné).
+          </small>
+
+          <!-- ✅ Script sans casse (message SEO mais seulement si détecté) -->
+          <small class="hint" *ngIf="input() && probablyNoCaseScript()" i18n="@@text_case_hint_no_case">
+            Remarque : certaines écritures ne distinguent pas majuscules et minuscules (ex. chinois, japonais, arabe…).
+          </small>
+
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Actions -->
+      <div class="actions-row">
+        <div class="mode-buttons">
+          <p-button
+            type="button"
+            icon="pi pi-arrow-up"
+            label="MAJUSCULES"
+            i18n-label="@@text_case_btn_upper"
+            (click)="applyMode('upper')"
+            [outlined]="mode() !== 'upper'"
+          ></p-button>
+
+          <p-button
+            type="button"
+            icon="pi pi-arrow-down"
+            label="minuscules"
+            i18n-label="@@text_case_btn_lower"
+            (click)="applyMode('lower')"
+            [outlined]="mode() !== 'lower'"
+          ></p-button>
+
+          <p-button
+            type="button"
+            icon="pi pi-refresh"
+            label="Inverser"
+            i18n-label="@@text_case_btn_invert"
+            (click)="applyMode('invert')"
+            [outlined]="mode() !== 'invert'"
+          ></p-button>
+
+          <p-button
+            type="button"
+            icon="pi pi-align-left"
+            label="Phrases"
+            i18n-label="@@text_case_btn_sentence"
+            (click)="applyMode('sentence')"
+            [outlined]="mode() !== 'sentence'"
+          ></p-button>
+
+          <p-button
+            type="button"
+            icon="pi pi-book"
+            label="Titre"
+            i18n-label="@@text_case_btn_title"
+            (click)="applyMode('title')"
+            [outlined]="mode() !== 'title'"
+          ></p-button>
+        </div>
+
+        <div class="utility-buttons">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-trash"
+            label="Effacer"
+            i18n-label="@@text_case_btn_clear"
+            (click)="clear()"
+          ></p-button>
+
+          <p-button
+            type="button"
+            icon="pi pi-copy"
+            label="Copier le résultat"
+            i18n-label="@@text_case_btn_copy"
+            (click)="copy()"
+            [disabled]="!output()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte explication -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@text_case_actions_title">Actions disponibles</h2>
+        <p i18n="@@text_case_actions_sub">
+          Chaque option transforme le texte d’une manière précise. Voici ce que fait chaque action.
+        </p>
+      </div>
+
+      <div class="actions-explain">
+        <div class="explain-item">
+          <h3 i18n="@@text_case_upper_title">MAJUSCULES</h3>
+          <p i18n="@@text_case_upper_desc">
+            Convertit toutes les lettres en majuscules selon la langue (locale). Exemple : “été” → “ÉTÉ”.
+          </p>
+        </div>
+
+        <div class="explain-item">
+          <h3 i18n="@@text_case_lower_title">minuscules</h3>
+          <p i18n="@@text_case_lower_desc">
+            Convertit toutes les lettres en minuscules selon la langue (locale). Exemple : “ÉTÉ” → “été”.
+          </p>
+        </div>
+
+        <div class="explain-item">
+          <h3 i18n="@@text_case_invert_title">Inverser la casse</h3>
+          <p i18n="@@text_case_invert_desc">
+            Inverse la casse lettre par lettre : une majuscule devient une minuscule et inversement.
+            Les caractères non concernés (chiffres, emojis, ponctuation, écritures sans casse) restent inchangés.
+          </p>
+        </div>
+
+        <div class="explain-item">
+          <h3 i18n="@@text_case_sentence_title">Phrases</h3>
+          <p i18n="@@text_case_sentence_desc">
+            Met le texte en “casse phrase” : tout en minuscules, puis majuscule au début de chaque phrase
+            (après “.”, “!”, “?”, “…” ou un retour à la ligne). Utile pour nettoyer un texte “tout en vrac”.
+          </p>
+        </div>
+
+        <div class="explain-item">
+          <h3 i18n="@@text_case_title_title">Titre</h3>
+          <p i18n="@@text_case_title_desc">
+            Met en “casse titre” (Title Case) : la première lettre de chaque mot passe en majuscule.
+            C’est une version simple (générique) : selon la langue, certaines règles typographiques peuvent varier.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exemples -->
+  <div class="tool-card">
+    <div class="card-header centered">
+      <h2 i18n="@@text_case_examples_title">Exemples</h2>
+      <p i18n="@@text_case_examples_sub">
+        Cliquez sur un exemple pour pré-remplir le texte et tester une action.
+      </p>
+    </div>
+
+    <div class="examples-grid">
+      <button
+        type="button"
+        class="example-btn"
+        *ngFor="let ex of examples"
+        (click)="applyExample(ex)"
+      >
+        {{ ex.label }}
+      </button>
+    </div>
+  </div>
+
+</section>
