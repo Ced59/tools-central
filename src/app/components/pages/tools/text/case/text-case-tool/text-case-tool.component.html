@@ -38,8 +38,13 @@
             class="input-full"
           ></textarea>
 
-          <small class="hint" i18n="@@text_case_input_hint">
-            Astuce : le turc a des règles spéciales (i/İ, I/ı) — la locale est prise en compte.
+          <small
+            class="hint"
+            *ngIf="input() && !actionHasEffect()"
+            i18n="@@text_case_hint_no_change"
+          >
+            Aucun changement : le texte est déjà dans le format “<span i18n-ph="MODE_LABEL">{{ modeLabel() }}</span>”
+            (ou aucun caractère n’est concerné).
           </small>
         </div>
 
@@ -58,7 +63,7 @@
 
           <!-- ✅ Script sans casse (message SEO mais seulement si détecté) -->
           <small class="hint" *ngIf="input() && probablyNoCaseScript()" i18n="@@text_case_hint_no_case">
-            Remarque : certaines écritures ne distinguent pas majuscules et minuscules (ex. chinois, japonais, arabe…).
+            Remarque : certaines écritures ne distinguent pas majuscules et minuscules (ex. chinois, japonais…).
           </small>
 
         </div>
@@ -187,27 +192,26 @@
         </div>
       </div>
     </div>
-  </div>
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@text_case_examples_title">Exemples</h2>
+        <p i18n="@@text_case_examples_sub">
+          Cliquez sur un exemple pour pré-remplir le texte et tester une action.
+        </p>
+      </div>
 
-  <!-- Exemples -->
-  <div class="tool-card">
-    <div class="card-header centered">
-      <h2 i18n="@@text_case_examples_title">Exemples</h2>
-      <p i18n="@@text_case_examples_sub">
-        Cliquez sur un exemple pour pré-remplir le texte et tester une action.
-      </p>
+      <div class="examples-grid">
+        <button
+          type="button"
+          class="example-btn"
+          *ngFor="let ex of examples"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">→ {{ modeLabelOf(ex.mode) }}</span>
+        </button>
+      </div>
     </div>
-
-    <div class="examples-grid">
-      <button
-        type="button"
-        class="example-btn"
-        *ngFor="let ex of examples"
-        (click)="applyExample(ex)"
-      >
-        {{ ex.label }}
-      </button>
-    </div>
   </div>
-
 </section>
