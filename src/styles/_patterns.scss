@@ -1,24 +1,40 @@
 @use 'mixins' as m;
 
 // ---------------------------------------------------------
-// Listing pages (Categories / Category / Tool-group)
+// HERO (shared) - One consistent pattern for the whole site
 // ---------------------------------------------------------
 
-@mixin listing-hero {
-  // Hero
+@mixin hero-base(
+  $contentMax: 550px,
+  $padTop: 3.5rem,
+  $padBottom: 3rem,
+  $padTopMd: 2.5rem,
+  $padBottomMd: 2rem
+) {
   .page-hero {
-    padding: 3.5rem 0 3rem;
+    width: 100%;
     background: var(--hero-gradient);
     color: white;
     text-align: center;
+    overflow: hidden;
+
+    // Full-bleed hero everywhere
+    margin-top: 0;
+    border-radius: 0;
+
+    // Optional offset if header is fixed/sticky
+    padding: calc(var(--header-offset, 0px) + #{$padTop}) 0 $padBottom;
+
+    // subtle depth
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
 
     @include m.down(m.$bp-md) {
-      padding: 2.5rem 0 2rem;
+      padding: calc(var(--header-offset, 0px) + #{$padTopMd}) 0 $padBottomMd;
     }
   }
 
   .hero-content {
-    max-width: 550px;
+    max-width: $contentMax;
     margin: 0 auto;
   }
 
@@ -32,6 +48,7 @@
     justify-content: center;
     margin: 0 auto 1.25rem;
     backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
 
     i {
       font-size: 1.75rem;
@@ -53,6 +70,7 @@
     font-size: clamp(1.75rem, 4vw, 2.25rem);
     font-weight: 800;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
   }
 
   .hero-subtitle {
@@ -65,8 +83,39 @@
   }
 }
 
+// ---------------------------------------------------------
+// Listing pages (Categories / Category / Tool-group)
+// ---------------------------------------------------------
+
+@mixin listing-hero {
+  @include hero-base(
+    $contentMax: 550px,
+    $padTop: 3.5rem,
+    $padBottom: 3rem,
+    $padTopMd: 2.5rem,
+    $padBottomMd: 2rem
+  );
+}
+
+// ---------------------------------------------------------
+// Tool pages (All tools)
+// ---------------------------------------------------------
+
+@mixin tool-hero {
+  @include hero-base(
+    $contentMax: 780px,
+    $padTop: 3.25rem,
+    $padBottom: 3rem,
+    $padTopMd: 2.35rem,
+    $padBottomMd: 2.1rem
+  );
+}
+
+// ---------------------------------------------------------
+// Listing sections (Categories / Tools blocks)
+// ---------------------------------------------------------
+
 @mixin listing-section {
-  // Section
   .categories-section,
   .tools-section {
     padding: 3rem 0 2rem;
@@ -155,8 +204,11 @@
   }
 }
 
+// ---------------------------------------------------------
+// Back link (shared)
+// ---------------------------------------------------------
+
 @mixin back-link {
-  // Section retour
   .back-section {
     padding: 1rem 0 3rem;
 

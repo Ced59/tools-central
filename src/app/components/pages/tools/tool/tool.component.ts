@@ -33,21 +33,25 @@ const TOOL_COMPONENTS: Record<string, Record<string, Record<string, Type<unknown
   standalone: true,
   imports: [NgIf, NgComponentOutlet],
   template: `
-    <section class="tool-page">
-      <div class="container">
-        <ng-container *ngIf="toolComponent; else notFound">
-          <ng-container *ngComponentOutlet="toolComponent"></ng-container>
-        </ng-container>
+    <ng-container *ngIf="toolComponent; else notFound">
+      <!--
+        Important: ne pas envelopper les tools dans un .container ici.
+        Chaque tool gère son propre layout (hero full-bleed + contenu en .container).
+      -->
+      <ng-container *ngComponentOutlet="toolComponent"></ng-container>
+    </ng-container>
 
-        <ng-template #notFound>
+    <ng-template #notFound>
+      <section class="notfound">
+        <div class="container">
           <h1 i18n>Outil indisponible</h1>
           <p i18n>Cet outil n'existe pas ou n'est pas encore disponible.</p>
-        </ng-template>
-      </div>
-    </section>
+        </div>
+      </section>
+    </ng-template>
   `,
   styles: [`
-    .tool-page { padding: 4rem 0; }
+    .notfound { padding: 4rem 0; }
   `]
 })
 export class ToolComponent {

@@ -1,74 +1,123 @@
-@use 'tool-page' as tp;
-
 /* =========================================================
-   ✅ Socle "charte outils" (refacto ISO)
+   ✅ Tool page (aligné avec les tools % / listings)
    ========================================================= */
+
+:host {
+  display: block;
+}
 
 .tool-page {
   padding-bottom: 3rem;
-}
 
-.container {
-  width: min(1100px, calc(100% - 2rem));
-  margin: 0 auto;
-}
-
-/* Hero */
-.page-hero {
-  margin-top: 2.75rem;
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-
-  /* même vibe que les % (dégradé + glow) */
-  background: linear-gradient(135deg,
-    rgba(99, 102, 241, 0.95),
-    rgba(168, 85, 247, 0.85)
-  );
-
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-}
-
-.hero-content {
-  padding: 3.2rem 2rem;
-  text-align: center;
-
-  h1 {
-    margin: 0.75rem 0 0;
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 750;
-    letter-spacing: -0.02em;
+  @media (max-width: 768px) {
+    padding-bottom: 2rem;
   }
 }
 
-.hero-subtitle {
-  margin: 0.75rem auto 0;
+/* Hero pleine largeur (même pattern que les pages math/listings) */
+.page-hero {
+  padding: 3.5rem 0 3rem;
+  background: var(--hero-gradient);
+  color: white;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 2.5rem 0 2rem;
+  }
+}
+
+.hero-content {
   max-width: 780px;
-  opacity: 0.92;
-  font-size: 1rem;
+  margin: 0 auto;
 }
 
 .hero-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  margin: 0 auto;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  width: 68px;
+  height: 68px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  backdrop-filter: blur(10px);
 
   i {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+
+    i {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+.page-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  opacity: 0.9;
+  margin: 0;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
   }
 }
 
 /* Contenu sous hero */
 .tool-content {
-  padding-top: 1.6rem;
+  padding-top: 2rem;
+
+  @media (max-width: 768px) {
+    padding-top: 1.5rem;
+  }
 }
 
-@include tp.tool-card;
+/* Card */
+.tool-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+    border-radius: 14px;
+  }
+}
+
+.card-header {
+  margin-bottom: 1.25rem;
+
+  &.centered {
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0 0 0.25rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: var(--text-color-secondary);
+    margin: 0;
+  }
+}
 
 .divider {
   height: 1px;
@@ -76,7 +125,38 @@
   margin: 1.25rem 0;
 }
 
-@include tp.back;
+/* Retour */
+.back-section {
+  padding-top: 0.5rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  i {
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.08);
+
+    i {
+      transform: translateX(-3px);
+    }
+  }
+}
+
 
 /* =========================================================
    ✅ Styles spécifiques "Text Case"
@@ -156,6 +236,7 @@
   }
 }
 
+
 .actions-explain {
   display: grid;
   grid-template-columns: 1fr;
@@ -185,4 +266,42 @@
   }
 }
 
-@include tp.examples;
+// Examples
+.examples-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.example-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  background: var(--surface-ground);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    border-color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.05);
+  }
+
+  .ex-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--primary-color);
+  }
+
+  .ex-values {
+    font-size: 0.85rem;
+    color: var(--text-color-secondary);
+  }
+}
