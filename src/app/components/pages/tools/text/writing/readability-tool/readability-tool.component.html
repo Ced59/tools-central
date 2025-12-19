@@ -1,0 +1,226 @@
+<section class="tool-page">
+  <!-- HERO (shared) -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-file-edit"></i>
+        </div>
+
+        <h1 class="hero-title" i18n="@@readability_title">
+          Analyseur de lisibilité & clarté
+        </h1>
+
+        <p class="hero-subtitle" i18n="@@readability_subtitle">
+          Mesurez la clarté de votre texte avec un score universel (toutes langues), des statistiques et des conseils.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT (shared) -->
+  <section class="tool-content">
+    <div class="container">
+      <div class="readability-grid">
+        <!-- LEFT -->
+        <div class="tool-card">
+          <h2 class="card-title" i18n="@@readability_input_title">Votre texte</h2>
+          <p class="card-hint" i18n="@@readability_input_hint">
+            Collez ou écrivez un texte à analyser.
+          </p>
+
+          <div class="divider"></div>
+
+          <form [formGroup]="form">
+            <textarea
+              pInputTextarea
+              [autoResize]="true"
+              formControlName="text"
+              class="tool-textarea"
+              rows="8"
+              i18n-placeholder="@@readability_text_placeholder"
+              placeholder="Collez votre texte ici…"
+            ></textarea>
+
+            <div class="readability-actions">
+              <p-button
+                type="button"
+                icon="pi pi-trash"
+                severity="secondary"
+                (onClick)="clear()"
+                i18n-label="@@common_clear"
+                label="Effacer"
+              ></p-button>
+
+              <p-button
+                type="button"
+                icon="pi pi-copy"
+                severity="secondary"
+                (onClick)="copySummary()"
+                [disabled]="!analysis()"
+                i18n-label="@@readability_copy_button"
+                label="Copier le résumé"
+              ></p-button>
+            </div>
+          </form>
+
+          <div class="divider"></div>
+
+          <h3 class="section-title" i18n="@@readability_examples_title">Exemples rapides</h3>
+
+          <div class="examples-grid">
+            <button
+              type="button"
+              class="example-btn"
+              *ngFor="let ex of examples"
+              (click)="applyExample(ex)"
+            >
+              <span class="ex-label">{{ ex.label }}</span>
+              <span class="ex-icon" aria-hidden="true">
+                <i class="pi pi-arrow-right"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="tool-card">
+          <h2 class="card-title" i18n="@@readability_results_title">Résultats</h2>
+          <p class="card-hint" i18n="@@readability_results_hint">
+            Score, niveau, statistiques et conseils.
+          </p>
+
+          <div class="divider"></div>
+
+          <ng-container *ngIf="analysis() as a; else emptyState">
+            <div class="score-head">
+              <div class="score-value">{{ scoreLabel() }}</div>
+              <p-tag [severity]="levelSeverity()" [value]="levelLabel()"></p-tag>
+            </div>
+
+            <div
+              class="score-bar"
+              role="progressbar"
+              [attr.aria-valuenow]="a.score"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              <div class="score-bar-fill" [style.width]="barWidth()"></div>
+            </div>
+
+            <p class="score-legend" i18n="@@readability_score_legend">
+              100 = très clair • 0 = très complexe
+            </p>
+
+            <div class="divider"></div>
+
+            <div class="results-grid">
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_words">Mots</div>
+                <div class="result-value">{{ a.wordCount }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_sentences">Phrases</div>
+                <div class="result-value">{{ a.sentenceCount }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_paragraphs">Paragraphes</div>
+                <div class="result-value">{{ a.paragraphCount }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_chars">Caractères</div>
+                <div class="result-value">{{ a.charCount }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_avg_sentence">Longueur moyenne des phrases</div>
+                <div class="result-value">{{ a.avgSentenceLength }}</div>
+              </div>
+
+              <div class="result-item">
+                <div class="result-label" i18n="@@readability_stat_avg_word">Longueur moyenne des mots</div>
+                <div class="result-value">{{ a.avgWordLength }}</div>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h3 class="section-title" i18n="@@readability_issues_title">Points à améliorer</h3>
+            <ul class="feedback-list">
+              <li *ngFor="let k of a.issues">
+                <ng-container [ngSwitch]="k">
+                  <span *ngSwitchCase="'readability_issue_long_sentences'" i18n="@@readability_issue_long_sentences">
+                    Trop de phrases longues.
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_very_long_sentences'" i18n="@@readability_issue_very_long_sentences">
+                    Des phrases très longues rendent la lecture difficile.
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_long_words'" i18n="@@readability_issue_long_words">
+                    Les mots sont assez longs (vocabulaire potentiellement complexe).
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_no_paragraphs'" i18n="@@readability_issue_no_paragraphs">
+                    Le texte manque de paragraphes (effet “mur”).
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_low_punctuation'" i18n="@@readability_issue_low_punctuation">
+                    Peu de ponctuation : le rythme peut sembler monotone.
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_high_punctuation'" i18n="@@readability_issue_high_punctuation">
+                    Beaucoup de ponctuation : la lecture peut paraître hachée.
+                  </span>
+                  <span *ngSwitchCase="'readability_issue_none'" i18n="@@readability_issue_none">
+                    Aucun problème majeur détecté.
+                  </span>
+                </ng-container>
+              </li>
+            </ul>
+
+            <h3 class="section-title" i18n="@@readability_tips_title">Conseils</h3>
+            <ul class="feedback-list">
+              <li *ngFor="let k of a.tips">
+                <ng-container [ngSwitch]="k">
+                  <span *ngSwitchCase="'readability_tip_shorten_sentences'" i18n="@@readability_tip_shorten_sentences">
+                    Visez des phrases plus courtes (idéalement 12 à 20 mots).
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_split_sentences'" i18n="@@readability_tip_split_sentences">
+                    Coupez les phrases trop longues en 2 ou 3 idées.
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_simpler_words'" i18n="@@readability_tip_simpler_words">
+                    Préférez des mots simples quand c’est possible.
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_add_paragraphs'" i18n="@@readability_tip_add_paragraphs">
+                    Ajoutez des paragraphes pour aérer le texte.
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_add_punctuation'" i18n="@@readability_tip_add_punctuation">
+                    Ajoutez de la ponctuation pour rythmer la lecture.
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_reduce_punctuation'" i18n="@@readability_tip_reduce_punctuation">
+                    Simplifiez la ponctuation et clarifiez la structure.
+                  </span>
+                  <span *ngSwitchCase="'readability_tip_keep_it_up'" i18n="@@readability_tip_keep_it_up">
+                    Continuez : le texte est déjà clair et agréable à lire.
+                  </span>
+                </ng-container>
+              </li>
+            </ul>
+
+            <p class="footnote" i18n="@@readability_footnote">
+              Note : ce score est universel et basé sur des statistiques simples (phrases, mots, structure). Il ne remplace pas une relecture humaine.
+            </p>
+          </ng-container>
+
+          <ng-template #emptyState>
+            <div class="empty">
+              <div class="empty-title" i18n="@@readability_empty_title">Aucun texte à analyser</div>
+              <div class="empty-text" i18n="@@readability_empty_text">
+                Collez un texte dans le champ à gauche pour afficher le score et les conseils.
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

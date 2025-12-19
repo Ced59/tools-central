@@ -1,0 +1,82 @@
+@use 'mixins' as m;
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+
+.readability-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include m.up(m.$bp-md) {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+}
+
+.readability-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.75rem;
+}
+
+.tool-textarea {
+  width: 100%;
+}
+
+.section-title {
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.score-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.score-value {
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.score-bar {
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(128, 128, 128, 0.20);
+  overflow: hidden;
+  margin-top: 0.75rem;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--primary-color);
+  transition: width 0.2s ease;
+}
+
+.score-legend {
+  color: var(--text-color-secondary);
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.feedback-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.1rem;
+
+  li {
+    margin: 0.35rem 0;
+  }
+}
+
+.footnote {
+  margin-top: 1rem;
+  color: var(--text-color-secondary);
+  font-size: 0.95rem;
+}

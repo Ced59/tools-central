@@ -1,45 +1,27 @@
-import { Component, Type } from '@angular/core';
+import { Component, Type, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
-
-import {ATOMIC_TOOLS} from "../../../../data/atomic-tools";
-import {
-  PercentageVariationToolComponent
-} from "../math/percentages/percentage-variation-tool/percentage-variation-tool.component";
-import {
-  PercentageOfNumberToolComponent
-} from "../math/percentages/percentage-of-number-tool/percentage-of-number-tool.component";
-import {TextCaseToolComponent} from "../text/case/text-case-tool/text-case-tool.component";
-
-
-
-// Registry: (categoryId/toolId) -> composant
-// Registry: category -> group -> tool -> component
-const TOOL_COMPONENTS: Record<string, Record<string, Record<string, Type<unknown>>>> = {
-  math: {
-    percentages: {
-      'percentage-variation': PercentageVariationToolComponent,
-      'percentage-of-number': PercentageOfNumberToolComponent
-    },
-  },
-  text: {
-    case: {
-      'text-case': TextCaseToolComponent,
-    },
-  },
-};
+import { ToolRegistryService } from '../../../../core/tools/tool-registry.service';
 
 @Component({
   standalone: true,
   imports: [NgIf, NgComponentOutlet],
   template: `
-    <ng-container *ngIf="toolComponent; else notFound">
-      <!--
-        Important: ne pas envelopper les tools dans un .container ici.
-        Chaque tool gère son propre layout (hero full-bleed + contenu en .container).
-      -->
-      <ng-container *ngComponentOutlet="toolComponent"></ng-container>
+    <ng-container *ngIf="isLoading(); else loaded">
+      <section class="loading">
+        <div class="container">
+          <h1 i18n>Chargement…</h1>
+          <p i18n>Nous préparons l’outil.</p>
+        </div>
+      </section>
     </ng-container>
+
+    <ng-template #loaded>
+      <ng-container *ngIf="toolComponent(); else notFound">
+        <!-- Chaque tool gère son propre layout -->
+        <ng-container *ngComponentOutlet="toolComponent()"></ng-container>
+      </ng-container>
+    </ng-template>
 
     <ng-template #notFound>
       <section class="notfound">
@@ -51,31 +33,34 @@ const TOOL_COMPONENTS: Record<string, Record<string, Record<string, Type<unknown
     </ng-template>
   `,
   styles: [`
-    .notfound { padding: 4rem 0; }
+    .notfound, .loading { padding: 4rem 0; }
   `]
 })
 export class ToolComponent {
-  toolComponent: Type<unknown> | null = null;
+  toolComponent = signal<Type<unknown> | null>(null);
+  isLoading = signal(true);
 
-  constructor(route: ActivatedRoute) {
-    const idCategory = route.snapshot.paramMap.get('idCategory') ?? '';
-    const idGroup = route.snapshot.paramMap.get('idGroup') ?? '';
-    const idTool = route.snapshot.paramMap.get('idTool') ?? '';
+  constructor(route: ActivatedRoute, registry: ToolRegistryService) {
+    // ✅ Fallback : selon ton app.routes.ts, les params peuvent changer de nom.
+    const category =
+      route.snapshot.paramMap.get('idCategory') ??
+      route.snapshot.paramMap.get('category') ??
+      route.snapshot.paramMap.get('cat') ??
+      '';
 
-    // 1️⃣ Vérifie que l’outil existe et est disponible
-    const tool = ATOMIC_TOOLS.find(t =>
-      t.category === idCategory &&
-      t.group === idGroup &&
-      t.id === idTool
-    );
+    const group =
+      route.snapshot.paramMap.get('idGroup') ??
+      route.snapshot.paramMap.get('group') ??
+      '';
 
-    if (!tool || !tool.available) {
-      this.toolComponent = null;
-      return;
-    }
+    const tool =
+      route.snapshot.paramMap.get('idTool') ??
+      route.snapshot.paramMap.get('tool') ??
+      '';
 
-    // 2️⃣ Résout le composant métier réel
-    this.toolComponent =
-      TOOL_COMPONENTS[idCategory]?.[idGroup]?.[idTool] ?? null;
+    registry.loadToolComponent({ category, group, tool }).then(cmp => {
+      this.toolComponent.set(cmp);
+      this.isLoading.set(false);
+    });
   }
 }

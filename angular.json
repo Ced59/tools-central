@@ -13,7 +13,6 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
-
       "i18n": {
         "sourceLocale": "fr",
         "locales": {
@@ -55,7 +54,6 @@
           "zh-Hans": { "translation": "src/locale/messages.zh-Hans.xlf" }
         }
       },
-
       "architect": {
         "build": {
           "builder": "@angular/build:application",
@@ -69,6 +67,11 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "assets": [
               {
                 "glob": "**/*",
@@ -90,14 +93,35 @@
             },
             "localize": [
               "fr",
-              "en", "es",
-              "de", "it", "nl",
-              "sv", "da", "no", "fi",
-              "pl", "cs", "sk", "ro", "hu", "tr",
-              "id", "vi", "sw", "af", "fil",
-              "pt-BR", "pt-PT",
-              "ru", "uk", "bg", "el",
-              "ja", "ko", "zh-Hans"
+              "en",
+              "es",
+              "de",
+              "it",
+              "nl",
+              "sv",
+              "da",
+              "no",
+              "fi",
+              "pl",
+              "cs",
+              "sk",
+              "ro",
+              "hu",
+              "tr",
+              "id",
+              "vi",
+              "sw",
+              "af",
+              "fil",
+              "pt-BR",
+              "pt-PT",
+              "ru",
+              "uk",
+              "bg",
+              "el",
+              "ja",
+              "ko",
+              "zh-Hans"
             ]
           },
           "configurations": {
@@ -117,21 +141,44 @@
               "outputHashing": "all",
               "localize": [
                 "fr",
-                "en", "es",
-                "de", "it", "nl",
-                "sv", "da", "no", "fi",
-                "pl", "cs", "sk", "ro", "hu", "tr",
-                "id", "vi", "sw", "af", "fil",
-                "pt-BR", "pt-PT",
-                "ru", "uk", "bg", "el",
-                "ja", "ko", "zh-Hans"
+                "en",
+                "es",
+                "de",
+                "it",
+                "nl",
+                "sv",
+                "da",
+                "no",
+                "fi",
+                "pl",
+                "cs",
+                "sk",
+                "ro",
+                "hu",
+                "tr",
+                "id",
+                "vi",
+                "sw",
+                "af",
+                "fil",
+                "pt-BR",
+                "pt-PT",
+                "ru",
+                "uk",
+                "bg",
+                "el",
+                "ja",
+                "ko",
+                "zh-Hans"
               ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "localize": ["fr"],
+              "localize": [
+                "fr"
+              ],
               "prerender": false,
               "ssr": false
             }
@@ -168,6 +215,11 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/styles"
+              ]
+            },
             "assets": [
               {
                 "glob": "**/*",

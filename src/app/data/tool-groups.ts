@@ -1,3 +1,5 @@
+import { routes } from './routes';
+
 export interface ToolGroup {
   id: string;                 // ex: 'percentages'
   category: string;           // ex: 'math'
@@ -15,7 +17,7 @@ export const TOOL_GROUPS: ToolGroup[] = [
     title: $localize`:@@group_percentages_title:Pourcentages`,
     description: $localize`:@@group_percentages_desc:Augmentation, remise, variation, taux inversé...`,
     icon: 'pi pi-percentage',
-    route: '/categories/math/percentages',
+    route: routes.group('math', 'percentages'),
     available: true,
   },
   {
@@ -24,7 +26,7 @@ export const TOOL_GROUPS: ToolGroup[] = [
     title: $localize`:@@group_vat_title:TVA`,
     description: $localize`:@@group_vat_desc:HT/TTC, taux personnalisés, calculs rapides...`,
     icon: 'pi pi-receipt',
-    route: '/categories/math/vat',
+    route: routes.group('math', 'vat'),
     available: false,
   },
   {
@@ -33,7 +35,16 @@ export const TOOL_GROUPS: ToolGroup[] = [
     title: $localize`:@@group_text_case_title:Casse du texte`,
     description: $localize`:@@group_text_case_desc:Majuscules, minuscules, inversion, capitalisation…`,
     icon: 'pi pi-sort-alpha-down',
-    route: '/categories/text/case',
+    route: routes.group('text', 'case'),
+    available: true,
+  },
+  {
+    id: 'writing',
+    category: 'text',
+    title: $localize`:@@group_text_writing_title:Écriture`,
+    description: $localize`:@@group_text_writing_desc:Lisibilité, clarté, style et amélioration de texte…`,
+    icon: 'pi pi-pencil',
+    route: routes.group('text', 'writing'),
     available: true,
   },
 ];
