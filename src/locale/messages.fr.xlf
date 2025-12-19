@@ -427,6 +427,7 @@
         <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:105,106</note>
         <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:164,165</note>
         <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:119,120</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:116,117</note>
       </notes>
       <segment>
         <source>Formule</source>
@@ -516,6 +517,7 @@
       <notes>
         <note category="location">src/app/components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component.html:192,194</note>
         <note category="location">src/app/components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component.html:201,203</note>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:196,198</note>
       </notes>
       <segment>
         <source>Retour aux outils</source>
@@ -743,6 +745,222 @@
       </notes>
       <segment>
         <source> Résultat positif = hausse, négatif = baisse. Le coefficient vaut <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">final ÷ initial</pc>. </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:10,11</note>
+      </notes>
+      <segment>
+        <source>X est quel % de Y ?</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:12,14</note>
+      </notes>
+      <segment>
+        <source> Calcule le pourcentage que représente une valeur X par rapport à une valeur Y. </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_calc_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:24,27</note>
+      </notes>
+      <segment>
+        <source>Calculateur</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_x_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:29,30</note>
+      </notes>
+      <segment>
+        <source>Valeur X</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_x_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:40,41</note>
+      </notes>
+      <segment>
+        <source> Ex : part, quantité, score… </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_y_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:45,46</note>
+      </notes>
+      <segment>
+        <source>Valeur Y (référence)</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_y_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:56,57</note>
+      </notes>
+      <segment>
+        <source> Ex : total, maximum, ensemble… </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_precision_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:61,63</note>
+      </notes>
+      <segment>
+        <source>Décimales</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_precision_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:72,74</note>
+      </notes>
+      <segment>
+        <source> Arrondi </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_results_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:82,84</note>
+      </notes>
+      <segment>
+        <source>Résultats</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_tag">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:85,87</note>
+      </notes>
+      <segment>
+        <source>Pourcentage</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_ratio_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:91,92</note>
+      </notes>
+      <segment>
+        <source>Ratio (X ÷ Y)</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_div0_ratio">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:94,95</note>
+      </notes>
+      <segment>
+        <source> Division par 0 </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_percent_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:99,100</note>
+      </notes>
+      <segment>
+        <source>X en % de Y</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_div0_percent">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:102,104</note>
+      </notes>
+      <segment>
+        <source> Division par 0 </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_outof_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:107,108</note>
+      </notes>
+      <segment>
+        <source>Équivalent</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_reset">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:132,133</note>
+      </notes>
+      <segment>
+        <source>Réinitialiser</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_examples_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:142,143</note>
+      </notes>
+      <segment>
+        <source>Exemples</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_examples_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:143,146</note>
+      </notes>
+      <segment>
+        <source>Cliquez pour pré-remplir</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_definition_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:161,162</note>
+      </notes>
+      <segment>
+        <source>Définition &amp; méthode</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:163,166</note>
+      </notes>
+      <segment>
+        <source> Cet outil calcule la part de X dans Y (en pourcentage). </source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_formula_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:169,170</note>
+      </notes>
+      <segment>
+        <source>Formule</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:172,173</note>
+      </notes>
+      <segment>
+        <source>\text{Pourcentage}(\%)=\dfrac{X}{Y}\times 100</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:177,178</note>
+      </notes>
+      <segment>
+        <source>Calculez le ratio : <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">X ÷ Y</pc></source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:178,179</note>
+      </notes>
+      <segment>
+        <source>Multipliez par <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">100</pc> pour obtenir un pourcentage</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:179,182</note>
+      </notes>
+      <segment>
+        <source>Interprétez : 25% = 25 sur 100 (un quart)</source>
+      </segment>
+    </unit>
+    <unit id="pct_x_of_y_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component.html:185,188</note>
+      </notes>
+      <segment>
+        <source> Si <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">Y = 0</pc>, le pourcentage n’est pas défini (division par 0). Si <pc id="1" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">X &gt; Y</pc>, le résultat peut dépasser 100%. </source>
       </segment>
     </unit>
     <unit id="text_case_h1">
@@ -1853,7 +2071,7 @@
     </unit>
     <unit id="tool_percentage_of_number_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:40</note>
+        <note category="location">src/app/data/atomic-tools.ts:38</note>
       </notes>
       <segment>
         <source>Pourcentage d’un nombre</source>
@@ -1861,7 +2079,7 @@
     </unit>
     <unit id="tool_percentage_of_number_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:41</note>
+        <note category="location">src/app/data/atomic-tools.ts:39</note>
       </notes>
       <segment>
         <source>Calculer X% d’une valeur (X% de Y).</source>
@@ -1869,7 +2087,7 @@
     </unit>
     <unit id="tool_percentage_what_percent_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:56</note>
+        <note category="location">src/app/data/atomic-tools.ts:52</note>
       </notes>
       <segment>
         <source>X est quel % de Y</source>
@@ -1877,7 +2095,7 @@
     </unit>
     <unit id="tool_percentage_what_percent_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:57</note>
+        <note category="location">src/app/data/atomic-tools.ts:53</note>
       </notes>
       <segment>
         <source>Calculer le pourcentage que représente X par rapport à Y.</source>
@@ -1885,7 +2103,7 @@
     </unit>
     <unit id="tool_percentage_increase_decrease_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:66</note>
+        <note category="location">src/app/data/atomic-tools.ts:68</note>
       </notes>
       <segment>
         <source>Augmenter / diminuer de X%</source>
@@ -1893,7 +2111,7 @@
     </unit>
     <unit id="tool_percentage_increase_decrease_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:67</note>
+        <note category="location">src/app/data/atomic-tools.ts:69</note>
       </notes>
       <segment>
         <source>Appliquer une hausse ou une baisse en pourcentage à une valeur.</source>
@@ -1901,7 +2119,7 @@
     </unit>
     <unit id="tool_percentage_relative_difference_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:76</note>
+        <note category="location">src/app/data/atomic-tools.ts:78</note>
       </notes>
       <segment>
         <source>Écart relatif</source>
@@ -1909,7 +2127,7 @@
     </unit>
     <unit id="tool_percentage_relative_difference_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:77</note>
+        <note category="location">src/app/data/atomic-tools.ts:79</note>
       </notes>
       <segment>
         <source>Mesurer l’écart relatif entre deux valeurs (en %).</source>
@@ -1917,7 +2135,7 @@
     </unit>
     <unit id="tool_percentage_successive_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:86</note>
+        <note category="location">src/app/data/atomic-tools.ts:88</note>
       </notes>
       <segment>
         <source>Pourcentages successifs</source>
@@ -1925,7 +2143,7 @@
     </unit>
     <unit id="tool_percentage_successive_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:87</note>
+        <note category="location">src/app/data/atomic-tools.ts:89</note>
       </notes>
       <segment>
         <source>Composer plusieurs pourcentages (effet cumulé).</source>
@@ -1933,7 +2151,7 @@
     </unit>
     <unit id="tool_percentage_reverse_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:96</note>
+        <note category="location">src/app/data/atomic-tools.ts:98</note>
       </notes>
       <segment>
         <source>Pourcentage inverse</source>
@@ -1941,7 +2159,7 @@
     </unit>
     <unit id="tool_percentage_reverse_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:97</note>
+        <note category="location">src/app/data/atomic-tools.ts:99</note>
       </notes>
       <segment>
         <source>Retrouver la valeur initiale après une hausse ou une baisse.</source>
@@ -1949,7 +2167,7 @@
     </unit>
     <unit id="tool_percentage_share_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:106</note>
+        <note category="location">src/app/data/atomic-tools.ts:108</note>
       </notes>
       <segment>
         <source>Proportion / part du total</source>
@@ -1957,7 +2175,7 @@
     </unit>
     <unit id="tool_percentage_share_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:107</note>
+        <note category="location">src/app/data/atomic-tools.ts:109</note>
       </notes>
       <segment>
         <source>Calculer une part en % et sa valeur correspondante.</source>
@@ -1965,7 +2183,7 @@
     </unit>
     <unit id="tool_percentage_composition_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:116</note>
+        <note category="location">src/app/data/atomic-tools.ts:118</note>
       </notes>
       <segment>
         <source>Composition de pourcentages</source>
@@ -1973,7 +2191,7 @@
     </unit>
     <unit id="tool_percentage_composition_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:117</note>
+        <note category="location">src/app/data/atomic-tools.ts:119</note>
       </notes>
       <segment>
         <source>Combiner des pourcentages à travers plusieurs niveaux (A de B, B de C…).</source>
@@ -1981,7 +2199,7 @@
     </unit>
     <unit id="tool_percentage_ratio_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:126</note>
+        <note category="location">src/app/data/atomic-tools.ts:128</note>
       </notes>
       <segment>
         <source>Ratio en pourcentage</source>
@@ -1989,7 +2207,7 @@
     </unit>
     <unit id="tool_percentage_ratio_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:127</note>
+        <note category="location">src/app/data/atomic-tools.ts:129</note>
       </notes>
       <segment>
         <source>Exprimer un ratio (A/B) sous forme de pourcentage.</source>
@@ -1997,7 +2215,7 @@
     </unit>
     <unit id="tool_text_case_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:138</note>
+        <note category="location">src/app/data/atomic-tools.ts:140</note>
       </notes>
       <segment>
         <source>Mettre en majuscule / minuscule</source>
@@ -2005,7 +2223,7 @@
     </unit>
     <unit id="tool_text_case_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:139</note>
+        <note category="location">src/app/data/atomic-tools.ts:141</note>
       </notes>
       <segment>
         <source>Convertir la casse du texte selon la langue (locale).</source>
@@ -2013,7 +2231,7 @@
     </unit>
     <unit id="readability_tool_card_title">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:152</note>
+        <note category="location">src/app/data/atomic-tools.ts:154</note>
       </notes>
       <segment>
         <source>Lisibilité &amp; clarté</source>
@@ -2021,7 +2239,7 @@
     </unit>
     <unit id="readability_tool_card_desc">
       <notes>
-        <note category="location">src/app/data/atomic-tools.ts:153</note>
+        <note category="location">src/app/data/atomic-tools.ts:155</note>
       </notes>
       <segment>
         <source>Analysez la clarté de votre texte avec un score universel, des statistiques et des conseils.</source>

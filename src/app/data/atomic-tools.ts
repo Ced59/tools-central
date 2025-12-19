@@ -31,8 +31,6 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
         '../components/pages/tools/math/percentages/percentage-variation-tool/percentage-variation-tool.component'
         ).then(m => m.PercentageVariationToolComponent),
   },
-
-  // NOUVEAU #1 (DISPO)
   {
     id: 'percentage-of-number',
     category: 'math',
@@ -47,8 +45,6 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
         '../components/pages/tools/math/percentages/percentage-of-number-tool/percentage-of-number-tool.component'
         ).then(m => m.PercentageOfNumberToolComponent),
   },
-
-  // À VENIR
   {
     id: 'percentage-what-percent',
     category: 'math',
@@ -57,8 +53,14 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     description: $localize`:@@tool_percentage_what_percent_desc:Calculer le pourcentage que représente X par rapport à Y.`,
     icon: 'pi pi-percentage',
     route: routes.tool('math', 'percentages', 'percentage-what-percent'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component'
+        ).then(m => m.XOfYPercentageToolComponent),
   },
+
+  // A VENIR
   {
     id: 'percentage-increase-decrease',
     category: 'math',
