@@ -13,9 +13,10 @@
     "extract-i18n": "ng extract-i18n --project=tools-central",
     "i18n:sync": "node scripts/i18n-sync.mjs",
     "i18n:aggregate": "node scripts/i18n-aggregate.mjs",
-    "i18n:apply": "node scripts/i18n-apply.mjs dist/i18n/todo",
+    "i18n:apply": "node scripts/i18n-apply.mjs dist/i18n/todo && node scripts/i18n-repair.mjs",
     "i18n:extract-and-sync": "npm run extract-i18n && npm run i18n:sync",
     "i18n:prepare": "npm run i18n:extract-and-sync && npm run i18n:aggregate",
+    "i18n:repair": "node scripts/i18n-repair.mjs",
     "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs"
   },
