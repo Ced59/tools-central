@@ -37,15 +37,6 @@
             i18n-placeholder="@@text_case_input_placeholder"
             class="input-full"
           ></textarea>
-
-          <small
-            class="hint"
-            *ngIf="input() && !actionHasEffect()"
-            i18n="@@text_case_hint_no_change"
-          >
-            Aucun changement : le texte est déjà dans le format “<span i18n-ph="MODE_LABEL">{{ modeLabel() }}</span>”
-            (ou aucun caractère n’est concerné).
-          </small>
         </div>
 
         <!-- Sortie -->
@@ -56,7 +47,7 @@
             <pre class="output-pre">{{ output() }}</pre>
           </div>
 
-          <!-- ✅ Action sans effet -->
+          <!-- ✅ Action sans effet (UNIQUE, sans balise dans le message) -->
           <small class="hint" *ngIf="input() && !actionHasEffect()" i18n="@@text_case_hint_no_change">
             Aucun changement : le texte est déjà dans le format “{{ modeLabel() }}” (ou aucun caractère n’est concerné).
           </small>
@@ -65,7 +56,6 @@
           <small class="hint" *ngIf="input() && probablyNoCaseScript()" i18n="@@text_case_hint_no_case">
             Remarque : certaines écritures ne distinguent pas majuscules et minuscules (ex. chinois, japonais…).
           </small>
-
         </div>
       </div>
 
@@ -192,6 +182,7 @@
         </div>
       </div>
     </div>
+
     <!-- Exemples -->
     <div class="tool-card">
       <div class="card-header centered">
