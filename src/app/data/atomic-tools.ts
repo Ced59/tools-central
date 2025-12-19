@@ -59,8 +59,6 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
         '../components/pages/tools/math/percentages/x-of-y-percentage-tool/x-of-y-percentage-tool.component'
         ).then(m => m.XOfYPercentageToolComponent),
   },
-
-  // A VENIR
   {
     id: 'percentage-increase-decrease',
     category: 'math',
@@ -69,7 +67,11 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     description: $localize`:@@tool_percentage_increase_decrease_desc:Appliquer une hausse ou une baisse en pourcentage à une valeur.`,
     icon: 'pi pi-arrow-up-right',
     route: routes.tool('math', 'percentages', 'percentage-increase-decrease'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../components/pages/tools/math/percentages/percentage-increase-decrease-tool/percentage-increase-decrease-tool.component'
+        ).then(m => m.PercentageIncreaseDecreaseToolComponent),
   },
   {
     id: 'percentage-relative-difference',
@@ -79,7 +81,11 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     description: $localize`:@@tool_percentage_relative_difference_desc:Mesurer l’écart relatif entre deux valeurs (en %).`,
     icon: 'pi pi-arrows-h',
     route: routes.tool('math', 'percentages', 'percentage-relative-difference'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../components/pages/tools/math/percentages/percentage-relative-difference-tool/percentage-relative-difference-tool.component'
+        ).then(m => m.PercentageRelativeDifferenceToolComponent),
   },
   {
     id: 'percentage-successive',
@@ -89,7 +95,11 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     description: $localize`:@@tool_percentage_successive_desc:Composer plusieurs pourcentages (effet cumulé).`,
     icon: 'pi pi-sliders-h',
     route: routes.tool('math', 'percentages', 'percentage-successive'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../components/pages/tools/math/percentages/percentage-successive-tool/percentage-successive-tool.component'
+        ).then(m => m.PercentageSuccessiveToolComponent),
   },
   {
     id: 'percentage-reverse',
@@ -99,8 +109,14 @@ export const ATOMIC_TOOLS: AtomicToolItem[] = [
     description: $localize`:@@tool_percentage_reverse_desc:Retrouver la valeur initiale après une hausse ou une baisse.`,
     icon: 'pi pi-undo',
     route: routes.tool('math', 'percentages', 'percentage-reverse'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../components/pages/tools/math/percentages/percentage-reverse-tool/percentage-reverse-tool.component'
+        ).then(m => m.PercentageReverseToolComponent),
   },
+
+  // A VENIR
   {
     id: 'percentage-share-of-total',
     category: 'math',

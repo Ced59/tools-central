@@ -1,0 +1,199 @@
+<section class="tool-page">
+  <!-- Hero HORS du container -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-arrow-up-right"></i>
+        </div>
+
+        <h1 i18n="@@pct_incdec_title">Augmenter / diminuer de X%</h1>
+        <p class="hero-subtitle" i18n="@@pct_incdec_subtitle">
+          Applique une hausse ou une baisse en pourcentage à une valeur.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pct_incdec_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="base" i18n="@@pct_incdec_base_label">Valeur de départ</label>
+          <p-inputNumber
+            inputId="base"
+            [formControl]="form.controls.base"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_incdec_base_hint">
+            Ex : prix, quantité, salaire…
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="rate" i18n="@@pct_incdec_rate_label">Pourcentage X</label>
+          <p-inputNumber
+            inputId="rate"
+            [formControl]="form.controls.rate"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="10"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_incdec_rate_hint">
+            Ex : 10 = 10%
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@pct_incdec_precision_label">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_incdec_precision_hint">
+            Arrondi
+          </small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@pct_incdec_results_title">Résultats</h3>
+
+          <p-tag *ngIf="trendKey() !== null" [severity]="tagSeverity()">
+            <ng-container [ngSwitch]="trendKey()">
+              <span *ngSwitchCase="'up'" i18n="@@pct_incdec_up">Hausse</span>
+              <span *ngSwitchCase="'down'" i18n="@@pct_incdec_down">Baisse</span>
+              <span *ngSwitchDefault i18n="@@pct_incdec_flat">Stable</span>
+            </ng-container>
+          </p-tag>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_incdec_delta_label">Variation (valeur)</span>
+            <span class="result-value">{{ fmt(delta()) }}</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pct_incdec_final_label">Valeur finale</span>
+            <span class="result-value">{{ fmt(finalValue()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_incdec_coeff_label">Coefficient</span>
+            <span class="result-value">{{ fmt(coeff()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Formule step-by-step -->
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@pct_incdec_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@pct_incdec_examples_title">Exemples</h2>
+        <p i18n="@@pct_incdec_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">{{ ex.base }} ; {{ ex.rate }}%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@pct_incdec_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_incdec_definition_sub">
+          Augmenter ou diminuer une valeur revient à la multiplier par un coefficient.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@pct_incdec_formula_title"
+          mode="katex"
+          latex="\text{Final}=\text{Base}\times\left(1+\dfrac{X}{100}\right)"
+          i18n-latex="@@pct_incdec_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@pct_incdec_step1">Convertissez X% en décimal : <strong>X ÷ 100</strong></li>
+          <li i18n="@@pct_incdec_step2">Calculez le coefficient : <strong>1 + X/100</strong></li>
+          <li i18n="@@pct_incdec_step3">Multipliez : <strong>Base × coefficient</strong></li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_incdec_note">
+            Si X est négatif, c’est une baisse.
+            Exemple : <strong>-15%</strong> signifie multiplier par <strong>0,85</strong>.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

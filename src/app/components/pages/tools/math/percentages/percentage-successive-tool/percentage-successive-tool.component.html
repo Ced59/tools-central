@@ -1,0 +1,220 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-sliders-h"></i>
+        </div>
+
+        <h1 i18n="@@pct_succ_title">Pourcentages successifs</h1>
+        <p class="hero-subtitle" i18n="@@pct_succ_subtitle">
+          Compose plusieurs pourcentages (effet cumulé) sur une valeur.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pct_succ_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="base" i18n="@@pct_succ_base_label">Valeur de départ</label>
+          <p-inputNumber
+            inputId="base"
+            [formControl]="form.controls.base"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_succ_base_hint">
+            Ex : prix, salaire, population…
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="p1" i18n="@@pct_succ_p1_label">Pourcentage 1</label>
+          <p-inputNumber
+            inputId="p1"
+            [formControl]="form.controls.p1"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_succ_p1_hint">
+            Ex : +10 ou -15 (en %)
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="p2" i18n="@@pct_succ_p2_label">Pourcentage 2</label>
+          <p-inputNumber
+            inputId="p2"
+            [formControl]="form.controls.p2"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_succ_p2_hint">
+            Ex : +5 ou -8 (en %)
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="p3" i18n="@@pct_succ_p3_label">Pourcentage 3 (optionnel)</label>
+          <p-inputNumber
+            inputId="p3"
+            [formControl]="form.controls.p3"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_succ_p3_hint">
+            Laissez 0 si non utilisé
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@pct_succ_precision_label">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_succ_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@pct_succ_results_title">Résultats</h3>
+
+          <p-tag *ngIf="globalPct() !== null" severity="info">
+            <span i18n="@@pct_succ_tag">Effet cumulé</span>
+          </p-tag>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_succ_final_label">Valeur finale</span>
+            <span class="result-value">{{ fmt(finalValue()) }}</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pct_succ_global_label">Variation globale</span>
+            <span class="result-value">{{ fmtPct(globalPct()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_succ_coeff_label">Coefficient global</span>
+            <span class="result-value">{{ fmt(globalCoeff()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@pct_succ_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@pct_succ_examples_title">Exemples</h2>
+        <p i18n="@@pct_succ_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button *ngFor="let ex of examples" class="example-btn" (click)="applyExample(ex)">
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">{{ ex.base }} ; {{ ex.p1 }}% ; {{ ex.p2 }}% ; {{ ex.p3 }}%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@pct_succ_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_succ_definition_sub">
+          Les pourcentages successifs se multiplient via des coefficients.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@pct_succ_formula_title"
+          mode="katex"
+          latex="\text{Final}=\text{Base}\times\prod_{k}(1+\frac{p_k}{100})"
+          i18n-latex="@@pct_succ_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@pct_succ_step1">Transformez chaque p% en coefficient : <strong>1 + p/100</strong></li>
+          <li i18n="@@pct_succ_step2">Multipliez les coefficients</li>
+          <li i18n="@@pct_succ_step3">Appliquez à la base, puis calculez la variation globale</li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_succ_note">
+            +10% puis -10% ne ramène pas à la valeur initiale :
+            <strong>1,10 × 0,90 = 0,99</strong> (soit -1%).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>
