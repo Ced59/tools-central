@@ -49,7 +49,7 @@
 
           <!-- ✅ Action sans effet (UNIQUE, sans balise dans le message) -->
           <small class="hint" *ngIf="input() && !actionHasEffect()" i18n="@@text_case_hint_no_change">
-            Aucun changement : le texte est déjà dans le format “{{ modeLabel() }}” (ou aucun caractère n’est concerné).
+            Aucun changement : le texte est déjà dans le format “{{ modeLabel() }}” (ou aucun caractère du texte n’est concerné).
           </small>
 
           <!-- ✅ Script sans casse (message SEO mais seulement si détecté) -->
