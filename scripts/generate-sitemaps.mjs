@@ -16,7 +16,9 @@ const INCLUDE_COMING_SOON = false;
 function readAngularLocales() {
   const angular = JSON.parse(fs.readFileSync(ANGULAR_JSON, "utf8"));
   const project = angular.projects?.[PROJECT_NAME];
-  if (!project?.i18n) throw new Error(`No i18n config for "${PROJECT_NAME}"`);
+  if (!project?.i18n) {
+    throw new Error(`No i18n config for "${PROJECT_NAME}"`);
+  }
 
   const sourceLocale = project.i18n.sourceLocale; // "fr"
   const locales = Object.keys(project.i18n.locales || {});
@@ -25,7 +27,9 @@ function readAngularLocales() {
 
 // ---------- parsing helpers ----------
 function read(file) {
-  if (!fs.existsSync(file)) return "";
+  if (!fs.existsSync(file)) {
+    return "";
+  }
   return fs.readFileSync(file, "utf8");
 }
 
@@ -44,12 +48,34 @@ function extractRoutesFromArrayTs(tsContent) {
   const blocks = tsContent.match(/\{[\s\S]*?\}/g) ?? [];
 
   for (const b of blocks) {
-    const route = b.match(/route\s*:\s*['"]([^'"]+)['"]/)?.[1];
+    // Chercher route: "..." OU route: routes.xxx(...)
+    const directRoute = b.match(/route\s*:\s*['"]([^'"]+)['"]/)?.[1];
+    const dynamicRoute = b.match(/route\s*:\s*routes\.tool\(['"]([^'"]+)['"],\s*['"]([^'"]+)['"],\s*['"]([^'"]+)['"]\)/);
+    const groupRoute = b.match(/route\s*:\s*routes\.group\(['"]([^'"]+)['"],\s*['"]([^'"]+)['"]\)/);
+
     const availableRaw = b.match(/available\s*:\s*(true|false)/)?.[1];
     const available = availableRaw ? availableRaw === "true" : true;
 
-    if (!route) continue;
-    if (!INCLUDE_COMING_SOON && available === false) continue;
+    let route = null;
+
+    if (directRoute) {
+      route = directRoute;
+    } else if (dynamicRoute) {
+      // routes.tool(cat, group, tool) -> /categories/cat/group/tool
+      const [, cat, group, tool] = dynamicRoute;
+      route = `/categories/${cat}/${group}/${tool}`;
+    } else if (groupRoute) {
+      // routes.group(cat, group) -> /categories/cat/group
+      const [, cat, group] = groupRoute;
+      route = `/categories/${cat}/${group}`;
+    }
+
+    if (!route) {
+      continue;
+    }
+    if (!INCLUDE_COMING_SOON && available === false) {
+      continue;
+    }
 
     routes.push(route);
   }
@@ -57,7 +83,9 @@ function extractRoutesFromArrayTs(tsContent) {
 }
 
 function normalizeNoTrailingSlash(p) {
-  if (p === "/") return "/";
+  if (p === "/") {
+    return "/";
+  }
   return p.replace(/\/+$/g, "");
 }
 
@@ -101,17 +129,23 @@ if (!fs.existsSync(DIST_DIR)) {
 const locales = readAngularLocales();
 console.log("🌍 Locales:", locales.join(", "));
 
-// routes “canon” (sans prefix locale)
+// routes "canon" (sans prefix locale)
 const baseRoutes = new Set();
 baseRoutes.add("/");
 baseRoutes.add("/categories");
 
 // catégories
-for (const r of extractCategoryRoutes(read(CATEGORIES_TS))) baseRoutes.add(r);
+for (const r of extractCategoryRoutes(read(CATEGORIES_TS))) {
+  baseRoutes.add(r);
+}
 
 // groups + atomic tools
-for (const r of extractRoutesFromArrayTs(read(TOOL_GROUPS_TS))) baseRoutes.add(r);
-for (const r of extractRoutesFromArrayTs(read(ATOMIC_TOOLS_TS))) baseRoutes.add(r);
+for (const r of extractRoutesFromArrayTs(read(TOOL_GROUPS_TS))) {
+  baseRoutes.add(r);
+}
+for (const r of extractRoutesFromArrayTs(read(ATOMIC_TOOLS_TS))) {
+  baseRoutes.add(r);
+}
 
 const baseList = uniq([...baseRoutes].map(normalizeNoTrailingSlash)).sort((a, b) => a.localeCompare(b));
 console.log("🧭 Base routes:", baseList);

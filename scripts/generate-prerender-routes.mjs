@@ -13,7 +13,9 @@ const INCLUDE_COMING_SOON = false;
 
 // ---- helpers
 function read(file) {
-  if (!fs.existsSync(file)) return "";
+  if (!fs.existsSync(file)) {
+    return "";
+  }
   return fs.readFileSync(file, "utf8");
 }
 
@@ -27,12 +29,34 @@ function extractRoutesFromArrayTs(tsContent) {
   const blocks = tsContent.match(/\{[\s\S]*?\}/g) ?? [];
 
   for (const b of blocks) {
-    const route = b.match(/route\s*:\s*['"]([^'"]+)['"]/)?.[1];
+    // Chercher route: "..." OU route: routes.xxx(...)
+    const directRoute = b.match(/route\s*:\s*['"]([^'"]+)['"]/)?.[1];
+    const dynamicRoute = b.match(/route\s*:\s*routes\.tool\(['"]([^'"]+)['"],\s*['"]([^'"]+)['"],\s*['"]([^'"]+)['"]\)/);
+    const groupRoute = b.match(/route\s*:\s*routes\.group\(['"]([^'"]+)['"],\s*['"]([^'"]+)['"]\)/);
+
     const availableRaw = b.match(/available\s*:\s*(true|false)/)?.[1];
     const available = availableRaw ? availableRaw === "true" : true;
 
-    if (!route) continue;
-    if (!INCLUDE_COMING_SOON && available === false) continue;
+    let route = null;
+
+    if (directRoute) {
+      route = directRoute;
+    } else if (dynamicRoute) {
+      // routes.tool(cat, group, tool) -> /categories/cat/group/tool
+      const [, cat, group, tool] = dynamicRoute;
+      route = `/categories/${cat}/${group}/${tool}`;
+    } else if (groupRoute) {
+      // routes.group(cat, group) -> /categories/cat/group
+      const [, cat, group] = groupRoute;
+      route = `/categories/${cat}/${group}`;
+    }
+
+    if (!route) {
+      continue;
+    }
+    if (!INCLUDE_COMING_SOON && available === false) {
+      continue;
+    }
 
     routes.push(route);
   }
@@ -40,12 +64,14 @@ function extractRoutesFromArrayTs(tsContent) {
 }
 
 function extractCategoryRoutes(tsContent) {
-  // categories.ts n’a pas "route", donc on fabrique /categories/<id>
+  // categories.ts n'a pas "route", donc on fabrique /categories/<id>
   const ids = [...tsContent.matchAll(/id\s*:\s*['"]([^'"]+)['"]/g)].map((m) => m[1]);
   const uniqIds = uniq(ids);
 
   const out = [];
-  for (const id of uniqIds) out.push(`/categories/${id}`);
+  for (const id of uniqIds) {
+    out.push(`/categories/${id}`);
+  }
   return out;
 }
 
@@ -57,16 +83,24 @@ routes.add(`/`);
 routes.add(`/categories`);
 
 // pages catégories
-routes.add(...extractCategoryRoutes(read(CATEGORIES_TS)));
+for (const r of extractCategoryRoutes(read(CATEGORIES_TS))) {
+  routes.add(r);
+}
 
 // pages groups (2 segments) + pages tools (3 segments)
-for (const r of extractRoutesFromArrayTs(read(TOOL_GROUPS_TS))) routes.add(r);
-for (const r of extractRoutesFromArrayTs(read(ATOMIC_TOOLS_TS))) routes.add(r);
+for (const r of extractRoutesFromArrayTs(read(TOOL_GROUPS_TS))) {
+  routes.add(r);
+}
+for (const r of extractRoutesFromArrayTs(read(ATOMIC_TOOLS_TS))) {
+  routes.add(r);
+}
 
 // normalisation (pas de trailing slash sauf "/")
 const normalized = uniq(
   [...routes].map((r) => {
-    if (r === "/") return "/";
+    if (r === "/") {
+      return "/";
+    }
     return r.replace(/\/+$/g, ""); // enlève / final
   })
 ).sort((a, b) => a.localeCompare(b));
