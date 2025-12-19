@@ -7,6 +7,8 @@ import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { TextareaModule } from 'primeng/textarea';
+import {map, startWith} from "rxjs";
+import {toSignal} from "@angular/core/rxjs-interop";
 
 type ReadabilityLevelKey =
   | 'very_easy'
@@ -67,6 +69,28 @@ export class ReadabilityToolComponent {
     text: ['', [Validators.required, Validators.minLength(1)]],
   });
 
+  // ✅ Signal réactif basé sur le formControl
+  text = toSignal(
+    this.form.controls.text.valueChanges.pipe(
+      startWith(this.form.controls.text.value ?? ''),
+      map(v => (v ?? '').toString())
+    ),
+    { initialValue: '' }
+  );
+
+  // ✅ résultat (null si vide) — maintenant ça marche
+  analysis = computed<Analysis | null>(() => {
+    const t = (this.text() ?? '').trim();
+    if (!t) return null;
+    return analyzeText(t);
+  });
+
+  // UI helpers inchangés
+  scoreLabel = computed(() => {
+    const a = this.analysis();
+    return a ? `${a.score}/100` : '';
+  });
+
   examples: Example[] = [
     {
       label: $localize`:@@readability_example_clear_label:Texte clair`,
@@ -81,20 +105,6 @@ export class ReadabilityToolComponent {
       text: $localize`:@@readability_example_long_text:Quand on écrit un texte sans faire de pauses et qu’on enchaîne les idées sans séparer clairement les phrases, le lecteur se fatigue, perd le fil, et finit par relire plusieurs fois parce qu’il n’arrive pas à identifier ce qui est important.`,
     },
   ];
-
-  // résultat (null si vide)
-  analysis = computed<Analysis | null>(() => {
-    const t = (this.form.value.text ?? '').trim();
-    if (!t) return null;
-    return analyzeText(t);
-  });
-
-  // UI helpers
-  scoreLabel = computed(() => {
-    const a = this.analysis();
-    if (!a) return '';
-    return `${a.score}/100`;
-  });
 
   levelLabel = computed(() => {
     const a = this.analysis();
@@ -128,13 +138,15 @@ export class ReadabilityToolComponent {
   });
 
   applyExample(ex: Example) {
-    this.form.patchValue({ text: ex.text });
+    this.form.controls.text.setValue(ex.text, { emitEvent: true });
     this.form.markAsDirty();
     this.form.markAsTouched();
   }
 
   clear() {
-    this.form.reset({ text: '' });
+    this.form.controls.text.setValue('', { emitEvent: true });
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   copySummary() {

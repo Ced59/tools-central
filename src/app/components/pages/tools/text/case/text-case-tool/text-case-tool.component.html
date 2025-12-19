@@ -30,7 +30,7 @@
           <textarea
             id="input"
             pTextarea
-            [autoResize]="true"
+            [autoResize]="false"
             rows="8"
             [formControl]="form.controls.input"
             placeholder="Collez votre texte ici…"
@@ -204,5 +204,19 @@
         </button>
       </div>
     </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a
+        class="back-link"
+        [routerLink]="['/categories/text/case']"
+        i18n="@@text_case_back"
+      >
+        <i class="pi pi-arrow-left"></i>
+        Retour à la section “Casse du texte”
+      </a>
+    </div>
+
+
   </div>
 </section>

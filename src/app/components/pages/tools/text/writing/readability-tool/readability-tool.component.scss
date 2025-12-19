@@ -1,36 +1,90 @@
 @use 'mixins' as m;
 @use 'patterns' as p;
 @use 'tool-page' as tp;
+@use 'components' as c;
 
+// ✅ Base commune (comme les autres tools)
 @include p.tool-hero;
 @include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.examples;
+@include tp.explain;
+@include tp.back;
+
+// ---------------------------------------------------------
+// Readability : layout spécifique (convertisseur en 2 colonnes)
+// ---------------------------------------------------------
 
 .readability-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.25rem;
 
   @include m.up(m.$bp-md) {
     grid-template-columns: 1.1fr 0.9fr;
-    gap: 1.25rem;
+    gap: 1.5rem;
     align-items: start;
   }
 }
 
+.field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+
+  label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+  }
+}
+
+// textarea full width + hauteur stable
+.input-full {
+  width: 100%;
+  display: block;
+}
+
+:host ::ng-deep textarea.p-inputtextarea,
+:host ::ng-deep .p-inputtextarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 240px;
+  padding: 1rem;
+  resize: vertical;
+}
+
+// actions sous textarea
 .readability-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.6rem;
   flex-wrap: wrap;
   margin-top: 0.75rem;
 }
 
-.tool-textarea {
-  width: 100%;
+// box résultat (même style que les autres outils: fond + border + radius)
+.result-box {
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background: var(--surface-ground);
+  padding: 1rem;
+  min-height: 240px;
 }
 
+.empty-title {
+  font-weight: 800;
+}
+
+.empty-text {
+  margin-top: 0.25rem;
+  color: var(--text-color-secondary);
+}
+
+// score
 .section-title {
   font-weight: 800;
-  margin-bottom: 0.5rem;
+  margin: 0.75rem 0 0.5rem;
 }
 
 .score-head {
@@ -66,6 +120,38 @@
   font-size: 0.95rem;
 }
 
+// stats
+.results-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+
+  @include m.up(m.$bp-md) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.result-item {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background: var(--surface-card);
+  padding: 0.9rem;
+}
+
+.result-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.result-value {
+  margin-top: 0.25rem;
+  font-weight: 900;
+  font-size: 1.05rem;
+  color: var(--text-color);
+}
+
+// lists
 .feedback-list {
   margin: 0.25rem 0 0;
   padding-left: 1.1rem;
@@ -80,3 +166,83 @@
   color: var(--text-color-secondary);
   font-size: 0.95rem;
 }
+
+.result-box {
+  padding: 1.25rem;
+}
+
+.score-head {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0.75rem;
+}
+
+.actions-explain {
+  gap: 1.25rem;
+}
+.explain-item p {
+  margin-top: 0.4rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include m.up(m.$bp-md) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.metric-card {
+  border: 1px solid var(--border-color);
+  background: var(--surface-ground);
+  border-radius: 14px;
+  padding: 1.1rem;
+
+  p {
+    margin: 0.5rem 0 0;
+    color: var(--text-color-secondary);
+    line-height: 1.45;
+  }
+}
+
+.metric-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text-color);
+  }
+}
+
+.metric-chip {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-color-secondary);
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.12);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  white-space: nowrap;
+}
+
+.metric-tips {
+  margin: 0.75rem 0 0;
+  padding-left: 1.15rem;
+  color: var(--text-color-secondary);
+
+  li {
+    margin: 0.35rem 0;
+  }
+}
+
+
+// utiliser le divider commun
+@include c.divider;

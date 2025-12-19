@@ -1,200 +1,42 @@
-/* =========================================================
-   ✅ Tool page (aligné avec les tools % / listings)
-   ========================================================= */
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+@use 'components' as c;
+@use 'mixins' as m;
 
-:host {
-  display: block;
-}
+// Application des mixins partagés (même base que les tools % / listings)
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.examples;
+@include tp.explain;
+@include tp.back;
 
+// ---------------------------------------------------------
+// Styles spécifiques à text-case-tool uniquement
+// ---------------------------------------------------------
+
+// ---------------------------------------------------------
+// Retrouver le rendu "avant" (plus aéré + cartes)
+// ---------------------------------------------------------
+
+// Un peu plus de padding sur CET outil uniquement (sans casser les autres pages)
 .tool-page {
-  padding-bottom: 3rem;
+  .tool-card {
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
 
-  @media (max-width: 768px) {
-    padding-bottom: 2rem;
-  }
-}
-
-/* Hero pleine largeur (même pattern que les pages math/listings) */
-.page-hero {
-  padding: 3.5rem 0 3rem;
-  background: var(--hero-gradient);
-  color: white;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    padding: 2.5rem 0 2rem;
-  }
-}
-
-.hero-content {
-  max-width: 780px;
-  margin: 0 auto;
-}
-
-.hero-icon {
-  width: 68px;
-  height: 68px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1.25rem;
-  backdrop-filter: blur(10px);
-
-  i {
-    font-size: 1.75rem;
-    color: white;
-  }
-
-  @media (max-width: 768px) {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-
-    i {
-      font-size: 1.4rem;
+    @include m.down(m.$bp-md) {
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
     }
   }
 }
 
-.page-hero h1 {
-  font-size: clamp(1.75rem, 4vw, 2.25rem);
-  font-weight: 800;
-  margin: 0 0 0.5rem;
-  letter-spacing: -0.02em;
-}
-
-.hero-subtitle {
-  font-size: 1.05rem;
-  opacity: 0.9;
-  margin: 0;
-
-  @media (max-width: 768px) {
-    font-size: 0.95rem;
-  }
-}
-
-/* Contenu sous hero */
-.tool-content {
-  padding-top: 2rem;
-
-  @media (max-width: 768px) {
-    padding-top: 1.5rem;
-  }
-}
-
-/* Card */
-.tool-card {
-  background: var(--surface-card);
+// Résultat : même look que "avant"
+.output-box {
   border: 1px solid var(--border-color);
   border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1.25rem;
-
-  @media (max-width: 768px) {
-    padding: 1.25rem;
-    border-radius: 14px;
-  }
-}
-
-.card-header {
-  margin-bottom: 1.25rem;
-
-  &.centered {
-    text-align: center;
-  }
-
-  h2 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    color: var(--text-color);
-    margin: 0 0 0.25rem;
-  }
-
-  p {
-    font-size: 0.9rem;
-    color: var(--text-color-secondary);
-    margin: 0;
-  }
-}
-
-.divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.10);
-  margin: 1.25rem 0;
-}
-
-/* Retour */
-.back-section {
-  padding-top: 0.5rem;
-}
-
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color-secondary);
-  text-decoration: none;
-  font-size: 0.95rem;
-  font-weight: 500;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  transition: color 0.2s ease, background 0.2s ease;
-
-  i {
-    font-size: 0.85rem;
-    transition: transform 0.2s ease;
-  }
-
-  &:hover {
-    color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.08);
-
-    i {
-      transform: translateX(-3px);
-    }
-  }
-}
-
-
-/* =========================================================
-   ✅ Styles spécifiques "Text Case"
-   ========================================================= */
-
-.text-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-
-  @media (min-width: 900px) {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.field label {
-  display: block;
-  font-weight: 650;
-  margin-bottom: 0.5rem;
-}
-
-.hint {
-  display: block;
-  margin-top: 0.5rem;
-  opacity: 0.75;
-  font-size: 0.9rem;
-}
-
-/* Prime textarea full width */
-.input-full {
-  width: 100%;
-}
-
-/* Résultat */
-.output-box {
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 16px;
-  background: rgba(0, 0, 0, 0.18);
+  background: var(--surface-ground);
   padding: 1rem;
   min-height: 220px;
 }
@@ -207,9 +49,10 @@
   "Liberation Mono", "Courier New", monospace;
   font-size: 0.95rem;
   line-height: 1.35;
+  color: var(--text-color);
 }
 
-/* Actions */
+// Ligne des boutons : utilitaires à droite comme sur l’image "avant"
 .actions-row {
   display: flex;
   justify-content: space-between;
@@ -225,31 +68,24 @@
   flex-wrap: wrap;
 }
 
-/* Liste info */
-.info-list {
-  margin: 0;
-  padding-left: 1.25rem;
-  opacity: 0.92;
-
-  li {
-    margin: 0.45rem 0;
-  }
+.utility-buttons {
+  margin-left: auto; // pousse à droite
 }
 
-
+// Grille + cartes "Actions disponibles" (ce qui manque aujourd’hui)
 .actions-explain {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
 
-  @media (min-width: 900px) {
+  @include m.up(m.$bp-md) {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 .explain-item {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.14);
+  border: 1px solid var(--border-color);
+  background: var(--surface-ground);
   border-radius: 14px;
   padding: 1rem;
 
@@ -257,51 +93,115 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 750;
+    color: var(--text-color);
   }
 
   p {
     margin: 0.5rem 0 0 0;
-    opacity: 0.9;
+    color: var(--text-color-secondary);
     line-height: 1.45;
   }
 }
 
-// Examples
-.examples-grid {
+// ---------------------------------------------------------
+// ✅ Convertisseur : remettre le layout (Texte / Résultat)
+// ---------------------------------------------------------
+
+.text-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.75rem;
+  gap: 1.25rem;
 
-  @media (min-width: 640px) {
-    grid-template-columns: repeat(2, 1fr);
+  @include m.up(m.$bp-md) {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    align-items: start;
   }
 }
 
-.example-btn {
+.field {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  background: var(--surface-ground);
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  flex-direction: column;
+  min-width: 0; // important pour éviter des débordements en grid
 
-  &:hover {
-    border-color: var(--primary-color);
-    background: rgba(99, 102, 241, 0.05);
-  }
-
-  .ex-label {
+  label {
     font-weight: 600;
     font-size: 0.9rem;
-    color: var(--primary-color);
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
   }
+}
 
-  .ex-values {
-    font-size: 0.85rem;
-    color: var(--text-color-secondary);
-  }
+// Ton textarea doit prendre TOUTE la largeur
+.input-full {
+  width: 100%;
+  display: block;
+}
+
+// PrimeNG ajoute ses propres classes -> on force le width sur le vrai textarea
+:host ::ng-deep textarea.p-inputtextarea,
+:host ::ng-deep .p-inputtextarea {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Hint sous le résultat
+.hint {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+// ---------------------------------------------------------
+// ✅ Alignement des 2 zones + respiration avant les boutons
+// ---------------------------------------------------------
+
+// Les 2 colonnes doivent démarrer au même niveau
+.text-grid {
+  align-items: start;
+}
+
+// Donne la même hauteur de base au textarea et au résultat
+:host ::ng-deep textarea.p-inputtextarea {
+  min-height: 220px; // match output-box
+}
+
+// Résultat : un peu d'air sous la box (évite "collé aux boutons")
+.output-box {
+  margin-bottom: 0.75rem;
+}
+
+:host ::ng-deep textarea.p-inputtextarea {
+  padding: 1rem; // rapproche du padding output-box
+}
+
+// ---------------------------------------------------------
+// ✅ Finitions : hauteur identique + espace avant boutons
+// ---------------------------------------------------------
+
+// 1) Force une hauteur visuelle identique aux 2 blocs
+:host ::ng-deep textarea.p-inputtextarea {
+  min-height: 220px;
+  height: 220px; // Prime autoResize peut varier : on fixe la base
+  resize: vertical; // l'utilisateur peut agrandir
+}
+
+.output-box {
+  min-height: 220px;
+  display: flex; // évite un "vide" bizarre et stabilise l'alignement
+}
+
+.output-pre {
+  width: 100%;
+}
+
+// 2) Ajoute de l'air entre la grille et la zone de boutons
+.text-grid {
+  margin-bottom: 1rem;
+}
+
+// 3) (optionnel) quand ça wrap en mobile, garde un spacing propre
+.actions-row {
+  padding-top: 0.25rem;
 }

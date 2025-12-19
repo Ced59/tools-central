@@ -8,6 +8,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
+import {RouterLink} from "@angular/router";
 
 type CaseMode = 'upper' | 'lower' | 'invert' | 'sentence' | 'title';
 
@@ -29,6 +30,7 @@ type TextCaseExample = {
     DividerModule,
     TagModule,
     NgForOf,
+    RouterLink,
   ],
   templateUrl: './text-case-tool.component.html',
   styleUrl: './text-case-tool.component.scss',

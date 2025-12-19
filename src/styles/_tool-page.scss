@@ -1,4 +1,5 @@
 @use 'mixins' as m;
+@use 'components' as c;
 
 // ---------------------------------------------------------
 // Standard "tool page" patterns (percentage tools, etc.)
@@ -17,7 +18,6 @@
     }
   }
 
-  // Contenu (le hero est géré par patterns.scss)
   .tool-content {
     padding-top: 2rem;
 
@@ -109,15 +109,7 @@
     }
   }
 
-  .divider {
-    height: 1px;
-    background: var(--border-color);
-    margin: 1.5rem 0;
-
-    @include m.down(m.$bp-md) {
-      margin: 1.25rem 0;
-    }
-  }
+  @include c.divider;
 }
 
 @mixin results {
@@ -138,14 +130,7 @@
   }
 
   .results-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-
-    @include m.up(m.$bp-sm) {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
+    @include c.three-col-grid;
   }
 
   .result-item {
@@ -192,13 +177,7 @@
 
 @mixin examples {
   .examples-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-
-    @include m.up(m.$bp-sm) {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    @include c.two-col-grid;
   }
 
   .example-btn {

@@ -1,0 +1,173 @@
+@use 'mixins' as m;
+
+// =========================================================
+// COMPONENTS PARTAGÉS - Utilisés à travers toute l'app
+// =========================================================
+
+// ---------------------------------------------------------
+// GRIDS (layouts récurrents)
+// ---------------------------------------------------------
+
+@mixin listing-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+
+  @include m.up(m.$bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+
+  @include m.up(m.$bp-lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@mixin two-col-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @include m.up(m.$bp-sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@mixin three-col-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+
+  @include m.up(m.$bp-sm) {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+
+// ---------------------------------------------------------
+// BADGES (status indicators, labels)
+// ---------------------------------------------------------
+
+@mixin section-badge {
+  .section-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 0.75rem;
+
+    i {
+      font-size: 0.8rem;
+    }
+
+    &.available {
+      background: rgba(34, 197, 94, 0.12);
+      color: #22c55e;
+      border: 1px solid rgba(34, 197, 94, 0.25);
+    }
+
+    &.coming-soon {
+      background: rgba(99, 102, 241, 0.1);
+      color: var(--primary-color);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+  }
+}
+
+// ---------------------------------------------------------
+// SECTION HEADERS (titles, subtitles pour sections)
+// ---------------------------------------------------------
+
+@mixin section-header {
+  .section-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+
+    @include m.down(m.$bp-md) {
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-size: clamp(1.25rem, 3vw, 1.6rem);
+      font-weight: 700;
+      color: var(--text-color);
+      margin-bottom: 0.35rem;
+    }
+
+    p {
+      color: var(--text-color-secondary);
+      font-size: 0.95rem;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// ---------------------------------------------------------
+// ICON BOXES (hero icons, feature icons)
+// ---------------------------------------------------------
+
+@mixin hero-icon-box {
+  .hero-icon {
+    width: 68px;
+    height: 68px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+
+    i {
+      font-size: 1.75rem;
+      color: white;
+    }
+
+    @include m.down(m.$bp-md) {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+
+      i {
+        font-size: 1.4rem;
+      }
+    }
+  }
+}
+
+// ---------------------------------------------------------
+// DIVIDERS
+// ---------------------------------------------------------
+
+@mixin divider {
+  .divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 1.5rem 0;
+
+    @include m.down(m.$bp-md) {
+      margin: 1.25rem 0;
+    }
+  }
+}
+
+// ---------------------------------------------------------
+// BACK SECTION (réutilisé partout)
+// ---------------------------------------------------------
+
+@mixin back-section {
+  .back-section {
+    padding: 1rem 0 3rem;
+
+    @include m.down(m.$bp-md) {
+      padding: 0.5rem 0 2.5rem;
+    }
+  }
+}

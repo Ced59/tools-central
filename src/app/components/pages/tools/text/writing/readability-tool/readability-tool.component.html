@@ -1,226 +1,337 @@
 <section class="tool-page">
-  <!-- HERO (shared) -->
-  <section class="page-hero">
+  <!-- Hero -->
+  <div class="page-hero">
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon" aria-hidden="true">
           <i class="pi pi-file-edit"></i>
         </div>
 
-        <h1 class="hero-title" i18n="@@readability_title">
-          Analyseur de lisibilité & clarté
-        </h1>
+        <h1 i18n="@@readability_title">Analyseur de lisibilité & clarté</h1>
 
         <p class="hero-subtitle" i18n="@@readability_subtitle">
           Mesurez la clarté de votre texte avec un score universel (toutes langues), des statistiques et des conseils.
         </p>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- CONTENT (shared) -->
-  <section class="tool-content">
-    <div class="container">
+  <!-- Content -->
+  <div class="container tool-content">
+
+    <!-- Card: Analyse -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@readability_card_analyze_title">Analyse</h2>
+        <p i18n="@@readability_card_analyze_sub">
+          Collez un texte : score, stats et conseils apparaissent automatiquement.
+        </p>
+      </div>
+
+      <form [formGroup]="form">
       <div class="readability-grid">
         <!-- LEFT -->
-        <div class="tool-card">
-          <h2 class="card-title" i18n="@@readability_input_title">Votre texte</h2>
-          <p class="card-hint" i18n="@@readability_input_hint">
-            Collez ou écrivez un texte à analyser.
-          </p>
+        <div class="field">
+          <label i18n="@@readability_input_label">Votre texte</label>
 
-          <div class="divider"></div>
+          <textarea
+            pInputTextarea
+            [autoResize]="false"
+            rows="10"
+            formControlName="text"
+            class="input-full"
+            i18n-placeholder="@@readability_text_placeholder"
+            placeholder="Collez votre texte ici…"
+          ></textarea>
 
-          <form [formGroup]="form">
-            <textarea
-              pInputTextarea
-              [autoResize]="true"
-              formControlName="text"
-              class="tool-textarea"
-              rows="8"
-              i18n-placeholder="@@readability_text_placeholder"
-              placeholder="Collez votre texte ici…"
-            ></textarea>
-
-            <div class="readability-actions">
-              <p-button
-                type="button"
-                icon="pi pi-trash"
-                severity="secondary"
-                (onClick)="clear()"
-                i18n-label="@@common_clear"
-                label="Effacer"
-              ></p-button>
-
-              <p-button
-                type="button"
-                icon="pi pi-copy"
-                severity="secondary"
-                (onClick)="copySummary()"
-                [disabled]="!analysis()"
-                i18n-label="@@readability_copy_button"
-                label="Copier le résumé"
-              ></p-button>
-            </div>
-          </form>
-
-          <div class="divider"></div>
-
-          <h3 class="section-title" i18n="@@readability_examples_title">Exemples rapides</h3>
-
-          <div class="examples-grid">
-            <button
+          <div class="readability-actions">
+            <p-button
               type="button"
-              class="example-btn"
-              *ngFor="let ex of examples"
-              (click)="applyExample(ex)"
-            >
-              <span class="ex-label">{{ ex.label }}</span>
-              <span class="ex-icon" aria-hidden="true">
-                <i class="pi pi-arrow-right"></i>
-              </span>
-            </button>
+              icon="pi pi-trash"
+              severity="secondary"
+              [text]="true"
+              (onClick)="clear()"
+              i18n-label="@@common_clear"
+              label="Effacer"
+            ></p-button>
+
+            <p-button
+              type="button"
+              icon="pi pi-copy"
+              (onClick)="copySummary()"
+              [disabled]="!analysis()"
+              i18n-label="@@readability_copy_button"
+              label="Copier le résumé"
+            ></p-button>
           </div>
         </div>
 
         <!-- RIGHT -->
-        <div class="tool-card">
-          <h2 class="card-title" i18n="@@readability_results_title">Résultats</h2>
-          <p class="card-hint" i18n="@@readability_results_hint">
-            Score, niveau, statistiques et conseils.
-          </p>
-
-          <div class="divider"></div>
+        <div class="field">
+          <label i18n="@@readability_output_label">Résultats</label>
 
           <ng-container *ngIf="analysis() as a; else emptyState">
-            <div class="score-head">
-              <div class="score-value">{{ scoreLabel() }}</div>
-              <p-tag [severity]="levelSeverity()" [value]="levelLabel()"></p-tag>
+            <div class="result-box">
+              <div class="score-head">
+                <div class="score-value">{{ scoreLabel() }}</div>
+                <p-tag [severity]="levelSeverity()" [value]="levelLabel()"></p-tag>
+              </div>
+
+              <div
+                class="score-bar"
+                role="progressbar"
+                [attr.aria-valuenow]="a.score"
+                aria-valuemin="0"
+                aria-valuemax="100"
+              >
+                <div class="score-bar-fill" [style.width]="barWidth()"></div>
+              </div>
+
+              <p class="score-legend" i18n="@@readability_score_legend">
+                100 = très clair • 0 = très complexe
+              </p>
+
+              <div class="divider"></div>
+
+              <div class="results-grid">
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_words">Mots</div>
+                  <div class="result-value">{{ a.wordCount }}</div>
+                </div>
+
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_sentences">Phrases</div>
+                  <div class="result-value">{{ a.sentenceCount }}</div>
+                </div>
+
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_paragraphs">Paragraphes</div>
+                  <div class="result-value">{{ a.paragraphCount }}</div>
+                </div>
+
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_chars">Caractères</div>
+                  <div class="result-value">{{ a.charCount }}</div>
+                </div>
+
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_avg_sentence">Longueur moyenne des phrases</div>
+                  <div class="result-value">{{ a.avgSentenceLength }}</div>
+                </div>
+
+                <div class="result-item">
+                  <div class="result-label" i18n="@@readability_stat_avg_word">Longueur moyenne des mots</div>
+                  <div class="result-value">{{ a.avgWordLength }}</div>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <h3 class="section-title" i18n="@@readability_issues_title">Points à améliorer</h3>
+              <ul class="feedback-list">
+                <li *ngFor="let k of a.issues">
+                  <ng-container [ngSwitch]="k">
+                    <span *ngSwitchCase="'readability_issue_long_sentences'" i18n="@@readability_issue_long_sentences">
+                      Trop de phrases longues.
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_very_long_sentences'" i18n="@@readability_issue_very_long_sentences">
+                      Des phrases très longues rendent la lecture difficile.
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_long_words'" i18n="@@readability_issue_long_words">
+                      Les mots sont assez longs (vocabulaire potentiellement complexe).
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_no_paragraphs'" i18n="@@readability_issue_no_paragraphs">
+                      Le texte manque de paragraphes (effet “mur”).
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_low_punctuation'" i18n="@@readability_issue_low_punctuation">
+                      Peu de ponctuation : le rythme peut sembler monotone.
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_high_punctuation'" i18n="@@readability_issue_high_punctuation">
+                      Beaucoup de ponctuation : la lecture peut paraître hachée.
+                    </span>
+                    <span *ngSwitchCase="'readability_issue_none'" i18n="@@readability_issue_none">
+                      Aucun problème majeur détecté.
+                    </span>
+                  </ng-container>
+                </li>
+              </ul>
+
+              <h3 class="section-title" i18n="@@readability_tips_title">Conseils</h3>
+              <ul class="feedback-list">
+                <li *ngFor="let k of a.tips">
+                  <ng-container [ngSwitch]="k">
+                    <span *ngSwitchCase="'readability_tip_shorten_sentences'" i18n="@@readability_tip_shorten_sentences">
+                      Visez des phrases plus courtes (idéalement 12 à 20 mots).
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_split_sentences'" i18n="@@readability_tip_split_sentences">
+                      Coupez les phrases trop longues en 2 ou 3 idées.
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_simpler_words'" i18n="@@readability_tip_simpler_words">
+                      Préférez des mots simples quand c’est possible.
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_add_paragraphs'" i18n="@@readability_tip_add_paragraphs">
+                      Ajoutez des paragraphes pour aérer le texte.
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_add_punctuation'" i18n="@@readability_tip_add_punctuation">
+                      Ajoutez de la ponctuation pour rythmer la lecture.
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_reduce_punctuation'" i18n="@@readability_tip_reduce_punctuation">
+                      Simplifiez la ponctuation et clarifiez la structure.
+                    </span>
+                    <span *ngSwitchCase="'readability_tip_keep_it_up'" i18n="@@readability_tip_keep_it_up">
+                      Continuez : le texte est déjà clair et agréable à lire.
+                    </span>
+                  </ng-container>
+                </li>
+              </ul>
+
+              <p class="footnote" i18n="@@readability_footnote">
+                Note : ce score est universel et basé sur des statistiques simples. Il ne remplace pas une relecture humaine.
+              </p>
             </div>
-
-            <div
-              class="score-bar"
-              role="progressbar"
-              [attr.aria-valuenow]="a.score"
-              aria-valuemin="0"
-              aria-valuemax="100"
-            >
-              <div class="score-bar-fill" [style.width]="barWidth()"></div>
-            </div>
-
-            <p class="score-legend" i18n="@@readability_score_legend">
-              100 = très clair • 0 = très complexe
-            </p>
-
-            <div class="divider"></div>
-
-            <div class="results-grid">
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_words">Mots</div>
-                <div class="result-value">{{ a.wordCount }}</div>
-              </div>
-
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_sentences">Phrases</div>
-                <div class="result-value">{{ a.sentenceCount }}</div>
-              </div>
-
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_paragraphs">Paragraphes</div>
-                <div class="result-value">{{ a.paragraphCount }}</div>
-              </div>
-
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_chars">Caractères</div>
-                <div class="result-value">{{ a.charCount }}</div>
-              </div>
-
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_avg_sentence">Longueur moyenne des phrases</div>
-                <div class="result-value">{{ a.avgSentenceLength }}</div>
-              </div>
-
-              <div class="result-item">
-                <div class="result-label" i18n="@@readability_stat_avg_word">Longueur moyenne des mots</div>
-                <div class="result-value">{{ a.avgWordLength }}</div>
-              </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <h3 class="section-title" i18n="@@readability_issues_title">Points à améliorer</h3>
-            <ul class="feedback-list">
-              <li *ngFor="let k of a.issues">
-                <ng-container [ngSwitch]="k">
-                  <span *ngSwitchCase="'readability_issue_long_sentences'" i18n="@@readability_issue_long_sentences">
-                    Trop de phrases longues.
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_very_long_sentences'" i18n="@@readability_issue_very_long_sentences">
-                    Des phrases très longues rendent la lecture difficile.
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_long_words'" i18n="@@readability_issue_long_words">
-                    Les mots sont assez longs (vocabulaire potentiellement complexe).
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_no_paragraphs'" i18n="@@readability_issue_no_paragraphs">
-                    Le texte manque de paragraphes (effet “mur”).
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_low_punctuation'" i18n="@@readability_issue_low_punctuation">
-                    Peu de ponctuation : le rythme peut sembler monotone.
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_high_punctuation'" i18n="@@readability_issue_high_punctuation">
-                    Beaucoup de ponctuation : la lecture peut paraître hachée.
-                  </span>
-                  <span *ngSwitchCase="'readability_issue_none'" i18n="@@readability_issue_none">
-                    Aucun problème majeur détecté.
-                  </span>
-                </ng-container>
-              </li>
-            </ul>
-
-            <h3 class="section-title" i18n="@@readability_tips_title">Conseils</h3>
-            <ul class="feedback-list">
-              <li *ngFor="let k of a.tips">
-                <ng-container [ngSwitch]="k">
-                  <span *ngSwitchCase="'readability_tip_shorten_sentences'" i18n="@@readability_tip_shorten_sentences">
-                    Visez des phrases plus courtes (idéalement 12 à 20 mots).
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_split_sentences'" i18n="@@readability_tip_split_sentences">
-                    Coupez les phrases trop longues en 2 ou 3 idées.
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_simpler_words'" i18n="@@readability_tip_simpler_words">
-                    Préférez des mots simples quand c’est possible.
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_add_paragraphs'" i18n="@@readability_tip_add_paragraphs">
-                    Ajoutez des paragraphes pour aérer le texte.
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_add_punctuation'" i18n="@@readability_tip_add_punctuation">
-                    Ajoutez de la ponctuation pour rythmer la lecture.
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_reduce_punctuation'" i18n="@@readability_tip_reduce_punctuation">
-                    Simplifiez la ponctuation et clarifiez la structure.
-                  </span>
-                  <span *ngSwitchCase="'readability_tip_keep_it_up'" i18n="@@readability_tip_keep_it_up">
-                    Continuez : le texte est déjà clair et agréable à lire.
-                  </span>
-                </ng-container>
-              </li>
-            </ul>
-
-            <p class="footnote" i18n="@@readability_footnote">
-              Note : ce score est universel et basé sur des statistiques simples (phrases, mots, structure). Il ne remplace pas une relecture humaine.
-            </p>
           </ng-container>
 
           <ng-template #emptyState>
-            <div class="empty">
+            <div class="result-box empty">
               <div class="empty-title" i18n="@@readability_empty_title">Aucun texte à analyser</div>
               <div class="empty-text" i18n="@@readability_empty_text">
-                Collez un texte dans le champ à gauche pour afficher le score et les conseils.
+                Collez un texte à gauche pour afficher le score et les conseils.
               </div>
             </div>
           </ng-template>
         </div>
       </div>
+      </form>
     </div>
-  </section>
+
+
+    <!-- Card: Comprendre les métriques -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@readability_metrics_title">Comprendre les métriques</h2>
+        <p i18n="@@readability_metrics_sub">
+          À quoi correspondent ces chiffres et comment les améliorer.
+        </p>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_score_title">Score (0–100)</h3>
+            <span class="metric-chip" i18n="@@readability_metric_score_chip">Global</span>
+          </div>
+          <p i18n="@@readability_metric_score_desc">
+            Score de clarté : plus il est élevé, plus la lecture est fluide.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_score_tip_1">Objectif : 70+ pour un texte facile.</li>
+            <li i18n="@@readability_metric_score_tip_2">Améliorez en raccourcissant les phrases et en aérant.</li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_words_title">Mots</h3>
+            <span class="metric-chip" i18n="@@readability_metric_words_chip">Volume</span>
+          </div>
+          <p i18n="@@readability_metric_words_desc">
+            Nombre de mots détectés. Sert de base pour les moyennes et densités.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_words_tip_1">Un texte court peut être clair même avec peu de paragraphes.</li>
+            <li i18n="@@readability_metric_words_tip_2">À partir de ~120 mots, aérer devient important.</li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_sentences_title">Phrases</h3>
+            <span class="metric-chip" i18n="@@readability_metric_sentences_chip">Structure</span>
+          </div>
+          <p i18n="@@readability_metric_sentences_desc">
+            Nombre de phrases. Peu de phrases pour beaucoup de mots = phrases longues.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_sentences_tip_1">Visez une idée principale par phrase.</li>
+            <li i18n="@@readability_metric_sentences_tip_2">Coupez à “et”, “mais”, “car”, “donc” si ça s’étire.</li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_paragraphs_title">Paragraphes</h3>
+            <span class="metric-chip" i18n="@@readability_metric_paragraphs_chip">Aération</span>
+          </div>
+          <p i18n="@@readability_metric_paragraphs_desc">
+            Un texte sans paragraphes fatigue. Aérez toutes les 3–6 phrases.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_paragraphs_tip_1">1 paragraphe = 1 idée.</li>
+            <li i18n="@@readability_metric_paragraphs_tip_2">Ajoutez des retours à la ligne sur mobile.</li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_avg_sentence_title">Longueur moyenne des phrases</h3>
+            <span class="metric-chip" i18n="@@readability_metric_avg_sentence_chip">Rythme</span>
+          </div>
+          <p i18n="@@readability_metric_avg_sentence_desc">
+            Idéalement 12–20 mots. Au-delà, le lecteur se perd plus facilement.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_avg_sentence_tip_1">Au-dessus de 25 mots, pense “scinder”.</li>
+            <li i18n="@@readability_metric_avg_sentence_tip_2">Remplacez les subordonnées par 2 phrases.</li>
+          </ul>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-head">
+            <h3 i18n="@@readability_metric_avg_word_title">Longueur moyenne des mots</h3>
+            <span class="metric-chip" i18n="@@readability_metric_avg_word_chip">Vocabulaire</span>
+          </div>
+          <p i18n="@@readability_metric_avg_word_desc">
+            Plus les mots sont longs, plus le vocabulaire est souvent technique ou abstrait.
+          </p>
+          <ul class="metric-tips">
+            <li i18n="@@readability_metric_avg_word_tip_1">Privilégiez des mots courants quand c’est possible.</li>
+            <li i18n="@@readability_metric_avg_word_tip_2">Définissez les termes techniques si nécessaires.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card: Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@readability_examples_title">Exemples</h2>
+        <p i18n="@@readability_examples_sub">
+          Cliquez sur un exemple pour pré-remplir et tester l’analyse.
+        </p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          type="button"
+          class="example-btn"
+          *ngFor="let ex of examples"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">
+            <i class="pi pi-arrow-right" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <a class="back-link" [routerLink]="['/categories/text']" i18n="@@readability_back">
+        <i class="pi pi-arrow-left"></i>
+        Retour
+      </a>
+    </div>
+
+  </div>
 </section>
