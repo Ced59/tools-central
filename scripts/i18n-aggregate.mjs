@@ -51,17 +51,10 @@ const sourceLocale = project.i18n.sourceLocale;
 const targetLocales = Object.keys(project.i18n.locales);
 
 const localeDir = path.resolve("src/locale");
-const outDir = path.resolve("dist/i18n");
+
+// ✅ Nouveau dossier dédié par-locale
+const outDir = path.resolve("dist/i18n/todo");
 fs.mkdirSync(outDir, { recursive: true });
-
-const outputFile = path.join(outDir, "translations.todo.json");
-
-const payload = {
-  generatedAt: new Date().toISOString(),
-  projectName,
-  sourceLocale,
-  locales: {}
-};
 
 let total = 0;
 
@@ -100,11 +93,19 @@ for (const locale of targetLocales) {
 
   items.sort((a, b) => a.id.localeCompare(b.id));
 
-  payload.locales[locale] = items;
-  total += items.length;
+  const payload = {
+    generatedAt: new Date().toISOString(),
+    projectName,
+    sourceLocale,
+    locale,           // ✅ important: on sait quel fichier c’est
+    items
+  };
 
-  console.log(`[i18n-aggregate] ${locale}: ${items.length} items`);
+  const outFile = path.join(outDir, `${locale}.todo.json`);
+  fs.writeFileSync(outFile, JSON.stringify(payload, null, 2), "utf8");
+
+  total += items.length;
+  console.log(`[i18n-aggregate] ${locale}: ${items.length} items -> ${outFile}`);
 }
 
-fs.writeFileSync(outputFile, JSON.stringify(payload, null, 2), "utf8");
-console.log(`[i18n-aggregate] wrote ${outputFile} (${total} total)`);
+console.log(`[i18n-aggregate] done (${total} total)`);

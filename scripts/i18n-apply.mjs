@@ -1,5 +1,27 @@
-// Import du fichier json de traductions dans tous les fichiers messages.
-// Lancement avec npm run i18n:apply
+// scripts/i18n-apply.mjs
+//
+// Applique les traductions depuis des fichiers JSON "todo" vers les fichiers XLF.
+//
+// ✅ Supporte :
+// - un dossier (par défaut dist/i18n/todo) contenant des fichiers *.todo.json (un par locale)
+// - un fichier unique *.todo.json
+//
+// Format attendu d'un fichier todo :
+// {
+//   "generatedAt": "...",
+//   "projectName": "tools-central",
+//   "sourceLocale": "fr",
+//   "locale": "de",
+//   "items": [
+//     {
+//       "id": "...",
+//       "status": "new|needs-review|...",
+//       "source": "...|{...}",
+//       "currentTarget": "...",
+//       "translatedTarget": "...|{...}"
+//     }
+//   ]
+// }
 
 import fs from "node:fs";
 import path from "node:path";
@@ -10,9 +32,12 @@ const builder = new XMLBuilder({
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
   format: true,
-  suppressEmptyNode: false
+  suppressEmptyNode: false,
 });
 
+// --------------------
+// Utils
+// --------------------
 function normalizeArray(v) {
   if (!v) return [];
   return Array.isArray(v) ? v : [v];
@@ -24,6 +49,7 @@ function loadXlf(filePath) {
 }
 
 function writeXlf(filePath, obj) {
+  // fast-xml-parser peut inclure '?xml' selon les configs : on force notre header
   if (obj["?xml"]) delete obj["?xml"];
   const xmlBody = builder.build(obj);
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n${xmlBody}\n`;
@@ -41,7 +67,8 @@ function indexUnitsById(xlfObj) {
   const units = normalizeArray(file.unit);
   const map = new Map();
   for (const u of units) {
-    if (u?.["@_id"]) map.set(u["@_id"], u);
+    const id = u?.["@_id"];
+    if (id) map.set(id, u);
   }
   return map;
 }
@@ -51,17 +78,24 @@ function getOrCreateSegment(unit) {
   return unit.segment;
 }
 
+// --------------------
+// KaTeX helpers
+// --------------------
+
 /**
  * Détecte "c'est du KaTeX" :
- * - id qui finit par _katex (ton conventionnement actuel)
- * - ou présence de commandes latex typiques dans la source/target
+ * - id qui finit par _katex (convention)
+ * - ou présence de commandes latex typiques dans la valeur (string ou object)
  */
 function looksLikeKatex(id, value) {
   if ((id ?? "").endsWith("_katex")) return true;
 
-  const s = typeof value === "string"
-    ? value
-    : (value && typeof value === "object" ? (value["#text"] ?? "") : "");
+  const s =
+    typeof value === "string"
+      ? value
+      : value && typeof value === "object"
+        ? (value["#text"] ?? "")
+        : "";
 
   // heuristique légère (évite d’over-escape du texte normal)
   return /\\(text|mathrm|dfrac|frac|times|begin|end|left|right|%)/.test(s);
@@ -72,17 +106,16 @@ function looksLikeKatex(id, value) {
  * - On veut écrire \\text dans le XLF pour éviter que \text => \t (TAB) dans du JS généré.
  * - Idempotent: ne double que les backslashes "simples" (pas ceux déjà doublés).
  * - Répare aussi une tabulation réelle si elle s'est déjà glissée.
+ * - Protège { } contre ICU Angular i18n (Angular interprète { } comme ICU)
  */
 function escapeKatexForXlfString(s) {
   if (typeof s !== "string" || s.length === 0) return s;
 
-  // ✅ Protéger les accolades contre ICU Angular i18n
-  // (Angular i18n traite { } comme syntaxe ICU)
   let out = s
     .replace(/{/g, "&#123;")
     .replace(/}/g, "&#125;");
 
-  // Si un vrai caractère TAB est présent, on le remplace par \t littéral.
+  // Remplace un vrai TAB par \t littéral
   out = out.replace(/\t/g, "\\t");
 
   // Double uniquement les backslashes non déjà doublés
@@ -99,13 +132,15 @@ function escapeKatexForXlf(value) {
     if (typeof cloned["#text"] === "string") {
       cloned["#text"] = escapeKatexForXlfString(cloned["#text"]);
     }
-    // Si jamais tu ajoutes des champs texte ailleurs (rare), on peut étendre ici.
     return cloned;
   }
 
   return value;
 }
 
+// --------------------
+// XLF target writer
+// --------------------
 function setTarget(unit, value, state = "translated") {
   const seg = getOrCreateSegment(unit);
 
@@ -130,28 +165,77 @@ function setTarget(unit, value, state = "translated") {
   }
 }
 
-// ---- args
-const inputJson = process.argv[2] ?? path.resolve("dist/i18n/translations.todo.json");
-if (!fs.existsSync(inputJson)) {
-  console.error(`[i18n-apply] missing input json: ${inputJson}`);
+// --------------------
+// Input loader (file or directory)
+// --------------------
+function isDirectory(p) {
+  return fs.existsSync(p) && fs.statSync(p).isDirectory();
+}
+
+function loadTodoPayloads(inputPath) {
+  if (!fs.existsSync(inputPath)) return [];
+
+  // dossier => charger tous les *.todo.json
+  if (isDirectory(inputPath)) {
+    const files = fs
+      .readdirSync(inputPath)
+      .filter((f) => f.endsWith(".todo.json"))
+      .map((f) => path.join(inputPath, f));
+
+    return files.map((f) => ({
+      file: f,
+      payload: JSON.parse(fs.readFileSync(f, "utf8")),
+    }));
+  }
+
+  // fichier unique
+  return [
+    {
+      file: inputPath,
+      payload: JSON.parse(fs.readFileSync(inputPath, "utf8")),
+    },
+  ];
+}
+
+// --------------------
+// Main
+// --------------------
+const inputPath = process.argv[2] ?? path.resolve("dist/i18n/todo");
+if (!fs.existsSync(inputPath)) {
+  console.error(`[i18n-apply] missing input path: ${inputPath}`);
   process.exit(1);
 }
 
-const payload = JSON.parse(fs.readFileSync(inputJson, "utf8"));
-const locales = payload?.locales ?? {};
+const todos = loadTodoPayloads(inputPath);
+if (todos.length === 0) {
+  console.log(`[i18n-apply] nothing to apply (no *.todo.json found)`);
+  process.exit(0);
+}
+
 const localeDir = path.resolve("src/locale");
 
 let applied = 0;
 let missingUnits = 0;
+let skippedEmpty = 0;
+let skippedInvalid = 0;
 
-for (const [locale, items] of Object.entries(locales)) {
-  const filePath = path.join(localeDir, `messages.${locale}.xlf`);
-  if (!fs.existsSync(filePath)) {
-    console.warn(`[i18n-apply] skip missing ${filePath}`);
+for (const { file: todoFile, payload } of todos) {
+  const locale = payload?.locale;
+  const items = payload?.items ?? [];
+
+  if (!locale || !Array.isArray(items)) {
+    console.warn(`[i18n-apply] skip invalid todo file: ${todoFile}`);
+    skippedInvalid++;
     continue;
   }
 
-  const xlf = loadXlf(filePath);
+  const xlfPath = path.join(localeDir, `messages.${locale}.xlf`);
+  if (!fs.existsSync(xlfPath)) {
+    console.warn(`[i18n-apply] skip missing ${xlfPath} (from ${path.basename(todoFile)})`);
+    continue;
+  }
+
+  const xlf = loadXlf(xlfPath);
   const map = indexUnitsById(xlf);
 
   let appliedInLocale = 0;
@@ -160,18 +244,30 @@ for (const [locale, items] of Object.entries(locales)) {
     const id = item?.id;
     const translatedTargetRaw = item?.translatedTarget;
 
+    if (!id || translatedTargetRaw == null) {
+      skippedEmpty++;
+      continue;
+    }
+
+    // trim si string, sinon garder object tel quel
     const translatedTarget =
       typeof translatedTargetRaw === "string"
         ? translatedTargetRaw.trim()
         : translatedTargetRaw;
 
     const isEmptyString = typeof translatedTarget === "string" && translatedTarget.length === 0;
+
     const isEmptyObject =
       translatedTarget && typeof translatedTarget === "object"
-        ? (translatedTarget["#text"] ?? "").toString().trim().length === 0 && !translatedTarget.pc
+        ? (translatedTarget["#text"] ?? "")
+        .toString()
+        .trim().length === 0 && !translatedTarget.pc
         : false;
 
-    if (!id || translatedTarget == null || isEmptyString || isEmptyObject) continue;
+    if (isEmptyString || isEmptyObject) {
+      skippedEmpty++;
+      continue;
+    }
 
     const unit = map.get(id);
     if (!unit) {
@@ -179,7 +275,7 @@ for (const [locale, items] of Object.entries(locales)) {
       continue;
     }
 
-    // ✅ Escape KaTeX automatiquement au moment d'écrire dans le XLF
+    // Escape KaTeX automatiquement au moment d'écrire dans le XLF
     const finalValue = looksLikeKatex(id, translatedTarget)
       ? escapeKatexForXlf(translatedTarget)
       : translatedTarget;
@@ -189,8 +285,12 @@ for (const [locale, items] of Object.entries(locales)) {
     appliedInLocale++;
   }
 
-  writeXlf(filePath, xlf);
-  console.log(`[i18n-apply] ${locale}: applied ${appliedInLocale}`);
+  writeXlf(xlfPath, xlf);
+  console.log(
+    `[i18n-apply] ${locale}: applied ${appliedInLocale} (from ${path.basename(todoFile)})`
+  );
 }
 
-console.log(`[i18n-apply] done. applied=${applied}, missingUnits=${missingUnits}`);
+console.log(
+  `[i18n-apply] done. applied=${applied}, missingUnits=${missingUnits}, skippedEmpty=${skippedEmpty}, skippedInvalid=${skippedInvalid}`
+);
