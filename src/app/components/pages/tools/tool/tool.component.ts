@@ -1,14 +1,17 @@
 import { Component, Type, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
+
 import { ToolRegistryService } from '../../../../core/tools/tool-registry.service';
+import { CATEGORIES, type CategoryId } from '../../../../data/categories';
+import { routes } from '../../../../data/routes';
 
 @Component({
   standalone: true,
-  imports: [NgIf, NgComponentOutlet],
+  imports: [NgIf, NgComponentOutlet, RouterLink],
   template: `
     <ng-container *ngIf="isLoading(); else loaded">
-      <section class="loading">
+      <section class="state state-loading">
         <div class="container">
           <h1 i18n>Chargement…</h1>
           <p i18n>Nous préparons l’outil.</p>
@@ -24,25 +27,32 @@ import { ToolRegistryService } from '../../../../core/tools/tool-registry.servic
     </ng-template>
 
     <ng-template #notFound>
-      <section class="notfound">
+      <section class="state state-notfound">
         <div class="container">
           <h1 i18n>Outil indisponible</h1>
           <p i18n>Cet outil n'existe pas ou n'est pas encore disponible.</p>
+
+          <div class="back-section">
+            <a [routerLink]="backLink()" class="back-link">
+              <i class="pi pi-arrow-left"></i>
+              <span i18n>Retour</span>
+            </a>
+          </div>
         </div>
       </section>
     </ng-template>
   `,
-  styles: [`
-    .notfound, .loading { padding: 4rem 0; }
-  `]
+  styleUrl: './tool.component.scss',
 })
 export class ToolComponent {
   toolComponent = signal<Type<unknown> | null>(null);
   isLoading = signal(true);
 
+  private categoryId = '';
+  private groupId = '';
+
   constructor(route: ActivatedRoute, registry: ToolRegistryService) {
-    // ✅ Fallback : selon ton app.routes.ts, les params peuvent changer de nom.
-    const category =
+    const categoryRaw =
       route.snapshot.paramMap.get('idCategory') ??
       route.snapshot.paramMap.get('category') ??
       route.snapshot.paramMap.get('cat') ??
@@ -58,9 +68,31 @@ export class ToolComponent {
       route.snapshot.paramMap.get('tool') ??
       '';
 
+    this.categoryId = categoryRaw;
+    this.groupId = group;
+
+    const category = this.toCategoryId(categoryRaw);
+
+    if (!category || !group || !tool) {
+      this.toolComponent.set(null);
+      this.isLoading.set(false);
+      return;
+    }
+
     registry.loadToolComponent({ category, group, tool }).then(cmp => {
       this.toolComponent.set(cmp);
       this.isLoading.set(false);
     });
+  }
+
+  backLink(): string {
+    // Retour au groupe si possible, sinon aux catégories
+    if (this.categoryId && this.groupId) return routes.group(this.categoryId, this.groupId);
+    if (this.categoryId) return routes.category(this.categoryId);
+    return '/';
+  }
+
+  private toCategoryId(v: string): CategoryId | null {
+    return CATEGORIES.some(c => c.id === v) ? (v as CategoryId) : null;
   }
 }

@@ -11,11 +11,19 @@ import { ToolCardComponent, ToolCardItem } from '../../shared/tool-card/tool-car
 import { SeoService } from '../../../services/seo/seo.service';
 
 type ToolSection = {
-  id: string; // subgroup id or '__default'
+  id: string; // subGroup id, ou '__other'
   title?: string;
   description?: string;
+  order: number;
+
   availableTools: ToolCardItem[];
   comingSoonTools: ToolCardItem[];
+
+  // ✅ pour le rendu “1 seule grille”
+  tools: ToolCardItem[];
+
+  availableCount: number;
+  comingSoonCount: number;
 };
 
 @Component({
@@ -35,10 +43,7 @@ export class ToolGroupComponent {
   group?: ToolGroup;
 
   sections: ToolSection[] = [];
-
-  get hasAnyTool(): boolean {
-    return this.sections.some(s => s.availableTools.length > 0 || s.comingSoonTools.length > 0);
-  }
+  hasAnyTool = false;
 
   constructor(route: ActivatedRoute) {
     this.categoryId =
@@ -54,8 +59,8 @@ export class ToolGroupComponent {
     this.category = CATEGORIES.find(c => c.id === this.categoryId);
     this.group = TOOL_GROUPS.find(g => g.category === this.categoryId && g.id === this.groupId);
 
-    const tools: AtomicToolItem[] = ATOMIC_TOOL_LIST.filter(
-      t => t.category === this.categoryId && t.group === this.groupId
+    const tools: AtomicToolItem[] = ATOMIC_TOOL_LIST.filter(t =>
+      t.category === this.categoryId && t.group === this.groupId
     );
 
     const mapTool = (t: AtomicToolItem): ToolCardItem => ({
@@ -67,63 +72,61 @@ export class ToolGroupComponent {
       available: t.available,
     });
 
-    const subGroups: ToolSubGroup[] = TOOL_SUBGROUPS
+    const subGroups = TOOL_SUBGROUPS
       .filter(sg => sg.category === this.categoryId && sg.group === this.groupId)
       .sort((a, b) => a.order - b.order);
 
-    const hasSubGroups = subGroups.length > 0;
-
-    if (!hasSubGroups) {
-      this.sections = [
-        {
-          id: '__default',
-          availableTools: tools.filter(t => t.available).map(mapTool),
-          comingSoonTools: tools.filter(t => !t.available).map(mapTool),
-        },
-      ];
-      return;
-    }
-
-    const bySubGroup = new Map<string, AtomicToolItem[]>();
+    const bySub = new Map<string, AtomicToolItem[]>();
     for (const t of tools) {
-      const key = (t.subGroup ?? '__other') as string;
-      if (!bySubGroup.has(key)) bySubGroup.set(key, []);
-      bySubGroup.get(key)!.push(t);
+      const k = t.subGroup || '__other';
+      const arr = bySub.get(k) ?? [];
+      arr.push(t);
+      bySub.set(k, arr);
     }
 
-    const mkSection = (id: string, title?: string, description?: string): ToolSection => {
-      const list = (bySubGroup.get(id) ?? []).map(mapTool);
+    const mkSection = (id: string, title?: string, description?: string, order = 999): ToolSection => {
+      const arr = (bySub.get(id) ?? []).map(mapTool);
+
+      const availableTools = arr.filter(x => x.available);
+      const comingSoonTools = arr.filter(x => !x.available);
+
+      // ✅ rendu final : une seule liste, triée "dispo d'abord"
+      const toolsSorted = [...availableTools, ...comingSoonTools];
+
       return {
         id,
         title,
         description,
-        availableTools: list.filter(x => x.available),
-        comingSoonTools: list.filter(x => !x.available),
+        order,
+        availableTools,
+        comingSoonTools,
+        tools: toolsSorted,
+        availableCount: availableTools.length,
+        comingSoonCount: comingSoonTools.length,
       };
     };
 
-    this.sections = subGroups.map((sg: ToolSubGroup) => mkSection(sg.id as string, sg.title, sg.description));
+    const declaredSections = subGroups.map(sg => mkSection(sg.id, sg.title, sg.description, sg.order));
 
-    // "Autres" si des tools n'entrent dans aucun sous-groupe déclaré
-    const declared = new Set<string>(subGroups.map(sg => sg.id as string));
+    // "__other" si jamais un tool a un subGroup non déclaré (ou vide)
+    const declaredIds = new Set(subGroups.map(sg => sg.id));
     const others: AtomicToolItem[] = [];
-
-    for (const [k, arr] of bySubGroup.entries()) {
-      if (k === '__other' || !declared.has(k)) {
-        others.push(...arr);
-      }
+    for (const [k, arr] of bySub.entries()) {
+      if (k === '__other' || !declaredIds.has(k)) others.push(...arr);
     }
+    const otherSection =
+      others.length > 0
+        ? (() => {
+          bySub.set('__other', others);
+          return mkSection('__other', undefined, undefined, 9999);
+        })()
+        : null;
 
-    if (others.length > 0) {
-      const list = others.map(mapTool);
-      this.sections.push({
-        id: '__other',
-        title: $localize`:@@tools_subgroup_other:Autres`,
-        description: $localize`:@@tools_subgroup_other_desc:Outils complémentaires.`,
-        availableTools: list.filter(x => x.available),
-        comingSoonTools: list.filter(x => !x.available),
-      });
-    }
+    this.sections = otherSection
+      ? [...declaredSections, otherSection].sort((a, b) => a.order - b.order)
+      : declaredSections;
+
+    this.hasAnyTool = this.sections.some(s => s.tools.length > 0);
   }
 
   ngOnInit() {

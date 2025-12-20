@@ -1,7 +1,133 @@
 @use 'patterns' as p;
 
-// Application des mixins partagés (identique à categories et category)
+// mixins existants
 @include p.listing-hero;
 @include p.listing-section;
 @include p.back-link;
-@include  p.listing-subgroups;
+
+.tools-section {
+  .subgroup-block {
+    padding: 2.25rem 0 2.75rem; // + d’air
+    border-top: 1px solid var(--border-color);
+
+    &:first-of-type {
+      border-top: 0;
+      padding-top: 1.5rem;
+    }
+  }
+
+  .subgroup-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.25rem;
+
+    // ✅ header plus “chapitre”
+    margin: 0 auto 1.75rem;
+
+    // ✅ on limite la largeur pour que le centrage soit joli
+    max-width: 980px;
+  }
+
+  .subgroup-titles {
+    min-width: 0;
+    flex: 1;
+
+    // ✅ centré
+    text-align: center;
+
+    // ✅ petit confort : on évite les lignes trop longues
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .subgroup-title {
+    margin: 0;
+    font-size: 1.35rem; // + marqué
+    font-weight: 750;
+    letter-spacing: -0.01em;
+  }
+
+  .subgroup-subtitle {
+    margin: 0.55rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  // ✅ petit séparateur discret (optionnel mais joli)
+  .subgroup-titles::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 2px;
+    margin: 1.1rem auto 0;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--primary-color),
+        transparent
+    );
+    opacity: 0.35;
+  }
+
+  .subgroup-badges {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    // badges à droite sur desktop
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  .mini-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    border: 1px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.03);
+
+    i {
+      font-size: 0.9rem;
+    }
+
+    .count {
+      margin-left: 0.15rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.04);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+  }
+
+  // ✅ Responsive
+  @media (max-width: 768px) {
+    .subgroup-block {
+      padding: 1.75rem 0 2.25rem;
+    }
+
+    .subgroup-header {
+      flex-direction: column;
+      align-items: center; // ✅ tout centré
+      margin-bottom: 1.35rem;
+    }
+
+    .subgroup-title {
+      font-size: 1.2rem;
+    }
+
+    .subgroup-subtitle {
+      font-size: 0.92rem;
+    }
+
+    .subgroup-badges {
+      justify-content: center; // ✅ badges centrés
+    }
+  }
+}

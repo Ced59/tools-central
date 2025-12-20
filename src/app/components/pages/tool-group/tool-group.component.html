@@ -15,46 +15,34 @@
   <div class="container">
 
     <ng-container *ngFor="let s of sections">
-      <div class="subgroup-block" *ngIf="s.availableTools.length > 0 || s.comingSoonTools.length > 0">
+      <section class="subgroup-block" *ngIf="s.tools.length > 0">
 
-        <div class="subgroup-header" *ngIf="s.title">
-          <h2 class="subgroup-title">{{ s.title }}</h2>
-          <p class="subgroup-subtitle" *ngIf="s.description">{{ s.description }}</p>
-        </div>
+        <header class="subgroup-header" *ngIf="s.title || s.availableCount > 0 || s.comingSoonCount > 0">
+          <div class="subgroup-titles">
+            <h2 class="subgroup-title" *ngIf="s.title">{{ s.title }}</h2>
+            <p class="subgroup-subtitle" *ngIf="s.description">{{ s.description }}</p>
+          </div>
 
-        <!-- Disponible -->
-        <div class="section-block" *ngIf="s.availableTools.length > 0">
-          <div class="section-header">
-            <span class="section-badge available">
+          <div class="subgroup-badges">
+            <span class="mini-badge available" *ngIf="s.availableCount > 0">
               <i class="pi pi-check-circle"></i>
               <span i18n="@@available_now">Disponible</span>
+              <span class="count">{{ s.availableCount }}</span>
             </span>
-            <h3 i18n="@@tools_available_title">Outils disponibles</h3>
-            <p i18n="@@tools_available_subtitle">Accédez aux outils déjà utilisables</p>
-          </div>
 
-          <div class="tools-grid">
-            <app-tool-card *ngFor="let t of s.availableTools" [tool]="t" />
-          </div>
-        </div>
-
-        <!-- Bientôt -->
-        <div class="section-block" *ngIf="s.comingSoonTools.length > 0">
-          <div class="section-header">
-            <span class="section-badge coming-soon">
+            <span class="mini-badge coming-soon" *ngIf="s.comingSoonCount > 0">
               <i class="pi pi-clock"></i>
               <span i18n="@@coming_soon_label">Bientôt</span>
+              <span class="count">{{ s.comingSoonCount }}</span>
             </span>
-            <h3 i18n="@@tools_soon_title">Outils à venir</h3>
-            <p i18n="@@tools_soon_subtitle">De nouveaux outils arrivent bientôt</p>
           </div>
+        </header>
 
-          <div class="tools-grid">
-            <app-tool-card *ngFor="let t of s.comingSoonTools" [tool]="t" />
-          </div>
+        <div class="tools-grid">
+          <app-tool-card *ngFor="let t of s.tools" [tool]="t" />
         </div>
 
-      </div>
+      </section>
     </ng-container>
 
     <!-- Empty state -->

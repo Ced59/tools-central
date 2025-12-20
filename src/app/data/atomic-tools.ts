@@ -1,11 +1,10 @@
 import { Type } from '@angular/core';
 import { routes } from './routes';
-import { CategoryId, GroupId, SubGroupId } from './ids';
+import type { CategoryId } from './categories';
+import type { GroupId } from './tool-groups';
+import type { SubGroupId } from './tool-subgroups';
 
-export interface AtomicTool<
-  C extends CategoryId = CategoryId,
-  G extends GroupId<C> = GroupId<C>
-> {
+export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   category: C;
   group: G;
   subGroup: SubGroupId<C, G>;
@@ -17,11 +16,15 @@ export interface AtomicTool<
   loadComponent?: () => Promise<Type<unknown>>;
 }
 
-// ✅ Single Source of Truth : clé = id (doublons impossibles)
+/** Helper: union “any valid pair” (évite never) */
+export type AtomicToolAny = {
+  [C in CategoryId]: {
+    [G in GroupId<C>]: AtomicTool<C, G>;
+  }[GroupId<C>];
+}[CategoryId];
+
 export const ATOMIC_TOOLS = {
-  // ==========================
-  // MATH / PERCENTAGES (DISPO)
-  // ==========================
+  // MATH / PERCENTAGES
   'percentage-variation': {
     category: 'math',
     group: 'percentages',
@@ -127,9 +130,7 @@ export const ATOMIC_TOOLS = {
         ).then(m => m.PercentageReverseToolComponent),
   },
 
-  // ==========================
-  // MATH / PERCENTAGES (A VENIR)
-  // ==========================
+  // A VENIR
   'percentage-share-of-total': {
     category: 'math',
     group: 'percentages',
@@ -163,9 +164,7 @@ export const ATOMIC_TOOLS = {
     available: false,
   },
 
-  // ==========================
   // TEXT
-  // ==========================
   'text-case': {
     category: 'text',
     group: 'case',
@@ -176,9 +175,9 @@ export const ATOMIC_TOOLS = {
     route: routes.tool('text', 'case', 'text-case'),
     available: true,
     loadComponent: () =>
-      import(
-        '../components/pages/tools/text/case/text-case-tool/text-case-tool.component'
-        ).then(m => m.TextCaseToolComponent),
+      import('../components/pages/tools/text/case/text-case-tool/text-case-tool.component').then(
+        m => m.TextCaseToolComponent
+      ),
   },
 
   readability: {
@@ -195,31 +194,16 @@ export const ATOMIC_TOOLS = {
         '../components/pages/tools/text/writing/readability-tool/readability-tool.component'
         ).then(m => m.ReadabilityToolComponent),
   },
-} as const satisfies Record<string, AtomicTool>;
+} as const satisfies Record<string, AtomicToolAny>;
 
-// Types dérivés automatiquement
 export type ToolId = keyof typeof ATOMIC_TOOLS;
 export type AtomicToolItem = { id: ToolId } & (typeof ATOMIC_TOOLS)[ToolId];
 
-// Liste pour *ngFor / filter
-export const ATOMIC_TOOL_LIST: AtomicToolItem[] = Object.entries(ATOMIC_TOOLS).map(
-  ([id, tool]) => ({
-    id: id as ToolId,
-    ...tool,
-  })
-);
+export const ATOMIC_TOOL_LIST: AtomicToolItem[] = Object.entries(ATOMIC_TOOLS).map(([id, tool]) => ({
+  id: id as ToolId,
+  ...tool,
+}));
 
-// Anti-doublon “dev” : ici inutile car objet => clés uniques,
-// mais ça détecte si quelqu'un fait une fusion incorrecte via spreads.
-function assertUniqueToolIds(list: { id: string }[]) {
-  const seen = new Set<string>();
-  for (const t of list) {
-    if (seen.has(t.id)) {
-      throw new Error(`[ATOMIC_TOOL_LIST] Duplicate tool id detected: "${t.id}"`);
-    }
-    seen.add(t.id);
-  }
-}
-if (typeof ngDevMode !== 'undefined' && ngDevMode) {
-  assertUniqueToolIds(ATOMIC_TOOL_LIST);
+export function getToolById(id: ToolId) {
+  return ATOMIC_TOOLS[id];
 }
