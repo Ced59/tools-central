@@ -1,5 +1,7 @@
+import { CategoryId } from './ids';
+
 export interface ToolCategory {
-  id: string;
+  id: CategoryId;
   title: string;
   description: string;
   icon: string;

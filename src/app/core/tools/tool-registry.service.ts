@@ -1,5 +1,5 @@
 import { Injectable, Type, isDevMode } from '@angular/core';
-import { ATOMIC_TOOLS, AtomicToolItem } from '../../data/atomic-tools';
+import { ATOMIC_TOOL_LIST, AtomicToolItem, ToolId } from '../../data/atomic-tools';
 import { CATEGORIES, ToolCategory } from '../../data/categories';
 import { TOOL_GROUPS, ToolGroup } from '../../data/tool-groups';
 import { routes } from '../../data/routes';
@@ -19,7 +19,7 @@ export type ResolvedTool = AtomicToolItem & {
 export class ToolRegistryService {
   private readonly categories = CATEGORIES;
   private readonly groups = TOOL_GROUPS;
-  private readonly tools = ATOMIC_TOOLS;
+  private tools: AtomicToolItem[] = ATOMIC_TOOL_LIST;
 
   constructor() {
     if (isDevMode()) this.validate();

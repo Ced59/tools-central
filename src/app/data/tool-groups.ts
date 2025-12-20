@@ -1,12 +1,13 @@
 import { routes } from './routes';
+import { CategoryId, GroupId } from './ids';
 
-export interface ToolGroup {
-  id: string;                 // ex: 'percentages'
-  category: string;           // ex: 'math'
+export interface ToolGroup<C extends CategoryId = CategoryId> {
+  id: GroupId<C>;
+  category: C;
   title: string;
   description: string;
   icon?: string;
-  route: string;              // ex: '/categories/math/percentages'
+  route: string;
   available: boolean;
 }
 

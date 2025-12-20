@@ -149,3 +149,31 @@
     }
   }
 }
+
+@mixin listing-subgroups {
+  .subgroup-block {
+    margin-top: 2.25rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .subgroup-header {
+    margin-bottom: 1rem;
+  }
+
+  .subgroup-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  .subgroup-subtitle {
+    margin: 0.35rem 0 0;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+}
+

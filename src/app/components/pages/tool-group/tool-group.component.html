@@ -14,40 +14,51 @@
 <section class="tools-section">
   <div class="container">
 
-    <!-- Outils disponibles -->
-    <div class="section-block" *ngIf="availableTools.length > 0">
-      <div class="section-header">
-        <span class="section-badge available">
-          <i class="pi pi-check-circle"></i>
-          <span i18n="@@available_now">Disponible</span>
-        </span>
-        <h2 i18n="@@tools_available_title">Outils disponibles</h2>
-        <p i18n="@@tools_available_subtitle">Accédez aux outils déjà utilisables</p>
-      </div>
+    <ng-container *ngFor="let s of sections">
+      <div class="subgroup-block" *ngIf="s.availableTools.length > 0 || s.comingSoonTools.length > 0">
 
-      <div class="tools-grid">
-        <app-tool-card *ngFor="let t of availableTools" [tool]="t" />
-      </div>
-    </div>
+        <div class="subgroup-header" *ngIf="s.title">
+          <h2 class="subgroup-title">{{ s.title }}</h2>
+          <p class="subgroup-subtitle" *ngIf="s.description">{{ s.description }}</p>
+        </div>
 
-    <!-- Outils à venir -->
-    <div class="section-block" *ngIf="comingSoonTools.length > 0">
-      <div class="section-header">
-        <span class="section-badge coming-soon">
-          <i class="pi pi-clock"></i>
-          <span i18n="@@coming_soon_label">Bientôt</span>
-        </span>
-        <h2 i18n="@@tools_soon_title">Outils à venir</h2>
-        <p i18n="@@tools_soon_subtitle">De nouveaux outils arrivent bientôt</p>
-      </div>
+        <!-- Disponible -->
+        <div class="section-block" *ngIf="s.availableTools.length > 0">
+          <div class="section-header">
+            <span class="section-badge available">
+              <i class="pi pi-check-circle"></i>
+              <span i18n="@@available_now">Disponible</span>
+            </span>
+            <h3 i18n="@@tools_available_title">Outils disponibles</h3>
+            <p i18n="@@tools_available_subtitle">Accédez aux outils déjà utilisables</p>
+          </div>
 
-      <div class="tools-grid">
-        <app-tool-card *ngFor="let t of comingSoonTools" [tool]="t" />
+          <div class="tools-grid">
+            <app-tool-card *ngFor="let t of s.availableTools" [tool]="t" />
+          </div>
+        </div>
+
+        <!-- Bientôt -->
+        <div class="section-block" *ngIf="s.comingSoonTools.length > 0">
+          <div class="section-header">
+            <span class="section-badge coming-soon">
+              <i class="pi pi-clock"></i>
+              <span i18n="@@coming_soon_label">Bientôt</span>
+            </span>
+            <h3 i18n="@@tools_soon_title">Outils à venir</h3>
+            <p i18n="@@tools_soon_subtitle">De nouveaux outils arrivent bientôt</p>
+          </div>
+
+          <div class="tools-grid">
+            <app-tool-card *ngFor="let t of s.comingSoonTools" [tool]="t" />
+          </div>
+        </div>
+
       </div>
-    </div>
+    </ng-container>
 
     <!-- Empty state -->
-    <div class="section-block" *ngIf="availableTools.length === 0 && comingSoonTools.length === 0">
+    <div class="section-block" *ngIf="!hasAnyTool">
       <div class="section-header">
         <h2 i18n="@@tools_none_title">Aucun outil pour le moment</h2>
         <p i18n="@@tools_none_subtitle">Cette sous-catégorie sera remplie progressivement.</p>
