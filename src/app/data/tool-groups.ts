@@ -11,6 +11,7 @@ export const TOOL_GROUP_REGISTRY = {
       route: routes.group('math', 'percentages'),
       available: true,
     },
+
     vat: {
       title: $localize`:@@group_vat_title:TVA`,
       description: $localize`:@@group_vat_desc:HT/TTC, taux personnalisés, calculs rapides...`,
@@ -18,7 +19,53 @@ export const TOOL_GROUP_REGISTRY = {
       route: routes.group('math', 'vat'),
       available: false,
     },
+
+    // ✅ PHASE 2
+    ratios: {
+      title: $localize`:@@group_ratios_title:Proportions & ratios`,
+      description: $localize`:@@group_ratios_desc:Ratios, simplification, proportions et parts proportionnelles.`,
+      icon: 'pi pi-sliders-h',
+      route: routes.group('math', 'ratios'),
+      available: false,
+    },
+
+    // ✅ PHASE 3
+    'rule-of-three': {
+      title: $localize`:@@group_rule_of_three_title:Règle de trois`,
+      description: $localize`:@@group_rule_of_three_desc:Règle de trois directe/inverse, tableaux de proportionnalité.`,
+      icon: 'pi pi-table',
+      route: routes.group('math', 'rule-of-three'),
+      available: false,
+    },
+
+    // ✅ PHASE 4
+    statistics: {
+      title: $localize`:@@group_statistics_title:Statistiques`,
+      description: $localize`:@@group_statistics_desc:Moyenne, médiane, mode, étendue et notions clés.`,
+      icon: 'pi pi-chart-bar',
+      route: routes.group('math', 'statistics'),
+      available: false,
+    },
+
+    // ✅ PHASE 5
+    fractions: {
+      title: $localize`:@@group_fractions_title:Fractions & décimaux`,
+      description: $localize`:@@group_fractions_desc:Conversions, calculs simples et simplification.`,
+      icon: 'pi pi-calculator',
+      route: routes.group('math', 'fractions'),
+      available: false,
+    },
+
+    // ✅ PHASE 6
+    rounding: {
+      title: $localize`:@@group_rounding_title:Arrondis & estimation`,
+      description: $localize`:@@group_rounding_desc:Arrondis, chiffres significatifs, erreurs et ordres de grandeur.`,
+      icon: 'pi pi-compass',
+      route: routes.group('math', 'rounding'),
+      available: false,
+    },
   },
+
   text: {
     case: {
       title: $localize`:@@group_text_case_title:Casse du texte`,
@@ -35,6 +82,7 @@ export const TOOL_GROUP_REGISTRY = {
       available: true,
     },
   },
+
   image: {},
 } as const;
 

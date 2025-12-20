@@ -4,6 +4,7 @@ import type { GroupId } from './tool-groups';
 /** ✅ Single Source of Truth (registry imbriqué) */
 export const TOOL_SUBGROUP_REGISTRY = {
   math: {
+    // 🟦 PHASE 1 — Pourcentages
     percentages: [
       {
         id: 'essential',
@@ -18,12 +19,32 @@ export const TOOL_SUBGROUP_REGISTRY = {
         order: 2,
       },
       {
-        id: 'share',
-        title: $localize`:@@pct_sg_share_title:Parts & ratios`,
-        description: $localize`:@@pct_sg_share_desc:Répartition d’un total, ratio en %, composition…`,
+        id: 'understand',
+        title: $localize`:@@pct_sg_understand_title:Comprendre`,
+        description: $localize`:@@pct_sg_understand_desc:Notions clés, pièges, interprétation et limites.`,
         order: 3,
       },
+      {
+        id: 'fractions',
+        title: $localize`:@@pct_sg_fractions_title:Fractions & décimaux`,
+        description: $localize`:@@pct_sg_fractions_desc:Conversions entre %, fractions et décimaux.`,
+        order: 4,
+      },
+      {
+        id: 'practice',
+        title: $localize`:@@pct_sg_practice_title:Exercices`,
+        description: $localize`:@@pct_sg_practice_desc:Générateurs et exercices corrigés pas à pas.`,
+        order: 5,
+      },
+      {
+        id: 'share',
+        title: $localize`:@@pct_sg_share_title:Parts & ratios`,
+        description: $localize`:@@pct_sg_share_desc:Répartition d’un total, ratios en %, composition…`,
+        order: 6,
+      },
+
     ],
+
     vat: [
       {
         id: 'essential',
@@ -32,7 +53,106 @@ export const TOOL_SUBGROUP_REGISTRY = {
         order: 1,
       },
     ],
+
+    // 🟩 PHASE 2 — Proportions & ratios
+    ratios: [
+      {
+        id: 'essential',
+        title: $localize`:@@ratios_sg_essential_title:Essentiels`,
+        description: $localize`:@@ratios_sg_essential_desc:Ratios, simplification, conversions.`,
+        order: 1,
+      },
+      {
+        id: 'advanced',
+        title: $localize`:@@ratios_sg_advanced_title:Avancés`,
+        description: $localize`:@@ratios_sg_advanced_desc:Ratios équivalents, valeurs manquantes, proportions.`,
+        order: 2,
+      },
+      {
+        id: 'understand',
+        title: $localize`:@@ratios_sg_understand_title:Comprendre`,
+        description: $localize`:@@ratios_sg_understand_desc:Proportionnalité directe/inverse, reconnaître une situation proportionnelle.`,
+        order: 3,
+      },
+    ],
+
+    // 🟨 PHASE 3 — Règle de trois
+    'rule-of-three': [
+      {
+        id: 'direct',
+        title: $localize`:@@rot_sg_direct_title:Directe`,
+        description: $localize`:@@rot_sg_direct_desc:Règle de trois simple, tableau, valeur manquante.`,
+        order: 1,
+      },
+      {
+        id: 'inverse',
+        title: $localize`:@@rot_sg_inverse_title:Inverse`,
+        description: $localize`:@@rot_sg_inverse_desc:Règle de trois inversée et situations d’inverse proportion.`,
+        order: 2,
+      },
+      {
+        id: 'tables',
+        title: $localize`:@@rot_sg_tables_title:Tableaux`,
+        description: $localize`:@@rot_sg_tables_desc:Compléter / vérifier un tableau de proportionnalité.`,
+        order: 3,
+      },
+    ],
+
+    // 🟧 PHASE 4 — Statistiques simples
+    statistics: [
+      {
+        id: 'basic',
+        title: $localize`:@@stats_sg_basic_title:Essentiels`,
+        description: $localize`:@@stats_sg_basic_desc:Moyenne, médiane, mode, étendue.`,
+        order: 1,
+      },
+      {
+        id: 'distribution',
+        title: $localize`:@@stats_sg_distribution_title:Distribution`,
+        description: $localize`:@@stats_sg_distribution_desc:Min/max, amplitude, lecture de données.`,
+        order: 2,
+      },
+      {
+        id: 'understand',
+        title: $localize`:@@stats_sg_understand_title:Comprendre`,
+        description: $localize`:@@stats_sg_understand_desc:Quand la moyenne trompe, effet des valeurs extrêmes, moyenne vs médiane.`,
+        order: 3,
+      },
+    ],
+
+    // 🟥 PHASE 5 — Fractions & décimaux
+    fractions: [
+      {
+        id: 'convert',
+        title: $localize`:@@fractions_sg_convert_title:Conversions`,
+        description: $localize`:@@fractions_sg_convert_desc:Fraction ↔ décimal ↔ pourcentage.`,
+        order: 1,
+      },
+      {
+        id: 'compute',
+        title: $localize`:@@fractions_sg_compute_title:Calculs simples`,
+        description: $localize`:@@fractions_sg_compute_desc:Simplification, addition, comparaison.`,
+        order: 2,
+      },
+    ],
+
+    // 🟪 PHASE 6 — Arrondis & ordres de grandeur
+    rounding: [
+      {
+        id: 'rounding',
+        title: $localize`:@@rounding_sg_rounding_title:Arrondis`,
+        description: $localize`:@@rounding_sg_rounding_desc:Arrondis, chiffres significatifs, troncature.`,
+        order: 1,
+      },
+      {
+        id: 'errors',
+        title: $localize`:@@rounding_sg_errors_title:Erreurs & estimation`,
+        description: $localize`:@@rounding_sg_errors_desc:Ordre de grandeur, erreur d’arrondi, écart absolu vs relatif.`,
+        order: 2,
+      },
+    ],
   },
+
   text: {
     case: [
       {
@@ -51,6 +171,7 @@ export const TOOL_SUBGROUP_REGISTRY = {
       },
     ],
   },
+
   image: {},
 } as const;
 
