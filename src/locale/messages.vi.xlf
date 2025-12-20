@@ -5353,7 +5353,7 @@ Multipliez par  pour obtenir un pourcentage        </source>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">100</pc>
 
           
-Nhân với để có được một tỷ lệ phần trăm                </target>
+Nhân với để có được tỷ lệ phần trăm                </target>
 
         
         
@@ -12501,7 +12501,7 @@ Chuyển đổi sang phần trăm:                </target>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">B − A</pc>
 
           
-Tính toán sự khác biệt tỷ lệ: (điểm, pp).                </target>
+Tính toán sự khác biệt tỷ lệ: (tính bằng điểm, pp).                </target>
 
         
         
@@ -12936,7 +12936,358 @@ Tính toán độ chênh lệch tuyệt đối:                </target>
       
       
         </unit>
+    <unit id="pct_error_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:10,11</note>
 
+        
+            </notes>
+      <segment>
+        <source>Pourcentage d’erreur</source>
+        <target state="translated">Tỷ lệ lỗi</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:12,14</note>
+
+        
+            </notes>
+      <segment>
+        <source> Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence. </source>
+        <target state="translated">Đo lường sai số tương đối (%) giữa giá trị đo được và giá trị tham chiếu.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:29,30</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur mesurée</source>
+        <target state="translated">Giá trị đo được</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:40,42</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur observée / mesurée (expérience, capteur, calcul…). </source>
+        <target state="translated">Giá trị quan sát / đo (trải nghiệm, cảm biến, tính toán…).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:45,46</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur de référence</source>
+        <target state="translated">Giá trị tham chiếu</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:56,58</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur “vraie” / théorique / attendue (la base de comparaison). </source>
+        <target state="translated">Giá trị &quot;thực&quot; / lý thuyết / mong đợi (cơ sở so sánh).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_rel_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:85,86</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur relative</source>
+        <target state="translated">Lỗi liên quan</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_abs_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:90,91</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur absolue</source>
+        <target state="translated">Lỗi tuyệt đối</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_signed_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:95,96</note>
+
+        
+            </notes>
+      <segment>
+        <source>Écart signé</source>
+        <target state="translated">Khoảng cách đã ký</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_zero_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:127,129</note>
+
+        
+            </notes>
+      <segment>
+        <source> Si la valeur de référence vaut 0, le pourcentage d’erreur n’est pas défini. Utilisez plutôt l’erreur absolue. </source>
+        <target state="translated">Nếu giá trị tham chiếu bằng 0, tỷ lệ lỗi không được xác định. Thay vào đó, hãy sử dụng lỗi tuyệt đối.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:148,149</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+ Mesuré  ; Référence          </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+
+          
+          
+Đo lường; Tham chiếu                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:163,165</note>
+
+        
+            </notes>
+      <segment>
+        <source> Le pourcentage d’erreur mesure l’écart d’une valeur mesurée par rapport à une valeur de référence. </source>
+        <target state="translated">Tỷ lệ lỗi đo lường sự chênh lệch giữa giá trị đo được và giá trị tham chiếu.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:172,173</note>
+
+        
+            </notes>
+      <segment>
+        <source>\text{Erreur}(\%)=\dfrac{|x_{mesuré}-x_{réf}|}{|x_{réf}|}\times 100</source>
+        <target state="translated">Lỗi(\\%)=\\dfrac&amp;#123;|x_&amp;#123;đo&amp;#125;-x_&amp;#123;tham chiếu&amp;#125;|&amp;#125;&amp;#123;|x_&amp;#123;tham chiếu&amp;#125;|&amp;#125;\\times 100</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:178,180</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+ Calculez l’écart : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+
+          
+Tính toán chênh lệch :.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:181,183</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+ Prenez la valeur absolue (on mesure une amplitude d’erreur) : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+
+          
+Lấy giá trị tuyệt đối (chúng ta đo một biên độ sai số) :.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:184,185</note>
+
+        
+            </notes>
+      <segment>
+        <source> Divisez par la référence puis multipliez par 100. </source>
+        <target state="translated">Chia cho tham chiếu rồi nhân với 100.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_not_confuse">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:192,196</note>
+
+        
+            </notes>
+      <segment>
+        <source> À ne pas confondre : • “Variation en %” compare une valeur initiale à une valeur finale (référence = initiale). • “Écart relatif” peut choisir une référence (A ou B). • “Pourcentage d’erreur” impose la référence (valeur vraie/théorique) et utilise une valeur absolue. Exemple : référence 100, mesuré 102 ou 98 → erreur = 2% dans les deux cas. </source>
+        <target state="translated">Không nhầm lẫn: • “Biến đổi theo %” so sánh giá trị ban đầu với giá trị cuối (tham chiếu = ban đầu). • “Sai số tương đối” có thể chọn tham chiếu (A hoặc B). • “Tỷ lệ sai số” quy định tham chiếu (giá trị thực/giá trị lý thuyết) và sử dụng giá trị tuyệt đối. Ví dụ: tham chiếu 100, đo được 102 hoặc 98 → sai số = 2% trong cả hai trường hợp.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_ratio_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:203,205</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+ Lecture rapide : mesuré / référence = . Si ce ratio vaut 1, la mesure est exacte.         </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+
+          
+Đọc nhanh: đo lường / tham chiếu =. Nếu tỷ lệ này bằng 1, phép đo là chính xác.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

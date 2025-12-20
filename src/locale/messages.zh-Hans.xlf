@@ -5882,7 +5882,7 @@ Multipliez :         </source>
 
           
           
-如果X为负，则表示下降。例如：表示乘以。                </target>
+如果X为负，则表示下降。示例：表示乘以。                </target>
 
         
         
@@ -10466,7 +10466,7 @@ Transformez chaque p% en coefficient :         </source>
           
           
           
-% 对 %（基准）                </target>
+% 与 %（基准）                </target>
 
         
         
@@ -10813,7 +10813,7 @@ Transformez chaque p% en coefficient :         </source>
           
           
           
-基础：% 然后%                </target>
+基础：% 然后 %                </target>
 
         
         
@@ -12936,7 +12936,358 @@ Calculez l’écart absolu :         </source>
       
       
         </unit>
+    <unit id="pct_error_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:10,11</note>
 
+        
+            </notes>
+      <segment>
+        <source>Pourcentage d’erreur</source>
+        <target state="translated">错误百分比</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:12,14</note>
+
+        
+            </notes>
+      <segment>
+        <source> Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence. </source>
+        <target state="translated">测量测量值与参考值之间的相对误差（%）。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:29,30</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur mesurée</source>
+        <target state="translated">测量值</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:40,42</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur observée / mesurée (expérience, capteur, calcul…). </source>
+        <target state="translated">观察到的/测量的值（经验、传感器、计算…）。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:45,46</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur de référence</source>
+        <target state="translated">参考值</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:56,58</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur “vraie” / théorique / attendue (la base de comparaison). </source>
+        <target state="translated">“真实”/理论/预期值（比较基准）。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_rel_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:85,86</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur relative</source>
+        <target state="translated">相关错误</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_abs_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:90,91</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur absolue</source>
+        <target state="translated">绝对错误</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_signed_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:95,96</note>
+
+        
+            </notes>
+      <segment>
+        <source>Écart signé</source>
+        <target state="translated">签署差异</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_zero_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:127,129</note>
+
+        
+            </notes>
+      <segment>
+        <source> Si la valeur de référence vaut 0, le pourcentage d’erreur n’est pas défini. Utilisez plutôt l’erreur absolue. </source>
+        <target state="translated">如果参考值为0，则错误百分比未定义。请使用绝对误差。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:148,149</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+ Mesuré  ; Référence          </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+
+          
+          
+测量; 参考                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:163,165</note>
+
+        
+            </notes>
+      <segment>
+        <source> Le pourcentage d’erreur mesure l’écart d’une valeur mesurée par rapport à une valeur de référence. </source>
+        <target state="translated">误差百分比衡量测量值与参考值之间的差距。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:172,173</note>
+
+        
+            </notes>
+      <segment>
+        <source>\text{Erreur}(\%)=\dfrac{|x_{mesuré}-x_{réf}|}{|x_{réf}|}\times 100</source>
+        <target state="translated">误差(%) = \\dfrac&amp;#123;|x_&amp;#123;测量&amp;#125;-x_&amp;#123;参考&amp;#125;|&amp;#125;&amp;#123;|x_&amp;#123;参考&amp;#125;|&amp;#125; \\times 100</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:178,180</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+ Calculez l’écart : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+
+          
+计算差距：                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:181,183</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+ Prenez la valeur absolue (on mesure une amplitude d’erreur) : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+
+          
+取绝对值（我们测量误差幅度）：.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:184,185</note>
+
+        
+            </notes>
+      <segment>
+        <source> Divisez par la référence puis multipliez par 100. </source>
+        <target state="translated">将其除以参考值，然后乘以100。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_not_confuse">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:192,196</note>
+
+        
+            </notes>
+      <segment>
+        <source> À ne pas confondre : • “Variation en %” compare une valeur initiale à une valeur finale (référence = initiale). • “Écart relatif” peut choisir une référence (A ou B). • “Pourcentage d’erreur” impose la référence (valeur vraie/théorique) et utilise une valeur absolue. Exemple : référence 100, mesuré 102 ou 98 → erreur = 2% dans les deux cas. </source>
+        <target state="translated">不要混淆：• “百分比变化”比较初始值和最终值（参考 = 初始值）。• “相对差异”可以选择参考（A或B）。• “误差百分比”强制使用参考（真实/理论值）并使用绝对值。例：参考100，测量值102或98 → 在两种情况下误差 = 2%。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_ratio_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:203,205</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+ Lecture rapide : mesuré / référence = . Si ce ratio vaut 1, la mesure est exacte.         </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+
+          
+快速读取：测量/参考 =。如果该比率为1，则测量是准确的。                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

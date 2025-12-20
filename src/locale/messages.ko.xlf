@@ -5353,7 +5353,7 @@ Multipliez par  pour obtenir un pourcentage        </source>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">100</pc>
 
           
-백분율을 얻으려면 곱하세요.                </target>
+곱하여 백분율을 구하세요.                </target>
 
         
         
@@ -10813,7 +10813,7 @@ B로 얻은 값을 계산하세요:                </target>
           
           
           
-기본:% 그런 다음 %                </target>
+기본:% 그 후 %                </target>
 
         
         
@@ -10912,7 +10912,7 @@ B로 얻은 값을 계산하세요:                </target>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">p1 + p2</pc>
 
           
-단순한 덧셈과 비교하세요:.                </target>
+단순한 합계와 비교하세요:.                </target>
 
         
         
@@ -12936,7 +12936,358 @@ Calculez l’écart absolu :         </source>
       
       
         </unit>
+    <unit id="pct_error_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:10,11</note>
 
+        
+            </notes>
+      <segment>
+        <source>Pourcentage d’erreur</source>
+        <target state="translated">오류 비율</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:12,14</note>
+
+        
+            </notes>
+      <segment>
+        <source> Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence. </source>
+        <target state="translated">측정된 값과 기준 값 사이의 상대 오차(%)를 측정합니다.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:29,30</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur mesurée</source>
+        <target state="translated">측정된 값</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:40,42</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur observée / mesurée (expérience, capteur, calcul…). </source>
+        <target state="translated">관찰된 / 측정된 값 (경험, 센서, 계산…).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:45,46</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur de référence</source>
+        <target state="translated">기준 값</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:56,58</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur “vraie” / théorique / attendue (la base de comparaison). </source>
+        <target state="translated">&quot;진짜&quot; / 이론적 / 예상 값 (비교 기준).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_rel_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:85,86</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur relative</source>
+        <target state="translated">상대 오류</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_abs_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:90,91</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur absolue</source>
+        <target state="translated">절대 오류</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_signed_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:95,96</note>
+
+        
+            </notes>
+      <segment>
+        <source>Écart signé</source>
+        <target state="translated">서명된 차이</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_zero_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:127,129</note>
+
+        
+            </notes>
+      <segment>
+        <source> Si la valeur de référence vaut 0, le pourcentage d’erreur n’est pas défini. Utilisez plutôt l’erreur absolue. </source>
+        <target state="translated">기준 값이 0이면 오류 비율이 정의되지 않습니다. 대신 절대 오류를 사용하세요.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:148,149</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+ Mesuré  ; Référence          </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+
+          
+          
+측정됨; 참조                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:163,165</note>
+
+        
+            </notes>
+      <segment>
+        <source> Le pourcentage d’erreur mesure l’écart d’une valeur mesurée par rapport à une valeur de référence. </source>
+        <target state="translated">오차 비율은 측정된 값과 기준 값의 차이를 측정합니다.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:172,173</note>
+
+        
+            </notes>
+      <segment>
+        <source>\text{Erreur}(\%)=\dfrac{|x_{mesuré}-x_{réf}|}{|x_{réf}|}\times 100</source>
+        <target state="translated">오류(\\%)=\\dfrac&amp;#123;|x_&amp;#123;측정&amp;#125;-x_&amp;#123;기준&amp;#125;|&amp;#125;&amp;#123;|x_&amp;#123;기준&amp;#125;|&amp;#125;\\times 100</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:178,180</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+ Calculez l’écart : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+
+          
+차이를 계산하세요:.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:181,183</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+ Prenez la valeur absolue (on mesure une amplitude d’erreur) : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+
+          
+절대값을 취하세요 (오차 범위를 측정합니다) :.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:184,185</note>
+
+        
+            </notes>
+      <segment>
+        <source> Divisez par la référence puis multipliez par 100. </source>
+        <target state="translated">참조로 나눈 다음 100을 곱하세요.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_not_confuse">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:192,196</note>
+
+        
+            </notes>
+      <segment>
+        <source> À ne pas confondre : • “Variation en %” compare une valeur initiale à une valeur finale (référence = initiale). • “Écart relatif” peut choisir une référence (A ou B). • “Pourcentage d’erreur” impose la référence (valeur vraie/théorique) et utilise une valeur absolue. Exemple : référence 100, mesuré 102 ou 98 → erreur = 2% dans les deux cas. </source>
+        <target state="translated">혼동하지 마세요: • “변화율”은 초기 값과 최종 값을 비교합니다 (기준 = 초기 값). • “상대 편차”는 기준을 선택할 수 있습니다 (A 또는 B). • “오차 비율”은 기준을 강제합니다 (진짜/이론 값) 및 절대 값을 사용합니다. 예: 기준 100, 측정 102 또는 98 → 두 경우 모두 오차 = 2%.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_ratio_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:203,205</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+ Lecture rapide : mesuré / référence = . Si ce ratio vaut 1, la mesure est exacte.         </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+
+          
+빠른 측정: 측정 / 기준 =. 이 비율이 1이면 측정이 정확합니다.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

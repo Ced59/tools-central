@@ -5396,7 +5396,7 @@ Multipliez par  pour obtenir un pourcentage        </source>
 
           
           
-はい、パーセンテージは定義されていません（0で割り算）。はい、結果は100%を超える可能性があります。                </target>
+はい、パーセンテージは定義されていません（0で割る）。はい、結果は100%を超える可能性があります。                </target>
 
         
         
@@ -5882,7 +5882,7 @@ Multipliez :         </source>
 
           
           
-Xが負の場合、これは減少を意味します。例：掛け算を意味します。                </target>
+Xが負の場合、減少を意味します。例：掛け算を意味します。                </target>
 
         
         
@@ -11173,7 +11173,7 @@ Bを使って得られた値を計算してください：                </targ
           <ph id="0" equiv="INTERPOLATION" disp="{{ fmtSigned(naiveSumPercent()) }}"></ph>
 
           
-ヒント：単純な%の合計は%、しかし実際の効果は複合的です（係数の掛け算）。                </target>
+ヒント：単純な%の合計は%、しかし実際の効果は複合的です（係数の乗算）。                </target>
 
         
         
@@ -11296,7 +11296,7 @@ Bを使って得られた値を計算してください：                </targ
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">(coef − 1) × 100</pc>
 
           
-この係数をユニークなレートに変換します:。                </target>
+この係数をユニークなレートに変換します。                </target>
 
         
         
@@ -12936,7 +12936,358 @@ Calculez l’écart absolu :         </source>
       
       
         </unit>
+    <unit id="pct_error_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:10,11</note>
 
+        
+            </notes>
+      <segment>
+        <source>Pourcentage d’erreur</source>
+        <target state="translated">エラー率</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:12,14</note>
+
+        
+            </notes>
+      <segment>
+        <source> Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence. </source>
+        <target state="translated">測定値と基準値の間の相対誤差（%）を測定します。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:29,30</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur mesurée</source>
+        <target state="translated">測定値</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:40,42</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur observée / mesurée (expérience, capteur, calcul…). </source>
+        <target state="translated">観測値 / 測定値（体験、センサー、計算…）。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:45,46</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur de référence</source>
+        <target state="translated">基準値</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:56,58</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur “vraie” / théorique / attendue (la base de comparaison). </source>
+        <target state="translated">「真の」/ 理論的 / 期待される値（比較の基準）。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_rel_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:85,86</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur relative</source>
+        <target state="translated">関連エラー</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_abs_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:90,91</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur absolue</source>
+        <target state="translated">絶対誤差</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_signed_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:95,96</note>
+
+        
+            </notes>
+      <segment>
+        <source>Écart signé</source>
+        <target state="translated">署名された差異</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_zero_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:127,129</note>
+
+        
+            </notes>
+      <segment>
+        <source> Si la valeur de référence vaut 0, le pourcentage d’erreur n’est pas défini. Utilisez plutôt l’erreur absolue. </source>
+        <target state="translated">基準値が0の場合、誤差のパーセンテージは定義されていません。代わりに絶対誤差を使用してください。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:148,149</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+ Mesuré  ; Référence          </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+
+          
+          
+測定; 参照                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:163,165</note>
+
+        
+            </notes>
+      <segment>
+        <source> Le pourcentage d’erreur mesure l’écart d’une valeur mesurée par rapport à une valeur de référence. </source>
+        <target state="translated">誤差率は、測定値と基準値の差を測定します。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:172,173</note>
+
+        
+            </notes>
+      <segment>
+        <source>\text{Erreur}(\%)=\dfrac{|x_{mesuré}-x_{réf}|}{|x_{réf}|}\times 100</source>
+        <target state="translated">エラー(%)=\\dfrac&amp;#123;|x_&amp;#123;測定&amp;#125;-x_&amp;#123;基準&amp;#125;|&amp;#125;&amp;#123;|x_&amp;#123;基準&amp;#125;|&amp;#125;\\times 100</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:178,180</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+ Calculez l’écart : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+
+          
+差を計算します。                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:181,183</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+ Prenez la valeur absolue (on mesure une amplitude d’erreur) : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+
+          
+絶対値を取ります（誤差の大きさを測定します）:                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:184,185</note>
+
+        
+            </notes>
+      <segment>
+        <source> Divisez par la référence puis multipliez par 100. </source>
+        <target state="translated">参照で割ってから100を掛けてください。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_not_confuse">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:192,196</note>
+
+        
+            </notes>
+      <segment>
+        <source> À ne pas confondre : • “Variation en %” compare une valeur initiale à une valeur finale (référence = initiale). • “Écart relatif” peut choisir une référence (A ou B). • “Pourcentage d’erreur” impose la référence (valeur vraie/théorique) et utilise une valeur absolue. Exemple : référence 100, mesuré 102 ou 98 → erreur = 2% dans les deux cas. </source>
+        <target state="translated">混同しないでください： • 「%の変動」は初期値と最終値を比較します（基準 = 初期値）。 • 「相対誤差」は基準（AまたはB）を選択できます。 • 「誤差率」は基準（真の値/理論値）を設定し、絶対値を使用します。例：基準100、測定値102または98 → どちらの場合も誤差 = 2%。</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_ratio_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:203,205</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+ Lecture rapide : mesuré / référence = . Si ce ratio vaut 1, la mesure est exacte.         </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+
+          
+迅速な測定：測定値 / 参照 =。この比率が1であれば、測定は正確です。                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

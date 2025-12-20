@@ -5882,7 +5882,7 @@ Szorozza meg:                </target>
 
           
           
-Ha X negatív, akkor csökkenés. Példa: a szorzás jelentése.                </target>
+Ha X negatív, akkor csökkenés. Példa: azt jelenti, hogy szorozni.                </target>
 
         
         
@@ -10872,7 +10872,7 @@ alap:% majd%                </target>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">1 + p/100</pc>
 
           
-Alakítsa át a százalékokat együtthatóvá:.                </target>
+Alakítsa át minden százalékot egy együtthatóra:.                </target>
 
         
         
@@ -11173,7 +11173,7 @@ Hasonlítsa össze a naiv összeadással:.                </target>
           <ph id="0" equiv="INTERPOLATION" disp="{{ fmtSigned(naiveSumPercent()) }}"></ph>
 
           
-Tipp: A százalékok naiv összege % értékű, de a valós hatás összetett (a tényezők szorzása).                </target>
+Tipp: A naiv összeg % értéke %, de a valós hatás összetett (a tényezők szorzása).                </target>
 
         
         
@@ -11296,7 +11296,7 @@ Konvertálja az egyes százalékokat együtthatóvá:                </target>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">(coef − 1) × 100</pc>
 
           
-Alakítsa át ezt a tényezőt egyedi rátává:.                </target>
+Alakítsa át ezt a tényezőt egyetlen rátává:.                </target>
 
         
         
@@ -12501,7 +12501,7 @@ Konvertálja százalékra:                </target>
           <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">B − A</pc>
 
           
-Számolja ki a kamatláb különbségét: (pontokban, pp).                </target>
+Számolja ki a kamatkülönbséget: (pontokban, pp).                </target>
 
         
         
@@ -12936,7 +12936,358 @@ Számolja ki az abszolút eltérést:                </target>
       
       
         </unit>
+    <unit id="pct_error_title">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:10,11</note>
 
+        
+            </notes>
+      <segment>
+        <source>Pourcentage d’erreur</source>
+        <target state="translated">Hibáság százalékos aránya</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_subtitle">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:12,14</note>
+
+        
+            </notes>
+      <segment>
+        <source> Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence. </source>
+        <target state="translated">Mérje a relatív hibát (%) a mért érték és a referenciaérték között.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:29,30</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur mesurée</source>
+        <target state="translated">Mért érték</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_measured_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:40,42</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur observée / mesurée (expérience, capteur, calcul…). </source>
+        <target state="translated">Megfigyelt / mért érték (tapasztalat, érzékelő, számítás…).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:45,46</note>
+
+        
+            </notes>
+      <segment>
+        <source>Valeur de référence</source>
+        <target state="translated">Referencia érték</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_reference_hint">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:56,58</note>
+
+        
+            </notes>
+      <segment>
+        <source> Valeur “vraie” / théorique / attendue (la base de comparaison). </source>
+        <target state="translated">&quot;Valódi&quot; / elméleti / várt érték (a összehasonlítás alapja).</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_rel_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:85,86</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur relative</source>
+        <target state="translated">Hiba kapcsolódó</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_abs_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:90,91</note>
+
+        
+            </notes>
+      <segment>
+        <source>Erreur absolue</source>
+        <target state="translated">Abszolút hiba</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_signed_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:95,96</note>
+
+        
+            </notes>
+      <segment>
+        <source>Écart signé</source>
+        <target state="translated">Aláírt eltérés</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_zero_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:127,129</note>
+
+        
+            </notes>
+      <segment>
+        <source> Si la valeur de référence vaut 0, le pourcentage d’erreur n’est pas défini. Utilisez plutôt l’erreur absolue. </source>
+        <target state="translated">Ha a referenciaérték 0, akkor a hibaszázalék nincs meghatározva. Használja inkább az abszolút hibát.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_example_label">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:148,149</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+ Mesuré  ; Référence          </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ ex.measured }}"></ph>
+          <ph id="1" equiv="INTERPOLATION_1" disp="{{ ex.reference }}"></ph>
+
+          
+          
+Mért; Hivatkozás                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_definition_sub">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:163,165</note>
+
+        
+            </notes>
+      <segment>
+        <source> Le pourcentage d’erreur mesure l’écart d’une valeur mesurée par rapport à une valeur de référence. </source>
+        <target state="translated">A hibaszázalék a mért érték eltérését méri a referenciaértéktől.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_formula_katex">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:172,173</note>
+
+        
+            </notes>
+      <segment>
+        <source>\text{Erreur}(\%)=\dfrac{|x_{mesuré}-x_{réf}|}{|x_{réf}|}\times 100</source>
+        <target state="translated">Hiba(\\%)=\\dfrac&amp;#123;|x_&amp;#123;mért&amp;#125;-x_&amp;#123;referencia&amp;#125;|&amp;#125;&amp;#123;|x_&amp;#123;referencia&amp;#125;|&amp;#125;\\times 100</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step1">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:178,180</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+ Calculez l’écart : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">mesuré − référence</pc>
+
+          
+Számolja ki a különbséget:                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step2">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:181,183</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+ Prenez la valeur absolue (on mesure une amplitude d’erreur) : .         </source>
+        <target state="translated">
+          <pc id="0" equivStart="START_TAG_STRONG" equivEnd="CLOSE_TAG_STRONG" type="other" dispStart="&lt;strong&gt;" dispEnd="&lt;/strong&gt;">|…|</pc>
+
+          
+Vegye az abszolút értéket (a hibahatárt mérjük):.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_step3">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:184,185</note>
+
+        
+            </notes>
+      <segment>
+        <source> Divisez par la référence puis multipliez par 100. </source>
+        <target state="translated">Ossza el a hivatkozással, majd szorozza meg 100-zal.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_not_confuse">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:192,196</note>
+
+        
+            </notes>
+      <segment>
+        <source> À ne pas confondre : • “Variation en %” compare une valeur initiale à une valeur finale (référence = initiale). • “Écart relatif” peut choisir une référence (A ou B). • “Pourcentage d’erreur” impose la référence (valeur vraie/théorique) et utilise une valeur absolue. Exemple : référence 100, mesuré 102 ou 98 → erreur = 2% dans les deux cas. </source>
+        <target state="translated">Ne keverjük össze: • A “% változás” egy kezdeti értéket hasonlít össze egy végső értékkel (referencia = kezdeti). • A “relatív eltérés” választhat egy referenciát (A vagy B). • A “hibaszázalék” megköveteli a referenciát (valódi/elméleti érték) és abszolút értéket használ. Példa: referencia 100, mért 102 vagy 98 → hiba = 2% mindkét esetben.</target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+    <unit id="pct_error_ratio_note">
+      <notes>
+        <note category="location">src/app/components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component.html:203,205</note>
+
+        
+            </notes>
+      <segment>
+        <source>
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+ Lecture rapide : mesuré / référence = . Si ce ratio vaut 1, la mesure est exacte.         </source>
+        <target state="translated">
+          <ph id="0" equiv="INTERPOLATION" disp="{{ fmt(ratio()) }}"></ph>
+
+          
+Gyors olvasás: mért / referencia =. Ha ez a hányados 1, a mérés pontos.                </target>
+
+        
+        
+            </segment>
+
+      
+      
+        </unit>
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

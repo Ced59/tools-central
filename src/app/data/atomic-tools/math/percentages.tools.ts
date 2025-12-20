@@ -247,7 +247,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_error_desc:Mesurer l’erreur relative (%) entre une valeur mesurée et une valeur de référence.`,
     icon: 'pi pi-exclamation-triangle',
     route: routes.tool('math', 'percentages', 'percentage-error'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-error-tool/percentage-error-tool.component'
+        ).then(m => m.PercentageErrorToolComponent),
   },
 
   'percentage-of-total': {
