@@ -70,7 +70,7 @@ export const PERCENTAGES_TOOLS = {
     group: 'percentages',
     subGroup: 'cumul',
     title: $localize`:@@tool_percentage_relative_difference_title:Écart relatif`,
-    description: $localize`:@@tool_percentage_relative_difference_desc:Mesurer l’écart relatif entre deux valeurs (en %).`,
+    description: $localize`:@@tool_percentage_relative_difference_desc:Mesurer l’écart relatif, symétrique, entre deux valeurs (en %).`,
     icon: 'pi pi-arrows-h',
     route: routes.tool('math', 'percentages', 'percentage-relative-difference'),
     available: true,
@@ -123,7 +123,12 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_applied_rate_desc:Retrouver le taux (%) utilisé entre une valeur initiale et finale.`,
     icon: 'pi pi-percentage',
     route: routes.tool('math', 'percentages', 'percentage-applied-rate'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-applied-tool/percentage-applied-tool.component'
+        ).then(m => m.PercentageAppliedToolComponent),
+
   },
 
   'percentage-missing': {
@@ -134,7 +139,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_missing_desc:Calculer le pourcentage manquant pour atteindre une valeur cible.`,
     icon: 'pi pi-percentage',
     route: routes.tool('math', 'percentages', 'percentage-missing'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-missing-tool/percentage-missing-tool.component'
+        ).then(m => m.PercentageMissingToolComponent),
   },
 
   'percent-coefficient-converter': {
@@ -145,7 +154,26 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percent_coefficient_converter_desc:Passer d’un taux (%) à un coefficient multiplicateur et inversement.`,
     icon: 'pi pi-sliders-h',
     route: routes.tool('math', 'percentages', 'percent-coefficient-converter'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-coefficient-converter-tool/percentage-coefficient-converter-tool.component'
+        ).then(m => m.PercentageCoefficientConverterToolComponent),
+  },
+
+  'difference-relative': {
+    category: 'math',
+    group: 'percentages',
+    subGroup: 'cumul',
+    title: $localize`:@@tool_percentage_diff_relative_title:Différence relative`,
+    description: $localize`:@@tool_percentage_diff_relative_desc:Mesurer la différence relative entre deux valeurs (en %).`,
+    icon: 'pi pi-sliders-h',
+    route: routes.tool('math', 'percentages', 'difference-relative'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/relative-difference-tool/relative-difference-tool.component'
+        ).then(m => m.RelativeDifferenceToolComponent),
   },
 
   // --- Cumul & comparaisons (🟡)
@@ -154,10 +182,14 @@ export const PERCENTAGES_TOOLS = {
     group: 'percentages',
     subGroup: 'cumul',
     title: $localize`:@@tool_percentage_compare_title:Comparer deux pourcentages`,
-    description: $localize`:@@tool_percentage_compare_desc:Comparer deux taux (%) et visualiser l’écart et l’impact.`,
+    description: $localize`:@@tool_percentage_compare_desc:Comparer deux taux (%) appliqués à une même base et visualiser l’écart réel.`,
     icon: 'pi pi-arrows-h',
     route: routes.tool('math', 'percentages', 'percentage-compare'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/compare-percentages-tool/compare-percentages-tool.component'
+        ).then(m => m.ComparePercentagesToolComponent),
   },
 
   'percentage-points': {
@@ -168,7 +200,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_points_desc:Distinguer variation en % et variation en points de % (pp).`,
     icon: 'pi pi-plus',
     route: routes.tool('math', 'percentages', 'percentage-points'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-points-tool/percentage-points-tool.component'
+        ).then(m => m.PercentagePointsToolComponent),
   },
 
   'percentage-cumulative-vs-naive': {
@@ -179,7 +215,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_cumulative_vs_naive_desc:Comparer l’effet réel (composé) à une addition simple des pourcentages.`,
     icon: 'pi pi-sliders-v',
     route: routes.tool('math', 'percentages', 'percentage-cumulative-vs-naive'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/cumulative-vs-naive-tool/cumulative-vs-naive-tool.component'
+        ).then(m => m.CumulativeVsNaiveToolComponent),
   },
 
   'percentage-equivalent': {
@@ -190,7 +230,12 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_equivalent_desc:Calculer le taux unique équivalent à plusieurs variations successives.`,
     icon: 'pi pi-sync',
     route: routes.tool('math', 'percentages', 'percentage-equivalent'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/equivalent-percentage-tool/equivalent-percentage-tool.component'
+        ).then(m => m.EquivalentPercentageToolComponent),
+
   },
 
   // --- Comprendre (🟡)

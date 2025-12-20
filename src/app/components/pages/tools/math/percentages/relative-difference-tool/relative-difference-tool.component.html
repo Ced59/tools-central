@@ -1,0 +1,205 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-arrows-h"></i>
+        </div>
+
+        <h1 i18n="@@rel_diff_title">Différence relative</h1>
+        <p class="hero-subtitle" i18n="@@rel_diff_subtitle">
+          Mesurer la différence relative entre deux valeurs (en %).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="a" i18n="@@rel_diff_a">Valeur A</label>
+          <p-inputNumber
+            inputId="a"
+            [formControl]="form.controls.a"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@rel_diff_a_hint">
+            Valeur de référence possible.
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="b" i18n="@@rel_diff_b">Valeur B</label>
+          <p-inputNumber
+            inputId="b"
+            [formControl]="form.controls.b"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@rel_diff_b_hint">
+            Valeur à comparer à A.
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="ref" i18n="@@rel_diff_ref">Référence</label>
+          <select id="ref" class="tc-select input-full" [formControl]="form.controls.ref">
+            <option value="a" i18n="@@rel_diff_ref_a">Par rapport à A</option>
+            <option value="b" i18n="@@rel_diff_ref_b">Par rapport à B</option>
+          </select>
+          <small class="hint" i18n="@@rel_diff_ref_hint">
+            Le % dépend de la valeur choisie comme base.
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@rel_diff_abs_label">Écart absolu</span>
+            <span class="result-value">{{ fmt(difference()) }}</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@rel_diff_pct_label">Écart relatif</span>
+            <span class="result-value">{{ fmtPct(relativeDifferencePercent()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@rel_diff_ratio_label">Rapport</span>
+            <span class="result-value">{{ fmt(ratio()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box" *ngIf="referenceValue() === 0">
+          <i class="pi pi-info-circle"></i>
+          <span i18n="@@rel_diff_zero_note">
+            Impossible de calculer un % si la référence vaut 0.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button *ngFor="let ex of examples" class="example-btn" (click)="applyExample(ex)">
+          <span class="ex-label" i18n="@@rel_diff_example_label">
+            A={{ ex.a }}, B={{ ex.b }} (ref {{ ex.ref }})
+          </span>
+          <span class="ex-values">
+            {{ ex.a }} • {{ ex.b }} • ref {{ ex.ref }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@rel_diff_definition_sub">
+          L’écart relatif exprime une différence en proportion d’une valeur de référence.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{Écart relatif}=\dfrac{B-A}{\text{référence}}\times 100"
+          i18n-latex="@@rel_diff_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@rel_diff_step1">Calculez l’écart absolu : <strong>B − A</strong></li>
+          <li i18n="@@rel_diff_step2">
+            Divisez par la référence (A ou B), puis multipliez par 100.
+          </li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@rel_diff_note">
+            Exemple : A=80, B=100. Par rapport à A : (100−80)/80×100 = +25%.
+            Par rapport à B : (100−80)/100×100 = +20%.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,239 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-sliders-h"></i>
+        </div>
+
+        <h1 i18n="@@pct_coef_conv_title">Convertisseur % ↔ coefficient</h1>
+        <p class="hero-subtitle" i18n="@@pct_coef_conv_subtitle">
+          Passer d’un taux (%) à un coefficient multiplicateur et inversement.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="mode" i18n="@@pct_coef_conv_mode">Conversion</label>
+
+          <select
+            id="mode"
+            class="tc-select input-full"
+            [formControl]="form.controls.mode"
+            (change)="onModeChanged()"
+          >
+            <option value="pctToCoef" i18n="@@pct_coef_conv_mode_pct_to_coef">
+              % → Coefficient
+            </option>
+            <option value="coefToPct" i18n="@@pct_coef_conv_mode_coef_to_pct">
+              Coefficient → %
+            </option>
+          </select>
+
+          <small class="hint" i18n="@@pct_coef_conv_mode_hint">
+            Choisissez le sens de conversion.
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="percent" i18n="@@pct_coef_conv_percent">Taux (%)</label>
+          <p-inputNumber
+            inputId="percent"
+            [formControl]="form.controls.percent"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="0"
+            suffix="%"
+            styleClass="input-full"
+            [readonly]="!isPctToCoef()"
+            (onInput)="isPctToCoef() && onSourceChanged()"
+          />
+          <small class="hint" i18n="@@pct_coef_conv_percent_hint">
+            Ex : 15, -7,5, 20…
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="coefficient" i18n="@@pct_coef_conv_coefficient">Coefficient</label>
+          <p-inputNumber
+            inputId="coefficient"
+            [formControl]="form.controls.coefficient"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="1"
+            styleClass="input-full"
+            [readonly]="isPctToCoef()"
+            (onInput)="!isPctToCoef() && onSourceChanged()"
+          />
+          <small class="hint" i18n="@@pct_coef_conv_coefficient_hint">
+            Ex : 1,15 ; 0,925 ; 1,25…
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="3"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_coef_conv_source_label">Valeur source</span>
+
+            <span class="result-value" *ngIf="isPctToCoef()">
+              {{ fmtPct(form.controls.percent.value ?? null) }}
+            </span>
+            <span class="result-value" *ngIf="!isPctToCoef()">
+              {{ fmt(form.controls.coefficient.value ?? null) }}
+            </span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" *ngIf="isPctToCoef()" i18n="@@pct_coef_conv_converted_label_coef">
+              Coefficient
+            </span>
+            <span class="result-label" *ngIf="!isPctToCoef()" i18n="@@pct_coef_conv_converted_label_pct">
+              Taux
+            </span>
+
+            <span class="result-value" *ngIf="isPctToCoef()">
+              {{ fmt(coefficientFromPercent()) }}
+            </span>
+            <span class="result-value" *ngIf="!isPctToCoef()">
+              {{ fmtPct(percentFromCoefficient()) }}
+            </span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_coef_conv_interpretation_label">Interprétation</span>
+
+            <span class="result-value" *ngIf="isPctToCoef()">
+              × {{ fmt(coefficientFromPercent()) }}
+            </span>
+
+            <span class="result-value" *ngIf="!isPctToCoef()">
+              {{ fmtPct(percentFromCoefficient()) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 3"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button *ngFor="let ex of examples" class="example-btn" (click)="applyExample(ex)">
+          <span class="ex-label" i18n="@@pct_coef_conv_example_label">
+            {{ ex.percent }}% ↔ {{ ex.coefficient }}
+          </span>
+          <span class="ex-values">
+            {{ ex.percent }}% • {{ ex.coefficient }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_coef_conv_definition_sub">
+          Le coefficient multiplicateur indique par combien une valeur est multipliée après application d’un taux.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{coef}=1+\dfrac{\text{taux}}{100}\quad;\quad \text{taux}=(\text{coef}-1)\times 100"
+          i18n-latex="@@pct_coef_conv_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@pct_coef_conv_step1">
+            Pour passer de % à coefficient : ajoutez 1 au taux exprimé en fraction (p ÷ 100).
+          </li>
+          <li i18n="@@pct_coef_conv_step2">
+            Pour passer de coefficient à % : retirez 1 puis multipliez par 100.
+          </li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_coef_conv_note">
+            Exemple : +15% → coef = 1 + 15/100 = 1,15. Et coef 0,925 → taux = (0,925 − 1)×100 = −7,5%.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+  </div>
+</section>

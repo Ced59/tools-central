@@ -1,0 +1,253 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon">
+          <i class="pi pi-refresh"></i>
+        </div>
+
+        <h1 i18n="@@pct_equiv_title">Pourcentage équivalent</h1>
+        <p class="hero-subtitle" i18n="@@pct_equiv_subtitle">
+          Calculer le taux unique équivalent à plusieurs variations successives.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="base" i18n="@@pct_equiv_base">Valeur de base</label>
+          <p-inputNumber
+            inputId="base"
+            [formControl]="form.controls.base"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="1000"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@pct_equiv_base_hint">
+            Optionnel mais utile pour visualiser l’impact (valeur finale).
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+
+        <!-- Liste dynamique -->
+        <div class="field field-main field-full">
+          <label i18n="@@pct_equiv_list_label">Variations successives</label>
+
+          <div class="percent-list">
+            <div class="percent-row" *ngFor="let _ of percentsArray.controls; let i = index">
+              <div class="percent-row-main">
+                <span class="row-label" i18n="@@pct_equiv_item_label">Variation</span>
+                <span class="row-index">{{ i + 1 }}</span>
+
+                <p-inputNumber
+                  [inputId]="'p' + i"
+                  [formControl]="$any(percentCtrlAt(i))"
+                  [minFractionDigits]="0"
+                  [maxFractionDigits]="6"
+                  [useGrouping]="true"
+                  placeholder="0"
+                  suffix="%"
+                  styleClass="input-full"
+                />
+              </div>
+
+              <p-button
+                type="button"
+                severity="secondary"
+                [text]="true"
+                icon="pi pi-trash"
+                (onClick)="removePercent(i)"
+                [disabled]="percentsArray.length <= 1"
+                aria-label="Supprimer"
+                i18n-aria-label="@@pct_equiv_remove_aria"
+              ></p-button>
+            </div>
+          </div>
+
+          <div class="percent-actions">
+            <p-button
+              type="button"
+              icon="pi pi-plus"
+              (onClick)="addPercent(0)"
+              label="Ajouter une variation"
+              i18n-label="@@pct_equiv_add"
+            ></p-button>
+
+            <p-button
+              type="button"
+              severity="secondary"
+              [text]="true"
+              icon="pi pi-times"
+              (onClick)="clearPercents()"
+              label="Vider"
+              i18n-label="@@pct_equiv_clear"
+            ></p-button>
+          </div>
+
+          <small class="hint" i18n="@@pct_equiv_list_hint">
+            Ajoutez autant de pourcentages que nécessaire (hausse ou baisse).
+          </small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_equiv_coef_label">Coefficient total</span>
+            <span class="result-value">{{ fmt(totalCoefficient()) }}</span>
+          </div>
+
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pct_equiv_result_label">Pourcentage équivalent</span>
+            <span class="result-value">{{ fmtPct(equivalentPercent()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_equiv_final_label">Valeur finale</span>
+            <span class="result-value">{{ fmt(finalValue()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_equiv_naive_note">
+            Astuce : la somme naïve des % vaut {{ fmtSigned(naiveSumPercent()) }}%,
+            mais l’effet réel est composé (multiplication des coefficients).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label" i18n="@@pct_equiv_example_label">
+            base {{ ex.base }} : {{ ex.percents.length }} variations
+          </span>
+
+          <span class="ex-values">
+            {{ ex.base }} •
+            <ng-container *ngFor="let p of ex.percents; let j = index">
+              {{ p }}%<span *ngIf="j < ex.percents.length - 1"> → </span>
+            </ng-container>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_equiv_definition_sub">
+          Une suite de pourcentages se compose : on multiplie des coefficients.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{coef}=\prod_i(1+\frac{p_i}{100})\quad;\quad p_{eq}=(\text{coef}-1)\times 100"
+          i18n-latex="@@pct_equiv_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@pct_equiv_step1">
+            Convertissez chaque pourcentage en coefficient : <strong>1 + p/100</strong>.
+          </li>
+          <li i18n="@@pct_equiv_step2">
+            Multipliez tous les coefficients pour obtenir le coefficient total.
+          </li>
+          <li i18n="@@pct_equiv_step3">
+            Transformez ce coefficient en un taux unique : <strong>(coef − 1) × 100</strong>.
+          </li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@pct_equiv_note">
+            Exemple : +10% puis +10% → coef = 1,1×1,1 = 1,21 → taux équivalent = +21%.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>
