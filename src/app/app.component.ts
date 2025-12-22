@@ -74,19 +74,19 @@ import {LocalePathService} from "./services/local-path.service";
       <footer class="app-footer">
         <div class="container footer-inner">
           <div class="footer-links" aria-label="Legal">
-            <a [routerLink]="localePath.link('legal-notice')" class="footer-link" i18n="@@footer_legal_notice">
+            <a routerLink="/legal-notice" class="footer-link" i18n="@@footer_legal_notice">
               Mentions légales
             </a>
 
             <span class="footer-sep" aria-hidden="true">•</span>
 
-            <a [routerLink]="localePath.link('privacy-policy')" class="footer-link" i18n="@@footer_privacy">
+            <a routerLink="/privacy-policy" class="footer-link" i18n="@@footer_privacy">
               Politique de confidentialité
             </a>
 
             <span class="footer-sep" aria-hidden="true">•</span>
 
-            <a [routerLink]="localePath.link('cookies-policy')" class="footer-link" i18n="@@footer_cookies">
+            <a routerLink="/cookies-policy" class="footer-link" i18n="@@footer_cookies">
               Politique des cookies
             </a>
           </div>
