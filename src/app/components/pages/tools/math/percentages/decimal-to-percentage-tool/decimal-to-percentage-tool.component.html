@@ -1,0 +1,199 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-sort-numeric-up"></i>
+        </div>
+
+        <h1 i18n="@@dec_pct_title">Décimal → pourcentage</h1>
+        <p class="hero-subtitle" i18n="@@dec_pct_subtitle">
+          Convertir un nombre décimal en pourcentage (et inversement).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main field-full">
+          <label for="mode" i18n="@@dec_pct_mode">Mode</label>
+
+          <p-selectButton
+            [options]="modeOptions"
+            [formControl]="form.controls.mode"
+            optionLabel="label"
+            optionValue="value"
+            aria-label="Mode"
+            i18n-aria-label="@@dec_pct_mode_aria"
+          ></p-selectButton>
+
+          <small class="hint" i18n="@@dec_pct_mode_hint">
+            Choisissez la direction de conversion.
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="input" i18n="@@dec_pct_input">Valeur</label>
+
+          <p-inputNumber
+            inputId="input"
+            [formControl]="form.controls.input"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="12"
+            [useGrouping]="true"
+            placeholder="0.125"
+            [suffix]="mode() === 'pctToDec' ? '%' : ''"
+            styleClass="input-full"
+          />
+
+          <small class="hint" *ngIf="mode() === 'decToPct'" i18n="@@dec_pct_input_hint_dec">
+            Exemple : 0,125 → 12,5%.
+          </small>
+
+          <small class="hint" *ngIf="mode() === 'pctToDec'" i18n="@@dec_pct_input_hint_pct">
+            Exemple : 12,5% → 0,125.
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="12"
+            [useGrouping]="false"
+            placeholder="6"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@dec_pct_result_main">Résultat</span>
+            <span class="result-value">{{ resultText() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@dec_pct_result_fraction">Fraction (approx.)</span>
+            <span class="result-value">{{ fractionText() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@dec_pct_result_one_over">Forme 1/N</span>
+            <span class="result-value">{{ oneOverText() }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 6"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@dec_pct_note">
+            Multiplier/diviser par 100 change uniquement l’échelle, pas la proportion.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button class="example-btn" (click)="applyExample('decToPct', 0.125)">
+          <span class="ex-label">Décimal → %</span>
+          <span class="ex-values">0,125 → 12,5%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample('decToPct', 0.03)">
+          <span class="ex-label">Petite proportion</span>
+          <span class="ex-values">0,03 → 3%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample('pctToDec', 12.5)">
+          <span class="ex-label">% → décimal</span>
+          <span class="ex-values">12,5% → 0,125</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample('pctToDec', 150)">
+          <span class="ex-label">Au-delà de 100%</span>
+          <span class="ex-values">150% → 1,5</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@dec_pct_definition_sub">
+          Un pourcentage est une fraction sur 100. Un décimal est la même proportion, sans “sur 100”.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formules"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{pct}=\text{décimal}\times 100\quad;\quad \text{décimal}=\frac{\text{pct}}{100}"
+          i18n-latex="@@dec_pct_formula_katex"
+        ></tc-math-formula>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

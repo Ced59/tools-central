@@ -1,0 +1,54 @@
+<div class="tcdd" [class.is-disabled]="disabled()" [class.is-full]="full">
+  <label class="tcdd-label" *ngIf="label" [attr.for]="id">{{ label }}</label>
+
+  <button
+    type="button"
+    class="tcdd-trigger"
+    [attr.id]="id"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="listbox"
+    [disabled]="disabled()"
+    (click)="toggle()"
+    (keydown)="onKeydown($event)"
+  >
+    <span class="tcdd-value" *ngIf="selectedLabel(); else empty">
+      {{ selectedLabel() }}
+    </span>
+    <ng-template #empty>
+      <span class="tcdd-placeholder">{{ placeholder }}</span>
+    </ng-template>
+
+    <i class="pi pi-chevron-down tcdd-caret" aria-hidden="true"></i>
+  </button>
+
+  <small class="tcdd-hint" *ngIf="hint">{{ hint }}</small>
+
+  <div class="tcdd-panel" *ngIf="isOpen()">
+    <div class="tcdd-list" role="listbox" [attr.aria-labelledby]="id">
+      <button
+        type="button"
+        class="tcdd-item"
+        *ngFor="let opt of options; let i = index"
+        [disabled]="opt.disabled"
+        [class.is-selected]="isSelected(opt)"
+        [attr.data-active]="i === activeIndex()"
+        (click)="select(opt)"
+      >
+        <span class="tcdd-item-main">
+          <span class="tcdd-item-label">{{ opt.label }}</span>
+          <span class="tcdd-item-desc" *ngIf="opt.description">{{ opt.description }}</span>
+        </span>
+        <i class="pi pi-check" *ngIf="isSelected(opt)" aria-hidden="true"></i>
+      </button>
+
+      <button
+        type="button"
+        class="tcdd-item tcdd-clear"
+        *ngIf="value() !== null"
+        (click)="clear()"
+      >
+        <span class="tcdd-item-label" i18n>Effacer</span>
+      </button>
+    </div>
+  </div>
+</div>

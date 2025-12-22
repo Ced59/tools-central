@@ -1,0 +1,110 @@
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.calc-form;
+@include tp.results;
+@include tp.examples;
+@include tp.explain;
+@include tp.back;
+
+// ---- Local: list layout ----
+.exercises-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exercise-item {
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface-card) 92%, transparent);
+  padding: 0.9rem;
+
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.exercise-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.exercise-left {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.exercise-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.8rem;
+  font-weight: 800;
+  background: color-mix(in srgb, var(--primary-color) 20%, transparent);
+  flex: 0 0 auto;
+}
+
+.exercise-meta {
+  min-width: 0;
+}
+
+.exercise-title {
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.exercise-statement {
+  color: var(--text-color-secondary);
+  line-height: 1.35;
+}
+
+.exercise-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 0 0 auto;
+}
+
+.exercise-answer {
+  margin-top: 0.9rem;
+}
+
+.answer-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+  margin-bottom: 0.75rem;
+}
+
+.answer-label {
+  color: var(--text-color-secondary);
+  font-size: 0.9rem;
+}
+
+.answer-value {
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+
+.empty-box {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  border: 1px dashed var(--border-color);
+  border-radius: 1rem;
+  color: var(--text-color-secondary);
+}

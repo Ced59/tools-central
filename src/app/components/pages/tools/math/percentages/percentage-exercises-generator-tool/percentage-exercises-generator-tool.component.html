@@ -1,0 +1,245 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-refresh"></i>
+        </div>
+
+        <h1 i18n="@@ex_gen_title">Générateur d’exercices (pourcentages)</h1>
+        <p class="hero-subtitle" i18n="@@ex_gen_subtitle">
+          Générez des séries uniques (seed), choisissez le niveau, les thèmes, et obtenez une correction pas à pas.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+
+    <!-- Paramètres -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Paramètres</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="level" i18n="@@ex_level_label">Niveau</label>
+
+          <tc-dropdown
+            id="level"
+            [options]="levelOptions"
+            [formControl]="form.controls.level"
+            placeholder="Choisir un niveau"
+            i18n-placeholder="@@pct_ex_gen_level_ph"
+          ></tc-dropdown>
+
+          <small class="hint" i18n="@@ex_level_hint">Change l’amplitude des nombres et la difficulté des pièges.</small>
+        </div>
+
+        <div class="field field-main">
+          <label for="themes" i18n="@@ex_themes_label">Thèmes</label>
+          <p-multiSelect
+            inputId="themes"
+            [formControl]="form.controls.themes"
+            [options]="themeOptions"
+            optionLabel="label"
+            optionValue="value"
+            display="chip"
+            styleClass="input-full"
+          ></p-multiSelect>
+          <small class="hint" i18n="@@ex_themes_hint">Sélection multiple : mélange d’exercices.</small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="count" i18n="@@ex_count_label">Nombre</label>
+          <p-inputNumber
+            inputId="count"
+            [formControl]="form.controls.count"
+            [min]="1"
+            [max]="50"
+            [useGrouping]="false"
+            styleClass="input-full"
+          ></p-inputNumber>
+          <small class="hint" i18n="@@ex_count_hint">Jusqu’à 50 par série.</small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            styleClass="input-full"
+          ></p-inputNumber>
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+
+        <div class="field field-main">
+          <label for="seed" i18n="@@ex_seed_label">Seed</label>
+          <p-inputNumber
+            inputId="seed"
+            [formControl]="form.controls.seed"
+            [useGrouping]="false"
+            styleClass="input-full"
+          ></p-inputNumber>
+          <small class="hint" i18n="@@ex_seed_hint">
+            Même seed = même série (utile pour partager).
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label i18n="@@ex_show_corrections_label">Corrections</label>
+          <p-toggleButton
+            [formControl]="form.controls.showCorrections"
+            onLabel="Affichées"
+            offLabel="Masquées"
+            i18n-onLabel="@@ex_show_on"
+            i18n-offLabel="@@ex_show_off"
+          ></p-toggleButton>
+          <small class="hint" i18n="@@ex_show_corrections_hint">
+            Vous pouvez aussi révéler exercice par exercice.
+          </small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="actions">
+        <p-button
+          type="button"
+          icon="pi pi-bolt"
+          (onClick)="randomizeSeedAndGenerate()"
+          label="Générer"
+          i18n-label="@@ex_generate_btn"
+        ></p-button>
+
+        <p-button
+          type="button"
+          severity="secondary"
+          [text]="true"
+          icon="pi pi-refresh"
+          (onClick)="generate()"
+          label="Re-générer (même seed)"
+          i18n-label="@@ex_regenerate_same_seed"
+        ></p-button>
+
+        <p-button
+          type="button"
+          severity="secondary"
+          [text]="true"
+          icon="pi pi-times"
+          (onClick)="reset()"
+          label="Réinitialiser"
+          i18n-label="@@tool_reset"
+        ></p-button>
+      </div>
+
+      <div class="tip-box">
+        <i class="pi pi-lightbulb"></i>
+        <span i18n="@@ex_gen_tip">
+          Astuce : gardez le même seed pour refaire une série (ou l’envoyer à quelqu’un).
+        </span>
+      </div>
+    </div>
+
+    <!-- Série -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@ex_series_title">Série générée</h2>
+        <p i18n="@@ex_series_subtitle">Chaque clic produit des exercices différents (seed + thèmes + niveau).</p>
+      </div>
+
+      <div class="exercises-list" *ngIf="exercises().length > 0; else none">
+        <div class="exercise-item" *ngFor="let ex of exercises(); let i = index">
+          <div class="exercise-head">
+            <div class="exercise-left">
+              <span class="exercise-index">#{{ i + 1 }}</span>
+              <div class="exercise-meta">
+                <div class="exercise-title">{{ ex.title }}</div>
+                <div class="exercise-statement">{{ ex.statement }}</div>
+              </div>
+            </div>
+
+            <div class="exercise-right">
+              <p-tag [value]="ex.difficultyTag"></p-tag>
+
+              <p-button
+                type="button"
+                severity="secondary"
+                [text]="true"
+                icon="pi pi-eye"
+                (onClick)="toggleReveal(ex.id)"
+                [label]="isRevealed(ex.id) ? ('Masquer') : ('Afficher')"
+                i18n-label="@@ex_toggle_solution_btn"
+              ></p-button>
+            </div>
+          </div>
+
+          <div class="exercise-answer" *ngIf="isRevealed(ex.id)">
+            <div class="answer-row">
+              <span class="answer-label" i18n="@@ex_answer_label">Réponse</span>
+              <span class="answer-value">{{ ex.answerShort }}</span>
+            </div>
+
+            <tc-math-formula
+              label="Correction"
+              i18n-label="@@ex_correction_label"
+              mode="steps"
+              [precision]="form.controls.precision.value ?? 2"
+              [steps]="ex.steps"
+            ></tc-math-formula>
+
+            <div class="tip-box" *ngIf="ex.tip">
+              <i class="pi pi-lightbulb"></i>
+              <span>{{ ex.tip }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #none>
+        <div class="empty-box">
+          <i class="pi pi-info-circle"></i>
+          <span i18n="@@ex_none">Aucun exercice (vérifiez vos thèmes).</span>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Comment ça fonctionne</h2>
+        <p i18n="@@ex_how_sub">Le générateur combine types d’exercices + seed + règles anti-trivia.</p>
+      </div>
+
+      <div class="explain-content">
+        <ul class="steps-list">
+          <li i18n="@@ex_how_1">Un <strong>seed</strong> pilote un générateur pseudo-aléatoire : même seed = mêmes exercices.</li>
+          <li i18n="@@ex_how_2">Les exercices sont tirés par <strong>thèmes</strong> avec une distribution équilibrée.</li>
+          <li i18n="@@ex_how_3">Chaque exercice inclut une <strong>correction pas à pas</strong> (formules).</li>
+          <li i18n="@@ex_how_4">Des garde-fous évitent les cas “nuls” (division par 0, -100% sur inverse, doublons).</li>
+        </ul>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@ex_how_tip">
+            Activez “Pièges” et “Détecter l’erreur” pour progresser vite (c’est là que les erreurs classiques apparaissent).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

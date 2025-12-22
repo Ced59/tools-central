@@ -262,7 +262,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_of_total_desc:Calculer la part (%) d’une valeur dans un total.`,
     icon: 'pi pi-chart-pie',
     route: routes.tool('math', 'percentages', 'percentage-of-total'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-of-total-tool/percentage-of-total-tool.component'
+        ).then(m => m.PercentageOfTotalToolComponent),
   },
 
   'percentage-part-of-total': {
@@ -273,7 +277,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_part_of_total_desc:Calculer A / (A+B+C) en % (parts relatives).`,
     icon: 'pi pi-chart-pie',
     route: routes.tool('math', 'percentages', 'percentage-part-of-total'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/relative-parts-tool/relative-parts-tool.component'
+        ).then(m => m.RelativePartsToolComponent),
   },
 
   'percentage-weighted': {
@@ -282,9 +290,13 @@ export const PERCENTAGES_TOOLS = {
     subGroup: 'understand',
     title: $localize`:@@tool_percentage_weighted_title:Pourcentage pondéré`,
     description: $localize`:@@tool_percentage_weighted_desc:Calculer un taux moyen en tenant compte de poids (pondérations).`,
-    icon: 'pi pi-weight',
+    icon: 'pi pi-sliders-h',
     route: routes.tool('math', 'percentages', 'percentage-weighted'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/weighted-percentage-tool/weighted-percentage-tool.component'
+        ).then(m => m.WeightedPercentageToolComponent),
   },
 
   'percentage-limits': {
@@ -295,7 +307,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_limits_desc:Comprendre +∞ et −100% (cas limites et interprétations).`,
     icon: 'pi pi-info-circle',
     route: routes.tool('math', 'percentages', 'percentage-limits'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-limits-tool/percentage-limits-tool.component'
+        ).then(m => m.PercentageLimitsToolComponent),
   },
 
   // (tes 3 tools "share" existants → on les met en understand)
@@ -307,7 +323,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_share_desc:Calculer une part en % et sa valeur correspondante.`,
     icon: 'pi pi-chart-pie',
     route: routes.tool('math', 'percentages', 'percentage-share-of-total'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/proportion-part-total-tool/proportion-part-total-tool.component'
+        ).then(m => m.ProportionPartTotalToolComponent),
   },
 
   'percentage-composition': {
@@ -318,7 +338,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_composition_desc:Combiner des pourcentages à travers plusieurs niveaux (A de B, B de C…).`,
     icon: 'pi pi-sitemap',
     route: routes.tool('math', 'percentages', 'percentage-composition'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-composition-tool/percentage-composition-tool.component'
+        ).then(m => m.PercentageCompositionToolComponent),
   },
 
   'percentage-ratio': {
@@ -329,30 +353,27 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_ratio_desc:Exprimer un ratio (A/B) sous forme de pourcentage.`,
     icon: 'pi pi-calculator',
     route: routes.tool('math', 'percentages', 'percentage-ratio'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/ratio-to-percentage-tool/ratio-to-percentage-tool.component'
+        ).then(m => m.RatioToPercentageToolComponent),
   },
 
-  // --- Fractions & décimaux (🟡)
+  //--- Fractions & décimaux (🟡)
   'percent-to-fraction': {
     category: 'math',
     group: 'percentages',
     subGroup: 'fractions',
-    title: $localize`:@@tool_percent_to_fraction_title:Pourcentage → fraction`,
-    description: $localize`:@@tool_percent_to_fraction_desc:Convertir un pourcentage en fraction simplifiée.`,
+    title: $localize`:@@tool_percent_to_fraction_title:Pourcentage ↔ fraction`,
+    description: $localize`:@@tool_percent_to_fraction_desc:Convertir un pourcentage en fraction simplifiée et inversement.`,
     icon: 'pi pi-sort-numeric-up',
     route: routes.tool('math', 'percentages', 'percent-to-fraction'),
-    available: false,
-  },
-
-  'fraction-to-percent': {
-    category: 'math',
-    group: 'percentages',
-    subGroup: 'fractions',
-    title: $localize`:@@tool_fraction_to_percent_title:Fraction → pourcentage`,
-    description: $localize`:@@tool_fraction_to_percent_desc:Convertir une fraction en pourcentage.`,
-    icon: 'pi pi-sort-numeric-down',
-    route: routes.tool('math', 'percentages', 'fraction-to-percent'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percent-to-fraction-tool/percent-to-fraction-tool.component'
+        ).then(m => m.PercentToFractionToolComponent),
   },
 
   'decimal-to-percent': {
@@ -363,18 +384,11 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_decimal_to_percent_desc:Convertir un nombre décimal en pourcentage.`,
     icon: 'pi pi-sort-numeric-up',
     route: routes.tool('math', 'percentages', 'decimal-to-percent'),
-    available: false,
-  },
-
-  'percent-to-decimal': {
-    category: 'math',
-    group: 'percentages',
-    subGroup: 'fractions',
-    title: $localize`:@@tool_percent_to_decimal_title:Pourcentage → décimal`,
-    description: $localize`:@@tool_percent_to_decimal_desc:Convertir un pourcentage en décimal.`,
-    icon: 'pi pi-sort-numeric-down',
-    route: routes.tool('math', 'percentages', 'percent-to-decimal'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/decimal-to-percentage-tool/decimal-to-percentage-tool.component'
+        ).then(m => m.DecimalToPercentageToolComponent),
   },
 
   // --- Exercices (🟡)
@@ -386,28 +400,29 @@ export const PERCENTAGES_TOOLS = {
     description: $localize`:@@tool_percentage_exercises_generator_desc:Générer des exercices de pourcentages (niveau, thèmes, correction).`,
     icon: 'pi pi-refresh',
     route: routes.tool('math', 'percentages', 'percentage-exercises-generator'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-exercises-generator-tool/percentage-exercises-generator-tool.component'
+        ).then(m => m.PercentageExercisesGeneratorToolComponent),
   },
 
-  'percentage-exercises-step-by-step': {
+  // ...dans PERCENTAGES_TOOLS
+
+  'percentage-course': {
     category: 'math',
     group: 'percentages',
-    subGroup: 'practice',
-    title: $localize`:@@tool_percentage_exercises_step_by_step_title:Exercices corrigés pas à pas`,
-    description: $localize`:@@tool_percentage_exercises_step_by_step_desc:Résolutions guidées étape par étape pour apprendre rapidement.`,
-    icon: 'pi pi-list',
-    route: routes.tool('math', 'percentages', 'percentage-exercises-step-by-step'),
-    available: false,
+    subGroup: 'learn',
+    title: $localize`:@@tool_percentage_course_title:Cours complet sur les pourcentages`,
+    description: $localize`:@@tool_percentage_course_desc:Leçons structurées, formules, exemples et quiz (QCM + numérique) pour maîtriser les pourcentages.`,
+    icon: 'pi pi-book',
+    route: routes.tool('math', 'percentages', 'percentage-course'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/percentages/percentage-course-tool/percentage-course-tool.component'
+        ).then(m => m.PercentageCourseToolComponent),
   },
 
-  'percentage-find-mistake': {
-    category: 'math',
-    group: 'percentages',
-    subGroup: 'practice',
-    title: $localize`:@@tool_percentage_find_mistake_title:Identifier l’erreur dans un calcul`,
-    description: $localize`:@@tool_percentage_find_mistake_desc:Analyser un calcul et identifier l’étape incorrecte.`,
-    icon: 'pi pi-search',
-    route: routes.tool('math', 'percentages', 'percentage-find-mistake'),
-    available: false,
-  },
+
 } as const satisfies Record<string, AtomicToolAny>;

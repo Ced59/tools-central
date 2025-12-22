@@ -10,38 +10,39 @@ export const TOOL_SUBGROUP_REGISTRY = {
         id: 'essential',
         title: $localize`:@@pct_sg_essential_title:Essentiels`,
         description: $localize`:@@pct_sg_essential_desc:Les calculs les plus courants.`,
-        order: 1,
+        order: 2,
       },
       {
         id: 'cumul',
         title: $localize`:@@pct_sg_cumul_title:Cumul & comparaisons`,
         description: $localize`:@@pct_sg_cumul_desc:Effet cumulé, différences, comparaisons.`,
-        order: 2,
+        order: 3,
       },
       {
         id: 'understand',
         title: $localize`:@@pct_sg_understand_title:Comprendre`,
         description: $localize`:@@pct_sg_understand_desc:Notions clés, pièges, interprétation et limites.`,
-        order: 3,
+        order: 4,
       },
       {
         id: 'fractions',
         title: $localize`:@@pct_sg_fractions_title:Fractions & décimaux`,
         description: $localize`:@@pct_sg_fractions_desc:Conversions entre %, fractions et décimaux.`,
-        order: 4,
+        order: 5,
       },
       {
         id: 'practice',
         title: $localize`:@@pct_sg_practice_title:Exercices`,
         description: $localize`:@@pct_sg_practice_desc:Générateurs et exercices corrigés pas à pas.`,
-        order: 5,
-      },
-      {
-        id: 'share',
-        title: $localize`:@@pct_sg_share_title:Parts & ratios`,
-        description: $localize`:@@pct_sg_share_desc:Répartition d’un total, ratios en %, composition…`,
         order: 6,
       },
+      {
+        id: 'learn',
+        title: $localize`:@@pct_subgroup_learn_title:Cours`,
+        description: $localize`:@@pct_subgroup_learn_desc:Leçons complètes, exemples et quiz pour apprendre vite.`,
+        order: 1,
+      },
+
 
     ],
 

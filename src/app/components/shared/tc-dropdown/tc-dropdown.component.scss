@@ -1,0 +1,128 @@
+.tcdd {
+  display: grid;
+  gap: 0.35rem;
+
+  &.is-full {
+    width: 100%;
+  }
+
+  &.is-disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
+}
+
+.tcdd-label {
+  font-size: 0.9rem;
+  color: var(--text-color-secondary);
+}
+
+.tcdd-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  padding: 0.7rem 0.9rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--border-color);
+  background: var(--surface-card);
+  color: var(--text-color);
+
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--primary-color) 35%, var(--border-color));
+  }
+
+  &:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--primary-color) 55%, transparent);
+    outline-offset: 2px;
+  }
+}
+
+.tcdd-placeholder {
+  color: var(--text-color-secondary);
+}
+
+.tcdd-caret {
+  opacity: 0.8;
+}
+
+.tcdd-hint {
+  color: var(--text-color-secondary);
+  font-size: 0.85rem;
+}
+
+.tcdd-panel {
+  position: relative;
+}
+
+.tcdd-list {
+  margin-top: 0.4rem;
+  border: 1px solid var(--border-color);
+  border-radius: 0.9rem;
+  background: var(--surface-card);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+
+  max-height: 260px;
+  overflow: auto;
+  padding: 0.35rem;
+}
+
+.tcdd-item {
+  width: 100%;
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.7rem;
+  border: 0;
+  background: transparent;
+  color: var(--text-color);
+
+  cursor: pointer;
+
+  &:hover {
+    background: color-mix(in srgb, var(--surface-card) 80%, white);
+  }
+
+  &[data-active="true"] {
+    background: color-mix(in srgb, var(--primary-color) 12%, var(--surface-card));
+  }
+
+  &.is-selected {
+    background: color-mix(in srgb, var(--primary-color) 18%, var(--surface-card));
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.tcdd-item-main {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.tcdd-item-label {
+  font-weight: 600;
+}
+
+.tcdd-item-desc {
+  font-size: 0.85rem;
+  color: var(--text-color-secondary);
+}
+
+.tcdd-clear {
+  border-top: 1px solid var(--border-color);
+  margin-top: 0.35rem;
+  padding-top: 0.75rem;
+}

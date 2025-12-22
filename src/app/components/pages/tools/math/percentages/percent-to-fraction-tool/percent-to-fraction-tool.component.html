@@ -1,0 +1,218 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-sort-numeric-up"></i>
+        </div>
+
+        <h1 i18n="@@pct_frac_title">Pourcentage ↔ fraction</h1>
+        <p class="hero-subtitle" i18n="@@pct_frac_subtitle">
+          Convertir un pourcentage en fraction simplifiée (et inversement).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main field-full">
+          <label for="mode" i18n="@@pct_frac_mode">Mode</label>
+
+          <p-selectButton
+            [options]="modeOptions"
+            [formControl]="form.controls.mode"
+            optionLabel="label"
+            optionValue="value"
+            aria-label="Mode"
+            i18n-aria-label="@@pct_frac_mode_aria"
+          ></p-selectButton>
+
+          <small class="hint" i18n="@@pct_frac_mode_hint">
+            Choisissez la direction : pourcentage → fraction, ou fraction → pourcentage.
+          </small>
+        </div>
+
+        <!-- % -> fraction -->
+        <div class="field field-main" *ngIf="mode() === 'pctToFrac'">
+          <label for="pct" i18n="@@pct_frac_pct">Pourcentage</label>
+          <p-inputNumber
+            inputId="pct"
+            [formControl]="form.controls.pct"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="12"
+            [useGrouping]="true"
+            placeholder="12.5"
+            suffix="%"
+            styleClass="input-full"
+          />
+        </div>
+
+        <!-- fraction -> % -->
+        <ng-container *ngIf="mode() === 'fracToPct'">
+          <div class="field field-main">
+            <label for="num" i18n="@@pct_frac_num">Numérateur</label>
+            <p-inputNumber
+              inputId="num"
+              [formControl]="form.controls.num"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="0"
+              [useGrouping]="true"
+              placeholder="1"
+              styleClass="input-full"
+            />
+          </div>
+
+          <div class="field field-main">
+            <label for="den" i18n="@@pct_frac_den">Dénominateur</label>
+            <p-inputNumber
+              inputId="den"
+              [formControl]="form.controls.den"
+              [minFractionDigits]="0"
+              [maxFractionDigits]="0"
+              [useGrouping]="true"
+              placeholder="8"
+              styleClass="input-full"
+            />
+            <small class="hint" i18n="@@pct_frac_den_hint">
+              Le dénominateur ne peut pas être 0.
+            </small>
+          </div>
+        </ng-container>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="12"
+            [useGrouping]="false"
+            placeholder="6"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pct_frac_result_fraction">Fraction simplifiée</span>
+            <span class="result-value">{{ fractionText() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_frac_result_decimal">Décimal</span>
+            <span class="result-value">{{ decimalText() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pct_frac_result_percent">Pourcentage</span>
+            <span class="result-value">{{ percentText() }}</span>
+          </div>
+        </div>
+
+        <div class="tip-box" *ngIf="warning()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ warning() }}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 6"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button class="example-btn" (click)="applyExamplePct(12.5)">
+          <span class="ex-label">% → fraction</span>
+          <span class="ex-values">12,5% → 1/8</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExamplePct(75)">
+          <span class="ex-label">Classique</span>
+          <span class="ex-values">75% → 3/4</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExampleFrac(1, 8)">
+          <span class="ex-label">fraction → %</span>
+          <span class="ex-values">1/8 → 12,5%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExampleFrac(7, 20)">
+          <span class="ex-label">Autre</span>
+          <span class="ex-values">7/20 → 35%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@pct_frac_definition_sub">
+          Un pourcentage est une fraction sur 100, qu’on peut simplifier.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formules"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{pct}=\frac{a}{b}\times 100\quad;\quad \frac{p}{100}\ \text{(simplifier)}"
+          i18n-latex="@@pct_frac_formula_katex"
+        ></tc-math-formula>
+      </div>
+    </div>
+
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

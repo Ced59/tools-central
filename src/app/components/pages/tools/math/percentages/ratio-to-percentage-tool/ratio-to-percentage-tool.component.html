@@ -1,0 +1,198 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-calculator"></i>
+        </div>
+
+        <h1 i18n="@@ratio_pct_title">Ratio en pourcentage</h1>
+        <p class="hero-subtitle" i18n="@@ratio_pct_subtitle">
+          Exprimer un ratio (A/B) sous forme de pourcentage, et lire le ratio dans l’autre sens.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+
+    <!-- Carte calcul -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form">
+        <div class="field field-main">
+          <label for="a" i18n="@@ratio_pct_a">A (numérateur)</label>
+          <p-inputNumber
+            inputId="a"
+            [formControl]="form.controls.a"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="12"
+            [useGrouping]="true"
+            placeholder="25"
+            styleClass="input-full"
+          />
+        </div>
+
+        <div class="field field-main">
+          <label for="b" i18n="@@ratio_pct_b">B (dénominateur)</label>
+          <p-inputNumber
+            inputId="b"
+            [formControl]="form.controls.b"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="12"
+            [useGrouping]="true"
+            placeholder="200"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@ratio_pct_b_hint">
+            Le ratio A/B n’est pas défini si B = 0.
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@ratio_pct_ab_label">A / B</span>
+            <span class="result-value">{{ fmtPct(pctAB()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@ratio_pct_ba_label">B / A</span>
+            <span class="result-value">{{ fmtPct(pctBA()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@ratio_pct_ratio_label">Ratio A:B</span>
+            <span class="result-value">{{ ratioText() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@ratio_pct_share_label">Parts sur (A+B)</span>
+            <span class="result-value">{{ shareText() }}</span>
+          </div>
+        </div>
+
+        <div class="tip-box" *ngIf="warning()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ warning() }}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Exemples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button class="example-btn" (click)="applyExample(25, 200)">
+          <span class="ex-label" i18n="@@ratio_pct_ex1">Cas simple</span>
+          <span class="ex-values">25/200 → 12,5%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample(3, 4)">
+          <span class="ex-label" i18n="@@ratio_pct_ex2">Fraction</span>
+          <span class="ex-values">3/4 → 75%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample(120, 80)">
+          <span class="ex-label" i18n="@@ratio_pct_ex3">Ratio &gt; 100%</span>
+          <span class="ex-values">120/80 → 150%</span>
+        </button>
+
+        <button class="example-btn" (click)="applyExample(1, 0)">
+          <span class="ex-label" i18n="@@ratio_pct_ex4">Division par 0</span>
+          <span class="ex-values">A/0 → non défini</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explications -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@ratio_pct_definition_sub">
+          Un ratio compare deux valeurs. Converti en %, il indique “combien vaut A par rapport à B”.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formule"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\text{A/B (\%)}=\dfrac{A}{B}\times 100"
+          i18n-latex="@@ratio_pct_formula_katex"
+        ></tc-math-formula>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@ratio_pct_note">
+            Si A = B, alors A/B = 1 → 100%. Si A &gt; B, le pourcentage dépasse 100%.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Retour -->
+    <div class="back-section">
+      <a routerLink="/categories/math/percentages" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

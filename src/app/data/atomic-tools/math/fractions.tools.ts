@@ -33,7 +33,7 @@ export const FRACTIONS_TOOLS = {
     route: routes.tool('math', 'fractions', 'fraction-to-percent'),
     available: false,
   },
-  'percent-to-fraction': {
+  'fractions-percent-to-fraction': {
     category: 'math',
     group: 'fractions',
     subGroup: 'convert',
