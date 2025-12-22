@@ -19,7 +19,7 @@
     "i18n:repair": "node scripts/i18n-repair.mjs",
     "i18n:auto": "npm run i18n:prepare && node scripts/i18n-translate.mjs && npm run i18n:apply",
     "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
-    "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs"
+    "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs && node scripts/generate-ads-txt.mjs"
   },
   "dependencies": {
     "@angular/animations": "^21.0.4",

@@ -1,6 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
+// --------------------------------------------------
+// Config
+// --------------------------------------------------
 const DIST_DIR = path.resolve("dist/tools-central/browser");
 const ANGULAR_JSON = path.resolve("angular.json");
 const PROJECT_NAME = "tools-central";
@@ -10,11 +13,14 @@ const SITE = "https://www.tools-central.com";
 const CATEGORIES_TS = path.resolve("src/app/data/categories.ts");
 const TOOL_GROUPS_TS = path.resolve("src/app/data/tool-groups.ts");
 const ATOMIC_TOOLS_DIR = path.resolve("src/app/data/atomic-tools");
+const APP_ROUTES_TS = path.resolve("src/app/app.routes.ts");
 
-// Config
+// Options
 const INCLUDE_COMING_SOON = false;
 
-// ---------- locales ----------
+// --------------------------------------------------
+// Locales
+// --------------------------------------------------
 function readAngularLocales() {
   const angular = JSON.parse(fs.readFileSync(ANGULAR_JSON, "utf8"));
   const project = angular.projects?.[PROJECT_NAME];
@@ -22,12 +28,14 @@ function readAngularLocales() {
     throw new Error(`No i18n config for "${PROJECT_NAME}"`);
   }
 
-  const sourceLocale = project.i18n.sourceLocale; // ex: "fr"
+  const sourceLocale = project.i18n.sourceLocale;
   const locales = Object.keys(project.i18n.locales || {});
   return [sourceLocale, ...locales];
 }
 
-// ---------- fs helpers ----------
+// --------------------------------------------------
+// FS helpers
+// --------------------------------------------------
 function read(file) {
   if (!fs.existsSync(file)) return "";
   return fs.readFileSync(file, "utf8");
@@ -49,34 +57,33 @@ function listFilesRecursive(dir, predicate = () => true) {
   return out;
 }
 
-// ---------- route extraction ----------
+// --------------------------------------------------
+// Route extraction helpers
+// --------------------------------------------------
 
 /**
- * Catégories: lire les clés top-level de CATEGORY_REGISTRY
- * (math/text/image...)
+ * Categories: top-level keys of CATEGORY_REGISTRY
  */
 function extractCategoryRoutesFromRegistry(tsContent) {
   const body =
-    tsContent.match(/export\s+const\s+CATEGORY_REGISTRY\s*=\s*\{([\s\S]*?)\}\s*as\s*const\s*;/)?.[1] ??
-    "";
+    tsContent.match(
+      /export\s+const\s+CATEGORY_REGISTRY\s*=\s*\{([\s\S]*?)\}\s*as\s*const\s*;/
+    )?.[1] ?? "";
 
-  const keys = [...body.matchAll(/^\s*([A-Za-z0-9_-]+)\s*:\s*\{/gm)].map((m) => m[1]);
+  const keys = [...body.matchAll(/^\s*([A-Za-z0-9_-]+)\s*:\s*\{/gm)].map(
+    (m) => m[1]
+  );
+
   return uniq(keys).map((id) => `/categories/${id}`);
 }
 
 /**
- * Extrait routes.group('cat','group') / routes.tool('cat','group','tool')
- * en tenant compte de available:false (si INCLUDE_COMING_SOON=false).
- *
- * Fonctionne sur:
- * - TOOL_GROUP_REGISTRY (nested objects)
- * - export const XXX_TOOLS = { ... } (atomic tools)
+ * Extract routes from registry-like objects
+ * (tool groups + atomic tools)
  */
 function extractRoutesFromRegistryLikeObject(tsContent) {
   const routes = [];
 
-  // Match "key: { ... }" ou "'key': { ... }" et capture le body entre { ... }
-  // Note: on s’appuie sur ton style: une entrée par objet, fermée par "},"
   const entryRegex =
     /(^|\n)\s*(?:['"]([^'"]+)['"]|([A-Za-z0-9_-]+))\s*:\s*\{([\s\S]*?)\n\s*\}\s*,?/g;
 
@@ -84,12 +91,10 @@ function extractRoutesFromRegistryLikeObject(tsContent) {
   while ((m = entryRegex.exec(tsContent)) !== null) {
     const body = m[4] || "";
 
-    // available
     const availableRaw = body.match(/available\s*:\s*(true|false)/)?.[1];
     const available = availableRaw ? availableRaw === "true" : true;
     if (!INCLUDE_COMING_SOON && available === false) continue;
 
-    // routes.tool(cat, group, tool)
     for (const t of body.matchAll(
       /routes\.tool\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*\)/g
     )) {
@@ -97,7 +102,6 @@ function extractRoutesFromRegistryLikeObject(tsContent) {
       routes.push(`/categories/${cat}/${group}/${tool}`);
     }
 
-    // routes.group(cat, group)
     for (const g of body.matchAll(
       /routes\.group\(\s*['"]([^'"]+)['"]\s*,\s*['"]([^'"]+)['"]\s*\)/g
     )) {
@@ -105,7 +109,6 @@ function extractRoutesFromRegistryLikeObject(tsContent) {
       routes.push(`/categories/${cat}/${group}`);
     }
 
-    // route: '/xxx' (au cas où tu as des routes directes)
     for (const d of body.matchAll(/route\s*:\s*['"]([^'"]+)['"]/g)) {
       routes.push(d[1]);
     }
@@ -114,12 +117,33 @@ function extractRoutesFromRegistryLikeObject(tsContent) {
   return routes;
 }
 
+/**
+ * Extract static routes from Angular Routes config
+ * - includes: path: 'privacy-policy'
+ * - excludes: '', '**', dynamic ':id'
+ */
+function extractStaticRoutesFromAngularRoutes(tsContent) {
+  const out = [];
+
+  for (const m of tsContent.matchAll(/path\s*:\s*['"]([^'"]+)['"]/g)) {
+    const p = m[1].trim();
+    if (!p || p === "**") continue;
+    if (p.includes(":")) continue;
+
+    out.push(p.startsWith("/") ? p : `/${p}`);
+  }
+
+  return uniq(out);
+}
+
 function normalizeNoTrailingSlash(p) {
   if (p === "/") return "/";
   return p.replace(/\/+$/g, "");
 }
 
-// ---------- sitemap builders ----------
+// --------------------------------------------------
+// Sitemap builders
+// --------------------------------------------------
 function buildUrlset(entries) {
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -156,7 +180,9 @@ function writeFile(filePath, content) {
   console.log(`✅ wrote ${path.relative(process.cwd(), filePath)}`);
 }
 
-// ---------- main ----------
+// --------------------------------------------------
+// Main
+// --------------------------------------------------
 if (!fs.existsSync(DIST_DIR)) {
   throw new Error(`DIST_DIR not found: ${DIST_DIR} (build first)`);
 }
@@ -165,22 +191,31 @@ const locales = readAngularLocales();
 console.log("🌍 Locales:", locales.join(", "));
 
 const baseRoutes = new Set();
+
+// Core pages
 baseRoutes.add("/");
 baseRoutes.add("/categories");
 
-// categories
+// Angular static routes (legal pages, etc.)
+{
+  const content = read(APP_ROUTES_TS);
+  const staticRoutes = extractStaticRoutesFromAngularRoutes(content);
+  for (const r of staticRoutes) baseRoutes.add(r);
+}
+
+// Categories
 {
   const content = read(CATEGORIES_TS);
   for (const r of extractCategoryRoutesFromRegistry(content)) baseRoutes.add(r);
 }
 
-// groups
+// Tool groups
 {
   const content = read(TOOL_GROUPS_TS);
   for (const r of extractRoutesFromRegistryLikeObject(content)) baseRoutes.add(r);
 }
 
-// atomic tools: scan folder recursively
+// Atomic tools
 {
   const files = listFilesRecursive(
     ATOMIC_TOOLS_DIR,
@@ -198,12 +233,23 @@ baseRoutes.add("/categories");
   }
 }
 
+// Final base list (no locale)
 const baseList = uniq([...baseRoutes].map(normalizeNoTrailingSlash)).sort((a, b) =>
   a.localeCompare(b)
 );
 
+// --------------------------------------------------
+// BONUS: console output (unique routes, no locale)
+// --------------------------------------------------
+console.log("");
+console.log("🧾 Base routes (unique, no locale):");
+for (const r of baseList) console.log(" - " + r);
 console.log("🧭 Base routes count:", baseList.length);
+console.log("");
 
+// --------------------------------------------------
+// Generate sitemaps per locale
+// --------------------------------------------------
 const sitemapFiles = [];
 
 for (const locale of locales) {
@@ -227,5 +273,10 @@ for (const locale of locales) {
   sitemapFiles.push({ loc: `${SITE}/${filename}` });
 }
 
-writeFile(path.join(DIST_DIR, "sitemap.xml"), buildSitemapIndex(sitemapFiles));
-console.log("✅ Done");
+// Sitemap index
+writeFile(
+  path.join(DIST_DIR, "sitemap.xml"),
+  buildSitemapIndex(sitemapFiles)
+);
+
+console.log("✅ Sitemap generation done");
