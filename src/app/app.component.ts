@@ -1,5 +1,5 @@
 import { Component, inject, PLATFORM_ID } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {RouterLink, RouterOutlet} from '@angular/router';
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,11 +10,12 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 
 import { LOCALES, type LocaleOption } from './i18n/locales.generated';
+import {LocalePathService} from "./services/local-path.service";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ButtonModule, NgOptimizedImage, FormsModule, SelectModule],
+  imports: [RouterOutlet, RouterLink, ButtonModule, NgOptimizedImage, FormsModule, SelectModule],
   template: `
     <div class="app-root">
       <header class="app-header">
@@ -71,8 +72,28 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
       </main>
 
       <footer class="app-footer">
-        <div class="container">
-          <small>&copy; {{ year }} Tools Central – Outils en ligne gratuits</small>
+        <div class="container footer-inner">
+          <div class="footer-links" aria-label="Legal">
+            <a [routerLink]="localePath.link('legal-notice')" class="footer-link" i18n="@@footer_legal_notice">
+              Mentions légales
+            </a>
+
+            <span class="footer-sep" aria-hidden="true">•</span>
+
+            <a [routerLink]="localePath.link('privacy-policy')" class="footer-link" i18n="@@footer_privacy">
+              Politique de confidentialité
+            </a>
+
+            <span class="footer-sep" aria-hidden="true">•</span>
+
+            <a [routerLink]="localePath.link('cookies-policy')" class="footer-link" i18n="@@footer_cookies">
+              Politique des cookies
+            </a>
+          </div>
+
+          <small class="footer-copy" i18n="@@footer_copyright">
+            © {{ year }} Tools Central – Outils en ligne gratuits
+          </small>
         </div>
       </footer>
     </div>
@@ -128,6 +149,7 @@ export class AppComponent {
   themeService = inject(ThemeService);
   seo = inject(SeoService);
   private platformId = inject(PLATFORM_ID);
+  localePath = inject(LocalePathService);
 
   year = new Date().getFullYear();
 

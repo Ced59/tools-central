@@ -5,6 +5,11 @@ export const routes: Routes = [
 
   { path: 'categories', loadComponent: () => import('./components/pages/categories/categories.component').then(m => m.CategoriesComponent) },
 
+  { path: 'legal-notice', loadComponent: () => import('./components/pages/legal/legal-notice/legal-notice.component').then(m => m.LegalNoticeComponent) },
+  { path: 'privacy-policy', loadComponent: () => import('./components/pages/legal/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
+  { path: 'cookies-policy', loadComponent: () => import('./components/pages/legal/cookies-policy/cookies-policy.component').then(m => m.CookiesPolicyComponent) },
+
+
   // Outil atomique (wrapper) - 3 segments
   {
     path: 'categories/:idCategory/:idGroup/:idTool',

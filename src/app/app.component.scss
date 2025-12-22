@@ -3,3 +3,48 @@
 .lang-text { font-weight: 500; }
 .lang-locale { margin-left: auto; opacity: .6; font-size: .85rem; text-transform: uppercase; }
 
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 0.75rem; /* espace entre items + quand ça wrap */
+  line-height: 1.4;
+}
+
+.footer-link {
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.25rem 0.35rem;
+  border-radius: 10px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.footer-link:hover {
+  color: var(--text-color);
+  background: color-mix(in srgb, var(--surface-card) 70%, transparent);
+  text-decoration: underline;
+}
+
+.footer-sep {
+  opacity: 0.5;
+  user-select: none;
+}
+
+.footer-copy {
+  opacity: 0.85;
+}
+
+/* Mobile: separators peuvent faire moche si wrap -> on les cache */
+@media (max-width: 520px) {
+  .footer-sep { display: none; }
+}
+

@@ -1,0 +1,100 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-info-circle"></i>
+        </div>
+
+        <h1 i18n="@@legal_notice_title">Mentions légales</h1>
+
+        <p class="hero-subtitle" i18n="@@legal_notice_subtitle">
+          Informations légales relatives au site Tools Central.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container tool-content">
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@legal_notice_editor_title">Éditeur du site</h2>
+      </div>
+
+      <div class="card-body">
+        <p>
+          <strong i18n="@@legal_notice_site_label">Site :</strong>
+          <span i18n="@@legal_notice_site_value">Tools Central</span>
+        </p>
+
+        <p>
+          <strong i18n="@@legal_notice_domain_label">Domaine :</strong>
+          <span i18n="@@legal_notice_domain_value">tools-central.com</span>
+        </p>
+
+        <p>
+          <strong i18n="@@legal_notice_publisher_label">Responsable de publication :</strong>
+          <span i18n="@@legal_notice_publisher_value">CAUDRON Cédric</span>
+        </p>
+
+        <p>
+          <strong i18n="@@legal_notice_email_label">Contact :</strong>
+          <span i18n="@@legal_notice_email_value">c.caudron59&#64;gmail.com</span>
+        </p>
+
+        <p class="muted" i18n="@@legal_notice_update">
+          Dernière mise à jour : 2025-12-22
+        </p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@legal_notice_host_title">Hébergement</h2>
+      </div>
+
+      <div class="card-body">
+        <p i18n="@@legal_notice_host_desc">
+          Le site est hébergé par :
+        </p>
+
+        <p>
+          <strong i18n="@@legal_notice_host_name_label">Hébergeur :</strong>
+          <span i18n="@@legal_notice_host_name_value">Hostinger</span>
+        </p>
+
+        <p>
+          <strong i18n="@@legal_notice_host_address_label">Adresse :</strong>
+          <span i18n="@@legal_notice_host_address_value">Paris - France</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@legal_notice_links_title">Liens utiles</h2>
+      </div>
+
+      <div class="card-body">
+        <ul class="legal-list">
+          <li>
+            <a routerLink="/privacy-policy" i18n="@@legal_notice_privacy_link">
+              Politique de confidentialité
+            </a>
+          </li>
+          <li>
+            <a [routerLink]="localePath.link('cookies-policy')" i18n="@@legal_notice_cookies_link">
+              Politique des cookies
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
