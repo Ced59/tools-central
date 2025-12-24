@@ -11,6 +11,7 @@ import { FRACTIONS_TOOLS } from './math/fractions.tools';
 import { ROUNDING_TOOLS } from './math/rounding.tools';
 import {TEXT_CASE_TOOLS} from "./text/text-case.tools";
 import {WRITING_TOOLS} from "./text/writing.tools";
+import {DEV_PDF_TOOLS} from "./dev/pdf";
 
 export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   category: C;
@@ -40,7 +41,8 @@ export const ATOMIC_TOOLS = {
   ...FRACTIONS_TOOLS,
   ...ROUNDING_TOOLS,
   ...TEXT_CASE_TOOLS,
-  ...WRITING_TOOLS
+  ...WRITING_TOOLS,
+  ...DEV_PDF_TOOLS
 } as const satisfies Record<string, AtomicToolAny>;
 
 export type ToolId = keyof typeof ATOMIC_TOOLS;

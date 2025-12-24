@@ -174,6 +174,16 @@ export const TOOL_SUBGROUP_REGISTRY = {
   },
 
   image: {},
+  dev: {
+    pdf: [
+      {
+        id: 'extract',
+        title: $localize`:@@dev_pdf_sg_extract_title:Extraction`,
+        description: $localize`:@@dev_pdf_sg_extract_desc:Exporter les champs d’un formulaire PDF en JSON.`,
+        order: 1,
+      },
+    ],
+  },
 } as const;
 
 /**

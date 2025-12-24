@@ -18,6 +18,12 @@ export const CATEGORY_REGISTRY = {
     icon: 'pi pi-image',
     available: false,
   },
+  dev: {
+    title: $localize`:@@cat_dev_title:Développeur`,
+    description: $localize`:@@cat_dev_desc:Outils pour développeurs : PDF, JSON, encodage, formats…`,
+    icon: 'pi pi-code',
+    available: true,
+  },
 } as const;
 
 export type CategoryId = keyof typeof CATEGORY_REGISTRY;

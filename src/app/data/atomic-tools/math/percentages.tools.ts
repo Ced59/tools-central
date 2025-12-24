@@ -2,9 +2,6 @@ import { routes } from '../../routes';
 import type { AtomicToolAny } from '../index';
 
 export const PERCENTAGES_TOOLS = {
-  // =========================
-  // ✅ EXISTANTS (available: true)
-  // =========================
   'percentage-variation': {
     category: 'math',
     group: 'percentages',

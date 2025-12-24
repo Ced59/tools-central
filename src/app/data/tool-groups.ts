@@ -84,6 +84,15 @@ export const TOOL_GROUP_REGISTRY = {
   },
 
   image: {},
+  dev: {
+    pdf: {
+      title: $localize`:@@group_dev_pdf_title:PDF`,
+      description: $localize`:@@group_dev_pdf_desc:Extraction et inspection : champs de formulaires, métadonnées, JSON…`,
+      icon: 'pi pi-file-pdf',
+      route: routes.group('dev', 'pdf'),
+      available: true,
+    },
+  },
 } as const;
 
 export type GroupId<C extends CategoryId> = keyof (typeof TOOL_GROUP_REGISTRY)[C];
