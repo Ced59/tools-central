@@ -6,9 +6,32 @@ import { LOCALES } from '../i18n/locales.generated';
 export class LocalePathService {
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
+  private readonly localeSet = new Set<string>(LOCALES.map(l => l.locale));
+
   private isKnownLocale(seg: string | undefined | null): boolean {
     if (!seg) return false;
     return LOCALES.some(l => l.locale === seg);
+  }
+
+  switchLocale(currentPath: string, targetLocale: string): string {
+    const pathOnly = (currentPath || '/').split('?')[0].split('#')[0];
+
+    // garde l’info "slash final"
+    const hasTrailingSlash = pathOnly.endsWith('/');
+
+    const parts = pathOnly.split('/').filter(Boolean);
+    const first = parts[0];
+
+    let rest: string[] = [];
+    if (first && this.localeSet.has(first)) rest = parts.slice(1);
+    else rest = parts;
+
+    // Si on est sur la home => /xx/
+    if (rest.length === 0) return `/${targetLocale}/`;
+
+    // Sur une page interne : on garde le trailing slash si présent
+    const joined = `/${targetLocale}/${rest.join('/')}`;
+    return hasTrailingSlash ? `${joined}/` : joined;
   }
 
   /**

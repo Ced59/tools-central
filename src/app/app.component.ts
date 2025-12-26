@@ -74,19 +74,15 @@ import {LocalePathService} from "./services/local-path.service";
       <footer class="app-footer">
         <div class="container footer-inner">
           <div class="footer-links" aria-label="Legal">
-            <a routerLink="/legal-notice" class="footer-link" i18n="@@footer_legal_notice">
+            <a [routerLink]="localePath.link('legal-notice')" class="footer-link" i18n="@@footer_legal_notice">
               Mentions légales
             </a>
 
-            <span class="footer-sep" aria-hidden="true">•</span>
-
-            <a routerLink="/privacy-policy" class="footer-link" i18n="@@footer_privacy">
+            <a [routerLink]="localePath.link('privacy-policy')" class="footer-link" i18n="@@footer_privacy">
               Politique de confidentialité
             </a>
 
-            <span class="footer-sep" aria-hidden="true">•</span>
-
-            <a routerLink="/cookies-policy" class="footer-link" i18n="@@footer_cookies">
+            <a [routerLink]="localePath.link('cookies-policy')" class="footer-link" i18n="@@footer_cookies">
               Politique des cookies
             </a>
           </div>
@@ -159,16 +155,18 @@ export class AppComponent {
   homeHref = '/fr/';
 
   ngOnInit() {
-    // Active canonical/hreflang auto sur chaque navigation (SSR ok)
     this.seo.init();
 
+    // SSR: fallback simple
     if (!isPlatformBrowser(this.platformId)) {
       this.selectedLocale = LOCALES[0];
+      this.homeHref = `/${this.selectedLocale.locale}/`;
       return;
     }
 
     const firstSegment = (location.pathname.split('/').filter(Boolean)[0] ?? 'fr');
     this.selectedLocale = LOCALES.find(l => l.locale === firstSegment) ?? LOCALES[0];
+
     this.homeHref = `/${this.selectedLocale.locale}/`;
   }
 
@@ -178,10 +176,11 @@ export class AppComponent {
     this.selectedLocale = option;
     this.homeHref = `/${option.locale}/`;
 
-    const parts = location.pathname.split('/').filter(Boolean);
-    if (parts.length > 0) parts[0] = option.locale;
-    else parts.push(option.locale);
+    const nextPath = this.localePath.switchLocale(location.pathname, option.locale);
 
-    location.assign('/' + parts.join('/') + location.search + location.hash);
+    // conserve query + hash
+    const nextUrl = nextPath + location.search + location.hash;
+
+    location.assign(nextUrl);
   }
 }
