@@ -35,7 +35,7 @@ jobs:
 
       # ✅ Répare les XLF (placeholders mismatch) => évite le crash localize/tools
       - name: Repair i18n files
-        run: npm run i18n:repair
+        run: npm run i18n:check
 
       - name: Build application
         run: npm run build:all
