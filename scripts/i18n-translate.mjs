@@ -510,6 +510,7 @@ async function translateLocale(todoFilePath) {
   console.log(`✅ ${locale} done (${translatedApplied} translated, ${translatedEmpty} empty)`);
 }
 
+
 // =====================================================================================
 // Entrypoint
 // =====================================================================================
