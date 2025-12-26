@@ -36,9 +36,9 @@ function deepClone(v) {
 }
 
 /**
- * Collecte les noms de placeholders "logiques" attendus par Angular:
- * - ph[@_equiv] ex: INTERPOLATION, LINE_BREAK...
- * - pc[@_equivStart] / pc[@_equivEnd] ex: START_TAG_SPAN / CLOSE_TAG_SPAN...
+ * Collect placeholders expected by Angular:
+ * - ph[@_equiv]
+ * - pc[@_equivStart]/pc[@_equivEnd]
  */
 function collectPlaceholders(node, set = new Set()) {
   if (node == null) return set;
@@ -47,10 +47,8 @@ function collectPlaceholders(node, set = new Set()) {
     for (const x of node) collectPlaceholders(x, set);
     return set;
   }
-
   if (typeof node !== "object") return set;
 
-  // ph
   if (node.ph) {
     for (const ph of asArray(node.ph)) {
       const equiv = ph?.["@_equiv"];
@@ -58,24 +56,20 @@ function collectPlaceholders(node, set = new Set()) {
     }
   }
 
-  // pc
   if (node.pc) {
     for (const pc of asArray(node.pc)) {
       const es = pc?.["@_equivStart"];
       const ee = pc?.["@_equivEnd"];
       if (es) set.add(es);
       if (ee) set.add(ee);
-      // pc peut contenir des ph
       collectPlaceholders(pc, set);
     }
   }
 
-  // traverse tous les champs objets
   for (const [k, v] of Object.entries(node)) {
     if (k === "ph" || k === "pc") continue;
     if (typeof v === "object") collectPlaceholders(v, set);
   }
-
   return set;
 }
 
@@ -88,33 +82,79 @@ function samePlaceholderSet(a, b) {
 function isEmptyTarget(t) {
   if (t == null) return true;
   if (typeof t === "string") return t.trim().length === 0;
-  // si objet, on regarde s’il contient du texte visible
   const xml = builder.build({ target: t });
   const inner = xml.replace(/^<target>|<\/target>$/g, "");
   return inner.trim().length === 0;
 }
 
-const frXml = parser.parse(fs.readFileSync(frPath, "utf8"));
-const frFile = frXml?.xliff?.file;
-const frUnits = asArray(frFile?.unit);
+function hasRawRangeTokensInText(s) {
+  return /\bSTART_TAG_[A-Z0-9_]+\b/.test(s) || /\bCLOSE_TAG_[A-Z0-9_]+\b/.test(s);
+}
 
-// Map id -> FR source node (object OR string)
+function hasRawRangeTokens(node) {
+  if (node == null) return false;
+  if (typeof node === "string") return hasRawRangeTokensInText(node);
+  if (Array.isArray(node)) return node.some(hasRawRangeTokens);
+  if (typeof node === "object") {
+    if (typeof node["#text"] === "string" && hasRawRangeTokensInText(node["#text"])) return true;
+    for (const v of Object.values(node)) {
+      if (typeof v === "object" || typeof v === "string") {
+        if (hasRawRangeTokens(v)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+// Validate that pc/ph elements are structurally usable
+function hasInvalidPcPhStructure(node) {
+  if (node == null) return false;
+  if (typeof node === "string") return false;
+  if (Array.isArray(node)) return node.some(hasInvalidPcPhStructure);
+  if (typeof node !== "object") return false;
+
+  if (node.pc) {
+    for (const pc of asArray(node.pc)) {
+      const es = pc?.["@_equivStart"];
+      const ee = pc?.["@_equivEnd"];
+      // both must exist
+      if (!es || !ee) return true;
+      // ids are expected/very common; missing ids tends to break tooling
+      if (!pc?.["@_id"]) return true;
+      if (hasInvalidPcPhStructure(pc)) return true;
+    }
+  }
+
+  if (node.ph) {
+    for (const ph of asArray(node.ph)) {
+      if (!ph?.["@_equiv"]) return true;
+      if (!ph?.["@_id"]) return true;
+    }
+  }
+
+  for (const [k, v] of Object.entries(node)) {
+    if (k === "ph" || k === "pc") continue;
+    if (typeof v === "object") {
+      if (hasInvalidPcPhStructure(v)) return true;
+    }
+  }
+
+  return false;
+}
+
+const frXml = parser.parse(fs.readFileSync(frPath, "utf8"));
+const frUnits = asArray(frXml?.xliff?.file?.unit);
+
 const frById = new Map();
 for (const u of frUnits) {
   const id = u?.["@_id"];
-  const seg = u?.segment;
-  const source = seg?.source;
+  const source = u?.segment?.source;
   if (id) frById.set(id, source);
 }
 
 const files = fs
   .readdirSync(localeDir)
-  .filter(
-    (f) =>
-      f.startsWith("messages.") &&
-      f.endsWith(".xlf") &&
-      f !== "messages.fr.xlf"
-  );
+  .filter((f) => f.startsWith("messages.") && f.endsWith(".xlf") && f !== "messages.fr.xlf");
 
 let changedCount = 0;
 
@@ -131,7 +171,6 @@ for (const fileName of files) {
     continue;
   }
 
-  // Force proper languages
   xliff["@_srcLang"] = "fr";
   xliff["@_trgLang"] = locale;
 
@@ -143,7 +182,7 @@ for (const fileName of files) {
     if (!id) continue;
 
     const frSource = frById.get(id);
-    if (frSource == null) continue; // id inconnu côté FR
+    if (frSource == null) continue;
 
     if (!u.segment) u.segment = {};
     const seg = u.segment;
@@ -151,33 +190,39 @@ for (const fileName of files) {
     const srcPh = collectPlaceholders(frSource);
     const tgtPh = collectPlaceholders(seg.target);
 
-    // 1) Force <source> = FR (structure complète, pas string)
-    const sameSource =
-      JSON.stringify(seg.source ?? null) === JSON.stringify(frSource ?? null);
-
+    // Force <source> = FR
+    const sameSource = JSON.stringify(seg.source ?? null) === JSON.stringify(frSource ?? null);
     if (!sameSource) {
       seg.source = deepClone(frSource);
       fileChanged = true;
     }
 
-    // 2) Réparer target si vide
+    // If target empty -> repair
     if (isEmptyTarget(seg.target)) {
-      // Si la source a des placeholders -> mettre une copie de la source pour compiler
-      if (srcPh.size > 0) {
-        seg.target = deepClone(frSource);
-      } else {
-        seg.target = "TODO";
-      }
+      seg.target = srcPh.size > 0 ? deepClone(frSource) : "TODO";
       fileChanged = true;
       continue;
     }
 
-    // 3) Réparer target si placeholders mismatch
-    // (ex: target contient START_TAG_SPAN mais source ne l’a pas)
-    if (!samePlaceholderSet(srcPh, tgtPh)) {
-      // sécurité: on remplace par la source (compile garanti)
+    // NEW: if raw START_TAG/CLOSE_TAG tokens appear in text => repair
+    if (hasRawRangeTokens(seg.target)) {
       seg.target = deepClone(frSource);
       fileChanged = true;
+      continue;
+    }
+
+    // NEW: invalid pc/ph structure => repair
+    if (hasInvalidPcPhStructure(seg.target)) {
+      seg.target = deepClone(frSource);
+      fileChanged = true;
+      continue;
+    }
+
+    // Old rule: placeholder set mismatch => repair
+    if (!samePlaceholderSet(srcPh, tgtPh)) {
+      seg.target = deepClone(frSource);
+      fileChanged = true;
+      continue;
     }
   }
 
