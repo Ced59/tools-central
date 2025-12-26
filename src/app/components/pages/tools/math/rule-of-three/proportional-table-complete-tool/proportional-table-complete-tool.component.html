@@ -1,0 +1,230 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-table"></i>
+        </div>
+
+        <h1 i18n="@@pt_complete_title">Compléter un tableau de proportionnalité</h1>
+        <p class="hero-subtitle" i18n="@@pt_complete_subtitle">
+          Compléter les valeurs manquantes d’un tableau.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+
+    <!-- Card -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="table-toolbar">
+        <div class="toolbar-left">
+          <span class="toolbar-label" i18n="@@pt_cols_label">Colonnes</span>
+          <p-button
+            type="button"
+            icon="pi pi-minus"
+            severity="secondary"
+            [text]="true"
+            (onClick)="removeCol()"
+            [disabled]="colCount() <= 2"
+            aria-label="Remove column"
+            i18n-aria-label="@@pt_remove_col_aria"
+          ></p-button>
+
+          <span class="toolbar-value">{{ colCount() }}</span>
+
+          <p-button
+            type="button"
+            icon="pi pi-plus"
+            severity="secondary"
+            [text]="true"
+            (onClick)="addCol()"
+            [disabled]="colCount() >= maxCols"
+            aria-label="Add column"
+            i18n-aria-label="@@pt_add_col_aria"
+          ></p-button>
+        </div>
+
+        <div class="toolbar-right">
+          <p-button
+            type="button"
+            icon="pi pi-refresh"
+            severity="secondary"
+            [text]="true"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          ></p-button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Table input -->
+      <div class="prop-table-wrap">
+        <div class="prop-table" [style.gridTemplateColumns]="gridCols()">
+          <!-- Corner -->
+          <div class="corner" aria-hidden="true"></div>
+
+          <!-- Column headers -->
+          <div class="col-head" *ngFor="let _ of cols(); let i = index">
+            {{ i + 1 }}
+          </div>
+
+          <!-- Row 1 -->
+          <div class="row-head" i18n="@@pt_row1">Ligne 1</div>
+          <div class="cell" *ngFor="let _ of cols(); let i = index">
+            <p-inputNumber
+              [inputId]="'r1_' + i"
+              [ngModel]="r1()[i]"
+              (ngModelChange)="setCell(1, i, $event)"
+              [maxFractionDigits]="6"
+              [useGrouping]="true"
+              styleClass="input-full"
+              placeholder="—"
+            />
+          </div>
+
+          <!-- Row 2 -->
+          <div class="row-head" i18n="@@pt_row2">Ligne 2</div>
+          <div class="cell" *ngFor="let _ of cols(); let i = index">
+            <p-inputNumber
+              [inputId]="'r2_' + i"
+              [ngModel]="r2()[i]"
+              (ngModelChange)="setCell(2, i, $event)"
+              [maxFractionDigits]="6"
+              [useGrouping]="true"
+              styleClass="input-full"
+              placeholder="—"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Results -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@pt_complete_status">État</span>
+            <span class="result-value">{{ statusLabel() }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@pt_ratio_label">k (ratio)</span>
+            <span class="result-value">{{ fmt(k()) }}</span>
+          </div>
+
+          <div class="result-item" *ngIf="filledCell() as fc">
+            <span class="result-label" i18n="@@pt_filled_label">Valeur calculée</span>
+            <span class="result-value">
+              {{ fc.row }}{{ fc.index + 1 }} = {{ fmt(fc.value) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="precision()"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="tip-box" *ngIf="statusCode() === 'need_one_empty'">
+          <i class="pi pi-info-circle"></i>
+          <span i18n="@@pt_need_one_empty_note">
+            Laissez exactement une case vide (et remplissez au moins une colonne complète) pour calculer la valeur manquante.
+          </span>
+        </div>
+
+        <div class="tip-box" *ngIf="statusCode() === 'no_reference'">
+          <i class="pi pi-info-circle"></i>
+          <span i18n="@@pt_no_reference_note">
+            Impossible de déterminer k : il faut une colonne avec deux valeurs (et la valeur de la ligne 1 non nulle).
+          </span>
+        </div>
+
+        <div class="tip-box" *ngIf="statusCode() === 'division_by_zero'">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span i18n="@@pt_div0_note">
+            Division par zéro : une valeur de la ligne 1 vaut 0 dans la colonne de référence.
+          </span>
+        </div>
+
+        <div class="tip-box" *ngIf="statusCode() === 'not_proportional'">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span i18n="@@pt_not_prop_note">
+            Les colonnes complètes ne donnent pas le même ratio : le tableau n’est pas proportionnel.
+          </span>
+        </div>
+
+        <div class="actions" *ngIf="canApplyFill()">
+          <p-button
+            type="button"
+            icon="pi pi-check"
+            (onClick)="applyFill()"
+            label="Appliquer"
+            i18n-label="@@pt_apply"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explain -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@pt_complete_def_sub">
+          Dans un tableau proportionnel, le ratio entre les deux lignes est constant.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="k=\dfrac{r2}{r1}\quad;\quad r2=k\cdot r1\quad;\quad r1=\dfrac{r2}{k}"
+          i18n-latex="@@pt_complete_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@pt_complete_step1">
+            Trouvez une colonne complète et calculez <strong>k = r2 / r1</strong>.
+          </li>
+          <li i18n="@@pt_complete_step2">
+            Vérifiez que le même <strong>k</strong> marche sur les autres colonnes complètes.
+          </li>
+          <li i18n="@@pt_complete_step3">
+            Calculez la case vide avec <strong>r2 = k · r1</strong> (ou <strong>r1 = r2 / k</strong>).
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <a routerLink="/categories/math/rule-of-three" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

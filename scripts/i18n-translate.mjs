@@ -4,6 +4,9 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 
+// =====================================================================================
+// Config
+// =====================================================================================
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) {
   console.error("❌ OPENAI_API_KEY missing (local only)");
@@ -15,330 +18,514 @@ const TODO_DIR = path.resolve("dist/i18n/todo");
 // Cache persistant (survit aux re-run de i18n:aggregate)
 const CACHE_DIR = path.resolve("dist/i18n/cache");
 
+// OpenAI
 const MODEL = "gpt-4o-mini";
 const TEMPERATURE = 0;
 
 // Au lieu d'1 requête par string => 1 requête par batch
 const BATCH_SIZE = 25;
 
-// Concurrence par locale : avec le batching, inutile de monter haut.
-// Mets 1 pour le plus stable (surtout si tu as beaucoup de locales).
+// Concurrence par locale
 const MAX_CONCURRENT_BATCHES = 1;
 
 // Retry/backoff
 const MAX_RETRIES = 8;
-const BASE_DELAY_MS = 600; // base backoff
+const BASE_DELAY_MS = 600;
 const MAX_DELAY_MS = 30_000;
 
-// Sécurité prompt: évite les réponses énormes
-const MAX_INPUT_CHARS_PER_ITEM = 1200;
+// Timeout explicite
+const REQUEST_TIMEOUT_MS = 60_000;
 
+// Si un batch renvoie un tableau de taille différente, on retente "strict" N fois
+const MAX_MISMATCH_RETRIES = 2;
+
+// Dernier recours : si toujours mismatch, on traduit item par item ce batch
+const FALLBACK_ITEM_BY_ITEM = true;
+
+// Prompt
+const SYSTEM_PROMPT = `
+You are a professional software localization translator.
+
+Rules:
+- Translate naturally for the target locale.
+- Preserve placeholders, variables, HTML tags, and ICU-like syntax exactly.
+- Do not add extra explanations, punctuation, or quotes.
+- Return ONLY valid JSON according to the required format.
+`.trim();
+
+// =====================================================================================
+// Helpers
+// =====================================================================================
 function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
+}
+
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function listTodoFiles() {
+  if (!fs.existsSync(TODO_DIR)) return [];
+  return fs
+    .readdirSync(TODO_DIR)
+    .filter((f) => f.endsWith(".todo.json"))
+    .map((f) => path.join(TODO_DIR, f));
+}
+
+function readJson(p) {
+  return JSON.parse(fs.readFileSync(p, "utf8"));
+}
+
+function writeJson(p, obj) {
+  fs.writeFileSync(p, JSON.stringify(obj, null, 2) + "\n", "utf8");
 }
 
 function clamp(n, min, max) {
   return Math.max(min, Math.min(max, n));
 }
 
-function jitter(ms) {
-  // +/- 20%
-  const j = ms * 0.2;
-  return ms + (Math.random() * 2 - 1) * j;
+function isNonEmptyString(v) {
+  return typeof v === "string" && v.trim().length > 0;
 }
 
-// -------------------------
-// Helpers items
-// -------------------------
-function needsTranslation(item) {
-  return (
-    !item.translatedTarget ||
-    (typeof item.translatedTarget === "string" && item.translatedTarget.trim() === "")
-  );
-}
+// --- Extract plain text from aggregate format (best effort) ---
+function extractPlainText(sourceNode) {
+  if (!sourceNode) return "";
 
-function extractPlainText(source) {
-  if (typeof source === "string") return source;
-  if (source && typeof source === "object") return source["#text"] ?? "";
+  if (typeof sourceNode === "string") return sourceNode;
+
+  if (typeof sourceNode === "object" && typeof sourceNode["#text"] === "string") {
+    return sourceNode["#text"];
+  }
+
+  if (typeof sourceNode === "object") {
+    let out = "";
+    for (const [k, v] of Object.entries(sourceNode)) {
+      if (k === "#text" && typeof v === "string") out += v;
+      else if (Array.isArray(v)) for (const it of v) out += extractPlainText(it);
+      else if (typeof v === "object" && v) out += extractPlainText(v);
+    }
+    return out;
+  }
+
   return "";
 }
 
-function applyTranslation(item, translatedText) {
-  if (typeof item.source === "string") {
-    item.translatedTarget = translatedText;
-    return;
+// --- FNV-1a 32-bit for cache invalidation ---
+function hashString(s) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
   }
-  if (item.source && typeof item.source === "object") {
-    item.translatedTarget = { ...item.source, "#text": translatedText };
-  }
+  return (h >>> 0).toString(16);
 }
 
-function ensureDir(p) {
-  if (!fs.existsSync(p)) fs.mkdirSync(p, { recursive: true });
+function getSourceHash(item) {
+  const src = extractPlainText(item?.source).trim();
+  return hashString(src);
 }
 
+function needsTranslation(item) {
+  // needs-review => retraduction forcée
+  if (item?.status === "needs-review") return true;
+  return !isNonEmptyString(item?.translatedTarget);
+}
+
+function applyTranslation(item, text) {
+  item.translatedTarget = text;
+}
+
+function getLocaleFromTodoFile(todoFilePath) {
+  const base = path.basename(todoFilePath);
+  const m = base.match(/^(.+)\.todo\.json$/);
+  return m ? m[1] : base;
+}
+
+// =====================================================================================
+// Cache: id -> { text, srcHash } (migration douce: accepte aussi id -> "text")
+// =====================================================================================
 function cachePathForLocale(locale) {
-  return path.join(CACHE_DIR, `${locale}.json`);
+  ensureDir(CACHE_DIR);
+  return path.join(CACHE_DIR, `${locale}.cache.json`);
 }
 
 function loadCache(locale) {
-  ensureDir(CACHE_DIR);
   const p = cachePathForLocale(locale);
   if (!fs.existsSync(p)) return {};
   try {
-    return JSON.parse(fs.readFileSync(p, "utf8")) ?? {};
+    return readJson(p);
   } catch {
     return {};
   }
 }
 
 function saveCache(locale, cacheObj) {
-  ensureDir(CACHE_DIR);
-  fs.writeFileSync(cachePathForLocale(locale), JSON.stringify(cacheObj, null, 2), "utf8");
+  const p = cachePathForLocale(locale);
+  writeJson(p, cacheObj);
 }
 
-// -------------------------
-// OpenAI call (batch)
-// -------------------------
-async function translateBatch(batch, sourceLang, targetLang) {
-  // batch: [{ id, text }]
-  // On demande un JSON strict et on valide.
-  const prompt = [
-    `Translate from ${sourceLang} to ${targetLang}.`,
-    "",
-    "Rules:",
-    "- keep exact meaning",
-    "- neutral UX / SEO tone",
-    "- short sentences when possible",
-    "- keep punctuation and numbers",
-    "- do NOT add explanations",
-    "- Output MUST be valid JSON only",
-    "",
-    "Return format:",
-    `{ "translations": [ { "id": "…", "text": "…" } ] }`,
-    "",
-    "Items:"
-  ].join("\n");
+function readCacheEntry(cacheObj, id) {
+  const entry = cacheObj?.[id];
+  if (!entry) return null;
 
-  const body = {
-    model: MODEL,
-    temperature: TEMPERATURE,
-    messages: [
-      { role: "system", content: "You are a professional software localization translator." },
-      {
-        role: "user",
-        content:
-          prompt +
-          "\n" +
-          JSON.stringify(
-            {
-              items: batch.map((x) => ({ id: x.id, text: x.text })),
-            },
-            null,
-            2
-          ),
-      },
-    ],
-  };
+  if (typeof entry === "string") return { text: entry, srcHash: null, legacy: true };
 
-  let attempt = 0;
+  if (typeof entry === "object" && entry && typeof entry.text === "string") {
+    return { text: entry.text, srcHash: entry.srcHash ?? null, legacy: false };
+  }
 
-  while (true) {
-    attempt++;
+  return null;
+}
 
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+function writeCacheEntry(cacheObj, id, text, srcHash) {
+  cacheObj[id] = { text, srcHash };
+}
+
+// =====================================================================================
+// JSON robustness
+// =====================================================================================
+function stripJsonFences(s) {
+  return String(s ?? "")
+    .replace(/^\s*```json\s*/i, "")
+    .replace(/^\s*```\s*/i, "")
+    .replace(/\s*```\s*$/i, "")
+    .trim();
+}
+
+// =====================================================================================
+// OpenAI low-level call
+// =====================================================================================
+async function openAiChatCompletions(body) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), REQUEST_TIMEOUT_MS);
+
+  let res;
+  try {
+    res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),
+      signal: ctrl.signal,
     });
+  } finally {
+    clearTimeout(timer);
+  }
 
-    if (res.ok) {
-      const json = await res.json();
-      const content = (json?.choices?.[0]?.message?.content ?? "").trim();
+  if (!res.ok) {
+    const txt = await res.text().catch(() => "");
+    throw new Error(`OpenAI HTTP ${res.status}: ${txt}`);
+  }
 
-      let parsed;
-      try {
-        parsed = JSON.parse(content);
-      } catch (e) {
-        // Réponse non-JSON => on retente (ça arrive)
-        if (attempt >= MAX_RETRIES) {
-          throw new Error(`Non-JSON response after ${attempt} attempts: ${content.slice(0, 500)}`);
-        }
-        const delay = clamp(jitter(BASE_DELAY_MS * 2 ** (attempt - 1)), BASE_DELAY_MS, MAX_DELAY_MS);
-        await sleep(delay);
-        continue;
-      }
+  return res.json();
+}
 
-      const arr = parsed?.translations;
-      if (!Array.isArray(arr)) {
-        if (attempt >= MAX_RETRIES) {
-          throw new Error(`Invalid JSON schema: missing translations[]`);
-        }
-        const delay = clamp(jitter(BASE_DELAY_MS * 2 ** (attempt - 1)), BASE_DELAY_MS, MAX_DELAY_MS);
-        await sleep(delay);
-        continue;
-      }
+function parseItemsArrayFromContent(content) {
+  const raw = stripJsonFences(content);
 
-      // Map id -> text
-      const map = {};
-      for (const t of arr) {
-        if (t && typeof t.id === "string" && typeof t.text === "string") {
-          map[t.id] = t.text;
-        }
-      }
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    const excerpt = raw.slice(0, 200).replace(/\s+/g, " ");
+    throw new Error(`OpenAI: invalid JSON returned (excerpt: "${excerpt}...")`);
+  }
 
-      return map;
+  const arr = parsed?.items;
+  if (!Array.isArray(arr)) throw new Error("OpenAI: expected {items:[...]}");
+
+  return arr.map((x) => String(x ?? ""));
+}
+
+// =====================================================================================
+// Translation calls
+// =====================================================================================
+function buildBatchPrompt({ locale, items, strict }) {
+  const rules = strict
+    ? `
+Return EXACTLY ${items.length} translations.
+The JSON must be: {"items":[...]} with length = ${items.length}.
+Do NOT omit any item. Do NOT merge items. Do NOT add extra fields.
+If unsure, still output an empty string for that position.
+`.trim()
+    : `
+Return a JSON object: {"items":[ "t1", "t2", ... ]} in the SAME ORDER.
+`.trim();
+
+  return `
+Target locale: ${locale}
+
+${rules}
+
+Items (translate each line separately, keep order):
+${items.map((it, idx) => `${idx + 1}) ${it.sourceText}`).join("\n")}
+`.trim();
+}
+
+async function translateBatchOpenAI({ locale, items, strict = false }) {
+  const prompt = buildBatchPrompt({ locale, items, strict });
+
+  const body = {
+    model: MODEL,
+    temperature: TEMPERATURE,
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: prompt },
+    ],
+    response_format: { type: "json_object" },
+  };
+
+  const json = await openAiChatCompletions(body);
+  const content = json?.choices?.[0]?.message?.content;
+  if (!content) throw new Error("OpenAI: empty content");
+
+  return parseItemsArrayFromContent(content);
+}
+
+// fallback 1-by-1
+async function translateOneOpenAI({ locale, sourceText }) {
+  const prompt = `
+Target locale: ${locale}
+
+Translate this text.
+Return JSON: {"items":["..."]} (one-element array).
+
+Text:
+${sourceText}
+`.trim();
+
+  const body = {
+    model: MODEL,
+    temperature: TEMPERATURE,
+    messages: [
+      { role: "system", content: SYSTEM_PROMPT },
+      { role: "user", content: prompt },
+    ],
+    response_format: { type: "json_object" },
+  };
+
+  const json = await openAiChatCompletions(body);
+  const content = json?.choices?.[0]?.message?.content;
+  if (!content) throw new Error("OpenAI: empty content");
+
+  const arr = parseItemsArrayFromContent(content);
+  return String(arr?.[0] ?? "");
+}
+
+// =====================================================================================
+// Runner utils
+// =====================================================================================
+function chunk(arr, size) {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+}
+
+async function withRetries(fn, { maxRetries }) {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await fn();
+    } catch (e) {
+      attempt++;
+      const msg = String(e?.message ?? e);
+
+      if (attempt > maxRetries) throw e;
+
+      const delay = clamp(BASE_DELAY_MS * Math.pow(2, attempt - 1), BASE_DELAY_MS, MAX_DELAY_MS);
+      console.warn(`⚠️ retry ${attempt}/${maxRetries} after ${delay}ms: ${msg}`);
+      await sleep(delay);
     }
+  }
+}
 
-    // Not ok: retry with backoff
-    const status = res.status;
-    const errText = await res.text();
+async function translateBatchWithMismatchHandling({ locale, payloadItems }) {
+  const expected = payloadItems.length;
 
-    // Respect Retry-After if present
-    const ra = res.headers.get("retry-after");
-    const retryAfterMs = ra ? clamp(Number(ra) * 1000, 0, MAX_DELAY_MS) : null;
+  // 1) normal try (with usual retries)
+  let results = await withRetries(
+    () => translateBatchOpenAI({ locale, items: payloadItems, strict: false }),
+    { maxRetries: MAX_RETRIES }
+  );
 
-    const isRetryable =
-      status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+  if (results.length === expected) return results;
 
-    if (!isRetryable || attempt >= MAX_RETRIES) {
-      throw new Error(`OpenAI error ${status}: ${errText}`);
-    }
-
-    const backoff = clamp(
-      jitter(BASE_DELAY_MS * 2 ** (attempt - 1)),
-      BASE_DELAY_MS,
-      MAX_DELAY_MS
+  // 2) strict retries (no need to redo MAX_RETRIES network-wise; we do a small number)
+  for (let i = 1; i <= MAX_MISMATCH_RETRIES; i++) {
+    console.warn(
+      `⚠️ ${locale}: batch size mismatch (${results.length} vs ${expected}) -> strict retry ${i}/${MAX_MISMATCH_RETRIES}`
     );
-    const delay = retryAfterMs != null ? Math.max(retryAfterMs, backoff) : backoff;
 
-    console.warn(`⚠️ OpenAI ${status} (attempt ${attempt}/${MAX_RETRIES}) -> wait ${Math.round(delay)}ms`);
-    await sleep(delay);
+    results = await withRetries(
+      () => translateBatchOpenAI({ locale, items: payloadItems, strict: true }),
+      { maxRetries: MAX_RETRIES }
+    );
+
+    if (results.length === expected) return results;
   }
-}
 
-// -------------------------
-// Simple pool for batches (per locale)
-// -------------------------
-async function runPool(tasks, limit) {
-  const executing = [];
-  for (const task of tasks) {
-    const p = task().finally(() => {
-      executing.splice(executing.indexOf(p), 1);
-    });
-    executing.push(p);
-    if (executing.length >= limit) await Promise.race(executing);
+  // 3) fallback item-by-item for this batch only
+  if (!FALLBACK_ITEM_BY_ITEM) {
+    throw new Error(`OpenAI: batch size mismatch (${results.length} vs ${expected})`);
   }
-  await Promise.all(executing);
+
+  console.warn(`🛟 ${locale}: fallback item-by-item for this batch (${expected} items)`);
+
+  const out = [];
+  for (let i = 0; i < payloadItems.length; i++) {
+    const one = payloadItems[i];
+    const text = await withRetries(
+      () => translateOneOpenAI({ locale, sourceText: one.sourceText }),
+      { maxRetries: MAX_RETRIES }
+    );
+    out.push(text);
+  }
+
+  return out;
 }
 
-// -------------------------
-// Main
-// -------------------------
-if (!fs.existsSync(TODO_DIR)) {
-  console.error(`❌ Missing ${TODO_DIR} (run i18n:aggregate first)`);
-  process.exit(1);
-}
+// =====================================================================================
+// Main per-locale translation
+// =====================================================================================
+async function translateLocale(todoFilePath) {
+  const locale = getLocaleFromTodoFile(todoFilePath);
+  const todo = readJson(todoFilePath);
 
-const files = fs.readdirSync(TODO_DIR).filter((f) => f.endsWith(".todo.json"));
+  const items = Array.isArray(todo.items) ? todo.items : [];
+  const total = items.length;
 
-for (const file of files) {
-  const filePath = path.join(TODO_DIR, file);
-  const payload = JSON.parse(fs.readFileSync(filePath, "utf8"));
+  console.log(`\n🌍 Translating ${locale} (${total} items)`);
 
-  const { locale, sourceLocale, items } = payload;
-  if (!locale || !Array.isArray(items)) continue;
-
-  console.log(`\n🌍 Translating ${locale} (${items.length} items)`);
-
-  // 1) Load persistent cache
   const cache = loadCache(locale);
 
-  // 2) Pre-fill from cache to avoid re-requests even if todo was re-generated
+  // Prefill cache (only if not needs-review, and hash matches if present)
   let cacheHits = 0;
+  let cacheSkipsHashMismatch = 0;
+
   for (const it of items) {
     if (!needsTranslation(it)) continue;
+    if (it.status === "needs-review") continue;
+
     const id = it.id;
-    if (id && cache[id]) {
-      applyTranslation(it, cache[id]);
-      cacheHits++;
+    if (!id) continue;
+
+    const entry = readCacheEntry(cache, id);
+    if (!entry) continue;
+
+    const currentHash = getSourceHash(it);
+
+    if (entry.srcHash && entry.srcHash !== currentHash) {
+      cacheSkipsHashMismatch++;
+      continue;
+    }
+
+    applyTranslation(it, entry.text);
+    cacheHits++;
+
+    if (entry.legacy) {
+      writeCacheEntry(cache, id, entry.text, currentHash);
     }
   }
-  if (cacheHits > 0) {
-    console.log(`🧠 ${locale}: restored ${cacheHits} translations from cache`);
-    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), "utf8");
+
+  console.log(
+    `🧠 ${locale}: restored ${cacheHits} translations from cache` +
+    (cacheSkipsHashMismatch ? ` (skipped ${cacheSkipsHashMismatch} hash mismatch)` : "")
+  );
+
+  const toTranslate = items.filter(needsTranslation);
+
+  if (toTranslate.length === 0) {
+    saveCache(locale, cache);
+    console.log(`✅ ${locale} done (0 translated)`);
+    return;
   }
 
-  // Build list of remaining items to translate
-  const remaining = items
-    .filter(needsTranslation)
-    .map((it) => {
-      const src = extractPlainText(it.source).trim();
-      return { it, id: it.id, src };
-    })
-    .filter((x) => x.src && x.id);
+  const batches = chunk(toTranslate, BATCH_SIZE);
 
-  const totalToTranslate = remaining.length;
-  if (totalToTranslate === 0) {
-    console.log(`✅ ${locale}: nothing to translate`);
-    continue;
-  }
+  let translatedApplied = 0;
+  let translatedEmpty = 0;
 
-  // Chunk into batches
-  const batches = [];
-  for (let i = 0; i < remaining.length; i += BATCH_SIZE) {
-    const slice = remaining.slice(i, i + BATCH_SIZE).map((x) => ({
-      id: x.id,
-      text: x.src.slice(0, MAX_INPUT_CHARS_PER_ITEM),
-      ref: x.it,
+  async function runBatch(batchIndex) {
+    const batch = batches[batchIndex];
+
+    const payloadItems = batch.map((it) => ({
+      id: it.id,
+      sourceText: extractPlainText(it.source),
     }));
-    batches.push(slice);
-  }
 
-  let doneCount = 0;
-  const totalBatches = batches.length;
-
-  const tasks = batches.map((batch, batchIndex) => async () => {
-    const start = doneCount + 1;
-    const end = doneCount + batch.length;
+    const start = batchIndex * BATCH_SIZE + 1;
+    const end = start + batch.length - 1;
 
     console.log(
-      `📝 ${locale} - Traduction ${start}/${totalToTranslate} → ${end}/${totalToTranslate} (batch ${
-        batchIndex + 1
-      }/${totalBatches})`
+      `📝 ${locale} - Traduction ${start}/${toTranslate.length} → ${end}/${toTranslate.length} (batch ${batchIndex + 1}/${batches.length})`
     );
 
-    const map = await translateBatch(
-      batch.map((b) => ({ id: b.id, text: b.text })),
-      sourceLocale,
-      locale
-    );
+    const results = await translateBatchWithMismatchHandling({ locale, payloadItems });
 
-    // Apply + cache
-    for (const b of batch) {
-      const tr = map[b.id];
-      if (typeof tr === "string" && tr.trim()) {
-        applyTranslation(b.ref, tr.trim());
-        cache[b.id] = tr.trim();
+    let appliedThisBatch = 0;
+    let emptyThisBatch = 0;
+
+    // APPLY BY INDEX
+    for (let i = 0; i < batch.length; i++) {
+      const it = batch[i];
+      const t = String(results[i] ?? "").trim();
+
+      if (!t) {
+        emptyThisBatch++;
+        translatedEmpty++;
+        continue;
       }
+
+      applyTranslation(it, t);
+      appliedThisBatch++;
+      translatedApplied++;
+
+      const srcHash = getSourceHash(it);
+      writeCacheEntry(cache, it.id, t, srcHash);
     }
 
-    doneCount += batch.length;
+    console.log(
+      `   ↳ received: ${results.length}, applied: ${appliedThisBatch}, empty: ${emptyThisBatch}`
+    );
+  }
 
-    // Checkpoint after every batch (crash-safe)
-    fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), "utf8");
-    saveCache(locale, cache);
+  // Concurrency pool
+  let nextBatch = 0;
+  const workers = Array.from({ length: MAX_CONCURRENT_BATCHES }, async () => {
+    while (nextBatch < batches.length) {
+      const idx = nextBatch++;
+      await runBatch(idx);
+    }
   });
 
-  await runPool(tasks, MAX_CONCURRENT_BATCHES);
+  await Promise.all(workers);
 
-  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), "utf8");
+  todo.items = items;
+  writeJson(todoFilePath, todo);
   saveCache(locale, cache);
 
-  console.log(`✅ ${locale} done (${totalToTranslate} translated)`);
+  console.log(`✅ ${locale} done (${translatedApplied} translated, ${translatedEmpty} empty)`);
 }
 
-console.log("\n🎉 i18n auto-translation finished");
+// =====================================================================================
+// Entrypoint
+// =====================================================================================
+async function main() {
+  const files = listTodoFiles();
+  if (files.length === 0) {
+    console.log("No todo files found.");
+    return;
+  }
+
+  for (const f of files) {
+    await translateLocale(f);
+  }
+}
+
+main().catch((e) => {
+  console.error("❌ i18n-translate failed:", e);
+  process.exit(1);
+});

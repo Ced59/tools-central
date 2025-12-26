@@ -1,19 +1,30 @@
+// scripts/i18n-aggregate.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { XMLParser } from "fast-xml-parser";
 
-const projectName = "tools-central";
-const angularJson = JSON.parse(fs.readFileSync(path.resolve("angular.json"), "utf8"));
 const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@_" });
+
+const projectName = "tools-central";
+const LOCALE_DIR = path.resolve("src/locale");
+const OUT_DIR = path.resolve("dist/i18n/todo");
+
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+}
+
+function readXml(filePath) {
+  const xml = fs.readFileSync(filePath, "utf8");
+  return parser.parse(xml);
+}
+
+function writeJson(filePath, obj) {
+  fs.writeFileSync(filePath, JSON.stringify(obj, null, 2) + "\n", "utf8");
+}
 
 function normalizeArray(v) {
   if (!v) return [];
   return Array.isArray(v) ? v : [v];
-}
-
-function loadXlf(filePath) {
-  const xml = fs.readFileSync(filePath, "utf8");
-  return parser.parse(xml);
 }
 
 function getFileNode(xlfObj) {
@@ -22,90 +33,132 @@ function getFileNode(xlfObj) {
   return file;
 }
 
+function getUnits(fileNode) {
+  return normalizeArray(fileNode?.unit);
+}
+
+function getUnitId(unit) {
+  return unit?.["@_id"] || unit?.id || "";
+}
+
+function getSourceValue(unit) {
+  const src = unit?.segment?.source;
+  if (!src) return "";
+
+  if (typeof src === "string") return src;
+
+  if (typeof src === "object") {
+    // keep object for placeholders if present
+    if (typeof src["#text"] === "string") return { "#text": src["#text"] };
+    return src;
+  }
+
+  return "";
+}
+
 function getTargetText(unit) {
   const t = unit?.segment?.target;
   if (!t) return "";
+
   if (typeof t === "string") return t;
-  return t["#text"] ?? "";
+
+  if (typeof t === "object") {
+    if (typeof t["#text"] === "string") return t["#text"];
+    return t["#text"] ?? "";
+  }
+
+  return "";
 }
 
 function getTargetState(unit) {
   const t = unit?.segment?.target;
-  if (!t || typeof t === "string") return "";
-  return t["@_state"] ?? "";
+  if (!t || typeof t !== "object") return "";
+  return t["@_state"] || "";
 }
 
-function getSourceValue(unit) {
-  // ✅ IMPORTANT: keep as string OR object (with ph / text / etc.)
-  return unit?.segment?.source;
+function isTodoTarget(targetText) {
+  return targetText === "TODO";
 }
 
-// ---- config
-const project = angularJson.projects?.[projectName];
-if (!project?.i18n?.sourceLocale || !project?.i18n?.locales) {
-  console.error(`[i18n-aggregate] missing i18n config in angular.json for "${projectName}"`);
-  process.exit(1);
+function listLocaleXlfs() {
+  if (!fs.existsSync(LOCALE_DIR)) return [];
+  return fs
+    .readdirSync(LOCALE_DIR)
+    .filter((f) => f.startsWith("messages.") && f.endsWith(".xlf"))
+    .map((f) => path.join(LOCALE_DIR, f));
 }
 
-const sourceLocale = project.i18n.sourceLocale;
-const targetLocales = Object.keys(project.i18n.locales);
+function getLocaleFromXlfPath(p) {
+  const base = path.basename(p);
+  const m = base.match(/^messages\.(.+)\.xlf$/);
+  return m ? m[1] : base;
+}
 
-const localeDir = path.resolve("src/locale");
+function main() {
+  ensureDir(OUT_DIR);
 
-// ✅ Nouveau dossier dédié par-locale
-const outDir = path.resolve("dist/i18n/todo");
-fs.mkdirSync(outDir, { recursive: true });
-
-let total = 0;
-
-for (const locale of targetLocales) {
-  const filePath = path.join(localeDir, `messages.${locale}.xlf`);
-  if (!fs.existsSync(filePath)) {
-    console.warn(`[i18n-aggregate] skip missing ${filePath}`);
-    continue;
+  const xlfFiles = listLocaleXlfs();
+  if (xlfFiles.length === 0) {
+    console.log("[i18n-aggregate] no locale XLF files found.");
+    return;
   }
 
-  const xlf = loadXlf(filePath);
-  const file = getFileNode(xlf);
-  const units = normalizeArray(file.unit);
+  let totalOut = 0;
 
-  const items = [];
+  for (const xlfPath of xlfFiles) {
+    const locale = getLocaleFromXlfPath(xlfPath);
 
-  for (const u of units) {
-    const id = u?.["@_id"];
-    if (!id) continue;
+    const xlfObj = readXml(xlfPath);
+    const fileNode = getFileNode(xlfObj);
+    const units = getUnits(fileNode);
 
-    const state = getTargetState(u);
-    const targetText = getTargetText(u);
-    const isTodo = (targetText || "").trim() === "TODO";
-    const isFlagged = state === "new" || state === "needs-review";
+    const outItems = [];
 
-    if (!isTodo && !isFlagged) continue;
+    for (const u of units) {
+      const id = getUnitId(u);
+      if (!id) continue;
 
-    items.push({
-      id,
-      status: isTodo && !isFlagged ? "new" : (state || "new"),
-      source: getSourceValue(u),           // ✅ object preserved
-      currentTarget: targetText,
-      translatedTarget: ""                 // to be filled
+      const targetText = getTargetText(u);
+      const state = getTargetState(u);
+
+      const isTodo = isTodoTarget(targetText);
+      const isFlagged = state === "new" || state === "needs-review";
+
+      // Export if missing (TODO) OR flagged (new/needs-review)
+      if (!isTodo && !isFlagged) continue;
+
+      const currentTarget =
+        targetText && targetText.trim().length > 0 ? targetText : "TODO";
+
+      // ✅ BONUS:
+      // Pre-fill translatedTarget with currentTarget (if present) for easier review/diff.
+      // IMPORTANT: i18n-translate still forces retranslation for needs-review.
+      const translatedTarget =
+        currentTarget !== "TODO" ? currentTarget : "";
+
+      outItems.push({
+        id,
+        status: isTodo && !isFlagged ? "new" : (state || "new"),
+        source: getSourceValue(u),
+        currentTarget,
+        translatedTarget,
+      });
+    }
+
+    const outPath = path.join(OUT_DIR, `${locale}.todo.json`);
+    writeJson(outPath, {
+      generatedAt: new Date().toISOString(),
+      projectName,
+      sourceLocale: "fr",
+      locale,
+      items: outItems,
     });
+
+    console.log(`[i18n-aggregate] ${locale}: ${outItems.length} items -> ${outPath}`);
+    totalOut += outItems.length;
   }
 
-  items.sort((a, b) => a.id.localeCompare(b.id));
-
-  const payload = {
-    generatedAt: new Date().toISOString(),
-    projectName,
-    sourceLocale,
-    locale,           // ✅ important: on sait quel fichier c’est
-    items
-  };
-
-  const outFile = path.join(outDir, `${locale}.todo.json`);
-  fs.writeFileSync(outFile, JSON.stringify(payload, null, 2), "utf8");
-
-  total += items.length;
-  console.log(`[i18n-aggregate] ${locale}: ${items.length} items -> ${outFile}`);
+  console.log(`[i18n-aggregate] done (${totalOut} total)`);
 }
 
-console.log(`[i18n-aggregate] done (${total} total)`);
+main();

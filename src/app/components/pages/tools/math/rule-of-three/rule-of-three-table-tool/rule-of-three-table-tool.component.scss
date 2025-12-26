@@ -1,0 +1,50 @@
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.calc-form;
+@include tp.results;
+@include tp.examples;
+@include tp.explain;
+@include tp.back;
+
+.calc-form-rot3-table {
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr 140px;
+  }
+}
+
+.prop-table {
+  display: grid;
+  gap: 0.75rem;
+
+  .row {
+    display: grid;
+    grid-template-columns: auto 1fr auto 1fr;
+    gap: 0.75rem;
+    align-items: center;
+  }
+
+  .cell {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    background: var(--surface-2);
+
+    &.label {
+      font-weight: 600;
+      text-align: center;
+    }
+
+    &.value {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    &.highlight {
+      background: var(--accent-soft);
+      font-weight: 700;
+    }
+  }
+}

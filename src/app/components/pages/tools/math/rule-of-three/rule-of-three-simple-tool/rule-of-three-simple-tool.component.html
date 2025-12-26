@@ -1,0 +1,217 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-calculator"></i>
+        </div>
+
+        <h1 i18n="@@rot3_title">Règle de trois simple</h1>
+        <p class="hero-subtitle" i18n="@@rot3_subtitle">
+          Calculer une valeur manquante en proportionnalité directe.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container tool-content">
+
+    <!-- Card: Calculator -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form calc-form-rot3">
+        <div class="field field-main">
+          <label for="a" i18n="@@rot3_a_label">a (référence)</label>
+          <p-inputNumber
+            inputId="a"
+            [formControl]="form.controls.a"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="10"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@rot3_a_hint">
+            a doit être non nul.
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="b" i18n="@@rot3_b_label">b (correspondant à a)</label>
+          <p-inputNumber
+            inputId="b"
+            [formControl]="form.controls.b"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="25"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@rot3_b_hint">
+            Exemple : a unités → b €
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="c" i18n="@@rot3_c_label">c (nouvelle référence)</label>
+          <p-inputNumber
+            inputId="c"
+            [formControl]="form.controls.c"
+            [minFractionDigits]="0"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="4"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@rot3_c_hint">
+            On calcule x correspondant à c.
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Results -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@rot3_x_label">x (valeur cherchée)</span>
+            <span class="result-value">{{ fmt(x()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@rot3_ratio_label">ratio (b / a)</span>
+            <span class="result-value">{{ fmt(ratio()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box" *ngIf="aIsZero()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span i18n="@@rot3_a_zero_note">
+            Impossible de calculer : a = 0 (division par zéro).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">
+            {{ ex.label }}
+          </span>
+
+          <span class="ex-values">
+            a={{ ex.a }} • b={{ ex.b }} • c={{ ex.c }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explain -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+        <p i18n="@@rot3_definition_sub">
+          En proportionnalité directe, le rapport b/a est constant.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\dfrac{b}{a}=\dfrac{x}{c}\quad\Rightarrow\quad x=\dfrac{b\times c}{a}"
+          i18n-latex="@@rot3_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@rot3_step1">
+            Écrivez l’égalité des rapports : <strong>b/a = x/c</strong>.
+          </li>
+          <li i18n="@@rot3_step2">
+            Isolez <strong>x</strong> : <strong>x = (b × c) / a</strong>.
+          </li>
+          <li i18n="@@rot3_step3">
+            Vérifiez que <strong>a ≠ 0</strong>.
+          </li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@rot3_note">
+            Exemple : a=10 correspond à b=25, alors c=4 correspond à x=10.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <!-- Ajuste la route selon ton groupe/catégorie -->
+      <a routerLink="/categories/math/rule-of-three" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

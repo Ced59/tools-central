@@ -1,0 +1,209 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-question-circle"></i>
+        </div>
+
+        <h1 i18n="@@missing_value_title">Valeur manquante</h1>
+        <p class="hero-subtitle" i18n="@@missing_value_subtitle">
+          Trouver rapidement la valeur inconnue (directe).
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container tool-content">
+
+    <!-- Calculator -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form calc-form-missing">
+        <div class="field field-main">
+          <label for="a" i18n="@@missing_value_a_label">a</label>
+          <p-inputNumber
+            inputId="a"
+            [formControl]="form.controls.a"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="10"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@missing_value_a_hint">
+            Valeur connue (a ≠ 0)
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="b" i18n="@@missing_value_b_label">b</label>
+          <p-inputNumber
+            inputId="b"
+            [formControl]="form.controls.b"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="25"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@missing_value_b_hint">
+            Correspondant à a
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="c" i18n="@@missing_value_c_label">c</label>
+          <p-inputNumber
+            inputId="c"
+            [formControl]="form.controls.c"
+            [maxFractionDigits]="6"
+            [useGrouping]="true"
+            placeholder="4"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@missing_value_c_hint">
+            Nouvelle valeur
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            placeholder="2"
+            styleClass="input-full"
+          />
+          <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Results -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@tool_results">Résultats</h3>
+        </div>
+
+        <div class="results-grid">
+          <div class="result-item highlight">
+            <span class="result-label" i18n="@@missing_value_x_label">x</span>
+            <span class="result-value">{{ fmt(x()) }}</span>
+          </div>
+
+          <div class="result-item">
+            <span class="result-label" i18n="@@missing_value_ratio_label">ratio (b / a)</span>
+            <span class="result-value">{{ fmt(ratio()) }}</span>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            type="button"
+            severity="secondary"
+            [text]="true"
+            icon="pi pi-refresh"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box" *ngIf="aIsZero()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span i18n="@@missing_value_a_zero_note">
+            a = 0 : division par zéro (impossible).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">
+            a={{ ex.a }} • b={{ ex.b }} • c={{ ex.c }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explain -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Définition & formule</h2>
+        <p i18n="@@missing_value_definition_sub">
+          Proportion directe : le rapport b/a est constant.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\dfrac{b}{a}=\dfrac{x}{c}\quad\Rightarrow\quad x=\dfrac{b\times c}{a}"
+          i18n-latex="@@missing_value_formula_katex"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@missing_value_step1">
+            Calculez le ratio : <strong>b / a</strong>.
+          </li>
+          <li i18n="@@missing_value_step2">
+            Multipliez par <strong>c</strong> : <strong>x = (b/a) × c</strong>.
+          </li>
+          <li i18n="@@missing_value_step3">
+            Vérifiez que <strong>a ≠ 0</strong>.
+          </li>
+        </ol>
+
+        <div class="tip-box">
+          <i class="pi pi-lightbulb"></i>
+          <span i18n="@@missing_value_note">
+            Si c double, alors x double (proportion directe).
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <a routerLink="/categories/math/rule-of-three" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,202 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-table"></i>
+        </div>
+
+        <h1 i18n="@@rot3_table_title">Règle de trois avec tableau</h1>
+        <p class="hero-subtitle" i18n="@@rot3_table_subtitle">
+          Résoudre une proportionnalité à l’aide d’un tableau.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="container tool-content">
+
+    <!-- Calculator -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@tool_calc_title">Calculateur</h2>
+      </div>
+
+      <div class="calc-form calc-form-rot3-table">
+        <div class="field field-main">
+          <label for="a" i18n="@@rot3_table_a">a</label>
+          <p-inputNumber
+            inputId="a"
+            [formControl]="form.controls.a"
+            [maxFractionDigits]="6"
+            styleClass="input-full"
+            placeholder="10"
+          />
+          <small class="hint" i18n="@@rot3_table_a_hint">
+            Valeur connue (ligne 1)
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="b" i18n="@@rot3_table_b">b</label>
+          <p-inputNumber
+            inputId="b"
+            [formControl]="form.controls.b"
+            [maxFractionDigits]="6"
+            styleClass="input-full"
+            placeholder="25"
+          />
+          <small class="hint" i18n="@@rot3_table_b_hint">
+            Correspondant à a
+          </small>
+        </div>
+
+        <div class="field field-main">
+          <label for="c" i18n="@@rot3_table_c">c</label>
+          <p-inputNumber
+            inputId="c"
+            [formControl]="form.controls.c"
+            [maxFractionDigits]="6"
+            styleClass="input-full"
+            placeholder="4"
+          />
+          <small class="hint" i18n="@@rot3_table_c_hint">
+            Nouvelle valeur
+          </small>
+        </div>
+
+        <div class="field field-precision">
+          <label for="precision" i18n="@@tool_precision">Décimales</label>
+          <p-inputNumber
+            inputId="precision"
+            [formControl]="form.controls.precision"
+            [min]="0"
+            [max]="6"
+            [useGrouping]="false"
+            styleClass="input-full"
+          />
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Table -->
+      <div class="results-section">
+        <div class="results-header">
+          <h3 i18n="@@rot3_table_table_title">Tableau de proportionnalité</h3>
+        </div>
+
+        <div class="prop-table">
+          <div class="row">
+            <div class="cell label">a</div>
+            <div class="cell value">{{ fmt(a()) }}</div>
+            <div class="cell label">c</div>
+            <div class="cell value">{{ fmt(c()) }}</div>
+          </div>
+
+          <div class="row">
+            <div class="cell label">b</div>
+            <div class="cell value">{{ fmt(b()) }}</div>
+            <div class="cell label">x</div>
+            <div class="cell value highlight">{{ fmt(x()) }}</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Formula -->
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="steps"
+          [precision]="form.controls.precision.value ?? 2"
+          [steps]="formulaSteps()"
+          [activeStepId]="activeFormulaStepId()"
+          (stepChange)="onFormulaStepChanged($any($event))"
+        ></tc-math-formula>
+
+        <div class="actions">
+          <p-button
+            icon="pi pi-refresh"
+            severity="secondary"
+            [text]="true"
+            (onClick)="reset()"
+            label="Réinitialiser"
+            i18n-label="@@tool_reset"
+          />
+        </div>
+
+        <div class="tip-box" *ngIf="aIsZero()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span i18n="@@rot3_table_zero_note">
+            a = 0 : impossible de calculer le coefficient.
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Examples -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_examples">Exemples</h2>
+        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+      </div>
+
+      <div class="examples-grid">
+        <button
+          *ngFor="let ex of examples"
+          class="example-btn"
+          (click)="applyExample(ex)"
+        >
+          <span class="ex-label">{{ ex.label }}</span>
+          <span class="ex-values">
+            a={{ ex.a }} • b={{ ex.b }} • c={{ ex.c }}
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Explain -->
+    <div class="tool-card">
+      <div class="card-header centered">
+        <h2 i18n="@@tool_definition_title">Méthode par tableau</h2>
+        <p i18n="@@rot3_table_definition_sub">
+          Le coefficient de proportionnalité est identique sur chaque colonne.
+        </p>
+      </div>
+
+      <div class="explain-content">
+        <tc-math-formula
+          label="Formula"
+          i18n-label="@@tool_formula_title"
+          mode="katex"
+          latex="\dfrac{b}{a}=\dfrac{x}{c}\quad\Rightarrow\quad x=\dfrac{b\times c}{a}"
+          i18n-latex="@@rot3_table_formula"
+        ></tc-math-formula>
+
+        <ol class="steps-list">
+          <li i18n="@@rot3_table_step1">
+            Construire le tableau avec les valeurs connues.
+          </li>
+          <li i18n="@@rot3_table_step2">
+            Calculer le coefficient <strong>b / a</strong>.
+          </li>
+          <li i18n="@@rot3_table_step3">
+            Multiplier ce coefficient par <strong>c</strong>.
+          </li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <a routerLink="/categories/math/rule-of-three" class="back-link">
+        <i class="pi pi-arrow-left"></i>
+        <span i18n="@@back_to_tools">Retour aux outils</span>
+      </a>
+    </div>
+
+  </div>
+</section>

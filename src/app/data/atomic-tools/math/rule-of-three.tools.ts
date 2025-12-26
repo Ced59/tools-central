@@ -26,7 +26,11 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_rule_of_three_simple_desc:Calculer une valeur manquante en proportionnalité directe.`,
     icon: 'pi pi-calculator',
     route: routes.tool('math', 'rule-of-three', 'rule-of-three-simple'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/rule-of-three-simple-tool/rule-of-three-simple-tool.component'
+        ).then(m => m.RuleOfThreeSimpleToolComponent),
   },
   'rule-of-three-table': {
     category: 'math',
@@ -36,7 +40,11 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_rule_of_three_table_desc:Résoudre une règle de trois via un tableau de proportionnalité.`,
     icon: 'pi pi-table',
     route: routes.tool('math', 'rule-of-three', 'rule-of-three-table'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/rule-of-three-table-tool/rule-of-three-table-tool.component'
+        ).then(m => m.RuleOfThreeTableToolComponent),
   },
   'rule-of-three-missing-value': {
     category: 'math',
@@ -46,7 +54,11 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_rule_of_three_missing_value_desc:Trouver rapidement la valeur inconnue (directe).`,
     icon: 'pi pi-question',
     route: routes.tool('math', 'rule-of-three', 'rule-of-three-missing-value'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/rule-of-three-missing-value-tool/rule-of-three-missing-value-tool.component'
+        ).then(m => m.RuleOfThreeMissingValueToolComponent),
   },
 
   // Inverse
@@ -58,8 +70,13 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_rule_of_three_inverse_desc:Résoudre un problème de proportionnalité inverse.`,
     icon: 'pi pi-replay',
     route: routes.tool('math', 'rule-of-three', 'rule-of-three-inverse'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/rule-of-three-inverse-tool/rule-of-three-inverse-tool.component'
+        ).then(m => m.RuleOfThreeInverseToolComponent),
   },
+
 
   // Tableaux
   'proportion-table-complete': {
@@ -70,7 +87,11 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_proportion_table_complete_desc:Compléter les valeurs manquantes d’un tableau.`,
     icon: 'pi pi-table',
     route: routes.tool('math', 'rule-of-three', 'proportion-table-complete'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/proportional-table-complete-tool/proportional-table-complete-tool.component'
+        ).then(m => m.ProportionalTableCompleteToolComponent),
   },
   'proportion-table-check': {
     category: 'math',
@@ -80,6 +101,10 @@ export const RULE_OF_THREE_TOOLS = {
     description: $localize`:@@tool_proportion_table_check_desc:Tester si les lignes/colonnes sont proportionnelles.`,
     icon: 'pi pi-verified',
     route: routes.tool('math', 'rule-of-three', 'proportion-table-check'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/proportional-table-check-tool/proportional-table-check-tool.component'
+        ).then(m => m.ProportionalTableCheckToolComponent),
   },
 } as const satisfies Record<string, AtomicToolAny>;

@@ -1,0 +1,144 @@
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.results;
+@include tp.explain;
+@include tp.back;
+
+.table-toolbar {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  .toolbar-left, .toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .toolbar-label {
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+
+  .toolbar-value {
+    min-width: 2ch;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.prop-grid {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: .75rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 140px 1fr;
+  }
+
+  .row-head {
+    align-self: center;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .cell {
+    background: var(--surface-2);
+    border-radius: 12px;
+    padding: .5rem;
+  }
+}
+
+/* (2 lignes) : on place les cellules par colonnes */
+.prop-grid {
+  /* row heads + 2*colCount cells -> on gère en TS via l'ordre d'insertion */
+}
+
+.prop-table-wrap {
+  overflow-x: auto;
+  padding-bottom: .25rem; // évite le scroll collé
+}
+
+.prop-table {
+  display: grid;
+  gap: .75rem;
+  align-items: stretch;
+
+  background: var(--surface-2);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1rem;
+
+  /* pour éviter des cellules minuscules */
+  min-width: 520px;
+}
+
+.corner {
+  background: transparent;
+}
+
+.col-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 40px;
+  border-radius: 12px;
+  background: var(--surface-3);
+  border: 1px solid var(--border-color);
+
+  font-weight: 700;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.row-head {
+  display: flex;
+  align-items: center;
+
+  padding: 0 .25rem;
+  font-weight: 800;
+  color: var(--text-muted);
+}
+
+.cell {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: .5rem;
+
+  transition: transform .08s ease, border-color .12s ease, background .12s ease;
+
+  &:hover {
+    background: var(--surface-0);
+    border-color: var(--border-strong, var(--border-color));
+    transform: translateY(-1px);
+  }
+
+  /* Input PrimeNG full width */
+  :deep(.p-inputnumber),
+  :deep(.p-inputnumber-input) {
+    width: 100%;
+  }
+
+  :deep(.p-inputnumber-input) {
+    border-radius: 10px;
+  }
+}
+
+/* Mobile: réduit un peu */
+@media (max-width: 768px) {
+  .prop-table {
+    padding: .75rem;
+    gap: .5rem;
+  }
+
+  .col-head {
+    height: 36px;
+  }
+}

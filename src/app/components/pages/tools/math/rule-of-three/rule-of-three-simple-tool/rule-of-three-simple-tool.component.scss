@@ -1,0 +1,18 @@
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.calc-form;
+@include tp.results;
+@include tp.examples;
+@include tp.explain;
+@include tp.back;
+
+/* Layout spécifique : 3 champs + précision */
+.calc-form-rot3 {
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr 1fr 140px;
+  }
+}
