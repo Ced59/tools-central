@@ -1,385 +1,336 @@
 // scripts/i18n-sync.mjs
 //
 // Synchronise les fichiers XLF de traduction avec le fichier source français.
-// 
+//
 // Ce script :
 // 1. Crée les fichiers XLF manquants pour les nouvelles langues
-// 2. Ajoute les nouvelles unités de traduction
-// 3. Met à jour les sources modifiées et marque les traductions comme "needs-review"
-// 4. Gère spécialement les formules KaTeX/LaTeX en échappant les accolades
+// 2. Ajoute les nouvelles unités de traduction (state="new")
+// 3. Détecte les sources modifiées et marque comme "needs-review"
+// 4. Échappe les accolades KaTeX pour éviter le parsing ICU
+//
+// Usage: node scripts/i18n-sync.mjs
 
 import fs from "node:fs";
 import path from "node:path";
-import { XMLParser, XMLBuilder } from "fast-xml-parser";
+import {
+    CONFIG,
+    getTargetLocales,
+    getSourceXlfPath,
+    getTargetXlfPath,
+    readFile,
+    writeFile,
+    parseXlfUnits,
+    isKatexId,
+    escapeKatexBraces,
+    sanitizeXmlControlChars,
+    validateXml,
+} from "./i18n-utils.mjs";
 
-const projectName = "tools-central";
-const angularJson = JSON.parse(fs.readFileSync(path.resolve("angular.json"), "utf8"));
+// =============================================================================
+// Main
+// =============================================================================
+function main() {
+    console.log("[i18n-sync] Starting synchronization...\n");
 
-const parser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: "@_",
-    trimValues: false,
-});
-
-const builder = new XMLBuilder({
-    ignoreAttributes: false,
-    attributeNamePrefix: "@_",
-    format: true,
-    suppressEmptyNode: false,
-    processEntities: false,  // IMPORTANT: Ne pas ré-encoder les entités HTML
-});
-
-// --------------------
-// Utils
-// --------------------
-function normalizeArray(v) {
-    if (!v) {
-        return [];
-    }
-    return Array.isArray(v) ? v : [v];
-}
-
-function loadXlf(filePath) {
-    const xml = fs.readFileSync(filePath, "utf8");
-    return parser.parse(xml);
-}
-
-function writeXlf(filePath, obj) {
-    if (obj["?xml"]) {
-        delete obj["?xml"];
-    }
-    const xmlBody = builder.build(obj);
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>\n${xmlBody}\n`;
-    fs.writeFileSync(filePath, xml, "utf8");
-}
-
-function getFileNode(xlfObj) {
-    const file = xlfObj?.xliff?.file;
-    if (!file) {
-        throw new Error("Invalid XLF: missing xliff.file");
-    }
-    return file;
-}
-
-function indexUnits(xlfObj) {
-    const file = getFileNode(xlfObj);
-    const units = normalizeArray(file?.unit);
-    const map = new Map();
-    for (const u of units) {
-        if (u?.["@_id"]) {
-            map.set(u["@_id"], u);
-        }
-    }
-    return map;
-}
-
-function getOrCreateSegment(unit) {
-    unit.segment = unit.segment ?? {};
-    return unit.segment;
-}
-
-function normalizeTargetToObject(seg) {
-    if (!seg.target) {
-        return null;
-    }
-    if (typeof seg.target === "string") {
-        seg.target = { "#text": seg.target };
-    }
-    return seg.target;
-}
-
-function getTargetState(unit) {
-    const t = unit?.segment?.target;
-    if (!t || typeof t === "string") {
-        return "";
-    }
-    return t["@_state"] ?? "";
-}
-
-function setTargetState(unit, state) {
-    const seg = getOrCreateSegment(unit);
-    if (!seg.target) {
-        seg.target = { "#text": "TODO" };
-    }
-    const t = normalizeTargetToObject(seg);
-    t["@_state"] = state;
-}
-
-function ensureTarget(unit, defaultText = "TODO", stateIfCreated = "new") {
-    const seg = getOrCreateSegment(unit);
-
-    if (!seg.target) {
-        seg.target = { "#text": defaultText, "@_state": stateIfCreated };
-    } else {
-        normalizeTargetToObject(seg);
+    const sourceXlfPath = getSourceXlfPath();
+    if (!fs.existsSync(sourceXlfPath)) {
+        console.error(`[i18n-sync] Source file not found: ${sourceXlfPath}`);
+        process.exit(1);
     }
 
-    return unit;
-}
+    // Lire et parser le fichier source
+    let sourceContent = readFile(sourceXlfPath);
+    const sourceUnits = parseXlfUnits(sourceContent);
 
-function getSourceValue(unit) {
-    return unit?.segment?.source;
-}
+    console.log(`[i18n-sync] Source: ${sourceUnits.size} units in messages.${CONFIG.sourceLocale}.xlf`);
 
-function setSourceValue(unit, newSource) {
-    const seg = getOrCreateSegment(unit);
-    seg.source = newSource;
-}
-
-function deepEqual(a, b) {
-    return JSON.stringify(a) === JSON.stringify(b);
-}
-
-// --------------------
-// KaTeX detection and processing
-// --------------------
-function isKatexId(id) {
-    const s = String(id ?? "");
-    return (
-        /_katex$/i.test(s) ||
-        /_latex$/i.test(s) ||
-        /_formula_katex$/i.test(s) ||
-        /_formula_latex$/i.test(s)
-    );
-}
-
-/**
- * Échappe les accolades pour éviter le parsing ICU d'Angular
- */
-function escapeKatexBraces(value) {
-    if (typeof value === "string") {
-        let out = value;
-        // Décoder d'abord les entités existantes
-        out = out.replace(/&amp;#123;/g, "{");
-        out = out.replace(/&amp;#125;/g, "}");
-        out = out.replace(/&#123;/g, "{");
-        out = out.replace(/&#125;/g, "}");
-        // Normaliser les backslash
-        while (out.includes("\\\\")) {
-            out = out.replace(/\\\\/g, "\\");
-        }
-        // Ré-échapper les accolades
-        out = out.replace(/\{/g, "&#123;");
-        out = out.replace(/\}/g, "&#125;");
-        return out;
-    }
-
-    if (value && typeof value === "object") {
-        const cloned = JSON.parse(JSON.stringify(value));
-        if (typeof cloned["#text"] === "string") {
-            cloned["#text"] = escapeKatexBraces(cloned["#text"]);
-        }
-        return cloned;
-    }
-
-    return value;
-}
-
-/**
- * Traite une unité KaTeX: échappe les accolades dans source et target
- */
-function processKatexUnit(unit) {
-    const seg = getOrCreateSegment(unit);
-
-    if (seg.source) {
-        seg.source = escapeKatexBraces(seg.source);
-    }
-
-    if (seg.target) {
-        if (typeof seg.target === "string") {
-            seg.target = { "#text": escapeKatexBraces(seg.target), "@_state": "translated" };
-        } else if (typeof seg.target === "object") {
-            const text = seg.target["#text"];
-            if (typeof text === "string") {
-                seg.target["#text"] = escapeKatexBraces(text);
-            }
-            seg.target["@_state"] = "translated";
-        }
-    } else {
-        // Pour KaTeX, le target = source (pas de traduction)
-        seg.target = {
-            "#text": typeof seg.source === "string" ? seg.source : (seg.source?.["#text"] ?? ""),
-            "@_state": "translated"
-        };
-    }
-}
-
-// --------------------
-// Config
-// --------------------
-const project = angularJson.projects?.[projectName];
-if (!project?.i18n?.sourceLocale || !project?.i18n?.locales) {
-    console.error(`[i18n-sync] missing i18n config in angular.json for "${projectName}"`);
-    process.exit(1);
-}
-
-const sourceLocale = project.i18n.sourceLocale;
-const targetLocales = Object.keys(project.i18n.locales);
-
-const outDir = path.resolve("src/locale");
-const sourceFile = path.join(outDir, `messages.${sourceLocale}.xlf`);
-
-if (!fs.existsSync(sourceFile)) {
-    console.error(`[i18n-sync] missing source: ${sourceFile}`);
-    process.exit(1);
-}
-
-const sourceObj = loadXlf(sourceFile);
-const sourceUnits = indexUnits(sourceObj);
-
-// --------------------
-// Traiter le fichier source français (échapper KaTeX)
-// --------------------
-let sourceModified = false;
-const sourceFileNode = getFileNode(sourceObj);
-const sourceUnitsList = normalizeArray(sourceFileNode.unit);
-
-for (const unit of sourceUnitsList) {
-    const id = unit?.["@_id"];
-    if (id && isKatexId(id)) {
-        const beforeJson = JSON.stringify(unit);
-        processKatexUnit(unit);
-        if (JSON.stringify(unit) !== beforeJson) {
-            sourceModified = true;
-        }
-    }
-}
-
-if (sourceModified) {
-    writeXlf(sourceFile, sourceObj);
-    console.log(`[i18n-sync] source ${sourceLocale}: KaTeX formulas processed`);
-}
-
-// Recharger après modification
-const sourceObjFresh = sourceModified ? loadXlf(sourceFile) : sourceObj;
-const sourceUnitsFresh = indexUnits(sourceObjFresh);
-
-// --------------------
-// Main sync loop
-// --------------------
-for (const locale of targetLocales) {
-    const targetFile = path.join(outDir, `messages.${locale}.xlf`);
-
-    // Fichier de locale absent => créer depuis le source avec TODO + state=new
-    if (!fs.existsSync(targetFile)) {
-        const clone = JSON.parse(JSON.stringify(sourceObjFresh));
-        const file = getFileNode(clone);
-        const units = normalizeArray(file.unit);
-
-        for (const u of units) {
-            const id = u?.["@_id"];
-            if (id && isKatexId(id)) {
-                // KaTeX: copier source comme target
-                processKatexUnit(u);
-            } else {
-                ensureTarget(u, "TODO", "new");
-            }
-        }
-
-        file.unit = units;
-
-        if (clone.xliff?.["@_srcLang"]) {
-            clone.xliff["@_srcLang"] = sourceLocale;
-        }
-        if (clone.xliff?.["@_trgLang"]) {
-            clone.xliff["@_trgLang"] = locale;
-        }
-
-        writeXlf(targetFile, clone);
-        console.log(`[i18n-sync] created ${targetFile} with TODO targets (state=new)`);
-        continue;
-    }
-
-    // Merge fichier existant
-    const targetObj = loadXlf(targetFile);
-    const targetUnits = indexUnits(targetObj);
-
-    const file = getFileNode(targetObj);
-    const existing = normalizeArray(file.unit);
-    const merged = [...existing];
-
-    let addedCount = 0;
-    let updatedSourceCount = 0;
-    let ensuredTargetCount = 0;
-    let katexProcessedCount = 0;
-
-    for (const [id, srcUnit] of sourceUnitsFresh.entries()) {
-        if (!targetUnits.has(id)) {
-            // Nouvelle unité
-            const newUnit = JSON.parse(JSON.stringify(srcUnit));
-
-            if (isKatexId(id)) {
-                processKatexUnit(newUnit);
-                katexProcessedCount++;
-            } else {
-                ensureTarget(newUnit, "TODO", "new");
-            }
-
-            merged.push(newUnit);
-            addedCount++;
-            continue;
-        }
-
-        const unit = targetUnits.get(id);
-
-        // Traitement spécial KaTeX
+    // Traiter les KaTeX dans le fichier source
+    let sourceModified = false;
+    for (const [id, unit] of sourceUnits) {
         if (isKatexId(id)) {
-            const beforeJson = JSON.stringify(unit);
-            processKatexUnit(unit);
-            if (JSON.stringify(unit) !== beforeJson) {
-                katexProcessedCount++;
+            const escapedSource = escapeKatexBraces(unit.source);
+            if (escapedSource !== unit.source) {
+                sourceContent = updateSourceAndTarget(sourceContent, id, escapedSource, escapedSource);
+                sourceModified = true;
             }
+        }
+    }
+
+    if (sourceModified) {
+        // Valider avant d'écrire
+        const validation = validateXml(sourceContent);
+        if (!validation.valid) {
+            console.error(`[i18n-sync] ❌ Source XML invalid after KaTeX processing:`);
+            validation.errors.forEach((e) => console.error(`  - ${e}`));
+            process.exit(1);
+        }
+
+        writeFile(sourceXlfPath, sourceContent);
+        console.log(`[i18n-sync] ✅ Source: KaTeX formulas escaped`);
+
+        // Reparser après modification
+        sourceContent = readFile(sourceXlfPath);
+    }
+
+    // Reparser le source (peut avoir changé)
+    const sourceUnitsFresh = parseXlfUnits(sourceContent);
+
+    // Traiter chaque locale cible
+    const targetLocales = getTargetLocales();
+
+    for (const locale of targetLocales) {
+        processLocale(locale, sourceContent, sourceUnitsFresh);
+    }
+
+    console.log("\n[i18n-sync] ✅ Synchronization complete!");
+}
+
+// =============================================================================
+// Traitement d'une locale
+// =============================================================================
+function processLocale(locale, sourceContent, sourceUnits) {
+    const targetPath = getTargetXlfPath(locale);
+
+    // Si le fichier n'existe pas, le créer depuis le source
+    if (!fs.existsSync(targetPath)) {
+        createNewLocaleFile(locale, sourceContent, sourceUnits);
+        return;
+    }
+
+    // Sinon, merger
+    mergeLocaleFile(locale, targetPath, sourceUnits);
+}
+
+// =============================================================================
+// Création d'un nouveau fichier de locale
+// =============================================================================
+function createNewLocaleFile(locale, sourceContent, sourceUnits) {
+    const targetPath = getTargetXlfPath(locale);
+
+    // Copier le source et modifier les targets
+    let content = sourceContent;
+
+    // Modifier les attributs xliff
+    content = content.replace(/trgLang="[^"]*"/, `trgLang="${locale}"`);
+    if (!content.includes('trgLang=')) {
+        content = content.replace(/<xliff([^>]*)>/, `<xliff$1 trgLang="${locale}">`);
+    }
+
+    // Pour chaque unité, initialiser le target
+    for (const [id, unit] of sourceUnits) {
+        if (isKatexId(id)) {
+            // KaTeX: target = source (échappé)
+            const escaped = escapeKatexBraces(unit.source);
+            content = updateSourceAndTarget(content, id, escaped, escaped, "translated");
+        } else {
+            // Normal: target = "TODO" avec state="new"
+            content = setUnitTarget(content, id, "TODO", "new");
+        }
+    }
+
+    // Valider
+    const validation = validateXml(content);
+    if (!validation.valid) {
+        console.error(`[i18n-sync] ❌ ${locale}: Generated XML is invalid:`);
+        validation.errors.forEach((e) => console.error(`  - ${e}`));
+        return;
+    }
+
+    writeFile(targetPath, content);
+    console.log(`[i18n-sync] ✨ ${locale}: Created with ${sourceUnits.size} units`);
+}
+
+// =============================================================================
+// Merge d'un fichier existant
+// =============================================================================
+function mergeLocaleFile(locale, targetPath, sourceUnits) {
+    let content = readFile(targetPath);
+    const targetUnits = parseXlfUnits(content);
+
+    let stats = {
+        added: 0,
+        sourceUpdated: 0,
+        katexFixed: 0,
+    };
+
+    // Mettre à jour trgLang
+    if (!content.includes(`trgLang="${locale}"`)) {
+        content = content.replace(/trgLang="[^"]*"/, `trgLang="${locale}"`);
+    }
+
+    for (const [id, srcUnit] of sourceUnits) {
+        const tgtUnit = targetUnits.get(id);
+
+        if (!tgtUnit) {
+            // Nouvelle unité à ajouter
+            if (isKatexId(id)) {
+                const escaped = escapeKatexBraces(srcUnit.source);
+                content = addUnit(content, id, escaped, escaped, "translated");
+            } else {
+                content = addUnit(content, id, srcUnit.source, "TODO", "new");
+            }
+            stats.added++;
             continue;
         }
 
-        // Assurer que target existe (ne pas écraser la traduction existante)
-        const hadTarget = !!unit?.segment?.target;
-        ensureTarget(unit, "TODO", "new");
-        if (!hadTarget && unit?.segment?.target) {
-            ensuredTargetCount++;
-        }
+        // Unité existante
+        if (isKatexId(id)) {
+            // KaTeX: s'assurer que source et target sont échappés
+            const escapedSource = escapeKatexBraces(srcUnit.source);
+            const currentTarget = tgtUnit.target ?? "";
+            const escapedTarget = escapeKatexBraces(currentTarget || srcUnit.source);
 
-        // Détecter changement de source
-        const srcSource = getSourceValue(srcUnit);
-        const tgtSource = getSourceValue(unit);
-
-        if (!deepEqual(tgtSource, srcSource)) {
-            // Mettre à jour le source de la locale pour correspondre au fichier source
-            setSourceValue(unit, JSON.parse(JSON.stringify(srcSource)));
-
-            // Marquer comme needs-review, mais garder la traduction existante
-            const currentState = getTargetState(unit);
-            if (currentState !== "new") {
-                setTargetState(unit, "needs-review");
+            if (tgtUnit.source !== escapedSource || currentTarget !== escapedTarget) {
+                content = updateSourceAndTarget(content, id, escapedSource, escapedTarget, "translated");
+                stats.katexFixed++;
             }
+        } else {
+            // Unité normale: vérifier si le source a changé
+            const normalizedSrcSource = normalizeWhitespace(srcUnit.source);
+            const normalizedTgtSource = normalizeWhitespace(tgtUnit.source);
 
-            updatedSourceCount++;
+            if (normalizedSrcSource !== normalizedTgtSource) {
+                // Source a changé → mettre à jour et marquer needs-review
+                content = updateSource(content, id, srcUnit.source);
+
+                // Marquer comme needs-review si pas déjà "new"
+                if (tgtUnit.state !== "new") {
+                    content = setUnitState(content, id, "needs-review");
+                }
+                stats.sourceUpdated++;
+            }
         }
     }
 
-    file.unit = merged;
-
-    // Mettre à jour les métadonnées
-    if (targetObj.xliff) {
-        targetObj.xliff["@_srcLang"] = sourceLocale;
-        targetObj.xliff["@_trgLang"] = locale;
+    // Valider avant d'écrire
+    const validation = validateXml(content);
+    if (!validation.valid) {
+        console.error(`[i18n-sync] ❌ ${locale}: XML invalid after merge:`);
+        validation.errors.forEach((e) => console.error(`  - ${e}`));
+        return;
     }
 
-    writeXlf(targetFile, targetObj);
+    writeFile(targetPath, content);
 
     const parts = [];
-    if (addedCount > 0) {
-        parts.push(`+${addedCount} new`);
+    if (stats.added > 0) {
+        parts.push(`+${stats.added} new`);
     }
-    if (ensuredTargetCount > 0) {
-        parts.push(`+${ensuredTargetCount} ensured target`);
+    if (stats.sourceUpdated > 0) {
+        parts.push(`~${stats.sourceUpdated} updated`);
     }
-    if (updatedSourceCount > 0) {
-        parts.push(`~${updatedSourceCount} source updated`);
-    }
-    if (katexProcessedCount > 0) {
-        parts.push(`📐${katexProcessedCount} KaTeX`);
+    if (stats.katexFixed > 0) {
+        parts.push(`📐${stats.katexFixed} KaTeX`);
     }
 
-    console.log(`[i18n-sync] merged ${targetFile} (${parts.join(", ") || "no changes"})`);
+    console.log(`[i18n-sync] ${locale}: ${parts.length > 0 ? parts.join(", ") : "up to date"}`);
 }
+
+// =============================================================================
+// Helpers pour modification XLF (regex-based, pas de XMLBuilder)
+// =============================================================================
+
+function escapeRegex(str) {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function setUnitTarget(content, unitId, newTarget, newState) {
+    const escapedId = escapeRegex(unitId);
+
+    // Extraire l'unité complète d'abord
+    const unitPattern = new RegExp(
+        `<unit\\s+id="${escapedId}"[^>]*>[\\s\\S]*?<\\/unit>`
+    );
+    const unitMatch = content.match(unitPattern);
+    
+    if (!unitMatch) {
+        return content; // Unité non trouvée
+    }
+    
+    const unitContent = unitMatch[0];
+    const hasTarget = /<target[^>]*>[\s\S]*?<\/target>/.test(unitContent);
+
+    if (hasTarget) {
+        // Target existe dans cette unité, le remplacer
+        const newUnitContent = unitContent.replace(
+            /(<segment>[\s\S]*?)(<target)[^>]*(>[\s\S]*?<\/target>)([\s\S]*?<\/segment>)/,
+            `$1<target state="${newState}">${newTarget}</target>$4`
+        );
+        return content.replace(unitContent, newUnitContent);
+    }
+
+    // Target n'existe pas, l'ajouter après </source>
+    const newUnitContent = unitContent.replace(
+        /(<source>[\s\S]*?<\/source>)([\s\S]*?)(<\/segment>)/,
+        `$1\n        <target state="${newState}">${newTarget}</target>$2$3`
+    );
+    return content.replace(unitContent, newUnitContent);
+}
+
+function setUnitState(content, unitId, newState) {
+    const escapedId = escapeRegex(unitId);
+
+    // Extraire l'unité
+    const unitPattern = new RegExp(`<unit\\s+id="${escapedId}"[^>]*>[\\s\\S]*?<\\/unit>`);
+    const unitMatch = content.match(unitPattern);
+    
+    if (!unitMatch) {
+        return content;
+    }
+    
+    const newUnitContent = unitMatch[0].replace(
+        /(<target\s+)state="[^"]*"/,
+        `$1state="${newState}"`
+    );
+    
+    return content.replace(unitMatch[0], newUnitContent);
+}
+
+function updateSource(content, unitId, newSource) {
+    const escapedId = escapeRegex(unitId);
+
+    // Extraire l'unité
+    const unitPattern = new RegExp(`<unit\\s+id="${escapedId}"[^>]*>[\\s\\S]*?<\\/unit>`);
+    const unitMatch = content.match(unitPattern);
+    
+    if (!unitMatch) {
+        return content;
+    }
+    
+    const newUnitContent = unitMatch[0].replace(
+        /<source>[\s\S]*?<\/source>/,
+        `<source>${newSource}</source>`
+    );
+    
+    return content.replace(unitMatch[0], newUnitContent);
+}
+
+function updateSourceAndTarget(content, unitId, newSource, newTarget, state = "translated") {
+    let result = updateSource(content, unitId, newSource);
+    result = setUnitTarget(result, unitId, newTarget, state);
+    return result;
+}
+
+function addUnit(content, unitId, source, target, state) {
+    const sanitizedSource = sanitizeXmlControlChars(source);
+    const sanitizedTarget = sanitizeXmlControlChars(target);
+
+    const newUnit = `    <unit id="${unitId}">
+      <segment>
+        <source>${sanitizedSource}</source>
+        <target state="${state}">${sanitizedTarget}</target>
+      </segment>
+    </unit>`;
+
+    // Insérer avant </file>
+    return content.replace(/(\s*)(<\/file>)/, `\n${newUnit}$1$2`);
+}
+
+function normalizeWhitespace(str) {
+    return (str || "").replace(/\s+/g, " ").trim();
+}
+
+// =============================================================================
+// Run
+// =============================================================================
+main();

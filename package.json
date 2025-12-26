@@ -11,13 +11,14 @@
     "test": "ng test",
     "serve:ssr:tools-central": "node dist/tools-central/server/server.mjs",
     "extract-i18n": "ng extract-i18n --project=tools-central",
+
     "i18n:sync": "node scripts/i18n-sync.mjs",
-    "i18n:aggregate": "node scripts/i18n-aggregate.mjs",
-    "i18n:apply": "node scripts/i18n-apply.mjs dist/i18n/todo && node scripts/i18n-repair.mjs",
-    "i18n:extract-and-sync": "npm run extract-i18n && npm run i18n:sync",
-    "i18n:prepare": "npm run i18n:extract-and-sync && npm run i18n:aggregate",
-    "i18n:repair": "node scripts/i18n-repair.mjs",
-    "i18n:auto": "npm run i18n:prepare && node scripts/i18n-translate.mjs && npm run i18n:apply",
+    "i18n:translate": "node scripts/i18n-translate.mjs",
+    "i18n:validate": "node scripts/i18n-validate.mjs",
+    "i18n:status": "node scripts/i18n-status.mjs",
+    "i18n:auto": "npm run extract-i18n && npm run i18n:sync && npm run i18n:translate",
+    "i18n:check": "npm run i18n:validate && npm run i18n:status",
+
     "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs && node scripts/generate-ads-txt.mjs"
   },
