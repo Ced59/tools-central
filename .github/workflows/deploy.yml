@@ -6,12 +6,14 @@ on:
       - master
 
 env:
-  NODE_VERSION: '25.x'
+  # ✅ Node LTS recommandé pour Angular en CI (évite les erreurs "bizarres")
+  NODE_VERSION: "22"
   DEPLOY_PATH: /opt/tools-central
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -21,26 +23,61 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: npm
+
+      - name: Versions (diagnostic)
+        run: |
+          node -v
+          npm -v
+          npx ng version || true
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Build application
         run: npm run build:all
 
-      - name: Prepare deployment structure
+      # ✅ Si ng build plante, le vrai détail est dans ce fichier
+      - name: Dump Angular errors log (if build failed)
+        if: failure()
         run: |
+          echo "=== List /tmp ==="
+          ls -la /tmp | sed -n '1,200p'
+          echo "=== angular-errors.log ==="
+          find /tmp -maxdepth 2 -type f -name "angular-errors.log" -print -exec cat {} \; || true
+
+      # ✅ Utile pour debug : récupérer le dist même si le deploy échoue ensuite
+      - name: Upload dist artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-tools-central
+          path: dist/
+          retention-days: 7
+
+      - name: Prepare deployment structure
+        if: success()
+        run: |
+          rm -rf deploy
           mkdir -p deploy/site
+
+          # Angular output
           cp -r dist/tools-central/browser/* deploy/site/
 
-          # ✅ Mutualisation : copier les assets communs AU ROOT
-          cp -r public/* deploy/site/
+          # Mutualisation : assets publics au root
+          if [ -d "public" ]; then
+            cp -r public/* deploy/site/
+          fi
 
+          # Docker files
           cp docker/docker-compose.yml deploy/
           cp docker/nginx.conf deploy/
 
+          echo "=== Deploy tree ==="
+          find deploy -maxdepth 3 -type f | sed -n '1,200p'
+
       - name: Deploy to VPS
+        if: success()
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -52,13 +89,23 @@ jobs:
           rm: true
 
       - name: Start/Restart container
+        if: success()
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
           script: |
-            cd ${{ env.DEPLOY_PATH }}
+            set -e
+            cd "${{ env.DEPLOY_PATH }}"
+
+            docker compose version
+
+            # (optionnel) pull si images distantes
+            docker compose pull || true
+
             docker compose down || true
-            docker compose up -d
-            docker ps | grep tools-central
+            docker compose up -d --remove-orphans
+
+            echo "=== Running containers ==="
+            docker ps | grep -E "tools-central|CONTAINER" || true
