@@ -44,10 +44,11 @@ if (!OPENAI_API_KEY) {
 
 const MODEL = "gpt-4o-mini";
 const TEMPERATURE = 0;
-const BATCH_SIZE = 20;
+const BATCH_SIZE = 40;
 const MAX_RETRIES = 5;
 const BASE_DELAY_MS = 1000;
 const REQUEST_TIMEOUT_MS = 60000;
+const MAX_CONCURRENT_LOCALES = 3;
 
 const CACHE_DIR = path.resolve("dist/i18n/cache");
 
@@ -337,11 +338,11 @@ function setTarget(content, unitId, newTarget, newState) {
     // Extraire l'unité complète
     const unitPattern = new RegExp(`<unit\\s+id="${escapedId}"[^>]*>[\\s\\S]*?<\\/unit>`);
     const unitMatch = content.match(unitPattern);
-    
+
     if (!unitMatch) {
         return content; // Unité non trouvée
     }
-    
+
     const unitContent = unitMatch[0];
     const hasTarget = /<target[^>]*>[\s\S]*?<\/target>/.test(unitContent);
 
@@ -362,6 +363,19 @@ function setTarget(content, unitId, newTarget, newState) {
     return content.replace(unitContent, newUnitContent);
 }
 
+async function runWithConcurrency(items, limit, worker) {
+  const queue = [...items];
+  const workers = Array.from({ length: Math.max(1, limit) }, async () => {
+    while (queue.length > 0) {
+      const item = queue.shift();
+      if (!item) return;
+      await worker(item);
+    }
+  });
+
+  await Promise.all(workers);
+}
+
 // =============================================================================
 // Main
 // =============================================================================
@@ -371,7 +385,7 @@ async function main() {
     const locales = getTargetLocales();
 
     for (const locale of locales) {
-        await processLocale(locale);
+      await runWithConcurrency(locales, MAX_CONCURRENT_LOCALES, processLocale);
     }
 
     console.log("\n[translate] ✅ Translation complete!");

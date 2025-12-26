@@ -44,7 +44,7 @@ export const TOOL_GROUP_REGISTRY = {
       description: $localize`:@@group_statistics_desc:Moyenne, médiane, mode, étendue et notions clés.`,
       icon: 'pi pi-chart-bar',
       route: routes.group('math', 'statistics'),
-      available: false,
+      available: true,
     },
 
     // ✅ PHASE 5

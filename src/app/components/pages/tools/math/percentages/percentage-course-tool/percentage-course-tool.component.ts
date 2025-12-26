@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CoursePageComponent } from '../../../../../shared/course/course-page/course-page.component';
-import {percentageCourseData} from "../../../../../../data/courses/percentage-course.data";
+import {percentageCourseData} from "../../../../../../data/courses/math/percentage-course.data";
 
 
 @Component({

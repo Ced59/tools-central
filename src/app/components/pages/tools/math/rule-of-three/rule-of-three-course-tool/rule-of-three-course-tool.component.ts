@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CoursePageComponent } from '../../../../../shared/course/course-page/course-page.component';
-import {ruleOfThreeCourseData} from "../../../../../../data/courses/rule-of-three.data";
+import {ruleOfThreeCourseData} from "../../../../../../data/courses/math/rule-of-three.data";
 
 
 @Component({

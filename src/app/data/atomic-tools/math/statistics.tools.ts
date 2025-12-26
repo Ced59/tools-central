@@ -2,6 +2,34 @@ import { routes } from '../../routes';
 import type { AtomicToolAny } from '../index';
 
 export const STATISTICS_TOOLS = {
+  'mean-course': {
+    category: 'math',
+    group: 'statistics',
+    subGroup: 'courses',
+    title: $localize`:@@tool_mean_course_title:Cours Moyennes`,
+    description: $localize`:@@tool_mean_course_desc:Cours sur les notions de moyennes.`,
+    icon: 'pi pi-chart-bar',
+    route: routes.tool('math', 'statistics', 'mean-course'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/statistics/courses/mean-course-tool/mean-course-tool.component'
+        ).then(m => m.MeanCourseToolComponent),
+  },
+  'median-course': {
+    category: 'math',
+    group: 'statistics',
+    subGroup: 'courses',
+    title: $localize`:@@tool_median_course_title:Cours Médiane`,
+    description: $localize`:@@tool_median_course_desc:Cours sur les notions de médianes.`,
+    icon: 'pi pi-chart-bar',
+    route: routes.tool('math', 'statistics', 'median-course'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/statistics/courses/median-course-tool/median-course-tool.component'
+        ).then(m => m.MedianCourseToolComponent),
+  },
   // Essentiels
   mean: {
     category: 'math',

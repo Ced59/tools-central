@@ -1,4 +1,4 @@
-import {CourseData} from "../../shared/course/course.types";
+import {CourseData} from "../../../shared/course/course.types";
 
 export const ruleOfThreeCourseData: CourseData = {
   id: 'rule-of-three',

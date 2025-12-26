@@ -108,22 +108,28 @@ export const TOOL_SUBGROUP_REGISTRY = {
     // 🟧 PHASE 4 — Statistiques simples
     statistics: [
       {
+        id: 'courses',
+        title: $localize`:@@stats_sg_course_title:Cours`,
+        description: $localize`:@@stats_sg_course_desc:Différents cours pour les notions de statistiques`,
+        order: 1,
+      },
+      {
         id: 'basic',
         title: $localize`:@@stats_sg_basic_title:Essentiels`,
         description: $localize`:@@stats_sg_basic_desc:Moyenne, médiane, mode, étendue.`,
-        order: 1,
+        order: 2,
       },
       {
         id: 'distribution',
         title: $localize`:@@stats_sg_distribution_title:Distribution`,
         description: $localize`:@@stats_sg_distribution_desc:Min/max, amplitude, lecture de données.`,
-        order: 2,
+        order: 3,
       },
       {
         id: 'understand',
         title: $localize`:@@stats_sg_understand_title:Comprendre`,
         description: $localize`:@@stats_sg_understand_desc:Quand la moyenne trompe, effet des valeurs extrêmes, moyenne vs médiane.`,
-        order: 3,
+        order: 4,
       },
     ],
 
