@@ -14,38 +14,27 @@ if (!OPENAI_API_KEY) {
 }
 
 const TODO_DIR = path.resolve("dist/i18n/todo");
-
-// Cache persistant (survit aux re-run de i18n:aggregate)
 const CACHE_DIR = path.resolve("dist/i18n/cache");
 
-// OpenAI
 const MODEL = "gpt-4o-mini";
 const TEMPERATURE = 0;
 
-// Au lieu d'1 requête par string => 1 requête par batch
 const BATCH_SIZE = 25;
-
-// Concurrence par locale
 const MAX_CONCURRENT_BATCHES = 1;
 
-// Retry/backoff
 const MAX_RETRIES = 8;
 const BASE_DELAY_MS = 600;
 const MAX_DELAY_MS = 30_000;
-
-// Timeout explicite
 const REQUEST_TIMEOUT_MS = 60_000;
 
-// Si un batch renvoie un tableau de taille différente, on retente "strict" N fois
 const MAX_MISMATCH_RETRIES = 2;
-
-// Si un batch contient des caractères interdits XML, on retente "strict" N fois
 const MAX_CONTROLCHAR_RETRIES = 2;
 
-// Dernier recours : si toujours mismatch, on traduit item par item ce batch
 const FALLBACK_ITEM_BY_ITEM = true;
 
+// =====================================================================================
 // Prompt
+// =====================================================================================
 const SYSTEM_PROMPT = `
 You are a professional software localization translator.
 
@@ -55,7 +44,7 @@ Rules:
 - Return ONLY valid JSON according to the required format.
 - CRITICAL: In JSON strings, you MUST escape every backslash as \\\\ .
   Example: LaTeX \\frac must be written as \\\\frac in JSON.
-- Do not add extra explanations, punctuation, or quotes.
+- Do not add explanations or extra keys.
 `.trim();
 
 // =====================================================================================
@@ -65,16 +54,12 @@ function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-function ensureDir(dir) {
-  fs.mkdirSync(dir, { recursive: true });
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
 }
 
-function listTodoFiles() {
-  if (!fs.existsSync(TODO_DIR)) return [];
-  return fs
-    .readdirSync(TODO_DIR)
-    .filter((f) => f.endsWith(".todo.json"))
-    .map((f) => path.join(TODO_DIR, f));
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true });
 }
 
 function readJson(p) {
@@ -85,15 +70,25 @@ function writeJson(p, obj) {
   fs.writeFileSync(p, JSON.stringify(obj, null, 2) + "\n", "utf8");
 }
 
-function clamp(n, min, max) {
-  return Math.max(min, Math.min(max, n));
-}
-
 function isNonEmptyString(v) {
   return typeof v === "string" && v.trim().length > 0;
 }
 
-// --- Extract plain text from aggregate format (best effort) ---
+function listTodoFiles() {
+  if (!fs.existsSync(TODO_DIR)) return [];
+  return fs
+    .readdirSync(TODO_DIR)
+    .filter((f) => f.endsWith(".todo.json"))
+    .map((f) => path.join(TODO_DIR, f));
+}
+
+function getLocaleFromTodoFile(todoFilePath) {
+  const base = path.basename(todoFilePath);
+  const m = base.match(/^(.+)\.todo\.json$/);
+  return m ? m[1] : base;
+}
+
+// Extract plain text from aggregate source node (best effort)
 function extractPlainText(sourceNode) {
   if (!sourceNode) return "";
 
@@ -117,9 +112,8 @@ function extractPlainText(sourceNode) {
 }
 
 // =====================================================================================
-// XML illegal control chars helpers
-// XML 1.0 disallows most chars < 0x20 except TAB(0x09), LF(0x0A), CR(0x0D).
-// JSON sequences like "\frac" can become form feed 0x0C when parsed.
+// XML illegal control chars (XML 1.0)
+// disallow most < 0x20 except TAB/LF/CR
 // =====================================================================================
 function hasXmlIllegalControlChars(s) {
   if (typeof s !== "string" || s.length === 0) return false;
@@ -132,14 +126,7 @@ function hasXmlIllegalControlChars(s) {
 
 /**
  * Converts illegal control chars to safe visible sequences.
- * This specifically fixes the JSON escape issue:
- * - \f => 0x0C  (form feed) -> "\\f"
- * - \b => 0x08  (backspace) -> "\\b"
- * - \v => 0x0B  (vertical tab) -> "\\v"
- * - \0 => 0x00  (null) -> "\\0"
- * For any other illegal control char, it is removed.
- *
- * After this, the string is safe to embed in XML files.
+ * Fixes typical JSON escape loss: \f => 0x0C, \b => 0x08...
  */
 function sanitizeXmlIllegalControlCharsToBackslashEscapes(s) {
   if (typeof s !== "string" || s.length === 0) return s;
@@ -160,18 +147,18 @@ function sanitizeXmlIllegalControlCharsToBackslashEscapes(s) {
     }
 
     // illegal controls
-    if (c === 0x0C) out += "\\\\f"; // form feed -> literal "\f"
-    else if (c === 0x08) out += "\\\\b"; // backspace -> literal "\b"
-    else if (c === 0x0B) out += "\\\\v"; // vertical tab -> literal "\v"
-    else if (c === 0x00) out += "\\\\0"; // null -> literal "\0"
-    // other control chars: drop
+    if (c === 0x0C) out += "\\\\f";
+    else if (c === 0x08) out += "\\\\b";
+    else if (c === 0x0B) out += "\\\\v";
+    else if (c === 0x00) out += "\\\\0";
+    // others: drop
   }
 
   return out;
 }
 
 // =====================================================================================
-// Hash for cache invalidation
+// Cache (id -> {text, srcHash})
 // =====================================================================================
 function hashString(s) {
   let h = 0x811c9dc5;
@@ -187,25 +174,6 @@ function getSourceHash(item) {
   return hashString(src);
 }
 
-function needsTranslation(item) {
-  // needs-review => retraduction forcée
-  if (item?.status === "needs-review") return true;
-  return !isNonEmptyString(item?.translatedTarget);
-}
-
-function applyTranslation(item, text) {
-  item.translatedTarget = text;
-}
-
-function getLocaleFromTodoFile(todoFilePath) {
-  const base = path.basename(todoFilePath);
-  const m = base.match(/^(.+)\.todo\.json$/);
-  return m ? m[1] : base;
-}
-
-// =====================================================================================
-// Cache: id -> { text, srcHash } (migration douce: accepte aussi id -> "text")
-// =====================================================================================
 function cachePathForLocale(locale) {
   ensureDir(CACHE_DIR);
   return path.join(CACHE_DIR, `${locale}.cache.json`);
@@ -230,6 +198,7 @@ function readCacheEntry(cacheObj, id) {
   const entry = cacheObj?.[id];
   if (!entry) return null;
 
+  // backward-compat: id -> "text"
   if (typeof entry === "string") return { text: entry, srcHash: null, legacy: true };
 
   if (typeof entry === "object" && entry && typeof entry.text === "string") {
@@ -244,6 +213,60 @@ function writeCacheEntry(cacheObj, id, text, srcHash) {
 }
 
 // =====================================================================================
+// “Should translate?” logic
+// - needs-review => always retranslate (unless LaTeX/KaTeX which we copy)
+// =====================================================================================
+function needsTranslation(item) {
+  if (item?.status === "needs-review") return true;
+  return !isNonEmptyString(item?.translatedTarget);
+}
+
+function applyTranslation(item, text) {
+  item.translatedTarget = text;
+}
+
+// =====================================================================================
+// LaTeX / KaTeX detection
+// - Primary: suffix in id
+// - Fallback: content heuristic (only as backup)
+// =====================================================================================
+function isLatexLikeText(s) {
+  if (typeof s !== "string") return false;
+
+  // common latex commands
+  if (/\\(frac|dfrac|cdot|times|div|Rightarrow|Leftarrow|Leftrightarrow|quad|qquad|left|right|begin|end|text|mathrm|mathbf|sqrt|sum|prod|int|approx|neq|leq|geq)\b/.test(s)) {
+    return true;
+  }
+
+  // delimiters
+  if (/\\\(|\\\)|\\\[|\\\]/.test(s)) return true;
+
+  // many backslashes + braces
+  const bs = (s.match(/\\/g) || []).length;
+  const braces = (s.match(/[{}]/g) || []).length;
+  if (bs >= 2 && braces >= 2) return true;
+
+  return false;
+}
+
+function isLatexLikeItem(item) {
+  const id = String(item?.id ?? "");
+
+  // ✅ deterministic by convention
+  if (/_katex$/i.test(id) || /_latex$/i.test(id)) return true;
+  if (/_formula_katex$/i.test(id) || /_formula_latex$/i.test(id)) return true;
+
+  // fallback by source/current text (best effort)
+  const src = extractPlainText(item?.source ?? "");
+  if (isLatexLikeText(src)) return true;
+
+  const cur = typeof item?.currentTarget === "string" ? item.currentTarget : "";
+  if (isLatexLikeText(cur)) return true;
+
+  return false;
+}
+
+// =====================================================================================
 // JSON robustness
 // =====================================================================================
 function stripJsonFences(s) {
@@ -252,6 +275,23 @@ function stripJsonFences(s) {
     .replace(/^\s*```\s*/i, "")
     .replace(/\s*```\s*$/i, "")
     .trim();
+}
+
+function parseItemsArrayFromContent(content) {
+  const raw = stripJsonFences(content);
+
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    const excerpt = raw.slice(0, 240).replace(/\s+/g, " ");
+    throw new Error(`OpenAI: invalid JSON returned (excerpt: "${excerpt}...")`);
+  }
+
+  const arr = parsed?.items;
+  if (!Array.isArray(arr)) throw new Error("OpenAI: expected {items:[...]}");
+
+  return arr.map((x) => String(x ?? ""));
 }
 
 // =====================================================================================
@@ -284,24 +324,6 @@ async function openAiChatCompletions(body) {
   return res.json();
 }
 
-function parseItemsArrayFromContent(content) {
-  const raw = stripJsonFences(content);
-
-  let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    const excerpt = raw.slice(0, 200).replace(/\s+/g, " ");
-    throw new Error(`OpenAI: invalid JSON returned (excerpt: "${excerpt}...")`);
-  }
-
-  const arr = parsed?.items;
-  if (!Array.isArray(arr)) throw new Error("OpenAI: expected {items:[...]}");
-
-  // Normalize to strings
-  return arr.map((x) => String(x ?? ""));
-}
-
 // =====================================================================================
 // Translation calls
 // =====================================================================================
@@ -310,13 +332,13 @@ function buildBatchPrompt({ locale, items, strict }) {
     ? `
 Return EXACTLY ${items.length} translations.
 The JSON must be: {"items":[...]} with length = ${items.length}.
-Do NOT omit any item. Do NOT merge items. Do NOT add extra fields.
+Do NOT omit any item. Do NOT merge items.
 
 CRITICAL JSON RULE:
 - Every backslash MUST be escaped as \\\\ in JSON strings.
   Example: output "\\\\frac" not "\\frac".
 
-If unsure, still output an empty string for that position.
+If unsure, output an empty string for that position.
 `.trim()
     : `
 Return a JSON object: {"items":[ "t1", "t2", ... ]} in the SAME ORDER.
@@ -355,7 +377,6 @@ async function translateBatchOpenAI({ locale, items, strict = false }) {
   return parseItemsArrayFromContent(content);
 }
 
-// fallback 1-by-1
 async function translateOneOpenAI({ locale, sourceText }) {
   const prompt = `
 Target locale: ${locale}
@@ -432,7 +453,7 @@ async function translateBatchWithHardening({ locale, payloadItems }) {
     { maxRetries: MAX_RETRIES }
   );
 
-  // size mismatch handling
+  // 2) size mismatch -> strict retries -> fallback
   if (results.length !== expected) {
     for (let i = 1; i <= MAX_MISMATCH_RETRIES; i++) {
       console.warn(
@@ -444,6 +465,7 @@ async function translateBatchWithHardening({ locale, payloadItems }) {
       );
       if (results.length === expected) break;
     }
+
     if (results.length !== expected) {
       if (!FALLBACK_ITEM_BY_ITEM) {
         throw new Error(`OpenAI: batch size mismatch (${results.length} vs ${expected})`);
@@ -461,7 +483,7 @@ async function translateBatchWithHardening({ locale, payloadItems }) {
     }
   }
 
-  // 2) control-char handling: retry strict if found
+  // 3) control-char detection -> strict retries
   if (batchHasIllegalControls(results)) {
     for (let i = 1; i <= MAX_CONTROLCHAR_RETRIES; i++) {
       console.warn(`⚠️ ${locale}: illegal XML control chars detected -> strict retry ${i}/${MAX_CONTROLCHAR_RETRIES}`);
@@ -477,7 +499,7 @@ async function translateBatchWithHardening({ locale, payloadItems }) {
     }
   }
 
-  // 3) sanitize as last line of defense (guarantees XML safety)
+  // 4) final sanitize (guarantees XML-safety)
   results = sanitizeBatchResults(results);
 
   return results;
@@ -497,13 +519,35 @@ async function translateLocale(todoFilePath) {
 
   const cache = loadCache(locale);
 
-  // Prefill cache (only if not needs-review, and hash matches if present)
+  // 0) Copy LaTeX/KaTeX items directly (no OpenAI)
+  let copiedLatex = 0;
+  for (const it of items) {
+    if (!needsTranslation(it)) continue;
+    if (!isLatexLikeItem(it)) continue;
+
+    const srcText = extractPlainText(it?.source ?? "").trim();
+    const fallback =
+      isNonEmptyString(it?.currentTarget) && it.currentTarget !== "TODO"
+        ? String(it.currentTarget)
+        : srcText;
+
+    if (isNonEmptyString(fallback)) {
+      applyTranslation(it, sanitizeXmlIllegalControlCharsToBackslashEscapes(fallback));
+      copiedLatex++;
+    }
+  }
+  if (copiedLatex > 0) {
+    console.log(`🧷 ${locale}: copied ${copiedLatex} LaTeX/KaTeX items (no translation)`);
+  }
+
+  // 1) Restore from cache (only if srcHash matches, and not needs-review)
   let cacheHits = 0;
   let cacheSkipsHashMismatch = 0;
 
   for (const it of items) {
     if (!needsTranslation(it)) continue;
-    if (it.status === "needs-review") continue;
+    if (it.status === "needs-review") continue; // always retranslate
+    if (isLatexLikeItem(it)) continue; // already handled
 
     const id = it.id;
     if (!id) continue;
@@ -519,7 +563,7 @@ async function translateLocale(todoFilePath) {
       continue;
     }
 
-    applyTranslation(it, entry.text);
+    applyTranslation(it, sanitizeXmlIllegalControlCharsToBackslashEscapes(entry.text));
     cacheHits++;
 
     if (entry.legacy) {
@@ -532,9 +576,12 @@ async function translateLocale(todoFilePath) {
     (cacheSkipsHashMismatch ? ` (skipped ${cacheSkipsHashMismatch} hash mismatch)` : "")
   );
 
-  const toTranslate = items.filter(needsTranslation);
+  // 2) Items to translate (exclude LaTeX/KaTeX)
+  const toTranslate = items.filter((it) => needsTranslation(it) && !isLatexLikeItem(it));
 
   if (toTranslate.length === 0) {
+    todo.items = items;
+    writeJson(todoFilePath, todo);
     saveCache(locale, cache);
     console.log(`✅ ${locale} done (0 translated)`);
     return;
@@ -562,12 +609,18 @@ async function translateLocale(todoFilePath) {
 
     const results = await translateBatchWithHardening({ locale, payloadItems });
 
+    if (results.length !== batch.length) {
+      throw new Error(`OpenAI: batch size mismatch (${results.length} vs ${batch.length})`);
+    }
+
     let appliedThisBatch = 0;
     let emptyThisBatch = 0;
 
     for (let i = 0; i < batch.length; i++) {
       const it = batch[i];
-      const t = String(results[i] ?? "").trim();
+      const raw = String(results[i] ?? "");
+
+      const t = sanitizeXmlIllegalControlCharsToBackslashEscapes(raw).trim();
 
       if (!t) {
         emptyThisBatch++;
@@ -575,15 +628,12 @@ async function translateLocale(todoFilePath) {
         continue;
       }
 
-      // safety again (idempotent)
-      const safe = sanitizeXmlIllegalControlCharsToBackslashEscapes(t);
-
-      applyTranslation(it, safe);
+      applyTranslation(it, t);
       appliedThisBatch++;
       translatedApplied++;
 
       const srcHash = getSourceHash(it);
-      writeCacheEntry(cache, it.id, safe, srcHash);
+      writeCacheEntry(cache, it.id, t, srcHash);
     }
 
     console.log(`   ↳ received: ${results.length}, applied: ${appliedThisBatch}, empty: ${emptyThisBatch}`);
@@ -616,6 +666,7 @@ async function main() {
     console.log("No todo files found.");
     return;
   }
+
   for (const f of files) {
     await translateLocale(f);
   }
