@@ -6,7 +6,6 @@ on:
       - master
 
 env:
-  # ✅ Node LTS recommandé pour Angular en CI (évite les erreurs "bizarres")
   NODE_VERSION: "22"
   DEPLOY_PATH: /opt/tools-central
 
@@ -34,26 +33,18 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit --no-fund
 
+      # ✅ Répare les XLF (placeholders mismatch) => évite le crash localize/tools
+      - name: Repair i18n files
+        run: npm run i18n:repair
+
       - name: Build application
         run: npm run build:all
 
-      # ✅ Si ng build plante, le vrai détail est dans ce fichier
-      - name: Dump Angular errors log (if build failed)
+      - name: Dump Angular errors log (if failed)
         if: failure()
         run: |
-          echo "=== List /tmp ==="
-          ls -la /tmp | sed -n '1,200p'
           echo "=== angular-errors.log ==="
           find /tmp -maxdepth 2 -type f -name "angular-errors.log" -print -exec cat {} \; || true
-
-      # ✅ Utile pour debug : récupérer le dist même si le deploy échoue ensuite
-      - name: Upload dist artifact
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-tools-central
-          path: dist/
-          retention-days: 7
 
       - name: Prepare deployment structure
         if: success()
@@ -61,20 +52,13 @@ jobs:
           rm -rf deploy
           mkdir -p deploy/site
 
-          # Angular output
           cp -r dist/tools-central/browser/* deploy/site/
-
-          # Mutualisation : assets publics au root
           if [ -d "public" ]; then
             cp -r public/* deploy/site/
           fi
 
-          # Docker files
           cp docker/docker-compose.yml deploy/
           cp docker/nginx.conf deploy/
-
-          echo "=== Deploy tree ==="
-          find deploy -maxdepth 3 -type f | sed -n '1,200p'
 
       - name: Deploy to VPS
         if: success()
@@ -98,14 +82,6 @@ jobs:
           script: |
             set -e
             cd "${{ env.DEPLOY_PATH }}"
-
-            docker compose version
-
-            # (optionnel) pull si images distantes
-            docker compose pull || true
-
             docker compose down || true
             docker compose up -d --remove-orphans
-
-            echo "=== Running containers ==="
-            docker ps | grep -E "tools-central|CONTAINER" || true
+            docker ps | grep tools-central || true
