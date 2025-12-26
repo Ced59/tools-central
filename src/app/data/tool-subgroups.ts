@@ -80,22 +80,28 @@ export const TOOL_SUBGROUP_REGISTRY = {
     // 🟨 PHASE 3 — Règle de trois
     'rule-of-three': [
       {
+        id: 'course',
+        title: $localize`:@@rot_sg_course_title:Cours`,
+        description: $localize`:@@rot_sg_course_desc:Cours complet + quiz pour maîtriser la règle de trois.`,
+        order: 1,
+      },
+      {
         id: 'direct',
         title: $localize`:@@rot_sg_direct_title:Directe`,
         description: $localize`:@@rot_sg_direct_desc:Règle de trois simple, tableau, valeur manquante.`,
-        order: 1,
+        order: 2,
       },
       {
         id: 'inverse',
         title: $localize`:@@rot_sg_inverse_title:Inverse`,
         description: $localize`:@@rot_sg_inverse_desc:Règle de trois inversée et situations d’inverse proportion.`,
-        order: 2,
+        order: 3,
       },
       {
         id: 'tables',
         title: $localize`:@@rot_sg_tables_title:Tableaux`,
         description: $localize`:@@rot_sg_tables_desc:Compléter / vérifier un tableau de proportionnalité.`,
-        order: 3,
+        order: 4,
       },
     ],
 

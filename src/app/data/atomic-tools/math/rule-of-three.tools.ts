@@ -2,6 +2,21 @@ import { routes } from '../../routes';
 import type { AtomicToolAny } from '../index';
 
 export const RULE_OF_THREE_TOOLS = {
+  'rule-of-three-course': {
+    category: 'math',
+    group: 'rule-of-three',
+    subGroup: 'course',
+    title: $localize`:@@tool_rot_course_title:Cours règle de trois`,
+    description: $localize`:@@tool_rot_course_desc:Directe, inverse, tableaux + quiz pour apprendre rapidement.`,
+    icon: 'pi pi-book',
+    route: routes.tool('math', 'rule-of-three', 'rule-of-three-course'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/math/rule-of-three/rule-of-three-course-tool/rule-of-three-course-tool.component'
+        ).then(m => m.RuleOfThreeCourseToolComponent),
+  },
+
   // Directe
   'rule-of-three-simple': {
     category: 'math',

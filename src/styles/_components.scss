@@ -149,7 +149,13 @@
 @mixin divider {
   .divider {
     height: 1px;
-    background: var(--border-color);
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--border-color) 20%,
+        var(--border-color) 80%,
+        transparent 100%
+    );
     margin: 1.5rem 0;
 
     @include m.down(m.$bp-md) {

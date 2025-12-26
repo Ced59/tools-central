@@ -1,0 +1,264 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-book"></i>
+        </div>
+
+        <h1>{{ course.heroTitle }}</h1>
+        <p class="hero-subtitle">{{ course.heroSubtitle }}</p>
+
+        <div class="hero-meta">
+          <span class="pill">
+            <i class="pi pi-list"></i>
+            <span>{{ course.lessons.length }}</span>
+            <span i18n="@@course_chapters">chapitres</span>
+          </span>
+
+          <span class="pill">
+            <i class="pi pi-chart-line"></i>
+            <span>{{ progress() }}%</span>
+            <span i18n="@@course_progress">progression</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="tool-card">
+          <div class="card-header">
+            <h2 i18n="@@course_nav">Chapitres</h2>
+          </div>
+
+          <div class="search">
+            <label class="sr-only" for="q" i18n="@@course_search_label">Rechercher</label>
+            <input
+              id="q"
+              type="text"
+              class="tc-input"
+              [value]="query()"
+              (input)="query.set(($any($event.target).value || ''))"
+              placeholder="Rechercher (ex: directe, inverse...)"
+              i18n-placeholder="@@course_search_ph"
+            />
+          </div>
+
+          <div class="progressbar">
+            <div class="progressbar-inner" [style.width.%]="progress()"></div>
+          </div>
+
+          <div class="nav-list">
+            <button
+              type="button"
+              class="nav-item"
+              *ngFor="let l of filteredLessons()"
+              [class.is-active]="l.id === activeLessonId()"
+              (click)="openLesson(l.id)"
+            >
+              <div class="nav-title">{{ l.title }}</div>
+              <div class="nav-sub">{{ l.subtitle }}</div>
+
+              <div class="nav-tags">
+                <span class="chip" *ngFor="let t of l.tags">{{ t }}</span>
+              </div>
+            </button>
+
+            <div class="empty" *ngIf="filteredLessons().length === 0" i18n="@@course_no_results">
+              Aucun chapitre ne correspond à votre recherche.
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="sidebar-actions">
+            <label class="switch">
+              <input type="checkbox" [checked]="shuffleQuizzes()" (change)="shuffleQuizzes.set(!shuffleQuizzes())" />
+              <span class="switch-ui"></span>
+              <span class="switch-label" i18n="@@course_shuffle_quiz">Mélanger les quiz</span>
+            </label>
+
+            <div class="seed-row">
+              <span class="seed-label" i18n="@@course_seed">Seed</span>
+              <input
+                type="number"
+                class="tc-input"
+                [value]="seed()"
+                (input)="seed.set(($any($event.target).valueAsNumber || seed()))"
+              />
+              <button type="button" class="btn-link" (click)="seed.set(nowSeed())">
+                <i class="pi pi-refresh"></i>
+                <span i18n="@@course_new_seed">Nouvelle</span>
+              </button>
+            </div>
+
+            <a [routerLink]="course.backLink" class="back-link">
+              <i class="pi pi-arrow-left"></i>
+              <span i18n="@@back_to_tools">Retour aux outils</span>
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <main class="main">
+        <div class="tool-card" *ngIf="activeLesson() as lesson">
+          <div class="card-header centered">
+            <h2>{{ lesson.title }}</h2>
+            <p class="sub">{{ lesson.subtitle }}</p>
+
+            <div class="tags">
+              <p-tag *ngFor="let t of lesson.tags" [value]="t"></p-tag>
+            </div>
+          </div>
+
+          <div class="lesson-body">
+            <section class="lesson-section" *ngFor="let s of lesson.sections">
+              <h3 class="section-title">{{ s.title }}</h3>
+
+              <ul class="bullets">
+                <li *ngFor="let b of s.bullets">{{ b }}</li>
+              </ul>
+
+              <tc-math-formula
+                *ngIf="s.formulaLatex"
+                label="Formule"
+                i18n-label="@@course_formula"
+                mode="katex"
+                [latex]="s.formulaLatex"
+              ></tc-math-formula>
+
+              <div class="examples" *ngIf="s.examples?.length">
+                <div class="example" *ngFor="let ex of s.examples">
+                  <div class="example-label">{{ ex.label }}</div>
+                  <tc-math-formula mode="katex" [latex]="ex.latex"></tc-math-formula>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+            </section>
+
+            <!-- Quiz -->
+            <section class="quiz">
+              <div class="quiz-head">
+                <h3 i18n="@@course_quiz_title">Mini-quiz</h3>
+                <button type="button" class="btn-link" (click)="resetQuizForLesson(lesson)">
+                  <i class="pi pi-times"></i>
+                  <span i18n="@@course_reset_quiz">Réinitialiser ce quiz</span>
+                </button>
+              </div>
+
+              <div class="quiz-list">
+                <div class="quiz-item" *ngFor="let q of getLessonQuizzes(lesson); let i = index">
+                  <div class="quiz-top">
+                    <div class="quiz-index">#{{ i + 1 }}</div>
+                    <div class="quiz-prompt">{{ q.prompt }}</div>
+                  </div>
+
+                  <!-- MCQ -->
+                  <div class="quiz-input" *ngIf="q.kind === 'mcq'">
+                    <div class="tc-select" [class.is-open]="openSelectId() === q.id">
+                      <button type="button" class="tc-select-trigger" (click)="toggleSelect(q.id)">
+                        <span class="tc-select-value">{{ selectLabel(q) }}</span>
+                        <i class="pi pi-chevron-down"></i>
+                      </button>
+
+                      <div class="tc-select-panel" *ngIf="openSelectId() === q.id">
+                        <button type="button" class="tc-select-option" (click)="setAnswer(q.id, ''); closeSelect()">
+                          <span i18n="@@course_choose">Choisir…</span>
+                        </button>
+
+                        <button
+                          *ngFor="let c of (q.choices || [])"
+                          type="button"
+                          class="tc-select-option"
+                          [class.is-selected]="quizAnswers()[q.id] === c.value"
+                          (click)="setAnswer(q.id, c.value); closeSelect()"
+                        >
+                          {{ c.label }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- NUMBER -->
+                  <div class="quiz-input" *ngIf="q.kind === 'number'">
+                    <div class="number-row">
+                      <input
+                        class="tc-input"
+                        type="text"
+                        inputmode="decimal"
+                        [value]="quizAnswers()[q.id] || ''"
+                        (input)="setAnswer(q.id, $any($event.target).value)"
+                        placeholder="Votre réponse (ex: 12,5)"
+                        i18n-placeholder="@@course_answer_ph"
+                      />
+                      <span class="unit" *ngIf="q.unit">{{ q.unit }}</span>
+                    </div>
+                  </div>
+
+                  <div class="quiz-actions">
+                    <button type="button" class="btn-secondary" (click)="reveal(q.id)">
+                      <i class="pi pi-eye"></i>
+                      <span i18n="@@course_show_correction">Voir la correction</span>
+                    </button>
+
+                    <div class="badge" *ngIf="quizReveals()[q.id]">
+                      <ng-container *ngIf="checkQuiz(q) as r">
+                        <span class="badge-ok" *ngIf="r.ok">
+                          <i class="pi pi-check"></i>
+                          <span i18n="@@course_ok">Correct</span>
+                        </span>
+                        <span class="badge-ko" *ngIf="!r.ok">
+                          <i class="pi pi-times"></i>
+                          <span i18n="@@course_ko">Incorrect</span>
+                        </span>
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <div class="quiz-correction" *ngIf="quizReveals()[q.id]">
+                    <ng-container *ngIf="checkQuiz(q) as r">
+                      <div class="corr-row">
+                        <span class="corr-label" i18n="@@course_your_answer">Votre réponse</span>
+                        <span class="corr-value">{{ r.userText }}</span>
+                      </div>
+                      <div class="corr-row">
+                        <span class="corr-label" i18n="@@course_correct_answer">Réponse attendue</span>
+                        <span class="corr-value">{{ r.correctText }}</span>
+                      </div>
+                    </ng-container>
+
+                    <div class="explain">
+                      <i class="pi pi-lightbulb"></i>
+                      <span>{{ q.explanation }}</span>
+                    </div>
+                  </div>
+
+                  <div class="divider"></div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="footer-nav">
+            <button type="button" class="btn-secondary" (click)="prev()" [disabled]="activeIndex() <= 0">
+              <i class="pi pi-arrow-left"></i>
+              <span i18n="@@course_prev">Précédent</span>
+            </button>
+
+            <button type="button" class="btn-primary" (click)="next()" [disabled]="activeIndex() >= course.lessons.length - 1">
+              <span i18n="@@course_next">Suivant</span>
+              <i class="pi pi-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>

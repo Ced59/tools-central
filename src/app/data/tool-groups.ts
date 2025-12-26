@@ -35,7 +35,7 @@ export const TOOL_GROUP_REGISTRY = {
       description: $localize`:@@group_rule_of_three_desc:Règle de trois directe/inverse, tableaux de proportionnalité.`,
       icon: 'pi pi-table',
       route: routes.group('math', 'rule-of-three'),
-      available: false,
+      available: true,
     },
 
     // ✅ PHASE 4
