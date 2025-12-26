@@ -1,3 +1,4 @@
+// scripts/i18n-repair.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
@@ -33,6 +34,53 @@ function asArray(v) {
 
 function deepClone(v) {
   return v == null ? v : JSON.parse(JSON.stringify(v));
+}
+
+// --------------------
+// XML illegal control chars (same strategy as translate/apply)
+// --------------------
+function hasXmlIllegalControlChars(s) {
+  if (typeof s !== "string" || s.length === 0) return false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c < 0x20 && c !== 0x09 && c !== 0x0A && c !== 0x0D) return true;
+  }
+  return false;
+}
+
+function sanitizeXmlIllegalControlCharsToBackslashEscapes(s) {
+  if (typeof s !== "string" || s.length === 0) return s;
+
+  let out = "";
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+
+    if (c === 0x09 || c === 0x0A || c === 0x0D) { out += s[i]; continue; }
+    if (c >= 0x20) { out += s[i]; continue; }
+
+    if (c === 0x0C) out += "\\\\f";
+    else if (c === 0x08) out += "\\\\b";
+    else if (c === 0x0B) out += "\\\\v";
+    else if (c === 0x00) out += "\\\\0";
+    // others: drop
+  }
+
+  return out;
+}
+
+function sanitizeNodeDeep(node) {
+  if (node == null) return node;
+  if (typeof node === "string") return sanitizeXmlIllegalControlCharsToBackslashEscapes(node);
+  if (Array.isArray(node)) return node.map(sanitizeNodeDeep);
+  if (typeof node === "object") {
+    const cloned = { ...node };
+    for (const [k, v] of Object.entries(cloned)) {
+      if (typeof v === "string") cloned[k] = sanitizeXmlIllegalControlCharsToBackslashEscapes(v);
+      else if (typeof v === "object" && v) cloned[k] = sanitizeNodeDeep(v);
+    }
+    return cloned;
+  }
+  return node;
 }
 
 /**
@@ -117,9 +165,7 @@ function hasInvalidPcPhStructure(node) {
     for (const pc of asArray(node.pc)) {
       const es = pc?.["@_equivStart"];
       const ee = pc?.["@_equivEnd"];
-      // both must exist
       if (!es || !ee) return true;
-      // ids are expected/very common; missing ids tends to break tooling
       if (!pc?.["@_id"]) return true;
       if (hasInvalidPcPhStructure(pc)) return true;
     }
@@ -187,15 +233,23 @@ for (const fileName of files) {
     if (!u.segment) u.segment = {};
     const seg = u.segment;
 
-    const srcPh = collectPlaceholders(frSource);
-    const tgtPh = collectPlaceholders(seg.target);
-
     // Force <source> = FR
     const sameSource = JSON.stringify(seg.source ?? null) === JSON.stringify(frSource ?? null);
     if (!sameSource) {
       seg.source = deepClone(frSource);
       fileChanged = true;
     }
+
+    // sanitize target content even if it "looks" ok (fix illegal controls)
+    if (seg.target) {
+      const before = JSON.stringify(seg.target);
+      seg.target = sanitizeNodeDeep(seg.target);
+      const after = JSON.stringify(seg.target);
+      if (before !== after) fileChanged = true;
+    }
+
+    const srcPh = collectPlaceholders(frSource);
+    const tgtPh = collectPlaceholders(seg.target);
 
     // If target empty -> repair
     if (isEmptyTarget(seg.target)) {
@@ -204,25 +258,35 @@ for (const fileName of files) {
       continue;
     }
 
-    // NEW: if raw START_TAG/CLOSE_TAG tokens appear in text => repair
+    // raw tokens => repair
     if (hasRawRangeTokens(seg.target)) {
       seg.target = deepClone(frSource);
       fileChanged = true;
       continue;
     }
 
-    // NEW: invalid pc/ph structure => repair
+    // invalid structure => repair
     if (hasInvalidPcPhStructure(seg.target)) {
       seg.target = deepClone(frSource);
       fileChanged = true;
       continue;
     }
 
-    // Old rule: placeholder set mismatch => repair
+    // placeholder mismatch => repair
     if (!samePlaceholderSet(srcPh, tgtPh)) {
       seg.target = deepClone(frSource);
       fileChanged = true;
       continue;
+    }
+
+    // final safety: if still contains illegal controls in text node, sanitize it
+    if (typeof seg.target === "string" && hasXmlIllegalControlChars(seg.target)) {
+      seg.target = sanitizeXmlIllegalControlCharsToBackslashEscapes(seg.target);
+      fileChanged = true;
+    }
+    if (typeof seg.target === "object" && typeof seg.target["#text"] === "string" && hasXmlIllegalControlChars(seg.target["#text"])) {
+      seg.target["#text"] = sanitizeXmlIllegalControlCharsToBackslashEscapes(seg.target["#text"]);
+      fileChanged = true;
     }
   }
 

@@ -1,3 +1,4 @@
+// scripts/i18n-diagnose.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { XMLParser, XMLBuilder } from "fast-xml-parser";
@@ -10,6 +11,22 @@ const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: "@_
 const builder = new XMLBuilder({ ignoreAttributes: false, attributeNamePrefix: "@_", format: false });
 
 function asArray(v) { return v ? (Array.isArray(v) ? v : [v]) : []; }
+
+function hasXmlIllegalControlChars(s) {
+  if (typeof s !== "string" || s.length === 0) return false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c < 0x20 && c !== 0x09 && c !== 0x0A && c !== 0x0D) return true;
+  }
+  return false;
+}
+
+function extractAnyText(node) {
+  if (!node) return "";
+  if (typeof node === "string") return node;
+  if (typeof node === "object") return String(node["#text"] ?? "");
+  return "";
+}
 
 function collectPlaceholders(node, set = new Set()) {
   if (node == null) return set;
@@ -81,13 +98,18 @@ for (const fileName of files) {
     const tgt = u?.segment?.target;
     const tgtPh = collectPlaceholders(tgt);
 
-    if (isEmptyTarget(tgt) || !sameSet(srcPh, tgtPh)) {
-      console.log(`[OFFENDER] ${locale} id=${id} srcPH=${srcPh.size} tgtPH=${tgtPh.size} empty=${isEmptyTarget(tgt)}`);
+    const tgtText = extractAnyText(tgt);
+
+    // Placeholder mismatch OR empty OR illegal XML controls
+    if (isEmptyTarget(tgt) || !sameSet(srcPh, tgtPh) || hasXmlIllegalControlChars(tgtText)) {
+      console.log(
+        `[OFFENDER] ${locale} id=${id} srcPH=${srcPh.size} tgtPH=${tgtPh.size} empty=${isEmptyTarget(tgt)} ctrl=${hasXmlIllegalControlChars(tgtText)}`
+      );
       offenders++;
       if (offenders >= 50) process.exit(2);
     }
   }
 }
 
-if (offenders === 0) console.log("✅ No placeholder mismatches found.");
+if (offenders === 0) console.log("✅ No placeholder mismatches / control-char issues found.");
 else process.exit(2);

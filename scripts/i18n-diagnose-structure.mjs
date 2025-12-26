@@ -1,3 +1,4 @@
+// scripts/i18n-diagnose-structure.mjs
 import fs from "node:fs";
 import path from "node:path";
 import { XMLParser } from "fast-xml-parser";
@@ -18,9 +19,16 @@ function asArray(v) {
 }
 
 function hasRawRangeTokens(s) {
-  // Les tokens utilisés en interne par Angular localize pour les ranges
-  // ne doivent pas se retrouver en texte brut dans un <target>.
   return /\bSTART_TAG_[A-Z0-9_]+\b/.test(s) || /\bCLOSE_TAG_[A-Z0-9_]+\b/.test(s);
+}
+
+function hasXmlIllegalControlChars(s) {
+  if (typeof s !== "string" || s.length === 0) return false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c < 0x20 && c !== 0x09 && c !== 0x0A && c !== 0x0D) return true;
+  }
+  return false;
 }
 
 function validatePc(node, issues, ctx) {
@@ -32,21 +40,13 @@ function validatePc(node, issues, ctx) {
   for (const pc of pcs) {
     const es = pc?.["@_equivStart"];
     const ee = pc?.["@_equivEnd"];
-    // pc MUST have both start/end
-    if (!es || !ee) {
-      issues.push(`${ctx} pc missing equivStart/equivEnd`);
-    }
-    // pc id should exist (pratique, souvent présent)
-    if (!pc?.["@_id"]) {
-      issues.push(`${ctx} pc missing @_id`);
-    }
-    // recurse into pc content
+    if (!es || !ee) issues.push(`${ctx} pc missing equivStart/equivEnd`);
+    if (!pc?.["@_id"]) issues.push(`${ctx} pc missing @_id`);
     validatePc(pc, issues, ctx);
   }
 
   const phs = node.ph ? asArray(node.ph) : [];
   for (const ph of phs) {
-    // ph equiv should exist
     if (!ph?.["@_equiv"]) issues.push(`${ctx} ph missing @_equiv`);
     if (!ph?.["@_id"]) issues.push(`${ctx} ph missing @_id`);
   }
@@ -75,7 +75,7 @@ function main() {
 
       const ctx = `${locale} id=${id}`;
 
-      // 1) target string contenant des tokens de ranges => très suspect
+      // raw START_TAG tokens in text
       if (typeof tgt === "string" && hasRawRangeTokens(tgt)) {
         console.log(`[SUSPECT] ${ctx} target has raw range tokens`);
         count++;
@@ -87,7 +87,18 @@ function main() {
         continue;
       }
 
-      // 2) validate pc/ph structure if any
+      // illegal control chars in text node
+      const tText =
+        typeof tgt === "string" ? tgt :
+          (tgt && typeof tgt === "object" ? String(tgt["#text"] ?? "") : "");
+
+      if (hasXmlIllegalControlChars(tText)) {
+        console.log(`[SUSPECT] ${ctx} target contains illegal XML control chars`);
+        count++;
+        continue;
+      }
+
+      // validate pc/ph structure
       const issues = [];
       validatePc(tgt, issues, ctx);
       if (issues.length) {
@@ -99,7 +110,7 @@ function main() {
     }
   }
 
-  if (count === 0) console.log("✅ No structural suspects found.");
+  if (count === 0) console.log("✅ No structural/control-char suspects found.");
   else process.exit(2);
 }
 

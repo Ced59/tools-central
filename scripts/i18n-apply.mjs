@@ -1,27 +1,6 @@
 // scripts/i18n-apply.mjs
 //
 // Applique les traductions depuis des fichiers JSON "todo" vers les fichiers XLF.
-//
-// ✅ Supporte :
-// - un dossier (par défaut dist/i18n/todo) contenant des fichiers *.todo.json (un par locale)
-// - un fichier unique *.todo.json
-//
-// Format attendu d'un fichier todo :
-// {
-//   "generatedAt": "...",
-//   "projectName": "tools-central",
-//   "sourceLocale": "fr",
-//   "locale": "de",
-//   "items": [
-//     {
-//       "id": "...",
-//       "status": "new|needs-review|...",
-//       "source": "...|{...}",
-//       "currentTarget": "...",
-//       "translatedTarget": "...|{...}"
-//     }
-//   ]
-// }
 
 import fs from "node:fs";
 import path from "node:path";
@@ -49,7 +28,6 @@ function loadXlf(filePath) {
 }
 
 function writeXlf(filePath, obj) {
-  // fast-xml-parser peut inclure '?xml' selon les configs : on force notre header
   if (obj["?xml"]) delete obj["?xml"];
   const xmlBody = builder.build(obj);
   const xml = `<?xml version="1.0" encoding="UTF-8"?>\n${xmlBody}\n`;
@@ -79,14 +57,53 @@ function getOrCreateSegment(unit) {
 }
 
 // --------------------
+// XML illegal control chars helpers
+// --------------------
+function sanitizeXmlIllegalControlCharsToBackslashEscapes(s) {
+  if (typeof s !== "string" || s.length === 0) return s;
+
+  let out = "";
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+
+    // allowed
+    if (c === 0x09 || c === 0x0A || c === 0x0D) {
+      out += s[i];
+      continue;
+    }
+
+    if (c >= 0x20) {
+      out += s[i];
+      continue;
+    }
+
+    // illegal controls
+    if (c === 0x0C) out += "\\\\f";
+    else if (c === 0x08) out += "\\\\b";
+    else if (c === 0x0B) out += "\\\\v";
+    else if (c === 0x00) out += "\\\\0";
+    // others: drop
+  }
+
+  return out;
+}
+
+function sanitizeValueDeep(value) {
+  if (typeof value === "string") return sanitizeXmlIllegalControlCharsToBackslashEscapes(value);
+  if (value && typeof value === "object") {
+    const cloned = Array.isArray(value) ? [...value] : { ...value };
+    for (const [k, v] of Object.entries(cloned)) {
+      if (typeof v === "string") cloned[k] = sanitizeXmlIllegalControlCharsToBackslashEscapes(v);
+      else if (typeof v === "object" && v) cloned[k] = sanitizeValueDeep(v);
+    }
+    return cloned;
+  }
+  return value;
+}
+
+// --------------------
 // KaTeX helpers
 // --------------------
-
-/**
- * Détecte "c'est du KaTeX" :
- * - id qui finit par _katex (convention)
- * - ou présence de commandes latex typiques dans la valeur (string ou object)
- */
 function looksLikeKatex(id, value) {
   if ((id ?? "").endsWith("_katex")) return true;
 
@@ -97,16 +114,14 @@ function looksLikeKatex(id, value) {
         ? (value["#text"] ?? "")
         : "";
 
-  // heuristique légère (évite d’over-escape du texte normal)
   return /\\(text|mathrm|dfrac|frac|times|begin|end|left|right|%)/.test(s);
 }
 
 /**
- * IMPORTANT:
- * - On veut écrire \\text dans le XLF pour éviter que \text => \t (TAB) dans du JS généré.
- * - Idempotent: ne double que les backslashes "simples" (pas ceux déjà doublés).
- * - Répare aussi une tabulation réelle si elle s'est déjà glissée.
- * - Protège { } contre ICU Angular i18n (Angular interprète { } comme ICU)
+ * - Protège { } contre ICU Angular i18n
+ * - Double les backslashes simples
+ * - Remplace TAB réel par \t littéral
+ * - ET applique la sanitization XML (anti contrôles illégaux)
  */
 function escapeKatexForXlfString(s) {
   if (typeof s !== "string" || s.length === 0) return s;
@@ -115,18 +130,18 @@ function escapeKatexForXlfString(s) {
     .replace(/{/g, "&#123;")
     .replace(/}/g, "&#125;");
 
-  // Remplace un vrai TAB par \t littéral
   out = out.replace(/\t/g, "\\t");
 
   // Double uniquement les backslashes non déjà doublés
   out = out.replace(/(?<!\\)\\(?!\\)/g, "\\\\");
+  out = sanitizeXmlIllegalControlCharsToBackslashEscapes(out);
+
   return out;
 }
 
 function escapeKatexForXlf(value) {
   if (typeof value === "string") return escapeKatexForXlfString(value);
 
-  // Cas "rich text" (pc + #text, éventuellement ph)
   if (value && typeof value === "object") {
     const cloned = { ...value };
     if (typeof cloned["#text"] === "string") {
@@ -144,23 +159,24 @@ function escapeKatexForXlf(value) {
 function setTarget(unit, value, state = "translated") {
   const seg = getOrCreateSegment(unit);
 
-  // Cas string classique
-  if (typeof value === "string") {
+  // sanitize globally (even for non-katex)
+  const safeValue = sanitizeValueDeep(value);
+
+  if (typeof safeValue === "string") {
     if (!seg.target) {
-      seg.target = { "#text": value, "@_state": state };
+      seg.target = { "#text": safeValue, "@_state": state };
       return;
     }
     if (typeof seg.target === "string") {
       seg.target = { "#text": seg.target };
     }
-    seg.target["#text"] = value;
+    seg.target["#text"] = safeValue;
     seg.target["@_state"] = state;
     return;
   }
 
-  // Cas "rich text"
-  if (value && typeof value === "object") {
-    seg.target = { ...value, "@_state": state };
+  if (safeValue && typeof safeValue === "object") {
+    seg.target = { ...safeValue, "@_state": state };
     return;
   }
 }
@@ -175,7 +191,6 @@ function isDirectory(p) {
 function loadTodoPayloads(inputPath) {
   if (!fs.existsSync(inputPath)) return [];
 
-  // dossier => charger tous les *.todo.json
   if (isDirectory(inputPath)) {
     const files = fs
       .readdirSync(inputPath)
@@ -188,7 +203,6 @@ function loadTodoPayloads(inputPath) {
     }));
   }
 
-  // fichier unique
   return [
     {
       file: inputPath,
@@ -249,7 +263,6 @@ for (const { file: todoFile, payload } of todos) {
       continue;
     }
 
-    // trim si string, sinon garder object tel quel
     const translatedTarget =
       typeof translatedTargetRaw === "string"
         ? translatedTargetRaw.trim()
@@ -275,10 +288,9 @@ for (const { file: todoFile, payload } of todos) {
       continue;
     }
 
-    // Escape KaTeX automatiquement au moment d'écrire dans le XLF
     const finalValue = looksLikeKatex(id, translatedTarget)
       ? escapeKatexForXlf(translatedTarget)
-      : translatedTarget;
+      : sanitizeValueDeep(translatedTarget);
 
     setTarget(unit, finalValue, "translated");
     applied++;
@@ -286,9 +298,7 @@ for (const { file: todoFile, payload } of todos) {
   }
 
   writeXlf(xlfPath, xlf);
-  console.log(
-    `[i18n-apply] ${locale}: applied ${appliedInLocale} (from ${path.basename(todoFile)})`
-  );
+  console.log(`[i18n-apply] ${locale}: applied ${appliedInLocale} (from ${path.basename(todoFile)})`);
 }
 
 console.log(

@@ -39,6 +39,9 @@ const REQUEST_TIMEOUT_MS = 60_000;
 // Si un batch renvoie un tableau de taille différente, on retente "strict" N fois
 const MAX_MISMATCH_RETRIES = 2;
 
+// Si un batch contient des caractères interdits XML, on retente "strict" N fois
+const MAX_CONTROLCHAR_RETRIES = 2;
+
 // Dernier recours : si toujours mismatch, on traduit item par item ce batch
 const FALLBACK_ITEM_BY_ITEM = true;
 
@@ -49,8 +52,10 @@ You are a professional software localization translator.
 Rules:
 - Translate naturally for the target locale.
 - Preserve placeholders, variables, HTML tags, and ICU-like syntax exactly.
-- Do not add extra explanations, punctuation, or quotes.
 - Return ONLY valid JSON according to the required format.
+- CRITICAL: In JSON strings, you MUST escape every backslash as \\\\ .
+  Example: LaTeX \\frac must be written as \\\\frac in JSON.
+- Do not add extra explanations, punctuation, or quotes.
 `.trim();
 
 // =====================================================================================
@@ -111,7 +116,63 @@ function extractPlainText(sourceNode) {
   return "";
 }
 
-// --- FNV-1a 32-bit for cache invalidation ---
+// =====================================================================================
+// XML illegal control chars helpers
+// XML 1.0 disallows most chars < 0x20 except TAB(0x09), LF(0x0A), CR(0x0D).
+// JSON sequences like "\frac" can become form feed 0x0C when parsed.
+// =====================================================================================
+function hasXmlIllegalControlChars(s) {
+  if (typeof s !== "string" || s.length === 0) return false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+    if (c < 0x20 && c !== 0x09 && c !== 0x0A && c !== 0x0D) return true;
+  }
+  return false;
+}
+
+/**
+ * Converts illegal control chars to safe visible sequences.
+ * This specifically fixes the JSON escape issue:
+ * - \f => 0x0C  (form feed) -> "\\f"
+ * - \b => 0x08  (backspace) -> "\\b"
+ * - \v => 0x0B  (vertical tab) -> "\\v"
+ * - \0 => 0x00  (null) -> "\\0"
+ * For any other illegal control char, it is removed.
+ *
+ * After this, the string is safe to embed in XML files.
+ */
+function sanitizeXmlIllegalControlCharsToBackslashEscapes(s) {
+  if (typeof s !== "string" || s.length === 0) return s;
+
+  let out = "";
+  for (let i = 0; i < s.length; i++) {
+    const c = s.charCodeAt(i);
+
+    // allowed
+    if (c === 0x09 || c === 0x0A || c === 0x0D) {
+      out += s[i];
+      continue;
+    }
+
+    if (c >= 0x20) {
+      out += s[i];
+      continue;
+    }
+
+    // illegal controls
+    if (c === 0x0C) out += "\\\\f"; // form feed -> literal "\f"
+    else if (c === 0x08) out += "\\\\b"; // backspace -> literal "\b"
+    else if (c === 0x0B) out += "\\\\v"; // vertical tab -> literal "\v"
+    else if (c === 0x00) out += "\\\\0"; // null -> literal "\0"
+    // other control chars: drop
+  }
+
+  return out;
+}
+
+// =====================================================================================
+// Hash for cache invalidation
+// =====================================================================================
 function hashString(s) {
   let h = 0x811c9dc5;
   for (let i = 0; i < s.length; i++) {
@@ -237,6 +298,7 @@ function parseItemsArrayFromContent(content) {
   const arr = parsed?.items;
   if (!Array.isArray(arr)) throw new Error("OpenAI: expected {items:[...]}");
 
+  // Normalize to strings
   return arr.map((x) => String(x ?? ""));
 }
 
@@ -249,10 +311,18 @@ function buildBatchPrompt({ locale, items, strict }) {
 Return EXACTLY ${items.length} translations.
 The JSON must be: {"items":[...]} with length = ${items.length}.
 Do NOT omit any item. Do NOT merge items. Do NOT add extra fields.
+
+CRITICAL JSON RULE:
+- Every backslash MUST be escaped as \\\\ in JSON strings.
+  Example: output "\\\\frac" not "\\frac".
+
 If unsure, still output an empty string for that position.
 `.trim()
     : `
 Return a JSON object: {"items":[ "t1", "t2", ... ]} in the SAME ORDER.
+
+CRITICAL JSON RULE:
+- Every backslash MUST be escaped as \\\\ in JSON strings.
 `.trim();
 
   return `
@@ -292,6 +362,9 @@ Target locale: ${locale}
 
 Translate this text.
 Return JSON: {"items":["..."]} (one-element array).
+
+CRITICAL JSON RULE:
+- Every backslash MUST be escaped as \\\\ in JSON strings.
 
 Text:
 ${sourceText}
@@ -342,49 +415,72 @@ async function withRetries(fn, { maxRetries }) {
   }
 }
 
-async function translateBatchWithMismatchHandling({ locale, payloadItems }) {
+function sanitizeBatchResults(results) {
+  return results.map((t) => sanitizeXmlIllegalControlCharsToBackslashEscapes(String(t ?? "")));
+}
+
+function batchHasIllegalControls(results) {
+  return results.some((t) => hasXmlIllegalControlChars(String(t ?? "")));
+}
+
+async function translateBatchWithHardening({ locale, payloadItems }) {
   const expected = payloadItems.length;
 
-  // 1) normal try (with usual retries)
+  // 1) normal try
   let results = await withRetries(
     () => translateBatchOpenAI({ locale, items: payloadItems, strict: false }),
     { maxRetries: MAX_RETRIES }
   );
 
-  if (results.length === expected) return results;
-
-  // 2) strict retries (no need to redo MAX_RETRIES network-wise; we do a small number)
-  for (let i = 1; i <= MAX_MISMATCH_RETRIES; i++) {
-    console.warn(
-      `⚠️ ${locale}: batch size mismatch (${results.length} vs ${expected}) -> strict retry ${i}/${MAX_MISMATCH_RETRIES}`
-    );
-
-    results = await withRetries(
-      () => translateBatchOpenAI({ locale, items: payloadItems, strict: true }),
-      { maxRetries: MAX_RETRIES }
-    );
-
-    if (results.length === expected) return results;
+  // size mismatch handling
+  if (results.length !== expected) {
+    for (let i = 1; i <= MAX_MISMATCH_RETRIES; i++) {
+      console.warn(
+        `⚠️ ${locale}: batch size mismatch (${results.length} vs ${expected}) -> strict retry ${i}/${MAX_MISMATCH_RETRIES}`
+      );
+      results = await withRetries(
+        () => translateBatchOpenAI({ locale, items: payloadItems, strict: true }),
+        { maxRetries: MAX_RETRIES }
+      );
+      if (results.length === expected) break;
+    }
+    if (results.length !== expected) {
+      if (!FALLBACK_ITEM_BY_ITEM) {
+        throw new Error(`OpenAI: batch size mismatch (${results.length} vs ${expected})`);
+      }
+      console.warn(`🛟 ${locale}: fallback item-by-item for this batch (${expected} items)`);
+      const out = [];
+      for (const one of payloadItems) {
+        const text = await withRetries(
+          () => translateOneOpenAI({ locale, sourceText: one.sourceText }),
+          { maxRetries: MAX_RETRIES }
+        );
+        out.push(text);
+      }
+      results = out;
+    }
   }
 
-  // 3) fallback item-by-item for this batch only
-  if (!FALLBACK_ITEM_BY_ITEM) {
-    throw new Error(`OpenAI: batch size mismatch (${results.length} vs ${expected})`);
+  // 2) control-char handling: retry strict if found
+  if (batchHasIllegalControls(results)) {
+    for (let i = 1; i <= MAX_CONTROLCHAR_RETRIES; i++) {
+      console.warn(`⚠️ ${locale}: illegal XML control chars detected -> strict retry ${i}/${MAX_CONTROLCHAR_RETRIES}`);
+      const retryResults = await withRetries(
+        () => translateBatchOpenAI({ locale, items: payloadItems, strict: true }),
+        { maxRetries: MAX_RETRIES }
+      );
+
+      if (retryResults.length === expected && !batchHasIllegalControls(retryResults)) {
+        results = retryResults;
+        break;
+      }
+    }
   }
 
-  console.warn(`🛟 ${locale}: fallback item-by-item for this batch (${expected} items)`);
+  // 3) sanitize as last line of defense (guarantees XML safety)
+  results = sanitizeBatchResults(results);
 
-  const out = [];
-  for (let i = 0; i < payloadItems.length; i++) {
-    const one = payloadItems[i];
-    const text = await withRetries(
-      () => translateOneOpenAI({ locale, sourceText: one.sourceText }),
-      { maxRetries: MAX_RETRIES }
-    );
-    out.push(text);
-  }
-
-  return out;
+  return results;
 }
 
 // =====================================================================================
@@ -417,6 +513,7 @@ async function translateLocale(todoFilePath) {
 
     const currentHash = getSourceHash(it);
 
+    // ✅ guarantee retranslation on source change
     if (entry.srcHash && entry.srcHash !== currentHash) {
       cacheSkipsHashMismatch++;
       continue;
@@ -463,12 +560,11 @@ async function translateLocale(todoFilePath) {
       `📝 ${locale} - Traduction ${start}/${toTranslate.length} → ${end}/${toTranslate.length} (batch ${batchIndex + 1}/${batches.length})`
     );
 
-    const results = await translateBatchWithMismatchHandling({ locale, payloadItems });
+    const results = await translateBatchWithHardening({ locale, payloadItems });
 
     let appliedThisBatch = 0;
     let emptyThisBatch = 0;
 
-    // APPLY BY INDEX
     for (let i = 0; i < batch.length; i++) {
       const it = batch[i];
       const t = String(results[i] ?? "").trim();
@@ -479,17 +575,18 @@ async function translateLocale(todoFilePath) {
         continue;
       }
 
-      applyTranslation(it, t);
+      // safety again (idempotent)
+      const safe = sanitizeXmlIllegalControlCharsToBackslashEscapes(t);
+
+      applyTranslation(it, safe);
       appliedThisBatch++;
       translatedApplied++;
 
       const srcHash = getSourceHash(it);
-      writeCacheEntry(cache, it.id, t, srcHash);
+      writeCacheEntry(cache, it.id, safe, srcHash);
     }
 
-    console.log(
-      `   ↳ received: ${results.length}, applied: ${appliedThisBatch}, empty: ${emptyThisBatch}`
-    );
+    console.log(`   ↳ received: ${results.length}, applied: ${appliedThisBatch}, empty: ${emptyThisBatch}`);
   }
 
   // Concurrency pool
@@ -510,7 +607,6 @@ async function translateLocale(todoFilePath) {
   console.log(`✅ ${locale} done (${translatedApplied} translated, ${translatedEmpty} empty)`);
 }
 
-
 // =====================================================================================
 // Entrypoint
 // =====================================================================================
@@ -520,7 +616,6 @@ async function main() {
     console.log("No todo files found.");
     return;
   }
-
   for (const f of files) {
     await translateLocale(f);
   }
