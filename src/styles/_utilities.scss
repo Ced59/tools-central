@@ -1,0 +1,208 @@
+// =============================================================================
+// UTILITIES - Classes utilitaires globales
+// =============================================================================
+@use 'tokens' as t;
+@use 'mixins' as m;
+
+// -----------------------------------------------------------------------------
+// ACCESSIBILITY
+// -----------------------------------------------------------------------------
+.sr-only {
+  @include m.sr-only;
+}
+
+// -----------------------------------------------------------------------------
+// TEXT
+// -----------------------------------------------------------------------------
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.text-muted { color: var(--text-color-secondary); }
+.text-primary { color: var(--primary-color); }
+.text-success { color: var(--success-color); }
+.text-error { color: var(--error-color); }
+
+.text-xs { font-size: t.$text-xs; }
+.text-sm { font-size: t.$text-sm; }
+.text-base { font-size: t.$text-base; }
+.text-lg { font-size: t.$text-lg; }
+.text-xl { font-size: t.$text-xl; }
+.text-2xl { font-size: t.$text-2xl; }
+
+.font-medium { font-weight: t.$weight-medium; }
+.font-semibold { font-weight: t.$weight-semibold; }
+.font-bold { font-weight: t.$weight-bold; }
+.font-extrabold { font-weight: t.$weight-extrabold; }
+
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+
+.truncate {
+  @include m.text-truncate;
+}
+
+.mono {
+  font-family: t.$font-mono;
+  font-size: t.$text-base;
+}
+
+// -----------------------------------------------------------------------------
+// OPACITY
+// -----------------------------------------------------------------------------
+.opacity-50 { opacity: 0.5; }
+.opacity-70 { opacity: 0.7; }
+.opacity-80 { opacity: 0.8; }
+.muted { opacity: 0.7; }
+
+// -----------------------------------------------------------------------------
+// DISPLAY
+// -----------------------------------------------------------------------------
+.hidden { display: none; }
+.block { display: block; }
+.inline-block { display: inline-block; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.grid { display: grid; }
+
+// -----------------------------------------------------------------------------
+// SPACING - Margins
+// -----------------------------------------------------------------------------
+.m-0 { margin: 0; }
+.m-auto { margin: auto; }
+.mx-auto { margin-inline: auto; }
+
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: t.$space-1; }
+.mt-2 { margin-top: t.$space-2; }
+.mt-3 { margin-top: t.$space-3; }
+.mt-4 { margin-top: t.$space-4; }
+.mt-5 { margin-top: t.$space-5; }
+.mt-6 { margin-top: t.$space-6; }
+.mt-8 { margin-top: t.$space-8; }
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: t.$space-1; }
+.mb-2 { margin-bottom: t.$space-2; }
+.mb-3 { margin-bottom: t.$space-3; }
+.mb-4 { margin-bottom: t.$space-4; }
+.mb-5 { margin-bottom: t.$space-5; }
+.mb-6 { margin-bottom: t.$space-6; }
+.mb-8 { margin-bottom: t.$space-8; }
+
+// -----------------------------------------------------------------------------
+// SPACING - Paddings
+// -----------------------------------------------------------------------------
+.p-0 { padding: 0; }
+.p-3 { padding: t.$space-3; }
+.p-4 { padding: t.$space-4; }
+.p-5 { padding: t.$space-5; }
+.p-6 { padding: t.$space-6; }
+
+.px-3 { padding-inline: t.$space-3; }
+.px-4 { padding-inline: t.$space-4; }
+.px-5 { padding-inline: t.$space-5; }
+
+.py-3 { padding-block: t.$space-3; }
+.py-4 { padding-block: t.$space-4; }
+.py-5 { padding-block: t.$space-5; }
+
+// -----------------------------------------------------------------------------
+// GAPS
+// -----------------------------------------------------------------------------
+.gap-1 { gap: t.$space-1; }
+.gap-2 { gap: t.$space-2; }
+.gap-3 { gap: t.$space-3; }
+.gap-4 { gap: t.$space-4; }
+.gap-5 { gap: t.$space-5; }
+.gap-6 { gap: t.$space-6; }
+
+// -----------------------------------------------------------------------------
+// WIDTH & HEIGHT
+// -----------------------------------------------------------------------------
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-screen { min-height: 100vh; }
+
+// -----------------------------------------------------------------------------
+// FLEX UTILITIES
+// -----------------------------------------------------------------------------
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.items-baseline { align-items: baseline; }
+
+.justify-center { justify-content: center; }
+.justify-between { justify-content: space-between; }
+.justify-start { justify-content: flex-start; }
+.justify-end { justify-content: flex-end; }
+
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.flex-1 { flex: 1; }
+.flex-shrink-0 { flex-shrink: 0; }
+
+// -----------------------------------------------------------------------------
+// BORDERS & RADIUS
+// -----------------------------------------------------------------------------
+.rounded { border-radius: t.$radius-md; }
+.rounded-lg { border-radius: t.$radius-lg; }
+.rounded-xl { border-radius: t.$radius-xl; }
+.rounded-full { border-radius: t.$radius-full; }
+
+.border { border: 1px solid var(--border-color); }
+.border-t { border-top: 1px solid var(--border-color); }
+.border-b { border-bottom: 1px solid var(--border-color); }
+.border-l { border-left: 1px solid var(--border-color); }
+
+.border-primary { border-color: var(--primary-color); }
+
+// -----------------------------------------------------------------------------
+// BACKGROUNDS
+// -----------------------------------------------------------------------------
+.bg-ground { background: var(--surface-ground); }
+.bg-card { background: var(--surface-card); }
+.bg-primary { background: var(--primary-color); }
+
+// -----------------------------------------------------------------------------
+// CURSORS
+// -----------------------------------------------------------------------------
+.cursor-pointer { cursor: pointer; }
+.cursor-default { cursor: default; }
+.pointer-events-none { pointer-events: none; }
+
+// -----------------------------------------------------------------------------
+// TRANSITIONS
+// -----------------------------------------------------------------------------
+.transition-all {
+  transition: all t.$transition-slow;
+}
+
+.transition-colors {
+  transition: color t.$transition-slow, background-color t.$transition-slow, border-color t.$transition-slow;
+}
+
+// -----------------------------------------------------------------------------
+// POSITION
+// -----------------------------------------------------------------------------
+.relative { position: relative; }
+.absolute { position: absolute; }
+.sticky { position: sticky; }
+.inset-0 { inset: 0; }
+
+// -----------------------------------------------------------------------------
+// Z-INDEX
+// -----------------------------------------------------------------------------
+.z-0 { z-index: 0; }
+.z-10 { z-index: 10; }
+.z-20 { z-index: 20; }
+.z-50 { z-index: 50; }
+
+// -----------------------------------------------------------------------------
+// OVERFLOW
+// -----------------------------------------------------------------------------
+.overflow-hidden { overflow: hidden; }
+.overflow-auto { overflow: auto; }
+.overflow-x-auto { overflow-x: auto; }
