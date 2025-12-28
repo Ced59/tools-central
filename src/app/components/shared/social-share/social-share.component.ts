@@ -9,6 +9,7 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import * as QRCode from 'qrcode';
 
 type ShareContext = 'tool' | 'category' | 'home' | 'generic';
 
@@ -451,8 +452,7 @@ export class SocialShareComponent implements OnInit {
       if (!url) throw new Error('Missing URL');
 
       // Import + calcul hors zone (perf), puis on revient dans la zone pour MAJ l'UI
-      const mod = await import('qrcode');
-      const dataUrl = await mod.toDataURL(url, {
+      const dataUrl = await QRCode.toDataURL(url, {
         margin: 1,
         scale: 6,
         errorCorrectionLevel: 'M',
