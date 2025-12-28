@@ -18,7 +18,6 @@ export const DEV_PDF_TOOLS = {
         ).then(m => m.PdfFormFieldsToJsonToolComponent),
   },
 
-  // Idées proches (toujours TS pur, faisables côté navigateur)
   'pdf-metadata-to-json': {
     category: 'dev',
     group: 'pdf',
@@ -27,7 +26,11 @@ export const DEV_PDF_TOOLS = {
     description: $localize`:@@tool_pdf_metadata_to_json_desc:Titre, auteur, dates, nombre de pages et infos document exportées en JSON.`,
     icon: 'pi pi-info-circle',
     route: routes.tool('dev', 'pdf', 'pdf-metadata-to-json'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-metadata-to-json-tool/pdf-metadata-to-json-tool.component'
+        ).then(m => m.PdfMetadataToJsonToolComponent),
   },
 
   'pdf-outline-to-json': {
@@ -38,7 +41,11 @@ export const DEV_PDF_TOOLS = {
     description: $localize`:@@tool_pdf_outline_to_json_desc:Extraire le plan (bookmarks) du PDF et l’exporter au format JSON.`,
     icon: 'pi pi-list',
     route: routes.tool('dev', 'pdf', 'pdf-outline-to-json'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-outline-to-json-tool/pdf-outline-to-json-tool.component'
+        ).then(m => m.PdfOutlineToJsonToolComponent),
   },
 
   'pdf-links-extractor': {
@@ -49,7 +56,11 @@ export const DEV_PDF_TOOLS = {
     description: $localize`:@@tool_pdf_links_extractor_desc:Récupérer toutes les URL cliquables d’un PDF et les exporter (JSON/texte).`,
     icon: 'pi pi-link',
     route: routes.tool('dev', 'pdf', 'pdf-links-extractor'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-links-to-json-tool/pdf-links-to-json-tool.component'
+        ).then(m => m.PdfLinksToJsonToolComponent),
   },
 
   'pdf-fonts-to-json': {
@@ -60,6 +71,24 @@ export const DEV_PDF_TOOLS = {
     description: $localize`:@@tool_pdf_fonts_to_json_desc:Identifier les polices utilisées dans un PDF et exporter la liste en JSON.`,
     icon: 'pi pi-align-left',
     route: routes.tool('dev', 'pdf', 'pdf-fonts-to-json'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-fonts-to-json-tool/pdf-fonts-to-json-tool.component'
+        ).then(m => m.PdfFontsToJsonToolComponent),
+  },
+  'pdf-pages-to-json': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_pages_to_json_title:Pages PDF → JSON`,
+    description: $localize`:@@tool_pdf_pages_to_json_desc:Exporter les informations de pages (dimensions, rotation, orientation, format) d’un PDF au format JSON.`,
+    icon: 'pi pi-clone',
+    route: routes.tool('dev', 'pdf', 'pdf-pages-to-json'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-pages-to-json-tool/pdf-pages-to-json-tool.component'
+        ).then(m => m.PdfPagesToJsonToolComponent),
   },
 } as const satisfies Record<string, AtomicToolAny>;

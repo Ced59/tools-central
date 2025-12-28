@@ -1,0 +1,214 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-file"></i>
+        </div>
+
+        <h1 i18n="@@pdf_fonts_title">Polices PDF → JSON</h1>
+        <p class="hero-subtitle" i18n="@@pdf_fonts_subtitle">
+          Identifiez les polices déclarées/utilisées dans un PDF (ressources des pages) et exportez la liste au format JSON, localement.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <!-- Card: Import -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pdf_fonts_card_import_title">Importer un PDF</h2>
+        <p class="muted" i18n="@@pdf_fonts_card_import_sub">
+          Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.
+        </p>
+      </div>
+
+      <div class="calc-form">
+        <input
+          class="sr-only"
+          type="file"
+          [id]="fileInputId"
+          accept="application/pdf"
+          (change)="onFileSelected($event)"
+        />
+
+        <div class="actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-upload"
+            [label]="ui.btnPick"
+            (click)="triggerFilePick()"
+            [disabled]="status() === 'loading'"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-refresh"
+            class="p-button-secondary"
+            [label]="ui.btnReset"
+            (click)="reset()"
+            [disabled]="status() === 'loading' && !fileName()"
+          ></button>
+
+          <span *ngIf="fileName()" class="muted">
+            <span class="mono">{{ fileName() }}</span>
+            <span class="muted"> • {{ (fileSize() / 1024 / 1024) | number:'1.2-2' }} MB</span>
+          </span>
+
+          <p-tag *ngIf="status() === 'loading'" severity="info" [value]="ui.statusLoading"></p-tag>
+          <p-tag *ngIf="status() === 'ready'" severity="success" [value]="ui.statusReady"></p-tag>
+          <p-tag *ngIf="status() === 'error'" severity="danger" [value]="ui.statusError"></p-tag>
+        </div>
+
+        <div *ngIf="tipMessage()" class="tip-box" role="status">
+          <i class="pi pi-lightbulb" aria-hidden="true"></i>
+          <div>{{ tipMessage() }}</div>
+        </div>
+
+        <div *ngIf="errorMessage()" class="tip-box" role="alert">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          <div>
+            <div><strong i18n="@@pdf_fonts_err_title">Impossible d’extraire les polices.</strong></div>
+            <div class="muted">{{ errorMessage() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="status() === 'ready'" class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pdf_fonts_card_results_title">Résultats</h2>
+        <p class="muted" i18n="@@pdf_fonts_card_results_sub">
+          Aperçu des polices détectées et export JSON.
+        </p>
+      </div>
+
+      <div class="results-grid">
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_fonts_stat_pages_label">Pages</div>
+          <div class="value">{{ stats().pages }}</div>
+        </div>
+
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_fonts_stat_total_label">Polices</div>
+          <div class="value">{{ stats().total }}</div>
+        </div>
+
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_fonts_stat_embedded_label">Embeddées</div>
+          <div class="value">{{ stats().embedded }}</div>
+        </div>
+
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_fonts_stat_not_embedded_label">Non emb.</div>
+          <div class="value">{{ stats().notEmbedded }}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="fields-json-layout">
+        <!-- Left -->
+        <div class="fields-list">
+          <div class="fields-list-header">
+            <div>
+              <strong i18n="@@pdf_fonts_list_title">Polices</strong>
+              <span class="muted"> • {{ filteredFonts().length }}/{{ fonts().length }}</span>
+            </div>
+
+            <div class="actions">
+              <input pInputText type="text" [formControl]="form.controls.filter" [placeholder]="ui.placeholderFilter" />
+            </div>
+          </div>
+
+          <div *ngIf="filteredFonts().length === 0" class="empty-box">
+            <i class="pi pi-search" aria-hidden="true"></i>
+            <span i18n="@@pdf_fonts_empty">Aucune police à afficher.</span>
+          </div>
+
+          <div *ngFor="let it of filteredFonts()" class="field-card">
+            <div class="field-card-header">
+              <div class="field-card-title">
+                <span class="field-name">{{ it.baseFont || '—' }}</span>
+                <span class="muted mono" *ngIf="it.resourceKey">({{ it.resourceKey }})</span>
+              </div>
+
+              <div class="field-card-page" *ngIf="it.embedded !== null">
+                <span class="muted" i18n="@@pdf_fonts_embedded">Emb.</span>
+                <span class="mono">{{ it.embedded ? 'true' : 'false' }}</span>
+              </div>
+            </div>
+
+            <div class="field-card-advanced">
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_fonts_subtype">Subtype</div>
+                <div class="adv-v mono">{{ it.subtype ?? 'null' }}</div>
+              </div>
+
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_fonts_encoding">Encodage</div>
+                <div class="adv-v mono">{{ it.encoding ?? 'null' }}</div>
+              </div>
+
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_fonts_tounicode">ToUnicode</div>
+                <div class="adv-v mono">{{ it.toUnicode ?? 'null' }}</div>
+              </div>
+
+              <div class="adv-kv" *ngIf="form.controls.includePages.value">
+                <div class="adv-k" i18n="@@pdf_fonts_pages">Pages</div>
+                <div class="adv-v mono">
+                  <span *ngIf="it.pages?.length; else noPages">{{ it.pages?.join(', ') }}</span>
+                  <ng-template #noPages><span class="muted">—</span></ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="json-panel" aria-label="JSON">
+          <div class="json-panel-header">
+            <div>
+              <strong i18n="@@pdf_fonts_json_title">JSON</strong>
+              <span class="muted" i18n="@@pdf_fonts_json_sub">Exportable</span>
+            </div>
+
+            <div class="actions">
+              <button pButton type="button" icon="pi pi-copy" class="p-button-secondary" [label]="ui.btnCopy" (click)="copyJson()"></button>
+              <button pButton type="button" icon="pi pi-download" [label]="ui.btnDownload" (click)="downloadJson()"></button>
+            </div>
+          </div>
+
+          <pre class="json-content">{{ jsonText() }}</pre>
+
+          <div class="divider"></div>
+
+          <div class="actions" style="padding: 0 1.25rem 1.25rem; flex-direction: column; align-items: flex-start;">
+            <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+              <input type="checkbox" [formControl]="form.controls.pretty" />
+              <span i18n="@@pdf_fonts_pretty">JSON “pretty” (indenté)</span>
+            </label>
+
+            <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+              <input type="checkbox" [formControl]="form.controls.includePages" />
+              <span i18n="@@pdf_fonts_include_pages">Inclure les pages d’utilisation</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="tool-back">
+      <a routerLink="/categories/dev/pdf" class="back-link" i18n="@@pdf_fonts_back">
+        ← Retour aux outils PDF
+      </a>
+    </div>
+  </div>
+</section>

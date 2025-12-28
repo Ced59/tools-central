@@ -1,0 +1,72 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-clone"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="errorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="pages().length"
+  [filteredCount]="filteredPages().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div *ngFor="let it of filteredPages()" class="field-card">
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">{{ ui.pageLabel }} {{ it.pageNumber }}</span>
+          <span class="muted mono" *ngIf="it.sizeName">• {{ it.sizeName }}</span>
+        </div>
+
+        <div class="field-card-page">
+          <span class="muted">{{ ui.rotLabel }}</span>
+          <span class="mono">{{ it.rotationDeg }}°</span>
+        </div>
+      </div>
+
+      <div class="field-card-advanced">
+        <div class="adv-kv">
+          <div class="adv-k">{{ ui.orientationLabel }}</div>
+          <div class="adv-v mono">{{ it.orientation }}</div>
+        </div>
+
+        <div class="adv-kv">
+          <div class="adv-k">{{ ui.sizePtLabel }}</div>
+          <div class="adv-v mono">{{ it.widthPt }} × {{ it.heightPt }}</div>
+        </div>
+
+        <div class="adv-kv" *ngIf="includeMm()">
+          <div class="adv-k">{{ ui.sizeMmLabel }}</div>
+          <div class="adv-v mono">{{ it.widthMm }} × {{ it.heightMm }}</div>
+        </div>
+
+        <div class="adv-kv">
+          <div class="adv-k">{{ ui.formatGuessLabel }}</div>
+          <div class="adv-v mono">{{ it.sizeName ?? 'null' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span>{{ ui.prettyLabel }}</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeMm" />
+      <span>{{ ui.includeMmLabel }}</span>
+    </label>
+  </div>
+</app-pdf-tool-shell>

@@ -1,0 +1,212 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="pi pi-list"></i>
+        </div>
+
+        <h1 i18n="@@pdf_outline_title">Sommaire PDF → JSON</h1>
+        <p class="hero-subtitle" i18n="@@pdf_outline_subtitle">
+          Extrayez le sommaire (bookmarks / outline) d’un PDF et exportez-le au format JSON, localement dans votre navigateur.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <!-- Card: Import -->
+    <div class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pdf_outline_card_import_title">Importer un PDF</h2>
+        <p class="muted" i18n="@@pdf_outline_card_import_sub">
+          Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.
+        </p>
+      </div>
+
+      <div class="calc-form">
+        <input
+          class="sr-only"
+          type="file"
+          [id]="fileInputId"
+          accept="application/pdf"
+          (change)="onFileSelected($event)"
+        />
+
+        <div class="actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-upload"
+            [label]="ui.btnPick"
+            (click)="triggerFilePick()"
+            [disabled]="status() === 'loading'"
+          ></button>
+
+          <button
+            pButton
+            type="button"
+            icon="pi pi-refresh"
+            class="p-button-secondary"
+            [label]="ui.btnReset"
+            (click)="reset()"
+            [disabled]="status() === 'loading' && !fileName()"
+          ></button>
+
+          <span *ngIf="fileName()" class="muted">
+            <span class="mono">{{ fileName() }}</span>
+            <span class="muted"> • {{ (fileSize() / 1024 / 1024) | number:'1.2-2' }} MB</span>
+          </span>
+
+          <p-tag *ngIf="status() === 'loading'" severity="info" [value]="ui.statusLoading"></p-tag>
+          <p-tag *ngIf="status() === 'ready'" severity="success" [value]="ui.statusReady"></p-tag>
+          <p-tag *ngIf="status() === 'error'" severity="danger" [value]="ui.statusError"></p-tag>
+        </div>
+
+        <div *ngIf="tipMessage()" class="tip-box" role="status">
+          <i class="pi pi-lightbulb" aria-hidden="true"></i>
+          <div>{{ tipMessage() }}</div>
+        </div>
+
+        <div *ngIf="errorMessage()" class="tip-box" role="alert">
+          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
+          <div>
+            <div><strong i18n="@@pdf_outline_err_title">Impossible d’extraire le sommaire.</strong></div>
+            <div class="muted">{{ errorMessage() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div *ngIf="status() === 'ready'" class="tool-card">
+      <div class="card-header">
+        <h2 i18n="@@pdf_outline_card_results_title">Résultats</h2>
+        <p class="muted" i18n="@@pdf_outline_card_results_sub">
+          Aperçu du sommaire et export JSON.
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="results-grid">
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_outline_stat_pages_label">Pages</div>
+          <div class="value">{{ stats().pages }}</div>
+        </div>
+
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_outline_stat_top_label">Niveau 1</div>
+          <div class="value">{{ stats().topLevel }}</div>
+        </div>
+
+        <div class="result-item">
+          <div class="label" i18n="@@pdf_outline_stat_total_label">Entrées</div>
+          <div class="value">{{ stats().totalItems }}</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Layout list + JSON -->
+      <div class="fields-json-layout">
+        <!-- Left -->
+        <div class="fields-list">
+          <div class="fields-list-header">
+            <div>
+              <strong i18n="@@pdf_outline_list_title">Sommaire</strong>
+              <span class="muted"> • {{ flatCount() }} <span i18n="@@pdf_outline_items">entrées</span></span>
+            </div>
+
+            <div class="actions">
+              <input
+                pInputText
+                type="text"
+                [formControl]="form.controls.filter"
+                [placeholder]="ui.placeholderFilter"
+              />
+            </div>
+          </div>
+
+          <div *ngIf="filteredOutline().length === 0" class="empty-box">
+            <i class="pi pi-list" aria-hidden="true"></i>
+            <span i18n="@@pdf_outline_empty">Aucun élément de sommaire à afficher.</span>
+          </div>
+
+          <!-- Top-level as cards -->
+          <div *ngFor="let it of filteredOutline()" class="field-card">
+            <div class="field-card-header">
+              <div class="field-card-title">
+                <span class="field-name">{{ it.title || '—' }}</span>
+              </div>
+
+              <div class="field-card-page" *ngIf="it.pageNumber">
+                <span class="muted" i18n="@@pdf_outline_page">Page</span>
+                <span class="mono">{{ it.pageNumber }}</span>
+              </div>
+            </div>
+
+            <div class="field-card-advanced" *ngIf="it.items?.length">
+              <div class="adv-kv" *ngFor="let child of it.items">
+                <div class="adv-k">{{ child.title || '—' }}</div>
+                <div class="adv-v">
+                  <span *ngIf="child.pageNumber; else noPage" class="mono">{{ child.pageNumber }}</span>
+                  <ng-template #noPage>
+                    <span class="muted" i18n="@@pdf_outline_no_page">Page inconnue</span>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right -->
+        <div class="json-panel" aria-label="JSON">
+          <div class="json-panel-header">
+            <div>
+              <strong i18n="@@pdf_outline_json_title">JSON</strong>
+              <span class="muted" i18n="@@pdf_outline_json_sub">Exportable</span>
+            </div>
+
+            <div class="actions">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-copy"
+                class="p-button-secondary"
+                [label]="ui.btnCopy"
+                (click)="copyJson()"
+              ></button>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-download"
+                [label]="ui.btnDownload"
+                (click)="downloadJson()"
+              ></button>
+            </div>
+          </div>
+
+          <pre class="json-content">{{ jsonText() }}</pre>
+
+          <div class="divider"></div>
+
+          <div class="actions" style="padding: 0 1.25rem 1.25rem;">
+            <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+              <input type="checkbox" [formControl]="form.controls.pretty" />
+              <span i18n="@@pdf_outline_pretty">JSON “pretty” (indenté)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="tool-back">
+      <a routerLink="/categories/dev/pdf" class="back-link" i18n="@@pdf_outline_back">
+        ← Retour aux outils PDF
+      </a>
+    </div>
+  </div>
+</section>
