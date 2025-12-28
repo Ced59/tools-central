@@ -1,0 +1,113 @@
+<section class="social-share" aria-label="Share">
+  <div class="inner">
+    <div class="text">
+      <div class="title">{{ heading }}</div>
+      <div class="subtitle">{{ subheading }}</div>
+    </div>
+
+    <div class="actions">
+      <button
+        *ngIf="canNativeShare"
+        type="button"
+        class="btn primary"
+        (click)="onNativeShare()"
+      >
+        <i class="pi pi-share-alt" aria-hidden="true"></i>
+        <span i18n="@@share_native:Partager">Partager</span>
+      </button>
+
+      <button
+        type="button"
+        class="btn"
+        (click)="onCopy()"
+        aria-label="Copier le lien"
+        i18n-aria-label="@@share_copy_aria"
+      >
+        <i class="pi pi-copy" aria-hidden="true"></i>
+        <span *ngIf="!copied" i18n="@@share_copy_label:Copier">Copier</span>
+        <span *ngIf="copied" i18n="@@share_copied_label:Copié !">Copié !</span>
+      </button>
+
+      <ng-container *ngFor="let n of primaryNetworks">
+        <button
+          *ngIf="n.id !== 'copy' && n.id !== 'wechat_qr'"
+          type="button"
+          class="btn network"
+          (click)="openNetwork(n)"
+          [attr.aria-label]="n.label"
+        >
+          <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+          <span class="label">{{ n.label }}</span>
+        </button>
+
+        <button
+          *ngIf="n.id === 'wechat_qr' && enableQr"
+          type="button"
+          class="btn network"
+          (click)="toggleQr()"
+          [attr.aria-label]="n.label"
+        >
+          <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+          <span class="label">{{ n.label }}</span>
+        </button>
+      </ng-container>
+
+      <button type="button" class="btn more" (click)="toggleMore()">
+        <i class="pi pi-ellipsis-h" aria-hidden="true"></i>
+        <span *ngIf="!showMore" i18n="@@share_more:Plus">Plus</span>
+        <span *ngIf="showMore" i18n="@@share_less:Moins">Moins</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="more-panel" *ngIf="showMore">
+    <div class="more-grid">
+      <button
+        *ngFor="let n of moreNetworks"
+        type="button"
+        class="chip"
+        (click)="openNetwork(n)"
+        [attr.aria-label]="n.label"
+      >
+        <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+        <span>{{ n.label }}</span>
+      </button>
+
+      <button
+        *ngIf="enableQr"
+        type="button"
+        class="chip"
+        (click)="toggleQr()"
+        aria-label="Afficher le QR code"
+        i18n-aria-label="@@share_qr_toggle"
+      >
+      <i class="pi pi-qrcode" aria-hidden="true"></i>
+        <span i18n="@@share_qr:QR code">QR code</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="qr" *ngIf="enableQr && showQr">
+    <div class="qr-card">
+      <div class="qr-title" i18n="@@share_qr_title:Partager via QR code">Partager via QR code</div>
+
+      <div class="qr-body">
+        <div class="qr-img" *ngIf="qrDataUrl">
+          <img [src]="qrDataUrl" alt="QR code" />
+        </div>
+
+        <div class="qr-loading" *ngIf="qrLoading" i18n="@@share_qr_loading:Chargement…">
+          Chargement…
+        </div>
+
+        <div class="qr-error" *ngIf="qrError" i18n="@@share_qr_error:Impossible de générer le QR code.">
+          Impossible de générer le QR code.
+        </div>
+
+        <div class="qr-url">
+          <div class="mono">{{ resolvedUrl }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

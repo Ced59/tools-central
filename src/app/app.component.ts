@@ -1,5 +1,5 @@
 import { Component, inject, PLATFORM_ID } from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {NavigationEnd, Router, RouterLink, RouterOutlet} from '@angular/router';
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -11,11 +11,15 @@ import { SelectModule } from 'primeng/select';
 
 import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 import {LocalePathService} from "./services/local-path.service";
+import {filter} from "rxjs/operators";
+import {SocialShareComponent} from "./components/shared/social-share/social-share.component";
+
+type ShareContext = 'tool' | 'category' | 'home' | 'generic';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, ButtonModule, NgOptimizedImage, FormsModule, SelectModule],
+  imports: [RouterOutlet, RouterLink, ButtonModule, NgOptimizedImage, FormsModule, SelectModule, SocialShareComponent],
   template: `
     <div class="app-root">
       <header class="app-header">
@@ -69,6 +73,9 @@ import {LocalePathService} from "./services/local-path.service";
 
       <main class="app-main">
         <router-outlet></router-outlet>
+        <div class="container share-container">
+        <app-social-share [context]="shareContext"></app-social-share>
+        </div>
       </main>
 
       <footer class="app-footer">
@@ -131,6 +138,8 @@ import {LocalePathService} from "./services/local-path.service";
 
     .app-main { flex: 1; }
 
+    .share-container { padding-bottom: 1rem; }
+
     .app-footer {
       background: var(--surface-card);
       border-top: 1px solid var(--border-color);
@@ -146,6 +155,7 @@ export class AppComponent {
   seo = inject(SeoService);
   private platformId = inject(PLATFORM_ID);
   localePath = inject(LocalePathService);
+  router = inject(Router);
 
   year = new Date().getFullYear();
 
@@ -153,6 +163,20 @@ export class AppComponent {
   selectedLocale!: LocaleOption;
 
   homeHref = '/fr/';
+
+  shareContext: ShareContext = 'generic';
+
+  constructor() {
+    this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => {
+        const url = this.router.url || '';
+        // Ajuste selon tes routes réelles
+        if (url === '/' || url === '/fr' || url === '/en') this.shareContext = 'home';
+        else if (url.includes('/categories/')) this.shareContext = 'category';
+        else if (url.includes('/tools/') || url.includes('/tool/')) this.shareContext = 'tool';
+        else this.shareContext = 'generic';
+      });
+  }
 
   ngOnInit() {
     this.seo.init();

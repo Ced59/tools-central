@@ -11,14 +11,12 @@
     "test": "ng test",
     "serve:ssr:tools-central": "node dist/tools-central/server/server.mjs",
     "extract-i18n": "ng extract-i18n --project=tools-central",
-
     "i18n:sync": "node scripts/i18n-sync.mjs",
     "i18n:translate": "node scripts/i18n-translate.mjs",
     "i18n:validate": "node scripts/i18n-validate.mjs",
     "i18n:status": "node scripts/i18n-status.mjs",
     "i18n:auto": "npm run extract-i18n && npm run i18n:sync && npm run i18n:translate",
     "i18n:check": "npm run i18n:validate && npm run i18n:status",
-
     "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs && node scripts/generate-ads-txt.mjs"
   },
@@ -41,6 +39,7 @@
     "pdf-lib": "^1.17.1",
     "primeicons": "^7.0.0",
     "primeng": "^21.0.1",
+    "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
@@ -53,6 +52,7 @@
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
+    "@types/qrcode": "^1.5.6",
     "dotenv": "^17.2.3",
     "fast-xml-parser": "^5.3.3",
     "jasmine-core": "~5.2.0",
