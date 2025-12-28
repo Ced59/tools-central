@@ -1,210 +1,45 @@
-<section class="tool-page">
-  <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-info-circle"></i>
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-info-circle"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="metadata().length"
+  [filteredCount]="filteredMetadata().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div *ngFor="let it of filteredMetadata()" class="field-card">
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">{{ it.label }}</span>
+          <span class="muted mono">({{ it.key }})</span>
         </div>
+      </div>
 
-        <h1 i18n="@@pdf_meta_title">Métadonnées PDF → JSON</h1>
-        <p class="hero-subtitle" i18n="@@pdf_meta_subtitle">
-          Exportez les métadonnées d’un PDF (titre, auteur, dates, nombre de pages…) au format JSON, localement dans votre navigateur.
-        </p>
+      <div class="field-card-value">
+        <div class="muted" i18n="@@pdf_meta_value_label">Valeur</div>
+        <div class="mono">{{ it.value ?? 'null' }}</div>
       </div>
     </div>
   </div>
 
-  <div class="container tool-content">
-    <!-- Card: Import -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@pdf_meta_card_import_title">Importer un PDF</h2>
-        <p class="muted" i18n="@@pdf_meta_card_import_sub">
-          Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.
-        </p>
-      </div>
-
-      <div class="calc-form">
-        <input
-          class="sr-only"
-          type="file"
-          [id]="fileInputId"
-          accept="application/pdf"
-          (change)="onFileSelected($event)"
-        />
-
-        <div class="actions">
-          <button
-            pButton
-            type="button"
-            icon="pi pi-upload"
-            [label]="ui.btnPick"
-            (click)="triggerFilePick()"
-            [disabled]="status() === 'loading'"
-          ></button>
-
-          <button
-            pButton
-            type="button"
-            icon="pi pi-refresh"
-            class="p-button-secondary"
-            [label]="ui.btnReset"
-            (click)="reset()"
-            [disabled]="status() === 'loading' && !fileName()"
-          ></button>
-
-          <span *ngIf="fileName()" class="muted">
-            <span class="mono">{{ fileName() }}</span>
-            <span class="muted">
-              • {{ (fileSize() / 1024 / 1024) | number:'1.2-2' }} MB
-            </span>
-          </span>
-
-          <p-tag *ngIf="status() === 'loading'" severity="info" [value]="ui.statusLoading"></p-tag>
-          <p-tag *ngIf="status() === 'ready'" severity="success" [value]="ui.statusReady"></p-tag>
-          <p-tag *ngIf="status() === 'error'" severity="danger" [value]="ui.statusError"></p-tag>
-        </div>
-
-        <div *ngIf="tipMessage()" class="tip-box" role="status">
-          <i class="pi pi-lightbulb" aria-hidden="true"></i>
-          <div>{{ tipMessage() }}</div>
-        </div>
-
-        <div *ngIf="errorMessage()" class="tip-box" role="alert">
-          <i class="pi pi-exclamation-triangle" aria-hidden="true"></i>
-          <div>
-            <div><strong i18n="@@pdf_meta_err_title">Impossible d’extraire les métadonnées.</strong></div>
-            <div class="muted">{{ errorMessage() }}</div>
-            <div class="muted" *ngIf="isEncrypted()" i18n="@@pdf_meta_err_encrypted">
-              Il semble que le PDF soit chiffré / protégé par mot de passe.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Results -->
-    <div *ngIf="status() === 'ready'" class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@pdf_meta_card_results_title">Résultats</h2>
-        <p class="muted" i18n="@@pdf_meta_card_results_sub">
-          Aperçu des métadonnées et export JSON.
-        </p>
-      </div>
-
-      <!-- Stats -->
-      <div class="results-grid">
-        <div class="result-item">
-          <div class="label" i18n="@@pdf_meta_stat_pages_label">Pages</div>
-          <div class="value">{{ stats().pages }}</div>
-        </div>
-
-        <div class="result-item">
-          <div class="label" i18n="@@pdf_meta_stat_total_label">Clés</div>
-          <div class="value">{{ stats().totalKeys }}</div>
-        </div>
-
-        <div class="result-item">
-          <div class="label" i18n="@@pdf_meta_stat_filled_label">Renseignées</div>
-          <div class="value">{{ stats().filledKeys }}</div>
-        </div>
-
-        <div class="result-item">
-          <div class="label" i18n="@@pdf_meta_stat_empty_label">Vides</div>
-          <div class="value">{{ stats().emptyKeys }}</div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <!-- Layout list + JSON (styles communs pdf-tools) -->
-      <div class="fields-json-layout">
-        <!-- Left: metadata list -->
-        <div class="fields-list">
-          <div class="fields-list-header">
-            <div>
-              <strong i18n="@@pdf_meta_list_title">Métadonnées</strong>
-              <span class="muted"> • {{ filteredMetadata().length }}/{{ metadata().length }}</span>
-            </div>
-
-            <div class="actions">
-              <input
-                pInputText
-                type="text"
-                [formControl]="form.controls.filter"
-                [placeholder]="ui.placeholderFilter"
-              />
-            </div>
-          </div>
-
-          <div *ngIf="filteredMetadata().length === 0" class="empty-box">
-            <i class="pi pi-search" aria-hidden="true"></i>
-            <span i18n="@@pdf_meta_empty">Aucune métadonnée ne correspond au filtre.</span>
-          </div>
-
-          <div *ngFor="let it of filteredMetadata()" class="field-card">
-            <div class="field-card-header">
-              <div class="field-card-title">
-                <span class="field-name">{{ it.label }}</span>
-                <span class="muted mono">({{ it.key }})</span>
-              </div>
-            </div>
-
-            <div class="field-card-value">
-              <div class="muted" i18n="@@pdf_meta_value_label">Valeur</div>
-              <div class="mono">{{ it.value ?? 'null' }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: JSON panel -->
-        <div class="json-panel" aria-label="JSON">
-          <div class="json-panel-header">
-            <div>
-              <strong i18n="@@pdf_meta_json_title">JSON</strong>
-              <span class="muted" i18n="@@pdf_meta_json_sub">Exportable</span>
-            </div>
-
-            <div class="actions">
-              <button
-                pButton
-                type="button"
-                icon="pi pi-copy"
-                class="p-button-secondary"
-                [label]="ui.btnCopy"
-                (click)="copyJson()"
-              ></button>
-
-              <button
-                pButton
-                type="button"
-                icon="pi pi-download"
-                [label]="ui.btnDownload"
-                (click)="downloadJson()"
-              ></button>
-            </div>
-          </div>
-
-          <pre class="json-content">{{ jsonText() }}</pre>
-
-          <div class="divider"></div>
-
-          <div class="actions" style="padding: 0 1.25rem 1.25rem;">
-            <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
-              <input type="checkbox" [formControl]="form.controls.pretty" />
-              <span i18n="@@pdf_meta_pretty">JSON “pretty” (indenté)</span>
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Back -->
-    <div class="tool-back">
-      <a routerLink="/categories/dev/pdf" class="back-link" i18n="@@pdf_meta_back">
-        ← Retour aux outils PDF
-      </a>
-    </div>
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_meta_pretty">JSON “pretty” (indenté)</span>
+    </label>
   </div>
-</section>
+</app-pdf-tool-shell>

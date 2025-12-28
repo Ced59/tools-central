@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
 
 import { PDFDocument } from 'pdf-lib';
 
-type ToolStatus = 'idle' | 'loading' | 'ready' | 'error';
+import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
 
 interface PdfMetadataItem {
   key: string;
@@ -20,40 +17,52 @@ interface PdfMetadataItem {
 @Component({
   selector: 'app-pdf-metadata-to-json-tool',
   standalone: true,
-  imports: [
-    CommonModule, // ✅ NgIf, NgFor, number pipe
-    RouterLink,
-    ReactiveFormsModule,
-    ButtonModule,
-    InputTextModule,
-    TagModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-metadata-to-json-tool.component.html',
   styleUrl: './pdf-metadata-to-json-tool.component.scss',
 })
 export class PdfMetadataToJsonToolComponent {
   private readonly fb = new FormBuilder();
 
-  readonly fileInputId = 'pdf-meta-file-input';
+  readonly backLink = '/categories/dev/pdf';
 
-  // ---- UI labels (pas de $localize dans le template)
+  // Tool texts
   readonly ui = {
+    title: $localize`:@@pdf_meta_title:Métadonnées PDF → JSON`,
+    subtitle: $localize`:@@pdf_meta_subtitle:Exportez les métadonnées d’un PDF (titre, auteur, dates, nombre de pages…) au format JSON, localement dans votre navigateur.`,
+
+    errTitle: $localize`:@@pdf_meta_err_title:Impossible d’extraire les métadonnées.`,
+    errEncrypted: $localize`:@@pdf_meta_err_encrypted:Il semble que le PDF soit chiffré / protégé par mot de passe.`,
+  };
+
+  // Shell texts
+  readonly uiShell: PdfToolShellUi = {
     btnPick: $localize`:@@pdf_meta_btn_pick:Choisir un PDF`,
     btnReset: $localize`:@@pdf_meta_btn_reset:Réinitialiser`,
     btnCopy: $localize`:@@pdf_meta_btn_copy:Copier`,
     btnDownload: $localize`:@@pdf_meta_btn_download:Télécharger`,
     placeholderFilter: $localize`:@@pdf_meta_filter_placeholder:Filtrer (titre, auteur, date…)`,
+
     statusLoading: $localize`:@@pdf_meta_status_loading:Analyse…`,
     statusReady: $localize`:@@pdf_meta_status_ready:Prêt`,
     statusError: $localize`:@@pdf_meta_status_error:Erreur`,
-    tipMissing: $localize`:@@pdf_meta_tip_missing:Certaines métadonnées sont vides : c’est normal, beaucoup de PDFs n’en définissent pas.`,
-    copied: $localize`:@@pdf_meta_copied:JSON copié dans le presse-papiers.`,
-    copyFail: $localize`:@@pdf_meta_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`,
-    errGeneric: $localize`:@@pdf_meta_err_generic:Impossible de lire ce PDF.`,
+
+    importTitle: $localize`:@@pdf_meta_card_import_title:Importer un PDF`,
+    importSub: $localize`:@@pdf_meta_card_import_sub:Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.`,
+
+    resultsTitle: $localize`:@@pdf_meta_card_results_title:Résultats`,
+    resultsSub: $localize`:@@pdf_meta_card_results_sub:Aperçu des métadonnées et export JSON.`,
+
+    jsonTitle: $localize`:@@pdf_meta_json_title:JSON`,
+    jsonSub: $localize`:@@pdf_meta_json_sub:Exportable`,
+
+    leftTitle: $localize`:@@pdf_meta_list_title:Métadonnées`,
+    emptyText: $localize`:@@pdf_meta_empty:Aucune métadonnée ne correspond au filtre.`,
+    backText: $localize`:@@pdf_meta_back:← Retour aux outils PDF`,
   };
 
   // ---- State ----
-  readonly status = signal<ToolStatus>('idle');
+  readonly status = signal<PdfToolStatus>('idle');
   readonly errorMessage = signal<string>('');
   readonly tipMessage = signal<string>('');
 
@@ -71,12 +80,13 @@ export class PdfMetadataToJsonToolComponent {
     filter: this.fb.nonNullable.control(''),
   });
 
-  readonly filter = computed(() => (this.form.value.filter ?? '').trim().toLowerCase());
-  readonly pretty = computed(() => !!this.form.value.pretty);
+  // ✅ fix réactivité: pas de computed sur this.form.value.*
+  readonly filter = controlToSignal(this.form.controls.filter);
+  readonly pretty = controlToSignal(this.form.controls.pretty);
 
   // ---- Derived ----
   readonly filteredMetadata = computed(() => {
-    const f = this.filter();
+    const f = (this.filter() ?? '').trim().toLowerCase();
     const items = this.metadata();
     if (!f) return items;
 
@@ -91,7 +101,6 @@ export class PdfMetadataToJsonToolComponent {
 
     for (const it of this.metadata()) obj[it.key] = it.value ?? null;
 
-    // ✅ index signature strict : accès par []
     obj['_pageCount'] = this.pageCount();
     obj['_fileName'] = this.fileName() || null;
     obj['_fileSize'] = this.fileSize();
@@ -99,13 +108,12 @@ export class PdfMetadataToJsonToolComponent {
     return obj;
   });
 
-  readonly jsonText = computed(() => {
-    return JSON.stringify(this.jsonObject(), null, this.pretty() ? 2 : 0);
-  });
+  readonly jsonText = computed(() => JSON.stringify(this.jsonObject(), null, this.pretty() ? 2 : 0));
 
   readonly stats = computed(() => {
     const all = this.metadata().length;
     const filled = this.metadata().filter(m => (m.value ?? '').trim().length > 0).length;
+
     return {
       totalKeys: all,
       filledKeys: filled,
@@ -114,18 +122,25 @@ export class PdfMetadataToJsonToolComponent {
     };
   });
 
+  readonly statsCards = computed((): PdfToolStatCard[] => [
+    { label: $localize`:@@pdf_meta_stat_pages_label:Pages`, value: this.stats().pages },
+    { label: $localize`:@@pdf_meta_stat_total_label:Clés`, value: this.stats().totalKeys },
+    { label: $localize`:@@pdf_meta_stat_filled_label:Renseignées`, value: this.stats().filledKeys },
+    { label: $localize`:@@pdf_meta_stat_empty_label:Vides`, value: this.stats().emptyKeys },
+  ]);
+
+  readonly shellErrorMessage = computed(() => {
+    const e = (this.errorMessage() ?? '').trim();
+    if (!e) return '';
+
+    // On garde le “titre” + détail, et on ajoute l’encrypted si besoin.
+    const parts = [`${this.ui.errTitle} — ${e}`];
+    if (this.isEncrypted()) parts.push(this.ui.errEncrypted);
+    return parts.join(' ');
+  });
+
   // ---- Actions ----
-  triggerFilePick() {
-    const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
-    el?.click();
-  }
-
-  async onFileSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = ''; // allow reselect
-    if (!file) return;
-
+  async onFileSelected(file: File) {
     this.status.set('loading');
     this.errorMessage.set('');
     this.tipMessage.set('');
@@ -157,9 +172,16 @@ export class PdfMetadataToJsonToolComponent {
       this.status.set('ready');
 
       const empty = items.filter(i => !(i.value ?? '').trim()).length;
-      if (empty > 0) this.tipMessage.set(this.ui.tipMissing);
+      if (empty > 0) {
+        this.tipMessage.set(
+          $localize`:@@pdf_meta_tip_missing:Certaines métadonnées sont vides : c’est normal, beaucoup de PDFs n’en définissent pas.`
+        );
+      }
     } catch (e: any) {
-      const msg = typeof e?.message === 'string' && e.message.trim() ? e.message : this.ui.errGeneric;
+      const msg =
+        typeof e?.message === 'string' && e.message.trim()
+          ? e.message
+          : $localize`:@@pdf_meta_err_generic:Impossible de lire ce PDF.`;
 
       if (msg.toLowerCase().includes('encrypted') || msg.toLowerCase().includes('password')) {
         this.isEncrypted.set(true);
@@ -185,10 +207,12 @@ export class PdfMetadataToJsonToolComponent {
   async copyJson() {
     try {
       await navigator.clipboard.writeText(this.jsonText());
-      this.tipMessage.set(this.ui.copied);
+      this.tipMessage.set($localize`:@@pdf_meta_copied:JSON copié dans le presse-papiers.`);
       window.setTimeout(() => this.tipMessage.set(''), 2500);
     } catch {
-      this.tipMessage.set(this.ui.copyFail);
+      this.tipMessage.set(
+        $localize`:@@pdf_meta_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`
+      );
     }
   }
 

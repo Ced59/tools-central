@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { PDFArray, PDFDict, PDFDocument, PDFHexString, PDFName, PDFRef, PDFString } from 'pdf-lib';
 
-import { PDFDocument, PDFName, PDFDict, PDFRef, PDFString, PDFHexString, PDFArray } from 'pdf-lib';
 
-type ToolStatus = 'idle' | 'loading' | 'ready' | 'error';
+import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
+import {PdfToolShellComponent} from "../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component";
 
 interface OutlineItemJson {
   title: string;
@@ -21,31 +19,50 @@ interface OutlineItemJson {
 @Component({
   selector: 'app-pdf-outline-to-json-tool',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, ButtonModule, InputTextModule, TagModule],
+  imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-outline-to-json-tool.component.html',
   styleUrl: './pdf-outline-to-json-tool.component.scss',
 })
 export class PdfOutlineToJsonToolComponent {
   private readonly fb = new FormBuilder();
-  readonly fileInputId = 'pdf-outline-file-input';
 
-  // UI labels (évite $localize dans le template)
+  readonly backLink = '/categories/dev/pdf';
+
+  // Text tool
   readonly ui = {
+    title: $localize`:@@pdf_outline_title:Sommaire PDF → JSON`,
+    subtitle: $localize`:@@pdf_outline_subtitle:Extrayez le sommaire (bookmarks / outline) d’un PDF et exportez-le au format JSON, localement dans votre navigateur.`,
+
+    errTitle: $localize`:@@pdf_outline_err_title:Impossible d’extraire le sommaire.`,
+  };
+
+  // Text shell
+  readonly uiShell: PdfToolShellUi = {
     btnPick: $localize`:@@pdf_outline_btn_pick:Choisir un PDF`,
     btnReset: $localize`:@@pdf_outline_btn_reset:Réinitialiser`,
     btnCopy: $localize`:@@pdf_outline_btn_copy:Copier`,
     btnDownload: $localize`:@@pdf_outline_btn_download:Télécharger`,
     placeholderFilter: $localize`:@@pdf_outline_filter_placeholder:Filtrer (titre…)`,
+
     statusLoading: $localize`:@@pdf_outline_status_loading:Analyse…`,
     statusReady: $localize`:@@pdf_outline_status_ready:Prêt`,
     statusError: $localize`:@@pdf_outline_status_error:Erreur`,
-    copied: $localize`:@@pdf_outline_copied:JSON copié dans le presse-papiers.`,
-    copyFail: $localize`:@@pdf_outline_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`,
-    errGeneric: $localize`:@@pdf_outline_err_generic:Impossible de lire ce PDF.`,
-    tipNoOutline: $localize`:@@pdf_outline_tip_no_outline:Ce PDF ne contient pas de sommaire (bookmarks).`,
+
+    importTitle: $localize`:@@pdf_outline_card_import_title:Importer un PDF`,
+    importSub: $localize`:@@pdf_outline_card_import_sub:Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.`,
+
+    resultsTitle: $localize`:@@pdf_outline_card_results_title:Résultats`,
+    resultsSub: $localize`:@@pdf_outline_card_results_sub:Aperçu du sommaire et export JSON.`,
+
+    jsonTitle: $localize`:@@pdf_outline_json_title:JSON`,
+    jsonSub: $localize`:@@pdf_outline_json_sub:Exportable`,
+
+    leftTitle: $localize`:@@pdf_outline_list_title:Sommaire`,
+    emptyText: $localize`:@@pdf_outline_empty:Aucun élément de sommaire à afficher.`,
+    backText: $localize`:@@pdf_outline_back:← Retour aux outils PDF`,
   };
 
-  readonly status = signal<ToolStatus>('idle');
+  readonly status = signal<PdfToolStatus>('idle');
   readonly errorMessage = signal<string>('');
   readonly tipMessage = signal<string>('');
 
@@ -60,28 +77,21 @@ export class PdfOutlineToJsonToolComponent {
     filter: this.fb.nonNullable.control(''),
   });
 
-  readonly filter = computed(() => (this.form.value.filter ?? '').trim().toLowerCase());
-  readonly pretty = computed(() => !!this.form.value.pretty);
+  // ✅ fix réactivité
+  readonly filter = controlToSignal(this.form.controls.filter);
+  readonly pretty = controlToSignal(this.form.controls.pretty);
 
   readonly flatCount = computed(() => countOutline(this.outline()));
 
   readonly filteredOutline = computed(() => {
-    const f = this.filter();
+    const f = (this.filter() ?? '').trim().toLowerCase();
     const items = this.outline();
     if (!f) return items;
     return filterOutline(items, f);
   });
 
-  readonly jsonObject = computed((): Record<string, unknown> => {
-    return {
-      _fileName: this.fileName() || null,
-      _fileSize: this.fileSize(),
-      _pageCount: this.pageCount(),
-      outline: this.filteredOutline(),
-    };
-  });
-
-  readonly jsonText = computed(() => JSON.stringify(this.jsonObject(), null, this.pretty() ? 2 : 0));
+  // combien d’items restent après filtrage (flat)
+  readonly flatFilteredCount = computed(() => countOutline(this.filteredOutline()));
 
   readonly stats = computed(() => ({
     pages: this.pageCount(),
@@ -89,17 +99,22 @@ export class PdfOutlineToJsonToolComponent {
     totalItems: this.flatCount(),
   }));
 
-  triggerFilePick() {
-    const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
-    el?.click();
-  }
+  readonly statsCards = computed((): PdfToolStatCard[] => [
+    { label: $localize`:@@pdf_outline_stat_pages_label:Pages`, value: this.stats().pages },
+    { label: $localize`:@@pdf_outline_stat_top_label:Niveau 1`, value: this.stats().topLevel },
+    { label: $localize`:@@pdf_outline_stat_total_label:Entrées`, value: this.stats().totalItems },
+  ]);
 
-  async onFileSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
+  readonly jsonObject = computed((): Record<string, unknown> => ({
+    _fileName: this.fileName() || null,
+    _fileSize: this.fileSize(),
+    _pageCount: this.pageCount(),
+    outline: this.filteredOutline(),
+  }));
 
+  readonly jsonText = computed(() => JSON.stringify(this.jsonObject(), null, this.pretty() ? 2 : 0));
+
+  async onFileSelected(file: File) {
     this.status.set('loading');
     this.errorMessage.set('');
     this.tipMessage.set('');
@@ -121,7 +136,7 @@ export class PdfOutlineToJsonToolComponent {
       if (!outlinesEntry) {
         this.outline.set([]);
         this.status.set('ready');
-        this.tipMessage.set(this.ui.tipNoOutline);
+        this.tipMessage.set($localize`:@@pdf_outline_tip_no_outline:Ce PDF ne contient pas de sommaire (bookmarks).`);
         return;
       }
 
@@ -129,7 +144,7 @@ export class PdfOutlineToJsonToolComponent {
       if (!outlinesDict) {
         this.outline.set([]);
         this.status.set('ready');
-        this.tipMessage.set(this.ui.tipNoOutline);
+        this.tipMessage.set($localize`:@@pdf_outline_tip_no_outline:Ce PDF ne contient pas de sommaire (bookmarks).`);
         return;
       }
 
@@ -137,7 +152,7 @@ export class PdfOutlineToJsonToolComponent {
       if (!first) {
         this.outline.set([]);
         this.status.set('ready');
-        this.tipMessage.set(this.ui.tipNoOutline);
+        this.tipMessage.set($localize`:@@pdf_outline_tip_no_outline:Ce PDF ne contient pas de sommaire (bookmarks).`);
         return;
       }
 
@@ -145,9 +160,15 @@ export class PdfOutlineToJsonToolComponent {
       this.outline.set(items);
 
       this.status.set('ready');
-      if (items.length === 0) this.tipMessage.set(this.ui.tipNoOutline);
+      if (items.length === 0) {
+        this.tipMessage.set($localize`:@@pdf_outline_tip_no_outline:Ce PDF ne contient pas de sommaire (bookmarks).`);
+      }
     } catch (e: any) {
-      const msg = typeof e?.message === 'string' && e.message.trim() ? e.message : this.ui.errGeneric;
+      const msg =
+        typeof e?.message === 'string' && e.message.trim()
+          ? e.message
+          : $localize`:@@pdf_outline_err_generic:Impossible de lire ce PDF.`;
+
       this.status.set('error');
       this.errorMessage.set(msg);
     }
@@ -167,10 +188,10 @@ export class PdfOutlineToJsonToolComponent {
   async copyJson() {
     try {
       await navigator.clipboard.writeText(this.jsonText());
-      this.tipMessage.set(this.ui.copied);
+      this.tipMessage.set($localize`:@@pdf_outline_copied:JSON copié dans le presse-papiers.`);
       window.setTimeout(() => this.tipMessage.set(''), 2500);
     } catch {
-      this.tipMessage.set(this.ui.copyFail);
+      this.tipMessage.set($localize`:@@pdf_outline_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`);
     }
   }
 
@@ -187,17 +208,17 @@ export class PdfOutlineToJsonToolComponent {
   }
 }
 
+/* ---------------- PDF helpers (identiques à ton implémentation) ---------------- */
+
 /** Map internal page references -> 1-based page number */
 function buildPageRefMap(doc: PDFDocument): Map<string, number> {
   const map = new Map<string, number>();
   const pages = doc.getPages();
 
   for (let i = 0; i < pages.length; i++) {
-    // pdf-lib internal: each page has a ref (PDFRef)
     const ref = (pages[i] as any).ref as PDFRef | undefined;
     if (ref) map.set(ref.toString(), i + 1);
   }
-
   return map;
 }
 
@@ -227,7 +248,7 @@ function readSiblingChain(
   const items: OutlineItemJson[] = [];
 
   let current: unknown = firstRefOrDict;
-  const seenRefs = new Set<string>(); // safety against cycles
+  const seenRefs = new Set<string>();
 
   while (current) {
     const dict = resolveDict(doc, current);
@@ -259,23 +280,18 @@ function readSiblingChain(
 }
 
 function resolvePageNumber(doc: PDFDocument, item: PDFDict, pageRefToNumber: Map<string, number>): number | null {
-  // Targets can be:
-  // - /Dest [pageRef /XYZ ...]
-  // - /A << /S /GoTo /D ... >>
   const dest = item.get(PDFName.of('Dest'));
   const action = item.get(PDFName.of('A'));
 
   const destValue = dest ?? getGoToDestFromAction(doc, action);
   if (!destValue) return null;
 
-  // dest array: [pageRef ...]
   if (destValue instanceof PDFArray) {
     const first = destValue.get(0);
     if (first instanceof PDFRef) return pageRefToNumber.get(first.toString()) ?? null;
     return null;
   }
 
-  // dest ref -> array
   if (destValue instanceof PDFRef) {
     const looked = doc.context.lookup(destValue);
     if (looked instanceof PDFArray) {
@@ -285,8 +301,6 @@ function resolvePageNumber(doc: PDFDocument, item: PDFDict, pageRefToNumber: Map
     return null;
   }
 
-  // Named destinations exist but resolving them requires parsing the NameTree (/Dests).
-  // Best-effort: return null.
   return null;
 }
 
@@ -300,7 +314,6 @@ function getGoToDestFromAction(doc: PDFDocument, action: unknown): unknown | nul
   const d = dict.get(PDFName.of('D'));
   if (!d) return null;
 
-  // Ignore scalar-like pdf-lib objects (duck-typing) — they are not useful here
   if (typeof (d as any)?.asNumber === 'function') return null;
   if (typeof (d as any)?.asBoolean === 'function') return null;
   if ((d as any)?.constructor?.name === 'PDFNull') return null;
