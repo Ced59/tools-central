@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
   inject,
-  PLATFORM_ID,
+  PLATFORM_ID, NgZone, ChangeDetectorRef,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
@@ -47,6 +47,9 @@ interface ShareNetwork {
 export class SocialShareComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
+
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly zone = inject(NgZone);
 
   private qrPromise: Promise<void> | null = null;
   private qrForUrl: string | null = null;
@@ -203,16 +206,35 @@ export class SocialShareComponent implements OnInit {
     this.refreshResolvedData();
 
     // Met à jour l’URL lors des navigations SPA
-    this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(() => {
-      this.refreshResolvedData();
-      this.copied = false;
-      this.showQr = false;
-      this.qrDataUrl = null;
-      this.qrError = false;
-      this.qrLoading = false;
-      this.qrForUrl = null;
-      this.qrPromise = null;
-    });
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => {
+        const wasOpen = this.showQr;
+
+        this.refreshResolvedData();
+
+        this.copied = false;
+        this.qrError = false;
+        this.qrLoading = false;
+
+        // reset QR cache
+        this.qrDataUrl = null;
+        this.qrForUrl = null;
+        this.qrPromise = null;
+
+        // ✅ Si le panneau QR était ouvert, on le garde ouvert et on régénère
+        if (wasOpen && this.enableQr) {
+          this.showQr = true;
+
+          // On lance une génération "propre"
+          this.qrPromise = this.generateQr();
+          this.qrPromise.finally(() => (this.qrPromise = null));
+        } else {
+          this.showQr = false;
+        }
+
+        this.cdr.markForCheck();
+      });
   }
 
   public get heading(): string {
@@ -416,37 +438,41 @@ export class SocialShareComponent implements OnInit {
   }
 
   private async generateQr(): Promise<void> {
-    this.qrLoading = true;
-    this.qrError = false;
+    // On passe en "loading" DANS la zone Angular
+    this.zone.run(() => {
+      this.qrLoading = true;
+      this.qrError = false;
+      this.cdr.markForCheck();
+    });
 
     const url = this.resolvedUrl;
 
     try {
-      // Si l'URL est vide, on évite
-      if (!url) {
-        this.qrError = true;
-        this.qrDataUrl = null;
-        this.qrForUrl = null;
-        return;
-      }
+      if (!url) throw new Error('Missing URL');
 
-      // Import dynamique une seule fois (mais même si appelé plusieurs fois, le lock empêche)
+      // Import + calcul hors zone (perf), puis on revient dans la zone pour MAJ l'UI
       const mod = await import('qrcode');
-
-      // Astuce perf/stabilité : utiliser toCanvas si tu veux (mais DataURL ok)
-      this.qrDataUrl = await mod.toDataURL(url, {
+      const dataUrl = await mod.toDataURL(url, {
         margin: 1,
         scale: 6,
         errorCorrectionLevel: 'M',
       });
 
-      this.qrForUrl = url;
-    } catch (e) {
-      this.qrError = true;
-      this.qrDataUrl = null;
-      this.qrForUrl = null;
-    } finally {
-      this.qrLoading = false;
+      this.zone.run(() => {
+        this.qrDataUrl = dataUrl;
+        this.qrForUrl = url;
+        this.qrLoading = false;
+        this.qrError = false;
+        this.cdr.markForCheck();
+      });
+    } catch {
+      this.zone.run(() => {
+        this.qrDataUrl = null;
+        this.qrForUrl = null;
+        this.qrLoading = false;
+        this.qrError = true;
+        this.cdr.markForCheck();
+      });
     }
   }
 
