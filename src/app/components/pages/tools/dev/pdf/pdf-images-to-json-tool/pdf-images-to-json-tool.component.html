@@ -1,0 +1,106 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-images"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="images().length"
+  [filteredCount]="filteredImages().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div
+      *ngFor="let it of filteredImages(); trackBy: trackById"
+      class="field-card img-card"
+      (click)="select(it)"
+      [class.active]="it.id === selectedId()"
+    >
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name mono">#{{ it.index }} — {{ displayTitle(it) }}</span>
+        </div>
+
+        <div class="field-card-page" *ngIf="(it.pages ?? []).length">
+          <span class="muted">Pages</span>
+          <span class="mono">{{ (it.pages ?? []).join(', ') }}</span>
+        </div>
+      </div>
+
+      <div class="field-card-value">
+        <div class="muted">Filters</div>
+        <div class="mono">{{ (it.filters ?? []).join(', ') || '—' }}</div>
+      </div>
+
+      <div class="field-card-advanced" *ngIf="it.objectId">
+        <div class="adv-kv">
+          <div class="adv-k">Object</div>
+          <div class="adv-v mono">{{ it.objectId }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_images_pretty">JSON “pretty” (indenté)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.uniqueOnly" />
+      <span i18n="@@pdf_images_unique_only">Afficher uniquement les images uniques</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRaw" />
+      <span i18n="@@pdf_images_include_raw">Inclure les détails “raw” (dict PDF)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeBase64" />
+      <span i18n="@@pdf_images_include_base64">Inclure base64 (peut être très lourd)</span>
+    </label>
+
+    <div class="divider"></div>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-download"
+      class="p-button-secondary"
+      [disabled]="!selected() || !selected()?.bytes"
+      i18n-label="@@pdf_images_btn_download_selected"
+      label="Télécharger l’image sélectionnée"
+      (click)="downloadSelectedImage()"
+    ></button>
+
+    <div class="divider"></div>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.zipIncludeBin" />
+      <span i18n="@@pdf_images_zip_include_bin">Inclure aussi les fichiers .bin (formats PDF bruts)</span>
+    </label>
+
+    <button
+      pButton
+      type="button"
+      icon="pi pi-file"
+      [disabled]="status() !== 'ready' || images().length === 0"
+      i18n-label="@@pdf_images_btn_download_zip"
+      label="Télécharger toutes les images (ZIP)"
+      (click)="downloadAllZip()"
+    ></button>
+  </div>
+</app-pdf-tool-shell>

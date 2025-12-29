@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.img-card {
+  cursor: pointer;
+  transition: transform .08s ease, border-color .08s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary-color) 55%, transparent);
+  }
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}

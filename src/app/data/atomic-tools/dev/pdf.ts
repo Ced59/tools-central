@@ -91,4 +91,19 @@ export const DEV_PDF_TOOLS = {
         '../../../components/pages/tools/dev/pdf/pdf-pages-to-json-tool/pdf-pages-to-json-tool.component'
         ).then(m => m.PdfPagesToJsonToolComponent),
   },
+  // ...dans DEV_PDF_TOOLS
+  'pdf-images-to-json': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_images_to_json_title:Images PDF → JSON`,
+    description: $localize`:@@tool_pdf_images_to_json_desc:Extraire les images intégrées (XObjects) d’un PDF, détecter leur type et exporter la liste en JSON.`,
+    icon: 'pi pi-images',
+    route: routes.tool('dev', 'pdf', 'pdf-images-to-json'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-images-to-json-tool/pdf-images-to-json-tool.component'
+        ).then(m => m.PdfImagesToJsonToolComponent),
+  },
 } as const satisfies Record<string, AtomicToolAny>;
