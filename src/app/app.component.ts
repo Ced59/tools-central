@@ -4,7 +4,6 @@ import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { ThemeService } from './services/theme.service';
-import { SeoService } from './services/seo/seo.service';
 
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -13,6 +12,7 @@ import { LOCALES, type LocaleOption } from './i18n/locales.generated';
 import {LocalePathService} from "./services/local-path.service";
 import {filter} from "rxjs/operators";
 import {SocialShareComponent} from "./components/shared/social-share/social-share.component";
+import {SeoAutoService} from "./services/seo/seo-auto.service";
 
 type ShareContext = 'tool' | 'category' | 'home' | 'generic';
 
@@ -152,7 +152,7 @@ type ShareContext = 'tool' | 'category' | 'home' | 'generic';
 })
 export class AppComponent {
   themeService = inject(ThemeService);
-  seo = inject(SeoService);
+  seoAuto = inject(SeoAutoService);
   private platformId = inject(PLATFORM_ID);
   localePath = inject(LocalePathService);
   router = inject(Router);
@@ -179,7 +179,7 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.seo.init();
+    this.seoAuto.init();
 
     // SSR: fallback simple
     if (!isPlatformBrowser(this.platformId)) {

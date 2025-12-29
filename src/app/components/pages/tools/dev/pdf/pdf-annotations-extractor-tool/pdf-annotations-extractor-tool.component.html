@@ -1,0 +1,90 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-comments"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="annotations().length"
+  [filteredCount]="filteredAnnotations().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div
+      *ngFor="let it of filteredAnnotations(); trackBy: trackById"
+      class="field-card"
+    >
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">{{ typeLabel(it.subtype) }}</span>
+          <span class="muted mono">
+            • <span i18n="@@pdf_ann_on_page">page</span> {{ it.pageNumber }}
+          </span>
+        </div>
+
+        <div class="field-card-page" *ngIf="it.author">
+          <span class="muted" i18n="@@pdf_ann_author">Auteur</span>
+          <span class="mono">{{ it.author }}</span>
+        </div>
+      </div>
+
+      <div class="field-card-value">
+        <div class="muted" i18n="@@pdf_ann_contents_label">Contenu</div>
+        <div class="mono">
+          {{ it.contents ?? '—' }}
+        </div>
+      </div>
+
+      <div class="field-card-advanced" *ngIf="includeRect() && it.rect">
+        <div class="adv-kv">
+          <div class="adv-k" i18n="@@pdf_ann_rect">Rect</div>
+          <div class="adv-v mono">
+            x={{ it.rect.x }} y={{ it.rect.y }} w={{ it.rect.w }} h={{ it.rect.h }}
+          </div>
+        </div>
+      </div>
+
+      <div class="field-card-advanced" *ngIf="includeQuadPoints() && it.quadPoints?.length">
+        <div class="adv-kv">
+          <div class="adv-k" i18n="@@pdf_ann_quadpoints">QuadPoints</div>
+          <div class="adv-v mono">
+            {{ (it.quadPoints ?? []).length }} valeurs
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_ann_pretty">JSON “pretty” (indenté)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRect" />
+      <span i18n="@@pdf_ann_include_rect">Inclure Rect (position)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeQuadPoints" />
+      <span i18n="@@pdf_ann_include_quadpoints">Inclure QuadPoints (surlignages)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRaw" />
+      <span i18n="@@pdf_ann_include_raw">Inclure les détails “raw” (dict PDF)</span>
+    </label>
+  </div>
+</app-pdf-tool-shell>

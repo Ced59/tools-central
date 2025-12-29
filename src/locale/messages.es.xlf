@@ -65555,6 +65555,996 @@ Calculez l’écart absolu :                                </target>
         <target state="translated">Extraer las imágenes incrustadas (XObjects) de un PDF, detectar su tipo y exportar la lista en JSON.</target>
       </segment>
     </unit>
+    <unit id="pdf_ann_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">página</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_author">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">Autor</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_contents_label">
+      <segment>
+        <source>Contenu</source>
+        <target state="translated">Contenido</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Rectángulo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_quadpoints">
+      <segment>
+        <source>QuadPoints</source>
+        <target state="translated">PuntosCuadrados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON 'bonito' (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_rect">
+      <segment>
+        <source>Inclure Rect (position)</source>
+        <target state="translated">Incluir Rect (posición)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_quadpoints">
+      <segment>
+        <source>Inclure QuadPoints (surlignages)</source>
+        <target state="translated">Incluir PuntosCuadrados (surlignados)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_raw">
+      <segment>
+        <source>Inclure les détails “raw” (dict PDF)</source>
+        <target state="translated">Incluir los detalles 'crudos' (dict PDF)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Anotaciones PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_subtitle">
+      <segment>
+        <source>Exportez les annotations d’un PDF (commentaires, surlignages, notes, dessins, liens…) au format JSON, localement dans votre navigateur.</source>
+        <target state="translated">Exporte las anotaciones de un PDF (comentarios, subrayados, notas, dibujos, enlaces…) en formato JSON, localmente en su navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_title">
+      <segment>
+        <source>Impossible d’extraire les annotations.</source>
+        <target state="translated">No se pueden extraer las anotaciones.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_tip_form_only">
+      <segment>
+        <source>Ce PDF ne contient pas de commentaires, surlignages ou autres annotations “utilisateur”. Il s’agit probablement d’un formulaire interactif : utilisez l’outil “Champs PDF → JSON” pour extraire les champs.</source>
+        <target state="translated">Este PDF no contiene comentarios, subrayados u otras anotaciones 'de usuario'. Probablemente se trata de un formulario interactivo: use la herramienta 'Campos PDF → JSON' para extraer los campos.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Elegir un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Restablecer</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Descargar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_filter_placeholder">
+      <segment>
+        <source>Filtrer (type, page, auteur, contenu…)</source>
+        <target state="translated">Filtrar (tipo, página, autor, contenido…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Analizando…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Listo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Importar un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">No se envían datos a un servidor: todo se realiza en su navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Resultados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_sub">
+      <segment>
+        <source>Aperçu des annotations et export JSON.</source>
+        <target state="translated">Vista previa de las anotaciones y exportación JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Exportable</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_list_title">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Anotaciones</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_empty">
+      <segment>
+        <source>Aucune annotation à afficher.</source>
+        <target state="translated">No hay anotaciones para mostrar.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Volver a las herramientas PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Páginas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_total">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Anotaciones</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_highlight">
+      <segment>
+        <source>Surlignages</source>
+        <target state="translated">Subrayados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_text">
+      <segment>
+        <source>Notes</source>
+        <target state="translated">Notas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_highlight">
+      <segment>
+        <source>Surlignage</source>
+        <target state="translated">Subrayado</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_underline">
+      <segment>
+        <source>Souligné</source>
+        <target state="translated">Subrayado</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_strikeout">
+      <segment>
+        <source>Barré</source>
+        <target state="translated">Tachado</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_squiggly">
+      <segment>
+        <source>Ondulé</source>
+        <target state="translated">Ondulado</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_text">
+      <segment>
+        <source>Note</source>
+        <target state="translated">Nota</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_freetext">
+      <segment>
+        <source>Texte libre</source>
+        <target state="translated">Texto libre</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_ink">
+      <segment>
+        <source>Dessin (Ink)</source>
+        <target state="translated">Dibujo (Tinta)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_stamp">
+      <segment>
+        <source>Tampon</source>
+        <target state="translated">Sello</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_link">
+      <segment>
+        <source>Lien</source>
+        <target state="translated">Enlace</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_widget">
+      <segment>
+        <source>Widget</source>
+        <target state="translated">Widget</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_unknown">
+      <segment>
+        <source>Autre</source>
+        <target state="translated">Otro</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">No se puede leer este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON copiado en el portapapeles.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">No se puede copiar automáticamente. Seleccione el texto y cópielo manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Anotaciones PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_desc">
+      <segment>
+        <source>Exporter les annotations d’un PDF (commentaires, surlignages, notes…) au format JSON.</source>
+        <target state="translated">Exportar las anotaciones de un PDF (comentarios, resaltados, notas…) en formato JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_desc">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Descripción</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "bonito" (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails FileSpec)</source>
+        <target state="translated">Incluir "crudo" (detalles de FileSpec)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_note">
+      <segment>
+        <source> Note : les fichiers sont extraits localement. Aucun upload serveur. </source>
+        <target state="translated">Nota: los archivos se extraen localmente. Ninguna carga al servidor.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Adjuntos PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_subtitle">
+      <segment>
+        <source>Détectez et extrayez les fichiers embarqués dans un PDF (EmbeddedFiles) et exportez la liste en JSON. Téléchargez chaque fichier ou tout en ZIP, localement dans votre navigateur.</source>
+        <target state="translated">Detecte y extraiga los archivos incrustados en un PDF (EmbeddedFiles) y exporte la lista en JSON. Descargue cada archivo o todo en ZIP, localmente en su navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_title">
+      <segment>
+        <source>Impossible d’extraire les pièces jointes.</source>
+        <target state="translated">No se pueden extraer los adjuntos.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_none">
+      <segment>
+        <source>Aucune pièce jointe détectée dans ce PDF.</source>
+        <target state="translated">No se detectó ningún adjunto en este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_zip">
+      <segment>
+        <source>ZIP généré. Téléchargement lancé.</source>
+        <target state="translated">ZIP generado. Descarga iniciada.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_downloaded">
+      <segment>
+        <source>Fichier téléchargé.</source>
+        <target state="translated">Archivo descargado.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_all">
+      <segment>
+        <source>Télécharger tout (ZIP)</source>
+        <target state="translated">Descargar todo (ZIP)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_one">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Descargar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Elegir un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Restablecer</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type, taille…)</source>
+        <target state="translated">Filtrar (nombre, tipo, tamaño…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Analizando…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Listo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Importar un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">No se envían datos a un servidor: todo se realiza en su navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Resultados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_sub">
+      <segment>
+        <source>Liste des pièces jointes (EmbeddedFiles) + export JSON + téléchargements.</source>
+        <target state="translated">Lista de adjuntos (EmbeddedFiles) + exportación JSON + descargas.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Exportable</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_list_title">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Archivos</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_empty">
+      <segment>
+        <source>Aucune pièce jointe à afficher.</source>
+        <target state="translated">No hay adjuntos para mostrar.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Volver a las herramientas PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Páginas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_files">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Archivos</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_total_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Tamaño</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_mime">
+      <segment>
+        <source>MIME</source>
+        <target state="translated">MIME</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">No se puede leer este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON copiado en el portapapeles.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">No se puede copiar automáticamente. Seleccione el texto y cópielo manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_page">
+      <segment>
+        <source>Page</source>
+        <target state="translated">Página</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_fax_hint">
+      <segment>
+        <source>Indice scan</source>
+        <target state="translated">Índice de escaneo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_reasons">
+      <segment>
+        <source>Raisons</source>
+        <target state="translated">Razones</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "bonito" (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_include_pages">
+      <segment>
+        <source>Inclure les détails par page</source>
+        <target state="translated">Incluir detalles por página</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_note">
+      <segment>
+        <source> Note : c’est une estimation basée sur les ressources (polices/images). Un PDF peut être “scan + OCR”. </source>
+        <target state="translated">Nota: es una estimación basada en los recursos (fuentes/imágenes). Un PDF puede ser “escaneo + OCR”.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Detectar si un PDF está escaneado</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_subtitle">
+      <segment>
+        <source>Analysez un PDF pour estimer s’il provient d’un scan (images sur les pages, absence de polices, indices CCITT/JBIG2) et exportez le diagnostic en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Analiza un PDF para estimar si proviene de un escaneo (imágenes en las páginas, ausencia de fuentes, índices CCITT/JBIG2) y exporta el diagnóstico en JSON, localmente en tu navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_title">
+      <segment>
+        <source>Impossible d’analyser ce PDF.</source>
+        <target state="translated">No se puede analizar este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_yes">
+      <segment>
+        <source>Ce PDF semble provenir d’un scan (forte probabilité).</source>
+        <target state="translated">Este PDF parece provenir de un escaneo (alta probabilidad).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_no">
+      <segment>
+        <source>Ce PDF ne semble pas être un scan (il contient des ressources de texte).</source>
+        <target state="translated">Este PDF no parece ser un escaneo (contiene recursos de texto).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Elegir un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Restablecer</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Descargar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_filter_placeholder">
+      <segment>
+        <source>Filtrer (page, raisons…)</source>
+        <target state="translated">Filtrar (página, razones…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Analizando…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Listo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Importar un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">No se envían datos a un servidor: todo se realiza en tu navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Resultados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_sub">
+      <segment>
+        <source>Score “scan” + indices détectés + détails par page.</source>
+        <target state="translated">Puntuación “escaneo” + índices detectados + detalles por página.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Exportable</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Páginas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_empty">
+      <segment>
+        <source>Aucune page à afficher.</source>
+        <target state="translated">No hay páginas para mostrar.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Volver a las herramientas PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Páginas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_score">
+      <segment>
+        <source>Score</source>
+        <target state="translated">Puntuación</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_fonts">
+      <segment>
+        <source>Pages avec polices</source>
+        <target state="translated">Páginas con fuentes</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_images">
+      <segment>
+        <source>Pages avec images</source>
+        <target state="translated">Páginas con imágenes</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">No se puede leer este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON copiado en el portapapeles.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">No se puede copiar automáticamente. Selecciona el texto y copia manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">página</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_field">
+      <segment>
+        <source>Champ</source>
+        <target state="translated">Campo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_meta">
+      <segment>
+        <source>Infos</source>
+        <target state="translated">Infos</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_reason">
+      <segment>
+        <source>Raison</source>
+        <target state="translated">Razón</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Rect</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “bonito” (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_rect">
+      <segment>
+        <source>Inclure Rect (position du widget)</source>
+        <target state="translated">Incluir Rect (posición del widget)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails dict /Sig)</source>
+        <target state="translated">Incluir “raw” (detalles dict /Sig)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Firmas PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_subtitle">
+      <segment>
+        <source>Détectez les signatures d’un PDF (PAdES / PKCS#7), récupérez les informations techniques (ByteRange, SubFilter…) et exportez-les en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Detecta las firmas de un PDF (PAdES / PKCS#7), recupera la información técnica (ByteRange, SubFilter…) y expórtala en JSON, localmente en tu navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_title">
+      <segment>
+        <source>Impossible d’extraire les signatures.</source>
+        <target state="translated">No se pueden extraer las firmas.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_none">
+      <segment>
+        <source>Aucune signature détectée dans ce PDF.</source>
+        <target state="translated">No se detectó ninguna firma en este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_explain">
+      <segment>
+        <source>Astuce : cet outil extrait des informations techniques de signature (sans valider cryptographiquement le certificat).</source>
+        <target state="translated">Consejo: esta herramienta extrae información técnica de la firma (sin validar criptográficamente el certificado).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Elegir un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Restablecer</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Descargar</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_filter_placeholder">
+      <segment>
+        <source>Filtrer (field, page, subfilter, reason…)</source>
+        <target state="translated">Filtrar (campo, página, subfiltro, razón…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Analizando…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Listo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Importar un PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">No se envían datos a un servidor: todo se realiza en tu navegador.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Resultados</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_sub">
+      <segment>
+        <source>Aperçu des signatures et export JSON.</source>
+        <target state="translated">Vista previa de las firmas y exportación a JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Exportable</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_list_title">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Firmas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_empty">
+      <segment>
+        <source>Aucune signature à afficher.</source>
+        <target state="translated">No hay firmas para mostrar.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Volver a las herramientas PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Páginas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_total">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Firmas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_byterange">
+      <segment>
+        <source>ByteRange</source>
+        <target state="translated">ByteRange</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pades">
+      <segment>
+        <source>PAdES</source>
+        <target state="translated">PAdES</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_type_signature">
+      <segment>
+        <source>Signature</source>
+        <target state="translated">Firma</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">No se puede leer este PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON copiado en el portapapeles.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">No se puede copiar automáticamente. Selecciona el texto y copia manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Firmas PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_desc">
+      <segment>
+        <source>Détecter les signatures d’un PDF et exporter les informations techniques (ByteRange, SubFilter…) au format JSON.</source>
+        <target state="translated">Detectar las firmas de un PDF y exportar la información técnica (ByteRange, SubFilter…) en formato JSON.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Adjuntos PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_desc">
+      <segment>
+        <source>Détecter et extraire les fichiers embarqués dans un PDF (EmbeddedFiles). Téléchargement individuel ou ZIP.</source>
+        <target state="translated">Detectar y extraer los archivos incrustados en un PDF (EmbeddedFiles). Descarga individual o ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Detectar si un PDF está escaneado</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_desc">
+      <segment>
+        <source>Estimer si un PDF provient d’un scan (images, absence de polices, indices CCITT/JBIG2) et exporter le diagnostic en JSON.</source>
+        <target state="translated">Estimar si un PDF proviene de un escaneo (imágenes, ausencia de fuentes, índices CCITT/JBIG2) y exportar el diagnóstico en JSON.</target>
+      </segment>
+    </unit>
 
     
     

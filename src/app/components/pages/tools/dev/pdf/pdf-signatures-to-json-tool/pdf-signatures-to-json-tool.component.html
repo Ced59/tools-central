@@ -1,0 +1,83 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-verified"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="signatures().length"
+  [filteredCount]="filtered().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div *ngFor="let it of filtered(); trackBy: trackById" class="field-card">
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">{{ typeLabel(it) }}</span>
+          <span class="muted mono" *ngIf="it.pageNumber != null">
+            • <span i18n="@@pdf_sig_on_page">page</span> {{ it.pageNumber }}
+          </span>
+        </div>
+
+        <div class="field-card-page" *ngIf="it.fieldName">
+          <span class="muted" i18n="@@pdf_sig_field">Champ</span>
+          <span class="mono">{{ it.fieldName }}</span>
+        </div>
+      </div>
+
+      <div class="field-card-value">
+        <div class="muted" i18n="@@pdf_sig_meta">Infos</div>
+
+        <div class="mono">
+          <span *ngIf="it.reason"><span i18n="@@pdf_sig_reason">Raison</span>: {{ it.reason }}</span>
+          <span *ngIf="!it.reason" class="muted">—</span>
+        </div>
+
+        <div class="mono muted" *ngIf="it.byteRange?.length">
+          ByteRange: {{ (it.byteRange ?? []).join(', ') }}
+        </div>
+
+        <div class="mono muted" *ngIf="it.contentsLength != null">
+          Contents: {{ it.contentsLength }} bytes
+        </div>
+      </div>
+
+      <div class="field-card-advanced" *ngIf="includeRect() && it.rect">
+        <div class="adv-kv">
+          <div class="adv-k" i18n="@@pdf_sig_rect">Rect</div>
+          <div class="adv-v mono">
+            x={{ it.rect.x }} y={{ it.rect.y }} w={{ it.rect.w }} h={{ it.rect.h }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_sig_pretty">JSON “pretty” (indenté)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRect" />
+      <span i18n="@@pdf_sig_include_rect">Inclure Rect (position du widget)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRawSigDict" />
+      <span i18n="@@pdf_sig_include_raw">Inclure “raw” (détails dict /Sig)</span>
+    </label>
+  </div>
+</app-pdf-tool-shell>

@@ -77,6 +77,7 @@ export const DEV_PDF_TOOLS = {
         '../../../components/pages/tools/dev/pdf/pdf-fonts-to-json-tool/pdf-fonts-to-json-tool.component'
         ).then(m => m.PdfFontsToJsonToolComponent),
   },
+
   'pdf-pages-to-json': {
     category: 'dev',
     group: 'pdf',
@@ -91,7 +92,7 @@ export const DEV_PDF_TOOLS = {
         '../../../components/pages/tools/dev/pdf/pdf-pages-to-json-tool/pdf-pages-to-json-tool.component'
         ).then(m => m.PdfPagesToJsonToolComponent),
   },
-  // ...dans DEV_PDF_TOOLS
+
   'pdf-images-to-json': {
     category: 'dev',
     group: 'pdf',
@@ -105,5 +106,65 @@ export const DEV_PDF_TOOLS = {
       import(
         '../../../components/pages/tools/dev/pdf/pdf-images-to-json-tool/pdf-images-to-json-tool.component'
         ).then(m => m.PdfImagesToJsonToolComponent),
+  },
+
+  'pdf-annotations-to-json': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_annotations_to_json_title:Annotations PDF → JSON`,
+    description: $localize`:@@tool_pdf_annotations_to_json_desc:Exporter les annotations d’un PDF (commentaires, surlignages, notes…) au format JSON.`,
+    icon: 'pi pi-comments',
+    route: routes.tool('dev', 'pdf', 'pdf-annotations-to-json'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-annotations-extractor-tool/pdf-annotations-extractor-tool.component'
+        ).then(m => m.PdfAnnotationsToJsonToolComponent),
+  },
+
+  'pdf-signatures-to-json': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_signatures_to_json_title:Signatures PDF → JSON`,
+    description: $localize`:@@tool_pdf_signatures_to_json_desc:Détecter les signatures d’un PDF et exporter les informations techniques (ByteRange, SubFilter…) au format JSON.`,
+    icon: 'pi pi-verified',
+    route: routes.tool('dev', 'pdf', 'pdf-signatures-to-json'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-signatures-to-json-tool/pdf-signatures-to-json-tool.component'
+        ).then(m => m.PdfSignaturesToJsonToolComponent),
+  },
+
+  'pdf-attachments-extractor': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_attachments_extractor_title:Pièces jointes PDF → JSON`,
+    description: $localize`:@@tool_pdf_attachments_extractor_desc:Détecter et extraire les fichiers embarqués dans un PDF (EmbeddedFiles). Téléchargement individuel ou ZIP.`,
+    icon: 'pi pi-paperclip',
+    route: routes.tool('dev', 'pdf', 'pdf-attachments-extractor'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-attachments-extractor-tool/pdf-attachments-extractor-tool.component'
+        ).then(m => m.PdfAttachmentsExtractorToolComponent),
+  },
+
+  'pdf-scan-detector': {
+    category: 'dev',
+    group: 'pdf',
+    subGroup: 'extract',
+    title: $localize`:@@tool_pdf_scan_detector_title:Détecter si un PDF est scanné`,
+    description: $localize`:@@tool_pdf_scan_detector_desc:Estimer si un PDF provient d’un scan (images, absence de polices, indices CCITT/JBIG2) et exporter le diagnostic en JSON.`,
+    icon: 'pi pi-search',
+    route: routes.tool('dev', 'pdf', 'pdf-scan-detector'),
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-scan-detector-tool/pdf-scan-detector-tool.component'
+        ).then(m => m.PdfScanDetectorToolComponent),
   },
 } as const satisfies Record<string, AtomicToolAny>;

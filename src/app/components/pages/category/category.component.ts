@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, DestroyRef, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CATEGORIES, ToolCategory } from '../../../data/categories';
 import { TOOL_GROUPS, ToolGroup } from '../../../data/tool-groups';
@@ -16,6 +17,8 @@ import { SeoService } from '../../../services/seo/seo.service';
 })
 export class CategoryComponent {
   private seo = inject(SeoService);
+  private route = inject(ActivatedRoute);
+  private destroyRef = inject(DestroyRef);
 
   categoryId = '';
   category?: ToolCategory;
@@ -23,35 +26,37 @@ export class CategoryComponent {
   availableTools: ToolCardItem[] = [];
   comingSoonTools: ToolCardItem[] = [];
 
-  constructor(route: ActivatedRoute) {
-    this.categoryId =
-      route.snapshot.paramMap.get('idCategory') ??
-      route.snapshot.paramMap.get('category') ??
-      '';
-
-    this.category = CATEGORIES.find(c => c.id === this.categoryId);
-
-    const groups: ToolGroup[] = TOOL_GROUPS.filter(g => g.category === this.categoryId);
-
-    const mapGroup = (g: ToolGroup): ToolCardItem => ({
-      id: g.id,
-      title: g.title,
-      description: g.description,
-      icon: g.icon ?? 'pi pi-wrench',
-      route: g.route,
-      available: g.available,
-    });
-
-    this.availableTools = groups.filter(g => g.available).map(mapGroup);
-    this.comingSoonTools = groups.filter(g => !g.available).map(mapGroup);
-  }
-
   ngOnInit() {
-    if (this.category) {
-      this.seo.setPageSeo({
-        title: `${this.category.title} – Tools Central`,
-        description: this.category.description,
+    this.route.paramMap
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(pm => {
+        this.categoryId =
+          pm.get('idCategory') ??
+          pm.get('category') ??
+          '';
+
+        this.category = CATEGORIES.find(c => c.id === this.categoryId);
+
+        const groups: ToolGroup[] = TOOL_GROUPS.filter(g => g.category === this.categoryId);
+
+        const mapGroup = (g: ToolGroup): ToolCardItem => ({
+          id: g.id,
+          title: g.title,
+          description: g.description,
+          icon: g.icon ?? 'pi pi-wrench',
+          route: g.route,
+          available: g.available,
+        });
+
+        this.availableTools = groups.filter(g => g.available).map(mapGroup);
+        this.comingSoonTools = groups.filter(g => !g.available).map(mapGroup);
+
+        if (this.category) {
+          this.seo.setPageSeo({
+            title: `${this.category.title} – Tools Central`,
+            description: this.category.description,
+          });
+        }
       });
-    }
   }
 }

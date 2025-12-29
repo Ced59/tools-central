@@ -65583,6 +65583,996 @@ Calculez l’écart absolu :                                </target>
         <target state="translated">I-extract ang mga nakapaloob na larawan (XObjects) mula sa isang PDF, tukuyin ang kanilang uri at i-export ang listahan sa JSON.</target>
       </segment>
     </unit>
+    <unit id="pdf_ann_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_author">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">May-akda</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_contents_label">
+      <segment>
+        <source>Contenu</source>
+        <target state="translated">Nilalaman</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Rect</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_quadpoints">
+      <segment>
+        <source>QuadPoints</source>
+        <target state="translated">QuadPoints</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "maganda" (may indentasyon)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_rect">
+      <segment>
+        <source>Inclure Rect (position)</source>
+        <target state="translated">Isama ang Rect (posisyon)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_quadpoints">
+      <segment>
+        <source>Inclure QuadPoints (surlignages)</source>
+        <target state="translated">Isama ang QuadPoints (mga highlight)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_raw">
+      <segment>
+        <source>Inclure les détails “raw” (dict PDF)</source>
+        <target state="translated">Isama ang mga detalye "raw" (dict PDF)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Mga anotasyon ng PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_subtitle">
+      <segment>
+        <source>Exportez les annotations d’un PDF (commentaires, surlignages, notes, dessins, liens…) au format JSON, localement dans votre navigateur.</source>
+        <target state="translated">I-export ang mga anotasyon mula sa isang PDF (mga komento, mga highlight, mga tala, mga guhit, mga link…) sa format na JSON, lokal sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_title">
+      <segment>
+        <source>Impossible d’extraire les annotations.</source>
+        <target state="translated">Hindi ma-extract ang mga anotasyon.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_tip_form_only">
+      <segment>
+        <source>Ce PDF ne contient pas de commentaires, surlignages ou autres annotations “utilisateur”. Il s’agit probablement d’un formulaire interactif : utilisez l’outil “Champs PDF → JSON” pour extraire les champs.</source>
+        <target state="translated">Ang PDF na ito ay walang mga komento, mga highlight o iba pang "user" na anotasyon. Marahil ito ay isang interactive na form: gamitin ang tool na "PDF Fields → JSON" upang i-extract ang mga field.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Pumili ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">I-reset</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopyahin</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">I-download</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_filter_placeholder">
+      <segment>
+        <source>Filtrer (type, page, auteur, contenu…)</source>
+        <target state="translated">I-filter (uri, pahina, may-akda, nilalaman…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Nanalysis…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Handa na</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Mag-import ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Walang data na ipinapadala sa isang server: lahat ay nangyayari sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Mga resulta</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_sub">
+      <segment>
+        <source>Aperçu des annotations et export JSON.</source>
+        <target state="translated">Preview ng mga anotasyon at export JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Ma-export</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_list_title">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Mga anotasyon</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_empty">
+      <segment>
+        <source>Aucune annotation à afficher.</source>
+        <target state="translated">Walang anotasyon na ipapakita.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Bumalik sa mga tool ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Mga pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_total">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Mga anotasyon</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_highlight">
+      <segment>
+        <source>Surlignages</source>
+        <target state="translated">Mga highlight</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_text">
+      <segment>
+        <source>Notes</source>
+        <target state="translated">Mga tala</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_highlight">
+      <segment>
+        <source>Surlignage</source>
+        <target state="translated">Highlight</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_underline">
+      <segment>
+        <source>Souligné</source>
+        <target state="translated">Naka-underline</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_strikeout">
+      <segment>
+        <source>Barré</source>
+        <target state="translated">Naka-strikethrough</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_squiggly">
+      <segment>
+        <source>Ondulé</source>
+        <target state="translated">Naka-wavy</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_text">
+      <segment>
+        <source>Note</source>
+        <target state="translated">Tala</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_freetext">
+      <segment>
+        <source>Texte libre</source>
+        <target state="translated">Libreng teksto</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_ink">
+      <segment>
+        <source>Dessin (Ink)</source>
+        <target state="translated">Dibuho (Ink)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_stamp">
+      <segment>
+        <source>Tampon</source>
+        <target state="translated">Tampok</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_link">
+      <segment>
+        <source>Lien</source>
+        <target state="translated">Ugnayan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_widget">
+      <segment>
+        <source>Widget</source>
+        <target state="translated">Widget</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_unknown">
+      <segment>
+        <source>Autre</source>
+        <target state="translated">Iba</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Hindi mabasa ang PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON na nakopya sa clipboard.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Hindi awtomatikong makokopya. Piliin ang teksto at kopyahin nang mano-mano.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Mga anotasyon ng PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_desc">
+      <segment>
+        <source>Exporter les annotations d’un PDF (commentaires, surlignages, notes…) au format JSON.</source>
+        <target state="translated">I-export ang mga anotasyon mula sa isang PDF (mga komento, mga naka-highlight, mga tala…) sa format na JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_desc">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Paglalarawan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "maganda" (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails FileSpec)</source>
+        <target state="translated">Isama ang "raw" (mga detalye ng FileSpec)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_note">
+      <segment>
+        <source> Note : les fichiers sont extraits localement. Aucun upload serveur. </source>
+        <target state="translated">Tandaan: ang mga file ay kinukuha nang lokal. Walang pag-upload sa server.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Mga kalakip na PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_subtitle">
+      <segment>
+        <source>Détectez et extrayez les fichiers embarqués dans un PDF (EmbeddedFiles) et exportez la liste en JSON. Téléchargez chaque fichier ou tout en ZIP, localement dans votre navigateur.</source>
+        <target state="translated">Tukuyin at kunin ang mga nakapaloob na file sa isang PDF (EmbeddedFiles) at i-export ang listahan sa JSON. I-download ang bawat file o lahat sa ZIP, lokal sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_title">
+      <segment>
+        <source>Impossible d’extraire les pièces jointes.</source>
+        <target state="translated">Hindi ma-extract ang mga kalakip.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_none">
+      <segment>
+        <source>Aucune pièce jointe détectée dans ce PDF.</source>
+        <target state="translated">Walang nakitang kalakip sa PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_zip">
+      <segment>
+        <source>ZIP généré. Téléchargement lancé.</source>
+        <target state="translated">Nabuo ang ZIP. Nagsimula ang pag-download.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_downloaded">
+      <segment>
+        <source>Fichier téléchargé.</source>
+        <target state="translated">Na-download ang file.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_all">
+      <segment>
+        <source>Télécharger tout (ZIP)</source>
+        <target state="translated">I-download ang lahat (ZIP)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_one">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">I-download</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Pumili ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">I-reset</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopyahin</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type, taille…)</source>
+        <target state="translated">I-filter (pangalan, uri, laki…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Nanalysis…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Handa na</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Mag-import ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Walang data na ipinapadala sa server: lahat ay nangyayari sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Mga resulta</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_sub">
+      <segment>
+        <source>Liste des pièces jointes (EmbeddedFiles) + export JSON + téléchargements.</source>
+        <target state="translated">Listahan ng mga kalakip (EmbeddedFiles) + export JSON + mga pag-download.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Maaaring i-export</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_list_title">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Mga file</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_empty">
+      <segment>
+        <source>Aucune pièce jointe à afficher.</source>
+        <target state="translated">Walang kalakip na ipapakita.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Bumalik sa mga tool ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Mga pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_files">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Mga file</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_total_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Laki</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_mime">
+      <segment>
+        <source>MIME</source>
+        <target state="translated">MIME</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Hindi mabasa ang PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON na kinopya sa clipboard.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Hindi awtomatikong makopya. Piliin ang teksto at kopyahin nang manu-mano.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_page">
+      <segment>
+        <source>Page</source>
+        <target state="translated">Pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_fax_hint">
+      <segment>
+        <source>Indice scan</source>
+        <target state="translated">Index ng scan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_reasons">
+      <segment>
+        <source>Raisons</source>
+        <target state="translated">Mga dahilan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "maganda" (indentado)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_include_pages">
+      <segment>
+        <source>Inclure les détails par page</source>
+        <target state="translated">Isama ang mga detalye sa bawat pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_note">
+      <segment>
+        <source> Note : c’est une estimation basée sur les ressources (polices/images). Un PDF peut être “scan + OCR”. </source>
+        <target state="translated">Tandaan: ito ay isang pagtataya batay sa mga mapagkukunan (font/imahe). Ang isang PDF ay maaaring "scan + OCR".</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Tukuyin kung ang isang PDF ay na-scan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_subtitle">
+      <segment>
+        <source>Analysez un PDF pour estimer s’il provient d’un scan (images sur les pages, absence de polices, indices CCITT/JBIG2) et exportez le diagnostic en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Suriin ang isang PDF upang tantiyahin kung ito ay nagmula sa isang scan (mga imahe sa mga pahina, kawalan ng mga font, mga palatandaan ng CCITT/JBIG2) at i-export ang diagnosis sa JSON, lokal sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_title">
+      <segment>
+        <source>Impossible d’analyser ce PDF.</source>
+        <target state="translated">Hindi ma-suri ang PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_yes">
+      <segment>
+        <source>Ce PDF semble provenir d’un scan (forte probabilité).</source>
+        <target state="translated">Mukhang nagmula ang PDF na ito sa isang scan (mataas na posibilidad).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_no">
+      <segment>
+        <source>Ce PDF ne semble pas être un scan (il contient des ressources de texte).</source>
+        <target state="translated">Mukhang hindi na-scan ang PDF na ito (naglalaman ito ng mga mapagkukunan ng teksto).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Pumili ng isang PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">I-reset</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopyahin</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">I-download</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_filter_placeholder">
+      <segment>
+        <source>Filtrer (page, raisons…)</source>
+        <target state="translated">I-filter (pahina, mga dahilan…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Sinusuri…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Handa na</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Mag-import ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Walang data na ipinapadala sa isang server: lahat ay nangyayari sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Mga resulta</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_sub">
+      <segment>
+        <source>Score “scan” + indices détectés + détails par page.</source>
+        <target state="translated">Score ng "scan" + mga natukoy na palatandaan + mga detalye sa bawat pahina.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Maaaring i-export</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Mga pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_empty">
+      <segment>
+        <source>Aucune page à afficher.</source>
+        <target state="translated">Walang pahina na ipapakita.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Bumalik sa mga tool ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Mga pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_score">
+      <segment>
+        <source>Score</source>
+        <target state="translated">Score</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_fonts">
+      <segment>
+        <source>Pages avec polices</source>
+        <target state="translated">Mga pahina na may mga font</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_images">
+      <segment>
+        <source>Pages avec images</source>
+        <target state="translated">Mga pahina na may mga imahe</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Hindi ma-basa ang PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON na kinopya sa clipboard.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Hindi awtomatikong makopya. Piliin ang teksto at kopyahin nang manu-mano.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_field">
+      <segment>
+        <source>Champ</source>
+        <target state="translated">Larangan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_meta">
+      <segment>
+        <source>Infos</source>
+        <target state="translated">Impormasyon</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_reason">
+      <segment>
+        <source>Raison</source>
+        <target state="translated">Dahilan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Rect</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "pretty" (naka-indent)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_rect">
+      <segment>
+        <source>Inclure Rect (position du widget)</source>
+        <target state="translated">Isama ang Rect (posisyon ng widget)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails dict /Sig)</source>
+        <target state="translated">Isama ang "raw" (mga detalye dict /Sig)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Mga Lagda ng PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_subtitle">
+      <segment>
+        <source>Détectez les signatures d’un PDF (PAdES / PKCS#7), récupérez les informations techniques (ByteRange, SubFilter…) et exportez-les en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Tukuyin ang mga lagda ng isang PDF (PAdES / PKCS#7), kunin ang mga teknikal na impormasyon (ByteRange, SubFilter…) at i-export ang mga ito sa JSON, lokal sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_title">
+      <segment>
+        <source>Impossible d’extraire les signatures.</source>
+        <target state="translated">Hindi ma-extract ang mga lagda.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_none">
+      <segment>
+        <source>Aucune signature détectée dans ce PDF.</source>
+        <target state="translated">Walang lagda na natukoy sa PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_explain">
+      <segment>
+        <source>Astuce : cet outil extrait des informations techniques de signature (sans valider cryptographiquement le certificat).</source>
+        <target state="translated">Tip: ang tool na ito ay kumukuha ng mga teknikal na impormasyon ng lagda (nang hindi nag-validate ng cryptographically ang sertipiko).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Pumili ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">I-reset</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopyahin</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">I-download</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_filter_placeholder">
+      <segment>
+        <source>Filtrer (field, page, subfilter, reason…)</source>
+        <target state="translated">I-filter (field, page, subfilter, reason…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Nanalysis…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Handa na</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Error</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Mag-import ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Walang data na ipinapadala sa isang server: lahat ay nangyayari sa iyong browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Mga resulta</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_sub">
+      <segment>
+        <source>Aperçu des signatures et export JSON.</source>
+        <target state="translated">Preview ng mga lagda at export JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Maaaring i-export</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_list_title">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Mga lagda</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_empty">
+      <segment>
+        <source>Aucune signature à afficher.</source>
+        <target state="translated">Walang lagda na ipapakita.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Bumalik sa mga tool ng PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Mga pahina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_total">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Mga lagda</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_byterange">
+      <segment>
+        <source>ByteRange</source>
+        <target state="translated">ByteRange</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pades">
+      <segment>
+        <source>PAdES</source>
+        <target state="translated">PAdES</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_type_signature">
+      <segment>
+        <source>Signature</source>
+        <target state="translated">Lagda</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Hindi mabasa ang PDF na ito.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON na kinopya sa clipboard.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Hindi awtomatikong makopya. Piliin ang teksto at kopyahin nang manu-mano.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Mga lagda ng PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_desc">
+      <segment>
+        <source>Détecter les signatures d’un PDF et exporter les informations techniques (ByteRange, SubFilter…) au format JSON.</source>
+        <target state="translated">Tukuyin ang mga lagda ng isang PDF at i-export ang mga teknikal na impormasyon (ByteRange, SubFilter…) sa format na JSON.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Mga kalakip ng PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_desc">
+      <segment>
+        <source>Détecter et extraire les fichiers embarqués dans un PDF (EmbeddedFiles). Téléchargement individuel ou ZIP.</source>
+        <target state="translated">Tukuyin at i-extract ang mga nakapaloob na file sa isang PDF (EmbeddedFiles). Indibidwal na pag-download o ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Tukuyin kung ang isang PDF ay na-scan</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_desc">
+      <segment>
+        <source>Estimer si un PDF provient d’un scan (images, absence de polices, indices CCITT/JBIG2) et exporter le diagnostic en JSON.</source>
+        <target state="translated">Tantiyahin kung ang isang PDF ay nagmula sa isang scan (mga larawan, kawalan ng mga font, mga palatandaan ng CCITT/JBIG2) at i-export ang diagnosis sa JSON.</target>
+      </segment>
+    </unit>
 
     
     

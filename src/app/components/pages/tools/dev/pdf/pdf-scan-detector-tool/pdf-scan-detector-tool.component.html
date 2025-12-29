@@ -1,0 +1,64 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-search"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="(result()?.pages?.length ?? 0)"
+  [filteredCount]="filteredPages().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div *ngFor="let p of filteredPages(); trackBy: trackByPage" class="field-card">
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">
+            <span i18n="@@pdf_scan_page">Page</span> {{ p.pageNumber }}
+          </span>
+
+          <span class="muted mono">
+            • fonts={{ p.fontCount }} • images={{ p.imageCount }}
+          </span>
+        </div>
+
+        <div class="field-card-page" *ngIf="p.has1BitFaxLikeImage">
+          <span class="muted" i18n="@@pdf_scan_fax_hint">Indice scan</span>
+          <span class="mono">CCITT/JBIG2/1-bit</span>
+        </div>
+      </div>
+
+      <div class="field-card-value">
+        <div class="muted" i18n="@@pdf_scan_reasons">Raisons</div>
+        <div class="mono">{{ (p?.reasons ?? []).join(', ') || '—' }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_scan_pretty">JSON “pretty” (indenté)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includePages" />
+      <span i18n="@@pdf_scan_include_pages">Inclure les détails par page</span>
+    </label>
+
+    <div class="muted" style="margin-top:.75rem;" i18n="@@pdf_scan_note">
+      Note : c’est une estimation basée sur les ressources (polices/images). Un PDF peut être “scan + OCR”.
+    </div>
+  </div>
+</app-pdf-tool-shell>

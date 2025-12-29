@@ -65587,6 +65587,996 @@ Calculez l’écart absolu :                                </target>
         <target state="translated">Εξαγάγετε τις ενσωματωμένες εικόνες (XObjects) από ένα PDF, ανιχνεύστε τον τύπο τους και εξάγετε τη λίστα σε JSON.</target>
       </segment>
     </unit>
+    <unit id="pdf_ann_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">σελίδα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_author">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">Συγγραφέας</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_contents_label">
+      <segment>
+        <source>Contenu</source>
+        <target state="translated">Περιεχόμενο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Ορθογώνιο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_quadpoints">
+      <segment>
+        <source>QuadPoints</source>
+        <target state="translated">Σημεία Τετραγώνου</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “όμορφο” (με εσοχές)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_rect">
+      <segment>
+        <source>Inclure Rect (position)</source>
+        <target state="translated">Συμπερίληψη Ορθογωνίου (θέση)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_quadpoints">
+      <segment>
+        <source>Inclure QuadPoints (surlignages)</source>
+        <target state="translated">Συμπερίληψη Σημείων Τετραγώνου (υπογραμμίσεις)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_raw">
+      <segment>
+        <source>Inclure les détails “raw” (dict PDF)</source>
+        <target state="translated">Συμπερίληψη λεπτομερειών “raw” (λεξικό PDF)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Σημειώσεις PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_subtitle">
+      <segment>
+        <source>Exportez les annotations d’un PDF (commentaires, surlignages, notes, dessins, liens…) au format JSON, localement dans votre navigateur.</source>
+        <target state="translated">Εξάγετε τις σημειώσεις ενός PDF (σχόλια, υπογραμμίσεις, σημειώσεις, σχέδια, σύνδεσμοι…) σε μορφή JSON, τοπικά στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_title">
+      <segment>
+        <source>Impossible d’extraire les annotations.</source>
+        <target state="translated">Αδύνατη η εξαγωγή σημειώσεων.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_tip_form_only">
+      <segment>
+        <source>Ce PDF ne contient pas de commentaires, surlignages ou autres annotations “utilisateur”. Il s’agit probablement d’un formulaire interactif : utilisez l’outil “Champs PDF → JSON” pour extraire les champs.</source>
+        <target state="translated">Αυτό το PDF δεν περιέχει σχόλια, υπογραμμίσεις ή άλλες “χρηστικές” σημειώσεις. Πιθανώς πρόκειται για διαδραστική φόρμα: χρησιμοποιήστε το εργαλείο “Πεδία PDF → JSON” για να εξάγετε τα πεδία.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Επιλέξτε ένα PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Επαναφορά</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Λήψη</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_filter_placeholder">
+      <segment>
+        <source>Filtrer (type, page, auteur, contenu…)</source>
+        <target state="translated">Φιλτράρισμα (τύπος, σελίδα, συγγραφέας, περιεχόμενο…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Ανάλυση…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Έτοιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Σφάλμα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Εισαγωγή ενός PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Καμία δεδομένα δεν αποστέλλονται σε διακομιστή: όλα γίνονται στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Αποτελέσματα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_sub">
+      <segment>
+        <source>Aperçu des annotations et export JSON.</source>
+        <target state="translated">Προεπισκόπηση σημειώσεων και εξαγωγή JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Εξαγώγιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_list_title">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Σημειώσεις</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_empty">
+      <segment>
+        <source>Aucune annotation à afficher.</source>
+        <target state="translated">Καμία σημείωση προς εμφάνιση.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Επιστροφή στα εργαλεία PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Σελίδες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_total">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">Σημειώσεις</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_highlight">
+      <segment>
+        <source>Surlignages</source>
+        <target state="translated">Υπογραμμίσεις</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_text">
+      <segment>
+        <source>Notes</source>
+        <target state="translated">Σημειώσεις</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_highlight">
+      <segment>
+        <source>Surlignage</source>
+        <target state="translated">Υπογράμμιση</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_underline">
+      <segment>
+        <source>Souligné</source>
+        <target state="translated">Υπογράμμιση</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_strikeout">
+      <segment>
+        <source>Barré</source>
+        <target state="translated">Διαγραμμένο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_squiggly">
+      <segment>
+        <source>Ondulé</source>
+        <target state="translated">Κυματιστό</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_text">
+      <segment>
+        <source>Note</source>
+        <target state="translated">Σημείωση</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_freetext">
+      <segment>
+        <source>Texte libre</source>
+        <target state="translated">Ελεύθερο κείμενο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_ink">
+      <segment>
+        <source>Dessin (Ink)</source>
+        <target state="translated">Σχέδιο (Μελάνι)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_stamp">
+      <segment>
+        <source>Tampon</source>
+        <target state="translated">Σφραγίδα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_link">
+      <segment>
+        <source>Lien</source>
+        <target state="translated">Σύνδεσμος</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_widget">
+      <segment>
+        <source>Widget</source>
+        <target state="translated">Γραφικό στοιχείο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_unknown">
+      <segment>
+        <source>Autre</source>
+        <target state="translated">Άλλο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Αδύνατον να διαβαστεί αυτό το PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON αντιγράφηκε στο πρόχειρο.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Αδύνατον να αντιγραφεί αυτόματα. Επιλέξτε το κείμενο και αντιγράψτε το χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">Σημειώσεις PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_desc">
+      <segment>
+        <source>Exporter les annotations d’un PDF (commentaires, surlignages, notes…) au format JSON.</source>
+        <target state="translated">Εξαγωγή σημειώσεων από ένα PDF (σχόλια, επισημάνσεις, σημειώσεις…) σε μορφή JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_desc">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Περιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "όμορφο" (με εσοχές)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails FileSpec)</source>
+        <target state="translated">Συμπερίληψη "raw" (λεπτομέρειες FileSpec)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_note">
+      <segment>
+        <source> Note : les fichiers sont extraits localement. Aucun upload serveur. </source>
+        <target state="translated">Σημείωση: τα αρχεία εξάγονται τοπικά. Καμία μεταφόρτωση διακομιστή.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Συνημμένα PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_subtitle">
+      <segment>
+        <source>Détectez et extrayez les fichiers embarqués dans un PDF (EmbeddedFiles) et exportez la liste en JSON. Téléchargez chaque fichier ou tout en ZIP, localement dans votre navigateur.</source>
+        <target state="translated">Ανιχνεύστε και εξάγετε τα ενσωματωμένα αρχεία σε ένα PDF (EmbeddedFiles) και εξάγετε τη λίστα σε JSON. Κατεβάστε κάθε αρχείο ή όλα σε ZIP, τοπικά στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_title">
+      <segment>
+        <source>Impossible d’extraire les pièces jointes.</source>
+        <target state="translated">Αδύνατη η εξαγωγή των συνημμένων.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_none">
+      <segment>
+        <source>Aucune pièce jointe détectée dans ce PDF.</source>
+        <target state="translated">Καμία συνημμένη δεν ανιχνεύθηκε σε αυτό το PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_zip">
+      <segment>
+        <source>ZIP généré. Téléchargement lancé.</source>
+        <target state="translated">Δημιουργήθηκε ZIP. Ξεκίνησε η λήψη.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_downloaded">
+      <segment>
+        <source>Fichier téléchargé.</source>
+        <target state="translated">Αρχείο κατεβασμένο.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_all">
+      <segment>
+        <source>Télécharger tout (ZIP)</source>
+        <target state="translated">Κατεβάστε όλα (ZIP)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_one">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Κατεβάστε</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Επιλέξτε ένα PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Επαναφορά</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type, taille…)</source>
+        <target state="translated">Φιλτράρισμα (όνομα, τύπος, μέγεθος…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Ανάλυση…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Έτοιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Σφάλμα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Εισαγωγή PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Καμία δεδομένα δεν αποστέλλονται σε διακομιστή: όλα γίνονται στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Αποτελέσματα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_sub">
+      <segment>
+        <source>Liste des pièces jointes (EmbeddedFiles) + export JSON + téléchargements.</source>
+        <target state="translated">Λίστα συνημμένων (EmbeddedFiles) + εξαγωγή JSON + λήψεις.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Εξαγώγιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_list_title">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Αρχεία</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_empty">
+      <segment>
+        <source>Aucune pièce jointe à afficher.</source>
+        <target state="translated">Καμία συνημμένη προς εμφάνιση.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Επιστροφή στα εργαλεία PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Σελίδες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_files">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">Αρχεία</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_total_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Μέγεθος</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_mime">
+      <segment>
+        <source>MIME</source>
+        <target state="translated">MIME</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Αδύνατη η ανάγνωση αυτού του PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON αντιγράφηκε στο πρόχειρο.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Αδύνατη η αυτόματη αντιγραφή. Επιλέξτε το κείμενο και αντιγράψτε το χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_page">
+      <segment>
+        <source>Page</source>
+        <target state="translated">Σελίδα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_fax_hint">
+      <segment>
+        <source>Indice scan</source>
+        <target state="translated">Δείκτης σάρωσης</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_reasons">
+      <segment>
+        <source>Raisons</source>
+        <target state="translated">Λόγοι</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "όμορφο" (με εσοχές)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_include_pages">
+      <segment>
+        <source>Inclure les détails par page</source>
+        <target state="translated">Συμπεριλάβετε τις λεπτομέρειες ανά σελίδα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_note">
+      <segment>
+        <source> Note : c’est une estimation basée sur les ressources (polices/images). Un PDF peut être “scan + OCR”. </source>
+        <target state="translated">Σημείωση: είναι μια εκτίμηση που βασίζεται στους πόρους (γραμματοσειρές/εικόνες). Ένα PDF μπορεί να είναι "σάρωση + OCR".</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Ανίχνευση αν ένα PDF είναι σκαναρισμένο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_subtitle">
+      <segment>
+        <source>Analysez un PDF pour estimer s’il provient d’un scan (images sur les pages, absence de polices, indices CCITT/JBIG2) et exportez le diagnostic en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Αναλύστε ένα PDF για να εκτιμήσετε αν προέρχεται από σάρωση (εικόνες στις σελίδες, απουσία γραμματοσειρών, δείκτες CCITT/JBIG2) και εξάγετε τη διάγνωση σε JSON, τοπικά στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_title">
+      <segment>
+        <source>Impossible d’analyser ce PDF.</source>
+        <target state="translated">Αδύνατη η ανάλυση αυτού του PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_yes">
+      <segment>
+        <source>Ce PDF semble provenir d’un scan (forte probabilité).</source>
+        <target state="translated">Αυτό το PDF φαίνεται να προέρχεται από σάρωση (υψηλή πιθανότητα).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_no">
+      <segment>
+        <source>Ce PDF ne semble pas être un scan (il contient des ressources de texte).</source>
+        <target state="translated">Αυτό το PDF δεν φαίνεται να είναι σάρωση (περιέχει πόρους κειμένου).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Επιλέξτε ένα PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Επαναφορά</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Λήψη</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_filter_placeholder">
+      <segment>
+        <source>Filtrer (page, raisons…)</source>
+        <target state="translated">Φιλτράρισμα (σελίδα, λόγοι…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Ανάλυση…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Έτοιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Σφάλμα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Εισαγωγή ενός PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Καμία δεδομένα δεν αποστέλλονται σε διακομιστή: όλα γίνονται στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Αποτελέσματα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_sub">
+      <segment>
+        <source>Score “scan” + indices détectés + détails par page.</source>
+        <target state="translated">Βαθμολογία "σάρωσης" + ανιχνευθέντες δείκτες + λεπτομέρειες ανά σελίδα.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Εξαγώγιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Σελίδες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_empty">
+      <segment>
+        <source>Aucune page à afficher.</source>
+        <target state="translated">Καμία σελίδα προς εμφάνιση.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Επιστροφή στα εργαλεία PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Σελίδες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_score">
+      <segment>
+        <source>Score</source>
+        <target state="translated">Βαθμολογία</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_fonts">
+      <segment>
+        <source>Pages avec polices</source>
+        <target state="translated">Σελίδες με γραμματοσειρές</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_images">
+      <segment>
+        <source>Pages avec images</source>
+        <target state="translated">Σελίδες με εικόνες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Αδύνατη η ανάγνωση αυτού του PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON αντιγράφηκε στο πρόχειρο.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Αδύνατη η αυτόματη αντιγραφή. Επιλέξτε το κείμενο και αντιγράψτε το χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">σελίδα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_field">
+      <segment>
+        <source>Champ</source>
+        <target state="translated">Πεδίο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_meta">
+      <segment>
+        <source>Infos</source>
+        <target state="translated">Πληροφορίες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_reason">
+      <segment>
+        <source>Raison</source>
+        <target state="translated">Λόγος</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">Rect</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON "όμορφο" (με εσοχές)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_rect">
+      <segment>
+        <source>Inclure Rect (position du widget)</source>
+        <target state="translated">Συμπεριλάβετε Rect (θέση του widget)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails dict /Sig)</source>
+        <target state="translated">Συμπεριλάβετε "raw" (λεπτομέρειες dict /Sig)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Υπογραφές PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_subtitle">
+      <segment>
+        <source>Détectez les signatures d’un PDF (PAdES / PKCS#7), récupérez les informations techniques (ByteRange, SubFilter…) et exportez-les en JSON, localement dans votre navigateur.</source>
+        <target state="translated">Αναγνωρίστε τις υπογραφές ενός PDF (PAdES / PKCS#7), ανακτήστε τις τεχνικές πληροφορίες (ByteRange, SubFilter…) και εξάγετε τις σε JSON, τοπικά στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_title">
+      <segment>
+        <source>Impossible d’extraire les signatures.</source>
+        <target state="translated">Αδύνατη η εξαγωγή των υπογραφών.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_none">
+      <segment>
+        <source>Aucune signature détectée dans ce PDF.</source>
+        <target state="translated">Καμία υπογραφή δεν ανιχνεύθηκε σε αυτό το PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_explain">
+      <segment>
+        <source>Astuce : cet outil extrait des informations techniques de signature (sans valider cryptographiquement le certificat).</source>
+        <target state="translated">Συμβουλή: αυτό το εργαλείο εξάγει τεχνικές πληροφορίες υπογραφής (χωρίς να επικυρώνει κρυπτογραφικά το πιστοποιητικό).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Επιλέξτε ένα PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Επαναφορά</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Λήψη</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_filter_placeholder">
+      <segment>
+        <source>Filtrer (field, page, subfilter, reason…)</source>
+        <target state="translated">Φιλτράρισμα (field, page, subfilter, reason…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">Ανάλυση…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Έτοιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Σφάλμα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Εισαγωγή ενός PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">Καμία δεδομένα δεν αποστέλλονται σε διακομιστή: όλα γίνονται στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">Αποτελέσματα</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_sub">
+      <segment>
+        <source>Aperçu des signatures et export JSON.</source>
+        <target state="translated">Προεπισκόπηση υπογραφών και εξαγωγή JSON.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">Εξαγώγιμο</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_list_title">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Υπογραφές</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_empty">
+      <segment>
+        <source>Aucune signature à afficher.</source>
+        <target state="translated">Καμία υπογραφή προς εμφάνιση.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Επιστροφή στα εργαλεία PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Σελίδες</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_total">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Υπογραφές</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_byterange">
+      <segment>
+        <source>ByteRange</source>
+        <target state="translated">ByteRange</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pades">
+      <segment>
+        <source>PAdES</source>
+        <target state="translated">PAdES</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_type_signature">
+      <segment>
+        <source>Signature</source>
+        <target state="translated">Υπογραφή</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">Αδύνατη η ανάγνωση αυτού του PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON αντιγράφηκε στο πρόχειρο.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">Αδύνατη η αυτόματη αντιγραφή. Επιλέξτε το κείμενο και αντιγράψτε το χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">Υπογραφές PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_desc">
+      <segment>
+        <source>Détecter les signatures d’un PDF et exporter les informations techniques (ByteRange, SubFilter…) au format JSON.</source>
+        <target state="translated">Αναγνωρίστε τις υπογραφές ενός PDF και εξάγετε τις τεχνικές πληροφορίες (ByteRange, SubFilter…) σε μορφή JSON.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">Συνημμένα PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_desc">
+      <segment>
+        <source>Détecter et extraire les fichiers embarqués dans un PDF (EmbeddedFiles). Téléchargement individuel ou ZIP.</source>
+        <target state="translated">Αναγνωρίστε και εξάγετε τα ενσωματωμένα αρχεία σε ένα PDF (EmbeddedFiles). Ατομική λήψη ή ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">Αναγνωρίστε αν ένα PDF είναι σαρωμένο</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_desc">
+      <segment>
+        <source>Estimer si un PDF provient d’un scan (images, absence de polices, indices CCITT/JBIG2) et exporter le diagnostic en JSON.</source>
+        <target state="translated">Εκτιμήστε αν ένα PDF προέρχεται από σάρωση (εικόνες, απουσία γραμματοσειρών, δείκτες CCITT/JBIG2) και εξάγετε τη διάγνωση σε JSON.</target>
+      </segment>
+    </unit>
 
     
     

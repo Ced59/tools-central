@@ -1,0 +1,83 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-paperclip"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="attachments().length"
+  [filteredCount]="filtered().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <div leftList>
+    <div class="actions" style="margin-bottom: .75rem; display:flex; gap:.5rem; flex-wrap:wrap;">
+      <button
+        type="button"
+        class="p-button p-component"
+        [disabled]="attachments().length === 0"
+        (click)="downloadAllZip()"
+      >
+        <span class="pi pi-download" style="margin-right:.5rem;"></span>
+        <span>{{ ui.btnDownloadAll }}</span>
+      </button>
+    </div>
+
+    <div *ngFor="let it of filtered(); trackBy: trackById" class="field-card">
+      <div class="field-card-header">
+        <div class="field-card-title">
+          <span class="field-name">{{ it.displayName }}</span>
+          <span class="muted mono"> • {{ it.size }} bytes</span>
+        </div>
+
+        <div class="field-card-page" *ngIf="it.mime">
+          <span class="muted">MIME</span>
+          <span class="mono">{{ it.mime }}</span>
+        </div>
+      </div>
+
+      <div class="field-card-value">
+        <div class="muted" i18n="@@pdf_att_desc">Description</div>
+        <div class="mono">{{ it.description ?? '—' }}</div>
+      </div>
+
+      <div class="field-card-advanced" style="display:flex; justify-content:flex-end;">
+        <button
+          type="button"
+          class="p-button p-component p-button-secondary"
+          [disabled]="!(it.bytes?.length)"
+          (click)="downloadOne(it)"
+        >
+          <span class="pi pi-download" style="margin-right:.5rem;"></span>
+          <span>{{ ui.btnDownloadOne }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div rightOptions>
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.pretty" />
+      <span i18n="@@pdf_att_pretty">JSON “pretty” (indenté)</span>
+    </label>
+
+    <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+      <input type="checkbox" [formControl]="form.controls.includeRaw" />
+      <span i18n="@@pdf_att_include_raw">Inclure “raw” (détails FileSpec)</span>
+    </label>
+
+    <div class="muted" style="margin-top:.75rem;" i18n="@@pdf_att_note">
+      Note : les fichiers sont extraits localement. Aucun upload serveur.
+    </div>
+  </div>
+</app-pdf-tool-shell>

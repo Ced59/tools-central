@@ -65583,6 +65583,996 @@ Calculez l’écart absolu :                                </target>
         <target state="translated">从 PDF 中提取嵌入的图像（XObjects），检测其类型并将列表导出为 JSON。</target>
       </segment>
     </unit>
+    <unit id="pdf_ann_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_author">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">作者</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_contents_label">
+      <segment>
+        <source>Contenu</source>
+        <target state="translated">内容</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">矩形</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_quadpoints">
+      <segment>
+        <source>QuadPoints</source>
+        <target state="translated">四边形点</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “美化”（缩进）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_rect">
+      <segment>
+        <source>Inclure Rect (position)</source>
+        <target state="translated">包含矩形（位置）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_quadpoints">
+      <segment>
+        <source>Inclure QuadPoints (surlignages)</source>
+        <target state="translated">包含四边形点（高亮）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_include_raw">
+      <segment>
+        <source>Inclure les détails “raw” (dict PDF)</source>
+        <target state="translated">包含“原始”细节（PDF 字典）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">PDF 注释 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_subtitle">
+      <segment>
+        <source>Exportez les annotations d’un PDF (commentaires, surlignages, notes, dessins, liens…) au format JSON, localement dans votre navigateur.</source>
+        <target state="translated">将 PDF 的注释（评论、高亮、笔记、图形、链接等）导出为 JSON 格式，保存在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_title">
+      <segment>
+        <source>Impossible d’extraire les annotations.</source>
+        <target state="translated">无法提取注释。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_tip_form_only">
+      <segment>
+        <source>Ce PDF ne contient pas de commentaires, surlignages ou autres annotations “utilisateur”. Il s’agit probablement d’un formulaire interactif : utilisez l’outil “Champs PDF → JSON” pour extraire les champs.</source>
+        <target state="translated">此 PDF 不包含评论、高亮或其他“用户”注释。它可能是一个交互式表单：请使用“PDF 字段 → JSON”工具提取字段。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">选择一个 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">下载</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_filter_placeholder">
+      <segment>
+        <source>Filtrer (type, page, auteur, contenu…)</source>
+        <target state="translated">过滤（类型、页面、作者、内容等）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">准备好</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">导入 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">没有数据被发送到服务器：一切都在您的浏览器中完成。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">结果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_card_results_sub">
+      <segment>
+        <source>Aperçu des annotations et export JSON.</source>
+        <target state="translated">注释预览和 JSON 导出。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">可导出</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_list_title">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">注释</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_empty">
+      <segment>
+        <source>Aucune annotation à afficher.</source>
+        <target state="translated">没有注释可显示。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← 返回 PDF 工具</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_total">
+      <segment>
+        <source>Annotations</source>
+        <target state="translated">注释</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_highlight">
+      <segment>
+        <source>Surlignages</source>
+        <target state="translated">高亮</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_stat_text">
+      <segment>
+        <source>Notes</source>
+        <target state="translated">笔记</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_highlight">
+      <segment>
+        <source>Surlignage</source>
+        <target state="translated">高亮</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_underline">
+      <segment>
+        <source>Souligné</source>
+        <target state="translated">下划线</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_strikeout">
+      <segment>
+        <source>Barré</source>
+        <target state="translated">删除线</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_squiggly">
+      <segment>
+        <source>Ondulé</source>
+        <target state="translated">波浪线</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_text">
+      <segment>
+        <source>Note</source>
+        <target state="translated">笔记</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_freetext">
+      <segment>
+        <source>Texte libre</source>
+        <target state="translated">自由文本</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_ink">
+      <segment>
+        <source>Dessin (Ink)</source>
+        <target state="translated">绘图 (墨水)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_stamp">
+      <segment>
+        <source>Tampon</source>
+        <target state="translated">印章</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_link">
+      <segment>
+        <source>Lien</source>
+        <target state="translated">链接</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_widget">
+      <segment>
+        <source>Widget</source>
+        <target state="translated">小部件</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_type_unknown">
+      <segment>
+        <source>Autre</source>
+        <target state="translated">其他</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">无法读取此 PDF。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON 已复制到剪贴板。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ann_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择文本并复制。</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_title">
+      <segment>
+        <source>Annotations PDF → JSON</source>
+        <target state="translated">PDF 注释 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_annotations_to_json_desc">
+      <segment>
+        <source>Exporter les annotations d’un PDF (commentaires, surlignages, notes…) au format JSON.</source>
+        <target state="translated">将 PDF 的注释（评论、高亮、笔记等）导出为 JSON 格式。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_desc">
+      <segment>
+        <source>Description</source>
+        <target state="translated">描述</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “美化”（缩进）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails FileSpec)</source>
+        <target state="translated">包含“原始”（FileSpec 详细信息）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_note">
+      <segment>
+        <source> Note : les fichiers sont extraits localement. Aucun upload serveur. </source>
+        <target state="translated">注意：文件在本地提取。没有服务器上传。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">PDF 附件 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_subtitle">
+      <segment>
+        <source>Détectez et extrayez les fichiers embarqués dans un PDF (EmbeddedFiles) et exportez la liste en JSON. Téléchargez chaque fichier ou tout en ZIP, localement dans votre navigateur.</source>
+        <target state="translated">检测并提取 PDF 中嵌入的文件（EmbeddedFiles），并将列表导出为 JSON。下载每个文件或将所有文件打包为 ZIP，保存在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_title">
+      <segment>
+        <source>Impossible d’extraire les pièces jointes.</source>
+        <target state="translated">无法提取附件。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_none">
+      <segment>
+        <source>Aucune pièce jointe détectée dans ce PDF.</source>
+        <target state="translated">在此 PDF 中未检测到任何附件。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_zip">
+      <segment>
+        <source>ZIP généré. Téléchargement lancé.</source>
+        <target state="translated">生成 ZIP。下载已启动。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_tip_downloaded">
+      <segment>
+        <source>Fichier téléchargé.</source>
+        <target state="translated">文件已下载。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_all">
+      <segment>
+        <source>Télécharger tout (ZIP)</source>
+        <target state="translated">下载全部（ZIP）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download_one">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">下载</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">选择 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_btn_download">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type, taille…)</source>
+        <target state="translated">过滤（名称，类型，大小…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">准备好</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">导入 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">没有数据发送到服务器：一切都在您的浏览器中进行。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">结果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_card_results_sub">
+      <segment>
+        <source>Liste des pièces jointes (EmbeddedFiles) + export JSON + téléchargements.</source>
+        <target state="translated">附件列表（EmbeddedFiles） + JSON 导出 + 下载。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">可导出</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_list_title">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">文件</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_empty">
+      <segment>
+        <source>Aucune pièce jointe à afficher.</source>
+        <target state="translated">没有附件可显示。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← 返回 PDF 工具</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_files">
+      <segment>
+        <source>Fichiers</source>
+        <target state="translated">文件</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_total_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">大小</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_stat_mime">
+      <segment>
+        <source>MIME</source>
+        <target state="translated">MIME</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">无法读取此 PDF。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON 已复制到剪贴板。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_att_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择文本并复制。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_page">
+      <segment>
+        <source>Page</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_fax_hint">
+      <segment>
+        <source>Indice scan</source>
+        <target state="translated">扫描索引</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_reasons">
+      <segment>
+        <source>Raisons</source>
+        <target state="translated">原因</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “美化”（缩进）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_include_pages">
+      <segment>
+        <source>Inclure les détails par page</source>
+        <target state="translated">包含每页的详细信息</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_note">
+      <segment>
+        <source> Note : c’est une estimation basée sur les ressources (polices/images). Un PDF peut être “scan + OCR”. </source>
+        <target state="translated">注意：这是基于资源（字体/图像）的估算。一个 PDF 可能是“扫描 + OCR”。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">检测 PDF 是否为扫描件</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_subtitle">
+      <segment>
+        <source>Analysez un PDF pour estimer s’il provient d’un scan (images sur les pages, absence de polices, indices CCITT/JBIG2) et exportez le diagnostic en JSON, localement dans votre navigateur.</source>
+        <target state="translated">分析 PDF 以估算其是否来自扫描（页面上的图像、缺少字体、CCITT/JBIG2 指示）并将诊断导出为 JSON，保存在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_title">
+      <segment>
+        <source>Impossible d’analyser ce PDF.</source>
+        <target state="translated">无法分析此 PDF。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_yes">
+      <segment>
+        <source>Ce PDF semble provenir d’un scan (forte probabilité).</source>
+        <target state="translated">此 PDF 似乎来自扫描（概率很高）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_tip_no">
+      <segment>
+        <source>Ce PDF ne semble pas être un scan (il contient des ressources de texte).</source>
+        <target state="translated">此 PDF 似乎不是扫描件（它包含文本资源）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">选择一个 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">下载</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_filter_placeholder">
+      <segment>
+        <source>Filtrer (page, raisons…)</source>
+        <target state="translated">过滤（页面，原因…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">准备好</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">导入 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">没有数据发送到服务器：一切都在您的浏览器中进行。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">结果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_card_results_sub">
+      <segment>
+        <source>Score “scan” + indices détectés + détails par page.</source>
+        <target state="translated">“扫描”分数 + 检测到的指标 + 每页详细信息。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">可导出</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_empty">
+      <segment>
+        <source>Aucune page à afficher.</source>
+        <target state="translated">没有页面可显示。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← 返回 PDF 工具</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_score">
+      <segment>
+        <source>Score</source>
+        <target state="translated">分数</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_fonts">
+      <segment>
+        <source>Pages avec polices</source>
+        <target state="translated">包含字体的页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_stat_images">
+      <segment>
+        <source>Pages avec images</source>
+        <target state="translated">包含图像的页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">无法读取此 PDF。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON 已复制到剪贴板。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_scan_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择文本并复制。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_on_page">
+      <segment>
+        <source>page</source>
+        <target state="translated">页</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_field">
+      <segment>
+        <source>Champ</source>
+        <target state="translated">字段</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_meta">
+      <segment>
+        <source>Infos</source>
+        <target state="translated">信息</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_reason">
+      <segment>
+        <source>Raison</source>
+        <target state="translated">原因</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_rect">
+      <segment>
+        <source>Rect</source>
+        <target state="translated">矩形</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “美化”（缩进）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_rect">
+      <segment>
+        <source>Inclure Rect (position du widget)</source>
+        <target state="translated">包含矩形（小部件位置）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_include_raw">
+      <segment>
+        <source>Inclure “raw” (détails dict /Sig)</source>
+        <target state="translated">包含“原始”（详细信息 dict /Sig）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">PDF 签名 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_subtitle">
+      <segment>
+        <source>Détectez les signatures d’un PDF (PAdES / PKCS#7), récupérez les informations techniques (ByteRange, SubFilter…) et exportez-les en JSON, localement dans votre navigateur.</source>
+        <target state="translated">检测 PDF 的签名 (PAdES / PKCS#7)，获取技术信息 (ByteRange, SubFilter…) 并将其导出为 JSON，保存在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_title">
+      <segment>
+        <source>Impossible d’extraire les signatures.</source>
+        <target state="translated">无法提取签名。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_none">
+      <segment>
+        <source>Aucune signature détectée dans ce PDF.</source>
+        <target state="translated">在此 PDF 中未检测到任何签名。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_tip_explain">
+      <segment>
+        <source>Astuce : cet outil extrait des informations techniques de signature (sans valider cryptographiquement le certificat).</source>
+        <target state="translated">提示：此工具提取签名的技术信息（不对证书进行加密验证）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">选择一个 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">下载</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_filter_placeholder">
+      <segment>
+        <source>Filtrer (field, page, subfilter, reason…)</source>
+        <target state="translated">过滤 (field, page, subfilter, reason…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">准备好</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">导入 PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">没有数据被发送到服务器：一切都在您的浏览器中完成。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">结果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_card_results_sub">
+      <segment>
+        <source>Aperçu des signatures et export JSON.</source>
+        <target state="translated">签名预览和 JSON 导出。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">可导出</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_list_title">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">签名</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_empty">
+      <segment>
+        <source>Aucune signature à afficher.</source>
+        <target state="translated">没有签名可显示。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← 返回 PDF 工具</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">页面</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_total">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">签名</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_byterange">
+      <segment>
+        <source>ByteRange</source>
+        <target state="translated">ByteRange</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_stat_pades">
+      <segment>
+        <source>PAdES</source>
+        <target state="translated">PAdES</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_type_signature">
+      <segment>
+        <source>Signature</source>
+        <target state="translated">签名</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">无法读取此 PDF。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON 已复制到剪贴板。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sig_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择文本并复制。</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_title">
+      <segment>
+        <source>Signatures PDF → JSON</source>
+        <target state="translated">PDF 签名 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_signatures_to_json_desc">
+      <segment>
+        <source>Détecter les signatures d’un PDF et exporter les informations techniques (ByteRange, SubFilter…) au format JSON.</source>
+        <target state="translated">检测 PDF 的签名并将技术信息 (ByteRange, SubFilter…) 导出为 JSON 格式。</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_title">
+      <segment>
+        <source>Pièces jointes PDF → JSON</source>
+        <target state="translated">PDF 附件 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_attachments_extractor_desc">
+      <segment>
+        <source>Détecter et extraire les fichiers embarqués dans un PDF (EmbeddedFiles). Téléchargement individuel ou ZIP.</source>
+        <target state="translated">检测并提取嵌入在 PDF 中的文件 (EmbeddedFiles)。单独下载或 ZIP。</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_title">
+      <segment>
+        <source>Détecter si un PDF est scanné</source>
+        <target state="translated">检测 PDF 是否为扫描件</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_scan_detector_desc">
+      <segment>
+        <source>Estimer si un PDF provient d’un scan (images, absence de polices, indices CCITT/JBIG2) et exporter le diagnostic en JSON.</source>
+        <target state="translated">估计 PDF 是否来自扫描（图像、缺少字体、CCITT/JBIG2 指示）并将诊断导出为 JSON。</target>
+      </segment>
+    </unit>
 
     
     

@@ -13,7 +13,9 @@ export class SeoLinksService {
 
   setHreflangs(entries: ReadonlyArray<HreflangEntry>): void {
     // On retire tous les alternates existants
-    const existing = Array.from(this.doc.head.querySelectorAll('link[rel="alternate"][hreflang]'));
+    const existing = Array.from(
+      this.doc.head.querySelectorAll('link[rel="alternate"][hreflang]')
+    );
     for (const el of existing) el.remove();
 
     // Puis on réinjecte la liste complète (stable)
@@ -25,8 +27,8 @@ export class SeoLinksService {
   private upsertLink(attrs: { rel: string; href: string; hreflang?: string }): void {
     const selector =
       attrs.rel === 'alternate' && attrs.hreflang
-        ? `link[rel="alternate"][hreflang="${cssEscape(attrs.hreflang)}"]`
-        : `link[rel="${cssEscape(attrs.rel)}"]`;
+        ? `link[rel="alternate"][hreflang="${cssEscapeAttr(attrs.hreflang)}"]`
+        : `link[rel="${cssEscapeAttr(attrs.rel)}"]`;
 
     let link = this.doc.head.querySelector(selector) as HTMLLinkElement | null;
     if (!link) {
@@ -40,6 +42,7 @@ export class SeoLinksService {
   }
 }
 
-function cssEscape(value: string): string {
-  return value.replace(/"/g, '\\"');
+function cssEscapeAttr(value: string): string {
+  // escape minimal pour attribut CSS selector
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 }
