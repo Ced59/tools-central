@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -17,7 +16,11 @@ import {
   PDFString,
 } from 'pdf-lib';
 
-type ToolStatus = 'idle' | 'loading' | 'ready' | 'error';
+import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
+
+type ToolStatusLocal = 'idle' | 'loading' | 'ready' | 'error';
 
 interface PdfFontStyleGuess {
   bold: boolean;
@@ -27,47 +30,75 @@ interface PdfFontStyleGuess {
 }
 
 interface PdfFontItem {
-  id: string; // ref string or synthetic
-  resourceKey: string | null; // /F1, /TT0, ...
-  baseFont: string | null; // /ABCDEE+Roboto-Bold
-  family: string | null; // Roboto
-  subset: boolean | null; // true if ABCDEF+ prefix detected
-  styleGuess: PdfFontStyleGuess | null; // heuristic based on name
-  subtype: string | null; // /Type0 /TrueType /Type1 ...
-  encoding: string | null; // /WinAnsiEncoding, ...
-  embedded: boolean | null; // true/false/null when unknown
+  id: string;
+  resourceKey: string | null;
+  baseFont: string | null;
+  family: string | null;
+  subset: boolean | null;
+  styleGuess: PdfFontStyleGuess | null;
+  subtype: string | null;
+  encoding: string | null;
+  embedded: boolean | null;
   toUnicode: boolean | null;
-  pages?: number[]; // optional
+  pages?: number[];
 }
 
 @Component({
   selector: 'app-pdf-fonts-to-json-tool',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, ButtonModule, InputTextModule, TagModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PdfToolShellComponent,
+    ButtonModule,
+    InputTextModule,
+    TagModule,
+  ],
   templateUrl: './pdf-fonts-to-json-tool.component.html',
   styleUrl: './pdf-fonts-to-json-tool.component.scss',
 })
 export class PdfFontsToJsonToolComponent {
   private readonly fb = new FormBuilder();
-  readonly fileInputId = 'pdf-fonts-file-input';
+
+  readonly backLink = '/categories/dev/pdf';
 
   readonly ui = {
-    btnPick: $localize`:@@pdf_fonts_btn_pick:Choisir un PDF`,
-    btnReset: $localize`:@@pdf_fonts_btn_reset:Réinitialiser`,
-    btnCopy: $localize`:@@pdf_fonts_btn_copy:Copier`,
-    btnDownload: $localize`:@@pdf_fonts_btn_download:Télécharger`,
-    placeholderFilter: $localize`:@@pdf_fonts_filter_placeholder:Filtrer (nom, famille, style, subtype…)`,
-    statusLoading: $localize`:@@pdf_fonts_status_loading:Analyse…`,
-    statusReady: $localize`:@@pdf_fonts_status_ready:Prêt`,
-    statusError: $localize`:@@pdf_fonts_status_error:Erreur`,
-    copied: $localize`:@@pdf_fonts_copied:JSON copié dans le presse-papiers.`,
-    copyFail: $localize`:@@pdf_fonts_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`,
+    title: $localize`:@@pdf_fonts_title:Polices PDF → JSON`,
+    subtitle: $localize`:@@pdf_fonts_subtitle:Identifiez les polices déclarées/utilisées dans un PDF (ressources des pages) et exportez la liste au format JSON, localement.`,
+    errTitle: $localize`:@@pdf_fonts_err_title:Impossible d’extraire les polices.`,
     errGeneric: $localize`:@@pdf_fonts_err_generic:Impossible de lire ce PDF.`,
     tipNone: $localize`:@@pdf_fonts_tip_none:Aucune police détectée (rare).`,
     noteSubset: $localize`:@@pdf_fonts_note_subset:Note : beaucoup de PDFs “sous-ensemblent” les polices (ex: ABCDEF+NomPolice).`,
   };
 
-  readonly status = signal<ToolStatus>('idle');
+  readonly uiShell: PdfToolShellUi = {
+    btnPick: $localize`:@@pdf_fonts_btn_pick:Choisir un PDF`,
+    btnReset: $localize`:@@pdf_fonts_btn_reset:Réinitialiser`,
+    btnCopy: $localize`:@@pdf_fonts_btn_copy:Copier`,
+    btnDownload: $localize`:@@pdf_fonts_btn_download:Télécharger`,
+
+    placeholderFilter: $localize`:@@pdf_fonts_filter_placeholder:Filtrer (nom, famille, style, subtype…)`,
+
+    statusLoading: $localize`:@@pdf_fonts_status_loading:Analyse…`,
+    statusReady: $localize`:@@pdf_fonts_status_ready:Prêt`,
+    statusError: $localize`:@@pdf_fonts_status_error:Erreur`,
+
+    importTitle: $localize`:@@pdf_fonts_card_import_title:Importer un PDF`,
+    importSub: $localize`:@@pdf_fonts_card_import_sub:Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.`,
+
+    resultsTitle: $localize`:@@pdf_fonts_card_results_title:Résultats`,
+    resultsSub: $localize`:@@pdf_fonts_card_results_sub:Aperçu des polices détectées et export JSON.`,
+
+    jsonTitle: $localize`:@@pdf_fonts_json_title:JSON`,
+    jsonSub: $localize`:@@pdf_fonts_json_sub:Exportable`,
+
+    leftTitle: $localize`:@@pdf_fonts_list_title:Polices`,
+    emptyText: $localize`:@@pdf_fonts_empty:Aucune police à afficher.`,
+    backText: $localize`:@@pdf_fonts_back:← Retour aux outils PDF`,
+  };
+
+  // ---- State ----
+  readonly status = signal<PdfToolStatus>('idle');
   readonly errorMessage = signal<string>('');
   readonly tipMessage = signal<string>('');
 
@@ -77,18 +108,20 @@ export class PdfFontsToJsonToolComponent {
 
   readonly fonts = signal<PdfFontItem[]>([]);
 
-  readonly form = this.fb.group({
+  // ---- Form ----
+  readonly form = this.fb.nonNullable.group({
     pretty: this.fb.nonNullable.control(true),
     filter: this.fb.nonNullable.control(''),
     includePages: this.fb.nonNullable.control(true),
   });
 
-  readonly filter = computed(() => (this.form.value.filter ?? '').trim().toLowerCase());
-  readonly pretty = computed(() => !!this.form.value.pretty);
-  readonly includePages = computed(() => !!this.form.value.includePages);
+  // ✅ Signals => filtre OK
+  readonly filter = controlToSignal(this.form.controls.filter);
+  readonly pretty = controlToSignal(this.form.controls.pretty);
+  readonly includePages = controlToSignal(this.form.controls.includePages);
 
   readonly filteredFonts = computed(() => {
-    const f = this.filter();
+    const f = (this.filter() ?? '').trim().toLowerCase();
     const all = this.fonts();
     if (!f) return all;
 
@@ -103,6 +136,7 @@ export class PdfFontsToJsonToolComponent {
         String(it.embedded ?? ''),
         String(it.toUnicode ?? ''),
         JSON.stringify(it.styleGuess ?? {}),
+        (it.pages ?? []).join(','),
       ]
         .join(' ')
         .toLowerCase();
@@ -149,7 +183,6 @@ export class PdfFontsToJsonToolComponent {
     const type0 = all.filter(f => (f.subtype ?? '').includes('Type0')).length;
     const truetype = all.filter(f => (f.subtype ?? '').includes('TrueType')).length;
     const type1 = all.filter(f => (f.subtype ?? '').includes('Type1')).length;
-
     const subsets = all.filter(f => f.subset === true).length;
 
     return {
@@ -165,17 +198,19 @@ export class PdfFontsToJsonToolComponent {
     };
   });
 
-  triggerFilePick() {
-    const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
-    el?.click();
-  }
+  readonly statsCards = computed((): PdfToolStatCard[] => [
+    { label: $localize`:@@pdf_fonts_stat_pages_label:Pages`, value: this.stats().pages },
+    { label: $localize`:@@pdf_fonts_stat_total_label:Polices`, value: this.stats().total },
+    { label: $localize`:@@pdf_fonts_stat_embedded_label:Embeddées`, value: this.stats().embedded },
+    { label: $localize`:@@pdf_fonts_stat_not_embedded_label:Non emb.`, value: this.stats().notEmbedded },
+  ]);
 
-  async onFileSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
+  readonly shellErrorMessage = computed(() => {
+    const e = (this.errorMessage() ?? '').trim();
+    return e ? `${this.ui.errTitle} — ${e}` : '';
+  });
 
+  async onFileSelected(file: File) {
     this.status.set('loading');
     this.errorMessage.set('');
     this.tipMessage.set('');
@@ -192,20 +227,18 @@ export class PdfFontsToJsonToolComponent {
       const pages = doc.getPages();
       this.pageCount.set(pages.length);
 
-      // Aggregate by font object ref string when possible
       const agg = new Map<string, PdfFontItem>();
-
-      // Avoid infinite recursion when scanning XObjects
       const visitedXObjectRefs = new Set<string>();
 
       for (let i = 0; i < pages.length; i++) {
         const pageNumber = i + 1;
         const pageNode = (pages[i] as any).node as PDFDict;
-
         scanResourcesForFonts(doc, pageNode.get(PDFName.of('Resources')), pageNumber, agg, visitedXObjectRefs);
       }
 
-      const list = Array.from(agg.values()).sort((a, b) => (a.family ?? a.baseFont ?? '').localeCompare(b.family ?? b.baseFont ?? ''));
+      const list = Array.from(agg.values()).sort((a, b) =>
+        (a.family ?? a.baseFont ?? '').localeCompare(b.family ?? b.baseFont ?? '')
+      );
 
       this.fonts.set(list);
       this.status.set('ready');
@@ -233,10 +266,10 @@ export class PdfFontsToJsonToolComponent {
   async copyJson() {
     try {
       await navigator.clipboard.writeText(this.jsonText());
-      this.tipMessage.set(this.ui.copied);
+      this.tipMessage.set($localize`:@@pdf_fonts_copied:JSON copié dans le presse-papiers.`);
       window.setTimeout(() => this.tipMessage.set(''), 2500);
     } catch {
-      this.tipMessage.set(this.ui.copyFail);
+      this.tipMessage.set($localize`:@@pdf_fonts_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`);
     }
   }
 
@@ -276,13 +309,7 @@ function resolveArray(doc: PDFDocument, v: unknown): PDFArray | null {
 }
 
 function nameToString(v: unknown): string | null {
-  if (v instanceof PDFName) return v.asString(); // includes leading '/'
-  return null;
-}
-
-function decodePdfString(v: unknown): string | null {
-  if (v instanceof PDFString) return v.decodeText().trim() || null;
-  if (v instanceof PDFHexString) return v.decodeText().trim() || null;
+  if (v instanceof PDFName) return v.asString();
   return null;
 }
 
@@ -304,7 +331,7 @@ function scanResourcesForFonts(
 
     if (entries) {
       for (const [k, v] of entries) {
-        const resourceKey = k.asString(); // '/F1'
+        const resourceKey = k.asString();
         const fontRef = v instanceof PDFRef ? v : null;
         const font = resolveDict(doc, v);
         if (!font) continue;
@@ -324,9 +351,10 @@ function scanResourcesForFonts(
 
         const existing = agg.get(id);
         if (existing) {
-          if (!existing.pages) existing.pages = [];
+          existing.pages ??= [];
           if (!existing.pages.includes(pageNumber)) existing.pages.push(pageNumber);
 
+          existing.resourceKey ??= resourceKey;
           existing.baseFont ??= baseFont;
           existing.family ??= family;
           existing.subset ??= subset;
@@ -355,7 +383,7 @@ function scanResourcesForFonts(
     }
   }
 
-  // 2) XObjects (Form XObjects can declare their own resources/fonts)
+  // 2) XObjects
   const xobjVal = resources.get(PDFName.of('XObject'));
   const xobjDict = resolveDict(doc, xobjVal);
   const xEntries = xobjDict ? ((xobjDict as any).entries?.() as Iterable<[PDFName, unknown]> | undefined) : undefined;
@@ -382,7 +410,6 @@ function scanResourcesForFonts(
 }
 
 function readFontBaseName(doc: PDFDocument, fontDict: PDFDict): string | null {
-  // BaseFont can be on the font dict OR inside DescendantFonts for Type0
   const base = nameToString(fontDict.get(PDFName.of('BaseFont')));
   if (base) return base;
 
@@ -393,9 +420,7 @@ function readFontBaseName(doc: PDFDocument, fontDict: PDFDict): string | null {
     if (descArr && descArr.size() > 0) {
       const first = descArr.get(0);
       const descDict = resolveDict(doc, first);
-      if (descDict) {
-        return nameToString(descDict.get(PDFName.of('BaseFont')));
-      }
+      if (descDict) return nameToString(descDict.get(PDFName.of('BaseFont')));
     }
   }
 
@@ -420,8 +445,6 @@ function readFontEncoding(doc: PDFDocument, fontDict: PDFDict): string | null {
 }
 
 function isFontEmbedded(doc: PDFDocument, fontDict: PDFDict): boolean | null {
-  // Embedded if it has a FontDescriptor with FontFile / FontFile2 / FontFile3
-  // For Type0 fonts, descriptor is on DescendantFonts[0]
   const subtype = nameToString(fontDict.get(PDFName.of('Subtype')));
 
   if (subtype === '/Type0') {
@@ -446,16 +469,9 @@ function isFontEmbedded(doc: PDFDocument, fontDict: PDFDict): boolean | null {
   return !!(ff || ff2 || ff3);
 }
 
-/**
- * Normalize a BaseFont like "/ABCDEE+Roboto-BoldItalic" into:
- * - family: "Roboto"
- * - subset: true
- * - cleanedName: "Roboto-BoldItalic"
- */
 function normalizeBaseFont(baseFont: string | null): { family: string | null; subset: boolean | null; cleanedName: string | null } {
   if (!baseFont) return { family: null, subset: null, cleanedName: null };
 
-  // baseFont is often like "/ABCDEE+Roboto-BoldItalic" or "/Helvetica"
   const raw = baseFont.startsWith('/') ? baseFont.slice(1) : baseFont;
 
   const m = raw.match(/^([A-Z]{6})\+(.+)$/);
@@ -469,9 +485,6 @@ function normalizeBaseFont(baseFont: string | null): { family: string | null; su
   return { family: fam || null, subset: false, cleanedName: raw || null };
 }
 
-/**
- * Heuristic (explicitly a guess): infer bold/italic/weight/style from font name.
- */
 function guessStyleFromFontName(cleanedName: string | null): PdfFontStyleGuess | null {
   if (!cleanedName) return null;
 

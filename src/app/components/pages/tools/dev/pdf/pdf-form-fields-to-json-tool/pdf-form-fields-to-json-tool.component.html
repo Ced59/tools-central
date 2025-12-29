@@ -1,428 +1,227 @@
-<section class="tool-page">
-  <!-- Hero (inchangé) -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-file-pdf"></i>
-        </div>
-
-        <h1 i18n="@@pdf_fields_title">Champs PDF → JSON</h1>
-        <p class="hero-subtitle" i18n="@@pdf_fields_subtitle">
-          Exportez les champs d'un formulaire PDF (AcroForm) au format JSON, localement dans votre navigateur.
-        </p>
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-file-pdf"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="counts().all"
+  [filteredCount]="counts().shown"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- ✅ Liste gauche -->
+  <div leftList>
+    @if (filteredFields().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_fields_no_match">Aucun champ ne correspond au filtre.</span>
       </div>
-    </div>
-  </div>
-
-  <div class="container tool-content">
-    <!-- Import / Paramètres -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@pdf_fields_import_title">Importer un PDF</h2>
-      </div>
-
-      <div class="calc-form">
-        <!-- Fichier -->
-        <div class="field field-main">
-          <label [for]="fileInputId" i18n="@@pdf_fields_file_label">Fichier PDF</label>
-
-          <input
-            [id]="fileInputId"
-            type="file"
-            accept="application/pdf"
-            class="input-full tc-file"
-            (change)="onFileSelected($event)"
-            aria-label="Sélectionner un fichier PDF"
-            i18n-aria-label="@@pdf_fields_file_aria"
-          />
-
-          <small class="hint" i18n="@@pdf_fields_file_hint">
-            Aucun upload : tout se passe localement.
-          </small>
-
-          <div class="actions">
-            <p-button
-              type="button"
-              icon="pi pi-folder-open"
-              (onClick)="triggerFilePick()"
-              label="Sélectionner"
-              i18n-label="@@pdf_fields_pick_btn"
-            ></p-button>
-
-            <p-button
-              type="button"
-              severity="secondary"
-              [text]="true"
-              icon="pi pi-times"
-              (onClick)="reset()"
-              label="Réinitialiser"
-              i18n-label="@@tool_reset"
-            ></p-button>
-          </div>
-
-          @if (fileName()) {
-            <div class="tip-box">
-              <i class="pi pi-check-circle"></i>
-              <span>
-                <strong i18n="@@pdf_fields_loaded">Chargé :</strong>
-                {{ fileName() }}
-                <span class="muted">·</span>
-                <span i18n="@@pdf_fields_size">Taille :</span>
-                {{ formatBytes(fileSize()) }}
-                <span class="muted">·</span>
-                <span i18n="@@pdf_fields_count_prefix">Champs :</span>
-                {{ counts().all }}
-              </span>
-            </div>
-          }
-
-          @if (tipMessage()) {
-            <div class="tip-box">
-              <i class="pi pi-lightbulb"></i>
-              <span>{{ tipMessage() }}</span>
-            </div>
-          }
-
-          @if (status() === 'loading') {
-            <div class="tip-box">
-              <i class="pi pi-spin pi-spinner"></i>
-              <span i18n="@@pdf_fields_loading">Analyse du PDF…</span>
-            </div>
-          }
-
-          @if (status() === 'error') {
-            <div class="tip-box">
-              <i class="pi pi-exclamation-triangle"></i>
-              <span>{{ errorMessage() }}</span>
-            </div>
-          }
-
-          @if (status() === 'ready' && fields().length === 0) {
-            <div class="tip-box">
-              <i class="pi pi-info-circle"></i>
-              <span i18n="@@pdf_fields_no_fields">
-                Aucun champ détecté. Le PDF ne contient peut-être pas d'AcroForm (ou utilise XFA).
-              </span>
-            </div>
-          }
-        </div>
-
-        @if (status() === 'ready') {
-          <!-- Filtre -->
-          <div class="field field-main">
-            <label for="filter" i18n="@@pdf_fields_filter_label">Filtrer</label>
-            <input
-              id="filter"
-              pInputText
-              class="input-full"
-              [formControl]="form.controls.filter"
-              placeholder="Nom, type, valeur…"
-              i18n-placeholder="@@pdf_fields_filter_ph"
-            />
-            <small class="hint" i18n="@@pdf_fields_filter_hint">
-              Recherche sur le nom, la valeur, le tooltip et le type.
-            </small>
-          </div>
-
-          <!-- Toggles -->
-          <div class="field field-precision">
-            <label i18n="@@pdf_fields_json_mode_label">JSON</label>
-            <p-button
-              type="button"
-              icon="pi pi-align-left"
-              [severity]="form.controls.pretty.value ? 'help' : 'secondary'"
-              [text]="!form.controls.pretty.value"
-              (onClick)="togglePretty()"
-              [label]="prettyLabel()"
-            ></p-button>
-            <small class="hint" i18n="@@pdf_fields_pretty_hint">
-              Indenté = lisible. Minifié = compact.
-            </small>
-          </div>
-
-          <div class="field field-precision">
-            <label i18n="@@pdf_fields_empty_label">Champs vides</label>
-            <p-button
-              type="button"
-              icon="pi pi-filter"
-              [severity]="form.controls.includeEmpty.value ? 'help' : 'secondary'"
-              [text]="!form.controls.includeEmpty.value"
-              (onClick)="toggleIncludeEmpty()"
-              [label]="emptyLabel()"
-            ></p-button>
-            <small class="hint" i18n="@@pdf_fields_empty_hint">
-              Masquer les champs vides rend la liste plus courte.
-            </small>
-          </div>
-
-          <div class="field field-precision">
-            <label i18n="@@pdf_fields_adv_label">Détails</label>
-            <p-button
-              type="button"
-              icon="pi pi-sliders-h"
-              [severity]="form.controls.showAdvanced.value ? 'help' : 'secondary'"
-              [text]="!form.controls.showAdvanced.value"
-              (onClick)="toggleAdvanced()"
-              [label]="advancedLabel()"
-            ></p-button>
-            <small class="hint" i18n="@@pdf_fields_adv_hint">
-              Affiche des informations supplémentaires (tooltip, justification, maxLen, rect…).
-            </small>
-          </div>
-        }
-      </div>
-
-      @if (status() === 'ready') {
-        <div class="divider"></div>
-
-        <div class="results-header">
-          <h3 i18n="@@pdf_fields_summary_title">Résumé</h3>
-
-          <div class="actions">
-            <p-button
-              type="button"
-              icon="pi pi-download"
-              (onClick)="downloadJson()"
-              label="Télécharger"
-              i18n-label="@@pdf_fields_download_btn"
-              [disabled]="!jsonText()"
-            ></p-button>
-
-            <p-button
-              type="button"
-              severity="secondary"
-              [text]="true"
-              icon="pi pi-copy"
-              (onClick)="copyJson()"
-              label="Copier"
-              i18n-label="@@pdf_fields_copy_btn"
-              [disabled]="!jsonText()"
-            ></p-button>
-          </div>
-        </div>
-
-        <div class="results-grid">
-          <div class="result-item">
-            <div class="label" i18n="@@pdf_fields_all_count">Nombre total de champs</div>
-            <div class="value">{{ counts().all }}</div>
-          </div>
-
-          <div class="result-item">
-            <div class="label" i18n="@@pdf_fields_shown_count">Champs affichés</div>
-            <div class="value">{{ counts().shown }}</div>
-          </div>
-
-          <div class="result-item">
-            <div class="label" i18n="@@pdf_fields_hidden_count">Champs masqués</div>
-            <div class="value">{{ counts().all - counts().shown }}</div>
-          </div>
-
-          <div class="result-item">
-            <div class="label" i18n="@@pdf_fields_types_count">Types distincts</div>
-            <div class="value">{{ counts().typeStats.length }}</div>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div class="fields-json-layout">
-          <!-- Colonne gauche : liste champs -->
-          <div class="fields-list">
-            <div class="fields-list-header">
-              <span class="muted" i18n="@@pdf_fields_left_list_title">Liste</span>
-              <p-tag [value]="(counts().shown + ' / ' + counts().all)"></p-tag>
+    } @else {
+      @for (f of filteredFields(); track f.Name) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <div class="field-name">{{ f.Name }}</div>
+              <p-tag severity="info" [value]="f.Type"></p-tag>
             </div>
 
-            @if (filteredFields().length === 0) {
-              <div class="empty-box">
-                <i class="pi pi-search"></i>
-                <span i18n="@@pdf_fields_no_match">Aucun champ ne correspond au filtre.</span>
+            <div class="field-card-page">
+              <span class="muted" i18n="@@pdf_fields_page">Page</span>
+              <span class="mono">{{ f.Widget.Page }}</span>
+            </div>
+          </div>
+
+          <div class="field-card-value">
+            <div class="muted" i18n="@@pdf_fields_value_label">Valeur</div>
+            <p-tag severity="contrast" [value]="JSON.stringify(f.Value)"></p-tag>
+          </div>
+
+          @if (showAdvanced()) {
+            <div class="divider"></div>
+
+            <div class="field-card-advanced">
+              <div class="adv-kv">
+                <div class="adv-k">PartialName</div>
+                <div class="adv-v mono">{{ f.PartialName }}</div>
               </div>
-            } @else {
-              @for (f of filteredFields(); track f.Name) {
-                <div class="field-card">
-                  <div class="field-card-header">
-                    <div class="field-card-title">
-                      <div class="field-name">
-                        {{ f.Name }}
-                      </div>
-                      <p-tag severity="info" [value]="f.Type"></p-tag>
-                    </div>
 
-                    <div class="field-card-page">
-                      <span class="muted">Page</span>
-                      <span class="mono">{{ f.Widget.Page }}</span>
-                    </div>
-                  </div>
+              <div class="adv-kv">
+                <div class="adv-k">DefaultValue</div>
+                <div class="adv-v mono">{{ f.DefaultValue }}</div>
+              </div>
 
-                  <div class="field-card-value">
-                    <div class="muted" i18n="@@pdf_fields_value_label">Valeur</div>
-                    <p-tag severity="contrast" [value]="JSON.stringify(f.Value)"></p-tag>
-                  </div>
+              <div class="adv-kv">
+                <div class="adv-k">Justification</div>
+                <div class="adv-v mono">{{ f.Justification }}</div>
+              </div>
 
-                  @if (form.controls.showAdvanced.value) {
-                    <div class="divider"></div>
+              <div class="adv-kv">
+                <div class="adv-k">MaxLen</div>
+                <div class="adv-v mono">{{ f.MaxLen }}</div>
+              </div>
 
-                    <div class="field-card-advanced">
-                      <div class="adv-kv">
-                        <div class="adv-k">PartialName</div>
-                        <div class="adv-v mono">{{ f.PartialName }}</div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">DefaultValue</div>
-                        <div class="adv-v mono">{{ f.DefaultValue }}</div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">Justification</div>
-                        <div class="adv-v mono">{{ f.Justification }}</div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">MaxLen</div>
-                        <div class="adv-v mono">{{ f.MaxLen }}</div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">Flags</div>
-                        <div class="adv-v mono">
-                          ReadOnly={{ f.Flags.ReadOnly }}, Required={{ f.Flags.Required }}
-                        </div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">Tooltip</div>
-                        <div class="adv-v mono">{{ f.Tooltip }}</div>
-                      </div>
-
-                      <div class="adv-kv">
-                        <div class="adv-k">Rect</div>
-                        <div class="adv-v mono">{{ JSON.stringify(f.Widget.Rect) }}</div>
-                      </div>
-
-                      @if (f.Extra) {
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.FullyQualifiedName</div>
-                          <div class="adv-v mono">{{ f.Extra.FullyQualifiedName }}</div>
-                        </div>
-
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.FieldTypeRaw</div>
-                          <div class="adv-v mono">{{ JSON.stringify(f.Extra.FieldTypeRaw) }}</div>
-                        </div>
-
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.Ff</div>
-                          <div class="adv-v mono">{{ JSON.stringify(f.Extra.Ff) }}</div>
-                        </div>
-
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.Q</div>
-                          <div class="adv-v mono">{{ JSON.stringify(f.Extra.Q) }}</div>
-                        </div>
-
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.DA</div>
-                          <div class="adv-v mono">{{ JSON.stringify(f.Extra.DA) }}</div>
-                        </div>
-
-                        <div class="adv-kv">
-                          <div class="adv-k">Extra.KidsCount</div>
-                          <div class="adv-v mono">{{ JSON.stringify(f.Extra.KidsCount) }}</div>
-                        </div>
-
-                        @if (f.Extra.Options && f.Extra.Options.length) {
-                          <div class="adv-kv">
-                            <div class="adv-k">Extra.Options</div>
-                            <div class="adv-v mono">{{ f.Extra.Options.join(', ') }}</div>
-                          </div>
-                        }
-
-                        @if (f.Extra.ExportDiagnostics) {
-                          <div class="adv-kv">
-                            <div class="adv-k">Extra.ExportDiagnostics</div>
-                            <div class="adv-v mono">
-                              HasAcroFieldDict={{ f.Extra.ExportDiagnostics.HasAcroFieldDict }},
-                              HasKids={{ f.Extra.ExportDiagnostics.HasKids }},
-                              HasRect={{ f.Extra.ExportDiagnostics.HasRect }},
-                              HasPageRef={{ f.Extra.ExportDiagnostics.HasPageRef }}
-                            </div>
-                          </div>
-                        }
-                      }
-                    </div>
-                  }
+              <div class="adv-kv">
+                <div class="adv-k">Flags</div>
+                <div class="adv-v mono">
+                  ReadOnly={{ f.Flags.ReadOnly }}, Required={{ f.Flags.Required }}
                 </div>
+              </div>
+
+              <div class="adv-kv">
+                <div class="adv-k">Tooltip</div>
+                <div class="adv-v mono">{{ f.Tooltip }}</div>
+              </div>
+
+              <div class="adv-kv">
+                <div class="adv-k">Rect</div>
+                <div class="adv-v mono">{{ JSON.stringify(f.Widget.Rect) }}</div>
+              </div>
+
+              @if (f.Extra) {
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.FullyQualifiedName</div>
+                  <div class="adv-v mono">{{ f.Extra.FullyQualifiedName }}</div>
+                </div>
+
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.FieldTypeRaw</div>
+                  <div class="adv-v mono">{{ JSON.stringify(f.Extra.FieldTypeRaw) }}</div>
+                </div>
+
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.Ff</div>
+                  <div class="adv-v mono">{{ JSON.stringify(f.Extra.Ff) }}</div>
+                </div>
+
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.Q</div>
+                  <div class="adv-v mono">{{ JSON.stringify(f.Extra.Q) }}</div>
+                </div>
+
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.DA</div>
+                  <div class="adv-v mono">{{ JSON.stringify(f.Extra.DA) }}</div>
+                </div>
+
+                <div class="adv-kv">
+                  <div class="adv-k">Extra.KidsCount</div>
+                  <div class="adv-v mono">{{ JSON.stringify(f.Extra.KidsCount) }}</div>
+                </div>
+
+                @if (f.Extra.Options && f.Extra.Options.length) {
+                  <div class="adv-kv">
+                    <div class="adv-k">Extra.Options</div>
+                    <div class="adv-v mono">{{ f.Extra.Options.join(', ') }}</div>
+                  </div>
+                }
+
+                @if (f.Extra.ExportDiagnostics) {
+                  <div class="adv-kv">
+                    <div class="adv-k">Extra.ExportDiagnostics</div>
+                    <div class="adv-v mono">
+                      HasAcroFieldDict={{ f.Extra.ExportDiagnostics.HasAcroFieldDict }},
+                      HasKids={{ f.Extra.ExportDiagnostics.HasKids }},
+                      HasRect={{ f.Extra.ExportDiagnostics.HasRect }},
+                      HasPageRef={{ f.Extra.ExportDiagnostics.HasPageRef }}
+                    </div>
+                  </div>
+                }
               }
-            }
-          </div>
-
-          <!-- Colonne droite : JSON -->
-          <div class="json-panel">
-            <div class="json-panel-header">
-              <span class="muted" i18n="@@pdf_fields_json_panel_title">JSON</span>
-
-              <p-button
-                type="button"
-                severity="secondary"
-                [text]="true"
-                icon="pi pi-copy"
-                (onClick)="copyJson()"
-                label="Copier"
-                i18n-label="@@pdf_fields_copy_btn"
-                [disabled]="!jsonText()"
-              ></p-button>
             </div>
-
-            <pre class="json-content">{{ jsonText() }}</pre>
-          </div>
+          }
         </div>
       }
+    }
+  </div>
+
+  <!-- ✅ Options droite (en bas du JSON panel) -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <p-button
+        type="button"
+        icon="pi pi-align-left"
+        [severity]="pretty() ? 'help' : 'secondary'"
+        [text]="!pretty()"
+        (onClick)="togglePretty()"
+        [label]="prettyLabel()"
+      ></p-button>
+
+      <p-button
+        type="button"
+        icon="pi pi-filter"
+        [severity]="includeEmpty() ? 'help' : 'secondary'"
+        [text]="!includeEmpty()"
+        (onClick)="toggleIncludeEmpty()"
+        [label]="emptyLabel()"
+      ></p-button>
+
+      <p-button
+        type="button"
+        icon="pi pi-sliders-h"
+        [severity]="showAdvanced() ? 'help' : 'secondary'"
+        [text]="!showAdvanced()"
+        (onClick)="toggleAdvanced()"
+        [label]="advancedLabel()"
+      ></p-button>
     </div>
 
-    <!-- À savoir -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pdf_fields_about_title">À savoir</h2>
-        <p i18n="@@pdf_fields_about_sub">
-          L'extraction est faite côté navigateur et fonctionne surtout pour les formulaires AcroForm.
-        </p>
+    @if (status() === 'ready' && fields().length === 0) {
+      <div class="tip-box" role="status">
+        <i class="pi pi-info-circle" aria-hidden="true"></i>
+        <span i18n="@@pdf_fields_no_fields">
+          Aucun champ détecté. Le PDF ne contient peut-être pas d'AcroForm (ou utilise XFA).
+        </span>
       </div>
+    }
+  </div>
+</app-pdf-tool-shell>
 
-      <div class="explain-content">
-        <ul class="steps-list">
-          <li i18n="@@pdf_fields_about_1">Le PDF reste local : aucun upload, aucun stockage serveur.</li>
-          <li i18n="@@pdf_fields_about_2">Le JSON inclut les champs extraits et un objet Extra (best-effort).</li>
-          <li i18n="@@pdf_fields_about_3">
-            Certains PDF administratifs utilisent XFA : dans ce cas, les champs peuvent être invisibles côté navigateur.
-          </li>
-        </ul>
-
-        <div class="tip-box">
-          <i class="pi pi-info-circle"></i>
-          <span i18n="@@pdf_fields_page_minus1_help">
-            Si <code>Page = -1</code>, cela signifie que la métadonnée permettant de relier le champ à une page
-            n'est pas disponible (ou pas exploitable) côté navigateur.
-          </span>
-        </div>
-
-        <div class="tip-box">
-          <i class="pi pi-code"></i>
-          <span class="mono">
-            Exemple : {{ '{' }} "Name": "NOM_PM_1", "Type": "e_text", "Widget": {{ '{' }} "Page": 1 {{ '}' }}, "Extra": {{ '{' }} ... {{ '}' }} {{ '}' }}
-          </span>
-        </div>
-      </div>
+<!-- ✅ On garde la section pédagogique, hors shell -->
+<div class="container tool-content">
+  <div class="tool-card">
+    <div class="card-header centered">
+      <h2 i18n="@@pdf_fields_about_title">À savoir</h2>
+      <p i18n="@@pdf_fields_about_sub">
+        L'extraction est faite côté navigateur et fonctionne surtout pour les formulaires AcroForm.
+      </p>
     </div>
 
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/dev/pdf" class="back-link">
-        <i class="pi pi-arrow-left"></i>
-        <span i18n="@@back_to_tools">Retour aux outils</span>
-      </a>
+    <div class="explain-content">
+      <ul class="steps-list">
+        <li i18n="@@pdf_fields_about_1">Le PDF reste local : aucun upload, aucun stockage serveur.</li>
+        <li i18n="@@pdf_fields_about_2">Le JSON inclut les champs extraits et un objet Extra (best-effort).</li>
+        <li i18n="@@pdf_fields_about_3">
+          Certains PDF administratifs utilisent XFA : dans ce cas, les champs peuvent être invisibles côté navigateur.
+        </li>
+      </ul>
+
+      <div class="tip-box">
+        <i class="pi pi-info-circle"></i>
+        <span i18n="@@pdf_fields_page_minus1_help">
+          Si <code>Page = -1</code>, cela signifie que la métadonnée permettant de relier le champ à une page
+          n'est pas disponible (ou pas exploitable) côté navigateur.
+        </span>
+      </div>
+
+      <div class="tip-box">
+        <i class="pi pi-code"></i>
+        <span class="mono">
+          Exemple :
+          {{ '{' }} "Name": "NOM_PM_1", "Type": "e_text", "Widget": {{ '{' }} "Page": 1 {{ '}' }},
+          "Extra": {{ '{' }} ... {{ '}' }} {{ '}' }}
+        </span>
+      </div>
     </div>
   </div>
-</section>
+</div>

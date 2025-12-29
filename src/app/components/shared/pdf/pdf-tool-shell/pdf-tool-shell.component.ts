@@ -74,7 +74,7 @@ export class PdfToolShellComponent {
   @Input() tipMessage: string | null = null;
   @Input() errorMessage: string | null = null;
 
-  @Input() stats: PdfToolStatCard[] = [];
+  @Input() stats?: PdfToolStatCard[] = [];
 
   @Input() totalCount: number | null = null;
   @Input() filteredCount: number | null = null;

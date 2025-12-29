@@ -1,24 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { PDFArray, PDFDict, PDFDocument, PDFHexString, PDFName, PDFNumber, PDFRef, PDFString } from 'pdf-lib';
 
-import {
-  PDFDocument,
-  PDFName,
-  PDFDict,
-  PDFRef,
-  PDFString,
-  PDFHexString,
-  PDFArray,
-  PDFNumber,
-} from 'pdf-lib';
-
-type ToolStatus = 'idle' | 'loading' | 'ready' | 'error';
+import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
 
 type LinkType = 'url' | 'internal' | 'unknown';
 
@@ -34,30 +22,50 @@ interface PdfLinkItem {
 @Component({
   selector: 'app-pdf-links-to-json-tool',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, ButtonModule, InputTextModule, TagModule],
+  imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-links-to-json-tool.component.html',
   styleUrl: './pdf-links-to-json-tool.component.scss',
 })
 export class PdfLinksToJsonToolComponent {
   private readonly fb = new FormBuilder();
-  readonly fileInputId = 'pdf-links-file-input';
 
+  readonly backLink = '/categories/dev/pdf';
+
+  // Tool texts
   readonly ui = {
+    title: $localize`:@@pdf_links_title:Liens PDF → JSON`,
+    subtitle: $localize`:@@pdf_links_subtitle:Détectez les liens cliquables d’un PDF (URL et liens internes) et exportez-les au format JSON, localement dans votre navigateur.`,
+
+    errTitle: $localize`:@@pdf_links_err_title:Impossible d’extraire les liens.`,
+  };
+
+  // Shell texts
+  readonly uiShell: PdfToolShellUi = {
     btnPick: $localize`:@@pdf_links_btn_pick:Choisir un PDF`,
     btnReset: $localize`:@@pdf_links_btn_reset:Réinitialiser`,
     btnCopy: $localize`:@@pdf_links_btn_copy:Copier`,
     btnDownload: $localize`:@@pdf_links_btn_download:Télécharger`,
     placeholderFilter: $localize`:@@pdf_links_filter_placeholder:Filtrer (url, page…)`,
+
     statusLoading: $localize`:@@pdf_links_status_loading:Analyse…`,
     statusReady: $localize`:@@pdf_links_status_ready:Prêt`,
     statusError: $localize`:@@pdf_links_status_error:Erreur`,
-    copied: $localize`:@@pdf_links_copied:JSON copié dans le presse-papiers.`,
-    copyFail: $localize`:@@pdf_links_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`,
-    errGeneric: $localize`:@@pdf_links_err_generic:Impossible de lire ce PDF.`,
-    tipNone: $localize`:@@pdf_links_tip_none:Aucun lien détecté dans ce PDF.`,
+
+    importTitle: $localize`:@@pdf_links_card_import_title:Importer un PDF`,
+    importSub: $localize`:@@pdf_links_card_import_sub:Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.`,
+
+    resultsTitle: $localize`:@@pdf_links_card_results_title:Résultats`,
+    resultsSub: $localize`:@@pdf_links_card_results_sub:Aperçu des liens et export JSON.`,
+
+    jsonTitle: $localize`:@@pdf_links_json_title:JSON`,
+    jsonSub: $localize`:@@pdf_links_json_sub:Exportable`,
+
+    leftTitle: $localize`:@@pdf_links_list_title:Liens`,
+    emptyText: $localize`:@@pdf_links_empty:Aucun lien à afficher.`,
+    backText: $localize`:@@pdf_links_back:← Retour aux outils PDF`,
   };
 
-  readonly status = signal<ToolStatus>('idle');
+  readonly status = signal<PdfToolStatus>('idle');
   readonly errorMessage = signal<string>('');
   readonly tipMessage = signal<string>('');
 
@@ -73,12 +81,13 @@ export class PdfLinksToJsonToolComponent {
     includeRect: this.fb.nonNullable.control(false),
   });
 
-  readonly filter = computed(() => (this.form.value.filter ?? '').trim().toLowerCase());
-  readonly pretty = computed(() => !!this.form.value.pretty);
-  readonly includeRect = computed(() => !!this.form.value.includeRect);
+  // ✅ reactive
+  readonly filter = controlToSignal(this.form.controls.filter);
+  readonly pretty = controlToSignal(this.form.controls.pretty);
+  readonly includeRect = controlToSignal(this.form.controls.includeRect);
 
   readonly filteredLinks = computed(() => {
-    const f = this.filter();
+    const f = (this.filter() ?? '').trim().toLowerCase();
     const all = this.links();
     if (!f) return all;
 
@@ -119,6 +128,7 @@ export class PdfLinksToJsonToolComponent {
     const url = all.filter(l => l.type === 'url').length;
     const internal = all.filter(l => l.type === 'internal').length;
     const unknown = all.filter(l => l.type === 'unknown').length;
+
     return {
       pages: this.pageCount(),
       total: all.length,
@@ -128,17 +138,25 @@ export class PdfLinksToJsonToolComponent {
     };
   });
 
-  triggerFilePick() {
-    const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
-    el?.click();
+  readonly statsCards = computed((): PdfToolStatCard[] => [
+    { label: $localize`:@@pdf_links_stat_pages_label:Pages`, value: this.stats().pages },
+    { label: $localize`:@@pdf_links_stat_total_label:Liens`, value: this.stats().total },
+    { label: $localize`:@@pdf_links_stat_url_label:URL`, value: this.stats().url },
+    { label: $localize`:@@pdf_links_stat_internal_label:Internes`, value: this.stats().internal },
+  ]);
+
+  readonly shellErrorMessage = computed(() => {
+    const e = (this.errorMessage() ?? '').trim();
+    return e ? `${this.ui.errTitle} — ${e}` : '';
+  });
+
+  typeLabel(t: LinkType): string {
+    if (t === 'url') return $localize`:@@pdf_links_type_url:URL`;
+    if (t === 'internal') return $localize`:@@pdf_links_type_internal:Interne`;
+    return $localize`:@@pdf_links_type_unknown:Autre`;
   }
 
-  async onFileSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (!file) return;
-
+  async onFileSelected(file: File) {
     this.status.set('loading');
     this.errorMessage.set('');
     this.tipMessage.set('');
@@ -163,7 +181,6 @@ export class PdfLinksToJsonToolComponent {
         const pageNumber = i + 1;
         const page = pages[i] as any;
 
-        // low-level page dict
         const pageDict = page.node as PDFDict;
         const annots = pageDict.get(PDFName.of('Annots'));
 
@@ -178,10 +195,8 @@ export class PdfLinksToJsonToolComponent {
           const subtype = annotDict.get(PDFName.of('Subtype'));
           if (!(subtype instanceof PDFName) || subtype.asString() !== '/Link') continue;
 
-          // Rect (optional)
           const rect = readRect(doc, annotDict.get(PDFName.of('Rect')));
 
-          // Action can be /A or /Dest directly on annot
           const a = annotDict.get(PDFName.of('A'));
           const dest = annotDict.get(PDFName.of('Dest'));
 
@@ -193,9 +208,15 @@ export class PdfLinksToJsonToolComponent {
       this.links.set(allLinks);
       this.status.set('ready');
 
-      if (allLinks.length === 0) this.tipMessage.set(this.ui.tipNone);
+      if (allLinks.length === 0) {
+        this.tipMessage.set($localize`:@@pdf_links_tip_none:Aucun lien détecté dans ce PDF.`);
+      }
     } catch (e: any) {
-      const msg = typeof e?.message === 'string' && e.message.trim() ? e.message : this.ui.errGeneric;
+      const msg =
+        typeof e?.message === 'string' && e.message.trim()
+          ? e.message
+          : $localize`:@@pdf_links_err_generic:Impossible de lire ce PDF.`;
+
       this.status.set('error');
       this.errorMessage.set(msg);
     }
@@ -215,10 +236,12 @@ export class PdfLinksToJsonToolComponent {
   async copyJson() {
     try {
       await navigator.clipboard.writeText(this.jsonText());
-      this.tipMessage.set(this.ui.copied);
+      this.tipMessage.set($localize`:@@pdf_links_copied:JSON copié dans le presse-papiers.`);
       window.setTimeout(() => this.tipMessage.set(''), 2500);
     } catch {
-      this.tipMessage.set(this.ui.copyFail);
+      this.tipMessage.set(
+        $localize`:@@pdf_links_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`
+      );
     }
   }
 
@@ -235,7 +258,7 @@ export class PdfLinksToJsonToolComponent {
   }
 }
 
-// ---------------- helpers ----------------
+/* ---------------- helpers (inchangés) ---------------- */
 
 function buildPageRefMap(doc: PDFDocument): Map<string, number> {
   const map = new Map<string, number>();
@@ -297,7 +320,6 @@ function parseLinkTarget(
   pageRefToNumber: Map<string, number>,
   rect: { x: number; y: number; w: number; h: number } | null
 ): PdfLinkItem | null {
-  // 1) URI action
   const actionDict = resolveDict(doc, actionVal);
   if (actionDict) {
     const s = actionDict.get(PDFName.of('S'));
@@ -306,51 +328,28 @@ function parseLinkTarget(
 
       if (sName === '/URI') {
         const uri = decodePdfString(actionDict.get(PDFName.of('URI')));
-        return {
-          type: 'url',
-          pageNumber,
-          url: uri ?? null,
-          rect,
-        };
+        return { type: 'url', pageNumber, url: uri ?? null, rect };
       }
 
       if (sName === '/GoTo') {
         const d = actionDict.get(PDFName.of('D'));
         const targetPage = resolveDestToPageNumber(doc, d, pageRefToNumber);
-        return {
-          type: 'internal',
-          pageNumber,
-          targetPage,
-          rect,
-        };
+        return { type: 'internal', pageNumber, targetPage, rect };
       }
 
-      // Other actions (Launch, JavaScript, etc.)
-      return {
-        type: 'unknown',
-        pageNumber,
-        rawAction: sName,
-        rect,
-      };
+      return { type: 'unknown', pageNumber, rawAction: sName, rect };
     }
   }
 
-  // 2) Direct /Dest on annotation
   if (destVal) {
     const targetPage = resolveDestToPageNumber(doc, destVal, pageRefToNumber);
-    return {
-      type: 'internal',
-      pageNumber,
-      targetPage,
-      rect,
-    };
+    return { type: 'internal', pageNumber, targetPage, rect };
   }
 
   return null;
 }
 
 function resolveDestToPageNumber(doc: PDFDocument, dest: unknown, pageRefToNumber: Map<string, number>): number | null {
-  // Common: dest is array [pageRef /XYZ ...] or ref to such array
   if (dest instanceof PDFArray) {
     const first = dest.get(0);
     if (first instanceof PDFRef) return pageRefToNumber.get(first.toString()) ?? null;
@@ -366,6 +365,5 @@ function resolveDestToPageNumber(doc: PDFDocument, dest: unknown, pageRefToNumbe
     return null;
   }
 
-  // Named destinations (name/string) require NameTree parsing. Best-effort => null.
   return null;
 }

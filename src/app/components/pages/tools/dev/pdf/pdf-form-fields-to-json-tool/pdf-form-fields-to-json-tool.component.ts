@@ -1,12 +1,9 @@
+import { CommonModule } from '@angular/common';
 import { Component, computed, effect, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
-
-import { toSignal } from '@angular/core/rxjs-interop';
 
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 
 import {
@@ -21,24 +18,21 @@ import {
   PDFSignature,
 } from 'pdf-lib';
 
-/** Export JSON complet + enrichissement dans Extra */
+import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
+import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
+
 export type DotNetIsoField = {
   Name: string;
   PartialName: string;
-  Type: string; // "e_text" etc.
+  Type: string;
   Value: string | boolean | string[];
   DefaultValue: string;
   Tooltip: string;
-  Flags: {
-    ReadOnly: boolean;
-    Required: boolean;
-  };
-  Justification: string; // "e_left_justified" etc.
-  MaxLen: number; // -1 if unknown
-  Widget: {
-    Page: number; // 1-based, -1 if unknown
-    Rect: [number, number, number, number] | null;
-  };
+  Flags: { ReadOnly: boolean; Required: boolean };
+  Justification: string;
+  MaxLen: number;
+  Widget: { Page: number; Rect: [number, number, number, number] | null };
   Extra?: {
     FullyQualifiedName: string;
     FieldTypeRaw: string | null;
@@ -47,11 +41,7 @@ export type DotNetIsoField = {
     DA: string | null;
     KidsCount: number | null;
 
-    Widgets: Array<{
-      Page: number;
-      Rect: [number, number, number, number] | null;
-    }>;
-
+    Widgets: Array<{ Page: number; Rect: [number, number, number, number] | null }>;
     Options?: string[];
     ExportDiagnostics?: {
       HasAcroFieldDict: boolean;
@@ -62,97 +52,116 @@ export type DotNetIsoField = {
   };
 };
 
-type UiStatus = 'idle' | 'loading' | 'ready' | 'error';
-
 @Component({
   selector: 'app-pdf-form-fields-to-json-tool',
   standalone: true,
   imports: [
-    RouterLink,
+    CommonModule,
     ReactiveFormsModule,
+    PdfToolShellComponent,
     ButtonModule,
     InputTextModule,
-    DividerModule,
     TagModule,
   ],
   templateUrl: './pdf-form-fields-to-json-tool.component.html',
   styleUrl: './pdf-form-fields-to-json-tool.component.scss',
 })
 export class PdfFormFieldsToJsonToolComponent {
-  private fb = new FormBuilder();
+  private readonly fb = new FormBuilder();
 
-  // UI state
-  status = signal<UiStatus>('idle');
-  errorMessage = signal<string>('');
-  tipMessage = signal<string>('');
+  readonly backLink = '/categories/dev/pdf';
 
-  fileName = signal<string>('');
-  fileSize = signal<number>(0);
-  lastUpdated = signal<number | null>(null);
+  // ---- Titles (hero) ----
+  readonly ui = {
+    title: $localize`:@@pdf_fields_title:Champs PDF → JSON`,
+    subtitle: $localize`:@@pdf_fields_subtitle:Exportez les champs d'un formulaire PDF (AcroForm) au format JSON, localement dans votre navigateur.`,
+    errTitle: $localize`:@@pdf_fields_err_title:Impossible d’extraire les champs.`,
+    tipNone: $localize`:@@pdf_fields_no_fields:Aucun champ détecté. Le PDF ne contient peut-être pas d'AcroForm (ou utilise XFA).`,
+  };
+
+  // ---- Shell UI ----
+  readonly uiShell: PdfToolShellUi = {
+    btnPick: $localize`:@@pdf_fields_pick_btn:Sélectionner`,
+    btnReset: $localize`:@@tool_reset:Réinitialiser`,
+    btnCopy: $localize`:@@pdf_fields_copy_btn:Copier`,
+    btnDownload: $localize`:@@pdf_fields_download_btn:Télécharger`,
+
+    placeholderFilter: $localize`:@@pdf_fields_filter_ph:Nom, type, valeur…`,
+
+    statusLoading: $localize`:@@pdf_fields_loading:Analyse du PDF…`,
+    statusReady: $localize`:@@pdf_fields_status_ready:Prêt`,
+    statusError: $localize`:@@pdf_fields_status_error:Erreur`,
+
+    importTitle: $localize`:@@pdf_fields_import_title:Importer un PDF`,
+    importSub: $localize`:@@pdf_fields_file_hint:Aucun upload : tout se passe localement.`,
+
+    resultsTitle: $localize`:@@pdf_fields_summary_title:Résumé`,
+    resultsSub: $localize`:@@pdf_fields_results_sub:Aperçu des champs et export JSON.`,
+
+    jsonTitle: $localize`:@@pdf_fields_json_panel_title:JSON`,
+    jsonSub: $localize`:@@pdf_fields_json_sub:Exportable`,
+
+    leftTitle: $localize`:@@pdf_fields_left_list_title:Liste`,
+    emptyText: $localize`:@@pdf_fields_no_match:Aucun champ ne correspond au filtre.`,
+    backText: $localize`:@@pdf_fields_back:← Retour aux outils PDF`,
+  };
+
+  // ---- State ----
+  readonly status = signal<PdfToolStatus>('idle');
+  readonly errorMessage = signal<string>('');
+  readonly tipMessage = signal<string>('');
+
+  readonly fileName = signal<string>('');
+  readonly fileSize = signal<number>(0);
 
   // Data
-  fields = signal<DotNetIsoField[]>([]);
-  jsonText = signal<string>('');
+  readonly fields = signal<DotNetIsoField[]>([]);
+  readonly jsonTextSig = signal<string>(''); // kept for shell binding
 
-  // Hidden file input handle (template)
-  fileInputId = 'pdf-upload-input';
-
-  // Form controls
-  form = this.fb.nonNullable.group({
+  // Form
+  readonly form = this.fb.nonNullable.group({
     filter: this.fb.nonNullable.control(''),
     pretty: this.fb.nonNullable.control(true),
     includeEmpty: this.fb.nonNullable.control(true),
     showAdvanced: this.fb.nonNullable.control(false),
   });
 
-  // ✅ Make form changes reactive for signals/computed
-  private filterSig = toSignal(this.form.controls.filter.valueChanges, {
-    initialValue: this.form.controls.filter.value,
-  });
+  // ✅ Signals (filter works)
+  readonly filter = controlToSignal(this.form.controls.filter);
+  readonly pretty = controlToSignal(this.form.controls.pretty);
+  readonly includeEmpty = controlToSignal(this.form.controls.includeEmpty);
+  readonly showAdvanced = controlToSignal(this.form.controls.showAdvanced);
 
-  private prettySig = toSignal(this.form.controls.pretty.valueChanges, {
-    initialValue: this.form.controls.pretty.value,
-  });
-
-  private includeEmptySig = toSignal(this.form.controls.includeEmpty.valueChanges, {
-    initialValue: this.form.controls.includeEmpty.value,
-  });
-
-  /** ✅ IMPORTANT: must be PUBLIC because template uses it */
-  showAdvancedSig = toSignal(this.form.controls.showAdvanced.valueChanges, {
-    initialValue: this.form.controls.showAdvanced.value,
-  });
-
-  // Dynamic labels (i18n-safe)
-  prettyLabel = computed(() =>
-    this.prettySig()
+  // Labels
+  readonly prettyLabel = computed(() =>
+    this.pretty()
       ? $localize`:@@pdf_fields_pretty_indented:Indenté`
       : $localize`:@@pdf_fields_pretty_minified:Minifié`
   );
 
-  emptyLabel = computed(() =>
-    this.includeEmptySig()
+  readonly emptyLabel = computed(() =>
+    this.includeEmpty()
       ? $localize`:@@pdf_fields_empty_included:Inclus`
       : $localize`:@@pdf_fields_empty_excluded:Exclus`
   );
 
-  advancedLabel = computed(() =>
-    this.showAdvancedSig()
+  readonly advancedLabel = computed(() =>
+    this.showAdvanced()
       ? $localize`:@@pdf_fields_adv_shown:Détails visibles`
       : $localize`:@@pdf_fields_adv_hidden:Détails masqués`
   );
 
-  // Derived lists
-  filteredFields = computed(() => {
-    const q = (this.filterSig() ?? '').trim().toLowerCase();
-    const includeEmpty = this.includeEmptySig();
+  // Derived
+  readonly filteredFields = computed(() => {
+    const q = (this.filter() ?? '').trim().toLowerCase();
+    const includeEmpty = this.includeEmpty();
 
     let list = this.fields();
 
     if (!includeEmpty) {
       list = list.filter(f => {
         const v = f.Value;
-        if (typeof v === 'boolean') return true; // keep bools
+        if (typeof v === 'boolean') return true;
         if (typeof v === 'string') return v.trim().length > 0;
         if (Array.isArray(v)) return v.length > 0;
         return true;
@@ -177,20 +186,20 @@ export class PdfFormFieldsToJsonToolComponent {
         f.Justification,
         String(f.MaxLen),
         valueStr,
-      ].join(' ').toLowerCase();
+      ]
+        .join(' ')
+        .toLowerCase();
 
       return hay.includes(q);
     });
   });
 
-  counts = computed(() => {
+  readonly counts = computed(() => {
     const all = this.fields().length;
     const shown = this.filteredFields().length;
 
     const byType = new Map<string, number>();
-    for (const f of this.fields()) {
-      byType.set(f.Type, (byType.get(f.Type) ?? 0) + 1);
-    }
+    for (const f of this.fields()) byType.set(f.Type, (byType.get(f.Type) ?? 0) + 1);
 
     const typeStats = Array.from(byType.entries())
       .sort((a, b) => b[1] - a[1])
@@ -199,29 +208,28 @@ export class PdfFormFieldsToJsonToolComponent {
     return { all, shown, typeStats };
   });
 
-  // Keep JSON output in sync with pretty/minify (and when fields change)
-  private syncJson = effect(() => {
-    const pretty = this.prettySig();
-    const data = this.fields();
-    this.jsonText.set(pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data));
+  readonly jsonText = computed(() => this.jsonTextSig());
+
+  readonly statsCards = computed((): PdfToolStatCard[] => [
+    { label: $localize`:@@pdf_fields_all_count:Nombre total de champs`, value: this.counts().all },
+    { label: $localize`:@@pdf_fields_shown_count:Champs affichés`, value: this.counts().shown },
+    { label: $localize`:@@pdf_fields_hidden_count:Champs masqués`, value: this.counts().all - this.counts().shown },
+    { label: $localize`:@@pdf_fields_types_count:Types distincts`, value: this.counts().typeStats.length },
+  ]);
+
+  readonly shellErrorMessage = computed(() => {
+    const e = (this.errorMessage() ?? '').trim();
+    return e ? `${this.ui.errTitle} — ${e}` : '';
   });
 
-  // ---- UI actions ----
+  // keep json in sync
+  private readonly syncJson = effect(() => {
+    const pretty = this.pretty();
+    const data = this.filteredFields(); // ✅ export reflète le filtre + includeEmpty
+    this.jsonTextSig.set(pretty ? JSON.stringify(data, null, 2) : JSON.stringify(data));
+  });
 
-  triggerFilePick() {
-    const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
-    el?.click();
-  }
-
-  async onFileSelected(evt: Event) {
-    const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    // allow re-select same file
-    input.value = '';
-
-    if (!file) return;
-
+  async onFileSelected(file: File) {
     if (!file.name.toLowerCase().endsWith('.pdf')) {
       this.fail($localize`:@@pdf_fields_err_not_pdf:Veuillez sélectionner un fichier PDF (.pdf).`);
       return;
@@ -246,11 +254,12 @@ export class PdfFormFieldsToJsonToolComponent {
       exported.sort((a, b) => a.Name.localeCompare(b.Name));
 
       this.fields.set(exported);
-      this.lastUpdated.set(Date.now());
       this.status.set('ready');
+
+      if (exported.length === 0) this.tipMessage.set(this.ui.tipNone);
     } catch (e: any) {
       const msg =
-        typeof e?.message === 'string' && e.message.trim().length > 0
+        typeof e?.message === 'string' && e.message.trim()
           ? e.message
           : $localize`:@@pdf_fields_err_generic:Impossible de lire ce PDF.`;
       this.fail(msg);
@@ -263,7 +272,6 @@ export class PdfFormFieldsToJsonToolComponent {
     this.tipMessage.set('');
     this.fileName.set('');
     this.fileSize.set(0);
-    this.lastUpdated.set(null);
     this.fields.set([]);
 
     this.form.patchValue({
@@ -314,12 +322,7 @@ export class PdfFormFieldsToJsonToolComponent {
     this.form.controls.showAdvanced.setValue(!this.form.controls.showAdvanced.value);
   }
 
-  optionsText(f: DotNetIsoField): string {
-    const opts = f.Extra?.Options;
-    return opts && opts.length ? opts.join(', ') : '';
-  }
-
-  // ---- Extraction ----
+  // ---- Extraction (identique à toi) ----
 
   private exportField(doc: PDFDocument, f: PDFField): DotNetIsoField {
     const name = f.getName();
@@ -327,7 +330,7 @@ export class PdfFormFieldsToJsonToolComponent {
     const acroField = anyField?.acroField;
     const dict = acroField?.dict;
 
-    const ftRaw = this.readName(dict, 'FT'); // Tx/Btn/Ch/Sig
+    const ftRaw = this.readName(dict, 'FT');
     const ff = this.readNumber(dict, 'Ff');
     const q = this.readNumber(dict, 'Q');
     const maxLen = this.readNumber(dict, 'MaxLen');
@@ -476,8 +479,6 @@ export class PdfFormFieldsToJsonToolComponent {
     return null;
   }
 
-  // ---- low-level readers (best-effort) ----
-
   private readText(dict: any, key: string): string | null {
     try {
       const v = dict?.get?.(key);
@@ -569,7 +570,6 @@ export class PdfFormFieldsToJsonToolComponent {
     }
   }
 
-  // ---- misc ----
   private fail(message: string) {
     this.status.set('error');
     this.errorMessage.set(message);
@@ -578,18 +578,6 @@ export class PdfFormFieldsToJsonToolComponent {
   private flashTip(message: string) {
     this.tipMessage.set(message);
     window.setTimeout(() => this.tipMessage.set(''), 2600);
-  }
-
-  formatBytes(n: number): string {
-    if (!Number.isFinite(n) || n <= 0) return '0 B';
-    const units = ['B', 'KB', 'MB', 'GB'];
-    let i = 0;
-    let v = n;
-    while (v >= 1024 && i < units.length - 1) {
-      v /= 1024;
-      i++;
-    }
-    return `${v.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
   }
 
   protected readonly JSON = JSON;

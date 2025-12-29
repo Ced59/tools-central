@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 
 import { PDFDocument } from 'pdf-lib';
 
@@ -25,7 +24,7 @@ interface PdfPageItem {
 @Component({
   selector: 'app-pdf-pages-to-json-tool',
   standalone: true,
-  imports: [CommonModule, RouterLink, ReactiveFormsModule, PdfToolShellComponent],
+  imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-pages-to-json-tool.component.html',
   styleUrl: './pdf-pages-to-json-tool.component.scss',
 })
