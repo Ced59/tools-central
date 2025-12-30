@@ -1,68 +1,71 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { LOCALES } from '../i18n/locales.generated';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class LocalePathService {
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(DOCUMENT) private doc: Document
+  ) {}
 
-  private readonly localeSet = new Set<string>(LOCALES.map(l => l.locale));
-
-  private isKnownLocale(seg: string | undefined | null): boolean {
-    if (!seg) return false;
-    return LOCALES.some(l => l.locale === seg);
+  /**
+   * ✅ Pour [routerLink]
+   * On NE met JAMAIS la locale dans les segments.
+   * Car en i18n Angular (baseHref=/fr/), le router est déjà “dans” la locale.
+   *
+   * Exemple:
+   *  - build FR (base=/fr/) -> ['/', 'legal-notice'] => /fr/legal-notice
+   *  - build EN (base=/en/) -> ['/', 'legal-notice'] => /en/legal-notice
+   */
+  routerLink(path: string): any[] {
+    const clean = (path ?? '').replace(/^\/+/, '');
+    return clean ? ['/', clean] : ['/'];
   }
 
+  /**
+   * ✅ Pour href (string)
+   * On utilise base href réel pour construire un lien correct en SSR/SSG.
+   */
+  href(path: string): string {
+    const clean = (path ?? '').replace(/^\/+/, '');
+    const base = this.getBaseHref(); // "/fr/" ou "/"
+    const joined = `${base}${clean}`;
+    return normalizeSlashes('/' + joined.replace(/^\/+/, ''));
+  }
+
+  /**
+   * Switch locale en gardant le "reste" du chemin.
+   * Ici, on travaille sur le pathname ABSOLU (avec locale).
+   */
   switchLocale(currentPath: string, targetLocale: string): string {
     const pathOnly = (currentPath || '/').split('?')[0].split('#')[0];
-
-    // garde l’info "slash final"
     const hasTrailingSlash = pathOnly.endsWith('/');
 
     const parts = pathOnly.split('/').filter(Boolean);
     const first = parts[0];
 
-    let rest: string[] = [];
-    if (first && this.localeSet.has(first)) rest = parts.slice(1);
-    else rest = parts;
+    // si on est déjà sur une locale, on enlève ce premier segment
+    const rest = first && looksLikeLocale(first) ? parts.slice(1) : parts;
 
-    // Si on est sur la home => /xx/
     if (rest.length === 0) return `/${targetLocale}/`;
 
-    // Sur une page interne : on garde le trailing slash si présent
     const joined = `/${targetLocale}/${rest.join('/')}`;
     return hasTrailingSlash ? `${joined}/` : joined;
   }
 
-  /**
-   * Retourne un tableau routerLink compatible :
-   * - prod (url prefixée): /{locale}/{path}
-   * - local dev (sans prefix): /{path}
-   *
-   * path: "privacy-policy" (sans slash)
-   */
-  link(path: string): any[] {
-    const clean = (path ?? '').replace(/^\/+/, '');
-    if (!clean) return ['/'];
-
-    if (!isPlatformBrowser(this.platformId)) {
-      // SSR: on ne peut pas lire location.pathname.
-      // On renvoie un lien non préfixé : OK en rendu,
-      // et le client corrigera au clic / après hydration.
-      return ['/', clean];
-    }
-
-    const first = location.pathname.split('/').filter(Boolean)[0] ?? null;
-    const loc = this.isKnownLocale(first) ? first : null;
-
-    return loc ? ['/', loc, clean] : ['/', clean];
+  private getBaseHref(): string {
+    const baseEl = this.doc.querySelector('base');
+    const href = (baseEl?.getAttribute('href') ?? '/').trim();
+    // normalise pour être "/xx/" ou "/"
+    if (!href.startsWith('/')) return '/' + href;
+    return href.endsWith('/') ? href : href + '/';
   }
+}
 
-  /**
-   * Variante qui retourne une URL string (utile pour href)
-   */
-  href(path: string): string {
-    const parts = this.link(path);
-    return parts.join('/').replace(/\/{2,}/g, '/');
-  }
+function normalizeSlashes(path: string): string {
+  return path.replace(/\/{2,}/g, '/');
+}
+
+function looksLikeLocale(seg: string): boolean {
+  return /^[a-z]{2}(-[A-Za-z]+)?$/.test(seg);
 }
