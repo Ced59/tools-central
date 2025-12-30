@@ -66573,6 +66573,210 @@ Calculez l’écart absolu :                                </target>
         <target state="translated">PDF가 스캔에서 유래했는지 추정(이미지, 글꼴 부재, CCITT/JBIG2 지표)하고 진단을 JSON 형식으로 내보냅니다.</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_object_info_to_json_title">
+      <segment>
+        <source>Objets PDF → JSON</source>
+        <target state="translated">PDF 객체 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_object_info_to_json_desc">
+      <segment>
+        <source>Lister les objets (ids/références), types (dict/stream/array) et statistiques bas niveau.</source>
+        <target state="translated">객체 (id/참조), 유형 (dict/stream/array) 및 저수준 통계 나열하기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_xref_to_json_title">
+      <segment>
+        <source>XRef PDF → JSON</source>
+        <target state="translated">XRef PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_xref_to_json_desc">
+      <segment>
+        <source>Inspecter la table/stream XRef (objets, offsets, générations) et exporter en JSON.</source>
+        <target state="translated">XRef 테이블/스트림 (객체, 오프셋, 세대) 검사 및 JSON으로 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_page_content_ops_to_json_title">
+      <segment>
+        <source>Opérateurs de page → JSON</source>
+        <target state="translated">페이지 연산자 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_page_content_ops_to_json_desc">
+      <segment>
+        <source>Analyser les content streams (opérateurs PDF) par page et exporter une version structurée.</source>
+        <target state="translated">페이지별 콘텐츠 스트림 (PDF 연산자) 분석 및 구조화된 버전 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_encryption_check_title">
+      <segment>
+        <source>Chiffrement &amp; permissions PDF</source>
+        <target state="translated">암호화 및 권한 PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_encryption_check_desc">
+      <segment>
+        <source>Détecter si le PDF est chiffré, quelles permissions sont activées, et exporter le diagnostic.</source>
+        <target state="translated">PDF가 암호화되어 있는지, 어떤 권한이 활성화되어 있는지 감지하고 진단 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_linearized_check_title">
+      <segment>
+        <source>PDF linéarisé (Fast Web View)</source>
+        <target state="translated">선형화된 PDF (빠른 웹 보기)</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_linearized_check_desc">
+      <segment>
+        <source>Détecter si le PDF est linéarisé et exporter l’état + indices.</source>
+        <target state="translated">PDF가 선형화되어 있는지 감지하고 상태 + 인덱스 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_font_embedding_check_title">
+      <segment>
+        <source>Vérifier l’intégration des polices</source>
+        <target state="translated">글꼴 통합 확인</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_font_embedding_check_desc">
+      <segment>
+        <source>Lister les polices non intégrées (ou partiellement) et exporter le rapport.</source>
+        <target state="translated">통합되지 않은 (또는 부분적으로) 글꼴 나열하고 보고서 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_merge_title">
+      <segment>
+        <source>Fusionner des PDF</source>
+        <target state="translated">PDF 병합</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_merge_desc">
+      <segment>
+        <source>Fusionner plusieurs PDF en un seul, localement dans le navigateur.</source>
+        <target state="translated">여러 PDF를 하나로 병합, 브라우저에서 로컬로.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_split_title">
+      <segment>
+        <source>Découper un PDF</source>
+        <target state="translated">PDF 자르기</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_split_desc">
+      <segment>
+        <source>Extraire certaines pages ou découper un PDF en plusieurs fichiers.</source>
+        <target state="translated">특정 페이지를 추출하거나 PDF를 여러 파일로 자르기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_flatten_forms_title">
+      <segment>
+        <source>Aplatir un formulaire PDF</source>
+        <target state="translated">PDF 양식 평면화</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_flatten_forms_desc">
+      <segment>
+        <source>Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.</source>
+        <target state="translated">양식 필드를 정적 콘텐츠로 변환 (평면화), 공유/보관을 위해.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_sanitize_title">
+      <segment>
+        <source>Nettoyer un PDF</source>
+        <target state="translated">PDF 정리</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_sanitize_desc">
+      <segment>
+        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.</source>
+        <target state="translated">민감한 메타데이터, XMP, 첨부 파일을 삭제하고 '정리된' PDF 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_stream_decoder_title">
+      <segment>
+        <source>Décoder un stream PDF</source>
+        <target state="translated">PDF 스트림 디코딩</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_stream_decoder_desc">
+      <segment>
+        <source>Décoder un stream (Flate/LZW/ASCII85…) et exporter le résultat (texte/hex).</source>
+        <target state="translated">스트림 (Flate/LZW/ASCII85…) 디코딩하고 결과 (텍스트/16진수) 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_to_unicode_inspector_title">
+      <segment>
+        <source>Inspecter ToUnicode</source>
+        <target state="translated">ToUnicode 검사</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_to_unicode_inspector_desc">
+      <segment>
+        <source>Analyser les CMaps ToUnicode et diagnostiquer les problèmes de copie/texte illisible.</source>
+        <target state="translated">ToUnicode CMap 분석 및 복사/읽을 수 없는 텍스트 문제 진단.</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_text_structure_to_json_title">
+      <segment>
+        <source>Structure texte PDF → JSON</source>
+        <target state="translated">텍스트 구조 PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_text_structure_to_json_desc">
+      <segment>
+        <source>Inspecter la structure texte (fonts/runs/positions) pour debug d’extraction.</source>
+        <target state="translated">추출 디버그를 위한 텍스트 구조 (글꼴/런/위치) 검사.</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_inspect_title">
+      <segment>
+        <source>Inspection &amp; extraction</source>
+        <target state="translated">검사 및 추출</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_inspect_desc">
+      <segment>
+        <source>Analyser et exporter la structure interne d’un PDF (métadonnées, pages, liens, polices, images, annotations, pièces jointes…).</source>
+        <target state="translated">PDF의 내부 구조 (메타데이터, 페이지, 링크, 글꼴, 이미지, 주석, 첨부 파일…) 분석 및 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_validate_title">
+      <segment>
+        <source>Validation &amp; diagnostic</source>
+        <target state="translated">검증 및 진단</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_validate_desc">
+      <segment>
+        <source>Vérifier l’état d’un PDF (scan, chiffrement, permissions, conformité…) et exporter le diagnostic.</source>
+        <target state="translated">PDF의 상태 (스캔, 암호화, 권한, 준수…) 확인 및 진단 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_transform_title">
+      <segment>
+        <source>Transformation</source>
+        <target state="translated">변환</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_transform_desc">
+      <segment>
+        <source>Convertir / modifier un PDF (fusion, split, flatten, nettoyage…).</source>
+        <target state="translated">PDF 변환/수정 (병합, 분할, 평면화, 정리…).</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_debug_title">
+      <segment>
+        <source>Internals &amp; debug</source>
+        <target state="translated">내부 및 디버그</target>
+      </segment>
+    </unit>
+    <unit id="dev_pdf_sg_debug_desc">
+      <segment>
+        <source>Explorer les objets bas niveau (xref, streams, opérateurs, ToUnicode…).</source>
+        <target state="translated">저수준 객체 (xref, 스트림, 연산자, ToUnicode…) 탐색.</target>
+      </segment>
+    </unit>
 
     
     

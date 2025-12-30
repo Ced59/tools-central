@@ -189,10 +189,28 @@ export const TOOL_SUBGROUP_REGISTRY = {
   dev: {
     pdf: [
       {
-        id: 'extract',
-        title: $localize`:@@dev_pdf_sg_extract_title:Extraction`,
-        description: $localize`:@@dev_pdf_sg_extract_desc:Exporter les champs d’un formulaire PDF en JSON.`,
+        id: 'inspect',
+        title: $localize`:@@dev_pdf_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_pdf_sg_inspect_desc:Analyser et exporter la structure interne d’un PDF (métadonnées, pages, liens, polices, images, annotations, pièces jointes…).`,
         order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_pdf_sg_validate_title:Validation & diagnostic`,
+        description: $localize`:@@dev_pdf_sg_validate_desc:Vérifier l’état d’un PDF (scan, chiffrement, permissions, conformité…) et exporter le diagnostic.`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_pdf_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_pdf_sg_transform_desc:Convertir / modifier un PDF (fusion, split, flatten, nettoyage…).`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_pdf_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_pdf_sg_debug_desc:Explorer les objets bas niveau (xref, streams, opérateurs, ToUnicode…).`,
+        order: 4,
       },
     ],
   },
