@@ -13,99 +13,99 @@ export interface EditorialRegistryEntry {
  */
 export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
   'dev/pdf/pdf-annotations-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-annotations-to-json.editorial'),
   },
   'dev/pdf/pdf-attachments-extractor': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-attachments-extractor.editorial'),
   },
   'dev/pdf/pdf-encryption-check': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-encryption-check.editorial'),
   },
   'dev/pdf/pdf-flatten-forms': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-flatten-forms.editorial'),
   },
   'dev/pdf/pdf-font-embedding-check': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-font-embedding-check.editorial'),
   },
   'dev/pdf/pdf-fonts-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-fonts-to-json.editorial'),
   },
   'dev/pdf/pdf-form-fields-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-form-fields-to-json.editorial'),
   },
   'dev/pdf/pdf-images-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-images-to-json.editorial'),
   },
   'dev/pdf/pdf-linearized-check': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-linearized-check.editorial'),
   },
   'dev/pdf/pdf-links-extractor': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-links-extractor.editorial'),
   },
   'dev/pdf/pdf-merge': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-merge.editorial'),
   },
   'dev/pdf/pdf-metadata-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-metadata-to-json.editorial'),
   },
   'dev/pdf/pdf-object-info-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-object-info-to-json.editorial'),
   },
   'dev/pdf/pdf-outline-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-outline-to-json.editorial'),
   },
   'dev/pdf/pdf-page-content-ops-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-page-content-ops-to-json.editorial'),
   },
   'dev/pdf/pdf-pages-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-pages-to-json.editorial'),
   },
   'dev/pdf/pdf-sanitize': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-sanitize.editorial'),
   },
   'dev/pdf/pdf-scan-detector': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-scan-detector.editorial'),
   },
   'dev/pdf/pdf-signatures-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-signatures-to-json.editorial'),
   },
   'dev/pdf/pdf-split': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-split.editorial'),
   },
   'dev/pdf/pdf-stream-decoder': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-stream-decoder.editorial'),
   },
   'dev/pdf/pdf-text-structure-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-text-structure-to-json.editorial'),
   },
   'dev/pdf/pdf-to-unicode-inspector': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-to-unicode-inspector.editorial'),
   },
   'dev/pdf/pdf-xref-to-json': {
-    available: false,
+    available: true,
     load: () => import('./dev/pdf/pdf-xref-to-json.editorial'),
   },
   'math/fractions/decimal-to-fraction': {
@@ -345,11 +345,11 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     load: () => import('./math/rule-of-three/rule-of-three-table.editorial'),
   },
   'math/statistics/amplitude': {
-    available: false,
+    available: true,
     load: () => import('./math/statistics/amplitude.editorial'),
   },
   'math/statistics/mean': {
-    available: false,
+    available: true,
     load: () => import('./math/statistics/mean.editorial'),
   },
   'math/statistics/mean-course': {
@@ -361,7 +361,7 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     load: () => import('./math/statistics/mean-vs-median.editorial'),
   },
   'math/statistics/median': {
-    available: false,
+    available: true,
     load: () => import('./math/statistics/median.editorial'),
   },
   'math/statistics/median-course': {
@@ -377,7 +377,7 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     load: () => import('./math/statistics/misleading-mean.editorial'),
   },
   'math/statistics/mode': {
-    available: false,
+    available: true,
     load: () => import('./math/statistics/mode.editorial'),
   },
   'math/statistics/outliers-effect': {
@@ -385,7 +385,7 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     load: () => import('./math/statistics/outliers-effect.editorial'),
   },
   'math/statistics/range': {
-    available: false,
+    available: true,
     load: () => import('./math/statistics/range.editorial'),
   },
   'math/statistics/weighted-mean': {
