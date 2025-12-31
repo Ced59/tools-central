@@ -180,7 +180,7 @@ export const TOOL_SUBGROUP_REGISTRY = {
         id: 'essential',
         title: $localize`:@@writing_sg_essential_title:Essentiels`,
         description: $localize`:@@writing_sg_essential_desc:Analyse et amélioration d’écriture.`,
-        order: 1,
+        order: 2,
       },
     ],
   },

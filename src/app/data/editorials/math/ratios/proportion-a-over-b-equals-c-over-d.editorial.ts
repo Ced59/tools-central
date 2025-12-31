@@ -1,63 +1,54 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_title:À propos : Proportion A/B = C/D`,
-  lead: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_proportion_fraction_title:À propos : a / b = c / d`,
+  lead: $localize`:@@ed_math_proportion_fraction_lead:Comprendre l’égalité de deux rapports et savoir l’utiliser pour résoudre des problèmes de proportionnalité.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_math_proportion_fraction_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc1_title:TODO`, text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc2_title:TODO`, text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc3_title:TODO`, text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_proportion_fraction_uc1_title:Produits en croix`,
+          text: $localize`:@@ed_math_proportion_fraction_uc1_text:Résoudre une équation de proportion avec une valeur manquante.`,
+        },
+        {
+          title: $localize`:@@ed_math_proportion_fraction_uc2_title:Ratios équivalents`,
+          text: $localize`:@@ed_math_proportion_fraction_uc2_text:Vérifier si deux rapports représentent la même proportion.`,
+        },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_math_proportion_fraction_output:Ce que vous apprenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_proportion_fraction_out1:Le lien entre fractions égales et proportionnalité.`,
+        $localize`:@@ed_math_proportion_fraction_out2:Pourquoi le produit en croix fonctionne.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_math_proportion_fraction_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_lim1:TODO.` },
-        { text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_q1:TODO`, a: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_a1:TODO` },
-        { q: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_q2:TODO`, a: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_a2:TODO` },
+        { text: $localize`:@@ed_math_proportion_fraction_lim1:Les fractions doivent représenter des grandeurs comparables.` },
+        { text: $localize`:@@ed_math_proportion_fraction_lim2:Attention aux divisions par zéro.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_tip_title:Astuce`,
+      heading: $localize`:@@ed_math_proportion_fraction_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_ratios_proportion_a_over_b_equals_c_over_d_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_proportion_fraction_tip:Si a×d = b×c, alors les deux rapports sont équivalents.`,
     },
   ],
 };

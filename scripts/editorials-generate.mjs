@@ -49,21 +49,24 @@ function safeIdentifier(s) {
 function extractToolsFromAtomicFile(tsSource) {
   const results = [];
 
-  const blockRegex = /'([^']+)'\s*:\s*{([\s\S]*?)\n\s*},/g;
-  let m;
+  // Matches:
+  //  - 'id': { ... }
+  //  - "id": { ... }
+  //  - id: { ... }
+  // Stops at the matching "}," or "}" at same indent level (simple but ok for your structures)
+  const blockRegex =
+    /(?:^|\n)\s*(?:'([^']+)'|"([^"]+)"|([a-zA-Z0-9_-]+))\s*:\s*{([\s\S]*?)\n\s*}(?:\s*,)?/g;
 
+  let m;
   while ((m = blockRegex.exec(tsSource)) !== null) {
-    const toolId = m[1];
-    const body = m[2];
+    const toolId = (m[1] ?? m[2] ?? m[3])?.trim();
+    const body = m[4];
 
     const category = body.match(/category\s*:\s*'([^']+)'/)?.[1] ?? null;
     const group = body.match(/group\s*:\s*'([^']+)'/)?.[1] ?? null;
 
-    // Only tools with category+group are eligible
-    if (!category || !group) continue;
+    if (!toolId || !category || !group) continue;
 
-    // Try to extract the default localized title text (FR) for nicer placeholder
-    // Example: title: $localize`:@@id:Mon titre`
     const titleText =
       body.match(/title\s*:\s*\$localize`[^`]*:([^`]+)`/)?.[1]?.trim() ?? null;
 

@@ -1,63 +1,54 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_ratios_inverse_proportionality_title:À propos : Proportionnalité inverse`,
-  lead: $localize`:@@ed_math_ratios_inverse_proportionality_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_inverse_proportionality_title:À propos : Proportionnalité inverse`,
+  lead: $localize`:@@ed_math_inverse_proportionality_lead:Identifier une proportionnalité inverse, comprendre la notion de produit constant et appliquer correctement la règle de trois inverse.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_inverse_proportionality_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_math_inverse_proportionality_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_ratios_inverse_proportionality_uc1_title:TODO`, text: $localize`:@@ed_math_ratios_inverse_proportionality_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_ratios_inverse_proportionality_uc2_title:TODO`, text: $localize`:@@ed_math_ratios_inverse_proportionality_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_ratios_inverse_proportionality_uc3_title:TODO`, text: $localize`:@@ed_math_ratios_inverse_proportionality_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_inverse_proportionality_uc1_title:Temps et vitesse`,
+          text: $localize`:@@ed_math_inverse_proportionality_uc1_text:Calculer un temps de parcours quand la vitesse varie.`,
+        },
+        {
+          title: $localize`:@@ed_math_inverse_proportionality_uc2_title:Partage de travail`,
+          text: $localize`:@@ed_math_inverse_proportionality_uc2_text:Estimer la durée d’un travail selon le nombre de personnes.`,
+        },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_ratios_inverse_proportionality_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_math_inverse_proportionality_output:Ce que vous apprenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_ratios_inverse_proportionality_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_ratios_inverse_proportionality_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_inverse_proportionality_out1:La différence fondamentale entre proportionnalité directe et inverse.`,
+        $localize`:@@ed_math_inverse_proportionality_out2:La méthode basée sur le produit constant pour résoudre les exercices.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_inverse_proportionality_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_math_inverse_proportionality_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_ratios_inverse_proportionality_lim1:TODO.` },
-        { text: $localize`:@@ed_math_ratios_inverse_proportionality_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_ratios_inverse_proportionality_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_ratios_inverse_proportionality_q1:TODO`, a: $localize`:@@ed_math_ratios_inverse_proportionality_a1:TODO` },
-        { q: $localize`:@@ed_math_ratios_inverse_proportionality_q2:TODO`, a: $localize`:@@ed_math_ratios_inverse_proportionality_a2:TODO` },
+        { text: $localize`:@@ed_math_inverse_proportionality_lim1:Ne pas confondre avec une simple diminution linéaire.` },
+        { text: $localize`:@@ed_math_inverse_proportionality_lim2:Vérifier que le produit des deux grandeurs reste constant.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_ratios_inverse_proportionality_tip_title:Astuce`,
+      heading: $localize`:@@ed_math_inverse_proportionality_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_ratios_inverse_proportionality_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_inverse_proportionality_tip:Si l’une des valeurs double et que l’autre est divisée par deux, tu es en proportionnalité inverse.`,
     },
   ],
 };

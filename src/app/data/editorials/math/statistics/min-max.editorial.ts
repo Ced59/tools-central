@@ -1,14 +1,10 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_statistics_min_max_title:À propos : Valeur minimale / maximale`,
-  lead: $localize`:@@ed_math_statistics_min_max_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_statistics_min_max_title:À propos : Minimum et maximum`,
+  lead: $localize`:@@ed_math_statistics_min_max_lead:Identifier rapidement les valeurs extrêmes d’une série grâce au minimum et au maximum.`,
   sections: [
     {
       id: 'use-cases',
@@ -16,9 +12,18 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_min_max_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_statistics_min_max_uc1_title:TODO`, text: $localize`:@@ed_math_statistics_min_max_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_statistics_min_max_uc2_title:TODO`, text: $localize`:@@ed_math_statistics_min_max_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_statistics_min_max_uc3_title:TODO`, text: $localize`:@@ed_math_statistics_min_max_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_statistics_min_max_uc1_title:Définir une plage de valeurs`,
+          text: $localize`:@@ed_math_statistics_min_max_uc1_text:Connaître les bornes d’une série de données.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_min_max_uc2_title:Détecter des anomalies`,
+          text: $localize`:@@ed_math_statistics_min_max_uc2_text:Repérer rapidement des valeurs aberrantes ou incohérentes.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_min_max_uc3_title:Analyse rapide`,
+          text: $localize`:@@ed_math_statistics_min_max_uc3_text:Obtenir une première lecture simple d’un ensemble de données.`,
+        },
       ],
     },
     {
@@ -27,8 +32,8 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_min_max_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_statistics_min_max_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_statistics_min_max_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_statistics_min_max_out1:La plus petite et la plus grande valeur de la série.`,
+        $localize`:@@ed_math_statistics_min_max_out2:Une information immédiate sur l’étendue brute des données.`,
       ],
     },
     {
@@ -37,18 +42,8 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_min_max_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_statistics_min_max_lim1:TODO.` },
-        { text: $localize`:@@ed_math_statistics_min_max_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_statistics_min_max_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_statistics_min_max_q1:TODO`, a: $localize`:@@ed_math_statistics_min_max_a1:TODO` },
-        { q: $localize`:@@ed_math_statistics_min_max_q2:TODO`, a: $localize`:@@ed_math_statistics_min_max_a2:TODO` },
+        { text: $localize`:@@ed_math_statistics_min_max_lim1:Très sensibles aux valeurs extrêmes.` },
+        { text: $localize`:@@ed_math_statistics_min_max_lim2:Ne décrivent pas la distribution interne des données.` },
       ],
     },
     {
@@ -57,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_min_max_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_statistics_min_max_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_statistics_min_max_tip:Utilisez minimum et maximum avec la médiane ou les quartiles pour une analyse plus fiable.`,
     },
   ],
 };

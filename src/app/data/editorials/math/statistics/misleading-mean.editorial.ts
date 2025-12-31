@@ -1,14 +1,10 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_statistics_misleading_mean_title:À propos : Quand la moyenne est trompeuse`,
-  lead: $localize`:@@ed_math_statistics_misleading_mean_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_statistics_misleading_mean_title:À propos : Moyenne trompeuse`,
+  lead: $localize`:@@ed_math_statistics_misleading_mean_lead:Comprendre pourquoi une moyenne peut être mathématiquement correcte mais statistiquement trompeuse.`,
   sections: [
     {
       id: 'use-cases',
@@ -16,9 +12,18 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_misleading_mean_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_statistics_misleading_mean_uc1_title:TODO`, text: $localize`:@@ed_math_statistics_misleading_mean_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_statistics_misleading_mean_uc2_title:TODO`, text: $localize`:@@ed_math_statistics_misleading_mean_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_statistics_misleading_mean_uc3_title:TODO`, text: $localize`:@@ed_math_statistics_misleading_mean_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_statistics_misleading_mean_uc1_title:Salaires et revenus`,
+          text: $localize`:@@ed_math_statistics_misleading_mean_uc1_text:Éviter les interprétations biaisées causées par quelques très hauts revenus.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_misleading_mean_uc2_title:Comparaisons injustes`,
+          text: $localize`:@@ed_math_statistics_misleading_mean_uc2_text:Comparer des groupes sans masquer les inégalités internes.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_misleading_mean_uc3_title:Analyse critique`,
+          text: $localize`:@@ed_math_statistics_misleading_mean_uc3_text:Développer un regard critique sur les chiffres présentés.`,
+        },
       ],
     },
     {
@@ -27,28 +32,8 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_misleading_mean_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_statistics_misleading_mean_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_statistics_misleading_mean_out2:TODO: À quoi sert cette sortie.`,
-      ],
-    },
-    {
-      id: 'limits',
-      kind: 'list',
-      heading: $localize`:@@ed_math_statistics_misleading_mean_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
-      items: [
-        { text: $localize`:@@ed_math_statistics_misleading_mean_lim1:TODO.` },
-        { text: $localize`:@@ed_math_statistics_misleading_mean_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_statistics_misleading_mean_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_statistics_misleading_mean_q1:TODO`, a: $localize`:@@ed_math_statistics_misleading_mean_a1:TODO` },
-        { q: $localize`:@@ed_math_statistics_misleading_mean_q2:TODO`, a: $localize`:@@ed_math_statistics_misleading_mean_a2:TODO` },
+        $localize`:@@ed_math_statistics_misleading_mean_out1:Des exemples concrets de moyennes trompeuses.`,
+        $localize`:@@ed_math_statistics_misleading_mean_out2:Des alternatives plus représentatives comme la médiane.`,
       ],
     },
     {
@@ -57,7 +42,7 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_misleading_mean_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_statistics_misleading_mean_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_statistics_misleading_mean_tip:Une moyenne élevée ne signifie pas que la majorité des valeurs sont élevées.`,
     },
   ],
 };

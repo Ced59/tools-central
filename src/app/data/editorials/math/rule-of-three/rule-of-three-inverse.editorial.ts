@@ -4,60 +4,50 @@ import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-edito
  * Generated editorial skeleton.
  * Set editorialReady=true when content is complete.
  */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_title:À propos : Règle de trois inversée`,
-  lead: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_rot_inverse_title:À propos : Règle de trois inverse`,
+  lead: $localize`:@@ed_rot_inverse_lead:Cet outil permet de résoudre facilement un calcul de proportionnalité inverse, lorsque le produit de deux grandeurs reste constant.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_rot_inverse_usecases:Situations concernées`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc1_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc2_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc3_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_uc3_text:TODO: Exemple concret 3` },
+        { title: $localize`:@@ed_rot_inverse_uc1_title:Temps et effectifs`, text: $localize`:@@ed_rot_inverse_uc1_text:Plus il y a de personnes, moins le temps est long.` },
+        { title: $localize`:@@ed_rot_inverse_uc2_title:Vitesses`, text: $localize`:@@ed_rot_inverse_uc2_text:Même distance parcourue à des vitesses différentes.` },
+        { title: $localize`:@@ed_rot_inverse_uc3_title:Production`, text: $localize`:@@ed_rot_inverse_uc3_text:Répartition d’une charge fixe.` },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_rot_inverse_output:Résultat`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_rot_inverse_out1:La valeur inconnue calculée automatiquement.`,
+        $localize`:@@ed_rot_inverse_out2:Un calcul respectant le principe du produit constant.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_rot_inverse_limits:Erreurs fréquentes`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_lim1:TODO.` },
-        { text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_q1:TODO`, a: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_a1:TODO` },
-        { q: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_q2:TODO`, a: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_a2:TODO` },
+        { text: $localize`:@@ed_rot_inverse_lim1:Ne pas utiliser cet outil pour une proportionnalité directe.` },
+        { text: $localize`:@@ed_rot_inverse_lim2:Vérifier que le produit reste constant.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_tip_title:Astuce`,
+      heading: $localize`:@@ed_rot_inverse_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_rule_of_three_rule_of_three_inverse_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_rot_inverse_tip:Si une grandeur double et que l’autre est divisée par deux, tu es bien dans un cas inverse.`,
     },
   ],
 };

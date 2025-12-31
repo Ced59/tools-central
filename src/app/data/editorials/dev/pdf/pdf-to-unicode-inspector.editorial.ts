@@ -1,63 +1,50 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_title:À propos : Inspecter ToUnicode`,
-  lead: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_dev_pdf_unicode_title:Inspection ToUnicode et encodage texte PDF`,
+  lead: $localize`:@@ed_dev_pdf_unicode_lead:Cet outil analyse les tables ToUnicode des polices PDF afin de comprendre comment les glyphes sont mappés vers les caractères Unicode.`,
+
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_dev_pdf_unicode_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc1_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc2_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc3_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_dev_pdf_unicode_uc1_title:Texte illisible ou incorrect`,
+          text: $localize`:@@ed_dev_pdf_unicode_uc1_text:Diagnostiquer des problèmes de caractères manquants ou erronés lors de l’extraction.`,
+        },
+        {
+          title: $localize`:@@ed_dev_pdf_unicode_uc2_title:Debug de polices personnalisées`,
+          text: $localize`:@@ed_dev_pdf_unicode_uc2_text:Vérifier le mapping Unicode de polices intégrées ou générées.`,
+        },
       ],
     },
+
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_dev_pdf_unicode_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_dev_pdf_unicode_out1:Les tables ToUnicode extraites et interprétées.`,
+        $localize`:@@ed_dev_pdf_unicode_out2:Une vision claire des correspondances glyphes → caractères Unicode.`,
       ],
     },
+
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_dev_pdf_unicode_limits:Limites`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_lim1:TODO.` },
-        { text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_lim2:TODO.` },
+        {
+          text: $localize`:@@ed_dev_pdf_unicode_lim1:Les PDF sans table ToUnicode restent difficiles à interpréter.`,
+        },
       ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_q1:TODO`, a: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_a1:TODO` },
-        { q: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_q2:TODO`, a: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_a2:TODO` },
-      ],
-    },
-    {
-      id: 'tip',
-      kind: 'callout',
-      heading: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
-      variant: 'info',
-      text: $localize`:@@ed_dev_pdf_pdf_to_unicode_inspector_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
     },
   ],
 };

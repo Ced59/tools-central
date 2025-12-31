@@ -1,63 +1,63 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_title:À propos : Structure texte PDF → JSON`,
-  lead: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_dev_pdf_text_structure_title:Analyser la structure du texte dans un PDF`,
+  lead: $localize`:@@ed_dev_pdf_text_structure_lead:Cet outil extrait et structure le texte d’un PDF (glyphes, lignes, blocs) afin de comprendre comment le contenu textuel est réellement organisé en interne.`,
+
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_dev_pdf_text_structure_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc1_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc2_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc3_title:TODO`, text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_dev_pdf_text_structure_uc1_title:Extraction fiable de texte`,
+          text: $localize`:@@ed_dev_pdf_text_structure_uc1_text:Comprendre pourquoi un texte copié depuis un PDF est désordonné ou incomplet.`,
+        },
+        {
+          title: $localize`:@@ed_dev_pdf_text_structure_uc2_title:OCR et post-traitement`,
+          text: $localize`:@@ed_dev_pdf_text_structure_uc2_text:Comparer la structure textuelle native avec des résultats OCR.`,
+        },
+        {
+          title: $localize`:@@ed_dev_pdf_text_structure_uc3_title:Indexation et recherche`,
+          text: $localize`:@@ed_dev_pdf_text_structure_uc3_text:Optimiser l’indexation plein texte ou la reconstruction logique de paragraphes.`,
+        },
       ],
     },
+
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_dev_pdf_text_structure_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_dev_pdf_text_structure_out1:Une représentation JSON des glyphes, lignes et blocs de texte.`,
+        $localize`:@@ed_dev_pdf_text_structure_out2:Des informations de position et d’ordre permettant de reconstruire la logique du texte.`,
       ],
     },
+
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_dev_pdf_text_structure_limits:Limites`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_lim1:TODO.` },
-        { text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_lim2:TODO.` },
+        {
+          text: $localize`:@@ed_dev_pdf_text_structure_lim1:La structure visuelle ne correspond pas toujours à la structure sémantique.`,
+        },
       ],
     },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_q1:TODO`, a: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_a1:TODO` },
-        { q: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_q2:TODO`, a: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_a2:TODO` },
-      ],
-    },
+
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_tip_title:Astuce`,
+      heading: $localize`:@@ed_dev_pdf_text_structure_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_dev_pdf_pdf_text_structure_to_json_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_dev_pdf_text_structure_tip:Inspectez les coordonnées et l’ordre des glyphes pour détecter colonnes et tableaux implicites.`,
     },
   ],
 };

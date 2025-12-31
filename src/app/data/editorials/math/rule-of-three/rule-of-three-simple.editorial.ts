@@ -4,60 +4,50 @@ import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-edito
  * Generated editorial skeleton.
  * Set editorialReady=true when content is complete.
  */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_title:À propos : Règle de trois simple`,
-  lead: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_rot_simple_title:À propos : Règle de trois simple`,
+  lead: $localize`:@@ed_rot_simple_lead:Cet outil permet de calculer rapidement une valeur manquante à l’aide de la règle de trois simple, dans un cas de proportionnalité directe.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_rot_simple_usecases:Quand utiliser cet outil ?`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc1_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc2_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc3_title:TODO`, text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_uc3_text:TODO: Exemple concret 3` },
+        { title: $localize`:@@ed_rot_simple_uc1_title:Calcul immédiat`, text: $localize`:@@ed_rot_simple_uc1_text:Résoudre un calcul de proportionnalité en quelques secondes.` },
+        { title: $localize`:@@ed_rot_simple_uc2_title:Devoirs et révisions`, text: $localize`:@@ed_rot_simple_uc2_text:Vérifier un exercice de maths sans refaire tout le raisonnement.` },
+        { title: $localize`:@@ed_rot_simple_uc3_title:Vie quotidienne`, text: $localize`:@@ed_rot_simple_uc3_text:Adapter une quantité, un prix ou une durée proportionnelle.` },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_rot_simple_output:Résultat obtenu`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_rule_of_three_rule_of_three_simple_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_rule_of_three_rule_of_three_simple_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_rot_simple_out1:La valeur manquante calculée automatiquement.`,
+        $localize`:@@ed_rot_simple_out2:Un calcul fiable basé sur le produit en croix.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_rot_simple_limits:À vérifier avant d’utiliser`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_lim1:TODO.` },
-        { text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_q1:TODO`, a: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_a1:TODO` },
-        { q: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_q2:TODO`, a: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_a2:TODO` },
+        { text: $localize`:@@ed_rot_simple_lim1:Les grandeurs doivent être proportionnelles.` },
+        { text: $localize`:@@ed_rot_simple_lim2:Les unités doivent être cohérentes.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_tip_title:Astuce`,
+      heading: $localize`:@@ed_rot_simple_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_rule_of_three_rule_of_three_simple_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_rot_simple_tip:Si une grandeur double, l’autre doit aussi doubler : sinon ce n’est pas une proportionnalité directe.`,
     },
   ],
 };

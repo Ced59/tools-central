@@ -1,63 +1,54 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_ratios_ratio_missing_title:À propos : Ratio manquant`,
-  lead: $localize`:@@ed_math_ratios_ratio_missing_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_ratio_missing_title:À propos : Valeur manquante dans un ratio`,
+  lead: $localize`:@@ed_math_ratio_missing_lead:Calculer une valeur inconnue dans un ratio en conservant la proportion.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_missing_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_math_ratio_missing_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_ratios_ratio_missing_uc1_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_missing_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_ratios_ratio_missing_uc2_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_missing_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_ratios_ratio_missing_uc3_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_missing_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_ratio_missing_uc1_title:Exercices scolaires`,
+          text: $localize`:@@ed_math_ratio_missing_uc1_text:Résoudre des problèmes avec une donnée absente.`,
+        },
+        {
+          title: $localize`:@@ed_math_ratio_missing_uc2_title:Situations concrètes`,
+          text: $localize`:@@ed_math_ratio_missing_uc2_text:Adapter des recettes, des mélanges ou des dosages.`,
+        },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_ratios_ratio_missing_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_math_ratio_missing_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_ratios_ratio_missing_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_ratios_ratio_missing_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_ratio_missing_out1:La méthode générale pour isoler une valeur inconnue.`,
+        $localize`:@@ed_math_ratio_missing_out2:Un calcul fiable basé sur la proportionnalité.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_missing_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_math_ratio_missing_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_ratios_ratio_missing_lim1:TODO.` },
-        { text: $localize`:@@ed_math_ratios_ratio_missing_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_ratios_ratio_missing_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_ratios_ratio_missing_q1:TODO`, a: $localize`:@@ed_math_ratios_ratio_missing_a1:TODO` },
-        { q: $localize`:@@ed_math_ratios_ratio_missing_q2:TODO`, a: $localize`:@@ed_math_ratios_ratio_missing_a2:TODO` },
+        { text: $localize`:@@ed_math_ratio_missing_lim1:La relation doit être proportionnelle.` },
+        { text: $localize`:@@ed_math_ratio_missing_lim2:Les unités doivent être cohérentes.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_ratios_ratio_missing_tip_title:Astuce`,
+      heading: $localize`:@@ed_math_ratio_missing_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_ratios_ratio_missing_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_ratio_missing_tip:Utilise le produit en croix pour isoler rapidement l’inconnue.`,
     },
   ],
 };

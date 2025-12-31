@@ -1,14 +1,10 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
   title: $localize`:@@ed_math_statistics_weighted_mean_title:À propos : Moyenne pondérée`,
-  lead: $localize`:@@ed_math_statistics_weighted_mean_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  lead: $localize`:@@ed_math_statistics_weighted_mean_lead:Calculer une moyenne lorsque toutes les valeurs n’ont pas la même importance.`,
   sections: [
     {
       id: 'use-cases',
@@ -16,9 +12,18 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_weighted_mean_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_statistics_weighted_mean_uc1_title:TODO`, text: $localize`:@@ed_math_statistics_weighted_mean_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_statistics_weighted_mean_uc2_title:TODO`, text: $localize`:@@ed_math_statistics_weighted_mean_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_statistics_weighted_mean_uc3_title:TODO`, text: $localize`:@@ed_math_statistics_weighted_mean_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_statistics_weighted_mean_uc1_title:Notes avec coefficients`,
+          text: $localize`:@@ed_math_statistics_weighted_mean_uc1_text:Calculer une moyenne scolaire ou universitaire.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_weighted_mean_uc2_title:Prix moyen`,
+          text: $localize`:@@ed_math_statistics_weighted_mean_uc2_text:Calculer un prix moyen en fonction des quantités achetées.`,
+        },
+        {
+          title: $localize`:@@ed_math_statistics_weighted_mean_uc3_title:Données pondérées`,
+          text: $localize`:@@ed_math_statistics_weighted_mean_uc3_text:Analyser des données avec fréquences ou durées différentes.`,
+        },
       ],
     },
     {
@@ -27,8 +32,8 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_weighted_mean_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_statistics_weighted_mean_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_statistics_weighted_mean_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_statistics_weighted_mean_out1:Une moyenne tenant compte de l’importance relative des valeurs.`,
+        $localize`:@@ed_math_statistics_weighted_mean_out2:Un résultat plus fidèle à la réalité que la moyenne simple.`,
       ],
     },
     {
@@ -37,18 +42,8 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_weighted_mean_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_statistics_weighted_mean_lim1:TODO.` },
-        { text: $localize`:@@ed_math_statistics_weighted_mean_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_statistics_weighted_mean_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_statistics_weighted_mean_q1:TODO`, a: $localize`:@@ed_math_statistics_weighted_mean_a1:TODO` },
-        { q: $localize`:@@ed_math_statistics_weighted_mean_q2:TODO`, a: $localize`:@@ed_math_statistics_weighted_mean_a2:TODO` },
+        { text: $localize`:@@ed_math_statistics_weighted_mean_lim1:Les poids doivent être cohérents et correctement interprétés.` },
+        { text: $localize`:@@ed_math_statistics_weighted_mean_lim2:Une erreur sur les poids fausse complètement le résultat.` },
       ],
     },
     {
@@ -57,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_math_statistics_weighted_mean_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_statistics_weighted_mean_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_statistics_weighted_mean_tip:Si tous les poids sont égaux, la moyenne pondérée devient une moyenne arithmétique.`,
     },
   ],
 };

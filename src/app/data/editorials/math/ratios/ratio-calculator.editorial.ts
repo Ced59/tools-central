@@ -1,63 +1,54 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_ratios_ratio_calculator_title:À propos : B)`,
-  lead: $localize`:@@ed_math_ratios_ratio_calculator_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_ratio_calculator_title:À propos : Calculer un ratio`,
+  lead: $localize`:@@ed_math_ratio_calculator_lead:Calculer et interpréter un ratio pour comparer deux grandeurs de manière simple et efficace.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_calculator_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_math_ratio_calculator_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_ratios_ratio_calculator_uc1_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_calculator_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_ratios_ratio_calculator_uc2_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_calculator_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_ratios_ratio_calculator_uc3_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_calculator_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_ratio_calculator_uc1_title:Comparaisons`,
+          text: $localize`:@@ed_math_ratio_calculator_uc1_text:Comparer deux quantités (population, effectifs, concentrations).`,
+        },
+        {
+          title: $localize`:@@ed_math_ratio_calculator_uc2_title:Données statistiques`,
+          text: $localize`:@@ed_math_ratio_calculator_uc2_text:Exprimer une relation entre deux grandeurs sans dépendre de leur unité.`,
+        },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_ratios_ratio_calculator_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_math_ratio_calculator_output:Ce que vous obtenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_ratios_ratio_calculator_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_ratios_ratio_calculator_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_ratio_calculator_out1:Le calcul exact du ratio entre deux valeurs.`,
+        $localize`:@@ed_math_ratio_calculator_out2:Une interprétation claire du résultat obtenu.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_calculator_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_math_ratio_calculator_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_ratios_ratio_calculator_lim1:TODO.` },
-        { text: $localize`:@@ed_math_ratios_ratio_calculator_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_ratios_ratio_calculator_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_ratios_ratio_calculator_q1:TODO`, a: $localize`:@@ed_math_ratios_ratio_calculator_a1:TODO` },
-        { q: $localize`:@@ed_math_ratios_ratio_calculator_q2:TODO`, a: $localize`:@@ed_math_ratios_ratio_calculator_a2:TODO` },
+        { text: $localize`:@@ed_math_ratio_calculator_lim1:Un ratio n’indique pas une quantité absolue.` },
+        { text: $localize`:@@ed_math_ratio_calculator_lim2:Attention aux divisions par zéro.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_ratios_ratio_calculator_tip_title:Astuce`,
+      heading: $localize`:@@ed_math_ratio_calculator_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_ratios_ratio_calculator_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_ratio_calculator_tip:Pense à simplifier le ratio pour le rendre plus lisible.`,
     },
   ],
 };

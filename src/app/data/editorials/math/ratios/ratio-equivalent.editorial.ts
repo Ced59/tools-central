@@ -1,63 +1,54 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
-  title: $localize`:@@ed_math_ratios_ratio_equivalent_title:À propos : Ratio équivalent`,
-  lead: $localize`:@@ed_math_ratios_ratio_equivalent_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  title: $localize`:@@ed_math_ratio_equivalent_title:À propos : Ratios équivalents`,
+  lead: $localize`:@@ed_math_ratio_equivalent_lead:Identifier si deux ratios représentent la même proportion malgré des écritures différentes.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_equivalent_usecases:Cas d’utilisation`,
+      heading: $localize`:@@ed_math_ratio_equivalent_usecases:Cas d’utilisation`,
       icon: 'pi pi-bolt',
       items: [
-        { title: $localize`:@@ed_math_ratios_ratio_equivalent_uc1_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_equivalent_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_ratios_ratio_equivalent_uc2_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_equivalent_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_ratios_ratio_equivalent_uc3_title:TODO`, text: $localize`:@@ed_math_ratios_ratio_equivalent_uc3_text:TODO: Exemple concret 3` },
+        {
+          title: $localize`:@@ed_math_ratio_equivalent_uc1_title:Simplification`,
+          text: $localize`:@@ed_math_ratio_equivalent_uc1_text:Reconnaître des ratios identiques sous des formes différentes.`,
+        },
+        {
+          title: $localize`:@@ed_math_ratio_equivalent_uc2_title:Vérification`,
+          text: $localize`:@@ed_math_ratio_equivalent_uc2_text:Vérifier qu’une transformation conserve bien la proportion.`,
+        },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
-      heading: $localize`:@@ed_math_ratios_ratio_equivalent_output:Ce que vous obtenez`,
+      heading: $localize`:@@ed_math_ratio_equivalent_output:Ce que vous apprenez`,
       icon: 'pi pi-database',
       paragraphs: [
-        $localize`:@@ed_math_ratios_ratio_equivalent_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_ratios_ratio_equivalent_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_ratio_equivalent_out1:La définition précise de ratios équivalents.`,
+        $localize`:@@ed_math_ratio_equivalent_out2:Les techniques pour les reconnaître rapidement.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
-      heading: $localize`:@@ed_math_ratios_ratio_equivalent_limits:Limites et points d’attention`,
+      heading: $localize`:@@ed_math_ratio_equivalent_limits:Limites et points d’attention`,
       icon: 'pi pi-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_ratios_ratio_equivalent_lim1:TODO.` },
-        { text: $localize`:@@ed_math_ratios_ratio_equivalent_lim2:TODO.` },
-      ],
-    },
-    {
-      id: 'faq',
-      kind: 'faq',
-      heading: $localize`:@@ed_math_ratios_ratio_equivalent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
-      items: [
-        { q: $localize`:@@ed_math_ratios_ratio_equivalent_q1:TODO`, a: $localize`:@@ed_math_ratios_ratio_equivalent_a1:TODO` },
-        { q: $localize`:@@ed_math_ratios_ratio_equivalent_q2:TODO`, a: $localize`:@@ed_math_ratios_ratio_equivalent_a2:TODO` },
+        { text: $localize`:@@ed_math_ratio_equivalent_lim1:Multiplier ou diviser par zéro invalide le ratio.` },
+        { text: $localize`:@@ed_math_ratio_equivalent_lim2:Les deux termes doivent être transformés de la même manière.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
-      heading: $localize`:@@ed_math_ratios_ratio_equivalent_tip_title:Astuce`,
+      heading: $localize`:@@ed_math_ratio_equivalent_tip_title:Astuce`,
       icon: 'pi pi-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_ratios_ratio_equivalent_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_ratio_equivalent_tip:Si a×d = b×c, alors les ratios a/b et c/d sont équivalents.`,
     },
   ],
 };
