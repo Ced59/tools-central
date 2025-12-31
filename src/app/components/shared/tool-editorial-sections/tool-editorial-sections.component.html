@@ -1,11 +1,9 @@
 <section class="tc-editorial" aria-label="Editorial">
-  <!-- Header -->
   <header class="tc-editorial__header" *ngIf="model.title || model.lead">
     <h2 class="tc-editorial__title" *ngIf="model.title">{{ model.title }}</h2>
     <p class="tc-editorial__lead" *ngIf="model.lead">{{ model.lead }}</p>
   </header>
 
-  <!-- Table of contents -->
   <nav class="tc-editorial__toc" *ngIf="model.sections?.length">
     <div class="tc-editorial__tocTitle">Sommaire</div>
 
@@ -25,7 +23,6 @@
     </div>
   </nav>
 
-  <!-- Sections -->
   <div class="tc-editorial__content">
     <article
       class="tc-editorial__section"
@@ -37,12 +34,10 @@
         {{ s.heading }}
       </h3>
 
-      <!-- TEXT -->
       <ng-container *ngIf="s.kind === 'text'">
         <p class="tc-editorial__p" *ngFor="let p of s.paragraphs">{{ p }}</p>
       </ng-container>
 
-      <!-- LIST -->
       <ng-container *ngIf="s.kind === 'list'">
         <ul class="tc-editorial__ul">
           <li class="tc-editorial__li" *ngFor="let it of s.items">
@@ -52,14 +47,12 @@
         </ul>
       </ng-container>
 
-      <!-- CALLOUT -->
       <ng-container *ngIf="s.kind === 'callout'">
         <div class="tc-editorial__callout" [attr.data-variant]="s.variant || 'info'">
           <span class="tc-editorial__calloutText">{{ s.text }}</span>
         </div>
       </ng-container>
 
-      <!-- FAQ -->
       <ng-container *ngIf="s.kind === 'faq'">
         <div class="tc-editorial__faq">
           <details class="tc-editorial__faqItem" *ngFor="let it of s.items">
@@ -69,7 +62,6 @@
         </div>
       </ng-container>
 
-      <!-- TABLE -->
       <ng-container *ngIf="s.kind === 'table'">
         <figure class="tc-editorial__tableWrap">
           <figcaption *ngIf="s.caption" class="tc-editorial__caption">{{ s.caption }}</figcaption>

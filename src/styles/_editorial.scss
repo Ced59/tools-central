@@ -201,6 +201,15 @@
 }
 
 /* =========================================================
+   Anchor scroll reliability with sticky header
+   ========================================================= */
+
+/* Chaque section peut être scrollée sans passer sous le header */
+.tc-editorial__section {
+  scroll-margin-top: calc(var(--app-header-h, 0px) + 12px);
+}
+
+/* =========================================================
    TOC Active item (IntersectionObserver)
    ========================================================= */
 

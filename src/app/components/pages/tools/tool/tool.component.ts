@@ -3,12 +3,17 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
 
 import { ToolRegistryService } from '../../../../core/tools/tool-registry.service';
+
 import { CATEGORIES, type CategoryId } from '../../../../data/categories';
 import { routes } from '../../../../data/routes';
 
+import type { ToolEditorialModel } from '../../../../models/tool-editorial/tool-editorial.model';
+import { ToolEditorialSectionsComponent } from '../../../shared/tool-editorial-sections/tool-editorial-sections.component';
+import {ToolEditorialService} from "../../../../core/tools/toll-editorial.service";
+
 @Component({
   standalone: true,
-  imports: [NgIf, NgComponentOutlet, RouterLink],
+  imports: [NgIf, NgComponentOutlet, RouterLink, ToolEditorialSectionsComponent],
   template: `
     <ng-container *ngIf="isLoading(); else loaded">
       <section class="state state-loading">
@@ -21,8 +26,15 @@ import { routes } from '../../../../data/routes';
 
     <ng-template #loaded>
       <ng-container *ngIf="toolComponent(); else notFound">
-        <!-- Chaque tool gère son propre layout -->
+        <!-- Tool UI -->
         <ng-container *ngComponentOutlet="toolComponent()"></ng-container>
+
+        <!-- Editorial global (1 seule intégration) -->
+        <ng-container *ngIf="editorial() as ed">
+          <div class="container tool-editorial-container">
+            <tc-tool-editorial-sections [model]="ed"></tc-tool-editorial-sections>
+          </div>
+        </ng-container>
       </ng-container>
     </ng-template>
 
@@ -46,12 +58,18 @@ import { routes } from '../../../../data/routes';
 })
 export class ToolComponent {
   toolComponent = signal<Type<unknown> | null>(null);
+  editorial = signal<ToolEditorialModel | null>(null);
   isLoading = signal(true);
 
   private categoryId = '';
   private groupId = '';
+  private toolId = '';
 
-  constructor(route: ActivatedRoute, registry: ToolRegistryService) {
+  constructor(
+    route: ActivatedRoute,
+    registry: ToolRegistryService,
+    editorialService: ToolEditorialService
+  ) {
     const categoryRaw =
       route.snapshot.paramMap.get('idCategory') ??
       route.snapshot.paramMap.get('category') ??
@@ -70,23 +88,34 @@ export class ToolComponent {
 
     this.categoryId = categoryRaw;
     this.groupId = group;
+    this.toolId = tool;
 
     const category = this.toCategoryId(categoryRaw);
 
     if (!category || !group || !tool) {
       this.toolComponent.set(null);
+      this.editorial.set(null);
       this.isLoading.set(false);
       return;
     }
 
-    registry.loadToolComponent({ category, group, tool }).then(cmp => {
-      this.toolComponent.set(cmp);
-      this.isLoading.set(false);
-    });
+    Promise.all([
+      registry.loadToolComponent({ category, group, tool }),
+      editorialService.loadEditorial({ category, group, tool }),
+    ])
+      .then(([cmp, ed]) => {
+        this.toolComponent.set(cmp);
+        this.editorial.set(ed);
+        this.isLoading.set(false);
+      })
+      .catch(() => {
+        this.toolComponent.set(null);
+        this.editorial.set(null);
+        this.isLoading.set(false);
+      });
   }
 
   backLink(): string {
-    // Retour au groupe si possible, sinon aux catégories
     if (this.categoryId && this.groupId) return routes.group(this.categoryId, this.groupId);
     if (this.categoryId) return routes.category(this.categoryId);
     return '/';

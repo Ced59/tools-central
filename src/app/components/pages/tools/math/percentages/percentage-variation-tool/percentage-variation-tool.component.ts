@@ -11,8 +11,6 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
-import { ToolEditorialSectionsComponent } from '../../../../../shared/tool-editorial-sections/tool-editorial-sections.component';
-import { percentageVariationEditorial } from './percentage-variation-tool.editorial';
 
 type Example = {
   label: string; // ⚠️ i18n template, pas $localize
@@ -39,7 +37,6 @@ type ChangedField = 'initial' | 'final' | 'precision';
     NgSwitch,
     NgSwitchCase,
     NgSwitchDefault,
-    ToolEditorialSectionsComponent,
   ],
   templateUrl: './percentage-variation-tool.component.html',
   styleUrl: './percentage-variation-tool.component.scss',
@@ -55,8 +52,6 @@ export class PercentageVariationToolComponent {
     { label: 'CA 12 000 → 15 600', initial: 12000, final: 15600 },
     { label: 'Note 14 → 16', initial: 14, final: 16 },
   ];
-
-  readonly editorial = percentageVariationEditorial;
 
   form = this.fb.group({
     initial: [100, [Validators.required]],

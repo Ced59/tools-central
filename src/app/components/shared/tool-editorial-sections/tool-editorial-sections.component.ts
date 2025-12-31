@@ -7,7 +7,7 @@ import {
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule, DOCUMENT, isPlatformBrowser, ViewportScroller } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import type { ToolEditorialModel } from '../../../models/tool-editorial/tool-editorial.model';
@@ -24,21 +24,15 @@ import type { EditorialSection } from '../../../models/tool-editorial/editorial-
 export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
   @Input({ required: true }) model!: ToolEditorialModel;
 
-  /** id de la section actuellement visible (pour highlight du sommaire) */
   activeSectionId: string | null = null;
 
   trackById = (_: number, s: EditorialSection) => s.id;
 
   private io: IntersectionObserver | null = null;
-  private readonly observed = new Map<string, Element>();
-
-  // Ajuste si tu as un header sticky (ex: 64/72/80)
-  private readonly stickyHeaderOffsetPx = 0;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private viewport: ViewportScroller,
     @Inject(PLATFORM_ID) private platformId: object,
     @Inject(DOCUMENT) private document: Document
   ) {}
@@ -46,31 +40,29 @@ export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    // offset scroll (si header sticky)
-    this.viewport.setOffset([0, this.stickyHeaderOffsetPx]);
-
-    // 1) Si on arrive avec un fragment, scroll proprement une fois le DOM prêt
+    // Si la page s'ouvre avec un fragment, scroll après rendu DOM
     this.route.fragment.subscribe((frag) => {
       if (!frag) return;
       setTimeout(() => this.scrollTo(frag), 0);
     });
 
-    // 2) Setup IntersectionObserver après rendu (DOM prêt)
+    // Setup observer après rendu DOM
     setTimeout(() => this.setupObserver(), 0);
+
+    // Optionnel: si resize (header height change), on re-setup l'observer
+    // (ça évite un rootMargin erroné si le header change beaucoup)
+    window.addEventListener('resize', this.onResize, { passive: true });
   }
 
   ngOnDestroy(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    window.removeEventListener('resize', this.onResize);
     this.teardownObserver();
   }
 
-  /**
-   * Click sommaire: navigation Angular (URL courante + fragment) + scroll fiable.
-   * Important: preventDefault pour éviter le "base href" qui renvoie à la racine.
-   */
   onTocClick(ev: MouseEvent, id: string): void {
     ev.preventDefault();
 
-    // met à jour l'URL sans "polluer" l'historique
     this.router.navigate([], {
       relativeTo: this.route,
       fragment: id,
@@ -87,14 +79,14 @@ export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
     const el = this.document.getElementById(id);
     if (!el) return;
 
+    // scroll-margin-top (CSS) gère l'offset sticky header
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    // met à jour l'active immédiatement (UX)
     this.activeSectionId = id;
   }
 
   // ----------------------------
-  // IntersectionObserver (bonus)
+  // IntersectionObserver highlight
   // ----------------------------
 
   private setupObserver(): void {
@@ -103,21 +95,19 @@ export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
     const sections = this.model?.sections ?? [];
     if (!sections.length) return;
 
-    // Root margin: on "remonte" la zone d'observation si header sticky
-    const topMargin = -(this.stickyHeaderOffsetPx + 8);
-    // On considère "actif" quand la section entre dans le viewport (top ~ 35%)
+    const headerOffset = this.readHeaderOffsetPx();
+    const topMargin = -(headerOffset + 8);
     const rootMargin = `${topMargin}px 0px -65% 0px`;
 
     this.io = new IntersectionObserver(
       (entries) => {
-        // On garde les entrées visibles, on choisit celle la plus "haut" dans la page
         const visible = entries.filter((e) => e.isIntersecting);
         if (!visible.length) return;
 
-        // On privilégie celle qui a le plus grand intersectionRatio
+        // Choisit la section la plus "dominante" visuellement
         visible.sort((a, b) => (b.intersectionRatio ?? 0) - (a.intersectionRatio ?? 0));
-
         const id = (visible[0].target as HTMLElement).id;
+
         if (id && id !== this.activeSectionId) {
           this.activeSectionId = id;
         }
@@ -129,15 +119,12 @@ export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
       }
     );
 
-    // Observe les sections existantes
     for (const s of sections) {
       const el = this.document.getElementById(s.id);
       if (!el) continue;
       this.io.observe(el);
-      this.observed.set(s.id, el);
     }
 
-    // Si rien n'est actif, on met le premier
     if (!this.activeSectionId && sections[0]) {
       this.activeSectionId = sections[0].id;
     }
@@ -148,6 +135,17 @@ export class ToolEditorialSectionsComponent implements OnInit, OnDestroy {
       this.io.disconnect();
       this.io = null;
     }
-    this.observed.clear();
   }
+
+  private readHeaderOffsetPx(): number {
+    // Lit la variable CSS définie par AppComponent
+    const raw = getComputedStyle(this.document.documentElement).getPropertyValue('--app-header-h').trim();
+    const n = parseInt(raw.replace('px', ''), 10);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  private onResize = () => {
+    // Recalcule rootMargin si la hauteur de header change
+    setTimeout(() => this.setupObserver(), 0);
+  };
 }

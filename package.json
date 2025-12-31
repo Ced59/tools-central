@@ -10,6 +10,9 @@
     "watch": "npm run i18n:locales && ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:tools-central": "node dist/tools-central/server/server.mjs",
+    "editorials:gen": "node scripts/editorials-generate.mjs",
+    "editorials:gen:dry": "node scripts/editorials-generate.mjs --dry",
+    "editorials:gen:force": "node scripts/editorials-generate.mjs --force",
     "extract-i18n": "ng extract-i18n --project=tools-central",
     "i18n:sync": "node scripts/i18n-sync.mjs",
     "i18n:translate": "node scripts/i18n-translate.mjs",
@@ -41,6 +44,7 @@
     "primeng": "^21.0.1",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
+    "src": "^1.1.2",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
   },

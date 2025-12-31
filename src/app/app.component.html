@@ -1,1 +1,81 @@
 
+<div class="app-root">
+  <header #appHeader class="app-header">
+    <div class="header-inner container">
+      <a [attr.href]="homeHref" class="brand" aria-label="Tools Central">
+        <img ngSrc="/assets/icons/tools.png" alt="" class="brand-icon" width="32" height="32" priority />
+        <span class="brand-text">Tools Central</span>
+      </a>
+
+      <div class="header-actions">
+        <p-select
+          [options]="localeOptions"
+          [(ngModel)]="selectedLocale"
+          optionLabel="nameNative"
+          [filter]="true"
+          filterBy="nameNative,locale"
+          (onChange)="onLocaleChange(selectedLocale)"
+          aria-label="Language"
+          i18n-aria-label="@@lang_switcher_aria"
+        >
+          <ng-template pTemplate="selectedItem" let-item>
+            <div class="lang-item">
+              <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
+              <span class="lang-text">{{ item.nameNative }}</span>
+            </div>
+          </ng-template>
+
+          <ng-template pTemplate="item" let-item>
+            <div class="lang-item">
+              <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
+              <span class="lang-text">{{ item.nameNative }}</span>
+              <span class="lang-locale">{{ item.locale }}</span>
+            </div>
+          </ng-template>
+        </p-select>
+
+        <p-button
+          [icon]="themeService.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
+          [rounded]="true"
+          [text]="true"
+          severity="secondary"
+          (onClick)="themeService.toggleTheme()"
+          [attr.aria-label]="themeService.isDarkMode()
+            ? 'Activer le mode clair'
+            : 'Activer le mode sombre'"
+          i18n-attr.aria-label="@@aria_light_mode"
+        />
+      </div>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <router-outlet></router-outlet>
+
+    <div class="container share-container">
+      <app-social-share [context]="shareContext"></app-social-share>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div class="footer-links" aria-label="Legal">
+        <a [routerLink]="localePath.routerLink('legal-notice')" class="footer-link" i18n="@@footer_legal_notice">
+          Mentions légales
+        </a>
+
+        <a [routerLink]="localePath.routerLink('privacy-policy')" class="footer-link" i18n="@@footer_privacy">
+          Politique de confidentialité
+        </a>
+
+        <a [routerLink]="localePath.routerLink('cookies-policy')" class="footer-link" i18n="@@footer_cookies">
+          Politique des cookies
+        </a>
+      </div>
+
+      <small class="footer-copy" i18n="@@footer_copyright">
+        © {{ year }} Tools Central – Outils en ligne gratuits
+      </small>
+    </div>
+  </footer>
+</div>
