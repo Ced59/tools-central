@@ -1,0 +1,214 @@
+/* =========================================================
+   TOOLS CENTRAL — EDITORIAL SECTIONS
+   ========================================================= */
+
+.tc-editorial {
+  margin-top: 1.5rem;
+  padding: 1.2rem;
+  border-radius: 1.25rem;
+
+  background: var(--surface-card, rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--surface-border, rgba(255, 255, 255, 0.08));
+  box-shadow: var(--shadow-1, 0 10px 25px rgba(0, 0, 0, 0.18));
+}
+
+/* ---------- Header ---------- */
+
+.tc-editorial__header {
+  margin-bottom: 1rem;
+}
+
+.tc-editorial__title {
+  font-size: 1.25rem;
+  margin: 0 0 0.35rem 0;
+}
+
+.tc-editorial__lead {
+  margin: 0;
+  opacity: 0.85;
+  line-height: 1.55;
+}
+
+/* ---------- TOC ---------- */
+
+.tc-editorial__toc {
+  margin: 1rem 0 1.25rem;
+  padding: 0.8rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tc-editorial__tocTitle {
+  font-weight: 600;
+  opacity: 0.9;
+  margin-bottom: 0.5rem;
+}
+
+.tc-editorial__tocList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tc-editorial__tocItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: inherit;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+/* ---------- Sections ---------- */
+
+.tc-editorial__content {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.tc-editorial__section {
+  padding: 1rem;
+  border-radius: 1rem;
+
+  background: rgba(0, 0, 0, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tc-editorial__h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  margin: 0 0 0.6rem 0;
+  font-size: 1.05rem;
+}
+
+/* ---------- Text ---------- */
+
+.tc-editorial__p {
+  margin: 0.5rem 0;
+  line-height: 1.65;
+  opacity: 0.92;
+}
+
+/* ---------- List ---------- */
+
+.tc-editorial__ul {
+  margin: 0.5rem 0 0 1.1rem;
+  padding: 0;
+}
+
+.tc-editorial__li {
+  margin: 0.45rem 0;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+.tc-editorial__liTitle {
+  margin-right: 0.35rem;
+  font-weight: 600;
+}
+
+/* ---------- Callout ---------- */
+
+.tc-editorial__callout {
+  padding: 0.8rem 0.9rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tc-editorial__callout[data-variant='warning'] {
+  border-color: rgba(255, 180, 0, 0.35);
+  background: rgba(255, 180, 0, 0.07);
+}
+
+.tc-editorial__callout[data-variant='success'] {
+  border-color: rgba(0, 255, 140, 0.25);
+  background: rgba(0, 255, 140, 0.06);
+}
+
+/* ---------- FAQ ---------- */
+
+.tc-editorial__faq {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.tc-editorial__faqItem {
+  padding: 0.6rem 0.75rem;
+  border-radius: 1rem;
+
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+}
+
+.tc-editorial__faqA {
+  margin-top: 0.55rem;
+  line-height: 1.6;
+  opacity: 0.92;
+}
+
+/* ---------- Table ---------- */
+
+.tc-editorial__tableWrap {
+  margin-top: 0.6rem;
+}
+
+.tc-editorial__caption {
+  margin-bottom: 0.4rem;
+  opacity: 0.8;
+}
+
+.tc-editorial__tableScroll {
+  overflow-x: auto;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.tc-editorial__table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 0.6rem 0.7rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: left;
+  }
+
+  th {
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.03);
+  }
+}
+
+/* =========================================================
+   TOC Active item (IntersectionObserver)
+   ========================================================= */
+
+.tc-editorial__tocItem.is-active {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.tc-editorial__tocItem.is-active span {
+  font-weight: 700;
+}

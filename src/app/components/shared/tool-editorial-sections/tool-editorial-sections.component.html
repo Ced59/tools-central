@@ -1,0 +1,96 @@
+<section class="tc-editorial" aria-label="Editorial">
+  <!-- Header -->
+  <header class="tc-editorial__header" *ngIf="model.title || model.lead">
+    <h2 class="tc-editorial__title" *ngIf="model.title">{{ model.title }}</h2>
+    <p class="tc-editorial__lead" *ngIf="model.lead">{{ model.lead }}</p>
+  </header>
+
+  <!-- Table of contents -->
+  <nav class="tc-editorial__toc" *ngIf="model.sections?.length">
+    <div class="tc-editorial__tocTitle">Sommaire</div>
+
+    <div class="tc-editorial__tocList">
+      <a
+        class="tc-editorial__tocItem"
+        *ngFor="let s of model.sections; trackBy: trackById"
+        [class.is-active]="activeSectionId === s.id"
+        [routerLink]="[]"
+        [fragment]="s.id"
+        queryParamsHandling="preserve"
+        (click)="onTocClick($event, s.id)"
+      >
+        <i *ngIf="s.icon" class="tc-editorial__tocIcon" [class]="s.icon"></i>
+        <span>{{ s.heading }}</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Sections -->
+  <div class="tc-editorial__content">
+    <article
+      class="tc-editorial__section"
+      *ngFor="let s of model.sections; trackBy: trackById"
+      [attr.id]="s.id"
+    >
+      <h3 class="tc-editorial__h3">
+        <i *ngIf="s.icon" class="tc-editorial__icon" [class]="s.icon"></i>
+        {{ s.heading }}
+      </h3>
+
+      <!-- TEXT -->
+      <ng-container *ngIf="s.kind === 'text'">
+        <p class="tc-editorial__p" *ngFor="let p of s.paragraphs">{{ p }}</p>
+      </ng-container>
+
+      <!-- LIST -->
+      <ng-container *ngIf="s.kind === 'list'">
+        <ul class="tc-editorial__ul">
+          <li class="tc-editorial__li" *ngFor="let it of s.items">
+            <strong *ngIf="it.title" class="tc-editorial__liTitle">{{ it.title }}</strong>
+            <span>{{ it.text }}</span>
+          </li>
+        </ul>
+      </ng-container>
+
+      <!-- CALLOUT -->
+      <ng-container *ngIf="s.kind === 'callout'">
+        <div class="tc-editorial__callout" [attr.data-variant]="s.variant || 'info'">
+          <span class="tc-editorial__calloutText">{{ s.text }}</span>
+        </div>
+      </ng-container>
+
+      <!-- FAQ -->
+      <ng-container *ngIf="s.kind === 'faq'">
+        <div class="tc-editorial__faq">
+          <details class="tc-editorial__faqItem" *ngFor="let it of s.items">
+            <summary class="tc-editorial__faqQ">{{ it.q }}</summary>
+            <div class="tc-editorial__faqA">{{ it.a }}</div>
+          </details>
+        </div>
+      </ng-container>
+
+      <!-- TABLE -->
+      <ng-container *ngIf="s.kind === 'table'">
+        <figure class="tc-editorial__tableWrap">
+          <figcaption *ngIf="s.caption" class="tc-editorial__caption">{{ s.caption }}</figcaption>
+
+          <div class="tc-editorial__tableScroll">
+            <table class="tc-editorial__table">
+              <thead>
+              <tr>
+                <th *ngFor="let c of s.columns">{{ c }}</th>
+              </tr>
+              </thead>
+
+              <tbody>
+              <tr *ngFor="let row of s.rows">
+                <td *ngFor="let cell of row">{{ cell }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </figure>
+      </ng-container>
+    </article>
+  </div>
+</section>
