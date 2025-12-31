@@ -213,6 +213,181 @@ export const TOOL_SUBGROUP_REGISTRY = {
         order: 4,
       },
     ],
+
+    // =====================================================================
+    // Office / Documents (client-side)
+    // =====================================================================
+
+    ooxml: [
+      {
+        id: 'inspect',
+        title: $localize`:@@dev_ooxml_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_ooxml_sg_inspect_desc:Explorer le ZIP OOXML (fichiers, relations, content types, métadonnées) et exporter en JSON.`,
+        order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_ooxml_sg_validate_title:Validation & cohérence`,
+        description: $localize`:@@dev_ooxml_sg_validate_desc:Vérifier la cohérence des relationships, références manquantes, content types, et produire un diagnostic.`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_ooxml_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_ooxml_sg_transform_desc:Nettoyer les métadonnées, supprimer des parties, regénérer un package OOXML minimal.`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_ooxml_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_ooxml_sg_debug_desc:Graph des relations, arbre des parts, inspection des namespaces et fragments XML.`,
+        order: 4,
+      },
+    ],
+
+    word: [
+      {
+        id: 'inspect',
+        title: $localize`:@@dev_word_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_word_sg_inspect_desc:Texte, styles, polices, champs, images, liens, tables, en-têtes/pieds, notes et révisions.`,
+        order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_word_sg_validate_title:Validation & audit`,
+        description: $localize`:@@dev_word_sg_validate_desc:Audit de compatibilité (styles, polices manquantes, liens cassés), et vérifs de conformité basiques.`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_word_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_word_sg_transform_desc:Remplacement de placeholders, nettoyage (métadonnées), normalisation de styles, extraction en Markdown/HTML (approx).`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_word_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_word_sg_debug_desc:Inspection des parts WordprocessingML (document.xml, numbering, styles, rels) et export JSON/graph.`,
+        order: 4,
+      },
+    ],
+
+    excel: [
+      {
+        id: 'inspect',
+        title: $localize`:@@dev_excel_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_excel_sg_inspect_desc:Feuilles, cellules, styles, sharedStrings, noms définis, formules, charts et médias.`,
+        order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_excel_sg_validate_title:Validation & audit`,
+        description: $localize`:@@dev_excel_sg_validate_desc:Détecter feuilles cachées, références cassées, formules invalides (surface), protections et compatibilité.`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_excel_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_excel_sg_transform_desc:Exporter vers CSV/JSON, supprimer des feuilles, nettoyer des métadonnées, normaliser des styles.`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_excel_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_excel_sg_debug_desc:Explorer SpreadsheetML (workbook, worksheets, styles) et le graphe de relations OOXML.`,
+        order: 4,
+      },
+    ],
+
+    powerpoint: [
+      {
+        id: 'inspect',
+        title: $localize`:@@dev_powerpoint_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_powerpoint_sg_inspect_desc:Texte des slides, notes, médias, thèmes, polices, liens et infos de deck.`,
+        order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_powerpoint_sg_validate_title:Validation & audit`,
+        description: $localize`:@@dev_powerpoint_sg_validate_desc:Audit de cohérence (liens, médias manquants), compatibilité et état des animations/transitions (surface).`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_powerpoint_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_powerpoint_sg_transform_desc:Exporter texte, nettoyer métadonnées, extraire médias, regrouper/filtrer slides (approche package).`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_powerpoint_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_powerpoint_sg_debug_desc:Explorer PresentationML (slides, layouts, masters) et relationships.`,
+        order: 4,
+      },
+    ],
+
+    odf: [
+      {
+        id: 'inspect',
+        title: $localize`:@@dev_odf_sg_inspect_title:Inspection & extraction`,
+        description: $localize`:@@dev_odf_sg_inspect_desc:ODT/ODS/ODP : explorer le ZIP ODF, extraire texte, styles, métadonnées et médias.`,
+        order: 1,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_odf_sg_validate_title:Validation & audit`,
+        description: $localize`:@@dev_odf_sg_validate_desc:Vérifier le manifest, les références de médias, et l’intégrité des fichiers XML clés (content/styles/meta).`,
+        order: 2,
+      },
+      {
+        id: 'transform',
+        title: $localize`:@@dev_odf_sg_transform_title:Transformation`,
+        description: $localize`:@@dev_odf_sg_transform_desc:Exporter vers texte/JSON, nettoyer des métadonnées, extraire médias, conversion simple (approximative).`,
+        order: 3,
+      },
+      {
+        id: 'debug',
+        title: $localize`:@@dev_odf_sg_debug_title:Internals & debug`,
+        description: $localize`:@@dev_odf_sg_debug_desc:Inspecter content.xml/styles.xml et le manifest ODF, avec export JSON.`,
+        order: 4,
+      },
+    ],
+
+    rtf: [
+      {
+        id: 'extract',
+        title: $localize`:@@dev_rtf_sg_extract_title:Extraction`,
+        description: $localize`:@@dev_rtf_sg_extract_desc:Extraire le texte, détecter encodage, et récupérer des informations de base (polices, couleurs).`,
+        order: 1,
+      },
+      {
+        id: 'convert',
+        title: $localize`:@@dev_rtf_sg_convert_title:Conversion`,
+        description: $localize`:@@dev_rtf_sg_convert_desc:Convertir RTF → texte/HTML/JSON simplifié (fidélité limitée).`,
+        order: 2,
+      },
+      {
+        id: 'validate',
+        title: $localize`:@@dev_rtf_sg_validate_title:Validation`,
+        description: $localize`:@@dev_rtf_sg_validate_desc:Détecter RTF corrompu, groupes non fermés, et anomalies de syntaxe courantes.`,
+        order: 3,
+      },
+    ],
+
+    legacy: [
+      {
+        id: 'identify',
+        title: $localize`:@@dev_legacy_sg_identify_title:Identification`,
+        description: $localize`:@@dev_legacy_sg_identify_desc:Reconnaître DOC/XLS/PPT (CFBF/OLE), afficher infos de base et signatures.`,
+        order: 1,
+      },
+      {
+        id: 'convert',
+        title: $localize`:@@dev_legacy_sg_convert_title:Conversion`,
+        description: $localize`:@@dev_legacy_sg_convert_desc:Conversions vers formats modernes (souvent via backend) : DOC→DOCX, XLS→XLSX, PPT→PPTX.`,
+        order: 2,
+      },
+    ],
   },
 } as const;
 

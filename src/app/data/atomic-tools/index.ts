@@ -12,6 +12,13 @@ import { ROUNDING_TOOLS } from './math/rounding.tools';
 import {TEXT_CASE_TOOLS} from "./text/text-case.tools";
 import {WRITING_TOOLS} from "./text/writing.tools";
 import {DEV_PDF_TOOLS} from "./dev/pdf";
+import {DEV_OOXML_TOOLS} from "./dev/ooxml";
+import {DEV_WORD_TOOLS} from "./dev/word";
+import {DEV_EXCEL_TOOLS} from "./dev/excel";
+import {DEV_POWERPOINT_TOOLS} from "./dev/powerpoint";
+import {DEV_ODF_TOOLS} from "./dev/odf";
+import {DEV_RTF_TOOLS} from "./dev/rtf";
+import {DEV_LEGACY_TOOLS} from "./dev/legacy";
 
 export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   category: C;
@@ -42,7 +49,14 @@ export const ATOMIC_TOOLS = {
   ...ROUNDING_TOOLS,
   ...TEXT_CASE_TOOLS,
   ...WRITING_TOOLS,
-  ...DEV_PDF_TOOLS
+  ...DEV_PDF_TOOLS,
+  ...DEV_OOXML_TOOLS,
+  ...DEV_WORD_TOOLS,
+  ...DEV_EXCEL_TOOLS,
+  ...DEV_POWERPOINT_TOOLS,
+  ...DEV_ODF_TOOLS,
+  ...DEV_RTF_TOOLS,
+  ...DEV_LEGACY_TOOLS
 } as const satisfies Record<string, AtomicToolAny>;
 
 export type ToolId = keyof typeof ATOMIC_TOOLS;
