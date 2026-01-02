@@ -1,24 +1,15 @@
 import { Type } from '@angular/core';
+import { deriveAtomicTools, deriveAtomicToolList, DerivedAtomicTool } from '../catalog/derive';
 import type { CategoryId } from '../categories';
 import type { GroupId } from '../tool-groups';
 import type { SubGroupId } from '../tool-subgroups';
 
-import { PERCENTAGES_TOOLS } from './math/percentages.tools';
-import { RATIOS_TOOLS } from './math/ratios.tools';
-import { RULE_OF_THREE_TOOLS } from './math/rule-of-three.tools';
-import { STATISTICS_TOOLS } from './math/statistics.tools';
-import { FRACTIONS_TOOLS } from './math/fractions.tools';
-import { ROUNDING_TOOLS } from './math/rounding.tools';
-import {TEXT_CASE_TOOLS} from "./text/text-case.tools";
-import {WRITING_TOOLS} from "./text/writing.tools";
-import {DEV_PDF_TOOLS} from "./dev/pdf";
-import {DEV_OOXML_TOOLS} from "./dev/ooxml";
-import {DEV_WORD_TOOLS} from "./dev/word";
-import {DEV_EXCEL_TOOLS} from "./dev/excel";
-import {DEV_POWERPOINT_TOOLS} from "./dev/powerpoint";
-import {DEV_ODF_TOOLS} from "./dev/odf";
-import {DEV_RTF_TOOLS} from "./dev/rtf";
-import {DEV_LEGACY_TOOLS} from "./dev/legacy";
+// =============================================================================
+// FAÇADE - Dérivé du catalogue unifié
+// =============================================================================
+// Ce fichier est une FAÇADE qui dérive ses données du catalogue SSOT.
+// L'API reste identique pour ne pas impacter le reste de l'application.
+// =============================================================================
 
 export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   category: C;
@@ -32,40 +23,20 @@ export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   loadComponent?: () => Promise<Type<unknown>>;
 }
 
-/** Helper: union “any valid pair” (évite never) */
+/** Helper: union "any valid pair" (évite never) */
 export type AtomicToolAny = {
   [C in CategoryId]: {
     [G in GroupId<C>]: AtomicTool<C, G>;
   }[GroupId<C>];
 }[CategoryId];
 
-/** ✅ Registry global : merge par groupe */
-export const ATOMIC_TOOLS = {
-  ...PERCENTAGES_TOOLS,
-  ...RATIOS_TOOLS,
-  ...RULE_OF_THREE_TOOLS,
-  ...STATISTICS_TOOLS,
-  ...FRACTIONS_TOOLS,
-  ...ROUNDING_TOOLS,
-  ...TEXT_CASE_TOOLS,
-  ...WRITING_TOOLS,
-  ...DEV_PDF_TOOLS,
-  ...DEV_OOXML_TOOLS,
-  ...DEV_WORD_TOOLS,
-  ...DEV_EXCEL_TOOLS,
-  ...DEV_POWERPOINT_TOOLS,
-  ...DEV_ODF_TOOLS,
-  ...DEV_RTF_TOOLS,
-  ...DEV_LEGACY_TOOLS
-} as const satisfies Record<string, AtomicToolAny>;
+/** ✅ Registry global : dérivé du catalogue */
+export const ATOMIC_TOOLS = deriveAtomicTools() as Record<string, DerivedAtomicTool>;
 
 export type ToolId = keyof typeof ATOMIC_TOOLS;
 export type AtomicToolItem = { id: ToolId } & (typeof ATOMIC_TOOLS)[ToolId];
 
-export const ATOMIC_TOOL_LIST: AtomicToolItem[] = Object.entries(ATOMIC_TOOLS).map(([id, tool]) => ({
-  id: id as ToolId,
-  ...tool,
-}));
+export const ATOMIC_TOOL_LIST: AtomicToolItem[] = deriveAtomicToolList() as AtomicToolItem[];
 
 export function getToolById(id: ToolId) {
   return ATOMIC_TOOLS[id];
