@@ -1,0 +1,140 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-copy"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="outputs().length"
+  [filteredCount]="filteredOutputs().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="status() === 'ready' ? jsonText() : ''"
+  [showResults]="showResults()"
+  [downloadDisabled]="downloadDisabled()"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadZip()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredOutputs().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_split_empty">Aucun fichier généré.</span>
+      </div>
+    } @else {
+      @for (o of filteredOutputs(); track o.index) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name">{{ o.fileName }}</span>
+              <span class="muted">· {{ o.pages }} p</span>
+              <span class="muted">· {{ o.range.from }} → {{ o.range.to }}</span>
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              <p-tag value="PDF" severity="info"></p-tag>
+              <span class="mono muted">{{ o.bytes | number }} bytes</span>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-download"
+                class="p-button-text p-button-sm"
+                (click)="$any($event).stopPropagation(); downloadOne(o)"
+                [disabled]="status() !== 'ready'"
+                aria-label="Download"
+              ></button>
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_split_adv_range">Plage</div>
+              <div class="adv-v mono">{{ o.range.from }}-{{ o.range.to }}</div>
+            </div>
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_split_adv_pages">Pages</div>
+              <div class="adv-v mono">{{ o.pages }}</div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start; width:100%;">
+      <div class="muted mono" i18n="@@pdf_split_options_title">Options</div>
+
+      <div style="display:flex; flex-direction:column; gap:.5rem; width:100%; margin-top:.5rem;">
+        <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+          <input type="radio" name="mode" value="ranges" [formControl]="form.controls.mode" />
+          <span i18n="@@pdf_split_mode_ranges">Plages (ex: 3-5, 8, 10-12)</span>
+        </label>
+
+        <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+          <input type="radio" name="mode" value="each-page" [formControl]="form.controls.mode" />
+          <span i18n="@@pdf_split_mode_each">1 page par fichier</span>
+        </label>
+      </div>
+
+      @if (mode() === 'ranges') {
+        <div style="width:100%; margin-top:.75rem;">
+          <div class="muted mono" i18n="@@pdf_split_ranges_label">Plages</div>
+          <input
+            pInputText
+            type="text"
+            [formControl]="form.controls.rangesText"
+            placeholder="3-5, 8, 10-12"
+            style="width:100%;"
+          />
+          <div class="muted" style="margin-top:.35rem;" i18n="@@pdf_split_ranges_help">
+            Exemple : 1-3, 7, 9-12 (les plages se fusionnent si elles se chevauchent).
+          </div>
+        </div>
+      }
+
+      <div class="divider" style="height:1px; width:100%; margin:1rem 0;"></div>
+
+      <div style="width:100%;">
+        <div class="muted mono" i18n="@@pdf_split_prefix_label">Préfixe fichiers</div>
+        <input pInputText type="text" [formControl]="form.controls.filePrefix" style="width:100%;" />
+        <label class="muted" style="display:flex; gap:.5rem; align-items:center; margin-top:.5rem;">
+          <input type="checkbox" [formControl]="form.controls.pad" />
+          <span i18n="@@pdf_split_pad">Indexer avec zéros (01, 02…)</span>
+        </label>
+      </div>
+
+      <div class="divider" style="height:1px; width:100%; margin:1rem 0;"></div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_split_pretty">Mapping JSON “pretty”</span>
+      </label>
+
+      <div style="display:flex; gap:.5rem; width:100%; margin-top: 1rem;">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-scissors"
+          label="Découper"
+          (click)="splitNow()"
+          [disabled]="!sourceFile() || status() === 'loading'"
+          style="width:100%;"
+        ></button>
+      </div>
+
+      <div class="muted" style="margin-top:.75rem;">
+        {{ ui.tipSign }}
+      </div>
+    </div>
+  </div>
+</app-pdf-tool-shell>

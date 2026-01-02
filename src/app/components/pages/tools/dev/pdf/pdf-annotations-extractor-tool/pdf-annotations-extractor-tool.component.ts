@@ -255,15 +255,18 @@ export class PdfAnnotationsToJsonToolComponent {
     }
   }
 
-  downloadJson() {
-    const blob = new Blob([this.jsonText()], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = (this.fileName() ? this.fileName().replace(/\.pdf$/i, '') : 'pdf-annotations') + '.json';
-    a.click();
-
-    URL.revokeObjectURL(url);
+  exportObject() {
+    return {
+      file: {
+        name: this.fileName(),
+        size: this.fileSize(),
+      },
+      options: {
+        includeRect: this.includeRect(),
+        includeQuadPoints: this.includeQuadPoints(),
+        includeRaw: this.includeRaw(),
+      },
+      annotations: this.filteredAnnotations(), // ou annotations() selon ton intention
+    };
   }
 }

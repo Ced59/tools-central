@@ -1,0 +1,150 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-clone"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [multiple]="true"
+  [accept]="'application/pdf,.pdf'"
+
+  [fileName]="pickedLabel()"
+  [fileSize]="mergedBytes()?.byteLength ?? 0"
+
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+
+  [totalCount]="files().length"
+  [filteredCount]="filteredFiles().length"
+  [filterControl]="form.controls.filter"
+
+  [jsonText]="status() === 'ready' ? jsonText() : ''"
+  [showResults]="files().length > 0 || status() === 'ready'"
+
+  [downloadDisabled]="status() !== 'ready' || !mergedBytes()"
+
+  (filesSelected)="onFilesSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadMerged()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredFiles().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-plus" aria-hidden="true"></i>
+        <span i18n="@@pdf_merge_empty">Aucun PDF ajouté.</span>
+      </div>
+    } @else {
+      @for (f of filteredFiles(); track f.id) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name">{{ f.name }}</span>
+              <span class="muted">· {{ f.pageCount }} p</span>
+              <span class="muted">· {{ f.size | number }} bytes</span>
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-arrow-up"
+                class="p-button-text p-button-sm"
+                (click)="moveUp(f.id)"
+                aria-label="Up"
+              ></button>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-arrow-down"
+                class="p-button-text p-button-sm"
+                (click)="moveDown(f.id)"
+                aria-label="Down"
+              ></button>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-times"
+                class="p-button-text p-button-sm"
+                (click)="remove(f.id)"
+                aria-label="Remove"
+              ></button>
+            </div>
+          </div>
+
+          @if (report()) {
+            <div class="field-card-advanced">
+              @for (m of report()!.mapping; track m.fileName) {
+                @if (m.fileName === f.name) {
+                  <div class="adv-kv">
+                    <div class="adv-k" i18n="@@pdf_merge_map">Mapping</div>
+                    <div class="adv-v mono">out {{ m.outputFromPage }} → {{ m.outputToPage }}</div>
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start; width:100%;">
+      <!-- Metadata -->
+      <div class="muted mono" i18n="@@pdf_merge_meta_title">Métadonnées</div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="radio" name="meta" value="keep-first" [formControl]="form.controls.metadataMode" />
+        <span i18n="@@pdf_merge_meta_keep_first">Garder celles du 1er PDF</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="radio" name="meta" value="blank" [formControl]="form.controls.metadataMode" />
+        <span i18n="@@pdf_merge_meta_blank">Vider</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center; margin-bottom:.5rem;">
+        <input type="radio" name="meta" value="custom" [formControl]="form.controls.metadataMode" />
+        <span i18n="@@pdf_merge_meta_custom">Personnaliser</span>
+      </label>
+
+      @if (metadataMode() === 'custom') {
+        <div style="display:flex; flex-direction:column; gap:.5rem; width:100%;">
+          <input pInputText type="text" [formControl]="form.controls.customTitle" placeholder="Title" style="width:100%;" />
+          <input pInputText type="text" [formControl]="form.controls.customAuthor" placeholder="Author" style="width:100%;" />
+          <input pInputText type="text" [formControl]="form.controls.customSubject" placeholder="Subject" style="width:100%;" />
+          <input pInputText type="text" [formControl]="form.controls.customKeywords" placeholder="keywords, comma-separated" style="width:100%;" />
+        </div>
+      }
+
+      <div class="divider" style="height:1px; width:100%; margin:1rem 0;"></div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_merge_pretty">Mapping JSON “pretty”</span>
+      </label>
+
+      <div style="display:flex; gap:.5rem; width:100%; margin-top: 1rem;">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-cog"
+          label="Fusionner"
+          (click)="mergeNow()"
+          [disabled]="files().length < 2 || status() === 'loading'"
+          style="width:100%;"
+        ></button>
+      </div>
+
+      <div class="muted" style="margin-top:.75rem;">
+        {{ ui.tipSign }}
+      </div>
+    </div>
+  </div>
+</app-pdf-tool-shell>

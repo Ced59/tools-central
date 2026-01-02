@@ -27,6 +27,7 @@
           type="file"
           [id]="fileInputId"
           [accept]="accept"
+          [multiple]="multiple"
           (change)="onFileChange($event)"
         />
 
@@ -135,6 +136,7 @@
                 class="p-button-secondary"
                 [label]="ui.btnCopy"
                 (click)="copy.emit()"
+                [disabled]="status !== 'ready'"
               ></button>
 
               <button
@@ -143,6 +145,7 @@
                 icon="pi pi-download"
                 [label]="ui.btnDownload"
                 (click)="download.emit()"
+                [disabled]="downloadDisabled"
               ></button>
             </div>
           </div>

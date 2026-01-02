@@ -170,8 +170,24 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
           description: $localize`:@@dev_pdf_sg_transform_desc:Convertir / modifier un PDF (fusion, split, flatten, nettoyage…).`,
           order: 3,
           tools: {
-            'pdf-merge': { title: $localize`:@@tool_pdf_merge_title:Fusionner des PDF`, description: $localize`:@@tool_pdf_merge_desc:Fusionner plusieurs PDF en un seul, localement dans le navigateur.`, icon: 'pi pi-clone', available: false },
-            'pdf-split': { title: $localize`:@@tool_pdf_split_title:Découper un PDF`, description: $localize`:@@tool_pdf_split_desc:Extraire certaines pages ou découper un PDF en plusieurs fichiers.`, icon: 'pi pi-copy', available: false },
+            'pdf-merge': {
+              title: $localize`:@@tool_pdf_merge_title:Fusionner des PDF`,
+              description: $localize`:@@tool_pdf_merge_desc:Fusionner plusieurs PDF en un seul, localement dans le navigateur.`,
+              icon: 'pi pi-clone',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-merge-tool/pdf-merge-tool.component')
+                  .then(m => m.PdfMergeToolComponent),
+            },
+            'pdf-split': {
+              title: $localize`:@@tool_pdf_split_title:Découper un PDF`,
+              description: $localize`:@@tool_pdf_split_desc:Extraire certaines pages ou découper un PDF en plusieurs fichiers.`,
+              icon: 'pi pi-copy',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-split-tool/pdf-split-tool.component')
+                  .then(m => m.PdfSplitToolComponent),
+            },
             'pdf-flatten-forms': { title: $localize`:@@tool_pdf_flatten_forms_title:Aplatir un formulaire PDF`, description: $localize`:@@tool_pdf_flatten_forms_desc:Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.`, icon: 'pi pi-file-export', available: false },
             'pdf-sanitize': { title: $localize`:@@tool_pdf_sanitize_title:Nettoyer un PDF`, description: $localize`:@@tool_pdf_sanitize_desc:Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF "sanitisé".`, icon: 'pi pi-shield', available: false },
           },

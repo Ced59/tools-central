@@ -1,5 +1,5 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import {Component, EventEmitter, Input, Output, ViewEncapsulation} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -34,10 +34,10 @@ export interface PdfToolShellUi {
   jsonTitle: string;
   jsonSub: string;
 
-  leftTitle: string; // ex: "Pages", "Polices", "Liens"
-  emptyText: string; // ex: "Aucune donnée à afficher."
+  leftTitle: string;
+  emptyText: string;
 
-  backText: string;  // ex: "← Retour aux outils PDF"
+  backText: string;
 }
 
 @Component({
@@ -66,6 +66,10 @@ export class PdfToolShellComponent {
   @Input() backLink: string | null = '/categories/dev/pdf';
 
   @Input() accept = 'application/pdf';
+  @Input() multiple = false;
+
+  /** ✅ pour désactiver “Télécharger” avant un résultat */
+  @Input() downloadDisabled = false;
 
   @Input() status: PdfToolStatus = 'idle';
   @Input() fileName: string | null = null;
@@ -84,12 +88,28 @@ export class PdfToolShellComponent {
 
   @Input() showResults = false;
 
+  /** legacy single */
   @Output() fileSelected = new EventEmitter<File>();
+
+  @Input() exportData: unknown | null = null;      // l’objet métier (pas string)
+  @Input() exportFileBaseName: string | null = null; // ex: "pdf-fonts"
+  @Input() includeMeta = true;
+
+  @Input() siteBaseUrl = 'https://tools-central.com'; // idéalement: environment.siteBaseUrl
+  @Input() locale: string | null = null;
+  @Input() toolId: string | null = null;
+  @Input() toolSlug: string | null = null;
+  @Input() toolVersion: string | null = null;
+
+  @Output() filesSelected = new EventEmitter<File[]>();
+
   @Output() reset = new EventEmitter<void>();
   @Output() copy = new EventEmitter<void>();
   @Output() download = new EventEmitter<void>();
 
   readonly fileInputId = `pdf-tool-file-input-${Math.random().toString(16).slice(2)}`;
+
+
 
   triggerFilePick() {
     const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
@@ -98,8 +118,18 @@ export class PdfToolShellComponent {
 
   onFileChange(evt: Event) {
     const input = evt.target as HTMLInputElement;
-    const file = input.files?.[0];
-    input.value = '';
-    if (file) this.fileSelected.emit(file);
+    const list = input.files ? Array.from(input.files) : [];
+    input.value = ''; // permet de re-sélectionner les mêmes fichiers
+
+    if (list.length === 0) return;
+
+    // ✅ si multiple=true -> on émet filesSelected
+    if (this.multiple) {
+      this.filesSelected.emit(list);
+      return;
+    }
+
+    // sinon legacy single
+    this.fileSelected.emit(list[0]);
   }
 }
