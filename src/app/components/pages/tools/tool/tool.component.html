@@ -1,1 +1,46 @@
-<p>tool works!</p>
+<ng-container *ngIf="isLoading(); else loaded">
+  <section class="state state-loading">
+    <div class="container">
+      <h1 i18n>Chargement…</h1>
+      <p i18n>Nous préparons l'outil.</p>
+    </div>
+  </section>
+</ng-container>
+
+<ng-template #loaded>
+  <ng-container *ngIf="toolComponent(); else notFound">
+    <!-- Tool UI -->
+    <ng-container *ngComponentOutlet="toolComponent()"></ng-container>
+
+    <!-- Back link + Editorial -->
+    <div class="container tool-footer">
+      <!-- Editorial (si disponible) -->
+      <tc-tool-editorial-sections
+        *ngIf="editorial() as ed"
+        [model]="ed"
+      ></tc-tool-editorial-sections>
+      <nav class="back-nav" aria-label="Navigation">
+        <a [routerLink]="backLink()" class="back-link">
+          <i class="pi pi-arrow-left"></i>
+          <span>{{ backLabel() }}</span>
+        </a>
+      </nav>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #notFound>
+  <section class="state state-notfound">
+    <div class="container">
+      <h1 i18n>Outil indisponible</h1>
+      <p i18n>Cet outil n'existe pas ou n'est pas encore disponible.</p>
+
+      <nav class="back-nav">
+        <a [routerLink]="backLink()" class="back-link">
+          <i class="pi pi-arrow-left"></i>
+          <span i18n>Retour</span>
+        </a>
+      </nav>
+    </div>
+  </section>
+</ng-template>

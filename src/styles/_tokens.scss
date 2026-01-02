@@ -1,22 +1,114 @@
 // Design tokens (CSS variables) shared by the whole app.
-// Keep values strictly identical to the previous styles.scss to remain ISO.
+// Expanded with additional utility tokens for consistency.
 
 :root {
+  // ─────────────────────────────────────────────────────────
+  // Core colors
+  // ─────────────────────────────────────────────────────────
   --surface-ground: #f8fafc;
   --surface-card: #ffffff;
   --text-color: #1e293b;
   --text-color-secondary: #64748b;
   --primary-color: #6366f1;
   --primary-color-lighter: #818cf8;
+  --primary-color-darker: #4f46e5;
   --border-color: #e2e8f0;
   --hero-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+
+  // ─────────────────────────────────────────────────────────
+  // Semantic colors (status)
+  // ─────────────────────────────────────────────────────────
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.1);
+  --color-success-border: rgba(34, 197, 94, 0.25);
+
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-warning-border: rgba(245, 158, 11, 0.3);
+
+  --color-error: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.1);
+  --color-error-border: rgba(239, 68, 68, 0.25);
+
+  --color-info: #6366f1;
+  --color-info-bg: rgba(99, 102, 241, 0.08);
+  --color-info-border: rgba(99, 102, 241, 0.2);
+
+  // ─────────────────────────────────────────────────────────
+  // Shadows (elevation system)
+  // ─────────────────────────────────────────────────────────
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.12);
+
+  // ─────────────────────────────────────────────────────────
+  // Radius (consistent rounding)
+  // ─────────────────────────────────────────────────────────
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  // ─────────────────────────────────────────────────────────
+  // Spacing (optional, for consistency)
+  // ─────────────────────────────────────────────────────────
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  // ─────────────────────────────────────────────────────────
+  // Interactive states
+  // ─────────────────────────────────────────────────────────
+  --hover-overlay: rgba(99, 102, 241, 0.06);
+  --active-overlay: rgba(99, 102, 241, 0.1);
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
 .dark-mode {
+  // ─────────────────────────────────────────────────────────
+  // Core colors (dark)
+  // ─────────────────────────────────────────────────────────
   --surface-ground: #0f172a;
   --surface-card: #1e293b;
   --text-color: #f1f5f9;
   --text-color-secondary: #94a3b8;
   --border-color: #334155;
   --hero-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #9333ea 100%);
+
+  // ─────────────────────────────────────────────────────────
+  // Semantic colors (dark - slightly more vibrant)
+  // ─────────────────────────────────────────────────────────
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-success-border: rgba(34, 197, 94, 0.3);
+
+  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-warning-border: rgba(245, 158, 11, 0.35);
+
+  --color-error-bg: rgba(239, 68, 68, 0.12);
+  --color-error-border: rgba(239, 68, 68, 0.3);
+
+  --color-info-bg: rgba(99, 102, 241, 0.12);
+  --color-info-border: rgba(99, 102, 241, 0.25);
+
+  // ─────────────────────────────────────────────────────────
+  // Shadows (dark - more pronounced)
+  // ─────────────────────────────────────────────────────────
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.4);
+
+  // ─────────────────────────────────────────────────────────
+  // Interactive states (dark)
+  // ─────────────────────────────────────────────────────────
+  --hover-overlay: rgba(99, 102, 241, 0.1);
+  --active-overlay: rgba(99, 102, 241, 0.15);
+  --focus-ring: 0 0 0 3px rgba(99, 102, 241, 0.35);
 }

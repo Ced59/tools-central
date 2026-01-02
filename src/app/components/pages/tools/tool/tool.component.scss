@@ -1,6 +1,11 @@
+@use 'mixins' as m;
 @use 'patterns' as p;
 
 @include p.back-link;
+
+// ─────────────────────────────────────────────────────────
+// States (loading, not found)
+// ─────────────────────────────────────────────────────────
 
 .state {
   padding: 4rem 0;
@@ -11,15 +16,86 @@
 
   p {
     margin: 0;
-    color: var(--text-muted);
+    color: var(--text-color-secondary);
   }
 }
 
-.back-section {
-  margin-top: 2rem;
+.state-notfound {
+  text-align: center;
+
+  .back-nav {
+    justify-content: center;
+  }
 }
 
-.tool-editorial-container {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+// ─────────────────────────────────────────────────────────
+// Tool footer (back nav + editorial)
+// ─────────────────────────────────────────────────────────
+
+.tool-footer {
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+
+  @include m.down(m.$bp-md) {
+    padding-bottom: 1.5rem;
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// Back navigation
+// ─────────────────────────────────────────────────────────
+
+.back-nav {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  margin-bottom: 0.5rem;
+
+  @include m.down(m.$bp-md) {
+    // Plus visible sur mobile : fond + padding
+    background: var(--surface-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg, 14px);
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+
+    .back-link {
+      width: 100%;
+      justify-content: center;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  transition: color 0.2s ease, background 0.2s ease;
+
+  i {
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.08);
+
+    i {
+      transform: translateX(-3px);
+    }
+  }
+
+  // Active state pour feedback tactile mobile
+  &:active {
+    background: rgba(99, 102, 241, 0.12);
+  }
 }

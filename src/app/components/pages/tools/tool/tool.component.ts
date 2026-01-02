@@ -1,59 +1,21 @@
-import { Component, Type, signal } from '@angular/core';
+import { Component, Type, signal, computed } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
 
 import { ToolRegistryService } from '../../../../core/tools/tool-registry.service';
 
 import { CATEGORIES, type CategoryId } from '../../../../data/categories';
+import { TOOL_GROUP_REGISTRY } from '../../../../data/tool-groups';
 import { routes } from '../../../../data/routes';
 
 import type { ToolEditorialModel } from '../../../../models/tool-editorial/tool-editorial.model';
 import { ToolEditorialSectionsComponent } from '../../../shared/tool-editorial-sections/tool-editorial-sections.component';
-import {ToolEditorialService} from "../../../../core/tools/toll-editorial.service";
+import { ToolEditorialService } from '../../../../core/tools/toll-editorial.service';
 
 @Component({
   standalone: true,
   imports: [NgIf, NgComponentOutlet, RouterLink, ToolEditorialSectionsComponent],
-  template: `
-    <ng-container *ngIf="isLoading(); else loaded">
-      <section class="state state-loading">
-        <div class="container">
-          <h1 i18n>Chargement…</h1>
-          <p i18n>Nous préparons l’outil.</p>
-        </div>
-      </section>
-    </ng-container>
-
-    <ng-template #loaded>
-      <ng-container *ngIf="toolComponent(); else notFound">
-        <!-- Tool UI -->
-        <ng-container *ngComponentOutlet="toolComponent()"></ng-container>
-
-        <!-- Editorial global (1 seule intégration) -->
-        <ng-container *ngIf="editorial() as ed">
-          <div class="container tool-editorial-container">
-            <tc-tool-editorial-sections [model]="ed"></tc-tool-editorial-sections>
-          </div>
-        </ng-container>
-      </ng-container>
-    </ng-template>
-
-    <ng-template #notFound>
-      <section class="state state-notfound">
-        <div class="container">
-          <h1 i18n>Outil indisponible</h1>
-          <p i18n>Cet outil n'existe pas ou n'est pas encore disponible.</p>
-
-          <div class="back-section">
-            <a [routerLink]="backLink()" class="back-link">
-              <i class="pi pi-arrow-left"></i>
-              <span i18n>Retour</span>
-            </a>
-          </div>
-        </div>
-      </section>
-    </ng-template>
-  `,
+  templateUrl: './tool.component.html',
   styleUrl: './tool.component.scss',
 })
 export class ToolComponent {
@@ -116,9 +78,37 @@ export class ToolComponent {
   }
 
   backLink(): string {
-    if (this.categoryId && this.groupId) return routes.group(this.categoryId, this.groupId);
-    if (this.categoryId) return routes.category(this.categoryId);
+    if (this.categoryId && this.groupId) {
+      return routes.group(this.categoryId, this.groupId);
+    }
+    if (this.categoryId) {
+      return routes.category(this.categoryId);
+    }
     return '/';
+  }
+
+  backLabel(): string {
+    // Essaie de récupérer le titre du groupe pour un label contextuel
+    if (this.categoryId && this.groupId) {
+      const catId = this.toCategoryId(this.categoryId);
+      if (catId) {
+        const groupRegistry = TOOL_GROUP_REGISTRY[catId];
+        const group = groupRegistry?.[this.groupId];
+        if (group?.title) {
+          return $localize`:@@back_to_tools:Retour aux outils ${group.title}`;
+        }
+      }
+    }
+
+    // Fallback sur le nom de la catégorie
+    if (this.categoryId) {
+      const cat = CATEGORIES.find(c => c.id === this.categoryId);
+      if (cat?.title) {
+        return $localize`:@@back_to_category:Retour à ${cat.title}`;
+      }
+    }
+
+    return $localize`:@@back_generic:Retour`;
   }
 
   private toCategoryId(v: string): CategoryId | null {
