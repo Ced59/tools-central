@@ -84115,6 +84115,276 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">自動的にコピーできませんでした。JSONを手動でコピーしてください。</target>
       </segment>
     </unit>
+    <unit id="pdf_flatten_empty">
+      <segment>
+        <source>Aucun fichier généré.</source>
+        <target state="translated">生成されたファイルはありません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_adv_fields">
+      <segment>
+        <source>Champs détectés</source>
+        <target state="translated">検出されたフィールド</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_adv_mode">
+      <segment>
+        <source>Mode</source>
+        <target state="translated">モード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_adv_mode_value">
+      <segment>
+        <source>Flatten (statique)</source>
+        <target state="translated">フラット化（静的）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_options_title">
+      <segment>
+        <source>Options</source>
+        <target state="translated">オプション</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_include_empty">
+      <segment>
+        <source>Inclure les champs vides dans le mapping JSON</source>
+        <target state="translated">JSONマッピングに空のフィールドを含める</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_pretty">
+      <segment>
+        <source>Mapping JSON “pretty”</source>
+        <target state="translated">「きれいな」JSONマッピング</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_prefix_label">
+      <segment>
+        <source>Préfixe fichiers</source>
+        <target state="translated">ファイルプレフィックス</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_prefix_help">
+      <segment>
+        <source> Exemple : flattened → flattened_monfichier.pdf </source>
+        <target state="translated">例：flattened → flattened_monfichier.pdf</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_title">
+      <segment>
+        <source>Aplatir un formulaire PDF</source>
+        <target state="translated">PDFフォームをフラット化する</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_subtitle">
+      <segment>
+        <source>Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage. Tout se fait localement dans votre navigateur.</source>
+        <target state="translated">フォームフィールドを静的コンテンツに変換（フラット化）し、共有/アーカイブ用にします。すべてはブラウザ内でローカルに行われます。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_err_generic">
+      <segment>
+        <source>Une erreur est survenue.</source>
+        <target state="translated">エラーが発生しました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_tip_privacy">
+      <segment>
+        <source>Aucun upload : vos fichiers restent sur votre appareil.</source>
+        <target state="translated">アップロードなし：ファイルはデバイスに残ります。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_tip_sign">
+      <segment>
+        <source>Après “flatten”, les champs ne sont plus éditables. Conservez l’original si vous devez garder un formulaire modifiable.</source>
+        <target state="translated">「フラット化」後、フィールドは編集できなくなります。変更可能なフォームを保持する必要がある場合は、元のものを保存してください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDFをインポートする</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_import_sub">
+      <segment>
+        <source>Choisissez un PDF contenant des champs de formulaire (rempli ou non).</source>
+        <target state="translated">フォームフィールドを含むPDFを選択してください（記入済みまたは未記入）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDFを選択</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">リセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_btn_copy">
+      <segment>
+        <source>Copier le mapping</source>
+        <target state="translated">マッピングをコピー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_btn_download">
+      <segment>
+        <source>Télécharger en ZIP</source>
+        <target state="translated">ZIPでダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, champs…)</source>
+        <target state="translated">フィルタ（名前、フィールド…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_status_loading">
+      <segment>
+        <source>Traitement…</source>
+        <target state="translated">処理中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">準備完了</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_results_title">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">結果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_results_sub">
+      <segment>
+        <source>PDF aplati + mapping des champs (audit/traçabilité).</source>
+        <target state="translated">フラット化されたPDF + フィールドのマッピング（監査/トレーサビリティ）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_json_title">
+      <segment>
+        <source>Mapping JSON</source>
+        <target state="translated">JSONマッピング</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_json_sub">
+      <segment>
+        <source>Champs détectés et valeurs (avant flatten).</source>
+        <target state="translated">検出されたフィールドと値（フラット化前）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_left_title">
+      <segment>
+        <source>Fichier généré</source>
+        <target state="translated">生成されたファイル</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDFツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_stat_in_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_stat_out_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_stat_in_label">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">入力</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_stat_out_label">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">出力</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_stat_fields_label">
+      <segment>
+        <source>Champs (détectés/exportés)</source>
+        <target state="translated">フィールド（検出された/エクスポートされた）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_need_file">
+      <segment>
+        <source>Choisissez d’abord un PDF.</source>
+        <target state="translated">まずPDFを選択してください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_note_no_fields">
+      <segment>
+        <source>Aucun champ de formulaire détecté (PDF peut être “plat”/scanné).</source>
+        <target state="translated">フォームフィールドが検出されませんでした（PDFは「フラット」またはスキャンされた可能性があります）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_done">
+      <segment>
+        <source>PDF aplati prêt. Téléchargez le PDF ou le ZIP (PDF + mapping).</source>
+        <target state="translated">フラット化されたPDFの準備が完了しました。PDFまたはZIP（PDF + マッピング）をダウンロードしてください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_fail">
+      <segment>
+        <source>Impossible d’aplatir ce PDF.</source>
+        <target state="translated">このPDFをフラット化できませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_downloading_one">
+      <segment>
+        <source>Téléchargement du PDF lancé.</source>
+        <target state="translated">PDFのダウンロードを開始しました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_download_one_fail">
+      <segment>
+        <source>Impossible de télécharger ce fichier.</source>
+        <target state="translated">このファイルをダウンロードできませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_zip_downloading">
+      <segment>
+        <source>Téléchargement du ZIP lancé.</source>
+        <target state="translated">ZIPのダウンロードを開始しました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_zip_fail">
+      <segment>
+        <source>Impossible de générer le ZIP.</source>
+        <target state="translated">ZIPを生成できませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_copied">
+      <segment>
+        <source>Mapping JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSONマッピングがクリップボードにコピーされました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_flatten_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
+        <target state="translated">自動的にコピーできませんでした。JSONを手動でコピーしてください。</target>
+      </segment>
+    </unit>
 
     
     

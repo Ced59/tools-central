@@ -188,7 +188,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../components/pages/tools/dev/pdf/pdf-split-tool/pdf-split-tool.component')
                   .then(m => m.PdfSplitToolComponent),
             },
-            'pdf-flatten-forms': { title: $localize`:@@tool_pdf_flatten_forms_title:Aplatir un formulaire PDF`, description: $localize`:@@tool_pdf_flatten_forms_desc:Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.`, icon: 'pi pi-file-export', available: false },
+            'pdf-flatten-forms': {
+              title: $localize`:@@tool_pdf_flatten_forms_title:Aplatir un formulaire PDF`,
+              description: $localize`:@@tool_pdf_flatten_forms_desc:Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.`,
+              icon: 'pi pi-file-export',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-flatten-form-tool/pdf-flatten-form-tool.component')
+                  .then(m => m.PdfFlattenFormToolComponent),
+            },
             'pdf-sanitize': { title: $localize`:@@tool_pdf_sanitize_title:Nettoyer un PDF`, description: $localize`:@@tool_pdf_sanitize_desc:Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF "sanitisé".`, icon: 'pi pi-shield', available: false },
           },
         },

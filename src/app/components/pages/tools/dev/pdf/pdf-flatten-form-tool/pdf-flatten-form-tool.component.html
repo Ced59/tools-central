@@ -1,0 +1,113 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-file-edit"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="outputs().length"
+  [filteredCount]="filteredOutputs().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="status() === 'ready' ? jsonText() : ''"
+  [showResults]="showResults()"
+  [downloadDisabled]="downloadDisabled()"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadZip()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredOutputs().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_flatten_empty">Aucun fichier généré.</span>
+      </div>
+    } @else {
+      @for (o of filteredOutputs(); track o.index) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name">{{ o.fileName }}</span>
+              <span class="muted" *ngIf="o.fieldsCount != null">· {{ o.fieldsCount }} champs</span>
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              <p-tag value="PDF" severity="info"></p-tag>
+              <span class="mono muted">{{ o.bytes | number }} bytes</span>
+
+              <button
+                pButton
+                type="button"
+                icon="pi pi-download"
+                class="p-button-text p-button-sm"
+                (click)="$any($event).stopPropagation(); downloadOne(o)"
+                [disabled]="status() !== 'ready'"
+                aria-label="Download"
+              ></button>
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_flatten_adv_fields">Champs détectés</div>
+              <div class="adv-v mono">{{ o.fieldsCount ?? '-' }}</div>
+            </div>
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_flatten_adv_mode">Mode</div>
+              <div class="adv-v mono" i18n="@@pdf_flatten_adv_mode_value">Flatten (statique)</div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start; width:100%;">
+      <div class="muted mono" i18n="@@pdf_flatten_options_title">Options</div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center; margin-top:.75rem;">
+        <input type="checkbox" [formControl]="form.controls.includeEmpty" />
+        <span i18n="@@pdf_flatten_include_empty">Inclure les champs vides dans le mapping JSON</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center; margin-top:.5rem;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_flatten_pretty">Mapping JSON “pretty”</span>
+      </label>
+
+      <div class="divider" style="height:1px; width:100%; margin:1rem 0;"></div>
+
+      <div style="width:100%;">
+        <div class="muted mono" i18n="@@pdf_flatten_prefix_label">Préfixe fichiers</div>
+        <input pInputText type="text" [formControl]="form.controls.filePrefix" style="width:100%;" />
+        <div class="muted" style="margin-top:.35rem;" i18n="@@pdf_flatten_prefix_help">
+          Exemple : flattened → flattened_monfichier.pdf
+        </div>
+      </div>
+
+      <div style="display:flex; gap:.5rem; width:100%; margin-top: 1rem;">
+        <button
+          pButton
+          type="button"
+          icon="pi pi-check-square"
+          label="Aplatir"
+          (click)="flattenNow()"
+          [disabled]="!sourceFile() || status() === 'loading'"
+          style="width:100%;"
+        ></button>
+      </div>
+
+      <div class="muted" style="margin-top:.75rem;">
+        {{ ui.tipSign }}
+      </div>
+    </div>
+  </div>
+</app-pdf-tool-shell>
