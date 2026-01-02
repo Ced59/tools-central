@@ -136,9 +136,33 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
               available: true,
               loadComponent: () => import('../../components/pages/tools/dev/pdf/pdf-scan-detector-tool/pdf-scan-detector-tool.component').then(m => m.PdfScanDetectorToolComponent),
             },
-            'pdf-encryption-check': { title: $localize`:@@tool_pdf_encryption_check_title:Chiffrement & permissions PDF`, description: $localize`:@@tool_pdf_encryption_check_desc:Détecter si le PDF est chiffré, quelles permissions sont activées, et exporter le diagnostic.`, icon: 'pi pi-lock', available: false },
-            'pdf-linearized-check': { title: $localize`:@@tool_pdf_linearized_check_title:PDF linéarisé (Fast Web View)`, description: $localize`:@@tool_pdf_linearized_check_desc:Détecter si le PDF est linéarisé et exporter l'état + indices.`, icon: 'pi pi-bolt', available: false },
-            'pdf-font-embedding-check': { title: $localize`:@@tool_pdf_font_embedding_check_title:Vérifier l'intégration des polices`, description: $localize`:@@tool_pdf_font_embedding_check_desc:Lister les polices non intégrées (ou partiellement) et exporter le rapport.`, icon: 'pi pi-check-circle', available: false },
+            'pdf-encryption-check': {
+              title: $localize`:@@tool_pdf_encryption_check_title:Chiffrement & permissions PDF`,
+              description: $localize`:@@tool_pdf_encryption_check_desc:Détecter si le PDF est chiffré, quelles permissions sont activées, et exporter le diagnostic.`,
+              icon: 'pi pi-lock',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-encryption-check-tool/pdf-encryption-check-tool.component')
+                  .then(m => m.PdfEncryptionCheckToolComponent),
+            },
+            'pdf-linearized-check': {
+              title: $localize`:@@tool_pdf_linearized_check_title:PDF linéarisé (Fast Web View)`,
+              description: $localize`:@@tool_pdf_linearized_check_desc:Détecter si le PDF est linéarisé et exporter l'état + indices.`,
+              icon: 'pi pi-bolt',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-linearized-check-tool/pdf-linearized-check-tool.component')
+                  .then(m => m.PdfLinearizedCheckToolComponent),
+            },
+            'pdf-font-embedding-check': {
+              title: $localize`:@@tool_pdf_font_embedding_check_title:Vérifier l'intégration des polices`,
+              description: $localize`:@@tool_pdf_font_embedding_check_desc:Lister les polices non intégrées (ou partiellement) et exporter le rapport.`,
+              icon: 'pi pi-check-circle',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-font-embedding-check-tool/pdf-font-embedding-check-tool.component')
+                  .then(m => m.PdfFontEmbeddingCheckToolComponent),
+            },
           },
         },
         transform: {

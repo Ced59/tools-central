@@ -1,0 +1,122 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-check-circle"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="fonts().length"
+  [filteredCount]="filteredFonts().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredFonts().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_font_embed_empty">Aucune police à afficher.</span>
+      </div>
+    } @else {
+      @for (f of filteredFonts(); track f.id) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name">{{ f.family ?? (f.baseFont ?? '—') }}</span>
+
+              @if (f.embedded === true) {
+                @if (f.subset === true) {
+                  <p-tag value="subset" severity="warn"></p-tag>
+                } @else {
+                  <p-tag value="embedded" severity="success"></p-tag>
+                }
+              } @else if (f.embedded === false) {
+                <p-tag value="not embedded" severity="danger"></p-tag>
+              } @else {
+                <p-tag value="unknown" severity="secondary"></p-tag>
+              }
+            </div>
+
+            <div class="field-card-subtitle mono">
+              {{ f.subtype ?? '—' }}
+              @if (f.embedKind) { · {{ f.embedKind }} }
+              @if (f.toUnicode === true) { · ToUnicode }
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k">BaseFont</div>
+              <div class="adv-v mono">{{ f.baseFont ?? '—' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_font_embed_encoding">Encodage</div>
+              <div class="adv-v mono">{{ f.encoding ?? '—' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_font_embed_fd">FontDescriptor</div>
+              <div class="adv-v mono">
+                {{ f.hasFontDescriptor === true ? 'yes' : (f.hasFontDescriptor === false ? 'no' : '—') }}
+              </div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k">ToUnicode</div>
+              <div class="adv-v mono">{{ f.toUnicode === true ? 'yes' : (f.toUnicode === false ? 'no' : '—') }}</div>
+            </div>
+
+            @if (includePages()) {
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_font_embed_pages">Pages</div>
+                <div class="adv-v mono">{{ f.pages?.join(', ') ?? '—' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_font_embed_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includePages" />
+        <span i18n="@@pdf_font_embed_include_pages">Inclure pages (où la police apparaît)</span>
+      </label>
+
+      <div class="divider" style="height: 1px; width: 100%; margin: .75rem 0;"></div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.showOnlyProblems" />
+        <span i18n="@@pdf_font_embed_only_pb">Afficher seulement les problèmes</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.countSubsetAsProblem" />
+        <span i18n="@@pdf_font_embed_subset_pb">Considérer “subset” comme problème</span>
+      </label>
+
+      <div class="muted" style="margin-top:.75rem;" i18n="@@pdf_font_embed_help">
+        “subset” = police embarquée partiellement (normal) — peut être bloquant en PDF/A selon le contexte.
+      </div>
+    </div>
+  </div>
+</app-pdf-tool-shell>

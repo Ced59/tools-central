@@ -1,0 +1,149 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-lock"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="info() ? 1 : 0"
+  [filteredCount]="info() ? 1 : 0"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (!info()) {
+      <div class="empty-box">
+        <i class="pi pi-lock" aria-hidden="true"></i>
+        <span i18n="@@pdf_enc_empty">Aucune donnée à afficher.</span>
+      </div>
+    } @else {
+      <div class="field-card">
+        <div class="field-card-header">
+          <div class="field-card-title">
+            <span class="field-name" i18n="@@pdf_enc_summary_title">Chiffrement</span>
+            @if (info()!.encrypted) {
+              <p-tag value="Encrypted" severity="danger"></p-tag>
+            } @else {
+              <p-tag value="Not encrypted" severity="success"></p-tag>
+            }
+          </div>
+        </div>
+
+        <div class="field-card-advanced">
+          <div class="adv-kv">
+            <div class="adv-k">Filter</div>
+            <div class="adv-v mono">{{ info()!.filter ?? '—' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">SubFilter</div>
+            <div class="adv-v mono">{{ info()!.subFilter ?? '—' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">V / R</div>
+            <div class="adv-v mono">V={{ info()!.v ?? '—' }} · R={{ info()!.r ?? '—' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_enc_keylen">Longueur de clé</div>
+            <div class="adv-v mono">{{ info()!.keyLengthBits ? (info()!.keyLengthBits + ' bits') : '—' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">EncryptMetadata</div>
+            <div class="adv-v mono">{{ info()!.encryptMetadata === null ? '—' : (info()!.encryptMetadata ? 'true' : 'false') }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_enc_pwd_presence">Entrées mot de passe</div>
+            <div class="adv-v mono">
+              O={{ info()!.hasO === null ? '—' : (info()!.hasO ? 'yes' : 'no') }}
+              · U={{ info()!.hasU === null ? '—' : (info()!.hasU ? 'yes' : 'no') }}
+            </div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">P</div>
+            <div class="adv-v mono">{{ info()!.pRaw === null ? '—' : info()!.pRaw }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-card">
+        <div class="field-card-header">
+          <div class="field-card-title">
+            <span class="field-name" i18n="@@pdf_enc_permissions_title">Permissions</span>
+            <span class="muted" i18n="@@pdf_enc_permissions_hint">Déclarées par le PDF (peuvent être ignorées par certains logiciels)</span>
+          </div>
+        </div>
+
+        <div class="field-card-advanced">
+          @for (p of filteredPermissions(); track p.id) {
+            <div class="adv-kv">
+              <div class="adv-k" style="display:flex; gap:.5rem; align-items:center;">
+                <p-tag
+                  [value]="p.allowed === true ? 'ALLOW' : (p.allowed === false ? 'DENY' : 'UNKNOWN')"
+                  [severity]="permissionBadgeSeverity(p)"
+                ></p-tag>
+                <span>{{ p.label }}</span>
+              </div>
+              <div class="adv-v mono">
+                @if (p.bit) { bit=0x{{ p.bit.toString(16) }} } @else { — }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      @if (includeNotes() && info()!.notes.length) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name" i18n="@@pdf_enc_notes_title">Notes</span>
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <ul class="muted" style="margin:0; padding-left: 1.1rem;">
+              @for (n of info()!.notes; track n) {
+                <li>{{ n }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_enc_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeRawTrailerEncrypt" />
+        <span i18n="@@pdf_enc_include_raw">Inclure “trailer /Encrypt” brut (diagnostic)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeNotes" />
+        <span i18n="@@pdf_enc_include_notes">Inclure notes (best-effort)</span>
+      </label>
+    </div>
+  </div>
+</app-pdf-tool-shell>

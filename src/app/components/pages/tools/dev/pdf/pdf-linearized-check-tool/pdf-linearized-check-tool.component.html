@@ -1,0 +1,182 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-bolt"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="report() ? 1 : 0"
+  [filteredCount]="report() ? 1 : 0"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (!report()) {
+      <div class="empty-box">
+        <i class="pi pi-bolt" aria-hidden="true"></i>
+        <span i18n="@@pdf_lin_empty">Aucune donnée à afficher.</span>
+      </div>
+    } @else {
+      <div class="field-card">
+        <div class="field-card-header">
+          <div class="field-card-title">
+            <span class="field-name" i18n="@@pdf_lin_summary_title">Linéarisation</span>
+            @if (report()!.isLinearized) {
+              <p-tag value="Linearized" severity="success"></p-tag>
+            } @else {
+              <p-tag value="Not linearized" severity="danger"></p-tag>
+            }
+          </div>
+        </div>
+
+        <div class="field-card-advanced">
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_marker_kw">Marqueur /Linearized 1</div>
+            <div class="adv-v mono">{{ report()!.markers.linearizedKeywordFound ? 'yes' : 'no' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_marker_dict">Linearization dict</div>
+            <div class="adv-v mono">
+              {{ report()!.markers.linearizationDictFound ? 'yes' : 'no' }}
+              @if (report()!.markers.linearizationDictOffset !== null) {
+                · offset≈{{ report()!.markers.linearizationDictOffset }}
+              }
+            </div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_scan_head">Scan entête</div>
+            <div class="adv-v mono">{{ report()!.markers.withinFirstBytes }} bytes</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">startxref</div>
+            <div class="adv-v mono">{{ report()!.structure.startXrefOffset === null ? '—' : report()!.structure.startXrefOffset }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k">%%EOF</div>
+            <div class="adv-v mono">{{ report()!.structure.eofCount }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-card">
+        <div class="field-card-header">
+          <div class="field-card-title">
+            <span class="field-name" i18n="@@pdf_lin_dict_title">Dictionnaire de linéarisation</span>
+            @if (!report()!.linearizationDict) {
+              <span class="muted" i18n="@@pdf_lin_dict_none">Non disponible</span>
+            }
+          </div>
+        </div>
+
+        <div class="field-card-advanced">
+          @if (report()!.linearizationDict) {
+            <div class="adv-kv"><div class="adv-k">/L</div><div class="adv-v mono">{{ report()!.linearizationDict!.L ?? '—' }}</div></div>
+            <div class="adv-kv"><div class="adv-k">/N</div><div class="adv-v mono">{{ report()!.linearizationDict!.N ?? '—' }}</div></div>
+            <div class="adv-kv"><div class="adv-k">/O</div><div class="adv-v mono">{{ report()!.linearizationDict!.O ?? '—' }}</div></div>
+            <div class="adv-kv"><div class="adv-k">/E</div><div class="adv-v mono">{{ report()!.linearizationDict!.E ?? '—' }}</div></div>
+            <div class="adv-kv"><div class="adv-k">/T</div><div class="adv-v mono">{{ report()!.linearizationDict!.T ?? '—' }}</div></div>
+            <div class="adv-kv"><div class="adv-k">/P</div><div class="adv-v mono">{{ report()!.linearizationDict!.P ?? '—' }}</div></div>
+
+            <div class="adv-kv">
+              <div class="adv-k">/H</div>
+              <div class="adv-v mono">
+                @if (report()!.linearizationDict!.H) {
+                  [{{ report()!.linearizationDict!.H![0] }}, {{ report()!.linearizationDict!.H![1] }}]
+                } @else { — }
+              </div>
+            </div>
+          } @else {
+            <div class="muted" i18n="@@pdf_lin_dict_hint">Aucun dictionnaire parsé. Le PDF peut ne pas être linéarisé, ou le scan n’a pas couvert la zone utile.</div>
+          }
+        </div>
+      </div>
+
+      <div class="field-card">
+        <div class="field-card-header">
+          <div class="field-card-title">
+            <span class="field-name" i18n="@@pdf_lin_hints_title">Hints</span>
+          </div>
+        </div>
+
+        <div class="field-card-advanced">
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_hints_array">Table /H</div>
+            <div class="adv-v mono">{{ report()!.hints.hasHintArray ? 'yes' : 'no' }}</div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_hints_offset">Hint offset/len</div>
+            <div class="adv-v mono">
+              @if (report()!.hints.hasHintArray) {
+                off={{ report()!.hints.hintOffset }} · len={{ report()!.hints.hintLength }}
+              } @else { — }
+            </div>
+          </div>
+
+          <div class="adv-kv">
+            <div class="adv-k" i18n="@@pdf_lin_hints_heur">Heuristique hints</div>
+            <div class="adv-v mono">{{ report()!.hints.possibleHintObjectsFound ? 'possible' : 'no signal' }}</div>
+          </div>
+        </div>
+      </div>
+
+      @if (includeNotes() && report()!.notes.length) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name" i18n="@@pdf_lin_notes_title">Notes</span>
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <ul class="muted" style="margin:0; padding-left: 1.1rem;">
+              @for (n of report()!.notes; track n) {
+                <li>{{ n }}</li>
+              }
+            </ul>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_lin_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input pInputText type="number" min="8192" [formControl]="form.controls.scanHeadBytes" style="width: 100%;" />
+        <span class="muted" i18n="@@pdf_lin_scan_head_label">Scan entête (bytes)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input pInputText type="number" min="8192" [formControl]="form.controls.scanTailBytes" style="width: 100%;" />
+        <span class="muted" i18n="@@pdf_lin_scan_tail_label">Scan fin (bytes)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeNotes" />
+        <span i18n="@@pdf_lin_include_notes">Inclure notes (best-effort)</span>
+      </label>
+    </div>
+  </div>
+</app-pdf-tool-shell>
