@@ -82153,6 +82153,714 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">돌아가기</target>
       </segment>
     </unit>
+    <unit id="pdf_obj_empty">
+      <segment>
+        <source>Aucun objet à afficher.</source>
+        <target state="translated">표시할 객체가 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_objnum">
+      <segment>
+        <source>Objet</source>
+        <target state="translated">객체</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_gen">
+      <segment>
+        <source>Génération</source>
+        <target state="translated">생성</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_kind">
+      <segment>
+        <source>Kind</source>
+        <target state="translated">종류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_keys_count">
+      <segment>
+        <source>Keys</source>
+        <target state="translated">키</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_stream_raw">
+      <segment>
+        <source>Stream (raw bytes)</source>
+        <target state="translated">스트림 (원시 바이트)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_length_declared">
+      <segment>
+        <source>/Length (decl.)</source>
+        <target state="translated">/Length (선언)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_filter">
+      <segment>
+        <source>/Filter</source>
+        <target state="translated">/Filter</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_xref_offset">
+      <segment>
+        <source>XRef offset</source>
+        <target state="translated">XRef 오프셋</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_reachable">
+      <segment>
+        <source>Reachable</source>
+        <target state="translated">도달 가능</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_keys">
+      <segment>
+        <source>Keys list</source>
+        <target state="translated">키 목록</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “예쁘게” (들여쓰기)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_keys">
+      <segment>
+        <source>Inclure la liste des clés (dict/stream)</source>
+        <target state="translated">키 목록 포함 (사전/스트림)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_hide_other">
+      <segment>
+        <source>Masquer les objets “other”</source>
+        <target state="translated">“기타” 객체 숨기기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_xref">
+      <segment>
+        <source>Inclure XRef (offsets si table)</source>
+        <target state="translated">XRef 포함 (테이블일 경우 오프셋)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_reachability">
+      <segment>
+        <source>Inclure reachability (orphans)</source>
+        <target state="translated">도달 가능성 포함 (고아)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_findings">
+      <segment>
+        <source>Inclure findings (JS, embedded…)</source>
+        <target state="translated">발견 사항 포함 (JS, 내장 등…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_title">
+      <segment>
+        <source>Objets PDF → JSON</source>
+        <target state="translated">PDF 객체 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_subtitle">
+      <segment>
+        <source>Inventoriez les objets indirects d’un PDF (références, dict/stream/array), analysez la XRef (table) et repérez des objets orphelins/suspects. Export JSON local.</source>
+        <target state="translated">PDF의 간접 객체(참조, dict/stream/array)를 나열하고, XRef(테이블)를 분석하며, 고아/의심스러운 객체를 식별합니다. 로컬 JSON으로 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_err_title">
+      <segment>
+        <source>Impossible d’analyser les objets du PDF.</source>
+        <target state="translated">PDF 객체를 분석할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">이 PDF를 읽을 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">모든 작업이 브라우저에서 로컬로 수행됩니다(업로드 없음).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_none">
+      <segment>
+        <source>Aucun objet indirect détecté (très rare).</source>
+        <target state="translated">간접 객체가 감지되지 않았습니다(매우 드뭅니다).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_xref_stream">
+      <segment>
+        <source>XRef “stream” détectée (PDF 1.5+) : offsets détaillés non disponibles dans cette version.</source>
+        <target state="translated">XRef “stream” 감지됨 (PDF 1.5+) : 이 버전에서는 상세 오프셋을 사용할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDF 선택</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">재설정</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">복사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">다운로드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_filter_placeholder">
+      <segment>
+        <source>Filtrer (ref, type, subtype, key, filter, orphan, js…)</source>
+        <target state="translated">필터 (ref, type, subtype, key, filter, orphan, js…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">분석 중…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">준비 완료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">오류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDF 가져오기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">데이터가 서버로 전송되지 않습니다: 모든 작업이 브라우저에서 수행됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">결과</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_results_sub">
+      <segment>
+        <source>Aperçu des objets détectés + XRef (table) + orphelins/suspects et export JSON.</source>
+        <target state="translated">감지된 객체 + XRef(테이블) + 고아/의심스러운 객체 미리보기 및 JSON 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">내보낼 수 있음</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_list_title">
+      <segment>
+        <source>Objets</source>
+        <target state="translated">객체</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDF 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">페이지</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_total_label">
+      <segment>
+        <source>Objets</source>
+        <target state="translated">객체</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_streams_label">
+      <segment>
+        <source>Streams</source>
+        <target state="translated">스트림</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_orphans_label">
+      <segment>
+        <source>Orphelins</source>
+        <target state="translated">고아</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON이 클립보드에 복사되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">자동으로 복사할 수 없습니다. 텍스트를 선택하고 수동으로 복사하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_empty">
+      <segment>
+        <source>Aucune donnée à afficher.</source>
+        <target state="translated">표시할 데이터가 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_adv_decode">
+      <segment>
+        <source>Décodage</source>
+        <target state="translated">디코딩</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_adv_preview">
+      <segment>
+        <source>Aperçu</source>
+        <target state="translated">미리보기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “pretty” (들여쓰기)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_include_raw">
+      <segment>
+        <source>Inclure “raw” (pour debug tokens)</source>
+        <target state="translated">“raw” 포함 (토큰 디버그용)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_include_notes">
+      <segment>
+        <source>Inclure notes de décodage (filtres/erreurs)</source>
+        <target state="translated">디코딩 노트 포함 (필터/오류)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_scope_title">
+      <segment>
+        <source>Plage de pages</source>
+        <target state="translated">페이지 범위</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_limit_title">
+      <segment>
+        <source>Limite</source>
+        <target state="translated">제한</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_limit_help">
+      <segment>
+        <source>Max ops / page (évite les exports géants).</source>
+        <target state="translated">페이지당 최대 작업 수 (거대한 내보내기를 피하십시오).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_title">
+      <segment>
+        <source>Opérateurs de page → JSON</source>
+        <target state="translated">페이지 연산자 → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_subtitle">
+      <segment>
+        <source>Analysez les content streams d’un PDF et exportez les opérateurs/operandés (TJ/Tj, Do, cm, q/Q…) page par page en JSON — localement dans le navigateur.</source>
+        <target state="translated">PDF의 콘텐츠 스트림을 분석하고 페이지별로 연산자/피연산자 (TJ/Tj, Do, cm, q/Q…)를 JSON으로 내보냅니다 — 브라우저에서 로컬로.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_err_title">
+      <segment>
+        <source>Impossible d’extraire les opérateurs.</source>
+        <target state="translated">연산자를 추출할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">이 PDF를 읽을 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">모든 작업이 브라우저에서 로컬로 수행됩니다 (업로드 없음).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_tip_huge">
+      <segment>
+        <source>Astuce : limitez la plage de pages ou le nombre d’opérations par page pour éviter un export énorme.</source>
+        <target state="translated">팁: 페이지 범위나 페이지당 작업 수를 제한하여 거대한 내보내기를 피하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDF 선택</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">재설정</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">복사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">다운로드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_filter_placeholder">
+      <segment>
+        <source>Filtrer (opérateur, Do, Tj/TJ, cm, nom XObject, texte…)</source>
+        <target state="translated">필터 (연산자, Do, Tj/TJ, cm, XObject 이름, 텍스트…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">분석 중…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">준비 완료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">오류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDF 가져오기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">서버에 데이터가 전송되지 않습니다: 모든 작업이 브라우저에서 수행됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">결과</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_results_sub">
+      <segment>
+        <source>Opérateurs extraits par page + export JSON.</source>
+        <target state="translated">페이지별로 추출된 연산자 + JSON 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">내보낼 수 있음</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">페이지</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDF 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">페이지</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_analyzed_label">
+      <segment>
+        <source>Analysées</source>
+        <target state="translated">분석됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_ops_label">
+      <segment>
+        <source>Ops</source>
+        <target state="translated">작업</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_text_label">
+      <segment>
+        <source>Texte</source>
+        <target state="translated">텍스트</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON이 클립보드에 복사되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">자동으로 복사할 수 없습니다. 텍스트를 선택하고 수동으로 복사하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_empty">
+      <segment>
+        <source>Aucune entrée à afficher.</source>
+        <target state="translated">표시할 항목이 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_kind">
+      <segment>
+        <source>Kind</source>
+        <target state="translated">종류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_offset">
+      <segment>
+        <source>Offset</source>
+        <target state="translated">오프셋</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_nextfree">
+      <segment>
+        <source>Next free</source>
+        <target state="translated">다음 무료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_objstm">
+      <segment>
+        <source>ObjStm</source>
+        <target state="translated">ObjStm</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_objstm_index">
+      <segment>
+        <source>ObjStm index</source>
+        <target state="translated">ObjStm 인덱스</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “예쁘게” (들여쓰기)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_include_diag">
+      <segment>
+        <source>Inclure diagnostics (type XRef, /W, /Index…)</source>
+        <target state="translated">진단 포함 (XRef 유형, /W, /Index…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_title">
+      <segment>
+        <source>XRef PDF → JSON</source>
+        <target state="translated">XRef PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_subtitle">
+      <segment>
+        <source>Inspectez la table/stream XRef d’un PDF (offsets, générations, statuts) et exportez un JSON exploitable, localement dans le navigateur.</source>
+        <target state="translated">PDF의 XRef 테이블/스트림 (오프셋, 세대, 상태)을 검사하고 로컬에서 사용 가능한 JSON으로 내보냅니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_err_title">
+      <segment>
+        <source>Impossible d’inspecter la XRef.</source>
+        <target state="translated">XRef를 검사할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">이 PDF를 읽을 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">모든 작업은 브라우저에서 로컬로 진행됩니다(업로드 없음).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDF 선택</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">재설정</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">복사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">다운로드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_filter_placeholder">
+      <segment>
+        <source>Filtrer (obj, offset, free, compressed, gen…)</source>
+        <target state="translated">필터 (obj, offset, free, compressed, gen…) </target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">분석 중…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">준비 완료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">오류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDF 가져오기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">데이터가 서버로 전송되지 않습니다: 모든 작업은 브라우저에서 진행됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">결과</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_results_sub">
+      <segment>
+        <source>Entrées XRef (table ou stream) + export JSON.</source>
+        <target state="translated">XRef 항목 (테이블 또는 스트림) + JSON 내보내기.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">내보낼 수 있음</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_list_title">
+      <segment>
+        <source>Entrées XRef</source>
+        <target state="translated">XRef 항목</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDF 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_total">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">항목</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_inuse">
+      <segment>
+        <source>In-use</source>
+        <target state="translated">사용 중</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_free">
+      <segment>
+        <source>Free</source>
+        <target state="translated">무료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_comp">
+      <segment>
+        <source>Compressed</source>
+        <target state="translated">압축됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON이 클립보드에 복사되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">자동으로 복사할 수 없습니다. 텍스트를 선택하고 수동으로 복사하세요.</target>
+      </segment>
+    </unit>
 
     
     

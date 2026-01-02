@@ -1,0 +1,102 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-sitemap"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="entries().length"
+  [filteredCount]="filteredEntries().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredEntries().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_xref_empty">Aucune entrée à afficher.</span>
+      </div>
+    } @else {
+      @for (it of filteredEntries(); track it.objNumber) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name mono">{{ it.objNumber }}</span>
+              <span class="muted mono">· gen {{ it.gen ?? '—' }}</span>
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              @if (it.kind === 'inUse') {
+                <p-tag value="inUse" severity="success"></p-tag>
+              } @else if (it.kind === 'free') {
+                <p-tag value="free" severity="warn"></p-tag>
+              } @else {
+                <p-tag value="compressed" severity="info"></p-tag>
+              }
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_xref_adv_kind">Kind</div>
+              <div class="adv-v mono">{{ it.kind }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_xref_adv_offset">Offset</div>
+              <div class="adv-v mono">{{ it.offset ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_xref_adv_nextfree">Next free</div>
+              <div class="adv-v mono">{{ it.nextFreeObj ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_xref_adv_objstm">ObjStm</div>
+              <div class="adv-v mono">{{ it.objStm ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_xref_adv_objstm_index">ObjStm index</div>
+              <div class="adv-v mono">{{ it.objStmIndex ?? 'null' }}</div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_xref_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeDiagnostics" />
+        <span i18n="@@pdf_xref_include_diag">Inclure diagnostics (type XRef, /W, /Index…)</span>
+      </label>
+
+      @if (status() === 'ready') {
+        <div class="muted" style="margin-top: .75rem;">
+          <div class="mono">kind={{ stats().kind }} · startxref={{ stats().startxref ?? 'null' }}</div>
+          <div class="mono">inUse={{ stats().inUse }} · free={{ stats().free }} · compressed={{ stats().compressed }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</app-pdf-tool-shell>

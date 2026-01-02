@@ -1,0 +1,178 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-database"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="objects().length"
+  [filteredCount]="filteredObjects().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredObjects().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_obj_empty">Aucun objet à afficher.</span>
+      </div>
+    } @else {
+      @for (it of filteredObjects(); track it.id) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name mono">{{ it.id }}</span>
+
+              @if (it.typeName) {
+                <span class="muted mono">· Type {{ it.typeName }}</span>
+              }
+              @if (it.subtypeName) {
+                <span class="muted mono">· Subtype {{ it.subtypeName }}</span>
+              }
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              <p-tag [value]="it.kind" severity="info"></p-tag>
+
+              @if (it.reachable === false) {
+                <p-tag value="orphan" severity="warn"></p-tag>
+              }
+
+              @if (it.hasJavaScript) {
+                <p-tag value="js" severity="danger"></p-tag>
+              }
+
+              @if (it.hasEmbeddedFile) {
+                <p-tag value="embedded" severity="danger"></p-tag>
+              }
+
+              @if (it.actionS) {
+                <span class="muted mono" title="Action /S">{{ it.actionS }}</span>
+              }
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_objnum">Objet</div>
+              <div class="adv-v mono">{{ it.objNumber }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_gen">Génération</div>
+              <div class="adv-v mono">{{ it.generation }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_kind">Kind</div>
+              <div class="adv-v mono">{{ it.kind }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_keys_count">Keys</div>
+              <div class="adv-v mono">{{ it.keysCount ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_stream_raw">Stream (raw bytes)</div>
+              <div class="adv-v mono">{{ it.streamLengthRawBytes ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_length_declared">/Length (decl.)</div>
+              <div class="adv-v mono">{{ it.lengthDeclared ?? 'null' }}</div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_obj_adv_filter">/Filter</div>
+              <div class="adv-v mono">{{ (it.filters ?? []).length ? (it.filters ?? []).join(', ') : '—' }}</div>
+            </div>
+
+            @if (includeXref() && it.xref) {
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_obj_adv_xref_offset">XRef offset</div>
+                <div class="adv-v mono">
+                  {{ it.xref.offset ?? 'null' }}
+                  @if (it.xref.inUse === false) {
+                    <span class="muted mono"> (free)</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (includeReachability() && it.reachable !== null) {
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_obj_adv_reachable">Reachable</div>
+                <div class="adv-v mono">{{ it.reachable }}</div>
+              </div>
+            }
+
+            @if (includeKeys() && (it.keys ?? []).length > 0) {
+              <div class="adv-kv">
+                <div class="adv-k" i18n="@@pdf_obj_adv_keys">Keys list</div>
+                <div class="adv-v mono" style="white-space: normal;">
+                  {{ (it.keys ?? []).join(', ') }}
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_obj_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeKeys" />
+        <span i18n="@@pdf_obj_include_keys">Inclure la liste des clés (dict/stream)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.hideOther" />
+        <span i18n="@@pdf_obj_hide_other">Masquer les objets “other”</span>
+      </label>
+
+      <div class="separator" style="height: 1px; width: 100%; opacity: .15; margin: .75rem 0;"></div>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeXref" />
+        <span i18n="@@pdf_obj_include_xref">Inclure XRef (offsets si table)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeReachability" />
+        <span i18n="@@pdf_obj_include_reachability">Inclure reachability (orphans)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeFindings" />
+        <span i18n="@@pdf_obj_include_findings">Inclure findings (JS, embedded…)</span>
+      </label>
+
+      @if (status() === 'ready') {
+        <div class="muted" style="margin-top: .75rem;">
+          <div class="mono">xref: {{ stats().xrefKind }} · startxref={{ stats().startXrefOffset ?? 'null' }} · parsed={{ stats().xrefParsedCount }}</div>
+          <div class="mono">reachable={{ stats().reachable }} · orphans={{ stats().orphans }} · findings={{ stats().findings }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</app-pdf-tool-shell>

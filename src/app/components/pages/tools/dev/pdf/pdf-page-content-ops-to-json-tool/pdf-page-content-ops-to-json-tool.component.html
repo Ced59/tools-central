@@ -1,0 +1,106 @@
+<app-pdf-tool-shell
+  [ui]="uiShell"
+  icon="pi pi-code"
+  [title]="ui.title"
+  [subtitle]="ui.subtitle"
+  [backLink]="backLink"
+  [status]="status()"
+  [fileName]="fileName()"
+  [fileSize]="fileSize()"
+  [tipMessage]="tipMessage()"
+  [errorMessage]="shellErrorMessage()"
+  [stats]="statsCards()"
+  [totalCount]="pages().length"
+  [filteredCount]="filteredPages().length"
+  [filterControl]="form.controls.filter"
+  [jsonText]="jsonText()"
+  [showResults]="status() === 'ready'"
+  (fileSelected)="onFileSelected($event)"
+  (reset)="reset()"
+  (copy)="copyJson()"
+  (download)="downloadJson()"
+>
+  <!-- LEFT -->
+  <div leftList>
+    @if (filteredPages().length === 0) {
+      <div class="empty-box">
+        <i class="pi pi-search" aria-hidden="true"></i>
+        <span i18n="@@pdf_ops_empty">Aucune donnée à afficher.</span>
+      </div>
+    } @else {
+      @for (p of filteredPages(); track p.pageNumber) {
+        <div class="field-card">
+          <div class="field-card-header">
+            <div class="field-card-title">
+              <span class="field-name">Page {{ p.pageNumber }}</span>
+              <span class="muted">· ops {{ p.stats.totalOps }}</span>
+            </div>
+
+            <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
+              <p-tag value="Tj/TJ" severity="success"></p-tag>
+              <span class="mono muted">{{ p.stats.textOps }}</span>
+
+              <p-tag value="Do" severity="info"></p-tag>
+              <span class="mono muted">{{ p.stats.xobjectOps }}</span>
+
+              @if (p.stats.hasInlineImages) {
+                <p-tag value="BI..EI" severity="warn"></p-tag>
+              }
+            </div>
+          </div>
+
+          <div class="field-card-advanced">
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_ops_adv_decode">Décodage</div>
+              <div class="adv-v mono">
+                streams={{ p.decode.streams }} · decoded={{ p.decode.decoded }} · skipped={{ p.decode.skipped }}
+              </div>
+            </div>
+
+            <div class="adv-kv">
+              <div class="adv-k" i18n="@@pdf_ops_adv_preview">Aperçu</div>
+              <div class="adv-v mono">
+                {{ previewOps(p) }}
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- RIGHT -->
+  <div rightOptions>
+    <div class="actions" style="flex-direction: column; align-items: flex-start;">
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.pretty" />
+        <span i18n="@@pdf_ops_pretty">JSON “pretty” (indenté)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeArgsRaw" />
+        <span i18n="@@pdf_ops_include_raw">Inclure “raw” (pour debug tokens)</span>
+      </label>
+
+      <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
+        <input type="checkbox" [formControl]="form.controls.includeDecodeNotes" />
+        <span i18n="@@pdf_ops_include_notes">Inclure notes de décodage (filtres/erreurs)</span>
+      </label>
+
+      <div class="divider" style="height: 1px; width: 100%; margin: .75rem 0;"></div>
+
+      <div class="muted" style="display:flex; flex-direction:column; gap:.5rem; width:100%;">
+        <div class="mono" i18n="@@pdf_ops_scope_title">Plage de pages</div>
+
+        <div style="display:flex; gap:.5rem; width:100%;">
+          <input pInputText type="number" min="1" [formControl]="form.controls.pageFrom" style="width: 100%;" />
+          <input pInputText type="number" min="1" [formControl]="form.controls.pageTo" style="width: 100%;" />
+        </div>
+
+        <div class="mono" i18n="@@pdf_ops_limit_title">Limite</div>
+        <input pInputText type="number" min="1" [formControl]="form.controls.maxOpsPerPage" style="width: 100%;" />
+        <div class="muted" i18n="@@pdf_ops_limit_help">Max ops / page (évite les exports géants).</div>
+      </div>
+    </div>
+  </div>
+</app-pdf-tool-shell>

@@ -94,9 +94,34 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
               available: true,
               loadComponent: () => import('../../components/pages/tools/dev/pdf/pdf-attachments-extractor-tool/pdf-attachments-extractor-tool.component').then(m => m.PdfAttachmentsExtractorToolComponent),
             },
-            'pdf-object-info-to-json': { title: $localize`:@@tool_pdf_object_info_to_json_title:Objets PDF → JSON`, description: $localize`:@@tool_pdf_object_info_to_json_desc:Lister les objets (ids/références), types (dict/stream/array) et statistiques bas niveau.`, icon: 'pi pi-database', available: false },
-            'pdf-xref-to-json': { title: $localize`:@@tool_pdf_xref_to_json_title:XRef PDF → JSON`, description: $localize`:@@tool_pdf_xref_to_json_desc:Inspecter la table/stream XRef (objets, offsets, générations) et exporter en JSON.`, icon: 'pi pi-sitemap', available: false },
-            'pdf-page-content-ops-to-json': { title: $localize`:@@tool_pdf_page_content_ops_to_json_title:Opérateurs de page → JSON`, description: $localize`:@@tool_pdf_page_content_ops_to_json_desc:Analyser les content streams (opérateurs PDF) par page et exporter une version structurée.`, icon: 'pi pi-code', available: false },
+            'pdf-object-info-to-json': {
+              title: $localize`:@@tool_pdf_object_info_to_json_title:Objets PDF → JSON`,
+              description: $localize`:@@tool_pdf_object_info_to_json_desc:Lister les objets (ids/références), types (dict/stream/array) et statistiques bas niveau.`,
+              icon: 'pi pi-database',
+              available: true,
+              loadComponent: () =>
+                import(
+                  '../../components/pages/tools/dev/pdf/pdf-object-info-to-json/pdf-object-info-to-json.component'
+                  ).then(m => m.PdfObjectInfoToJsonToolComponent),
+            },
+            'pdf-xref-to-json': {
+              title: $localize`:@@tool_pdf_xref_to_json_title:XRef PDF → JSON`,
+              description: $localize`:@@tool_pdf_xref_to_json_desc:Inspecter la table/stream XRef (objets, offsets, générations) et exporter en JSON.`,
+              icon: 'pi pi-sitemap',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-xref-to-json-tool/pdf-xref-to-json-tool.component')
+                  .then(m => m.PdfXrefToJsonToolComponent),
+            },
+            'pdf-page-content-ops-to-json': {
+              title: $localize`:@@tool_pdf_page_content_ops_to_json_title:Opérateurs de page → JSON`,
+              description: $localize`:@@tool_pdf_page_content_ops_to_json_desc:Analyser les content streams (opérateurs PDF) par page et exporter une version structurée.`,
+              icon: 'pi pi-code',
+              available: true,
+              loadComponent: () =>
+                import('../../components/pages/tools/dev/pdf/pdf-page-content-ops-to-json-tool/pdf-page-content-ops-to-json-tool.component')
+                  .then(m => m.PdfPageContentOpsToJsonToolComponent),
+            },
           },
         },
         validate: {

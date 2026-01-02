@@ -82153,6 +82153,714 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">戻る</target>
       </segment>
     </unit>
+    <unit id="pdf_obj_empty">
+      <segment>
+        <source>Aucun objet à afficher.</source>
+        <target state="translated">表示するオブジェクトはありません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_objnum">
+      <segment>
+        <source>Objet</source>
+        <target state="translated">オブジェクト</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_gen">
+      <segment>
+        <source>Génération</source>
+        <target state="translated">生成</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_kind">
+      <segment>
+        <source>Kind</source>
+        <target state="translated">種類</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_keys_count">
+      <segment>
+        <source>Keys</source>
+        <target state="translated">キー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_stream_raw">
+      <segment>
+        <source>Stream (raw bytes)</source>
+        <target state="translated">ストリーム（生のバイト）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_length_declared">
+      <segment>
+        <source>/Length (decl.)</source>
+        <target state="translated">/Length（宣言）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_filter">
+      <segment>
+        <source>/Filter</source>
+        <target state="translated">/Filter</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_xref_offset">
+      <segment>
+        <source>XRef offset</source>
+        <target state="translated">XRefオフセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_reachable">
+      <segment>
+        <source>Reachable</source>
+        <target state="translated">到達可能</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_adv_keys">
+      <segment>
+        <source>Keys list</source>
+        <target state="translated">キーリスト</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">JSON “pretty”（インデント付き）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_keys">
+      <segment>
+        <source>Inclure la liste des clés (dict/stream)</source>
+        <target state="translated">キーリストを含める（辞書/ストリーム）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_hide_other">
+      <segment>
+        <source>Masquer les objets “other”</source>
+        <target state="translated">“other”オブジェクトを隠す</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_xref">
+      <segment>
+        <source>Inclure XRef (offsets si table)</source>
+        <target state="translated">XRefを含める（テーブルの場合はオフセット）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_reachability">
+      <segment>
+        <source>Inclure reachability (orphans)</source>
+        <target state="translated">到達可能性を含める（孤立したオブジェクト）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_include_findings">
+      <segment>
+        <source>Inclure findings (JS, embedded…)</source>
+        <target state="translated">発見を含める（JS、埋め込み…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_title">
+      <segment>
+        <source>Objets PDF → JSON</source>
+        <target state="translated">PDFオブジェクト → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_subtitle">
+      <segment>
+        <source>Inventoriez les objets indirects d’un PDF (références, dict/stream/array), analysez la XRef (table) et repérez des objets orphelins/suspects. Export JSON local.</source>
+        <target state="translated">PDFの間接オブジェクト（参照、辞書/ストリーム/配列）をインベントリし、XRef（テーブル）を分析し、孤立した/疑わしいオブジェクトを特定します。ローカルJSONをエクスポートします。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_err_title">
+      <segment>
+        <source>Impossible d’analyser les objets du PDF.</source>
+        <target state="translated">PDFのオブジェクトを解析できませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">このPDFを読み取ることができません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">すべてはあなたのブラウザ内で行われます（アップロードはありません）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_none">
+      <segment>
+        <source>Aucun objet indirect détecté (très rare).</source>
+        <target state="translated">間接オブジェクトが検出されませんでした（非常に稀です）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_tip_xref_stream">
+      <segment>
+        <source>XRef “stream” détectée (PDF 1.5+) : offsets détaillés non disponibles dans cette version.</source>
+        <target state="translated">XRef “stream” が検出されました（PDF 1.5+）：このバージョンでは詳細なオフセットは利用できません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDFを選択</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">リセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">コピー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">ダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_filter_placeholder">
+      <segment>
+        <source>Filtrer (ref, type, subtype, key, filter, orphan, js…)</source>
+        <target state="translated">フィルタ（ref, type, subtype, key, filter, orphan, js…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">準備完了</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDFをインポート</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">データはサーバーに送信されません：すべてはあなたのブラウザ内で行われます。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">結果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_card_results_sub">
+      <segment>
+        <source>Aperçu des objets détectés + XRef (table) + orphelins/suspects et export JSON.</source>
+        <target state="translated">検出されたオブジェクトの概要 + XRef（テーブル） + 孤児/疑わしいオブジェクトとJSONエクスポート。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">エクスポート可能</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_list_title">
+      <segment>
+        <source>Objets</source>
+        <target state="translated">オブジェクト</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDFツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">ページ</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_total_label">
+      <segment>
+        <source>Objets</source>
+        <target state="translated">オブジェクト</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_streams_label">
+      <segment>
+        <source>Streams</source>
+        <target state="translated">ストリーム</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_stat_orphans_label">
+      <segment>
+        <source>Orphelins</source>
+        <target state="translated">孤児</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSONがクリップボードにコピーされました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_obj_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">自動的にコピーできませんでした。テキストを選択して手動でコピーしてください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_empty">
+      <segment>
+        <source>Aucune donnée à afficher.</source>
+        <target state="translated">表示するデータはありません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_adv_decode">
+      <segment>
+        <source>Décodage</source>
+        <target state="translated">デコード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_adv_preview">
+      <segment>
+        <source>Aperçu</source>
+        <target state="translated">プレビュー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">整形されたJSON（インデント付き）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_include_raw">
+      <segment>
+        <source>Inclure “raw” (pour debug tokens)</source>
+        <target state="translated">“raw”を含める（トークンのデバッグ用）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_include_notes">
+      <segment>
+        <source>Inclure notes de décodage (filtres/erreurs)</source>
+        <target state="translated">デコードノートを含める（フィルタ/エラー）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_scope_title">
+      <segment>
+        <source>Plage de pages</source>
+        <target state="translated">ページ範囲</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_limit_title">
+      <segment>
+        <source>Limite</source>
+        <target state="translated">制限</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_limit_help">
+      <segment>
+        <source>Max ops / page (évite les exports géants).</source>
+        <target state="translated">ページあたりの最大操作数（巨大なエクスポートを避けるため）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_title">
+      <segment>
+        <source>Opérateurs de page → JSON</source>
+        <target state="translated">ページオペレーター → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_subtitle">
+      <segment>
+        <source>Analysez les content streams d’un PDF et exportez les opérateurs/operandés (TJ/Tj, Do, cm, q/Q…) page par page en JSON — localement dans le navigateur.</source>
+        <target state="translated">PDFのコンテンツストリームを分析し、オペレーター/オペランド（TJ/Tj, Do, cm, q/Q…）をページごとにJSONにエクスポートします — ブラウザ内でローカルに。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_err_title">
+      <segment>
+        <source>Impossible d’extraire les opérateurs.</source>
+        <target state="translated">オペレーターを抽出できませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">このPDFを読み取ることができません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">すべてはあなたのブラウザ内で行われます（アップロードはありません）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_tip_huge">
+      <segment>
+        <source>Astuce : limitez la plage de pages ou le nombre d’opérations par page pour éviter un export énorme.</source>
+        <target state="translated">ヒント：巨大なエクスポートを避けるために、ページ範囲やページごとの操作数を制限してください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDFを選択</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">リセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">コピー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">ダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_filter_placeholder">
+      <segment>
+        <source>Filtrer (opérateur, Do, Tj/TJ, cm, nom XObject, texte…)</source>
+        <target state="translated">フィルター（オペレーター、Do、Tj/TJ、cm、XObject名、テキスト…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="translated">分析中…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">準備完了</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDFをインポート</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="translated">データはサーバーに送信されません：すべてブラウザ内で行われます。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="translated">結果</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_card_results_sub">
+      <segment>
+        <source>Opérateurs extraits par page + export JSON.</source>
+        <target state="translated">ページごとに抽出されたオペレーター + JSONエクスポート。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="translated">JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="translated">エクスポート可能</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_list_title">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">ページ</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDFツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">ページ</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_analyzed_label">
+      <segment>
+        <source>Analysées</source>
+        <target state="translated">分析済み</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_ops_label">
+      <segment>
+        <source>Ops</source>
+        <target state="translated">オペレーター</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_stat_text_label">
+      <segment>
+        <source>Texte</source>
+        <target state="translated">テキスト</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSONがクリップボードにコピーされました。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_ops_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="translated">自動的にコピーできませんでした。テキストを選択して手動でコピーしてください。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_empty">
+      <segment>
+        <source>Aucune entrée à afficher.</source>
+        <target state="translated">表示するエントリはありません。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_kind">
+      <segment>
+        <source>Kind</source>
+        <target state="translated">種類</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_offset">
+      <segment>
+        <source>Offset</source>
+        <target state="translated">オフセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_nextfree">
+      <segment>
+        <source>Next free</source>
+        <target state="translated">次の空き</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_objstm">
+      <segment>
+        <source>ObjStm</source>
+        <target state="translated">ObjStm</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_adv_objstm_index">
+      <segment>
+        <source>ObjStm index</source>
+        <target state="translated">ObjStmインデックス</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_pretty">
+      <segment>
+        <source>JSON “pretty” (indenté)</source>
+        <target state="translated">「きれいな」JSON（インデント付き）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_include_diag">
+      <segment>
+        <source>Inclure diagnostics (type XRef, /W, /Index…)</source>
+        <target state="translated">診断を含める（XRefタイプ、/W、/Index…）</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_title">
+      <segment>
+        <source>XRef PDF → JSON</source>
+        <target state="translated">XRef PDF → JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_subtitle">
+      <segment>
+        <source>Inspectez la table/stream XRef d’un PDF (offsets, générations, statuts) et exportez un JSON exploitable, localement dans le navigateur.</source>
+        <target state="translated">PDFのXRefテーブル/ストリームを検査し（オフセット、世代、ステータス）、ブラウザ内で利用可能なJSONをエクスポートします。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_err_title">
+      <segment>
+        <source>Impossible d’inspecter la XRef.</source>
+        <target state="translated">XRefを検査できませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_err_generic">
+      <segment>
+        <source>Impossible de lire ce PDF.</source>
+        <target state="translated">このPDFを読み取れませんでした。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_tip_privacy">
+      <segment>
+        <source>Tout se fait localement dans votre navigateur (aucun upload).</source>
+        <target state="translated">すべてブラウザ内で行われます（アップロードなし）。</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDFを選択</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">リセット</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">コピー</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_btn_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">ダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_filter_placeholder">
+      <segment>
+        <source>Filtrer (obj, offset, free, compressed, gen…)</source>
+        <target state="translated">フィルタ (obj, offset, free, compressed, gen…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_loading">
+      <segment>
+        <source>Analyse…</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_import_sub">
+      <segment>
+        <source>Aucune donnée n’est envoyée sur un serveur : tout se fait dans votre navigateur.</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_results_title">
+      <segment>
+        <source>Résultats</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_card_results_sub">
+      <segment>
+        <source>Entrées XRef (table ou stream) + export JSON.</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_json_title">
+      <segment>
+        <source>JSON</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_json_sub">
+      <segment>
+        <source>Exportable</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_list_title">
+      <segment>
+        <source>Entrées XRef</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_total">
+      <segment>
+        <source>Entrées</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_inuse">
+      <segment>
+        <source>In-use</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_free">
+      <segment>
+        <source>Free</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_stat_comp">
+      <segment>
+        <source>Compressed</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_copied">
+      <segment>
+        <source>JSON copié dans le presse-papiers.</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_xref_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
 
     
     
