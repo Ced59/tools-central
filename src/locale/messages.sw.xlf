@@ -66689,8 +66689,8 @@ Calculez l’écart absolu :                                </target>
     </unit>
     <unit id="tool_pdf_sanitize_desc">
       <segment>
-        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF &quot;sanitisé&quot;.</source>
-        <target state="translated">Ondoa metadata nyeti, XMP, viambatisho, na uhamasisha PDF &quot;iliyosafishwa&quot;.</target>
+        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.</source>
+        <target state="translated">Ondoa metadata nyeti, XMP, viambatisho, na kusafirisha PDF "iliyosafishwa".</target>
       </segment>
     </unit>
     <unit id="tool_pdf_stream_decoder_title">
@@ -84383,6 +84383,306 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
         <target state="translated">Haiwezekani kunakili kiotomatiki. Tafadhali nakili JSON kwa mikono.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_empty">
+      <segment>
+        <source>Aucun fichier généré.</source>
+        <target state="translated">Hakuna faili lililotengenezwa.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_type">
+      <segment>
+        <source>Type</source>
+        <target state="translated">Aina</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_bytes">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Ukubwa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_options_title">
+      <segment>
+        <source>Options</source>
+        <target state="translated">Chaguzi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_rebuild">
+      <segment>
+        <source>Reconstruire le PDF (recommandé : supprime beaucoup d’éléments annexes)</source>
+        <target state="translated">Rekebisha PDF (inapendekezwa: inafuta vitu vingi vya ziada)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_metadata">
+      <segment>
+        <source>Nettoyer les métadonnées (Title/Author/Producer… + tentative XMP)</source>
+        <target state="translated">Safisha metadata (Kichwa/Mwandishi/Mtengenezaji… + jaribio la XMP)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_annots">
+      <segment>
+        <source>Supprimer les annotations (liens, commentaires, surlignages…)</source>
+        <target state="translated">Futa maelezo (viungo, maoni, alama za kusisitiza…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_actions">
+      <segment>
+        <source>Neutraliser les actions (OpenAction / AA)</source>
+        <target state="translated">Neutraliza vitendo (OpenAction / AA)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_names">
+      <segment>
+        <source>Supprimer “Names” (peut contenir JS / EmbeddedFiles)</source>
+        <target state="translated">Futa “Majina” (inaweza kuwa na JS / EmbeddedFiles)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_acroform">
+      <segment>
+        <source>Supprimer AcroForm (formulaires interactifs)</source>
+        <target state="translated">Futa AcroForm (fomu za mwingiliano)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_pretty">
+      <segment>
+        <source>Rapport JSON “pretty”</source>
+        <target state="translated">Ripoti ya JSON “nzuri”</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_label">
+      <segment>
+        <source>Préfixe fichiers</source>
+        <target state="translated">Kichwa cha faili</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_help">
+      <segment>
+        <source> Exemple : sanitized → sanitized_monfichier.pdf </source>
+        <target state="translated"> Mfano: sanitized → sanitized_monfichier.pdf </target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_title">
+      <segment>
+        <source>Nettoyer un PDF</source>
+        <target state="translated">Safisha PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_subtitle">
+      <segment>
+        <source>Produire une version “sanitisée” en supprimant/neutralisant des éléments sensibles (métadonnées, actions, annotations…). Tout se fait localement dans votre navigateur.</source>
+        <target state="translated">Tengeneza toleo “safi” kwa kufuta/neutralizing vitu nyeti (metadata, vitendo, maelezo…). Kila kitu kinafanyika ndani ya kivinjari chako.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_err_generic">
+      <segment>
+        <source>Une erreur est survenue.</source>
+        <target state="translated">Kosa limetokea.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_privacy">
+      <segment>
+        <source>Aucun upload : vos fichiers restent sur votre appareil.</source>
+        <target state="translated">Hakuna kupakia: faili zako zinabaki kwenye kifaa chako.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_best_effort">
+      <segment>
+        <source>Le nettoyage est “best-effort” : certains éléments PDF très spécifiques peuvent subsister selon les lecteurs/structures.</source>
+        <target state="translated">Safisha ni “best-effort”: vitu vingine vya PDF maalum vinaweza kubaki kulingana na wasomaji/miundo.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Ingiza PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_sub">
+      <segment>
+        <source>Choisissez un PDF à nettoyer (sanitiser).</source>
+        <target state="translated">Chagua PDF ya kusafisha (sanitizing).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Chagua PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Rekebisha</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_copy">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Nakili ripoti</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_download">
+      <segment>
+        <source>Télécharger en ZIP</source>
+        <target state="translated">Pakua kwa ZIP</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type…)</source>
+        <target state="translated">Chuja (jina, aina…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_loading">
+      <segment>
+        <source>Traitement…</source>
+        <target state="translated">Inashughulika…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Tayari</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Kosa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_title">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Matokeo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_sub">
+      <segment>
+        <source>PDF nettoyé + rapport JSON des opérations (audit/traçabilité).</source>
+        <target state="translated">PDF iliyosafishwa + ripoti ya JSON ya operesheni (ukaguzi/ufuatiliaji).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_title">
+      <segment>
+        <source>Rapport JSON</source>
+        <target state="translated">Ripoti ya JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_sub">
+      <segment>
+        <source>Options appliquées, compteurs et avertissements.</source>
+        <target state="translated">Chaguzi zilizotumika, hesabu na tahadhari.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_left_title">
+      <segment>
+        <source>Fichiers générés</source>
+        <target state="translated">Faili zilizoundwa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Rudi kwa zana za PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_label">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">Ingizo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_label">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Tokeo</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Kurasa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_need_file">
+      <segment>
+        <source>Choisissez d’abord un PDF.</source>
+        <target state="translated">Tafadhali chagua PDF kwanza.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_warn_annots">
+      <segment>
+        <source>Certaines annotations peuvent subsister selon la structure du PDF.</source>
+        <target state="translated">Maelezo fulani yanaweza kubaki kulingana na muundo wa PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_done">
+      <segment>
+        <source>PDF nettoyé prêt. Téléchargez le PDF ou le ZIP (PDF + rapport).</source>
+        <target state="translated">PDF iliyosafishwa iko tayari. Pakua PDF au ZIP (PDF + ripoti).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_fail">
+      <segment>
+        <source>Impossible de nettoyer ce PDF.</source>
+        <target state="translated">Haiwezekani kusafisha PDF hii.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_downloading_one">
+      <segment>
+        <source>Téléchargement lancé.</source>
+        <target state="translated">Upakuaji umeanzishwa.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_download_one_fail">
+      <segment>
+        <source>Impossible de télécharger ce fichier.</source>
+        <target state="translated">Haiwezekani kupakua faili hii.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_downloading">
+      <segment>
+        <source>Téléchargement du ZIP lancé.</source>
+        <target state="translated">Upakuaji wa ZIP umeanzishwa.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_fail">
+      <segment>
+        <source>Impossible de générer le ZIP.</source>
+        <target state="translated">Haiwezekani kuunda ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copied">
+      <segment>
+        <source>Rapport JSON copié dans le presse-papiers.</source>
+        <target state="translated">Ripoti ya JSON imekopi katika clipboard.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
+        <target state="translated">Haiwezekani kunakili kiotomatiki. Tafadhali nakili JSON kwa mikono.</target>
+      </segment>
+    </unit>
+    <unit id="related_tools_title">
+      <segment>
+        <source>Outils similaires</source>
+        <target state="translated">Zana zinazofanana</target>
       </segment>
     </unit>
 

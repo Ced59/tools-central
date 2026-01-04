@@ -66689,7 +66689,7 @@ Calculez l’écart absolu :                                </target>
     </unit>
     <unit id="tool_pdf_sanitize_desc">
       <segment>
-        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF &quot;sanitisé&quot;.</source>
+        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.</source>
         <target state="translated">민감한 메타데이터, XMP, 첨부 파일을 제거하고 "정리된" PDF를 내보냅니다.</target>
       </segment>
     </unit>
@@ -84383,6 +84383,306 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
         <target state="translated">자동으로 복사할 수 없습니다. JSON을 수동으로 복사하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_empty">
+      <segment>
+        <source>Aucun fichier généré.</source>
+        <target state="translated">생성된 파일이 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_type">
+      <segment>
+        <source>Type</source>
+        <target state="translated">유형</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_bytes">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">크기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_options_title">
+      <segment>
+        <source>Options</source>
+        <target state="translated">옵션</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_rebuild">
+      <segment>
+        <source>Reconstruire le PDF (recommandé : supprime beaucoup d’éléments annexes)</source>
+        <target state="translated">PDF 재구성 (권장: 많은 부가 요소 삭제)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_metadata">
+      <segment>
+        <source>Nettoyer les métadonnées (Title/Author/Producer… + tentative XMP)</source>
+        <target state="translated">메타데이터 정리 (제목/저자/제작자… + XMP 시도)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_annots">
+      <segment>
+        <source>Supprimer les annotations (liens, commentaires, surlignages…)</source>
+        <target state="translated">주석 삭제 (링크, 댓글, 하이라이트…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_actions">
+      <segment>
+        <source>Neutraliser les actions (OpenAction / AA)</source>
+        <target state="translated">작업 비활성화 (OpenAction / AA)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_names">
+      <segment>
+        <source>Supprimer “Names” (peut contenir JS / EmbeddedFiles)</source>
+        <target state="translated">“Names” 삭제 (JS / EmbeddedFiles 포함 가능)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_acroform">
+      <segment>
+        <source>Supprimer AcroForm (formulaires interactifs)</source>
+        <target state="translated">AcroForm 삭제 (인터랙티브 양식)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_pretty">
+      <segment>
+        <source>Rapport JSON “pretty”</source>
+        <target state="translated">“예쁘게” JSON 보고서</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_label">
+      <segment>
+        <source>Préfixe fichiers</source>
+        <target state="translated">파일 접두사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_help">
+      <segment>
+        <source> Exemple : sanitized → sanitized_monfichier.pdf </source>
+        <target state="translated"> 예: sanitized → sanitized_monfichier.pdf </target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_title">
+      <segment>
+        <source>Nettoyer un PDF</source>
+        <target state="translated">PDF 정리</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_subtitle">
+      <segment>
+        <source>Produire une version “sanitisée” en supprimant/neutralisant des éléments sensibles (métadonnées, actions, annotations…). Tout se fait localement dans votre navigateur.</source>
+        <target state="translated">민감한 요소(메타데이터, 작업, 주석 등)를 삭제/중립화하여 “정리된” 버전을 생성합니다. 모든 작업은 브라우저에서 로컬로 수행됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_err_generic">
+      <segment>
+        <source>Une erreur est survenue.</source>
+        <target state="translated">오류가 발생했습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_privacy">
+      <segment>
+        <source>Aucun upload : vos fichiers restent sur votre appareil.</source>
+        <target state="translated">업로드 없음: 파일은 귀하의 장치에 남아 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_best_effort">
+      <segment>
+        <source>Le nettoyage est “best-effort” : certains éléments PDF très spécifiques peuvent subsister selon les lecteurs/structures.</source>
+        <target state="translated">정리는 “최선의 노력”입니다: 특정 PDF 요소는 리더기/구조에 따라 남아 있을 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDF 가져오기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_sub">
+      <segment>
+        <source>Choisissez un PDF à nettoyer (sanitiser).</source>
+        <target state="translated">정리할 PDF를 선택하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">PDF 선택</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">재설정</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_copy">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">보고서 복사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_download">
+      <segment>
+        <source>Télécharger en ZIP</source>
+        <target state="translated">ZIP으로 다운로드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type…)</source>
+        <target state="translated">필터 (이름, 유형…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_loading">
+      <segment>
+        <source>Traitement…</source>
+        <target state="translated">처리 중…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">준비 완료</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">오류</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_title">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">결과</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_sub">
+      <segment>
+        <source>PDF nettoyé + rapport JSON des opérations (audit/traçabilité).</source>
+        <target state="translated">정리된 PDF + 작업의 JSON 보고서 (감사/추적 가능성).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_title">
+      <segment>
+        <source>Rapport JSON</source>
+        <target state="translated">JSON 보고서</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_sub">
+      <segment>
+        <source>Options appliquées, compteurs et avertissements.</source>
+        <target state="translated">적용된 옵션, 카운터 및 경고.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_left_title">
+      <segment>
+        <source>Fichiers générés</source>
+        <target state="translated">생성된 파일</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← PDF 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_label">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">입력</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_label">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">출력</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">페이지</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_need_file">
+      <segment>
+        <source>Choisissez d’abord un PDF.</source>
+        <target state="translated">먼저 PDF를 선택하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_warn_annots">
+      <segment>
+        <source>Certaines annotations peuvent subsister selon la structure du PDF.</source>
+        <target state="translated">일부 주석은 PDF 구조에 따라 남아 있을 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_done">
+      <segment>
+        <source>PDF nettoyé prêt. Téléchargez le PDF ou le ZIP (PDF + rapport).</source>
+        <target state="translated">정리된 PDF가 준비되었습니다. PDF 또는 ZIP (PDF + 보고서)을 다운로드하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_fail">
+      <segment>
+        <source>Impossible de nettoyer ce PDF.</source>
+        <target state="translated">이 PDF를 정리할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_downloading_one">
+      <segment>
+        <source>Téléchargement lancé.</source>
+        <target state="translated">다운로드 시작.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_download_one_fail">
+      <segment>
+        <source>Impossible de télécharger ce fichier.</source>
+        <target state="translated">이 파일을 다운로드할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_downloading">
+      <segment>
+        <source>Téléchargement du ZIP lancé.</source>
+        <target state="translated">ZIP 다운로드 시작.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_fail">
+      <segment>
+        <source>Impossible de générer le ZIP.</source>
+        <target state="translated">ZIP을 생성할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copied">
+      <segment>
+        <source>Rapport JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON 보고서가 클립보드에 복사되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
+        <target state="translated">자동으로 복사할 수 없습니다. JSON을 수동으로 복사하세요.</target>
+      </segment>
+    </unit>
+    <unit id="related_tools_title">
+      <segment>
+        <source>Outils similaires</source>
+        <target state="translated">유사 도구</target>
       </segment>
     </unit>
 

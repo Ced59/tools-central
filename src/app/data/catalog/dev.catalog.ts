@@ -1,4 +1,5 @@
 import type { CatalogCategoryDefinition } from './types';
+import {routes} from "../routes";
 
 // =============================================================================
 // DEV - Single Source of Truth
@@ -197,7 +198,16 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../components/pages/tools/dev/pdf/pdf-flatten-form-tool/pdf-flatten-form-tool.component')
                   .then(m => m.PdfFlattenFormToolComponent),
             },
-            'pdf-sanitize': { title: $localize`:@@tool_pdf_sanitize_title:Nettoyer un PDF`, description: $localize`:@@tool_pdf_sanitize_desc:Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF "sanitisé".`, icon: 'pi pi-shield', available: false },
+            'pdf-sanitize': {
+              title: $localize`:@@tool_pdf_sanitize_title:Nettoyer un PDF`,
+              description: $localize`:@@tool_pdf_sanitize_desc:Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.`,
+              icon: 'pi pi-shield',
+              available: true,
+              loadComponent: () =>
+                import(
+                  '../../components/pages/tools/dev/pdf/pdf-sanitize-tool/pdf-sanitize-tool.component'
+                  ).then(m => m.PdfSanitizeToolComponent),
+            },
           },
         },
         debug: {

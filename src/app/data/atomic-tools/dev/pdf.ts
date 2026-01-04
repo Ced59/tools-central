@@ -291,7 +291,11 @@ export const DEV_PDF_TOOLS = {
     description: $localize`:@@tool_pdf_sanitize_desc:Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.`,
     icon: 'pi pi-shield',
     route: routes.tool('dev', 'pdf', 'pdf-sanitize'),
-    available: false,
+    available: true,
+    loadComponent: () =>
+      import(
+        '../../../components/pages/tools/dev/pdf/pdf-sanitize-tool/pdf-sanitize-tool.component'
+        ).then(m => m.PdfSanitizeToolComponent),
   },
 
   // ===========================================================================

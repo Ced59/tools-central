@@ -66661,7 +66661,7 @@ Calculez l’écart absolu :                                </target>
     </unit>
     <unit id="tool_pdf_sanitize_desc">
       <segment>
-        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF &quot;sanitisé&quot;.</source>
+        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.</source>
         <target state="translated">Видалити чутливі метадані, XMP, вкладення та експортувати "санітизований" PDF.</target>
       </segment>
     </unit>
@@ -84355,6 +84355,306 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
         <target state="translated">Не вдалося автоматично скопіювати. Скопіюйте JSON вручну.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_empty">
+      <segment>
+        <source>Aucun fichier généré.</source>
+        <target state="translated">Жоден файл не був створений.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_type">
+      <segment>
+        <source>Type</source>
+        <target state="translated">Тип</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_bytes">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Розмір</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_options_title">
+      <segment>
+        <source>Options</source>
+        <target state="translated">Опції</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_rebuild">
+      <segment>
+        <source>Reconstruire le PDF (recommandé : supprime beaucoup d’éléments annexes)</source>
+        <target state="translated">Перебудувати PDF (рекомендується: видаляє багато додаткових елементів)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_metadata">
+      <segment>
+        <source>Nettoyer les métadonnées (Title/Author/Producer… + tentative XMP)</source>
+        <target state="translated">Очистити метадані (Назва/Автор/Виробник… + спроба XMP)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_annots">
+      <segment>
+        <source>Supprimer les annotations (liens, commentaires, surlignages…)</source>
+        <target state="translated">Видалити анотації (посилання, коментарі, виділення…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_actions">
+      <segment>
+        <source>Neutraliser les actions (OpenAction / AA)</source>
+        <target state="translated">Нейтралізувати дії (OpenAction / AA)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_names">
+      <segment>
+        <source>Supprimer “Names” (peut contenir JS / EmbeddedFiles)</source>
+        <target state="translated">Видалити “Names” (може містити JS / EmbeddedFiles)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_acroform">
+      <segment>
+        <source>Supprimer AcroForm (formulaires interactifs)</source>
+        <target state="translated">Видалити AcroForm (інтерактивні форми)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_pretty">
+      <segment>
+        <source>Rapport JSON “pretty”</source>
+        <target state="translated">JSON звіт “pretty”</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_label">
+      <segment>
+        <source>Préfixe fichiers</source>
+        <target state="translated">Префікс файлів</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_help">
+      <segment>
+        <source> Exemple : sanitized → sanitized_monfichier.pdf </source>
+        <target state="translated"> Приклад: sanitized → sanitized_monfichier.pdf </target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_title">
+      <segment>
+        <source>Nettoyer un PDF</source>
+        <target state="translated">Очистити PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_subtitle">
+      <segment>
+        <source>Produire une version “sanitisée” en supprimant/neutralisant des éléments sensibles (métadonnées, actions, annotations…). Tout se fait localement dans votre navigateur.</source>
+        <target state="translated">Створити “санітизовану” версію, видаляючи/нейтралізуючи чутливі елементи (метадані, дії, анотації…). Все виконується локально у вашому браузері.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_err_generic">
+      <segment>
+        <source>Une erreur est survenue.</source>
+        <target state="translated">Сталася помилка.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_privacy">
+      <segment>
+        <source>Aucun upload : vos fichiers restent sur votre appareil.</source>
+        <target state="translated">Жодного завантаження: ваші файли залишаються на вашому пристрої.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_best_effort">
+      <segment>
+        <source>Le nettoyage est “best-effort” : certains éléments PDF très spécifiques peuvent subsister selon les lecteurs/structures.</source>
+        <target state="translated">Очищення є “best-effort”: деякі дуже специфічні елементи PDF можуть залишитися в залежності від читачів/структур.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">Імпортувати PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_sub">
+      <segment>
+        <source>Choisissez un PDF à nettoyer (sanitiser).</source>
+        <target state="translated">Виберіть PDF для очищення (санітизації).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Вибрати PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Скинути</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_copy">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Скопіювати звіт</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_download">
+      <segment>
+        <source>Télécharger en ZIP</source>
+        <target state="translated">Завантажити в ZIP</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type…)</source>
+        <target state="translated">Фільтрувати (ім'я, тип…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_loading">
+      <segment>
+        <source>Traitement…</source>
+        <target state="translated">Обробка…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="translated">Готово</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Помилка</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_title">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Результат</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_sub">
+      <segment>
+        <source>PDF nettoyé + rapport JSON des opérations (audit/traçabilité).</source>
+        <target state="translated">Очищений PDF + JSON звіт операцій (аудит/відстеження).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_title">
+      <segment>
+        <source>Rapport JSON</source>
+        <target state="translated">JSON звіт</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_sub">
+      <segment>
+        <source>Options appliquées, compteurs et avertissements.</source>
+        <target state="translated">Застосовані параметри, лічильники та попередження.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_left_title">
+      <segment>
+        <source>Fichiers générés</source>
+        <target state="translated">Сгенеровані файли</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Повернутися до PDF інструментів</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_label">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">Вхід</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_label">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Вихід</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Сторінки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_need_file">
+      <segment>
+        <source>Choisissez d’abord un PDF.</source>
+        <target state="translated">Спочатку виберіть PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_warn_annots">
+      <segment>
+        <source>Certaines annotations peuvent subsister selon la structure du PDF.</source>
+        <target state="translated">Деякі анотації можуть залишитися в залежності від структури PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_done">
+      <segment>
+        <source>PDF nettoyé prêt. Téléchargez le PDF ou le ZIP (PDF + rapport).</source>
+        <target state="translated">Очищений PDF готовий. Завантажте PDF або ZIP (PDF + звіт).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_fail">
+      <segment>
+        <source>Impossible de nettoyer ce PDF.</source>
+        <target state="translated">Не вдалося очистити цей PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_downloading_one">
+      <segment>
+        <source>Téléchargement lancé.</source>
+        <target state="translated">Завантаження розпочато.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_download_one_fail">
+      <segment>
+        <source>Impossible de télécharger ce fichier.</source>
+        <target state="translated">Не вдалося завантажити цей файл.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_downloading">
+      <segment>
+        <source>Téléchargement du ZIP lancé.</source>
+        <target state="translated">Завантаження ZIP розпочато.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_fail">
+      <segment>
+        <source>Impossible de générer le ZIP.</source>
+        <target state="translated">Не вдалося згенерувати ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copied">
+      <segment>
+        <source>Rapport JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON звіт скопійовано в буфер обміну.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
+        <target state="translated">Не вдалося автоматично скопіювати. Скопіюйте JSON вручну.</target>
+      </segment>
+    </unit>
+    <unit id="related_tools_title">
+      <segment>
+        <source>Outils similaires</source>
+        <target state="translated">Схожі інструменти</target>
       </segment>
     </unit>
 

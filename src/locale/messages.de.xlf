@@ -66661,8 +66661,8 @@ Calculez l’écart absolu :                                </target>
     </unit>
     <unit id="tool_pdf_sanitize_desc">
       <segment>
-        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF &quot;sanitisé&quot;.</source>
-        <target state="translated">Entfernen von sensiblen Metadaten, XMP, Anhängen und Exportieren eines "sanitisierten" PDFs.</target>
+        <source>Supprimer métadonnées sensibles, XMP, pièces jointes, et exporter un PDF “sanitisé”.</source>
+        <target state="translated">Entfernen Sie sensible Metadaten, XMP, Anhänge und exportieren Sie ein "sanitisiertes" PDF.</target>
       </segment>
     </unit>
     <unit id="tool_pdf_stream_decoder_title">
@@ -84355,6 +84355,306 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
         <target state="translated">Automatisches Kopieren fehlgeschlagen. Kopieren Sie das JSON manuell.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_empty">
+      <segment>
+        <source>Aucun fichier généré.</source>
+        <target state="translated">Keine Datei generiert.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_type">
+      <segment>
+        <source>Type</source>
+        <target state="translated">Typ</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_adv_bytes">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Größe</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_options_title">
+      <segment>
+        <source>Options</source>
+        <target state="translated">Optionen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_rebuild">
+      <segment>
+        <source>Reconstruire le PDF (recommandé : supprime beaucoup d’éléments annexes)</source>
+        <target state="translated">PDF neu erstellen (empfohlen: entfernt viele zusätzliche Elemente)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_metadata">
+      <segment>
+        <source>Nettoyer les métadonnées (Title/Author/Producer… + tentative XMP)</source>
+        <target state="translated">Metadaten bereinigen (Titel/Autor/Produzent… + XMP-Versuch)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_annots">
+      <segment>
+        <source>Supprimer les annotations (liens, commentaires, surlignages…)</source>
+        <target state="translated">Annotationen entfernen (Links, Kommentare, Markierungen…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_actions">
+      <segment>
+        <source>Neutraliser les actions (OpenAction / AA)</source>
+        <target state="translated">Aktionen neutralisieren (OpenAction / AA)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_names">
+      <segment>
+        <source>Supprimer “Names” (peut contenir JS / EmbeddedFiles)</source>
+        <target state="translated">„Names“ entfernen (kann JS / EmbeddedFiles enthalten)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_opt_acroform">
+      <segment>
+        <source>Supprimer AcroForm (formulaires interactifs)</source>
+        <target state="translated">AcroForm entfernen (interaktive Formulare)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_pretty">
+      <segment>
+        <source>Rapport JSON “pretty”</source>
+        <target state="translated">„Schöner“ JSON-Bericht</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_label">
+      <segment>
+        <source>Préfixe fichiers</source>
+        <target state="translated">Dateipräfix</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_prefix_help">
+      <segment>
+        <source> Exemple : sanitized → sanitized_monfichier.pdf </source>
+        <target state="translated"> Beispiel: sanitized → sanitized_meinedatei.pdf </target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_title">
+      <segment>
+        <source>Nettoyer un PDF</source>
+        <target state="translated">PDF bereinigen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_subtitle">
+      <segment>
+        <source>Produire une version “sanitisée” en supprimant/neutralisant des éléments sensibles (métadonnées, actions, annotations…). Tout se fait localement dans votre navigateur.</source>
+        <target state="translated">Eine „sanitisierte“ Version erstellen, indem sensible Elemente (Metadaten, Aktionen, Annotationen…) entfernt oder neutralisiert werden. Alles geschieht lokal in Ihrem Browser.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_err_generic">
+      <segment>
+        <source>Une erreur est survenue.</source>
+        <target state="translated">Ein Fehler ist aufgetreten.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_privacy">
+      <segment>
+        <source>Aucun upload : vos fichiers restent sur votre appareil.</source>
+        <target state="translated">Kein Upload: Ihre Dateien bleiben auf Ihrem Gerät.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_tip_best_effort">
+      <segment>
+        <source>Le nettoyage est “best-effort” : certains éléments PDF très spécifiques peuvent subsister selon les lecteurs/structures.</source>
+        <target state="translated">Die Bereinigung erfolgt „best-effort“: einige sehr spezifische PDF-Elemente können je nach Lesern/Strukturen bestehen bleiben.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_title">
+      <segment>
+        <source>Importer un PDF</source>
+        <target state="translated">PDF importieren</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_import_sub">
+      <segment>
+        <source>Choisissez un PDF à nettoyer (sanitiser).</source>
+        <target state="translated">Wählen Sie ein PDF zum Bereinigen (sanitizing).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_pick">
+      <segment>
+        <source>Choisir un PDF</source>
+        <target state="translated">Ein PDF auswählen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Zurücksetzen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_copy">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Bericht kopieren</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_btn_download">
+      <segment>
+        <source>Télécharger en ZIP</source>
+        <target state="translated">Als ZIP herunterladen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_filter_placeholder">
+      <segment>
+        <source>Filtrer (nom, type…)</source>
+        <target state="translated">Filtern (Name, Typ…)</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_loading">
+      <segment>
+        <source>Traitement…</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_ready">
+      <segment>
+        <source>Prêt</source>
+        <target state="new">TODO</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_status_error">
+      <segment>
+        <source>Erreur</source>
+        <target state="translated">Fehler</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_title">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Ergebnis</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_results_sub">
+      <segment>
+        <source>PDF nettoyé + rapport JSON des opérations (audit/traçabilité).</source>
+        <target state="translated">Bereinigtes PDF + JSON-Bericht der Operationen (Audit/Traceability).</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_title">
+      <segment>
+        <source>Rapport JSON</source>
+        <target state="translated">JSON-Bericht</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_json_sub">
+      <segment>
+        <source>Options appliquées, compteurs et avertissements.</source>
+        <target state="translated">Angewandte Optionen, Zähler und Warnungen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_left_title">
+      <segment>
+        <source>Fichiers générés</source>
+        <target state="translated">Generierte Dateien</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_back">
+      <segment>
+        <source>← Retour aux outils PDF</source>
+        <target state="translated">← Zurück zu den PDF-Tools</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_empty">
+      <segment>
+        <source>—</source>
+        <target state="translated">—</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_in_label">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">Eingang</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_out_label">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Ausgang</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_stat_pages_label">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Seiten</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_need_file">
+      <segment>
+        <source>Choisissez d’abord un PDF.</source>
+        <target state="translated">Wählen Sie zuerst ein PDF aus.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_warn_annots">
+      <segment>
+        <source>Certaines annotations peuvent subsister selon la structure du PDF.</source>
+        <target state="translated">Einige Annotationen können je nach Struktur des PDFs bestehen bleiben.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_done">
+      <segment>
+        <source>PDF nettoyé prêt. Téléchargez le PDF ou le ZIP (PDF + rapport).</source>
+        <target state="translated">Bereinigtes PDF bereit. Laden Sie das PDF oder das ZIP (PDF + Bericht) herunter.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_fail">
+      <segment>
+        <source>Impossible de nettoyer ce PDF.</source>
+        <target state="translated">Dieses PDF kann nicht bereinigt werden.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_downloading_one">
+      <segment>
+        <source>Téléchargement lancé.</source>
+        <target state="translated">Download gestartet.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_download_one_fail">
+      <segment>
+        <source>Impossible de télécharger ce fichier.</source>
+        <target state="translated">Dieser Datei kann nicht heruntergeladen werden.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_downloading">
+      <segment>
+        <source>Téléchargement du ZIP lancé.</source>
+        <target state="translated">ZIP-Download gestartet.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_zip_fail">
+      <segment>
+        <source>Impossible de générer le ZIP.</source>
+        <target state="translated">ZIP kann nicht erstellt werden.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copied">
+      <segment>
+        <source>Rapport JSON copié dans le presse-papiers.</source>
+        <target state="translated">JSON-Bericht in die Zwischenablage kopiert.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_sanitize_copy_fail">
+      <segment>
+        <source>Impossible de copier automatiquement. Copiez manuellement le JSON.</source>
+        <target state="translated">Automatisches Kopieren fehlgeschlagen. Kopieren Sie das JSON manuell.</target>
+      </segment>
+    </unit>
+    <unit id="related_tools_title">
+      <segment>
+        <source>Outils similaires</source>
+        <target state="translated">Ähnliche Werkzeuge</target>
       </segment>
     </unit>
 
