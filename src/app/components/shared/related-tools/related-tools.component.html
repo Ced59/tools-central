@@ -1,0 +1,23 @@
+<section class="related-tools" *ngIf="relatedTools.length > 0">
+  <div class="related-header">
+    <i class="pi pi-compass" aria-hidden="true"></i>
+    <h2 i18n="@@related_tools_title">Outils similaires</h2>
+  </div>
+
+  <div class="related-grid">
+    <a
+      *ngFor="let tool of relatedTools"
+      [routerLink]="getToolLink(tool)"
+      class="related-card"
+    >
+      <div class="card-icon">
+        <i [class]="getToolIcon(tool)" aria-hidden="true"></i>
+      </div>
+      <div class="card-content">
+        <span class="card-title">{{ tool.title }}</span>
+        <span class="card-desc">{{ tool.description }}</span>
+      </div>
+      <i class="pi pi-arrow-right card-arrow" aria-hidden="true"></i>
+    </a>
+  </div>
+</section>

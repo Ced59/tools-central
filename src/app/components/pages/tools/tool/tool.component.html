@@ -12,6 +12,17 @@
     <!-- Tool UI -->
     <ng-container *ngComponentOutlet="toolComponent()"></ng-container>
 
+    <div class="container">
+    <app-related-tools></app-related-tools>
+
+      <nav class="back-nav" aria-label="Navigation">
+        <a [routerLink]="backLink()" class="back-link">
+          <i class="pi pi-arrow-left"></i>
+          <span>{{ backLabel() }}</span>
+        </a>
+      </nav>
+    </div>
+
     <!-- Back link + Editorial -->
     <div class="container tool-footer">
       <!-- Editorial (si disponible) -->
