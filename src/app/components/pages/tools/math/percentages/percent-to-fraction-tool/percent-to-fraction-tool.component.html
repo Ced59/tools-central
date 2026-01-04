@@ -1,29 +1,21 @@
-<section class="tool-page">
+<app-math-tool-shell
+  icon="pi pi-sort-numeric-up"
+  backLink="/categories/math/percentages"
+  [showExamples]="true"
+  [showDefinition]="false"
+>
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-sort-numeric-up"></i>
-        </div>
+  <h1 heroTitle i18n="@@pct_frac_title">Pourcentage ↔ fraction</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@pct_frac_subtitle">
+    Convertir un pourcentage en fraction simplifiée (et inversement).
+  </p>
 
-        <h1 i18n="@@pct_frac_title">Pourcentage ↔ fraction</h1>
-        <p class="hero-subtitle" i18n="@@pct_frac_subtitle">
-          Convertir un pourcentage en fraction simplifiée (et inversement).
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <div class="container tool-content">
-
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@tool_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main field-full">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main field-full">
           <label for="mode" i18n="@@pct_frac_mode">Mode</label>
 
           <p-selectButton
@@ -100,16 +92,14 @@
           />
           <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@tool_results">Résultats</h3>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item highlight">
             <span class="result-label" i18n="@@pct_frac_result_fraction">Fraction simplifiée</span>
             <span class="result-value">{{ fractionText() }}</span>
@@ -130,10 +120,11 @@
           <i class="pi pi-exclamation-triangle"></i>
           <span>{{ warning() }}</span>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -142,9 +133,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -153,18 +145,16 @@
             label="Réinitialiser"
             i18n-label="@@tool_reset"
           />
-        </div>
-      </div>
-    </div>
 
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_examples">Exemples</h2>
-        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
+  <!-- Examples Header -->
+  <ng-container examplesHeader>
+    <h2 i18n="@@tool_examples">Exemples</h2>
+    <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+  </ng-container>
 
-      <div class="examples-grid">
+  <!-- Examples -->
+  <ng-container examples>
+    <div class="examples-grid">
         <button class="example-btn" (click)="applyExamplePct(12.5)">
           <span class="ex-label">% → fraction</span>
           <span class="ex-values">12,5% → 1/8</span>
@@ -185,34 +175,11 @@
           <span class="ex-values">7/20 → 35%</span>
         </button>
       </div>
-    </div>
+  </ng-container>
 
-    <!-- Explications -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
-        <p i18n="@@pct_frac_definition_sub">
-          Un pourcentage est une fraction sur 100, qu’on peut simplifier.
-        </p>
-      </div>
-
-      <div class="explain-content">
-        <tc-math-formula
-          label="Formules"
-          i18n-label="@@tool_formula_title"
-          mode="katex"
-          latex="\text{pct}=\frac{a}{b}\times 100\quad;\quad \frac{p}{100}\ \text{(simplifier)}"
-          i18n-latex="@@pct_frac_formula_katex"
-        ></tc-math-formula>
-      </div>
-    </div>
-
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>

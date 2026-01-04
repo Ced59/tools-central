@@ -1,31 +1,21 @@
-<section class="tool-page">
+<app-math-tool-shell
+  icon="pi pi-plus"
+  backLink="/categories/math/percentages"
+  [showExamples]="true"
+  [showDefinition]="true"
+>
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon">
-          <i class="pi pi-plus"></i>
-        </div>
+  <h1 heroTitle i18n="@@pct_points_title">Points de pourcentage</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@pct_points_subtitle">
+    Distinguer variation en % et variation en points de % (pp).
+  </p>
 
-        <h1 i18n="@@pct_points_title">Points de pourcentage</h1>
-        <p class="hero-subtitle" i18n="@@pct_points_subtitle">
-          Distinguer variation en % et variation en points de % (pp).
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <!-- Contenu -->
-  <div class="container tool-content">
-
-    <!-- Carte calcul -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@tool_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main">
           <label for="a" i18n="@@pct_points_a">Taux initial</label>
           <p-inputNumber
             inputId="a"
@@ -72,17 +62,14 @@
           />
           <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <!-- Résultats -->
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@tool_results">Résultats</h3>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item highlight">
             <span class="result-label" i18n="@@pct_points_pp_label">Variation en points (pp)</span>
             <span class="result-value">{{ fmtSigned(points()) }} pp</span>
@@ -98,10 +85,11 @@
             <span class="result-value">{{ fmt(ratio()) }}</span>
           </div>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -110,9 +98,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -121,26 +110,16 @@
             label="Réinitialiser"
             i18n-label="@@tool_reset"
           />
-        </div>
 
-        <div class="tip-box" *ngIf="form.controls.a.value === 0">
-          <i class="pi pi-info-circle"></i>
-          <span i18n="@@pct_points_zero_note">
-            Si le taux initial vaut 0, la variation relative (%) n’est pas définie.
-            La variation en points (pp) reste calculable.
-          </span>
-        </div>
-      </div>
-    </div>
+  <!-- Examples Header -->
+  <ng-container examplesHeader>
+    <h2 i18n="@@tool_examples">Exemples</h2>
+    <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+  </ng-container>
 
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_examples">Exemples</h2>
-        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
-
-      <div class="examples-grid">
+  <!-- Examples -->
+  <ng-container examples>
+    <div class="examples-grid">
         <button
           *ngFor="let ex of examples"
           class="example-btn"
@@ -155,19 +134,19 @@
           </span>
         </button>
       </div>
-    </div>
+  </ng-container>
 
-    <!-- Explications -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
-        <p i18n="@@pct_points_definition_sub">
+  <!-- Definition Header -->
+  <ng-container definitionHeader>
+    <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+    <p i18n="@@pct_points_definition_sub">
           Les “points de pourcentage” (pp) mesurent une différence directe entre deux taux.
         </p>
-      </div>
+  </ng-container>
 
-      <div class="explain-content">
-        <tc-math-formula
+  <!-- Definition -->
+  <ng-container definition>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="katex"
@@ -191,16 +170,11 @@
             2 points ≠ 2%.
           </span>
         </div>
-      </div>
-    </div>
+  </ng-container>
 
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>

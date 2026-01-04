@@ -4,11 +4,11 @@ import {percentageCourseData} from "../../../../../../data/courses/math/percenta
 
 
 @Component({
-  selector: 'app-percentage-course-tool',
-  standalone: true,
-  imports: [CoursePageComponent],
-  templateUrl: './percentage-course-tool.component.html',
+ selector: 'app-percentage-course-tool',
+ standalone: true,
+ imports: [CoursePageComponent],
+ templateUrl: './percentage-course-tool.component.html',
 })
 export class PercentageCourseToolComponent {
-  course = percentageCourseData;
+ course = percentageCourseData;
 }

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PDFDocument } from 'pdf-lib';
 
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
+import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 import { detectScannedPdf } from './pdf-scan-detector';
 

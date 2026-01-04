@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
+import {MathToolShellComponent} from "../../../../../shared/math";
 
 type Example = {
   label: string; // ⚠️ i18n template, pas $localize
@@ -34,9 +35,7 @@ type ChangedField = 'initial' | 'final' | 'precision';
     ButtonModule,
     TagModule,
     MathFormulaComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
+    MathToolShellComponent,
   ],
   templateUrl: './percentage-variation-tool.component.html',
   styleUrl: './percentage-variation-tool.component.scss',

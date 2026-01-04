@@ -1,0 +1,76 @@
+<section class="tool-page">
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i [class]="icon"></i>
+        </div>
+        <ng-content select="[heroTitle]"></ng-content>
+        <ng-content select="[heroSubtitle]"></ng-content>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenu -->
+  <div class="container tool-content">
+
+    <!-- Card Calculateur -->
+    <div class="tool-card">
+      <div class="card-header">
+        <ng-content select="[calcHeader]"></ng-content>
+      </div>
+
+      <div class="calc-form">
+        <ng-content select="[calcInputs]"></ng-content>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Résultats -->
+      <div class="results-section">
+        <div class="results-header">
+          <ng-content select="[resultsHeader]"></ng-content>
+        </div>
+
+        <ng-content select="[resultsGrid]"></ng-content>
+
+        <div class="divider"></div>
+
+        <ng-content select="[formula]"></ng-content>
+
+        <div class="actions">
+          <ng-content select="[resetButton]"></ng-content>
+        </div>
+
+        <ng-content select="[resultsTip]"></ng-content>
+      </div>
+    </div>
+
+    <!-- Card Exemples (optionnel) -->
+    <div class="tool-card" *ngIf="showExamples">
+      <div class="card-header centered">
+        <ng-content select="[examplesHeader]"></ng-content>
+      </div>
+
+      <ng-content select="[examples]"></ng-content>
+    </div>
+
+    <!-- Card Définition (optionnel) -->
+    <div class="tool-card" *ngIf="showDefinition">
+      <div class="card-header centered">
+        <ng-content select="[definitionHeader]"></ng-content>
+      </div>
+
+      <div class="explain-content">
+        <ng-content select="[definition]"></ng-content>
+      </div>
+    </div>
+
+    <!-- Back -->
+    <div class="back-section">
+      <ng-content select="[backLink]"></ng-content>
+    </div>
+
+  </div>
+</section>

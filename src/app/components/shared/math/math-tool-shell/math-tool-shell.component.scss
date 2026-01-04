@@ -1,0 +1,135 @@
+@use 'patterns' as p;
+@use 'tool-page' as tp;
+
+@include p.tool-hero;
+@include tp.tool-page-shell;
+@include tp.tool-card;
+@include tp.calc-form;
+
+:host ::ng-deep {
+  @include tp.results;
+  @include tp.examples;
+  @include tp.explain;
+  @include tp.back;
+
+  // ✅ dropdown / select PrimeNG full width dans la grille
+  .input-full {
+    width: 100%;
+  }
+
+  .input-full .p-dropdown,
+  .input-full .p-select,
+  .input-full .p-inputnumber,
+  .input-full input {
+    width: 100%;
+  }
+
+  // Style pour les selects natifs HTML
+  .tc-select {
+    width: 100%;
+    padding: 0.65rem 0.8rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    background: var(--surface-card);
+    color: var(--text-color);
+    outline: none;
+
+    &:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 25%, transparent);
+    }
+  }
+
+  // Champ pleine largeur
+  .field-full {
+    grid-column: 1 / -1;
+  }
+
+  // ---- Listes dynamiques (equivalent-percentage, percentage-composition) ----
+  .percent-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .percent-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--surface-card) 92%, transparent);
+  }
+
+  // ---- Listes dynamiques (relative-parts) ----
+  .parts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .part-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--surface-card) 92%, transparent);
+  }
+
+  // ---- Listes dynamiques (weighted-percentage) ----
+  .weighted-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+  }
+
+  .weighted-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--surface-card) 92%, transparent);
+  }
+
+  // ---- Grille limits (percentage-limits) ----
+  .limits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .limit-card {
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--surface-card) 94%, transparent);
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+  }
+
+  // ---- Tip box amélioration ----
+  .tip-box {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    i {
+      font-size: 1.05rem;
+    }
+  }
+}

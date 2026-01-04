@@ -1,31 +1,21 @@
-<section class="tool-page">
+<app-math-tool-shell
+  icon="pi pi-info-circle"
+  backLink="/categories/math/percentages"
+  [showExamples]="false"
+  [showDefinition]="false"
+>
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-info-circle"></i>
-        </div>
+  <h1 heroTitle i18n="@@pct_limits_title">Limites des pourcentages</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@pct_limits_subtitle">
+    Comprendre +∞ et −100% (cas limites et interprétations).
+  </p>
 
-        <h1 i18n="@@pct_limits_title">Limites des pourcentages</h1>
-        <p class="hero-subtitle" i18n="@@pct_limits_subtitle">
-          Comprendre +∞ et −100% (cas limites et interprétations).
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <!-- Contenu -->
-  <div class="container tool-content">
-
-    <!-- Carte calcul -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@tool_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main">
           <label for="initial" i18n="@@pct_limits_initial">Valeur initiale</label>
           <p-inputNumber
             inputId="initial"
@@ -70,17 +60,14 @@
           />
           <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <!-- Résultats -->
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@tool_results">Résultats</h3>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item highlight">
             <span class="result-label" i18n="@@pct_limits_variation_label">Variation (%)</span>
             <span class="result-value">{{ variationText() }}</span>
@@ -101,10 +88,11 @@
             <span class="result-value">{{ interpretation() }}</span>
           </div>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -113,9 +101,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -124,93 +113,10 @@
             label="Réinitialiser"
             i18n-label="@@tool_reset"
           />
-        </div>
 
-        <div class="tip-box" *ngIf="warning()">
-          <i class="pi pi-exclamation-triangle"></i>
-          <span>{{ warning() }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Comprendre (cards) -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pct_limits_understand_title">Comprendre les limites</h2>
-        <p i18n="@@pct_limits_understand_sub">
-          Pourquoi on ne peut pas descendre sous −100%, et comment on peut aller vers +∞%.
-        </p>
-      </div>
-
-      <div class="limits-grid">
-        <div class="limit-card">
-          <div class="limit-top">
-            <span class="limit-badge">−100%</span>
-            <h3 i18n="@@pct_limits_card_minus100_title">Plancher (si initial &gt; 0)</h3>
-          </div>
-          <p i18n="@@pct_limits_card_minus100_text">
-            Une baisse de −100% signifie “retour à 0”. En contexte prix/quantité, on ne peut pas faire moins que 0, donc on ne peut pas descendre sous −100%.
-          </p>
-        </div>
-
-        <div class="limit-card">
-          <div class="limit-top">
-            <span class="limit-badge">+∞%</span>
-            <h3 i18n="@@pct_limits_card_plusinf_title">Pas de plafond</h3>
-          </div>
-          <p i18n="@@pct_limits_card_plusinf_text">
-            Une hausse en % est calculée par rapport à l’initial. Si l’initial devient très petit (proche de 0), le ratio peut exploser : on tend vers +∞%.
-          </p>
-        </div>
-
-        <div class="limit-card">
-          <div class="limit-top">
-            <span class="limit-badge">Initial = 0</span>
-            <h3 i18n="@@pct_limits_card_zero_title">Cas non défini</h3>
-          </div>
-          <p i18n="@@pct_limits_card_zero_text">
-            La formule (final − initial) / initial n’est pas définie quand initial = 0. On parle plutôt de “passage de 0 à X” (écart absolu), ou on utilise un autre indicateur.
-          </p>
-        </div>
-
-        <div class="limit-card">
-          <div class="limit-top">
-            <span class="limit-badge">Symétrie ?</span>
-            <h3 i18n="@@pct_limits_card_sym_title">Asymétrie hausse/baisse</h3>
-          </div>
-          <p i18n="@@pct_limits_card_sym_text">
-            −50% puis +50% ne ramène pas à l’origine (0,5 × 1,5 = 0,75). Les pourcentages se composent par coefficients.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_examples">Exemples</h2>
-        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
-
-      <div class="examples-grid">
-        <button *ngFor="let ex of examples" class="example-btn" (click)="applyExample(ex)">
-          <span class="ex-label">
-            {{ ex.initial }} → {{ ex.final }}
-          </span>
-          <span class="ex-values">
-            {{ ex.label }}
-          </span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>

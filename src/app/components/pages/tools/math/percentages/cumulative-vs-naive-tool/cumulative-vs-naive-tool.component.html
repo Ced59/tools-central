@@ -1,31 +1,21 @@
-<section class="tool-page">
+<app-math-tool-shell
+  icon="pi pi-sliders-v"
+  backLink="/categories/math/percentages"
+  [showExamples]="true"
+  [showDefinition]="true"
+>
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon">
-          <i class="pi pi-sliders-v"></i>
-        </div>
+  <h1 heroTitle i18n="@@cum_naive_title">Effet cumulé vs somme naïve</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@cum_naive_subtitle">
+    Comparer l’effet réel (composé) à une addition simple des pourcentages.
+  </p>
 
-        <h1 i18n="@@cum_naive_title">Effet cumulé vs somme naïve</h1>
-        <p class="hero-subtitle" i18n="@@cum_naive_subtitle">
-          Comparer l’effet réel (composé) à une addition simple des pourcentages.
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <!-- Contenu -->
-  <div class="container tool-content">
-
-    <!-- Carte calcul -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@tool_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main">
           <label for="base" i18n="@@cum_naive_base">Valeur de base</label>
           <p-inputNumber
             inputId="base"
@@ -88,17 +78,14 @@
           />
           <small class="hint" i18n="@@tool_precision_hint">Arrondi</small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <!-- Résultats -->
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@tool_results">Résultats</h3>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item highlight">
             <span class="result-label" i18n="@@cum_naive_comp_label">Résultat cumulé</span>
             <span class="result-value">{{ fmt(compounded()) }}</span>
@@ -116,10 +103,11 @@
             </span>
           </div>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -128,9 +116,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -139,25 +128,16 @@
             label="Réinitialiser"
             i18n-label="@@tool_reset"
           />
-        </div>
 
-        <div class="tip-box" *ngIf="naive() === 0">
-          <i class="pi pi-info-circle"></i>
-          <span i18n="@@cum_naive_zero_note">
-            Si le résultat “naïf” vaut 0, l’écart en % n’est pas défini.
-          </span>
-        </div>
-      </div>
-    </div>
+  <!-- Examples Header -->
+  <ng-container examplesHeader>
+    <h2 i18n="@@tool_examples">Exemples</h2>
+    <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
+  </ng-container>
 
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_examples">Exemples</h2>
-        <p i18n="@@tool_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
-
-      <div class="examples-grid">
+  <!-- Examples -->
+  <ng-container examples>
+    <div class="examples-grid">
         <button
           *ngFor="let ex of examples"
           class="example-btn"
@@ -172,19 +152,19 @@
           </span>
         </button>
       </div>
-    </div>
+  </ng-container>
 
-    <!-- Explications -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
-        <p i18n="@@cum_naive_definition_sub">
+  <!-- Definition Header -->
+  <ng-container definitionHeader>
+    <h2 i18n="@@tool_definition_title">Définition & méthode</h2>
+    <p i18n="@@cum_naive_definition_sub">
           Additionner des pourcentages est souvent faux : l’effet réel est composé.
         </p>
-      </div>
+  </ng-container>
 
-      <div class="explain-content">
-        <tc-math-formula
+  <!-- Definition -->
+  <ng-container definition>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="katex"
@@ -211,16 +191,11 @@
             Exemple : +10% puis +10% → cumulé = ×1,1×1,1 = ×1,21 (+21%), pas +20%.
           </span>
         </div>
-      </div>
-    </div>
+  </ng-container>
 
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>

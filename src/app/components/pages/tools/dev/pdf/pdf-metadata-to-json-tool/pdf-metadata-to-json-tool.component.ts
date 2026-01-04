@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { PDFDocument } from 'pdf-lib';
@@ -7,6 +7,7 @@ import { PDFDocument } from 'pdf-lib';
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
+import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 interface PdfMetadataItem {
   key: string;
@@ -23,6 +24,7 @@ interface PdfMetadataItem {
 })
 export class PdfMetadataToJsonToolComponent {
   private readonly fb = new FormBuilder();
+  private readonly pdfActions = inject(PdfToolActionsService);
 
   readonly backLink = '/categories/dev/pdf';
 
@@ -205,27 +207,17 @@ export class PdfMetadataToJsonToolComponent {
   }
 
   async copyJson() {
-    try {
-      await navigator.clipboard.writeText(this.jsonText());
-      this.tipMessage.set($localize`:@@pdf_meta_copied:JSON copié dans le presse-papiers.`);
-      window.setTimeout(() => this.tipMessage.set(''), 2500);
-    } catch {
-      this.tipMessage.set(
-        $localize`:@@pdf_meta_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`
-      );
-    }
+    await this.pdfActions.copyJson(
+      this.jsonText(),
+      this.tipMessage,
+      $localize`:@@pdf_meta_copied:JSON copié dans le presse-papiers.`,
+      $localize`:@@pdf_meta_copy_fail:Impossible de copier automatiquement. Sélectionnez le texte et copiez manuellement.`
+    );
   }
 
   downloadJson() {
-    const blob = new Blob([this.jsonText()], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = (this.fileName() ? this.fileName().replace(/\.pdf$/i, '') : 'pdf-metadata') + '.json';
-    a.click();
-
-    URL.revokeObjectURL(url);
+    const baseName = this.pdfActions.getDownloadFileName(this.fileName(), 'metadata');
+    this.pdfActions.downloadJson(this.jsonText(), baseName.replace('.json', ''));
   }
 }
 

@@ -11,6 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
+import {MathToolShellComponent} from "../../../../../shared/math";
 
 type Example = {
   label: string;
@@ -24,7 +25,6 @@ type ChangedField = 'base' | 'rate' | 'precision';
   selector: 'app-percentage-increase-decrease-tool',
   standalone: true,
   imports: [
-    NgIf,
     NgFor,
     ReactiveFormsModule,
     RouterLink,
@@ -34,9 +34,7 @@ type ChangedField = 'base' | 'rate' | 'precision';
     ButtonModule,
     TagModule,
     MathFormulaComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
+    MathToolShellComponent,
   ],
   templateUrl: './percentage-increase-decrease-tool.component.html',
   styleUrl: './percentage-increase-decrease-tool.component.scss',

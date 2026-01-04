@@ -1,31 +1,21 @@
-<section class="tool-page">
+<app-math-tool-shell
+  icon="pi pi-sliders-h"
+  backLink="/categories/math/percentages"
+  [showExamples]="true"
+  [showDefinition]="true"
+>
   <!-- Hero -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon">
-          <i class="pi pi-sliders-h"></i>
-        </div>
+  <h1 heroTitle i18n="@@pct_succ_title">Pourcentages successifs</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@pct_succ_subtitle">
+    Compose plusieurs pourcentages (effet cumulé) sur une valeur.
+  </p>
 
-        <h1 i18n="@@pct_succ_title">Pourcentages successifs</h1>
-        <p class="hero-subtitle" i18n="@@pct_succ_subtitle">
-          Compose plusieurs pourcentages (effet cumulé) sur une valeur.
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <!-- Contenu -->
-  <div class="container tool-content">
-
-    <!-- Carte calcul -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@pct_succ_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main">
           <label for="base" i18n="@@pct_succ_base_label">Valeur de départ</label>
           <p-inputNumber
             inputId="base"
@@ -102,21 +92,14 @@
           />
           <small class="hint" i18n="@@pct_succ_precision_hint">Arrondi</small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <!-- Résultats -->
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@pct_succ_results_title">Résultats</h3>
-
-          <p-tag *ngIf="globalPct() !== null" severity="info">
-            <span i18n="@@pct_succ_tag">Effet cumulé</span>
-          </p-tag>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item">
             <span class="result-label" i18n="@@pct_succ_final_label">Valeur finale</span>
             <span class="result-value">{{ fmt(finalValue()) }}</span>
@@ -132,10 +115,11 @@
             <span class="result-value">{{ fmt(globalCoeff()) }}</span>
           </div>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -144,9 +128,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -155,36 +140,34 @@
             label="Réinitialiser"
             i18n-label="@@pct_succ_reset"
           />
-        </div>
-      </div>
-    </div>
 
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pct_succ_examples_title">Exemples</h2>
-        <p i18n="@@pct_succ_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
+  <!-- Examples Header -->
+  <ng-container examplesHeader>
+    <h2 i18n="@@pct_succ_examples_title">Exemples</h2>
+    <p i18n="@@pct_succ_examples_sub">Cliquez pour pré-remplir</p>
+  </ng-container>
 
-      <div class="examples-grid">
+  <!-- Examples -->
+  <ng-container examples>
+    <div class="examples-grid">
         <button *ngFor="let ex of examples" class="example-btn" (click)="applyExample(ex)">
           <span class="ex-label">{{ ex.label }}</span>
           <span class="ex-values">{{ ex.base }} ; {{ ex.p1 }}% ; {{ ex.p2 }}% ; {{ ex.p3 }}%</span>
         </button>
       </div>
-    </div>
+  </ng-container>
 
-    <!-- Explications -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pct_succ_definition_title">Définition & méthode</h2>
-        <p i18n="@@pct_succ_definition_sub">
+  <!-- Definition Header -->
+  <ng-container definitionHeader>
+    <h2 i18n="@@pct_succ_definition_title">Définition & méthode</h2>
+    <p i18n="@@pct_succ_definition_sub">
           Les pourcentages successifs se multiplient via des coefficients.
         </p>
-      </div>
+  </ng-container>
 
-      <div class="explain-content">
-        <tc-math-formula
+  <!-- Definition -->
+  <ng-container definition>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@pct_succ_formula_title"
           mode="katex"
@@ -205,16 +188,11 @@
             <strong>1,10 × 0,90 = 0,99</strong> (soit -1%).
           </span>
         </div>
-      </div>
-    </div>
+  </ng-container>
 
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>

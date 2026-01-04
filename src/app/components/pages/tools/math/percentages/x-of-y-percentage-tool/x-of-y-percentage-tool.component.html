@@ -1,31 +1,21 @@
-<section class="tool-page">
-  <!-- Hero HORS du container -->
-  <div class="page-hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-icon">
-          <i class="pi pi-percentage"></i>
-        </div>
+<app-math-tool-shell
+  icon="pi pi-percentage"
+  backLink="/categories/math/percentages"
+  [showExamples]="true"
+  [showDefinition]="true"
+>
+  <!-- Hero -->
+  <h1 heroTitle i18n="@@pct_x_of_y_title">X est quel % de Y ?</h1>
+  <p heroSubtitle class="hero-subtitle" i18n="@@pct_x_of_y_subtitle">
+    Calcule le pourcentage que représente une valeur X par rapport à une valeur Y.
+  </p>
 
-        <h1 i18n="@@pct_x_of_y_title">X est quel % de Y ?</h1>
-        <p class="hero-subtitle" i18n="@@pct_x_of_y_subtitle">
-          Calcule le pourcentage que représente une valeur X par rapport à une valeur Y.
-        </p>
-      </div>
-    </div>
-  </div>
+  <!-- Calc Header -->
+  <h2 calcHeader i18n="@@tool_calc_title">Calculateur</h2>
 
-  <!-- Contenu -->
-  <div class="container tool-content">
-
-    <!-- Carte calcul -->
-    <div class="tool-card">
-      <div class="card-header">
-        <h2 i18n="@@pct_x_of_y_calc_title">Calculateur</h2>
-      </div>
-
-      <div class="calc-form">
-        <div class="field field-main">
+  <!-- Inputs -->
+  <ng-container calcInputs>
+    <div class="field field-main">
           <label for="x" i18n="@@pct_x_of_y_x_label">Valeur X</label>
           <p-inputNumber
             inputId="x"
@@ -72,21 +62,14 @@
             Arrondi
           </small>
         </div>
-      </div>
+  </ng-container>
 
-      <div class="divider"></div>
+  <!-- Results Header -->
+  <h3 resultsHeader i18n="@@tool_results">Résultats</h3>
 
-      <!-- Résultats -->
-      <div class="results-section">
-        <div class="results-header">
-          <h3 i18n="@@pct_x_of_y_results_title">Résultats</h3>
-
-          <p-tag *ngIf="percent() !== null && !isYZero()" severity="info">
-            <span i18n="@@pct_x_of_y_tag">Pourcentage</span>
-          </p-tag>
-        </div>
-
-        <div class="results-grid">
+  <!-- Results Grid -->
+  <ng-container resultsGrid>
+    <div class="results-grid">
           <div class="result-item">
             <span class="result-label" i18n="@@pct_x_of_y_ratio_label">Ratio (X ÷ Y)</span>
             <span class="result-value">{{ fmt(ratio()) }}</span>
@@ -108,11 +91,11 @@
             <span class="result-value">{{ outOf100Label() }}</span>
           </div>
         </div>
+  </ng-container>
 
-        <div class="divider"></div>
-
-        <!-- Formule step-by-step -->
-        <tc-math-formula
+  <!-- Formula -->
+  <ng-container formula>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
@@ -121,9 +104,10 @@
           [activeStepId]="activeFormulaStepId()"
           (stepChange)="onFormulaStepChanged($any($event))"
         ></tc-math-formula>
+  </ng-container>
 
-        <div class="actions">
-          <p-button
+  <!-- Reset Button -->
+  <p-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
@@ -132,18 +116,16 @@
             label="Réinitialiser"
             i18n-label="@@pct_x_of_y_reset"
           />
-        </div>
-      </div>
-    </div>
 
-    <!-- Exemples -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pct_x_of_y_examples_title">Exemples</h2>
-        <p i18n="@@pct_x_of_y_examples_sub">Cliquez pour pré-remplir</p>
-      </div>
+  <!-- Examples Header -->
+  <ng-container examplesHeader>
+    <h2 i18n="@@pct_x_of_y_examples_title">Exemples</h2>
+    <p i18n="@@pct_x_of_y_examples_sub">Cliquez pour pré-remplir</p>
+  </ng-container>
 
-      <div class="examples-grid">
+  <!-- Examples -->
+  <ng-container examples>
+    <div class="examples-grid">
         <button
           *ngFor="let ex of examples"
           class="example-btn"
@@ -153,19 +135,19 @@
           <span class="ex-values">{{ ex.x }} / {{ ex.y }}</span>
         </button>
       </div>
-    </div>
+  </ng-container>
 
-    <!-- Explications -->
-    <div class="tool-card">
-      <div class="card-header centered">
-        <h2 i18n="@@pct_x_of_y_definition_title">Définition & méthode</h2>
-        <p i18n="@@pct_x_of_y_definition_sub">
+  <!-- Definition Header -->
+  <ng-container definitionHeader>
+    <h2 i18n="@@pct_x_of_y_definition_title">Définition & méthode</h2>
+    <p i18n="@@pct_x_of_y_definition_sub">
           Cet outil calcule la part de X dans Y (en pourcentage).
         </p>
-      </div>
+  </ng-container>
 
-      <div class="explain-content">
-        <tc-math-formula
+  <!-- Definition -->
+  <ng-container definition>
+    <tc-math-formula
           label="Formule"
           i18n-label="@@pct_x_of_y_formula_title"
           mode="katex"
@@ -186,16 +168,11 @@
             Si <strong>X &gt; Y</strong>, le résultat peut dépasser 100%.
           </span>
         </div>
-      </div>
-    </div>
+  </ng-container>
 
-    <!-- Retour -->
-    <div class="back-section">
-      <a routerLink="/categories/math/percentages" class="back-link">
+  <!-- Back Link -->
+  <a backLink routerLink="/categories/math/percentages" class="back-link">
         <i class="pi pi-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
-    </div>
-
-  </div>
-</section>
+</app-math-tool-shell>
