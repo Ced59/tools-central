@@ -20,7 +20,7 @@ export type SeoConfig = {
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
-  private readonly baseUrl = 'https://tools-central.com';
+  private readonly baseUrl = 'https://www.tools-central.com';
   private readonly defaultLocale = 'fr';
   private readonly localeSet = new Set<string>(LOCALES.map(l => l.locale));
 
@@ -104,7 +104,7 @@ export class SeoService {
 
     entries.push({
       hreflang: 'x-default',
-      hrefAbs: this.toAbsUrl(this.buildXDefaultPath(restPath)),
+      hrefAbs: this.toAbsUrl(this.buildLocalePath(this.defaultLocale, restPath)),
     });
 
     this.links.setHreflangs(entries);
