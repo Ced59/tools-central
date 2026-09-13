@@ -2,7 +2,11 @@ import { ApplicationConfig } from '@angular/core';
 import {provideRouter, withInMemoryScrolling} from '@angular/router';
 import { routes } from './app.routes';
 import { provideHttpClient, withXhr } from '@angular/common/http';
-import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
+import {
+  provideClientHydration,
+  withI18nSupport,
+  withNoIncrementalHydration,
+} from '@angular/platform-browser';
 import {provideMatomo, withRouter} from "ngx-matomo-client";
 
 export const appConfig: ApplicationConfig = {
@@ -15,7 +19,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(withXhr()),
-    provideClientHydration(withNoIncrementalHydration()),
+    provideClientHydration(withNoIncrementalHydration(), withI18nSupport()),
     provideMatomo(
       {
         siteId: 3,

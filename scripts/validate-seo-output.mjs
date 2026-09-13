@@ -99,6 +99,9 @@ for (const locale of locales) {
     if (/\bTODO\b/.test(html)) {
       report(`${label}: marqueur TODO publié.`);
     }
+    if (/<app-root\b[^>]*\bngskiphydration\b/i.test(html)) {
+      report(`${label}: l’application racine désactive l’hydratation.`);
+    }
 
     const robots = html.match(/<meta\s+name="robots"\s+content="([^"]+)"/i)?.[1];
     if (route === '/404' ? robots !== 'noindex,follow' : robots !== 'index,follow') {
