@@ -1,0 +1,248 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-sitemap"></i></div>
+        <h1 i18n="@@robots_builder_title">Générateur et validateur robots.txt</h1>
+        <p class="hero-subtitle" i18n="@@robots_builder_subtitle">
+          Créez un fichier robots.txt, détectez les erreurs et simulez l’accès à une URL pour un robot précis.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@robots_builder_privacy">Traitement 100 % local : le contenu et les URL saisis ne quittent jamais votre navigateur.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="tool-card builder-card">
+      <div class="card-header">
+        <h2 i18n="@@robots_builder_generator_title">1. Générer une base sûre</h2>
+        <p i18n="@@robots_builder_generator_subtitle">Une entrée par ligne pour les chemins. Le générateur ajoute « / », encode les espaces et déduplique les règles.</p>
+      </div>
+
+      <div class="preset-row" role="group" i18n-aria-label="@@robots_builder_presets_aria" aria-label="Modèles robots.txt">
+        <button type="button" (click)="applyPreset('recommended')" i18n="@@robots_builder_preset_recommended">Base recommandée</button>
+        <button type="button" (click)="applyPreset('allow-all')" i18n="@@robots_builder_preset_allow">Tout autoriser</button>
+        <button type="button" class="danger-outline" (click)="applyPreset('block-all')" i18n="@@robots_builder_preset_block">Tout bloquer</button>
+      </div>
+
+      <form class="builder-grid" (submit)="$event.preventDefault(); generate()">
+        <div class="field">
+          <label for="robots-site-url" i18n="@@robots_builder_site_label">URL du site</label>
+          <input
+            id="robots-site-url"
+            type="url"
+            maxlength="2048"
+            autocomplete="url"
+            spellcheck="false"
+            [value]="siteUrl()"
+            (input)="updateSiteUrl($event)"
+            aria-describedby="robots-site-help robots-site-status"
+          />
+          <small id="robots-site-help" i18n="@@robots_builder_site_help">Le protocole, le domaine et le port définissent la portée du fichier.</small>
+          <small id="robots-site-status" aria-live="polite" [class.error-text]="!builderValidation().siteValid">
+            @if (builderValidation().siteValid) {
+              <span i18n="@@robots_builder_site_valid">URL du site valide</span>
+            } @else {
+              <span i18n="@@robots_builder_site_invalid">URL du site à corriger</span>
+            }
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="robots-user-agent" i18n="@@robots_builder_agent_label">User-agent</label>
+          <input
+            id="robots-user-agent"
+            type="text"
+            maxlength="100"
+            spellcheck="false"
+            [value]="userAgent()"
+            (input)="updateUserAgent($event)"
+            aria-describedby="robots-agent-help robots-agent-status"
+          />
+          <small id="robots-agent-help" i18n="@@robots_builder_agent_help">Utilisez « * » pour tous les robots ou un product token comme Googlebot.</small>
+          <small id="robots-agent-status" aria-live="polite" [class.error-text]="!builderValidation().userAgentValid">
+            @if (builderValidation().userAgentValid) {
+              <span i18n="@@robots_builder_agent_valid">User-agent valide</span>
+            } @else {
+              <span i18n="@@robots_builder_agent_invalid">User-agent invalide ; « * » sera utilisé à la génération</span>
+            }
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="robots-disallow" i18n="@@robots_builder_disallow_label">Chemins à bloquer</label>
+          <textarea id="robots-disallow" rows="6" maxlength="10000" spellcheck="false" [value]="disallowPaths()" (input)="updateDisallowPaths($event)"></textarea>
+          <small i18n="@@robots_builder_disallow_help">Exemples : /admin/, /recherche?, /*.pdf$</small>
+        </div>
+
+        <div class="field">
+          <label for="robots-allow" i18n="@@robots_builder_allow_label">Exceptions à autoriser</label>
+          <textarea id="robots-allow" rows="6" maxlength="10000" spellcheck="false" [value]="allowPaths()" (input)="updateAllowPaths($event)"></textarea>
+          <small i18n="@@robots_builder_allow_help">Une règle Allow plus spécifique peut rouvrir une partie d’un chemin bloqué.</small>
+        </div>
+
+        <label class="check-field">
+          <input type="checkbox" [checked]="includeSitemap()" (change)="updateIncludeSitemap($event)" />
+          <span i18n="@@robots_builder_sitemap_toggle">Ajouter l’URL /sitemap.xml du site</span>
+        </label>
+
+        <button class="primary-button" type="submit">
+          <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+          <span i18n="@@robots_builder_generate">Générer et remplacer l’éditeur</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="workspace-grid">
+      <div class="tool-card editor-card">
+        <div class="card-header inline-header">
+          <div>
+            <h2 i18n="@@robots_builder_editor_title">2. Éditer et valider</h2>
+            <p i18n="@@robots_builder_editor_subtitle">Collez aussi un fichier existant : l’analyse se met à jour sans requête réseau.</p>
+          </div>
+          <button class="download-button" type="button" [disabled]="!content().trim()" (click)="download()">
+            <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+            <span i18n="@@robots_builder_download">Télécharger robots.txt</span>
+          </button>
+        </div>
+
+        <label class="sr-only" for="robots-content" i18n="@@robots_builder_content_label">Contenu du fichier robots.txt</label>
+        <textarea
+          id="robots-content"
+          class="code-editor"
+          rows="18"
+          maxlength="600000"
+          spellcheck="false"
+          [value]="content()"
+          (input)="updateContent($event)"
+          aria-describedby="robots-analysis-summary"
+        ></textarea>
+
+        <div id="robots-analysis-summary" class="stats" aria-live="polite">
+          <span><strong>{{ formatNumber(analysis().groups.length) }}</strong> <span i18n="@@robots_builder_groups">groupes</span></span>
+          <span><strong>{{ formatNumber(ruleCount()) }}</strong> <span i18n="@@robots_builder_rules">règles</span></span>
+          <span><strong>{{ formatNumber(analysis().sitemaps.length) }}</strong> <span i18n="@@robots_builder_sitemaps">sitemaps</span></span>
+          <span><strong>{{ formatNumber(analysis().sourceBytes) }}</strong> <span i18n="@@robots_builder_bytes">octets</span></span>
+        </div>
+      </div>
+
+      <aside class="tool-card report-card">
+        <div class="card-header">
+          <h2 i18n="@@robots_builder_report_title">Rapport de validation</h2>
+          <p>
+            <span class="badge badge--error">{{ formatNumber(errorCount()) }} <span i18n="@@robots_builder_errors">erreurs</span></span>
+            <span class="badge badge--warning">{{ formatNumber(warningCount()) }} <span i18n="@@robots_builder_warnings">avertissements</span></span>
+          </p>
+        </div>
+
+        @if (!analysis().issues.length) {
+          <div class="empty-report" role="status">
+            <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+            <strong i18n="@@robots_builder_no_issue">Aucun problème détecté</strong>
+            <span i18n="@@robots_builder_no_issue_help">Relisez néanmoins chaque chemin avant la mise en production.</span>
+          </div>
+        } @else {
+          <ol class="issue-list">
+            @for (issue of analysis().issues; track $index) {
+              <li [class]="'issue issue--' + issue.severity">
+                <div>
+                  @if (issue.line !== null) {
+                    <strong><span i18n="@@robots_builder_line">Ligne</span> {{ formatNumber(issue.line) }}</strong>
+                  } @else {
+                    <strong i18n="@@robots_builder_file_level">Fichier</strong>
+                  }
+                  <span>{{ issueLabel(issue.code) }}</span>
+                </div>
+                @if (issue.detail) { <code>{{ issue.detail }}</code> }
+              </li>
+            }
+          </ol>
+        }
+      </aside>
+    </div>
+
+    <div class="tool-card simulator-card">
+      <div class="card-header">
+        <h2 i18n="@@robots_builder_simulator_title">3. Tester une URL</h2>
+        <p i18n="@@robots_builder_simulator_subtitle">Le simulateur applique les groupes exacts, la règle la plus spécifique, « * » et « $ » selon RFC 9309.</p>
+      </div>
+
+      <div class="simulator-grid">
+        <div class="field">
+          <label for="robots-test-agent" i18n="@@robots_builder_test_agent">Product token du robot</label>
+          <input id="robots-test-agent" type="text" maxlength="100" spellcheck="false" [value]="testAgent()" (input)="updateTestAgent($event)" />
+        </div>
+        <div class="field field--wide">
+          <label for="robots-test-url" i18n="@@robots_builder_test_url">URL ou chemin à tester</label>
+          <input id="robots-test-url" type="text" maxlength="2048" spellcheck="false" [value]="testUrl()" (input)="updateTestUrl($event)" />
+        </div>
+      </div>
+
+      <div
+        class="decision"
+        [class.decision--allowed]="decision().allowed === true"
+        [class.decision--blocked]="decision().allowed === false"
+        [class.decision--invalid]="decision().allowed === null"
+        aria-live="polite"
+        data-testid="robots-decision"
+      >
+        <i
+          class="tc-icon"
+          [class.tc-icon-check-circle]="decision().allowed === true"
+          [class.tc-icon-exclamation-triangle]="decision().allowed !== true"
+          aria-hidden="true"
+        ></i>
+        <div>
+          @if (decision().allowed === true) {
+            <strong i18n="@@robots_builder_allowed">Exploration autorisée</strong>
+          } @else if (decision().allowed === false) {
+            <strong i18n="@@robots_builder_blocked">Exploration bloquée</strong>
+          } @else {
+            <strong i18n="@@robots_builder_test_invalid">Test impossible</strong>
+          }
+          <span>{{ decisionLabel(decision().reason) }}</span>
+          @if (decision().matchedRule; as matchedRule) {
+            <code>{{ matchedRule.directive }}: {{ matchedRule.path }} · <span i18n="@@robots_builder_line">Ligne</span> {{ formatNumber(matchedRule.line) }}</code>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card method-card">
+      <div class="card-header centered">
+        <h2 i18n="@@robots_builder_method_title">Trois points à vérifier avant publication</h2>
+      </div>
+      <div class="method-grid">
+        <div>
+          <i class="tc-icon tc-icon-sitemap" aria-hidden="true"></i>
+          <h3 i18n="@@robots_builder_method_scope_title">Portée exacte</h3>
+          <p i18n="@@robots_builder_method_scope_text">Placez le fichier à la racine. Ses règles ne valent que pour le même protocole, hôte et port.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>
+          <h3 i18n="@@robots_builder_method_index_title">Exploration, pas désindexation</h3>
+          <p i18n="@@robots_builder_method_index_text">Une URL bloquée peut encore apparaître dans les résultats. Pour empêcher l’indexation, utilisez une protection ou noindex sur une page accessible.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <h3 i18n="@@robots_builder_method_security_title">Aucune confidentialité</h3>
+          <p i18n="@@robots_builder_method_security_text">Le fichier est public et révèle les chemins listés. Ne l’utilisez jamais comme contrôle d’accès à des données sensibles.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="reset-button" type="button" (click)="reset()">
+        <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+        <span i18n="@@tool_reset">Réinitialiser</span>
+      </button>
+      <a class="back-link" routerLink="/categories/dev/seo">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@robots_builder_back">Retour aux outils SEO</span>
+      </a>
+    </div>
+  </div>
+</section>

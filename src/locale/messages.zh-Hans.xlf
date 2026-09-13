@@ -80010,6 +80010,654 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">meta description 的估算宽度</target>
       </segment>
     </unit>
+    <unit id="dev_seo_sg_technical_title">
+      <segment>
+        <source>Exploration technique</source>
+        <target state="translated">技术探索</target>
+      </segment>
+    </unit>
+    <unit id="dev_seo_sg_technical_desc">
+      <segment>
+        <source>Créer et contrôler les fichiers qui guident les robots d’exploration.</source>
+        <target state="translated">创建和控制指导爬虫的文件。</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt 生成器和验证器</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_desc">
+      <segment>
+        <source>Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.</source>
+        <target state="translated">生成、分析和下载一个 robots.txt 文件，然后模拟特定爬虫对 URL 的访问。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_title">
+      <segment>
+        <source>Créer et contrôler un fichier robots.txt fiable</source>
+        <target state="translated">创建和控制一个可靠的 robots.txt 文件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_lead">
+      <segment>
+        <source>Le fichier robots.txt indique aux robots d’exploration les chemins qu’ils peuvent demander. Le générateur prépare une base propre, le validateur détecte les erreurs fréquentes et le simulateur explique la règle appliquée à une URL.</source>
+        <target state="translated">robots.txt 文件指示爬虫可以请求的路径。生成器准备一个干净的基础，验证器检测常见错误，模拟器解释应用于 URL 的规则。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用案例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_title">
+      <segment>
+        <source>Préparer un nouveau site</source>
+        <target state="translated">准备一个新网站</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_text">
+      <segment>
+        <source>Créez un groupe User-agent, bloquez les espaces sans intérêt pour l’exploration et déclarez un sitemap absolu.</source>
+        <target state="translated">创建一个 User-agent 组，阻止无关的爬虫访问，并声明一个绝对的 sitemap。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">审核现有文件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_text">
+      <segment>
+        <source>Collez son contenu pour repérer les directives invalides, les doublons, les chemins mal formés, le HTML accidentel ou une taille supérieure à 500 Kio.</source>
+        <target state="translated">粘贴其内容以查找无效指令、重复项、格式错误的路径、意外的 HTML 或超过 500 KiB 的大小。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_title">
+      <segment>
+        <source>Diagnostiquer une URL bloquée</source>
+        <target state="translated">诊断被阻止的 URL</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_text">
+      <segment>
+        <source>Testez une URL avec un product token précis afin d’identifier le groupe sélectionné et la règle Allow ou Disallow la plus spécifique.</source>
+        <target state="translated">使用特定的产品令牌测试一个 URL，以识别所选组和最具体的 Allow 或 Disallow 规则。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_1">
+      <segment>
+        <source>Définissez d’abord l’origine exacte du site. Un fichier servi en HTTPS ne gouverne pas HTTP, un sous-domaine différent ni un autre port. Il doit être accessible à l’emplacement /robots.txt.</source>
+        <target state="translated">首先定义网站的确切来源。通过 HTTPS 提供的文件不控制 HTTP、不同的子域或其他端口。它必须在 /robots.txt 位置可访问。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_2">
+      <segment>
+        <source>Commencez avec peu de règles et des chemins explicites. Quand plusieurs règles correspondent, la plus spécifique gagne ; à spécificité égale, Allow prévaut sur Disallow.</source>
+        <target state="translated">从少量规则和明确的路径开始。当多个规则匹配时，最具体的规则优先；在相同的特异性下，Allow 优先于 Disallow。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_3">
+      <segment>
+        <source>Testez les robots importants et quelques URL représentatives, publiez le fichier en UTF-8 avec le type text/plain, puis vérifiez la réponse HTTP depuis l’extérieur.</source>
+        <target state="translated">测试重要的爬虫和一些代表性的 URL，以 UTF-8 格式发布文件，类型为 text/plain，然后从外部检查 HTTP 响应。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">需要了解的限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_1">
+      <segment>
+        <source>Bloquer l’exploration n’empêche pas toujours une URL d’apparaître dans un résultat de recherche. Une URL connue par des liens peut rester indexée sans extrait.</source>
+        <target state="translated">阻止爬虫并不总是能防止 URL 出现在搜索结果中。通过链接已知的 URL 可能仍然被索引而没有摘要。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_2">
+      <segment>
+        <source>robots.txt est public et ne protège aucune donnée. Utilisez une authentification et des autorisations serveur pour les contenus sensibles.</source>
+        <target state="translated">robots.txt 是公开的，无法保护任何数据。对于敏感内容，请使用身份验证和服务器权限。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_3">
+      <segment>
+        <source>Le standard définit le socle commun, mais chaque robot peut prendre en charge des directives supplémentaires. Google ignore notamment Crawl-delay.</source>
+        <target state="translated">标准定义了共同基础，但每个爬虫可以支持额外的指令。谷歌特别忽略 Crawl-delay。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q1">
+      <segment>
+        <source>Quelle différence entre Allow et Disallow ?</source>
+        <target state="translated">Allow 和 Disallow 有什么区别？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a1">
+      <segment>
+        <source>Disallow interdit la demande des chemins correspondants. Allow crée une exception plus spécifique dans un espace autrement bloqué. Une valeur vide ne bloque rien.</source>
+        <target state="translated">Disallow 禁止请求匹配的路径。Allow 在其他被阻止的空间中创建一个更具体的例外。空值不阻止任何内容。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q2">
+      <segment>
+        <source>Les majuscules et les paramètres d’URL comptent-ils ?</source>
+        <target state="translated">大写字母和 URL 参数算数吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a2">
+      <segment>
+        <source>Oui. La comparaison du chemin est sensible à la casse et peut inclure la chaîne de requête. Les caractères * et $ servent respectivement de joker et de marqueur de fin.</source>
+        <target state="translated">是的。路径比较是区分大小写的，并且可以包括查询字符串。字符 * 和 $ 分别用作通配符和结束标记。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q3">
+      <segment>
+        <source>Mes données sont-elles envoyées ou enregistrées ?</source>
+        <target state="translated">我的数据会被发送或记录吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a3">
+      <segment>
+        <source>Non. La génération, l’analyse, la simulation et l’export du fichier sont réalisés localement dans le navigateur.</source>
+        <target state="translated">不。文件的生成、分析、模拟和导出都是在浏览器中本地完成的。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip_title">
+      <segment>
+        <source>Avant de bloquer un chemin</source>
+        <target state="translated">在阻止路径之前</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip">
+      <segment>
+        <source>Vérifiez que le chemin ne contient pas les ressources nécessaires au rendu des pages, comme les feuilles de style ou les scripts. Une règle courte peut avoir un effet beaucoup plus large que prévu.</source>
+        <target state="translated">确保路径不包含页面呈现所需的资源，如样式表或脚本。一个简短的规则可能会产生比预期更广泛的影响。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt 生成器和验证器</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_subtitle">
+      <segment>
+        <source> Créez un fichier robots.txt, détectez les erreurs et simulez l’accès à une URL pour un robot précis. </source>
+        <target state="translated">创建一个 robots.txt 文件，检测错误并模拟特定爬虫对 URL 的访问。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : le contenu et les URL saisis ne quittent jamais votre navigateur.</source>
+        <target state="translated">100% 本地处理：输入的内容和 URL 永远不会离开您的浏览器。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_title">
+      <segment>
+        <source>1. Générer une base sûre</source>
+        <target state="translated">1. 生成安全基础</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne pour les chemins. Le générateur ajoute « / », encode les espaces et déduplique les règles.</source>
+        <target state="translated">每行一个输入用于路径。生成器添加“/”，编码空格并去重规则。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_presets_aria">
+      <segment>
+        <source>Modèles robots.txt</source>
+        <target state="translated">robots.txt 模板</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_recommended">
+      <segment>
+        <source>Base recommandée</source>
+        <target state="translated">推荐基础</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_allow">
+      <segment>
+        <source>Tout autoriser</source>
+        <target state="translated">全部允许</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_block">
+      <segment>
+        <source>Tout bloquer</source>
+        <target state="translated">全部阻止</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_label">
+      <segment>
+        <source>URL du site</source>
+        <target state="translated">网站 URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_help">
+      <segment>
+        <source>Le protocole, le domaine et le port définissent la portée du fichier.</source>
+        <target state="translated">协议、域名和端口定义了文件的范围。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_valid">
+      <segment>
+        <source>URL du site valide</source>
+        <target state="translated">有效网站的URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_invalid">
+      <segment>
+        <source>URL du site à corriger</source>
+        <target state="translated">需要修正的网站URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_label">
+      <segment>
+        <source>User-agent</source>
+        <target state="translated">用户代理</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_help">
+      <segment>
+        <source>Utilisez « * » pour tous les robots ou un product token comme Googlebot.</source>
+        <target state="translated">使用 « * » 来表示所有机器人或像 Googlebot 这样的产品令牌。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_valid">
+      <segment>
+        <source>User-agent valide</source>
+        <target state="translated">有效的用户代理</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_invalid">
+      <segment>
+        <source>User-agent invalide ; « * » sera utilisé à la génération</source>
+        <target state="translated">无效的用户代理；生成时将使用 « * »</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_label">
+      <segment>
+        <source>Chemins à bloquer</source>
+        <target state="translated">阻止的路径</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_help">
+      <segment>
+        <source>Exemples : /admin/, /recherche?, /*.pdf$</source>
+        <target state="translated">示例：/admin/，/search?，/*.pdf$</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_label">
+      <segment>
+        <source>Exceptions à autoriser</source>
+        <target state="translated">允许的例外</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_help">
+      <segment>
+        <source>Une règle Allow plus spécifique peut rouvrir une partie d’un chemin bloqué.</source>
+        <target state="translated">更具体的允许规则可以重新开放被阻止路径的一部分。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemap_toggle">
+      <segment>
+        <source>Ajouter l’URL /sitemap.xml du site</source>
+        <target state="translated">添加网站的 URL /sitemap.xml</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">生成并替换编辑器</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider</source>
+        <target state="translated">2. 编辑和验证</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un fichier existant : l’analyse se met à jour sans requête réseau.</source>
+        <target state="translated">也可以粘贴现有文件：分析会在没有网络请求的情况下更新。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_download">
+      <segment>
+        <source>Télécharger robots.txt</source>
+        <target state="translated">下载 robots.txt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_content_label">
+      <segment>
+        <source>Contenu du fichier robots.txt</source>
+        <target state="translated">robots.txt 文件的内容</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_groups">
+      <segment>
+        <source>groupes</source>
+        <target state="translated">组</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_rules">
+      <segment>
+        <source>règles</source>
+        <target state="translated">规则</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemaps">
+      <segment>
+        <source>sitemaps</source>
+        <target state="translated">网站地图</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_bytes">
+      <segment>
+        <source>octets</source>
+        <target state="translated">字节</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">验证报告</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">未检测到问题</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue_help">
+      <segment>
+        <source>Relisez néanmoins chaque chemin avant la mise en production.</source>
+        <target state="translated">不过在上线前请仔细检查每个路径。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">行</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">文件</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_title">
+      <segment>
+        <source>3. Tester une URL</source>
+        <target state="translated">3. 测试 URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_subtitle">
+      <segment>
+        <source>Le simulateur applique les groupes exacts, la règle la plus spécifique, « * » et « $ » selon RFC 9309.</source>
+        <target state="translated">模拟器根据 RFC 9309 应用精确组、最具体的规则、« * » 和 « $ »。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_agent">
+      <segment>
+        <source>Product token du robot</source>
+        <target state="translated">机器人的产品令牌</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_url">
+      <segment>
+        <source>URL ou chemin à tester</source>
+        <target state="translated">要测试的 URL 或路径</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allowed">
+      <segment>
+        <source>Exploration autorisée</source>
+        <target state="translated">允许爬取</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_blocked">
+      <segment>
+        <source>Exploration bloquée</source>
+        <target state="translated">阻止爬取</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_invalid">
+      <segment>
+        <source>Test impossible</source>
+        <target state="translated">测试失败</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_title">
+      <segment>
+        <source>Trois points à vérifier avant publication</source>
+        <target state="translated">发布前需检查的三点</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_title">
+      <segment>
+        <source>Portée exacte</source>
+        <target state="translated">确切范围</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_text">
+      <segment>
+        <source>Placez le fichier à la racine. Ses règles ne valent que pour le même protocole, hôte et port.</source>
+        <target state="translated">将文件放置在根目录。其规则仅适用于相同的协议、主机和端口。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_title">
+      <segment>
+        <source>Exploration, pas désindexation</source>
+        <target state="translated">爬取，而非去索引</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_text">
+      <segment>
+        <source>Une URL bloquée peut encore apparaître dans les résultats. Pour empêcher l’indexation, utilisez une protection ou noindex sur une page accessible.</source>
+        <target state="translated">被阻止的 URL 仍可能出现在结果中。要防止索引，请在可访问的页面上使用保护或 noindex。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_title">
+      <segment>
+        <source>Aucune confidentialité</source>
+        <target state="translated">没有隐私</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_text">
+      <segment>
+        <source>Le fichier est public et révèle les chemins listés. Ne l’utilisez jamais comme contrôle d’accès à des données sensibles.</source>
+        <target state="translated">该文件是公开的，并揭示了列出的路径。切勿将其用作对敏感数据的访问控制。</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">返回到SEO工具</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse 500 Kio ; les moteurs peuvent ignorer la suite.</source>
+        <target state="translated">文件超过500 KiB；引擎可能会忽略后续内容。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_bom">
+      <segment>
+        <source>Le marqueur BOM initial est ignoré.</source>
+        <target state="translated">初始BOM标记被忽略。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_control">
+      <segment>
+        <source>Caractère de contrôle non autorisé.</source>
+        <target state="translated">不允许的控制字符。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_html">
+      <segment>
+        <source>Le contenu ressemble à une page HTML, pas à un fichier robots.txt.</source>
+        <target state="translated">内容看起来像一个HTML页面，而不是一个robots.txt文件。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_line">
+      <segment>
+        <source>Ligne invalide : une directive et un deux-points sont attendus.</source>
+        <target state="translated">无效行：预期有一个指令和一个冒号。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_agent">
+      <segment>
+        <source>Le nom du robot est vide.</source>
+        <target state="translated">机器人名称为空。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_invalid_agent">
+      <segment>
+        <source>Le product token contient des caractères non autorisés.</source>
+        <target state="translated">产品令牌包含不允许的字符。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_orphan">
+      <segment>
+        <source>Cette règle n’est précédée d’aucun User-agent valide.</source>
+        <target state="translated">此规则前没有有效的User-agent。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_rule">
+      <segment>
+        <source>La règle vide est ignorée et ne bloque aucune URL.</source>
+        <target state="translated">空规则被忽略，不会阻止任何URL。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_path">
+      <segment>
+        <source>Le chemin doit commencer par « / » et ne pas contenir d’espace brut.</source>
+        <target state="translated">路径必须以“/”开头，并且不能包含空格。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_dollar">
+      <segment>
+        <source>Le symbole « $ » ne peut apparaître qu’une fois, à la fin du chemin.</source>
+        <target state="translated">符号“$”只能出现一次，且必须在路径的末尾。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_sitemap">
+      <segment>
+        <source>L’adresse du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">站点地图地址必须是绝对的HTTP或HTTPS URL。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_crawl_delay">
+      <segment>
+        <source>Crawl-delay n’est pas pris en charge par Google.</source>
+        <target state="translated">Crawl-delay不被Google支持。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_unknown">
+      <segment>
+        <source>Directive inconnue ou non standard ; elle peut être ignorée par les robots.</source>
+        <target state="translated">未知或非标准指令；可能会被机器人忽略。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_rule">
+      <segment>
+        <source>Règle dupliquée dans le même groupe.</source>
+        <target state="translated">同一组中的重复规则。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_sitemap">
+      <segment>
+        <source>Sitemap dupliqué.</source>
+        <target state="translated">重复的站点地图。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_missing_agent">
+      <segment>
+        <source>Aucun groupe User-agent valide n’a été trouvé.</source>
+        <target state="translated">未找到有效的User-agent组。</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">列表限制为前200个问题。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_matched">
+      <segment>
+        <source>Décision calculée avec la règle la plus spécifique.</source>
+        <target state="translated">根据最具体的规则计算的决策。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_no_rule">
+      <segment>
+        <source>Aucune règle applicable : l’exploration est autorisée par défaut.</source>
+        <target state="translated">没有适用的规则：默认允许抓取。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_file">
+      <segment>
+        <source>Le fichier /robots.txt lui-même est toujours autorisé.</source>
+        <target state="translated">/robots.txt文件本身始终被允许。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_site">
+      <segment>
+        <source>Corrigez l’URL du site avant de lancer le test.</source>
+        <target state="translated">在运行测试之前，请修正网站的URL。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_url">
+      <segment>
+        <source>Saisissez une URL HTTP ou HTTPS valide à tester.</source>
+        <target state="translated">请输入有效的HTTP或HTTPS URL进行测试。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_origin">
+      <segment>
+        <source>L’URL testée doit utiliser le même protocole, hôte et port que le site.</source>
+        <target state="translated">测试的URL必须使用与网站相同的协议、主机和端口。</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_agent">
+      <segment>
+        <source>Saisissez un product token précis, par exemple Googlebot.</source>
+        <target state="translated">请输入准确的产品令牌，例如Googlebot。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

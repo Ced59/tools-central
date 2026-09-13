@@ -80019,6 +80019,654 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Meta açıklamasının tahmini genişliği</target>
       </segment>
     </unit>
+    <unit id="dev_seo_sg_technical_title">
+      <segment>
+        <source>Exploration technique</source>
+        <target state="translated">Teknik keşif</target>
+      </segment>
+    </unit>
+    <unit id="dev_seo_sg_technical_desc">
+      <segment>
+        <source>Créer et contrôler les fichiers qui guident les robots d’exploration.</source>
+        <target state="translated">Tarayıcı robotlarını yönlendiren dosyaları oluşturun ve kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt Oluşturucu ve Doğrulayıcı</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_desc">
+      <segment>
+        <source>Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.</source>
+        <target state="translated">Bir robots.txt dosyası oluşturun, analiz edin ve indirin, ardından belirli bir robot için bir URL'ye erişimi simüle edin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_title">
+      <segment>
+        <source>Créer et contrôler un fichier robots.txt fiable</source>
+        <target state="translated">Güvenilir bir robots.txt dosyası oluşturun ve kontrol edin</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_lead">
+      <segment>
+        <source>Le fichier robots.txt indique aux robots d’exploration les chemins qu’ils peuvent demander. Le générateur prépare une base propre, le validateur détecte les erreurs fréquentes et le simulateur explique la règle appliquée à une URL.</source>
+        <target state="translated">robots.txt dosyası, tarayıcı robotlarına talep edebilecekleri yolları belirtir. Oluşturucu temiz bir temel hazırlar, doğrulayıcı yaygın hataları tespit eder ve simülatör, bir URL'ye uygulanan kuralı açıklar.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Kullanım durumları</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_title">
+      <segment>
+        <source>Préparer un nouveau site</source>
+        <target state="translated">Yeni bir site hazırlamak</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_text">
+      <segment>
+        <source>Créez un groupe User-agent, bloquez les espaces sans intérêt pour l’exploration et déclarez un sitemap absolu.</source>
+        <target state="translated">Bir User-agent grubu oluşturun, tarama için önemsiz alanları engelleyin ve mutlak bir sitemap belirtin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">Mevcut bir dosyayı denetlemek</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_text">
+      <segment>
+        <source>Collez son contenu pour repérer les directives invalides, les doublons, les chemins mal formés, le HTML accidentel ou une taille supérieure à 500 KiB.</source>
+        <target state="translated">Geçersiz direktifleri, yinelenenleri, hatalı yolları, kazara eklenmiş HTML'yi veya 500 KiB'dan büyük bir boyutu tespit etmek için içeriğini yapıştırın.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_title">
+      <segment>
+        <source>Diagnostiquer une URL bloquée</source>
+        <target state="translated">Engellenmiş bir URL'yi teşhis etmek</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_text">
+      <segment>
+        <source>Testez une URL avec un product token précis afin d’identifier le groupe sélectionné et la règle Allow ou Disallow la plus spécifique.</source>
+        <target state="translated">Seçilen grubu ve en spesifik Allow veya Disallow kuralını belirlemek için belirli bir ürün token ile bir URL'yi test edin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Tavsiye edilen yöntem</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_1">
+      <segment>
+        <source>Définissez d’abord l’origine exacte du site. Un fichier servi en HTTPS ne gouverne pas HTTP, un sous-domaine différent ni un autre port. Il doit être accessible à l’emplacement /robots.txt.</source>
+        <target state="translated">Öncelikle sitenin tam kaynağını belirleyin. HTTPS ile sunulan bir dosya, HTTP'yi, farklı bir alt alanı veya başka bir portu yönetmez. /robots.txt konumunda erişilebilir olmalıdır.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_2">
+      <segment>
+        <source>Commencez avec peu de règles et des chemins explicites. Quand plusieurs règles correspondent, la plus spécifique gagne ; à spécificité égale, Allow prévaut sur Disallow.</source>
+        <target state="translated">Öncelikle az sayıda kural ve açık yollarla başlayın. Birden fazla kural eşleştiğinde, en spesifik olan kazanır; eşit spesifiklikte Allow, Disallow'dan üstündür.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_3">
+      <segment>
+        <source>Testez les robots importants et quelques URL représentatives, publiez le fichier en UTF-8 avec le type text/plain, puis vérifiez la réponse HTTP depuis l’extérieur.</source>
+        <target state="translated">Önemli robotları ve birkaç temsilci URL'yi test edin, dosyayı UTF-8 olarak text/plain türünde yayınlayın ve ardından dışarıdan HTTP yanıtını kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">Bilmeniz gereken sınırlamalar</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_1">
+      <segment>
+        <source>Bloquer l’exploration n’empêche pas toujours une URL d’apparaître dans un résultat de recherche. Une URL connue par des liens peut rester indexée sans extrait.</source>
+        <target state="translated">Tarama engellemek, bir URL'nin arama sonuçlarında görünmesini her zaman engellemez. Bağlantılarla bilinen bir URL, özet olmadan dizine eklenebilir.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_2">
+      <segment>
+        <source>robots.txt est public et ne protège aucune donnée. Utilisez une authentification et des autorisations serveur pour les contenus sensibles.</source>
+        <target state="translated">robots.txt herkese açıktır ve hiçbir veriyi korumaz. Hassas içerikler için kimlik doğrulama ve sunucu izinleri kullanın.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_3">
+      <segment>
+        <source>Le standard définit le socle commun, mais chaque robot peut prendre en charge des directives supplémentaires. Google ignore notamment Crawl-delay.</source>
+        <target state="translated">Standart ortak bir temel tanımlar, ancak her robot ek direktifleri destekleyebilir. Özellikle Google, Crawl-delay'i göz ardı eder.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Sıkça Sorulan Sorular</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q1">
+      <segment>
+        <source>Quelle différence entre Allow et Disallow ?</source>
+        <target state="translated">Allow ve Disallow arasındaki fark nedir?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a1">
+      <segment>
+        <source>Disallow interdit la demande des chemins correspondants. Allow crée une exception plus spécifique dans un espace autrement bloqué. Une valeur vide ne bloque rien.</source>
+        <target state="translated">Disallow, eşleşen yolların talebini yasaklar. Allow, aksi takdirde engellenmiş bir alanda daha spesifik bir istisna oluşturur. Boş bir değer hiçbir şeyi engellemez.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q2">
+      <segment>
+        <source>Les majuscules et les paramètres d’URL comptent-ils ?</source>
+        <target state="translated">Büyük harfler ve URL parametreleri önemli mi?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a2">
+      <segment>
+        <source>Oui. La comparaison du chemin est sensible à la casse et peut inclure la chaîne de requête. Les caractères * et $ servent respectivement de joker et de marqueur de fin.</source>
+        <target state="translated">Evet. Yol karşılaştırması büyük/küçük harf duyarlıdır ve sorgu dizisini içerebilir. * ve $ karakterleri sırasıyla joker ve son işareti olarak kullanılır.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q3">
+      <segment>
+        <source>Mes données sont-elles envoyées ou enregistrées ?</source>
+        <target state="translated">Verilerim gönderiliyor veya kaydediliyor mu?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a3">
+      <segment>
+        <source>Non. La génération, l’analyse, la simulation et l’export du fichier sont réalisés localement dans le navigateur.</source>
+        <target state="translated">Hayır. Dosyanın oluşturulması, analizi, simülasyonu ve dışa aktarımı tarayıcıda yerel olarak gerçekleştirilir.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip_title">
+      <segment>
+        <source>Avant de bloquer un chemin</source>
+        <target state="translated">Bir yolu engellemeden önce</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip">
+      <segment>
+        <source>Vérifiez que le chemin ne contient pas les ressources nécessaires au rendu des pages, comme les feuilles de style ou les scripts. Une règle courte peut avoir un effet beaucoup plus large que prévu.</source>
+        <target state="translated">Yolun, sayfaların render edilmesi için gerekli kaynakları içermediğinden emin olun, örneğin stil sayfaları veya betikler. Kısa bir kural, beklenenden çok daha geniş bir etki yaratabilir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt Oluşturucu ve Doğrulayıcı</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_subtitle">
+      <segment>
+        <source> Créez un fichier robots.txt, détectez les erreurs et simulez l’accès à une URL pour un robot précis. </source>
+        <target state="translated">Bir robots.txt dosyası oluşturun, hataları tespit edin ve belirli bir robot için bir URL'ye erişimi simüle edin.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : le contenu et les URL saisis ne quittent jamais votre navigateur.</source>
+        <target state="translated">%100 yerel işleme: girilen içerik ve URL'ler asla tarayıcınızı terk etmez.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_title">
+      <segment>
+        <source>1. Générer une base sûre</source>
+        <target state="translated">1. Güvenli bir temel oluşturun</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne pour les chemins. Le générateur ajoute « / », encode les espaces et déduplique les règles.</source>
+        <target state="translated">Yollar için her satıra bir giriş. Oluşturucu « / » ekler, boşlukları kodlar ve kuralları tekrarlar.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_presets_aria">
+      <segment>
+        <source>Modèles robots.txt</source>
+        <target state="translated">robots.txt Şablonları</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_recommended">
+      <segment>
+        <source>Base recommandée</source>
+        <target state="translated">Tavsiye edilen temel</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_allow">
+      <segment>
+        <source>Tout autoriser</source>
+        <target state="translated">Her şeyi izin ver</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_block">
+      <segment>
+        <source>Tout bloquer</source>
+        <target state="translated">Her şeyi engelle</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_label">
+      <segment>
+        <source>URL du site</source>
+        <target state="translated">Site URL'si</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_help">
+      <segment>
+        <source>Le protocole, le domaine et le port définissent la portée du fichier.</source>
+        <target state="translated">Protokol, alan ve port dosyanın kapsamını tanımlar.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_valid">
+      <segment>
+        <source>URL du site valide</source>
+        <target state="translated">Geçerli site URL'si</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_invalid">
+      <segment>
+        <source>URL du site à corriger</source>
+        <target state="translated">Düzeltilecek site URL'si</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_label">
+      <segment>
+        <source>User-agent</source>
+        <target state="translated">Kullanıcı ajanı</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_help">
+      <segment>
+        <source>Utilisez « * » pour tous les robots ou un product token comme Googlebot.</source>
+        <target state="translated">Tüm robotlar için « * » kullanın veya Googlebot gibi bir ürün belirteci.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_valid">
+      <segment>
+        <source>User-agent valide</source>
+        <target state="translated">Geçerli kullanıcı ajanı</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_invalid">
+      <segment>
+        <source>User-agent invalide ; « * » sera utilisé à la génération</source>
+        <target state="translated">Geçersiz kullanıcı ajanı; oluşturma sırasında « * » kullanılacaktır.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_label">
+      <segment>
+        <source>Chemins à bloquer</source>
+        <target state="translated">Engellenecek yollar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_help">
+      <segment>
+        <source>Exemples : /admin/, /recherche?, /*.pdf$</source>
+        <target state="translated">Örnekler: /admin/, /arama?, /*.pdf$</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_label">
+      <segment>
+        <source>Exceptions à autoriser</source>
+        <target state="translated">İzin verilecek istisnalar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_help">
+      <segment>
+        <source>Une règle Allow plus spécifique peut rouvrir une partie d’un chemin bloqué.</source>
+        <target state="translated">Daha spesifik bir Allow kuralı, engellenmiş bir yolun bir kısmını yeniden açabilir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemap_toggle">
+      <segment>
+        <source>Ajouter l’URL /sitemap.xml du site</source>
+        <target state="translated">Site için /sitemap.xml URL'sini ekle</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">Oluştur ve editörü değiştir</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider</source>
+        <target state="translated">2. Düzenle ve doğrula</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un fichier existant : l’analyse se met à jour sans requête réseau.</source>
+        <target state="translated">Ayrıca mevcut bir dosyayı yapıştırın: analiz ağ isteği olmadan güncellenir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_download">
+      <segment>
+        <source>Télécharger robots.txt</source>
+        <target state="translated">robots.txt indir</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_content_label">
+      <segment>
+        <source>Contenu du fichier robots.txt</source>
+        <target state="translated">robots.txt dosyasının içeriği</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_groups">
+      <segment>
+        <source>groupes</source>
+        <target state="translated">gruplar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_rules">
+      <segment>
+        <source>règles</source>
+        <target state="translated">kurallar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemaps">
+      <segment>
+        <source>sitemaps</source>
+        <target state="translated">sitemap'ler</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_bytes">
+      <segment>
+        <source>octets</source>
+        <target state="translated">bayt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">Doğrulama raporu</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">hatalar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">uyarılar</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">Hiçbir sorun tespit edilmedi</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue_help">
+      <segment>
+        <source>Relisez néanmoins chaque chemin avant la mise en production.</source>
+        <target state="translated">Yine de üretime geçmeden önce her yolu gözden geçirin.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">Satır</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Dosya</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_title">
+      <segment>
+        <source>3. Tester une URL</source>
+        <target state="translated">3. Bir URL'yi test et</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_subtitle">
+      <segment>
+        <source>Le simulateur applique les groupes exacts, la règle la plus spécifique, « * » et « $ » selon RFC 9309.</source>
+        <target state="translated">Simülatör, tam grupları, en spesifik kuralı, « * » ve « $ » RFC 9309'a göre uygular.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_agent">
+      <segment>
+        <source>Product token du robot</source>
+        <target state="translated">Robotun ürün belirteci</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_url">
+      <segment>
+        <source>URL ou chemin à tester</source>
+        <target state="translated">Test edilecek URL veya yol</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allowed">
+      <segment>
+        <source>Exploration autorisée</source>
+        <target state="translated">Tarama izin verildi</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_blocked">
+      <segment>
+        <source>Exploration bloquée</source>
+        <target state="translated">Tarama engellendi</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_invalid">
+      <segment>
+        <source>Test impossible</source>
+        <target state="translated">Test yapılamadı</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_title">
+      <segment>
+        <source>Trois points à vérifier avant publication</source>
+        <target state="translated">Yayınlamadan önce kontrol edilmesi gereken üç nokta</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_title">
+      <segment>
+        <source>Portée exacte</source>
+        <target state="translated">Kesin kapsam</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_text">
+      <segment>
+        <source>Placez le fichier à la racine. Ses règles ne valent que pour le même protocole, hôte et port.</source>
+        <target state="translated">Dosyayı kök dizine yerleştirin. Kuralları yalnızca aynı protokol, ana bilgisayar ve port için geçerlidir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_title">
+      <segment>
+        <source>Exploration, pas désindexation</source>
+        <target state="translated">Tarama, dizin dışı bırakma değil</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_text">
+      <segment>
+        <source>Une URL bloquée peut encore apparaître dans les résultats. Pour empêcher l’indexation, utilisez une protection ou noindex sur une page accessible.</source>
+        <target state="translated">Engellenmiş bir URL hala sonuçlarda görünebilir. Dizin dışı bırakmayı önlemek için, erişilebilir bir sayfada koruma veya noindex kullanın.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_title">
+      <segment>
+        <source>Aucune confidentialité</source>
+        <target state="translated">Hiçbir gizlilik</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_text">
+      <segment>
+        <source>Le fichier est public et révèle les chemins listés. Ne l’utilisez jamais comme contrôle d’accès à des données sensibles.</source>
+        <target state="translated">Dosya herkese açıktır ve listelenen yolları açığa çıkarır. Bunu asla hassas verilere erişim kontrolü olarak kullanmayın.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEO araçlarına geri dön</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse 500 KiB ; les moteurs peuvent ignorer la suite.</source>
+        <target state="translated">Dosya 500 KiB'yu aşıyor; motorlar devamını göz ardı edebilir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_bom">
+      <segment>
+        <source>Le marqueur BOM initial est ignoré.</source>
+        <target state="translated">Başlangıç BOM işareti göz ardı ediliyor.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_control">
+      <segment>
+        <source>Caractère de contrôle non autorisé.</source>
+        <target state="translated">Geçersiz kontrol karakteri.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_html">
+      <segment>
+        <source>Le contenu ressemble à une page HTML, pas à un fichier robots.txt.</source>
+        <target state="translated">İçerik bir HTML sayfasına benziyor, robots.txt dosyası değil.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_line">
+      <segment>
+        <source>Ligne invalide : une directive et un deux-points sont attendus.</source>
+        <target state="translated">Geçersiz satır: bir direktif ve bir iki nokta bekleniyor.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_agent">
+      <segment>
+        <source>Le nom du robot est vide.</source>
+        <target state="translated">Robot adı boş.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_invalid_agent">
+      <segment>
+        <source>Le product token contient des caractères non autorisés.</source>
+        <target state="translated">Ürün belirteci geçersiz karakterler içeriyor.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_orphan">
+      <segment>
+        <source>Cette règle n’est précédée d’aucun User-agent valide.</source>
+        <target state="translated">Bu kuralın geçerli bir User-agent'ı yok.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_rule">
+      <segment>
+        <source>La règle vide est ignorée et ne bloque aucune URL.</source>
+        <target state="translated">Boş kural göz ardı ediliyor ve hiçbir URL'yi engellemiyor.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_path">
+      <segment>
+        <source>Le chemin doit commencer par « / » et ne pas contenir d’espace brut.</source>
+        <target state="translated">Yol « / » ile başlamalı ve boşluk içermemelidir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_dollar">
+      <segment>
+        <source>Le symbole « $ » ne peut apparaître qu’une fois, à la fin du chemin.</source>
+        <target state="translated">« $ » sembolü yalnızca bir kez, yolun sonunda görünebilir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_sitemap">
+      <segment>
+        <source>L’adresse du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Site haritası adresi bir HTTP veya HTTPS mutlak URL'si olmalıdır.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_crawl_delay">
+      <segment>
+        <source>Crawl-delay n’est pas pris en charge par Google.</source>
+        <target state="translated">Crawl-delay Google tarafından desteklenmiyor.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_unknown">
+      <segment>
+        <source>Directive inconnue ou non standard ; elle peut être ignorée par les robots.</source>
+        <target state="translated">Bilinmeyen veya standart dışı direktif; robotlar tarafından göz ardı edilebilir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_rule">
+      <segment>
+        <source>Règle dupliquée dans le même groupe.</source>
+        <target state="translated">Aynı grupta tekrarlanan kural.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_sitemap">
+      <segment>
+        <source>Sitemap dupliqué.</source>
+        <target state="translated">Tekrarlanan site haritası.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_missing_agent">
+      <segment>
+        <source>Aucun groupe User-agent valide n’a été trouvé.</source>
+        <target state="translated">Geçerli bir User-agent grubu bulunamadı.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">Liste ilk 200 soruyla sınırlıdır.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_matched">
+      <segment>
+        <source>Décision calculée avec la règle la plus spécifique.</source>
+        <target state="translated">En spesifik kural ile hesaplanan karar.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_no_rule">
+      <segment>
+        <source>Aucune règle applicable : l’exploration est autorisée par défaut.</source>
+        <target state="translated">Geçerli kural yok: tarama varsayılan olarak izinlidir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_file">
+      <segment>
+        <source>Le fichier /robots.txt lui-même est toujours autorisé.</source>
+        <target state="translated">/robots.txt dosyası her zaman izinlidir.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_site">
+      <segment>
+        <source>Corrigez l’URL du site avant de lancer le test.</source>
+        <target state="translated">Testi başlatmadan önce site URL'sini düzeltin.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_url">
+      <segment>
+        <source>Saisissez une URL HTTP ou HTTPS valide à tester.</source>
+        <target state="translated">Test edilecek geçerli bir HTTP veya HTTPS URL'si girin.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_origin">
+      <segment>
+        <source>L’URL testée doit utiliser le même protocole, hôte et port que le site.</source>
+        <target state="translated">Test edilen URL, site ile aynı protokolü, ana bilgisayarı ve portu kullanmalıdır.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_agent">
+      <segment>
+        <source>Saisissez un product token précis, par exemple Googlebot.</source>
+        <target state="translated">Örneğin Googlebot gibi belirli bir ürün belirteci girin.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

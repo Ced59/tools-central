@@ -82,6 +82,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 ### Outils livrés depuis l’audit
 
 - **Prévisualiseur de snippet Google** — implémenté en Clean Architecture, traitement local, vues ordinateur/mobile, estimation typographique en pixels, recommandations, tests unitaires et E2E. Route : `/categories/dev/seo/serp-snippet-preview`.
+- **Générateur et validateur robots.txt** — implémenté en Clean Architecture, traitement local, génération sûre, validation bornée à 500 Kio, simulation URL/user-agent conforme à RFC 9309, export texte, tests unitaires et E2E. Route : `/categories/dev/seo/robots-txt-builder`.
 
 ## Inventaire exhaustif des opportunités
 

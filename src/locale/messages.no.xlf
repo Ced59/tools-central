@@ -80010,6 +80010,654 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Estimert bredde på meta-beskrivelsen</target>
       </segment>
     </unit>
+    <unit id="dev_seo_sg_technical_title">
+      <segment>
+        <source>Exploration technique</source>
+        <target state="translated">Teknisk utforskning</target>
+      </segment>
+    </unit>
+    <unit id="dev_seo_sg_technical_desc">
+      <segment>
+        <source>Créer et contrôler les fichiers qui guident les robots d’exploration.</source>
+        <target state="translated">Opprett og kontroller filer som veileder utforskningsroboter.</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt-generator og -validerer</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_desc">
+      <segment>
+        <source>Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.</source>
+        <target state="translated">Generer, analyser og last ned en robots.txt-fil, og simuler deretter tilgangen til en URL for en spesifikk robot.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_title">
+      <segment>
+        <source>Créer et contrôler un fichier robots.txt fiable</source>
+        <target state="translated">Opprett og kontroller en pålitelig robots.txt-fil</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_lead">
+      <segment>
+        <source>Le fichier robots.txt indique aux robots d’exploration les chemins qu’ils peuvent demander. Le générateur prépare une base propre, le validateur détecte les erreurs fréquentes et le simulateur explique la règle appliquée à une URL.</source>
+        <target state="translated">robots.txt-filen angir for utforskningsroboter hvilke stier de kan be om. Generatoren forbereder et rent grunnlag, validatoren oppdager vanlige feil, og simulatoren forklarer regelen som gjelder for en URL.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Bruksområder</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_title">
+      <segment>
+        <source>Préparer un nouveau site</source>
+        <target state="translated">Forbered et nytt nettsted</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_text">
+      <segment>
+        <source>Créez un groupe User-agent, bloquez les espaces sans intérêt pour l’exploration et déclarez un sitemap absolu.</source>
+        <target state="translated">Opprett en User-agent-gruppe, blokkér uinteressante områder for utforskning, og oppgi et absolutt sitemap.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">Revider en eksisterende fil</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_text">
+      <segment>
+        <source>Collez son contenu pour repérer les directives invalides, les doublons, les chemins mal formés, le HTML accidentel ou une taille supérieure à 500 KiB.</source>
+        <target state="translated">Lim inn innholdet for å oppdage ugyldige direktiver, duplikater, feilformaterte stier, utilsiktet HTML eller en størrelse større enn 500 KiB.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_title">
+      <segment>
+        <source>Diagnostiquer une URL bloquée</source>
+        <target state="translated">Diagnostiser en blokkert URL</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_text">
+      <segment>
+        <source>Testez une URL avec un product token précis afin d’identifier le groupe sélectionné et la règle Allow ou Disallow la plus spécifique.</source>
+        <target state="translated">Test en URL med et spesifikt produkt-token for å identifisere den valgte gruppen og den mest spesifikke Allow- eller Disallow-regelen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Anbefalt metode</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_1">
+      <segment>
+        <source>Définissez d’abord l’origine exacte du site. Un fichier servi en HTTPS ne gouverne pas HTTP, un sous-domaine différent ni un autre port. Il doit être accessible à l’emplacement /robots.txt.</source>
+        <target state="translated">Definer først den nøyaktige opprinnelsen til nettstedet. En fil servert over HTTPS styrer ikke HTTP, en annen underdomene eller en annen port. Den må være tilgjengelig på plasseringen /robots.txt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_2">
+      <segment>
+        <source>Commencez avec peu de règles et des chemins explicites. Quand plusieurs règles correspondent, la plus spécifique gagne ; à spécificité égale, Allow prévaut sur Disallow.</source>
+        <target state="translated">Start med få regler og eksplisitte stier. Når flere regler samsvarer, vinner den mest spesifikke; ved lik spesifisitet har Allow forrang over Disallow.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_3">
+      <segment>
+        <source>Testez les robots importants et quelques URL représentatives, publiez le fichier en UTF-8 avec le type text/plain, puis vérifiez la réponse HTTP depuis l’extérieur.</source>
+        <target state="translated">Test viktige roboter og noen representative URL-er, publiser filen i UTF-8 med type text/plain, og sjekk deretter HTTP-responsen fra utsiden.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">Begrensninger å være klar over</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_1">
+      <segment>
+        <source>Bloquer l’exploration n’empêche pas toujours une URL d’apparaître dans un résultat de recherche. Une URL connue par des liens peut rester indexée sans extrait.</source>
+        <target state="translated">Å blokkere utforskning forhindrer ikke alltid en URL fra å vises i et søkeresultat. En URL kjent gjennom lenker kan forbli indeksert uten utdrag.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_2">
+      <segment>
+        <source>robots.txt est public et ne protège aucune donnée. Utilisez une authentification et des autorisations serveur pour les contenus sensibles.</source>
+        <target state="translated">robots.txt er offentlig og beskytter ingen data. Bruk autentisering og serverrettigheter for sensitivt innhold.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_3">
+      <segment>
+        <source>Le standard définit le socle commun, mais chaque robot peut prendre en charge des directives supplémentaires. Google ignore notamment Crawl-delay.</source>
+        <target state="translated">Standarden definerer det felles grunnlaget, men hver robot kan støtte ekstra direktiver. Google ignorerer spesielt Crawl-delay.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Vanlige spørsmål</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q1">
+      <segment>
+        <source>Quelle différence entre Allow et Disallow ?</source>
+        <target state="translated">Hva er forskjellen mellom Allow og Disallow?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a1">
+      <segment>
+        <source>Disallow interdit la demande des chemins correspondants. Allow crée une exception plus spécifique dans un espace autrement bloqué. Une valeur vide ne bloque rien.</source>
+        <target state="translated">Disallow forbyr forespørselen om de samsvarende stiene. Allow oppretter et mer spesifikt unntak i et ellers blokkert område. En tom verdi blokkerer ingenting.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q2">
+      <segment>
+        <source>Les majuscules et les paramètres d’URL comptent-ils ?</source>
+        <target state="translated">Teller store bokstaver og URL-parametere?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a2">
+      <segment>
+        <source>Oui. La comparaison du chemin est sensible à la casse et peut inclure la chaîne de requête. Les caractères * et $ servent respectivement de joker et de marqueur de fin.</source>
+        <target state="translated">Ja. Sammenligningen av stien er følsom for store bokstaver og kan inkludere spørringsstrengen. Tegnene * og $ fungerer henholdsvis som wildcard og sluttmarkør.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q3">
+      <segment>
+        <source>Mes données sont-elles envoyées ou enregistrées ?</source>
+        <target state="translated">Blir dataene mine sendt eller lagret?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a3">
+      <segment>
+        <source>Non. La génération, l’analyse, la simulation et l’export du fichier sont réalisés localement dans le navigateur.</source>
+        <target state="translated">Nei. Generering, analyse, simulering og eksport av filen skjer lokalt i nettleseren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip_title">
+      <segment>
+        <source>Avant de bloquer un chemin</source>
+        <target state="translated">Før du blokkerer en sti</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip">
+      <segment>
+        <source>Vérifiez que le chemin ne contient pas les ressources nécessaires au rendu des pages, comme les feuilles de style ou les scripts. Une règle courte peut avoir un effet beaucoup plus large que prévu.</source>
+        <target state="translated">Sjekk at stien ikke inneholder nødvendige ressurser for å gjengi sidene, som stilark eller skript. En kort regel kan ha en mye bredere effekt enn forventet.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt-generator og -validerer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_subtitle">
+      <segment>
+        <source> Créez un fichier robots.txt, détectez les erreurs et simulez l’accès à une URL pour un robot précis. </source>
+        <target state="translated">Opprett en robots.txt-fil, oppdag feil og simuler tilgangen til en URL for en spesifikk robot.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : le contenu et les URL saisis ne quittent jamais votre navigateur.</source>
+        <target state="translated">100 % lokal behandling: innholdet og URL-ene som er angitt, forlater aldri nettleseren din.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_title">
+      <segment>
+        <source>1. Générer une base sûre</source>
+        <target state="translated">1. Generer et sikkert grunnlag</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne pour les chemins. Le générateur ajoute « / », encode les espaces et déduplique les règles.</source>
+        <target state="translated">En oppføring per linje for stiene. Generatoren legger til « / », koder mellomrom og fjerner duplikater.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_presets_aria">
+      <segment>
+        <source>Modèles robots.txt</source>
+        <target state="translated">robots.txt-maler</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_recommended">
+      <segment>
+        <source>Base recommandée</source>
+        <target state="translated">Anbefalt grunnlag</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_allow">
+      <segment>
+        <source>Tout autoriser</source>
+        <target state="translated">Tillat alt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_block">
+      <segment>
+        <source>Tout bloquer</source>
+        <target state="translated">Blokker alt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_label">
+      <segment>
+        <source>URL du site</source>
+        <target state="translated">Nettstedets URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_help">
+      <segment>
+        <source>Le protocole, le domaine et le port définissent la portée du fichier.</source>
+        <target state="translated">Protokollen, domenet og porten definerer omfanget av filen.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_valid">
+      <segment>
+        <source>URL du site valide</source>
+        <target state="translated">Gyldig nettsted-URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_invalid">
+      <segment>
+        <source>URL du site à corriger</source>
+        <target state="translated">URL til nettstedet som må rettes</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_label">
+      <segment>
+        <source>User-agent</source>
+        <target state="translated">Bruker-agent</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_help">
+      <segment>
+        <source>Utilisez « * » pour tous les robots ou un product token comme Googlebot.</source>
+        <target state="translated">Bruk « * » for alle roboter eller en produkt-token som Googlebot.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_valid">
+      <segment>
+        <source>User-agent valide</source>
+        <target state="translated">Gyldig bruker-agent</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_invalid">
+      <segment>
+        <source>User-agent invalide ; « * » sera utilisé à la génération</source>
+        <target state="translated">Ugyldig bruker-agent; « * » vil bli brukt ved generering</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_label">
+      <segment>
+        <source>Chemins à bloquer</source>
+        <target state="translated">Stier å blokkere</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_help">
+      <segment>
+        <source>Exemples : /admin/, /recherche?, /*.pdf$</source>
+        <target state="translated">Eksempler: /admin/, /search?, /*.pdf$</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_label">
+      <segment>
+        <source>Exceptions à autoriser</source>
+        <target state="translated">Unntak å tillate</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_help">
+      <segment>
+        <source>Une règle Allow plus spécifique peut rouvrir une partie d’un chemin bloqué.</source>
+        <target state="translated">En mer spesifikk Allow-regel kan åpne en del av en blokkert sti.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemap_toggle">
+      <segment>
+        <source>Ajouter l’URL /sitemap.xml du site</source>
+        <target state="translated">Legg til URL /sitemap.xml for nettstedet</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">Generer og erstatt redaktøren</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider</source>
+        <target state="translated">2. Rediger og valider</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un fichier existant : l’analyse se met à jour sans requête réseau.</source>
+        <target state="translated">Lim også inn en eksisterende fil: analysen oppdateres uten nettverksforespørsel.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_download">
+      <segment>
+        <source>Télécharger robots.txt</source>
+        <target state="translated">Last ned robots.txt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_content_label">
+      <segment>
+        <source>Contenu du fichier robots.txt</source>
+        <target state="translated">Innholdet i robots.txt-filen</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_groups">
+      <segment>
+        <source>groupes</source>
+        <target state="translated">grupper</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_rules">
+      <segment>
+        <source>règles</source>
+        <target state="translated">regler</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemaps">
+      <segment>
+        <source>sitemaps</source>
+        <target state="translated">sitemaps</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_bytes">
+      <segment>
+        <source>octets</source>
+        <target state="translated">byte</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">Valideringsrapport</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">feil</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">advarsler</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">Ingen problemer oppdaget</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue_help">
+      <segment>
+        <source>Relisez néanmoins chaque chemin avant la mise en production.</source>
+        <target state="translated">Les gjennom hver sti før produksjon.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">Linje</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Fil</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_title">
+      <segment>
+        <source>3. Tester une URL</source>
+        <target state="translated">3. Test en URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_subtitle">
+      <segment>
+        <source>Le simulateur applique les groupes exacts, la règle la plus spécifique, « * » et « $ » selon RFC 9309.</source>
+        <target state="translated">Simulatoren bruker de nøyaktige gruppene, den mest spesifikke regelen, « * » og « $ » i henhold til RFC 9309.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_agent">
+      <segment>
+        <source>Product token du robot</source>
+        <target state="translated">Produkt-token for roboten</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_url">
+      <segment>
+        <source>URL ou chemin à tester</source>
+        <target state="translated">URL eller sti å teste</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allowed">
+      <segment>
+        <source>Exploration autorisée</source>
+        <target state="translated">Kryping tillatt</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_blocked">
+      <segment>
+        <source>Exploration bloquée</source>
+        <target state="translated">Kryping blokkert</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_invalid">
+      <segment>
+        <source>Test impossible</source>
+        <target state="translated">Test umulig</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_title">
+      <segment>
+        <source>Trois points à vérifier avant publication</source>
+        <target state="translated">Tre punkter å sjekke før publisering</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_title">
+      <segment>
+        <source>Portée exacte</source>
+        <target state="translated">Nøyaktig omfang</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_text">
+      <segment>
+        <source>Placez le fichier à la racine. Ses règles ne valent que pour le même protocole, hôte et port.</source>
+        <target state="translated">Plasser filen i roten. Dens regler gjelder kun for samme protokoll, vert og port.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_title">
+      <segment>
+        <source>Exploration, pas désindexation</source>
+        <target state="translated">Kryping, ikke deindeksering</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_text">
+      <segment>
+        <source>Une URL bloquée peut encore apparaître dans les résultats. Pour empêcher l’indexation, utilisez une protection ou noindex sur une page accessible.</source>
+        <target state="translated">En blokkert URL kan fortsatt vises i søkeresultatene. For å hindre indeksering, bruk beskyttelse eller noindex på en tilgjengelig side.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_title">
+      <segment>
+        <source>Aucune confidentialité</source>
+        <target state="translated">Ingen konfidensialitet</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_text">
+      <segment>
+        <source>Le fichier est public et révèle les chemins listés. Ne l’utilisez jamais comme contrôle d’accès à des données sensibles.</source>
+        <target state="translated">Filen er offentlig og avslører de listede stiene. Bruk den aldri som tilgangskontroll for sensitive data.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Tilbake til SEO-verktøy</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse 500 KiB ; les moteurs peuvent ignorer la suite.</source>
+        <target state="translated">Filen overskrider 500 KiB; motorene kan ignorere resten.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_bom">
+      <segment>
+        <source>Le marqueur BOM initial est ignoré.</source>
+        <target state="translated">Den innledende BOM-markøren blir ignorert.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_control">
+      <segment>
+        <source>Caractère de contrôle non autorisé.</source>
+        <target state="translated">Ugyldig kontrolltegn.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_html">
+      <segment>
+        <source>Le contenu ressemble à une page HTML, pas à un fichier robots.txt.</source>
+        <target state="translated">Innholdet ligner en HTML-side, ikke en robots.txt-fil.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_line">
+      <segment>
+        <source>Ligne invalide : une directive et un deux-points sont attendus.</source>
+        <target state="translated">Ugyldig linje: en direktiv og et kolon forventes.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_agent">
+      <segment>
+        <source>Le nom du robot est vide.</source>
+        <target state="translated">Robotnavnet er tomt.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_invalid_agent">
+      <segment>
+        <source>Le product token contient des caractères non autorisés.</source>
+        <target state="translated">Produkt-tokenet inneholder ugyldige tegn.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_orphan">
+      <segment>
+        <source>Cette règle n’est précédée d’aucun User-agent valide.</source>
+        <target state="translated">Denne regelen er ikke forutgått av noen gyldig User-agent.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_rule">
+      <segment>
+        <source>La règle vide est ignorée et ne bloque aucune URL.</source>
+        <target state="translated">Den tomme regelen blir ignorert og blokkerer ingen URL-er.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_path">
+      <segment>
+        <source>Le chemin doit commencer par « / » et ne pas contenir d’espace brut.</source>
+        <target state="translated">Stien må begynne med « / » og ikke inneholde rått mellomrom.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_dollar">
+      <segment>
+        <source>Le symbole « $ » ne peut apparaître qu’une fois, à la fin du chemin.</source>
+        <target state="translated">Symbolet « $ » kan bare vises én gang, på slutten av stien.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_sitemap">
+      <segment>
+        <source>L’adresse du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Sitemap-adressen må være en absolutt HTTP- eller HTTPS-URL.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_crawl_delay">
+      <segment>
+        <source>Crawl-delay n’est pas pris en charge par Google.</source>
+        <target state="translated">Crawl-delay støttes ikke av Google.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_unknown">
+      <segment>
+        <source>Directive inconnue ou non standard ; elle peut être ignorée par les robots.</source>
+        <target state="translated">Ukjent eller ikke-standard direktiv; det kan bli ignorert av robotene.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_rule">
+      <segment>
+        <source>Règle dupliquée dans le même groupe.</source>
+        <target state="translated">Duplisert regel i samme gruppe.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_sitemap">
+      <segment>
+        <source>Sitemap dupliqué.</source>
+        <target state="translated">Duplisert sitemap.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_missing_agent">
+      <segment>
+        <source>Aucun groupe User-agent valide n’a été trouvé.</source>
+        <target state="translated">Ingen gyldig User-agent-gruppe ble funnet.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">Listen er begrenset til de 200 første problemene.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_matched">
+      <segment>
+        <source>Décision calculée avec la règle la plus spécifique.</source>
+        <target state="translated">Beslutning beregnet med den mest spesifikke regelen.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_no_rule">
+      <segment>
+        <source>Aucune règle applicable : l’exploration est autorisée par défaut.</source>
+        <target state="translated">Ingen gjeldende regel: utforskning er tillatt som standard.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_file">
+      <segment>
+        <source>Le fichier /robots.txt lui-même est toujours autorisé.</source>
+        <target state="translated">Filen /robots.txt selv er alltid tillatt.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_site">
+      <segment>
+        <source>Corrigez l’URL du site avant de lancer le test.</source>
+        <target state="translated">Korriger nettadressen før du kjører testen.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_url">
+      <segment>
+        <source>Saisissez une URL HTTP ou HTTPS valide à tester.</source>
+        <target state="translated">Skriv inn en gyldig HTTP- eller HTTPS-URL for testing.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_origin">
+      <segment>
+        <source>L’URL testée doit utiliser le même protocole, hôte et port que le site.</source>
+        <target state="translated">Den testede URL-en må bruke samme protokoll, vert og port som nettstedet.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_agent">
+      <segment>
+        <source>Saisissez un product token précis, par exemple Googlebot.</source>
+        <target state="translated">Skriv inn et spesifikt produkt-token, for eksempel Googlebot.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

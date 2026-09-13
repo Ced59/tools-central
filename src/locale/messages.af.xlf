@@ -80010,6 +80010,654 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Geskatte breedte van die meta beskrywing</target>
       </segment>
     </unit>
+    <unit id="dev_seo_sg_technical_title">
+      <segment>
+        <source>Exploration technique</source>
+        <target state="translated">Tegniese verkenning</target>
+      </segment>
+    </unit>
+    <unit id="dev_seo_sg_technical_desc">
+      <segment>
+        <source>Créer et contrôler les fichiers qui guident les robots d’exploration.</source>
+        <target state="translated">Skep en beheer die lêers wat die verkenningsrobots lei.</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt Generator en Validator</target>
+      </segment>
+    </unit>
+    <unit id="tool_robots_txt_builder_desc">
+      <segment>
+        <source>Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.</source>
+        <target state="translated">Genereer, analiseer en laai 'n robots.txt-lêer af, en simuleer dan toegang tot 'n URL vir 'n spesifieke robot.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_title">
+      <segment>
+        <source>Créer et contrôler un fichier robots.txt fiable</source>
+        <target state="translated">Skep en beheer 'n betroubare robots.txt-lêer</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_lead">
+      <segment>
+        <source>Le fichier robots.txt indique aux robots d’exploration les chemins qu’ils peuvent demander. Le générateur prépare une base propre, le validateur détecte les erreurs fréquentes et le simulateur explique la règle appliquée à une URL.</source>
+        <target state="translated">Die robots.txt-lêer dui aan vir verkenningsrobots watter paaie hulle kan opvra. Die generator berei 'n skoon basis voor, die validator ontdek algemene foute en die simulator verduidelik die reël wat op 'n URL toegepas word.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Gebruik gevalle</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_title">
+      <segment>
+        <source>Préparer un nouveau site</source>
+        <target state="translated">Bereid 'n nuwe webwerf voor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc1_text">
+      <segment>
+        <source>Créez un groupe User-agent, bloquez les espaces sans intérêt pour l’exploration et déclarez un sitemap absolu.</source>
+        <target state="translated">Skep 'n User-agent-groep, blokkeer onbelangrike ruimtes vir verkenning en verklaar 'n absolute sitemap.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">Auditeer 'n bestaande lêer</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc2_text">
+      <segment>
+        <source>Collez son contenu pour repérer les directives invalides, les doublons, les chemins mal formés, le HTML accidentel ou une taille supérieure à 500 KiB.</source>
+        <target state="translated">Plak die inhoud om ongeldige riglyne, duplikate, verkeerd gevormde paaie, toevallige HTML of 'n grootte groter as 500 KiB op te spoor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_title">
+      <segment>
+        <source>Diagnostiquer une URL bloquée</source>
+        <target state="translated">Diagnoseer 'n geblokkeerde URL</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_uc3_text">
+      <segment>
+        <source>Testez une URL avec un product token précis afin d’identifier le groupe sélectionné et la règle Allow ou Disallow la plus spécifique.</source>
+        <target state="translated">Toets 'n URL met 'n spesifieke produk token om die geselekteerde groep en die mees spesifieke Allow of Disallow-reël te identifiseer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Aanbevole metode</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_1">
+      <segment>
+        <source>Définissez d’abord l’origine exacte du site. Un fichier servi en HTTPS ne gouverne pas HTTP, un sous-domaine différent ni un autre port. Il doit être accessible à l’emplacement /robots.txt.</source>
+        <target state="translated">Definieer eers die presiese oorsprong van die webwerf. 'n Lêer wat in HTTPS bedien word, regeer nie HTTP, 'n ander subdomein of 'n ander poort nie. Dit moet toeganklik wees op die ligging /robots.txt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_2">
+      <segment>
+        <source>Commencez avec peu de règles et des chemins explicites. Quand plusieurs règles correspondent, la plus spécifique gagne ; à spécificité égale, Allow prévaut sur Disallow.</source>
+        <target state="translated">Begin met min reëls en eksplisiete paaie. Wanneer verskeie reëls ooreenstem, wen die mees spesifieke; by gelyke spesifisiteit, het Allow voorrang bo Disallow.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_method_3">
+      <segment>
+        <source>Testez les robots importants et quelques URL représentatives, publiez le fichier en UTF-8 avec le type text/plain, puis vérifiez la réponse HTTP depuis l’extérieur.</source>
+        <target state="translated">Toets die belangrikste robots en 'n paar verteenwoordigende URL's, publiseer die lêer in UTF-8 met die tipe text/plain, en kontroleer dan die HTTP-respons van buite.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">Grense om te ken</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_1">
+      <segment>
+        <source>Bloquer l’exploration n’empêche pas toujours une URL d’apparaître dans un résultat de recherche. Une URL connue par des liens peut rester indexée sans extrait.</source>
+        <target state="translated">Die blokkering van verkenning verhoed nie altyd dat 'n URL in 'n soekresultaat verskyn nie. 'n URL wat deur skakels bekend is, kan steeds geïndekseer bly sonder 'n uittreksel.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_2">
+      <segment>
+        <source>robots.txt est public et ne protège aucune donnée. Utilisez une authentification et des autorisations serveur pour les contenus sensibles.</source>
+        <target state="translated">robots.txt is publiek en beskerm geen data nie. Gebruik 'n autentisering en bediener toestemmings vir sensitiewe inhoud.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_limit_3">
+      <segment>
+        <source>Le standard définit le socle commun, mais chaque robot peut prendre en charge des directives supplémentaires. Google ignore notamment Crawl-delay.</source>
+        <target state="translated">Die standaard definieer die gemeenskaplike grondslag, maar elke robot kan bykomende riglyne ondersteun. Google ignoreer veral Crawl-delay.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Gereelde vrae</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q1">
+      <segment>
+        <source>Quelle différence entre Allow et Disallow ?</source>
+        <target state="translated">Wat is die verskil tussen Allow en Disallow?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a1">
+      <segment>
+        <source>Disallow interdit la demande des chemins correspondants. Allow crée une exception plus spécifique dans un espace autrement bloqué. Une valeur vide ne bloque rien.</source>
+        <target state="translated">Disallow verbied die opvraging van die ooreenstemmende paaie. Allow skep 'n meer spesifieke uitsondering in 'n andersins geblokkeerde ruimte. 'n Leë waarde blokkeer niks.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q2">
+      <segment>
+        <source>Les majuscules et les paramètres d’URL comptent-ils ?</source>
+        <target state="translated">Tel hoofletters en URL parameters?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a2">
+      <segment>
+        <source>Oui. La comparaison du chemin est sensible à la casse et peut inclure la chaîne de requête. Les caractères * et $ servent respectivement de joker et de marqueur de fin.</source>
+        <target state="translated">Ja. Die padvergelyking is hooflettergevoelig en kan die versoekstring insluit. Die karakters * en $ dien onderskeidelik as wildcard en eindmerk.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_q3">
+      <segment>
+        <source>Mes données sont-elles envoyées ou enregistrées ?</source>
+        <target state="translated">Word my data gestuur of gestoor?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_a3">
+      <segment>
+        <source>Non. La génération, l’analyse, la simulation et l’export du fichier sont réalisés localement dans le navigateur.</source>
+        <target state="translated">Nee. Die generering, analise, simulering en uitvoer van die lêer word plaaslik in die blaaier uitgevoer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip_title">
+      <segment>
+        <source>Avant de bloquer un chemin</source>
+        <target state="translated">Voordat jy 'n pad blokkeer</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_robots_builder_tip">
+      <segment>
+        <source>Vérifiez que le chemin ne contient pas les ressources nécessaires au rendu des pages, comme les feuilles de style ou les scripts. Une règle courte peut avoir un effet beaucoup plus large que prévu.</source>
+        <target state="translated">Maak seker dat die pad nie die hulpbronne bevat wat nodig is vir die weergawe van die bladsye nie, soos stylesheets of skripte. 'n Kort reël kan 'n baie breër effek hê as wat verwag word.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_title">
+      <segment>
+        <source>Générateur et validateur robots.txt</source>
+        <target state="translated">robots.txt Generator en Validator</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_subtitle">
+      <segment>
+        <source> Créez un fichier robots.txt, détectez les erreurs et simulez l’accès à une URL pour un robot précis. </source>
+        <target state="translated">Skep 'n robots.txt-lêer, ontdek foute en simuleer toegang tot 'n URL vir 'n spesifieke robot.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : le contenu et les URL saisis ne quittent jamais votre navigateur.</source>
+        <target state="translated">100% plaaslike verwerking: die inhoud en URL's wat ingevoer word, verlaat nooit jou blaaiers nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_title">
+      <segment>
+        <source>1. Générer une base sûre</source>
+        <target state="translated">1. Genereer 'n veilige basis</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne pour les chemins. Le générateur ajoute « / », encode les espaces et déduplique les règles.</source>
+        <target state="translated">Een invoer per lyn vir die paaie. Die generator voeg « / » by, kodeer spaties en verwyder duplikate.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_presets_aria">
+      <segment>
+        <source>Modèles robots.txt</source>
+        <target state="translated">robots.txt Sjablone</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_recommended">
+      <segment>
+        <source>Base recommandée</source>
+        <target state="translated">Aanbevole basis</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_allow">
+      <segment>
+        <source>Tout autoriser</source>
+        <target state="translated">Alles toelaat</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_preset_block">
+      <segment>
+        <source>Tout bloquer</source>
+        <target state="translated">Alles blokkeer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_label">
+      <segment>
+        <source>URL du site</source>
+        <target state="translated">URL van die webwerf</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_help">
+      <segment>
+        <source>Le protocole, le domaine et le port définissent la portée du fichier.</source>
+        <target state="translated">Die protokol, domein en poort definieer die omvang van die lêer.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_valid">
+      <segment>
+        <source>URL du site valide</source>
+        <target state="translated">Geldige webadres</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_site_invalid">
+      <segment>
+        <source>URL du site à corriger</source>
+        <target state="translated">Webadres om reg te stel</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_label">
+      <segment>
+        <source>User-agent</source>
+        <target state="translated">User-agent</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_help">
+      <segment>
+        <source>Utilisez « * » pour tous les robots ou un product token comme Googlebot.</source>
+        <target state="translated">Gebruik « * » vir alle robots of 'n produk token soos Googlebot.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_valid">
+      <segment>
+        <source>User-agent valide</source>
+        <target state="translated">Geldige user-agent</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_agent_invalid">
+      <segment>
+        <source>User-agent invalide ; « * » sera utilisé à la génération</source>
+        <target state="translated">Ongeldige user-agent; « * » sal gebruik word tydens generasie</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_label">
+      <segment>
+        <source>Chemins à bloquer</source>
+        <target state="translated">Pad om te blokkeer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_disallow_help">
+      <segment>
+        <source>Exemples : /admin/, /recherche?, /*.pdf$</source>
+        <target state="translated">Voorbeelde: /admin/, /soek?, /*.pdf$</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_label">
+      <segment>
+        <source>Exceptions à autoriser</source>
+        <target state="translated">Uitsonderings om toe te laat</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allow_help">
+      <segment>
+        <source>Une règle Allow plus spécifique peut rouvrir une partie d’un chemin bloqué.</source>
+        <target state="translated">‘n Meer spesifieke Allow-reël kan 'n deel van 'n geblokkeerde pad heropen.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemap_toggle">
+      <segment>
+        <source>Ajouter l’URL /sitemap.xml du site</source>
+        <target state="translated">Voeg die URL /sitemap.xml van die webwerf by</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">Genereer en vervang die redigeerder</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider</source>
+        <target state="translated">2. Redigeer en valideer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un fichier existant : l’analyse se met à jour sans requête réseau.</source>
+        <target state="translated">Plak ook 'n bestaande lêer: die ontleding word sonder netwerkversoek opgedateer.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_download">
+      <segment>
+        <source>Télécharger robots.txt</source>
+        <target state="translated">Laai robots.txt af</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_content_label">
+      <segment>
+        <source>Contenu du fichier robots.txt</source>
+        <target state="translated">Inhoud van die robots.txt lêer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_groups">
+      <segment>
+        <source>groupes</source>
+        <target state="translated">groepe</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_rules">
+      <segment>
+        <source>règles</source>
+        <target state="translated">reëls</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_sitemaps">
+      <segment>
+        <source>sitemaps</source>
+        <target state="translated">sitemaps</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_bytes">
+      <segment>
+        <source>octets</source>
+        <target state="translated">bytes</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">Validasierapport</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">foute</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">waarskuwings</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">Geen probleme opgespoor</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_no_issue_help">
+      <segment>
+        <source>Relisez néanmoins chaque chemin avant la mise en production.</source>
+        <target state="translated">Lees egter elke pad weer deur voordat dit in produksie gaan.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">Lyn</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Lêer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_title">
+      <segment>
+        <source>3. Tester une URL</source>
+        <target state="translated">3. Toets 'n URL</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_simulator_subtitle">
+      <segment>
+        <source>Le simulateur applique les groupes exacts, la règle la plus spécifique, « * » et « $ » selon RFC 9309.</source>
+        <target state="translated">Die simulator pas die presiese groepe, die mees spesifieke reël, « * » en « $ » toe volgens RFC 9309.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_agent">
+      <segment>
+        <source>Product token du robot</source>
+        <target state="translated">Produk token van die robot</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_url">
+      <segment>
+        <source>URL ou chemin à tester</source>
+        <target state="translated">URL of pad om te toets</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_allowed">
+      <segment>
+        <source>Exploration autorisée</source>
+        <target state="translated">Verkenning toegelaat</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_blocked">
+      <segment>
+        <source>Exploration bloquée</source>
+        <target state="translated">Verkenning geblokkeer</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_test_invalid">
+      <segment>
+        <source>Test impossible</source>
+        <target state="translated">Toets onmoontlik</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_title">
+      <segment>
+        <source>Trois points à vérifier avant publication</source>
+        <target state="translated">Drie punte om te kontroleer voor publikasie</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_title">
+      <segment>
+        <source>Portée exacte</source>
+        <target state="translated">Presiese omvang</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_scope_text">
+      <segment>
+        <source>Placez le fichier à la racine. Ses règles ne valent que pour le même protocole, hôte et port.</source>
+        <target state="translated">Plaas die lêer in die wortel. Sy reëls geld slegs vir dieselfde protokol, gasheer en poort.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_title">
+      <segment>
+        <source>Exploration, pas désindexation</source>
+        <target state="translated">Verkenning, nie de-indexering nie</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_index_text">
+      <segment>
+        <source>Une URL bloquée peut encore apparaître dans les résultats. Pour empêcher l’indexation, utilisez une protection ou noindex sur une page accessible.</source>
+        <target state="translated">‘n Geblokkeerde URL kan steeds in die resultate verskyn. Om indeksasie te verhoed, gebruik 'n beskerming of noindex op 'n toeganklike bladsy.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_title">
+      <segment>
+        <source>Aucune confidentialité</source>
+        <target state="translated">Geen privaatheid</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_method_security_text">
+      <segment>
+        <source>Le fichier est public et révèle les chemins listés. Ne l’utilisez jamais comme contrôle d’accès à des données sensibles.</source>
+        <target state="translated">Die lêer is publiek en onthul die gelysde paaie. Moet dit nooit as 'n toegangbeheer vir sensitiewe data gebruik nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Terug na SEO-gereedskap</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse 500 KiB ; les moteurs peuvent ignorer la suite.</source>
+        <target state="translated">Die lêer oorskry 500 KiB; soekenjins mag die res ignoreer.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_bom">
+      <segment>
+        <source>Le marqueur BOM initial est ignoré.</source>
+        <target state="translated">Die aanvanklike BOM-merker word geïgnoreer.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_control">
+      <segment>
+        <source>Caractère de contrôle non autorisé.</source>
+        <target state="translated">Ongeldige kontrolekarakter.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_html">
+      <segment>
+        <source>Le contenu ressemble à une page HTML, pas à un fichier robots.txt.</source>
+        <target state="translated">Die inhoud lyk soos 'n HTML-bladsy, nie 'n robots.txt-lêer nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_line">
+      <segment>
+        <source>Ligne invalide : une directive et un deux-points sont attendus.</source>
+        <target state="translated">Ongeldige lyn: 'n riglyn en 'n dubbelpunt word verwag.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_agent">
+      <segment>
+        <source>Le nom du robot est vide.</source>
+        <target state="translated">Die robotnaam is leeg.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_invalid_agent">
+      <segment>
+        <source>Le product token contient des caractères non autorisés.</source>
+        <target state="translated">Die produk-token bevat ongeldig karakters.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_orphan">
+      <segment>
+        <source>Cette règle n’est précédée d’aucun User-agent valide.</source>
+        <target state="translated">Hierdie reël word nie voorafgegaan deur 'n geldige User-agent nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_empty_rule">
+      <segment>
+        <source>La règle vide est ignorée et ne bloque aucune URL.</source>
+        <target state="translated">Die leë reël word geïgnoreer en blokkeer geen URL nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_path">
+      <segment>
+        <source>Le chemin doit commencer par « / » et ne pas contenir d’espace brut.</source>
+        <target state="translated">Die pad moet met « / » begin en mag nie enige spasie bevat nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_dollar">
+      <segment>
+        <source>Le symbole « $ » ne peut apparaître qu’une fois, à la fin du chemin.</source>
+        <target state="translated">Die simbool « $ » mag slegs een keer verskyn, aan die einde van die pad.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_sitemap">
+      <segment>
+        <source>L’adresse du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Die adres van die sitemap moet 'n absolute HTTP of HTTPS URL wees.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_crawl_delay">
+      <segment>
+        <source>Crawl-delay n’est pas pris en charge par Google.</source>
+        <target state="translated">Crawl-delay word nie deur Google ondersteun nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_unknown">
+      <segment>
+        <source>Directive inconnue ou non standard ; elle peut être ignorée par les robots.</source>
+        <target state="translated">Onbekende of nie-standaard riglyn; dit kan deur die robots geïgnoreer word.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_rule">
+      <segment>
+        <source>Règle dupliquée dans le même groupe.</source>
+        <target state="translated">Gekopieerde reël in dieselfde groep.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_duplicate_sitemap">
+      <segment>
+        <source>Sitemap dupliqué.</source>
+        <target state="translated">Gekopieerde sitemap.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_missing_agent">
+      <segment>
+        <source>Aucun groupe User-agent valide n’a été trouvé.</source>
+        <target state="translated">Geen geldige User-agent groep is gevind nie.</target>
+      </segment>
+    </unit>
+    <unit id="robots_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">Die lys is beperk tot die eerste 200 probleme.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_matched">
+      <segment>
+        <source>Décision calculée avec la règle la plus spécifique.</source>
+        <target state="translated">Besluit bereken met die mees spesifieke reël.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_no_rule">
+      <segment>
+        <source>Aucune règle applicable : l’exploration est autorisée par défaut.</source>
+        <target state="translated">Geen toepaslike reël nie: verkenning is standaard toegelaat.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_file">
+      <segment>
+        <source>Le fichier /robots.txt lui-même est toujours autorisé.</source>
+        <target state="translated">Die lêer /robots.txt self is altyd toegelaat.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_site">
+      <segment>
+        <source>Corrigez l’URL du site avant de lancer le test.</source>
+        <target state="translated">Regstel die URL van die webwerf voordat jy die toets begin.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_url">
+      <segment>
+        <source>Saisissez une URL HTTP ou HTTPS valide à tester.</source>
+        <target state="translated">Voer 'n geldige HTTP of HTTPS URL in om te toets.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_origin">
+      <segment>
+        <source>L’URL testée doit utiliser le même protocole, hôte et port que le site.</source>
+        <target state="translated">Die getoetste URL moet dieselfde protokol, gasheer en poort as die webwerf gebruik.</target>
+      </segment>
+    </unit>
+    <unit id="robots_decision_invalid_agent">
+      <segment>
+        <source>Saisissez un product token précis, par exemple Googlebot.</source>
+        <target state="translated">Voer 'n spesifieke produk-token in, byvoorbeeld Googlebot.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
