@@ -14,6 +14,7 @@ describe('ToolEditorialSectionsComponent', () => {
 
     fixture = TestBed.createComponent(ToolEditorialSectionsComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('model', { title: 'Guide', sections: [] });
     fixture.detectChanges();
   });
 

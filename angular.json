@@ -80,17 +80,11 @@
             ],
             "styles": [
               "node_modules/katex/dist/katex.min.css",
-              "node_modules/primeicons/primeicons.css",
               "src/styles.scss"
             ],
             "scripts": [],
             "server": "src/main.server.ts",
-            "ssr": {
-              "entry": "server.ts"
-            },
-            "prerender": {
-              "routesFile": "dist/prerender-routes.txt"
-            },
+            "outputMode": "static",
             "localize": [
               "fr",
               "en",
@@ -129,13 +123,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "700MB",
-                  "maximumError": "800MB"
+                  "maximumWarning": "900kB",
+                  "maximumError": "1.2MB"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "700MB",
-                  "maximumError": "800MB"
+                  "maximumWarning": "24kB",
+                  "maximumError": "40kB"
                 }
               ],
               "outputHashing": "all",
@@ -181,6 +175,19 @@
               ],
               "prerender": false,
               "ssr": false
+            },
+            "testing": {
+              "aot": false,
+              "optimization": false,
+              "extractLicenses": false,
+              "styles": [
+                "src/styles.scss"
+              ],
+              "polyfills": [
+                "zone.js",
+                "zone.js/testing",
+                "@angular/localize/init"
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -206,30 +213,28 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing",
-              "@angular/localize/init"
-            ],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "stylePreprocessorOptions": {
-              "includePaths": [
-                "src/styles"
-              ]
-            },
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": []
+            "buildTarget": ":build:testing",
+            "runner": "vitest",
+            "providersFile": "src/test-providers.ts",
+            "setupFiles": ["src/test-setup.ts"],
+            "coverageThresholds": {
+              "statements": 37,
+              "branches": 21,
+              "functions": 37,
+              "lines": 40
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }

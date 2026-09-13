@@ -1,63 +1,59 @@
 import { ToolEditorialModel } from "../../../../models/tool-editorial/tool-editorial.model";
 
-/**
- * Generated editorial skeleton.
- * Set editorialReady=true when content is complete.
- */
-export const editorialReady = false;
+export const editorialReady = true;
 
 export const editorial: ToolEditorialModel = {
   title: $localize`:@@ed_math_statistics_mean_title:À propos : Moyenne`,
-  lead: $localize`:@@ed_math_statistics_mean_lead:TODO: Décrire l’objectif exact de cet outil (intention unique, pas une paraphrase d’un autre).`,
+  lead: $localize`:@@ed_math_statistics_mean_lead:Calculez la moyenne arithmétique d’une série en additionnant toutes les valeurs, puis en divisant cette somme par leur nombre.`,
   sections: [
     {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
-        { title: $localize`:@@ed_math_statistics_mean_uc1_title:TODO`, text: $localize`:@@ed_math_statistics_mean_uc1_text:TODO: Exemple concret 1` },
-        { title: $localize`:@@ed_math_statistics_mean_uc2_title:TODO`, text: $localize`:@@ed_math_statistics_mean_uc2_text:TODO: Exemple concret 2` },
-        { title: $localize`:@@ed_math_statistics_mean_uc3_title:TODO`, text: $localize`:@@ed_math_statistics_mean_uc3_text:TODO: Exemple concret 3` },
+        { title: $localize`:@@ed_math_statistics_mean_uc1_title:Notes scolaires`, text: $localize`:@@ed_math_statistics_mean_uc1_text:Obtenir la note moyenne d’une série d’évaluations lorsque chaque note a le même poids.` },
+        { title: $localize`:@@ed_math_statistics_mean_uc2_title:Mesures répétées`, text: $localize`:@@ed_math_statistics_mean_uc2_text:Résumer des températures, durées ou distances relevées dans les mêmes conditions.` },
+        { title: $localize`:@@ed_math_statistics_mean_uc3_title:Contrôle rapide`, text: $localize`:@@ed_math_statistics_mean_uc3_text:Comparer le niveau moyen de deux séries exprimées dans la même unité.` },
       ],
     },
     {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_mean_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
-        $localize`:@@ed_math_statistics_mean_out1:TODO: Décrire précisément la sortie.`,
-        $localize`:@@ed_math_statistics_mean_out2:TODO: À quoi sert cette sortie.`,
+        $localize`:@@ed_math_statistics_mean_out1:La somme des valeurs, leur nombre et la moyenne arithmétique correspondante.`,
+        $localize`:@@ed_math_statistics_mean_out2:Par exemple, pour 8, 10 et 15, la somme vaut 33 et la moyenne vaut 11.`,
       ],
     },
     {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_math_statistics_mean_lim1:TODO.` },
-        { text: $localize`:@@ed_math_statistics_mean_lim2:TODO.` },
+        { text: $localize`:@@ed_math_statistics_mean_lim1:Une valeur très élevée ou très faible peut déplacer fortement la moyenne ; consultez aussi la médiane pour une série asymétrique.` },
+        { text: $localize`:@@ed_math_statistics_mean_lim2:Une moyenne simple ne convient pas si les valeurs ont des coefficients différents : utilisez alors une moyenne pondérée.` },
       ],
     },
     {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_statistics_mean_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
-        { q: $localize`:@@ed_math_statistics_mean_q1:TODO`, a: $localize`:@@ed_math_statistics_mean_a1:TODO` },
-        { q: $localize`:@@ed_math_statistics_mean_q2:TODO`, a: $localize`:@@ed_math_statistics_mean_a2:TODO` },
+        { q: $localize`:@@ed_math_statistics_mean_q1:La moyenne doit-elle être l’une des valeurs de la série ?`, a: $localize`:@@ed_math_statistics_mean_a1:Non. La moyenne de 1 et 2 est 1,5, même si 1,5 n’apparaît pas dans la série.` },
+        { q: $localize`:@@ed_math_statistics_mean_q2:Peut-on calculer la moyenne d’une série vide ?`, a: $localize`:@@ed_math_statistics_mean_a2:Non. Sans valeur, le nombre d’éléments est nul et la division nécessaire n’est pas définie.` },
       ],
     },
     {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_mean_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
-      text: $localize`:@@ed_math_statistics_mean_tip:TODO: Une astuce unique liée à l’intention de l’outil.`,
+      text: $localize`:@@ed_math_statistics_mean_tip:Vérifiez que toutes les valeurs utilisent la même unité avant le calcul ; additionner des euros et des pourcentages n’a pas de sens.`,
     },
   ],
 };

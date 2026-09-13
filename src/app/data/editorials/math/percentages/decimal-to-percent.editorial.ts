@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_decimal_to_percent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_decimal_to_percent_uc1_title:Probabilités et statistiques`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_decimal_to_percent_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_decimal_to_percent_out1:Le pourcentage correspondant au nombre décimal saisi (multiplication par 100).`,
         $localize`:@@ed_math_percentages_decimal_to_percent_out2:Un résultat lisible, utile pour communiquer un taux ou une proportion sans ambiguïté.`,
@@ -52,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_decimal_to_percent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_decimal_to_percent_lim1:Un décimal supérieur à 1 correspond à un pourcentage supérieur à 100 % (ex. 1,2 → 120 %).`,
@@ -70,7 +70,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_decimal_to_percent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_decimal_to_percent_q1:Comment convertir un décimal en pourcentage ?`,
@@ -95,7 +95,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_decimal_to_percent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_decimal_to_percent_tip:Repère rapide : 0,01 = 1 %, 0,1 = 10 %, 0,25 = 25 %, 0,5 = 50 %, 0,75 = 75 %.`,
     },

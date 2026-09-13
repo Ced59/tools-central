@@ -3,8 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TcDropdownComponent } from './tc-dropdown.component';
 
 describe('TcDropdownComponent', () => {
-  let component: TcDropdownComponent;
-  let fixture: ComponentFixture<TcDropdownComponent>;
+  let component: TcDropdownComponent<unknown>;
+  let fixture: ComponentFixture<TcDropdownComponent<unknown>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

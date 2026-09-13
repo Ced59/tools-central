@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_fractions_fraction_simplify_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_fractions_fraction_simplify_uc1_title:Vérifier un résultat`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_fractions_fraction_simplify_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_fractions_fraction_simplify_out1:La fraction simplifiée sous sa forme irréductible.`,
         $localize`:@@ed_math_fractions_fraction_simplify_out2:Une écriture mathématiquement équivalente mais plus courte et plus lisible.`,
@@ -56,7 +56,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_fractions_fraction_simplify_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_fractions_fraction_simplify_lim1:Le dénominateur ne doit jamais être égal à zéro.`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_fractions_fraction_simplify_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_fractions_fraction_simplify_q1:Comment savoir si une fraction est irréductible ?`,
@@ -99,7 +99,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_fractions_fraction_simplify_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_fractions_fraction_simplify_tip:Si les deux nombres sont pairs ou multiples d’un même nombre, commencez par diviser par ce facteur avant de chercher le PGCD.`,
     },

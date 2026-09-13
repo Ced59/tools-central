@@ -4,7 +4,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-verified"></i>
+          <i class="tc-icon tc-icon-verified"></i>
         </div>
 
         <h1 i18n="@@pt_check_title">Vérifier si un tableau est proportionnel</h1>
@@ -25,41 +25,41 @@
       <div class="table-toolbar">
         <div class="toolbar-left">
           <span class="toolbar-label" i18n="@@pt_cols_label">Colonnes</span>
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-minus"
+            icon="tc-icon tc-icon-minus"
             severity="secondary"
             [text]="true"
             (onClick)="removeCol()"
             [disabled]="colCount() <= 2"
             aria-label="Remove column"
             i18n-aria-label="@@pt_remove_col_aria"
-          ></p-button>
+          ></tc-button>
 
           <span class="toolbar-value">{{ colCount() }}</span>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-plus"
+            icon="tc-icon tc-icon-plus"
             severity="secondary"
             [text]="true"
             (onClick)="addCol()"
             [disabled]="colCount() >= maxCols"
             aria-label="Add column"
             i18n-aria-label="@@pt_add_col_aria"
-          ></p-button>
+          ></tc-button>
         </div>
 
         <div class="toolbar-right">
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             severity="secondary"
             [text]="true"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
-          ></p-button>
+          ></tc-button>
         </div>
       </div>
 
@@ -79,7 +79,7 @@
           <!-- Row 1 -->
           <div class="row-head" i18n="@@pt_row1">Ligne 1</div>
           <div class="cell" *ngFor="let _ of cols(); let i = index">
-            <p-inputNumber
+            <tc-number-input
               [inputId]="'r1_' + i"
               [ngModel]="r1()[i]"
               (ngModelChange)="setCell(1, i, $event)"
@@ -93,7 +93,7 @@
           <!-- Row 2 -->
           <div class="row-head" i18n="@@pt_row2">Ligne 2</div>
           <div class="cell" *ngFor="let _ of cols(); let i = index">
-            <p-inputNumber
+            <tc-number-input
               [inputId]="'r2_' + i"
               [ngModel]="r2()[i]"
               (ngModelChange)="setCell(2, i, $event)"
@@ -134,7 +134,7 @@
         <div class="divider"></div>
 
         <tc-math-formula
-          label="Formula"
+          label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
           [precision]="precision()"
@@ -144,28 +144,28 @@
         ></tc-math-formula>
 
         <div class="tip-box" *ngIf="resultCode() === 'need_data'">
-          <i class="pi pi-info-circle"></i>
+          <i class="tc-icon tc-icon-info-circle"></i>
           <span i18n="@@pt_need_data_note">
             Remplissez au moins deux colonnes complètes (et la valeur de la ligne 1 non nulle) pour vérifier.
           </span>
         </div>
 
         <div class="tip-box" *ngIf="resultCode() === 'div0'">
-          <i class="pi pi-exclamation-triangle"></i>
-          <span i18n="@@pt_div0_note">
+          <i class="tc-icon tc-icon-exclamation-triangle"></i>
+          <span i18n="@@pt_check_div0_note">
             Division par zéro : une valeur de la ligne 1 vaut 0 dans une colonne complète.
           </span>
         </div>
 
         <div class="tip-box" *ngIf="resultCode() === 'ok'">
-          <i class="pi pi-check-circle"></i>
+          <i class="tc-icon tc-icon-check-circle"></i>
           <span i18n="@@pt_ok_note">
             Le ratio est constant : le tableau est proportionnel.
           </span>
         </div>
 
         <div class="tip-box" *ngIf="resultCode() === 'not_ok'">
-          <i class="pi pi-times-circle"></i>
+          <i class="tc-icon tc-icon-times-circle"></i>
           <span i18n="@@pt_not_ok_note">
             Le ratio n’est pas constant : le tableau n’est pas proportionnel.
           </span>
@@ -176,7 +176,7 @@
     <!-- Explain -->
     <div class="tool-card">
       <div class="card-header centered">
-        <h2 i18n="@@tool_definition_title">Définition & test</h2>
+        <h2 i18n="@@tool_definition_test_title">Définition & test</h2>
         <p i18n="@@pt_check_def_sub">
           Un tableau est proportionnel si <strong>r2 / r1</strong> est identique pour toutes les colonnes complètes.
         </p>
@@ -184,7 +184,7 @@
 
       <div class="explain-content">
         <tc-math-formula
-          label="Formula"
+          label="Formule"
           i18n-label="@@tool_formula_title"
           mode="katex"
           latex="k=\dfrac{r2}{r1}\quad\text{constant}"
@@ -207,7 +207,7 @@
 
     <div class="back-section">
       <a routerLink="/categories/math/rule-of-three" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
     </div>

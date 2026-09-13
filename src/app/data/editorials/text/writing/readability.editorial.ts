@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_text_writing_readability_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_text_writing_readability_uc1_title:Améliorer un texte avant publication`,
@@ -38,7 +38,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_text_writing_readability_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_text_writing_readability_out1:Un score de lisibilité et des statistiques clés (longueur moyenne des phrases, mots longs, structure générale) pour évaluer la clarté de votre texte en un coup d’œil.`,
         $localize`:@@ed_text_writing_readability_out2:Des conseils actionnables pour améliorer la lisibilité : raccourcir les phrases, privilégier la voix active, clarifier les enchaînements, et supprimer le jargon inutile.`,
@@ -49,7 +49,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_text_writing_readability_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_text_writing_readability_lim1:Un score de lisibilité est un indicateur, pas un verdict : un texte technique peut être volontairement plus dense (documentation, juridique, scientifique).`,
@@ -66,7 +66,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_text_writing_readability_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_text_writing_readability_q1:Quel score de lisibilité viser ?`,
@@ -86,7 +86,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_text_writing_readability_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_text_writing_readability_tip:Si votre score est moyen, commencez par une action simple : transformez chaque phrase de plus de 25–30 mots en deux phrases plus courtes. C’est souvent le meilleur gain de clarté en un minimum de temps.`,
     },

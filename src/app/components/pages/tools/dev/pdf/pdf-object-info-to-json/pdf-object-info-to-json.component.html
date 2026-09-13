@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-database"
+  icon="tc-icon tc-icon-database"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (filteredObjects().length === 0) {
       <div class="empty-box">
-        <i class="pi pi-search" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
         <span i18n="@@pdf_obj_empty">Aucun objet à afficher.</span>
       </div>
     } @else {
@@ -43,18 +43,18 @@
             </div>
 
             <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
-              <p-tag [value]="it.kind" severity="info"></p-tag>
+              <tc-tag [value]="it.kind" severity="info"></tc-tag>
 
               @if (it.reachable === false) {
-                <p-tag value="orphan" severity="warn"></p-tag>
+                <tc-tag value="orphan" severity="warn"></tc-tag>
               }
 
               @if (it.hasJavaScript) {
-                <p-tag value="js" severity="danger"></p-tag>
+                <tc-tag value="js" severity="danger"></tc-tag>
               }
 
               @if (it.hasEmbeddedFile) {
-                <p-tag value="embedded" severity="danger"></p-tag>
+                <tc-tag value="embedded" severity="danger"></tc-tag>
               }
 
               @if (it.actionS) {

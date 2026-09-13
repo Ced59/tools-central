@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_rot_missing_usecases:Cas typiques`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_rot_missing_uc1_title:Exercices scolaires`, text: $localize`:@@ed_rot_missing_uc1_text:Calculer la quatrième proportionnelle.` },
         { title: $localize`:@@ed_rot_missing_uc2_title:Contrôle rapide`, text: $localize`:@@ed_rot_missing_uc2_text:Vérifier un calcul sans refaire tout le tableau.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_rot_missing_output:Ce que fournit l’outil`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_rot_missing_out1:La valeur manquante calculée.`,
         $localize`:@@ed_rot_missing_out2:Une solution immédiate sans tableau intermédiaire.`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_rot_missing_limits:Points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_rot_missing_lim1:La relation doit être proportionnelle.` },
         { text: $localize`:@@ed_rot_missing_lim2:Ne pas confondre avec un cas inverse.` },
@@ -45,7 +45,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_rot_missing_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_rot_missing_tip:Avant de calculer, demande-toi si la valeur cherchée doit augmenter ou diminuer.`,
     },

@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_text_case_text_case_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_text_case_text_case_uc1_title:Corriger un texte “CRIS”`,
@@ -48,7 +48,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_text_case_text_case_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_text_case_text_case_out1:Le texte converti dans la casse choisie (majuscule, minuscule, titre, phrase, etc.), prêt à être copié-collé.`,
         $localize`:@@ed_text_case_text_case_out2:Une transformation rapide qui conserve le contenu : seuls les caractères (casse) changent, pas les mots.`,
@@ -60,7 +60,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_text_case_text_case_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_text_case_text_case_lim1:La “casse de titre” peut dépendre de règles linguistiques (mots à laisser en minuscule, exceptions), qui varient selon les conventions.`,
@@ -78,7 +78,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_text_case_text_case_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_text_case_text_case_q1:Quelle est la différence entre “casse de phrase” et “casse de titre” ?`,
@@ -103,7 +103,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_text_case_text_case_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_text_case_text_case_tip:Pour un rendu propre, convertissez d’abord en minuscules, puis appliquez la casse souhaitée (phrase ou titre) : cela évite les irrégularités issues d’un texte déjà mal formaté.`,
     },

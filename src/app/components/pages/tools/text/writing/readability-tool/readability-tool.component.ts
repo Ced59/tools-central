@@ -1,12 +1,12 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, ChangeDetectionStrategy } from '@angular/core';
 import {NgFor, NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-// PrimeNG
-import { ButtonModule } from 'primeng/button';
-import { TagModule } from 'primeng/tag';
-import { TextareaModule } from 'primeng/textarea';
+// Primitives UI internes
+import { ButtonModule } from '@ui';
+import { TagModule } from '@ui';
+import { TextareaModule } from '@ui';
 import {map, startWith} from "rxjs";
 import {toSignal} from "@angular/core/rxjs-interop";
 
@@ -60,6 +60,7 @@ type Analysis = {
     NgSwitch,
   ],
   templateUrl: './readability-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './readability-tool.component.scss',
 })
 export class ReadabilityToolComponent {
@@ -279,7 +280,7 @@ function splitWords(t: string): string[] {
   }
 
   // latin/cyrillic/greek/etc.
-  return (t.match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu) ?? []);
+  return (t.match(/[\p{L}\p{N}]+(?:['’-][\p{L}\p{N}]+)*/gu) ?? []);
 }
 
 function computeUniversalScore(input: {

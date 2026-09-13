@@ -1,13 +1,13 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-// PrimeNG
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
+// Primitives UI internes
+import { InputNumberModule } from '@ui';
+import { DividerModule } from '@ui';
+import { ButtonModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 import { MathToolShellComponent } from '../../../../../shared/math/math-tool-shell/math-tool-shell.component';
@@ -35,6 +35,7 @@ type ChangedField = 'value' | 'total' | 'precision';
  MathToolShellComponent,
  ],
  templateUrl: './percentage-of-total-tool.component.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  styleUrl: './percentage-of-total-tool.component.scss',
 })
 export class PercentageOfTotalToolComponent {

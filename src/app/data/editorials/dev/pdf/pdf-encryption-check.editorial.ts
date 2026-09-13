@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_encryption_check_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_encryption_check_uc1_title:Débloquer une pipeline d’extraction`, text: $localize`:@@ed_dev_pdf_pdf_encryption_check_uc1_text:Comprendre pourquoi une extraction de texte, de liens ou de champs de formulaire échoue sur certains PDF.` },
         { title: $localize`:@@ed_dev_pdf_pdf_encryption_check_uc2_title:Contrôle conformité`, text: $localize`:@@ed_dev_pdf_pdf_encryption_check_uc2_text:Valider qu’un document envoyé au client n’est pas protégé (ou au contraire qu’il l’est) selon votre politique.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_encryption_check_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_encryption_check_out1:Un diagnostic JSON : chiffré ou non, méthode/algorithme (si détectable), révision, longueur de clé, présence de mot de passe utilisateur/propriétaire.`,
         $localize`:@@ed_dev_pdf_pdf_encryption_check_out2:Un tableau de permissions (imprimer, copier, annoter, remplir des formulaires, extraire pour accessibilité, etc.).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_encryption_check_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_encryption_check_lim1:Les permissions PDF ne sont pas une sécurité forte : certains logiciels peuvent les ignorer selon le contexte.` },
         { text: $localize`:@@ed_dev_pdf_pdf_encryption_check_lim2:Un PDF peut être “protégé” sans être entièrement chiffré (restrictions/flags) : interprétez le rapport avec prudence.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_encryption_check_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_encryption_check_q1:L’outil enlève-t-il le mot de passe ?`, a: $localize`:@@ed_dev_pdf_pdf_encryption_check_a1:Non. Il diagnostique le chiffrement et les permissions ; il ne contourne pas la protection.` },
         { q: $localize`:@@ed_dev_pdf_pdf_encryption_check_q2:Pourquoi l’impression est “interdite” mais j’arrive à imprimer ?`, a: $localize`:@@ed_dev_pdf_pdf_encryption_check_a2:Certaines applications n’appliquent pas strictement les permissions. Le rapport reflète ce que déclare le PDF.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_encryption_check_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_encryption_check_tip:Avant de lancer des outils d’extraction (liens, images, champs), vérifiez d’abord le chiffrement : vous gagnerez du temps de debug en identifiant immédiatement une protection.`,
     },

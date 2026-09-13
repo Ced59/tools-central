@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-code"
+  icon="tc-icon tc-icon-code"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (filteredPages().length === 0) {
       <div class="empty-box">
-        <i class="pi pi-search" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
         <span i18n="@@pdf_ops_empty">Aucune donnée à afficher.</span>
       </div>
     } @else {
@@ -37,14 +37,14 @@
             </div>
 
             <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
-              <p-tag value="Tj/TJ" severity="success"></p-tag>
+              <tc-tag value="Tj/TJ" severity="success"></tc-tag>
               <span class="mono muted">{{ p.stats.textOps }}</span>
 
-              <p-tag value="Do" severity="info"></p-tag>
+              <tc-tag value="Do" severity="info"></tc-tag>
               <span class="mono muted">{{ p.stats.xobjectOps }}</span>
 
               @if (p.stats.hasInlineImages) {
-                <p-tag value="BI..EI" severity="warn"></p-tag>
+                <tc-tag value="BI..EI" severity="warn"></tc-tag>
               }
             </div>
           </div>
@@ -93,12 +93,12 @@
         <div class="mono" i18n="@@pdf_ops_scope_title">Plage de pages</div>
 
         <div style="display:flex; gap:.5rem; width:100%;">
-          <input pInputText type="number" min="1" [formControl]="form.controls.pageFrom" style="width: 100%;" />
-          <input pInputText type="number" min="1" [formControl]="form.controls.pageTo" style="width: 100%;" />
+          <input tcInput type="number" min="1" [formControl]="form.controls.pageFrom" style="width: 100%;" />
+          <input tcInput type="number" min="1" [formControl]="form.controls.pageTo" style="width: 100%;" />
         </div>
 
         <div class="mono" i18n="@@pdf_ops_limit_title">Limite</div>
-        <input pInputText type="number" min="1" [formControl]="form.controls.maxOpsPerPage" style="width: 100%;" />
+        <input tcInput type="number" min="1" [formControl]="form.controls.maxOpsPerPage" style="width: 100%;" />
         <div class="muted" i18n="@@pdf_ops_limit_help">Max ops / page (évite les exports géants).</div>
       </div>
     </div>

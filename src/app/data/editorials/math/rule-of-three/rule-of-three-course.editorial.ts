@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_rule_of_three_rule_of_three_course_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_rule_of_three_rule_of_three_course_uc1_title:Résoudre un exercice “3 valeurs connues, 1 inconnue”`,
@@ -48,7 +48,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_rule_of_three_rule_of_three_course_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_rule_of_three_rule_of_three_course_out1:Un cours clair et progressif : définition de la proportionnalité, test rapide (directe/inverse), puis méthodes de calcul pas à pas.`,
         $localize`:@@ed_math_rule_of_three_rule_of_three_course_out2:Les deux grandes méthodes : passage à l’unité (intuitif) et produit en croix (rapide et standard), avec tableaux et exemples.`,
@@ -62,7 +62,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_rule_of_three_rule_of_three_course_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_rule_of_three_rule_of_three_course_lim1:La règle de trois ne s’applique que s’il y a proportionnalité (directe ou inverse). Si la relation n’est pas proportionnelle, le résultat sera faux même si le calcul est “bien fait”.`,
@@ -83,7 +83,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_rule_of_three_rule_of_three_course_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_rule_of_three_rule_of_three_course_q1:Comment savoir si c’est une proportionnalité directe ou inverse ?`,
@@ -108,7 +108,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_rule_of_three_rule_of_three_course_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_rule_of_three_rule_of_three_course_tip:Avant de calculer, faites le “test de sens” : si la quantité de départ augmente, est-ce que le résultat doit augmenter ou diminuer ? Si votre calcul donne l’inverse, c’est que vous avez inversé directe/inverse ou mal rempli le tableau.`,
     },

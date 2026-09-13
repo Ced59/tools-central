@@ -8,6 +8,7 @@ export const routes: Routes = [
   { path: 'legal-notice', loadComponent: () => import('./components/pages/legal/legal-notice/legal-notice.component').then(m => m.LegalNoticeComponent) },
   { path: 'privacy-policy', loadComponent: () => import('./components/pages/legal/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent) },
   { path: 'cookies-policy', loadComponent: () => import('./components/pages/legal/cookies-policy/cookies-policy.component').then(m => m.CookiesPolicyComponent) },
+  { path: '404', loadComponent: () => import('./components/pages/not-found/not-found.component').then(m => m.NotFoundComponent) },
 
 
   // Outil atomique (wrapper) - 3 segments
@@ -28,5 +29,5 @@ export const routes: Routes = [
     loadComponent: () => import('./components/pages/category/category.component').then(m => m.CategoryComponent),
   },
 
-  { path: '**', redirectTo: '' },
+  { path: '**', loadComponent: () => import('./components/pages/not-found/not-found.component').then(m => m.NotFoundComponent) },
 ];

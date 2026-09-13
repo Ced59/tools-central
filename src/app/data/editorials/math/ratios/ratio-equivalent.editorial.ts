@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_equivalent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_ratio_equivalent_uc1_title:Simplification`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_ratio_equivalent_output:Ce que vous apprenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_ratio_equivalent_out1:La définition précise de ratios équivalents.`,
         $localize`:@@ed_math_ratio_equivalent_out2:Les techniques pour les reconnaître rapidement.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_equivalent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_ratio_equivalent_lim1:Multiplier ou diviser par zéro invalide le ratio.` },
         { text: $localize`:@@ed_math_ratio_equivalent_lim2:Les deux termes doivent être transformés de la même manière.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_ratio_equivalent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_ratio_equivalent_tip:Si a×d = b×c, alors les ratios a/b et c/d sont équivalents.`,
     },

@@ -151,11 +151,21 @@ function mergeLocaleFile(locale, targetPath, sourceUnits) {
         added: 0,
         sourceUpdated: 0,
         katexFixed: 0,
+        removed: 0,
     };
 
     // Mettre à jour trgLang
     if (!content.includes(`trgLang="${locale}"`)) {
         content = content.replace(/trgLang="[^"]*"/, `trgLang="${locale}"`);
+    }
+
+    // L'extraction Angular est la source de vérité. Conserver des unités qui
+    // n'existent plus fausse le taux de couverture et gonfle les bundles.
+    for (const [id, unit] of targetUnits) {
+        if (!sourceUnits.has(id)) {
+            content = content.replace(unit.raw, "");
+            stats.removed++;
+        }
     }
 
     for (const [id, srcUnit] of sourceUnits) {
@@ -221,6 +231,9 @@ function mergeLocaleFile(locale, targetPath, sourceUnits) {
     }
     if (stats.katexFixed > 0) {
         parts.push(`📐${stats.katexFixed} KaTeX`);
+    }
+    if (stats.removed > 0) {
+        parts.push(`-${stats.removed} obsolete`);
     }
 
     console.log(`[i18n-sync] ${locale}: ${parts.length > 0 ? parts.join(", ") : "up to date"}`);

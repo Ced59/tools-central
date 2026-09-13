@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_flatten_forms_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_flatten_forms_uc1_title:Archivage et conformité`, text: $localize`:@@ed_dev_pdf_pdf_flatten_forms_uc1_text:Conserver un PDF “figé” dont les champs ne peuvent plus être modifiés après validation.` },
         { title: $localize`:@@ed_dev_pdf_pdf_flatten_forms_uc2_title:Envoi à un tiers`, text: $localize`:@@ed_dev_pdf_pdf_flatten_forms_uc2_text:Partager un formulaire rempli sans laisser l’accès aux champs ou aux scripts de formulaire.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_flatten_forms_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_flatten_forms_out1:Un PDF aplati : les valeurs des champs sont rendues comme du contenu statique sur la page.`,
         $localize`:@@ed_dev_pdf_pdf_flatten_forms_out2:Un récapitulatif (JSON/rapport) des champs traités : noms, types, valeurs, pages et état (flatten ok/partiel).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_flatten_forms_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_flatten_forms_lim1:Une fois aplati, vous ne pourrez plus modifier les champs (sauf en repartant du PDF source).` },
         { text: $localize`:@@ed_dev_pdf_pdf_flatten_forms_lim2:Selon le PDF, certaines apparences de champ peuvent être incomplètes si l’appearance stream est absent ou non standard.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_flatten_forms_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_flatten_forms_q1:Est-ce que mes valeurs restent visibles ?`, a: $localize`:@@ed_dev_pdf_pdf_flatten_forms_a1:Oui : l’objectif du flatten est précisément de rendre la valeur visible en contenu statique.` },
         { q: $localize`:@@ed_dev_pdf_pdf_flatten_forms_q2:Les champs sont-ils supprimés ?`, a: $localize`:@@ed_dev_pdf_pdf_flatten_forms_a2:Ils ne sont plus interactifs. Selon l’implémentation, ils peuvent être retirés ou rendus inactifs après rendu.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_flatten_forms_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_flatten_forms_tip:Avant d’aplatir, exportez “Champs de formulaire PDF → JSON” : vous aurez une sauvegarde structurée des champs/valeurs au cas où vous deviez reconstituer un formulaire.`,
     },

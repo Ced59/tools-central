@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-bolt"
+  icon="tc-icon tc-icon-bolt"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (!report()) {
       <div class="empty-box">
-        <i class="pi pi-bolt" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-bolt" aria-hidden="true"></i>
         <span i18n="@@pdf_lin_empty">Aucune donnée à afficher.</span>
       </div>
     } @else {
@@ -33,9 +33,9 @@
           <div class="field-card-title">
             <span class="field-name" i18n="@@pdf_lin_summary_title">Linéarisation</span>
             @if (report()!.isLinearized) {
-              <p-tag value="Linearized" severity="success"></p-tag>
+              <tc-tag value="Linearized" severity="success"></tc-tag>
             } @else {
-              <p-tag value="Not linearized" severity="danger"></p-tag>
+              <tc-tag value="Not linearized" severity="danger"></tc-tag>
             }
           </div>
         </div>
@@ -164,12 +164,12 @@
       </label>
 
       <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
-        <input pInputText type="number" min="8192" [formControl]="form.controls.scanHeadBytes" style="width: 100%;" />
+        <input tcInput type="number" min="8192" [formControl]="form.controls.scanHeadBytes" style="width: 100%;" />
         <span class="muted" i18n="@@pdf_lin_scan_head_label">Scan entête (bytes)</span>
       </label>
 
       <label class="muted" style="display:flex; gap:.5rem; align-items:center;">
-        <input pInputText type="number" min="8192" [formControl]="form.controls.scanTailBytes" style="width: 100%;" />
+        <input tcInput type="number" min="8192" [formControl]="form.controls.scanTailBytes" style="width: 100%;" />
         <span class="muted" i18n="@@pdf_lin_scan_tail_label">Scan fin (bytes)</span>
       </label>
 

@@ -12,7 +12,7 @@
         class="btn primary"
         (click)="onNativeShare()"
       >
-        <i class="pi pi-share-alt" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-share-alt" aria-hidden="true"></i>
         <span i18n="@@share_native:Partager">Partager</span>
       </button>
 
@@ -23,7 +23,7 @@
         aria-label="Copier le lien"
         i18n-aria-label="@@share_copy_aria"
       >
-        <i class="pi pi-copy" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
         <span *ngIf="!copied" i18n="@@share_copy_label:Copier">Copier</span>
         <span *ngIf="copied" i18n="@@share_copied_label:Copié !">Copié !</span>
       </button>
@@ -36,7 +36,7 @@
           (click)="openNetwork(n)"
           [attr.aria-label]="n.label"
         >
-          <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+          <i [ngClass]="n.icon" aria-hidden="true"></i>
           <span class="label">{{ n.label }}</span>
         </button>
 
@@ -47,13 +47,13 @@
           (click)="toggleQr()"
           [attr.aria-label]="n.label"
         >
-          <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+          <i [ngClass]="n.icon" aria-hidden="true"></i>
           <span class="label">{{ n.label }}</span>
         </button>
       </ng-container>
 
       <button type="button" class="btn more" (click)="toggleMore()">
-        <i class="pi pi-ellipsis-h" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-ellipsis-h" aria-hidden="true"></i>
         <span *ngIf="!showMore" i18n="@@share_more:Plus">Plus</span>
         <span *ngIf="showMore" i18n="@@share_less:Moins">Moins</span>
       </button>
@@ -69,7 +69,7 @@
         (click)="openNetwork(n)"
         [attr.aria-label]="n.label"
       >
-        <i class="pi" [ngClass]="n.icon" aria-hidden="true"></i>
+        <i [ngClass]="n.icon" aria-hidden="true"></i>
         <span>{{ n.label }}</span>
       </button>
 
@@ -81,7 +81,7 @@
         aria-label="Afficher le QR code"
         i18n-aria-label="@@share_qr_toggle"
       >
-      <i class="pi pi-qrcode" aria-hidden="true"></i>
+      <i class="tc-icon tc-icon-qrcode" aria-hidden="true"></i>
         <span i18n="@@share_qr:QR code">QR code</span>
       </button>
     </div>

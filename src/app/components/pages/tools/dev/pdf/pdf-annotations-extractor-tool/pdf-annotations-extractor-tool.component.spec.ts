@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PdfAnnotationsExtractorToolComponent } from './pdf-annotations-extractor-tool.component';
+import { PdfAnnotationsToJsonToolComponent } from './pdf-annotations-extractor-tool.component';
 
-describe('PdfAnnotationsExtractorToolComponent', () => {
-  let component: PdfAnnotationsExtractorToolComponent;
-  let fixture: ComponentFixture<PdfAnnotationsExtractorToolComponent>;
+describe('PdfAnnotationsToJsonToolComponent', () => {
+  let component: PdfAnnotationsToJsonToolComponent;
+  let fixture: ComponentFixture<PdfAnnotationsToJsonToolComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PdfAnnotationsExtractorToolComponent]
+      imports: [PdfAnnotationsToJsonToolComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PdfAnnotationsExtractorToolComponent);
+    fixture = TestBed.createComponent(PdfAnnotationsToJsonToolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

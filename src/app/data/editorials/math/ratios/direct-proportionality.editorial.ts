@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_direct_proportionality_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_direct_proportionality_uc1_title:Prix et quantités`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_direct_proportionality_output:Ce que vous apprenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_direct_proportionality_out1:La définition claire d’une proportionnalité directe et les critères pour la reconnaître.`,
         $localize`:@@ed_math_direct_proportionality_out2:Les méthodes de calcul (coefficient, passage à l’unité, produit en croix) applicables dans tous les exercices.`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_direct_proportionality_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_direct_proportionality_lim1:Toutes les relations linéaires ne sont pas proportionnelles (attention aux constantes ajoutées).` },
         { text: $localize`:@@ed_math_direct_proportionality_lim2:Les unités doivent être cohérentes avant tout calcul.` },
@@ -50,7 +50,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_direct_proportionality_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_direct_proportionality_q1:Comment savoir si deux grandeurs sont proportionnelles ?`,
@@ -66,7 +66,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_direct_proportionality_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_direct_proportionality_tip:Avant de calculer, vérifie toujours si doubler une valeur double bien l’autre : c’est le test le plus rapide.`,
     },

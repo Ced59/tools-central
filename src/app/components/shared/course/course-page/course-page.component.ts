@@ -1,11 +1,11 @@
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component, Input, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgForOf, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { CardModule } from 'primeng/card';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { TagModule } from 'primeng/tag';
+import { CardModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
+import { TagModule } from '@ui';
 
 import { MathFormulaComponent } from '../../math-formula/math-formula.component';
 import {CourseData, CourseLesson, CourseQuiz} from "../../../../data/courses/course.types";
@@ -26,6 +26,7 @@ import {CourseData, CourseLesson, CourseQuiz} from "../../../../data/courses/cou
     MathFormulaComponent,
   ],
   templateUrl: './course-page.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './course-page.component.scss',
 })
 export class CoursePageComponent {

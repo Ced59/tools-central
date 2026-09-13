@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_median_course_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_median_course_uc1_title:Réviser un chapitre de statistiques`,
@@ -48,7 +48,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_median_course_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_median_course_out1:Un cours structuré et progressif : définition, intuition (50% en dessous / 50% au-dessus), puis méthode de calcul avec tri obligatoire.`,
         $localize`:@@ed_math_statistics_median_course_out2:Des cas complets : n impair (valeur centrale), n pair (moyenne des deux valeurs centrales), avec exemples pas à pas et quiz corrigés.`,
@@ -61,7 +61,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_median_course_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_statistics_median_course_lim1:La médiane dépend du tri : sans série triée (ou sans effectifs cumulés), on risque une erreur immédiate.`,
@@ -82,7 +82,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_statistics_median_course_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_statistics_median_course_q1:Pourquoi faut-il trier la série pour calculer la médiane ?`,
@@ -107,7 +107,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_median_course_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_median_course_tip:Réflexe anti-erreur : après avoir trié, repérez d’abord les deux valeurs “centrales” (même si n est impair). Si n est pair, la médiane est entre les deux ; si n est impair, elle est exactement l’une d’elles.`,
     },

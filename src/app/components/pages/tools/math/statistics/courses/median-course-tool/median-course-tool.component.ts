@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CoursePageComponent } from '../../../../../../shared/course/course-page/course-page.component';
 import {medianCourseData} from "../../../../../../../data/courses/math/statistics/median-course-data";
 
@@ -7,6 +7,7 @@ import {medianCourseData} from "../../../../../../../data/courses/math/statistic
   imports: [CoursePageComponent],
   templateUrl: './median-course-tool.component.html',
   styleUrl: './median-course-tool.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: true
 })
 export class MedianCourseToolComponent {

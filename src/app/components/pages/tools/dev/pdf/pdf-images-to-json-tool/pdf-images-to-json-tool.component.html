@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-images"
+  icon="tc-icon tc-icon-images"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -21,7 +21,8 @@
   (download)="downloadJson()"
 >
   <div leftList>
-    <div
+    <button
+      type="button"
       *ngFor="let it of filteredImages(); trackBy: trackById"
       class="field-card img-card"
       (click)="select(it)"
@@ -49,7 +50,7 @@
           <div class="adv-v mono">{{ it.objectId }}</div>
         </div>
       </div>
-    </div>
+    </button>
   </div>
 
   <div rightOptions>
@@ -76,10 +77,10 @@
     <div class="divider"></div>
 
     <button
-      pButton
+      tcButton
       type="button"
-      icon="pi pi-download"
-      class="p-button-secondary"
+      icon="tc-icon tc-icon-download"
+      class="tc-button-secondary"
       [disabled]="!selected() || !selected()?.bytes"
       i18n-label="@@pdf_images_btn_download_selected"
       label="Télécharger l’image sélectionnée"
@@ -94,9 +95,9 @@
     </label>
 
     <button
-      pButton
+      tcButton
       type="button"
-      icon="pi pi-file"
+      icon="tc-icon tc-icon-file"
       [disabled]="status() !== 'ready' || images().length === 0"
       i18n-label="@@pdf_images_btn_download_zip"
       label="Télécharger toutes les images (ZIP)"

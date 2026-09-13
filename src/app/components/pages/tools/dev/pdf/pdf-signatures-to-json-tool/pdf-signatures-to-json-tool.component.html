@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-verified"
+  icon="tc-icon tc-icon-verified"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -25,7 +25,7 @@
       <div class="field-card-header">
         <div class="field-card-title">
           <span class="field-name">{{ typeLabel(it) }}</span>
-          <span class="muted mono" *ngIf="it.pageNumber != null">
+          <span class="muted mono" *ngIf="it.pageNumber !== null">
             • <span i18n="@@pdf_sig_on_page">page</span> {{ it.pageNumber }}
           </span>
         </div>
@@ -48,7 +48,7 @@
           ByteRange: {{ (it.byteRange ?? []).join(', ') }}
         </div>
 
-        <div class="mono muted" *ngIf="it.contentsLength != null">
+        <div class="mono muted" *ngIf="it.contentsLength !== null">
           Contents: {{ it.contentsLength }} bytes
         </div>
       </div>

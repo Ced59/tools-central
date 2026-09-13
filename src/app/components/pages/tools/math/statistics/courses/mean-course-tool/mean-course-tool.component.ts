@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CoursePageComponent } from '../../../../../../shared/course/course-page/course-page.component';
 import {meanCourseData} from "../../../../../../../data/courses/math/statistics/mean-course.data";
 
@@ -8,6 +8,7 @@ import {meanCourseData} from "../../../../../../../data/courses/math/statistics/
   standalone: true,
   imports: [CoursePageComponent],
   templateUrl: './mean-course-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './mean-course-tool.component.scss',
 })
 export class MeanCourseToolComponent {

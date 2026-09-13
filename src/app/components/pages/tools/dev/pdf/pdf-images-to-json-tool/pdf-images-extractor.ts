@@ -326,7 +326,9 @@ function toPlain(doc: PDFDocument, v: unknown): unknown {
   try {
     const looked = (v instanceof PDFRef) ? ctx.lookup(v) : null;
     if (looked) return toPlain(doc, looked);
-  } catch {}
+  } catch {
+    // Une référence PDF invalide reste une valeur non résolue.
+  }
 
   return null;
 }

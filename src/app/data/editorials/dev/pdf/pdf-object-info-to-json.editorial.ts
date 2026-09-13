@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_uc1_title:Debug d’un PDF cassé`, text: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_uc1_text:Comprendre pourquoi un parser échoue : objets manquants, offsets incohérents, streams anormaux.` },
         { title: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_uc2_title:Analyse forensic`, text: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_uc2_text:Repérer des objets suspects (JavaScript, fichiers intégrés, streams très volumineux) dans un audit sécurité.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_object_info_to_json_out1:Un export JSON listant les objets : numéro/génération, type (dict/stream/array…), taille/longueur, références et flags utiles.`,
         $localize`:@@ed_dev_pdf_pdf_object_info_to_json_out2:Des indices pratiques : présence de streams compressés, objets orphelins, structure xref (selon le moteur).`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_lim1:C’est un outil “dev/forensic” : l’output est technique et peut être massif sur de gros PDF.` },
         { text: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_lim2:Les streams peuvent être compressés : le JSON décrit la structure, pas forcément le contenu décompressé.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_q1:Est-ce que ça remplace un viewer PDF bas niveau ?`, a: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_a1:Non, mais c’est très utile pour automatiser un diagnostic et partager un rapport JSON.` },
         { q: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_q2:Pourquoi l’export est énorme ?`, a: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_a2:Un PDF contient souvent des milliers d’objets. Filtrez par taille/type après export.` },
@@ -57,7 +57,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_object_info_to_json_tip:Commencez par lister les objets les plus lourds : c’est souvent le moyen le plus rapide d’expliquer un PDF de 50+ Mo (images HD, polices, scans).`,
     },

@@ -2,25 +2,22 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  Inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
   ViewChild,
   inject,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { FormsModule } from '@angular/forms';
 import { filter } from 'rxjs/operators';
-
-import { ButtonModule } from 'primeng/button';
-import { SelectModule } from 'primeng/select';
 
 import { ThemeService } from './services/theme.service';
 import { SeoAutoService } from './services/seo/seo-auto.service';
 import { LOCALES, type LocaleOption } from './i18n/locales.generated';
-import { LocalePathService } from './services/local-path.service';
+import { LocalePathService } from './services/locale-path.service';
 import { SocialShareComponent } from './components/shared/social-share/social-share.component';
 
 type ShareContext = 'tool' | 'category' | 'home' | 'generic';
@@ -31,12 +28,10 @@ type ShareContext = 'tool' | 'category' | 'home' | 'generic';
   imports: [
     RouterOutlet,
     RouterLink,
-    ButtonModule,
     NgOptimizedImage,
-    FormsModule,
-    SelectModule,
     SocialShareComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './app.component.html',
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -60,7 +55,10 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor() {
     this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
       .subscribe(() => {
         const url = this.router.url || '';
         if (url === '/' || url === '/fr' || url === '/en') this.shareContext = 'home';
@@ -105,8 +103,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.resizeHandler?.();
   }
 
-  onLocaleChange(option: LocaleOption) {
+  onLocaleChange(locale: string) {
     if (!isPlatformBrowser(this.platformId)) return;
+
+    const option = LOCALES.find((candidate) => candidate.locale === locale);
+    if (!option) return;
 
     this.selectedLocale = option;
     this.homeHref = `/${option.locale}/`;

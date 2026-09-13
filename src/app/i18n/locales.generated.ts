@@ -4,158 +4,127 @@ export type AppLocale = "fr" | "en" | "es" | "de" | "it" | "nl" | "sv" | "da" | 
 export interface LocaleOption {
   locale: AppLocale;
   nameNative: string;
-  flag: string;
 }
 
 export const LOCALES: readonly LocaleOption[] = [
   {
     "locale": "fr",
-    "nameNative": "Français",
-    "flag": "fr"
+    "nameNative": "Français"
   },
   {
     "locale": "en",
-    "nameNative": "English",
-    "flag": "gb"
+    "nameNative": "English"
   },
   {
     "locale": "es",
-    "nameNative": "Español",
-    "flag": "es"
+    "nameNative": "Español"
   },
   {
     "locale": "de",
-    "nameNative": "Deutsch",
-    "flag": "de"
+    "nameNative": "Deutsch"
   },
   {
     "locale": "it",
-    "nameNative": "Italiano",
-    "flag": "it"
+    "nameNative": "Italiano"
   },
   {
     "locale": "nl",
-    "nameNative": "Nederlands",
-    "flag": "nl"
+    "nameNative": "Nederlands"
   },
   {
     "locale": "sv",
-    "nameNative": "Svenska",
-    "flag": "se"
+    "nameNative": "Svenska"
   },
   {
     "locale": "da",
-    "nameNative": "Dansk",
-    "flag": "dk"
+    "nameNative": "Dansk"
   },
   {
     "locale": "no",
-    "nameNative": "Norsk",
-    "flag": "no"
+    "nameNative": "Norsk"
   },
   {
     "locale": "fi",
-    "nameNative": "Suomi",
-    "flag": "fi"
+    "nameNative": "Suomi"
   },
   {
     "locale": "pl",
-    "nameNative": "Polski",
-    "flag": "pl"
+    "nameNative": "Polski"
   },
   {
     "locale": "cs",
-    "nameNative": "Čeština",
-    "flag": "cz"
+    "nameNative": "Čeština"
   },
   {
     "locale": "sk",
-    "nameNative": "Slovenčina",
-    "flag": "sk"
+    "nameNative": "Slovenčina"
   },
   {
     "locale": "ro",
-    "nameNative": "Română",
-    "flag": "ro"
+    "nameNative": "Română"
   },
   {
     "locale": "hu",
-    "nameNative": "Magyar",
-    "flag": "hu"
+    "nameNative": "Magyar"
   },
   {
     "locale": "tr",
-    "nameNative": "Türkçe",
-    "flag": "tr"
+    "nameNative": "Türkçe"
   },
   {
     "locale": "id",
-    "nameNative": "Bahasa Indonesia",
-    "flag": "id"
+    "nameNative": "Bahasa Indonesia"
   },
   {
     "locale": "vi",
-    "nameNative": "Tiếng Việt",
-    "flag": "vn"
+    "nameNative": "Tiếng Việt"
   },
   {
     "locale": "sw",
-    "nameNative": "Kiswahili",
-    "flag": "ke"
+    "nameNative": "Kiswahili"
   },
   {
     "locale": "af",
-    "nameNative": "Afrikaans",
-    "flag": "za"
+    "nameNative": "Afrikaans"
   },
   {
     "locale": "fil",
-    "nameNative": "Filipino",
-    "flag": "ph"
+    "nameNative": "Filipino"
   },
   {
     "locale": "pt-BR",
-    "nameNative": "Português (Brasil)",
-    "flag": "br"
+    "nameNative": "Português (Brasil)"
   },
   {
     "locale": "pt-PT",
-    "nameNative": "Português (Portugal)",
-    "flag": "pt"
+    "nameNative": "Português (Portugal)"
   },
   {
     "locale": "ru",
-    "nameNative": "Русский",
-    "flag": "ru"
+    "nameNative": "Русский"
   },
   {
     "locale": "uk",
-    "nameNative": "Українська",
-    "flag": "ua"
+    "nameNative": "Українська"
   },
   {
     "locale": "bg",
-    "nameNative": "Български",
-    "flag": "bg"
+    "nameNative": "Български"
   },
   {
     "locale": "el",
-    "nameNative": "Ελληνικά",
-    "flag": "gr"
+    "nameNative": "Ελληνικά"
   },
   {
     "locale": "ja",
-    "nameNative": "日本語",
-    "flag": "jp"
+    "nameNative": "日本語"
   },
   {
     "locale": "ko",
-    "nameNative": "한국어",
-    "flag": "kr"
+    "nameNative": "한국어"
   },
   {
     "locale": "zh-Hans",
-    "nameNative": "中文（简体）",
-    "flag": "cn"
+    "nameNative": "中文（简体）"
   }
 ] as const;

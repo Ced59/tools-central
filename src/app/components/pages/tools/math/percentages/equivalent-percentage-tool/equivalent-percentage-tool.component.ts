@@ -1,12 +1,12 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-// PrimeNG
-import { InputNumberModule } from 'primeng/inputnumber';
-import { DividerModule } from 'primeng/divider';
-import { ButtonModule } from 'primeng/button';
+// Primitives UI internes
+import { InputNumberModule } from '@ui';
+import { DividerModule } from '@ui';
+import { ButtonModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 import { MathToolShellComponent } from '../../../../../shared/math/math-tool-shell/math-tool-shell.component';
@@ -33,6 +33,7 @@ type ChangedField = 'base' | 'precision' | 'percents';
  MathToolShellComponent,
  ],
  templateUrl: './equivalent-percentage-tool.component.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  styleUrl: './equivalent-percentage-tool.component.scss',
 })
 export class EquivalentPercentageToolComponent {
@@ -165,13 +166,7 @@ export class EquivalentPercentageToolComponent {
  const peq = (coef - 1) * 100;
  const final = base * coef;
 
- // Latex “détaillé” si peu d’items, sinon produit
  const maxExpand = 4;
- const expanded =
- ps.length <= maxExpand
- ? coeffs.map(c => `(${this.numToLatex(c)})`).join('\\times ')
- : String.raw`\prod_{i=1}^{${ps.length}}(1+\dfrac{p_i}{100})`;
-
  // pour l’affichage produit, on montre quand même la liste des p_i sous forme de vecteur si long
  const pListLatex =
  ps.length <= maxExpand

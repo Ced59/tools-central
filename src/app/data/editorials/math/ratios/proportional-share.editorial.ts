@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_proportional_share_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_proportional_share_uc1_title:Répartition d’un total`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_proportional_share_output:Ce que vous apprenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_proportional_share_out1:La méthode générale pour calculer une part proportionnelle.`,
         $localize`:@@ed_math_proportional_share_out2:Le lien entre ratios, fractions et pourcentages.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_proportional_share_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_proportional_share_lim1:La somme des parts doit correspondre exactement au total.` },
         { text: $localize`:@@ed_math_proportional_share_lim2:Attention aux arrondis dans les répartitions réelles.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_proportional_share_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_proportional_share_tip:Vérifie toujours que la somme des parts reconstitue bien le total initial.`,
     },

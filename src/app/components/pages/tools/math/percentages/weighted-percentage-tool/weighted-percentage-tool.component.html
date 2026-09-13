@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-sliders-h"
+  icon="tc-icon tc-icon-sliders-h"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -46,7 +46,7 @@
                     <label class="mini-label" [for]="'rate' + i" i18n="@@pct_weighted_rate">
                       Taux
                     </label>
-                    <p-inputNumber
+                    <tc-number-input
                       [inputId]="'rate' + i"
                       [formControl]="$any(rowRateCtrlAt(i))"
                       [minFractionDigits]="0"
@@ -62,7 +62,7 @@
                     <label class="mini-label" [for]="'weight' + i" i18n="@@pct_weighted_weight">
                       Poids
                     </label>
-                    <p-inputNumber
+                    <tc-number-input
                       [inputId]="'weight' + i"
                       [formControl]="$any(rowWeightCtrlAt(i))"
                       [minFractionDigits]="0"
@@ -75,37 +75,37 @@
                 </div>
               </div>
 
-              <p-button
+              <tc-button
                 type="button"
                 severity="secondary"
                 [text]="true"
-                icon="pi pi-trash"
+                icon="tc-icon tc-icon-trash"
                 (onClick)="removeRow(i)"
                 [disabled]="rowsArray.length <= 1"
                 aria-label="Supprimer"
                 i18n-aria-label="@@pct_weighted_remove_aria"
-              ></p-button>
+              ></tc-button>
             </div>
           </div>
 
           <div class="weighted-actions">
-            <p-button
+            <tc-button
               type="button"
-              icon="pi pi-plus"
+              icon="tc-icon tc-icon-plus"
               (onClick)="addRow(0, 1)"
               label="Ajouter une ligne"
               i18n-label="@@pct_weighted_add"
-            ></p-button>
+            ></tc-button>
 
-            <p-button
+            <tc-button
               type="button"
               severity="secondary"
               [text]="true"
-              icon="pi pi-times"
+              icon="tc-icon tc-icon-times"
               (onClick)="clearRows()"
               label="Vider"
               i18n-label="@@pct_weighted_clear"
-            ></p-button>
+            ></tc-button>
           </div>
 
           <small class="hint" i18n="@@pct_weighted_list_hint">
@@ -137,7 +137,7 @@
         </div>
 
         <div class="tip-box" *ngIf="sumWeights() === 0">
-          <i class="pi pi-info-circle"></i>
+          <i class="tc-icon tc-icon-info-circle"></i>
           <span i18n="@@pct_weighted_weights_zero_note">
             La somme des poids vaut 0 : le taux pondéré n’est pas défini.
           </span>
@@ -158,11 +158,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -226,7 +226,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@pct_weighted_example_note">
             Exemple : 10% (poids 1) et 20% (poids 3) → (10×1 + 20×3) / (1+3) = 17,5%.
           </span>
@@ -235,7 +235,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

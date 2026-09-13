@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_rot_inverse_usecases:Situations concernées`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_rot_inverse_uc1_title:Temps et effectifs`, text: $localize`:@@ed_rot_inverse_uc1_text:Plus il y a de personnes, moins le temps est long.` },
         { title: $localize`:@@ed_rot_inverse_uc2_title:Vitesses`, text: $localize`:@@ed_rot_inverse_uc2_text:Même distance parcourue à des vitesses différentes.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_rot_inverse_output:Résultat`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_rot_inverse_out1:La valeur inconnue calculée automatiquement.`,
         $localize`:@@ed_rot_inverse_out2:Un calcul respectant le principe du produit constant.`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_rot_inverse_limits:Erreurs fréquentes`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_rot_inverse_lim1:Ne pas utiliser cet outil pour une proportionnalité directe.` },
         { text: $localize`:@@ed_rot_inverse_lim2:Vérifier que le produit reste constant.` },
@@ -45,7 +45,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_rot_inverse_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_rot_inverse_tip:Si une grandeur double et que l’autre est divisée par deux, tu es bien dans un cas inverse.`,
     },

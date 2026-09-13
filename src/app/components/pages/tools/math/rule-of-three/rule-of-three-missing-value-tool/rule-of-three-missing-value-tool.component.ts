@@ -1,8 +1,8 @@
-import {Component, computed, signal} from '@angular/core';
+import {Component, computed, signal, ChangeDetectionStrategy} from '@angular/core';
 import {MathFormulaComponent} from "../../../../../shared/math-formula/math-formula.component";
-import {DividerModule} from "primeng/divider";
-import {ButtonModule} from "primeng/button";
-import {InputNumberModule} from "primeng/inputnumber";
+import {DividerModule} from "@ui";
+import {ButtonModule} from "@ui";
+import {InputNumberModule} from "@ui";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {NgFor, NgIf} from "@angular/common";
@@ -21,6 +21,7 @@ type ChangedField = 'a' | 'b' | 'c' | 'precision';
   templateUrl: './rule-of-three-missing-value-tool.component.html',
   styleUrl: './rule-of-three-missing-value-tool.component.scss',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     NgIf,
     NgFor,

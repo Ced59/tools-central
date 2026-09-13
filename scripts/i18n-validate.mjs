@@ -136,7 +136,7 @@ function validateFile(filePath, locale) {
         }
 
         // 4. Placeholders
-        if (unit.target && unit.target !== "TODO") {
+        if (unit.target && !/\bTODO\b/.test(unit.target)) {
             const phCheck = comparePlaceholders(unit.source, unit.target);
             if (!phCheck.valid) {
                 if (phCheck.missing.length > 0) {
@@ -163,10 +163,12 @@ function validateFile(filePath, locale) {
             }
         }
 
-        // 6. Traductions manquantes (strict mode)
-        if (STRICT_MODE) {
-            if (!unit.target || unit.target === "TODO" || unit.target.trim() === "") {
-                warnings.push(`${id}: Missing translation`);
+        // 6. Traductions manquantes ou non relues (strict mode)
+        if (STRICT_MODE && locale !== CONFIG.sourceLocale) {
+            if (!unit.target || /\bTODO\b/.test(unit.target) || unit.target.trim() === "") {
+                errors.push(`${id}: Missing translation`);
+            } else if (unit.state === "new" || unit.state === "needs-review") {
+                errors.push(`${id}: Translation state is ${unit.state}`);
             }
         }
     }

@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { PDFDocument } from 'pdf-lib';
 
 import type { PdfToolStatCard, PdfToolStatus, PdfToolShellUi } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 import {PdfToolShellComponent} from "../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component";
 
 type PageOrientation = 'portrait' | 'landscape' | 'square' | 'unknown';
@@ -27,6 +26,7 @@ interface PdfPageItem {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-pages-to-json-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-pages-to-json-tool.component.scss',
 })
 export class PdfPagesToJsonToolComponent {

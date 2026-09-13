@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-chart-line"
+  icon="tc-icon tc-icon-chart-line"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="initial" i18n="@@pct_var_initial">Valeur initiale</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="initial"
             [formControl]="form.controls.initial"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-main">
           <label for="final" i18n="@@pct_var_final">Valeur finale</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="final"
             [formControl]="form.controls.final"
             [minFractionDigits]="0"
@@ -49,7 +49,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@pct_var_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -104,11 +104,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@pct_var_reset"
@@ -161,7 +161,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@pct_var_note">
             Résultat positif = hausse, négatif = baisse.
             Le coefficient vaut <strong>final ÷ initial</strong>.
@@ -171,7 +171,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

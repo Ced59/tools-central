@@ -1,6 +1,6 @@
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, PLATFORM_ID, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { NgFor, isPlatformBrowser } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
+import { ButtonModule } from '@ui';
 import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
 import { SeoService } from '../../../services/seo/seo.service';
 import {RouterLink} from "@angular/router";
@@ -12,9 +12,10 @@ import { routes } from '../../../data/routes';
   standalone: true,
   imports: [NgFor, ButtonModule, CategoryCardComponent, RouterLink],
   templateUrl: './home.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.component.scss'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private seo = inject(SeoService);
   private platformId = inject(PLATFORM_ID);
 
@@ -38,7 +39,7 @@ export class HomeComponent {
     this.seo.setPageSeo({
       title: $localize`:@@meta_title_home:Tools Central – Outils en ligne gratuits`,
       description: $localize`:@@meta_description_home:Tools Central réunit tous les outils du quotidien en un seul endroit. Compression d'image, calculateurs, conversions et bien plus encore.`,
-      ogImageAbs: 'https://tools-central.com/assets/og-preview.png'
+      ogImageAbs: 'https://www.tools-central.com/assets/og-preview.png'
     });
   }
 

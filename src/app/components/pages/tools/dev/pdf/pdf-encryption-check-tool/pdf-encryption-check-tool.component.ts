@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 type PermissionId =
   | 'print'
@@ -67,6 +66,7 @@ interface EncryptionInfo {
     TagModule,
   ],
   templateUrl: './pdf-encryption-check-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-encryption-check-tool.component.scss',
 })
 export class PdfEncryptionCheckToolComponent {
@@ -533,7 +533,7 @@ function extractDictValueRaw(dictText: string, key: string): string | null {
 
   // If value is ref like "12 0 R"
   // Read until delimiter (/ or >>)
-  let start = i;
+  const start = i;
   while (i < dictText.length) {
     const c = dictText[i];
     if (c === '/' || (c === '>' && dictText[i + 1] === '>')) break;

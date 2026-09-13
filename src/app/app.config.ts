@@ -1,10 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
 import {provideRouter, withInMemoryScrolling} from '@angular/router';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
-import { provideClientHydration } from '@angular/platform-browser';
-import {providePrimeNG} from "primeng/config";
-import Aura from '@primeng/themes/aura';
+import { provideHttpClient, withXhr } from '@angular/common/http';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import {provideMatomo, withRouter} from "ngx-matomo-client";
 
 export const appConfig: ApplicationConfig = {
@@ -16,19 +14,8 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',        // 👈 supporte /page#section
       }),
     ),
-    provideHttpClient(),
-    provideClientHydration(),
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-        options: {
-          prefix: 'p',
-          darkModeSelector: '.dark-mode',
-          cssLayer: false
-        }
-      }
-    }),
-
+    provideHttpClient(withXhr()),
+    provideClientHydration(withNoIncrementalHydration()),
     provideMatomo(
       {
         siteId: 3,

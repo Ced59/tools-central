@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_fractions_fraction_to_percent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_fractions_fraction_to_percent_uc1_title:Exprimer une part en %`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_fractions_fraction_to_percent_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_fractions_fraction_to_percent_out1:Le pourcentage correspondant à la fraction saisie (conversion exacte quand c’est possible).`,
         $localize`:@@ed_math_fractions_fraction_to_percent_out2:Un résultat lisible pour exprimer une proportion, un taux ou une réussite.`,
@@ -56,7 +56,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_fractions_fraction_to_percent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_fractions_fraction_to_percent_lim1:Le dénominateur ne doit jamais être égal à zéro.`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_fractions_fraction_to_percent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_fractions_fraction_to_percent_q1:Comment convertir une fraction en pourcentage ?`,
@@ -99,7 +99,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_fractions_fraction_to_percent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_fractions_fraction_to_percent_tip:Si la fraction se simplifie en un dénominateur de 2, 4, 5, 10, 20, 25, 50 ou 100, vous obtenez souvent un pourcentage “propre” sans calcul compliqué.`,
     },

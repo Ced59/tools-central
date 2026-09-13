@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const DIST_DIR = path.resolve("dist/tools-central/browser");
-const SITE = "https://tools-central.com";
+const SITE = "https://www.tools-central.com";
 
 fs.mkdirSync(DIST_DIR, { recursive: true });
 

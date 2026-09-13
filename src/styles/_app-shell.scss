@@ -53,6 +53,47 @@
   gap: 1rem;
 }
 
+.locale-select {
+  background: var(--surface-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--text-color);
+  font: inherit;
+  max-width: 12rem;
+  min-height: 2.5rem;
+  padding: .45rem .7rem;
+
+  &:focus-visible {
+    border-color: var(--primary-color);
+    box-shadow: var(--focus-ring);
+    outline: 0;
+  }
+}
+
+.theme-toggle {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  color: var(--text-color-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.5rem;
+  justify-content: center;
+  width: 2.5rem;
+
+  &:hover {
+    background: var(--hover-overlay);
+    color: var(--primary-color);
+  }
+
+  &:focus-visible {
+    box-shadow: var(--focus-ring);
+    outline: 0;
+  }
+}
+
 .lang-item {
   display: flex;
   align-items: center;

@@ -4,7 +4,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-file-edit"></i>
+          <i class="tc-icon tc-icon-file-edit"></i>
         </div>
 
         <h1 i18n="@@readability_title">Analyseur de lisibilité & clarté</h1>
@@ -35,7 +35,7 @@
           <label i18n="@@readability_input_label">Votre texte</label>
 
           <textarea
-            pInputTextarea
+            tcInput
             [autoResize]="false"
             rows="10"
             formControlName="text"
@@ -45,24 +45,24 @@
           ></textarea>
 
           <div class="readability-actions">
-            <p-button
+            <tc-button
               type="button"
-              icon="pi pi-trash"
+              icon="tc-icon tc-icon-trash"
               severity="secondary"
               [text]="true"
               (onClick)="clear()"
               i18n-label="@@common_clear"
               label="Effacer"
-            ></p-button>
+            ></tc-button>
 
-            <p-button
+            <tc-button
               type="button"
-              icon="pi pi-copy"
+              icon="tc-icon tc-icon-copy"
               (onClick)="copySummary()"
               [disabled]="!analysis()"
               i18n-label="@@readability_copy_button"
               label="Copier le résumé"
-            ></p-button>
+            ></tc-button>
           </div>
         </div>
 
@@ -74,7 +74,7 @@
             <div class="result-box">
               <div class="score-head">
                 <div class="score-value">{{ scoreLabel() }}</div>
-                <p-tag [severity]="levelSeverity()" [value]="levelLabel()"></p-tag>
+                <tc-tag [severity]="levelSeverity()" [value]="levelLabel()"></tc-tag>
               </div>
 
               <div
@@ -319,7 +319,7 @@
         >
           <span class="ex-label">{{ ex.label }}</span>
           <span class="ex-values">
-            <i class="pi pi-arrow-right" aria-hidden="true"></i>
+            <i class="tc-icon tc-icon-arrow-right" aria-hidden="true"></i>
           </span>
         </button>
       </div>
@@ -328,7 +328,7 @@
     <!-- Back -->
     <div class="back-section">
       <a class="back-link" [routerLink]="['/categories/text']" i18n="@@readability_back">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         Retour
       </a>
     </div>

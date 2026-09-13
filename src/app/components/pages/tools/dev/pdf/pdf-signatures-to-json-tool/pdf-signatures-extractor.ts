@@ -60,7 +60,6 @@ export async function extractPdfSignatures(
   // encryption info (pdf-lib throws on load if encrypted w/ password; here doc loaded => not locked)
   const isEncrypted = false;
 
-  const ctx = doc.context;
   const catalog = (doc as any).catalog as PDFDict | undefined;
 
   const acroFormVal = catalog?.get(PDFName.of('AcroForm'));
@@ -294,11 +293,6 @@ function decodePdfString(v: unknown): string | null {
   return null;
 }
 
-function readNumber(v: unknown): number | null {
-  if (v instanceof PDFNumber) return v.asNumber();
-  return null;
-}
-
 function readRect(doc: PDFDocument, rectVal: unknown): { x: number; y: number; w: number; h: number } | null {
   const arr = resolveArray(doc, rectVal);
   if (!arr || arr.size() < 4) return null;
@@ -379,7 +373,6 @@ function dictToPlainObject(doc: PDFDocument, d: PDFDict): Record<string, unknown
 }
 
 function toPlain(doc: PDFDocument, v: unknown): unknown {
-  const ctx = doc.context;
   if (v instanceof PDFRef) return { ref: v.toString() };
   if (v instanceof PDFName) return v.asString();
   if (v instanceof PDFNumber) return v.asNumber();

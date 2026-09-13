@@ -99,7 +99,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize\`:@@ed_${keyBase}_usecases:Cas d’utilisation\`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize\`:@@ed_${keyBase}_uc1_title:TODO\`, text: $localize\`:@@ed_${keyBase}_uc1_text:TODO: Exemple concret 1\` },
         { title: $localize\`:@@ed_${keyBase}_uc2_title:TODO\`, text: $localize\`:@@ed_${keyBase}_uc2_text:TODO: Exemple concret 2\` },
@@ -110,7 +110,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize\`:@@ed_${keyBase}_output:Ce que vous obtenez\`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize\`:@@ed_${keyBase}_out1:TODO: Décrire précisément la sortie.\`,
         $localize\`:@@ed_${keyBase}_out2:TODO: À quoi sert cette sortie.\`,
@@ -120,7 +120,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize\`:@@ed_${keyBase}_limits:Limites et points d’attention\`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize\`:@@ed_${keyBase}_lim1:TODO.\` },
         { text: $localize\`:@@ed_${keyBase}_lim2:TODO.\` },
@@ -130,7 +130,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize\`:@@ed_${keyBase}_faq:Questions fréquentes\`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize\`:@@ed_${keyBase}_q1:TODO\`, a: $localize\`:@@ed_${keyBase}_a1:TODO\` },
         { q: $localize\`:@@ed_${keyBase}_q2:TODO\`, a: $localize\`:@@ed_${keyBase}_a2:TODO\` },
@@ -140,7 +140,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize\`:@@ed_${keyBase}_tip_title:Astuce\`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize\`:@@ed_${keyBase}_tip:TODO: Une astuce unique liée à l’intention de l’outil.\`,
     },

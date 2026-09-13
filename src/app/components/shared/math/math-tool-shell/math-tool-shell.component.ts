@@ -1,7 +1,7 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ButtonModule } from 'primeng/button';
+import { ButtonModule } from '@ui';
 
 @Component({
   selector: 'app-math-tool-shell',
@@ -11,10 +11,11 @@ import { ButtonModule } from 'primeng/button';
     ButtonModule,
   ],
   templateUrl: './math-tool-shell.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './math-tool-shell.component.scss',
 })
 export class MathToolShellComponent {
-  @Input() icon: string = 'pi pi-calculator';
+  @Input() icon: string = 'tc-icon tc-icon-calculator';
   @Input() backLink: string = '/';
 
   @Input() showExamples: boolean = true;

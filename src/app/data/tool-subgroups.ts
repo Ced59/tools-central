@@ -13,7 +13,7 @@ import type { GroupId } from './tool-groups';
 export const TOOL_SUBGROUP_REGISTRY = deriveToolSubGroupRegistry();
 
 /** ✅ ID dérivé automatiquement */
-export type SubGroupId<C extends CategoryId, G extends GroupId<C>> = string;
+export type SubGroupId<C extends CategoryId, _G extends GroupId<C>> = string;
 
 /** ✅ Type flat pour UI */
 export type ToolSubGroup = {

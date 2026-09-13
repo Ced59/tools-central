@@ -1,5 +1,6 @@
-import { Injectable, inject } from '@angular/core';
+import { DestroyRef, Injectable, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs/operators';
 
 import { SeoService } from './seo.service';
@@ -13,9 +14,10 @@ type AutoSeo = { title: string; description: string; ogImageAbs?: string };
 export class SeoAutoService {
   private router = inject(Router);
   private seo = inject(SeoService);
+  private destroyRef = inject(DestroyRef);
 
   // Optionnel : image OG par défaut (absolue)
-  private readonly ogDefault = 'https://tools-central.com/assets/og/default.png';
+  private readonly ogDefault = 'https://www.tools-central.com/assets/og-preview.png';
 
   init(): void {
     // 1) init classique (canonical/hreflang + lang)
@@ -25,7 +27,10 @@ export class SeoAutoService {
     this.applyForUrl(this.router.url);
 
     this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(e => this.applyForUrl(e.urlAfterRedirects ?? e.url));
   }
 

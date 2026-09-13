@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PdfObjectInfoToJsonComponent } from './pdf-object-info-to-json.component';
+import { PdfObjectInfoToJsonToolComponent } from './pdf-object-info-to-json.component';
 
-describe('PdfObjectInfoToJsonComponent', () => {
-  let component: PdfObjectInfoToJsonComponent;
-  let fixture: ComponentFixture<PdfObjectInfoToJsonComponent>;
+describe('PdfObjectInfoToJsonToolComponent', () => {
+  let component: PdfObjectInfoToJsonToolComponent;
+  let fixture: ComponentFixture<PdfObjectInfoToJsonToolComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PdfObjectInfoToJsonComponent]
+      imports: [PdfObjectInfoToJsonToolComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PdfObjectInfoToJsonComponent);
+    fixture = TestBed.createComponent(PdfObjectInfoToJsonToolComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_stream_decoder_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_dev_pdf_stream_decoder_uc1_title:Analyse bas niveau d’un PDF`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_stream_decoder_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_stream_decoder_out1:Le contenu décodé des streams PDF (FlateDecode, LZWDecode, ASCIIHex, ASCII85, etc.).`,
         $localize`:@@ed_dev_pdf_stream_decoder_out2:Une représentation lisible facilitant l’analyse des opérateurs graphiques, du texte et des structures internes.`,
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_stream_decoder_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_dev_pdf_stream_decoder_lim1:Le décodage expose des données techniques, peu adaptées à un usage non développeur.`,
@@ -61,7 +61,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_stream_decoder_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_dev_pdf_stream_decoder_q1:Qu’est-ce qu’un stream PDF ?`,
@@ -78,7 +78,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_stream_decoder_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_stream_decoder_tip:Combinez cet outil avec l’inspection des opérateurs de page pour comprendre exactement comment un contenu est rendu.`,
     },

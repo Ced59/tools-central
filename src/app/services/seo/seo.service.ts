@@ -1,5 +1,6 @@
-import { Inject, Injectable } from '@angular/core';
+import { DestroyRef, Inject, Injectable } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -32,7 +33,8 @@ export class SeoService {
     private title: Title,
     private meta: Meta,
     private links: SeoLinksService,
-    @Inject(DOCUMENT) private doc: Document
+    @Inject(DOCUMENT) private doc: Document,
+    private destroyRef: DestroyRef,
   ) {}
 
   /** À appeler UNE fois au boot */
@@ -40,7 +42,10 @@ export class SeoService {
     this.applyForUrl(this.router.url);
 
     this.router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe(e => this.applyForUrl(e.urlAfterRedirects ?? e.url));
   }
 

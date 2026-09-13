@@ -7,7 +7,7 @@ import type { CatalogCategoryDefinition } from './types';
 export const IMAGE_CATEGORY: CatalogCategoryDefinition = {
   title: $localize`:@@cat_image_title:Image`,
   description: $localize`:@@cat_image_desc:Compression, redimensionnement, optimisation...`,
-  icon: 'pi pi-image',
+  icon: 'tc-icon tc-icon-image',
   available: false,
   groups: {},
 };

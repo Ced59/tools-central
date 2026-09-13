@@ -1,13 +1,13 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-// PrimeNG
-import { CardModule } from 'primeng/card';
-import { TextareaModule } from 'primeng/textarea';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { TagModule } from 'primeng/tag';
+// Primitives UI internes
+import { CardModule } from '@ui';
+import { TextareaModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
+import { TagModule } from '@ui';
 import {RouterLink} from "@angular/router";
 
 type CaseMode = 'upper' | 'lower' | 'invert' | 'sentence' | 'title';
@@ -33,6 +33,7 @@ type TextCaseExample = {
     RouterLink,
   ],
   templateUrl: './text-case-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './text-case-tool.component.scss',
 })
 export class TextCaseToolComponent {
@@ -130,7 +131,7 @@ export class TextCaseToolComponent {
       this.inputSig.set((v ?? '').toString())
     );
     this.form.controls.mode.valueChanges.subscribe((v) =>
-      this.modeSig.set(((v ?? 'upper') as CaseMode) ?? 'upper')
+      this.modeSig.set((v ?? 'upper') as CaseMode)
     );
 
     this.inputSig.set((this.form.controls.input.value ?? '').toString());

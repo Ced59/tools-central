@@ -1,12 +1,12 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonModule } from "primeng/button";
+import { ButtonModule } from "@ui";
 
 export interface CategoryItem {
   id: string;
   title: string;
   description: string;
-  icon: string;      // ex: 'pi pi-calculator'
+  icon: string;      // ex: 'tc-icon tc-icon-calculator'
   route: string;     // ex: '/categories/math'
   available: boolean;
 }
@@ -39,23 +39,24 @@ export interface CategoryItem {
 
       <div class="actions">
         @if (category.available) {
-          <p-button
+          <tc-button
             class="open-btn"
             [routerLink]="category.route"
-            icon="pi pi-arrow-right"
+            icon="tc-icon tc-icon-arrow-right"
             iconPos="right"
             size="small"
             severity="secondary"
             [outlined]="true"
             label="Ouvrir"
             i18n-label="@@open_tool"
-          ></p-button>
+          ></tc-button>
         } @else {
           <span class="tool-badge" i18n="@@coming_soon">Prochainement</span>
         }
       </div>
     </article>
   `,
+  changeDetection: ChangeDetectionStrategy.Eager,
   styles: [`
     .tool-card {
       background: var(--surface-card);

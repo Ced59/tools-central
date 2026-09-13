@@ -30,11 +30,11 @@
   <p>{{ tool.description }}</p>
 
   <div class="card-footer">
-    <p-button
+    <tc-button
       *ngIf="tool.available"
       class="open-btn"
       [routerLink]="tool.route"
-      icon="pi pi-arrow-right"
+      icon="tc-icon tc-icon-arrow-right"
       iconPos="right"
       size="small"
       severity="secondary"
@@ -42,6 +42,6 @@
       label="Ouvrir"
       i18n-label="@@open_tool"
       (click)="$event.stopPropagation()"
-    ></p-button>
+    ></tc-button>
   </div>
 </article>

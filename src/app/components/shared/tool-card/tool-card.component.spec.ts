@@ -14,6 +14,14 @@ describe('ToolCardComponent', () => {
 
     fixture = TestBed.createComponent(ToolCardComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('tool', {
+      id: 'percentage',
+      title: 'Pourcentage',
+      description: 'Calculer un pourcentage',
+      icon: 'tc-icon tc-icon-percentage',
+      route: '/categories/math/percentages/percentage',
+      available: true,
+    });
     fixture.detectChanges();
   });
 

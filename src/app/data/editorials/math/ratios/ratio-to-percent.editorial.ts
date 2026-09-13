@@ -14,7 +14,7 @@ Convertir un ratio en pourcentage permet d’exprimer une part de manière intui
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_ratios_ratio_to_percent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_ratios_ratio_to_percent_uc1_title:Analyses et statistiques`,
@@ -37,7 +37,7 @@ Présenter des ratios sous forme de pourcentages pour faciliter la lecture et la
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_ratios_ratio_to_percent_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_ratios_ratio_to_percent_out1:
 Le pourcentage équivalent au ratio fourni.`,
@@ -49,7 +49,7 @@ Une valeur directement interprétable pour comparer des parts ou communiquer un 
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_ratios_ratio_to_percent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_ratios_ratio_to_percent_lim1:
@@ -65,7 +65,7 @@ Un pourcentage supérieur à 100% indique que la première quantité dépasse la
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_ratios_ratio_to_percent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_ratios_ratio_to_percent_q1:Pourquoi convertir un ratio en pourcentage ?`,
@@ -83,7 +83,7 @@ Oui, si la première valeur est supérieure à la seconde, le pourcentage dépas
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_ratios_ratio_to_percent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_ratios_ratio_to_percent_tip:
 Pour interpréter correctement un pourcentage, identifie toujours clairement ce qui représente le “tout” (100%).`,

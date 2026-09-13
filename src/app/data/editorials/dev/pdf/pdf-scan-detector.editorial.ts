@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_scan_detector_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_scan_detector_uc1_title:Décider d’un OCR`, text: $localize`:@@ed_dev_pdf_pdf_scan_detector_uc1_text:Savoir rapidement si l’OCR est nécessaire avant indexation/recherche plein texte.` },
         { title: $localize`:@@ed_dev_pdf_pdf_scan_detector_uc2_title:Contrôle accessibilité`, text: $localize`:@@ed_dev_pdf_pdf_scan_detector_uc2_text:Identifier des PDF “images” non sélectionnables (souvent non accessibles) à corriger.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_scan_detector_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_scan_detector_out1:Un diagnostic JSON par page : présence de texte, proportion de contenu image, indices de “scan” (selon heuristiques).`,
         $localize`:@@ed_dev_pdf_pdf_scan_detector_out2:Des indicateurs pour prioriser l’OCR (pages à traiter, pages déjà exploitables).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_scan_detector_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_scan_detector_lim1:Détection heuristique : certains PDF graphiques (catalogues, slides) peuvent ressembler à des scans sans l’être.` },
         { text: $localize`:@@ed_dev_pdf_pdf_scan_detector_lim2:Des PDF peuvent contenir du “texte caché” (OCR déjà fait) : l’outil le détecte mais la qualité peut varier.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_scan_detector_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_scan_detector_q1:Un scan peut-il contenir du texte sélectionnable ?`, a: $localize`:@@ed_dev_pdf_pdf_scan_detector_a1:Oui, si un OCR a été appliqué : l’image reste, mais une couche texte est ajoutée.` },
         { q: $localize`:@@ed_dev_pdf_pdf_scan_detector_q2:Est-ce que l’outil fait l’OCR ?`, a: $localize`:@@ed_dev_pdf_pdf_scan_detector_a2:Non. Il détecte et diagnostique. L’OCR est une étape séparée.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_scan_detector_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_scan_detector_tip:Avant d’investir du temps d’extraction, détectez les scans : c’est la façon la plus simple d’éviter de “chasser” du texte qui n’existe pas sans OCR.`,
     },

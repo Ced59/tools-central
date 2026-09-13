@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_simplifier_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_ratio_simplifier_uc1_title:Comparaison de proportions`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_ratio_simplifier_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_ratio_simplifier_out1:La méthode pour diviser chaque terme par le plus grand diviseur commun.`,
         $localize`:@@ed_math_ratio_simplifier_out2:Un ratio équivalent mais plus simple à interpréter.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_simplifier_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_ratio_simplifier_lim1:Simplifier ne change pas la proportion, seulement son écriture.` },
         { text: $localize`:@@ed_math_ratio_simplifier_lim2:Attention aux ratios contenant des unités différentes.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_ratio_simplifier_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_ratio_simplifier_tip:Commence toujours par chercher un facteur commun simple (2, 5 ou 10).`,
     },

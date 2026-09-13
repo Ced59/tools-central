@@ -1,11 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
+import { InputNumberModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 
@@ -32,6 +32,7 @@ type ChangedField = 'a' | 'b' | 'c' | 'precision';
     MathFormulaComponent,
   ],
   templateUrl: './rule-of-three-table-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './rule-of-three-table-tool.component.scss',
 })
 export class RuleOfThreeTableToolComponent {

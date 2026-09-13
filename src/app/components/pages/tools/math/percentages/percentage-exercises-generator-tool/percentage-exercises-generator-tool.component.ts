@@ -1,16 +1,16 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
-// PrimeNG
-import { CardModule } from 'primeng/card';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { ToggleButtonModule } from 'primeng/togglebutton';
-import { TagModule } from 'primeng/tag';
+// Primitives UI internes
+import { CardModule } from '@ui';
+import { InputNumberModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
+import { MultiSelectModule } from '@ui';
+import { ToggleButtonModule } from '@ui';
+import { TagModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 import {TcDropdownComponent} from "../../../../../shared/tc-dropdown/tc-dropdown.component";
@@ -68,10 +68,14 @@ type LevelOption = { label: string; value: Level };
  MathFormulaComponent,
  ],
  templateUrl: './percentage-exercises-generator-tool.component.html',
+ changeDetection: ChangeDetectionStrategy.Eager,
  styleUrl: './percentage-exercises-generator-tool.component.scss',
 })
 export class PercentageExercisesGeneratorToolComponent {
  private fb = new FormBuilder();
+
+ readonly correctionsShownLabel = $localize`:@@ex_show_on:Affichées`;
+ readonly correctionsHiddenLabel = $localize`:@@ex_show_off:Masquées`;
 
  // --- UI options
  readonly levelOptions: LevelOption[] = [

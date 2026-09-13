@@ -1,10 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 
 import { CATEGORIES, ToolCategory } from '../../../data/categories';
 import { TOOL_GROUPS, ToolGroup } from '../../../data/tool-groups';
-import { TOOL_SUBGROUPS, ToolSubGroup } from '../../../data/tool-subgroups';
+import { TOOL_SUBGROUPS } from '../../../data/tool-subgroups';
 import { ATOMIC_TOOL_LIST, AtomicToolItem } from '../../../data/atomic-tools';
 
 import { ToolCardComponent, ToolCardItem } from '../../shared/tool-card/tool-card.component';
@@ -31,9 +31,10 @@ type ToolSection = {
   standalone: true,
   imports: [NgFor, NgIf, RouterLink, ToolCardComponent],
   templateUrl: './tool-group.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tool-group.component.scss',
 })
-export class ToolGroupComponent {
+export class ToolGroupComponent implements OnInit {
   private seo = inject(SeoService);
 
   categoryId = '';
@@ -67,7 +68,7 @@ export class ToolGroupComponent {
       id: t.id,
       title: t.title,
       description: t.description,
-      icon: t.icon ?? 'pi pi-wrench',
+      icon: t.icon ?? 'tc-icon tc-icon-wrench',
       route: t.route,
       available: t.available,
     });

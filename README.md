@@ -1,27 +1,52 @@
-# ToolsCentral
+# Tools Central
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.4.
+Application Angular multilingue regroupant des outils gratuits exécutés localement dans le navigateur.
 
-## Development server
+## Prérequis
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js `^22.22.3`, `^24.15.0` ou `>=26.0.0` ;
+- npm (la CI utilise Node 24) ;
+- aucune dépendance PrimeNG : l'interface repose sur les primitives internes de `src/app/ui/`.
 
-## Code scaffolding
+## Démarrage
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm ci
+npm start
+```
 
-## Build
+L'application est ensuite disponible sur `http://localhost:4200/`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Contrôles locaux
 
-## Running unit tests
+```bash
+npm audit --omit=dev --audit-level=high
+npm run lint
+npm run i18n:check:strict
+npm run catalog:validate
+npm run architecture:validate
+npm run test:coverage
+npm run build:all && npm run seo:validate
+npm run test:e2e
+```
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+`build:all` génère les routes prérendues, compile les 30 locales en sortie statique puis produit les sitemaps, `robots.txt` et `ads.txt` dans `dist/tools-central/browser/`. Playwright teste cette sortie, pas un serveur de développement différent de la production.
 
-## Running end-to-end tests
+## Contribution
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Lire [AGENTS.md](AGENTS.md) avant toute modification. Les règles structurantes sont :
 
-## Further help
+- une PR = une fonctionnalité ou un objectif atomique ;
+- Clean Architecture stricte ;
+- tests, i18n et build complet verts avant merge ;
+- déploiement uniquement après merge sur `master`.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+La CI valide chaque PR vers `master` avec le statut obligatoire `Verify`. Après merge, un job distinct déploie une release versionnée sur le VPS, attend le healthcheck Nginx, contrôle le domaine public et revient à la release précédente en cas d’échec.
+
+## Documentation
+
+- [Audit technique](docs/CODE_AUDIT.md)
+- [Backlog d'outils et stratégie SEO](docs/SEO_TOOL_BACKLOG.md)
+- [Règles de développement](AGENTS.md)
+
+Le projet utilise Angular 22 et Vitest. La configuration de build produit un site statique servi par Nginx ; le prérendu Angular reste utilisé pour fournir du HTML indexable.

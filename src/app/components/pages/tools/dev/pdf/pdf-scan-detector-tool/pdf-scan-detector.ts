@@ -164,9 +164,7 @@ function resolveArray(doc: PDFDocument, v: unknown): PDFArray | null {
 }
 
 function countDictEntries(d: PDFDict): number {
-  let n = 0;
-  for (const _ of d.entries()) n++;
-  return n;
+  return Array.from(d.entries()).length;
 }
 
 function countImagesInResources(doc: PDFDocument, resources: PDFDict | null): { imageCount: number; faxLike: boolean } {

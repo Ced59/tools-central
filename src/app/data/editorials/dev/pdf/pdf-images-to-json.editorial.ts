@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_images_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_images_to_json_uc1_title:Identifier les images lourdes`, text: $localize`:@@ed_dev_pdf_pdf_images_to_json_uc1_text:Repérer les XObject images très grandes ou mal compressées qui gonflent le poids du PDF.` },
         { title: $localize`:@@ed_dev_pdf_pdf_images_to_json_uc2_title:Préparer une optimisation`, text: $localize`:@@ed_dev_pdf_pdf_images_to_json_uc2_text:Comprendre les formats internes (DCT/JPEG, JPX/JPEG2000, Flate, CCITT…) avant recompression.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_images_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_images_to_json_out1:Un export JSON des images détectées (par page) : largeur/hauteur, bpc, color space, filtres, identifiants d’objets.`,
         $localize`:@@ed_dev_pdf_pdf_images_to_json_out2:Des indicateurs utiles pour décider d’une stratégie d’optimisation (recompression, downscale, suppression de doublons).`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_images_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_images_to_json_lim1:Une même image peut être réutilisée sur plusieurs pages : le JSON peut référencer la même ressource plusieurs fois.` },
         { text: $localize`:@@ed_dev_pdf_pdf_images_to_json_lim2:L’outil décrit les images PDF internes, pas forcément la “taille affichée” réelle à l’écran (qui dépend des transformations).` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_images_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_images_to_json_q1:Est-ce que je peux récupérer les fichiers image ?`, a: $localize`:@@ed_dev_pdf_pdf_images_to_json_a1:Cet outil fournit surtout un inventaire. Si vous avez besoin d’extraction binaire, utilisez un extracteur d’images dédié.` },
         { q: $localize`:@@ed_dev_pdf_pdf_images_to_json_q2:Pourquoi la dimension est énorme alors que l’image est petite ?`, a: $localize`:@@ed_dev_pdf_pdf_images_to_json_a2:Parce que l’image peut être dessinée avec un facteur d’échelle sur la page : la ressource reste grande.` },
@@ -57,7 +57,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_images_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_images_to_json_tip:Pour optimiser un PDF, commencez par “Images PDF → JSON”, puis ciblez uniquement les pages/ressources problématiques au lieu de recomprimer à l’aveugle.`,
     },

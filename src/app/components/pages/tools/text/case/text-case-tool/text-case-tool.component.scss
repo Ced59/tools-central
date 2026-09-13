@@ -138,9 +138,9 @@
   display: block;
 }
 
-// PrimeNG ajoute ses propres classes -> on force le width sur le vrai textarea
-:host ::ng-deep textarea.p-inputtextarea,
-:host ::ng-deep .p-inputtextarea {
+// Le champ texte doit toujours occuper toute la largeur disponible.
+:host ::ng-deep textarea.tc-input,
+:host ::ng-deep .tc-input {
   width: 100%;
   box-sizing: border-box;
 }
@@ -163,7 +163,7 @@
 }
 
 // Donne la même hauteur de base au textarea et au résultat
-:host ::ng-deep textarea.p-inputtextarea {
+:host ::ng-deep textarea.tc-input {
   min-height: 220px; // match output-box
 }
 
@@ -172,7 +172,7 @@
   margin-bottom: 0.75rem;
 }
 
-:host ::ng-deep textarea.p-inputtextarea {
+:host ::ng-deep textarea.tc-input {
   padding: 1rem; // rapproche du padding output-box
 }
 
@@ -181,7 +181,7 @@
 // ---------------------------------------------------------
 
 // 1) Force une hauteur visuelle identique aux 2 blocs
-:host ::ng-deep textarea.p-inputtextarea {
+:host ::ng-deep textarea.tc-input {
   min-height: 220px;
   height: 220px; // Prime autoResize peut varier : on fixe la base
   resize: vertical; // l'utilisateur peut agrandir

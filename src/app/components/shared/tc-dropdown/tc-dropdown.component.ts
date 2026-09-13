@@ -8,6 +8,7 @@ import {
   forwardRef,
   signal,
   computed,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -25,6 +26,7 @@ export type TcDropdownOption<T = string> = {
   imports: [CommonModule],
   templateUrl: './tc-dropdown.component.html',
   styleUrl: './tc-dropdown.component.scss',
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

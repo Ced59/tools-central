@@ -4,7 +4,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-book"></i>
+          <i class="tc-icon tc-icon-book"></i>
         </div>
 
         <h1>{{ course.heroTitle }}</h1>
@@ -12,13 +12,13 @@
 
         <div class="hero-meta">
           <span class="pill">
-            <i class="pi pi-list"></i>
+            <i class="tc-icon tc-icon-list"></i>
             <span>{{ course.lessons.length }}</span>
             <span i18n="@@course_chapters">chapitres</span>
           </span>
 
           <span class="pill">
-            <i class="pi pi-chart-line"></i>
+            <i class="tc-icon tc-icon-chart-line"></i>
             <span>{{ progress() }}%</span>
             <span i18n="@@course_progress">progression</span>
           </span>
@@ -92,13 +92,13 @@
                 (input)="seed.set(($any($event.target).valueAsNumber || seed()))"
               />
               <button type="button" class="btn-link" (click)="seed.set(nowSeed())">
-                <i class="pi pi-refresh"></i>
+                <i class="tc-icon tc-icon-refresh"></i>
                 <span i18n="@@course_new_seed">Nouvelle</span>
               </button>
             </div>
 
             <a [routerLink]="course.backLink" class="back-link">
-              <i class="pi pi-arrow-left"></i>
+              <i class="tc-icon tc-icon-arrow-left"></i>
               <span i18n="@@back_to_tools">Retour aux outils</span>
             </a>
           </div>
@@ -113,7 +113,7 @@
             <p class="sub">{{ lesson.subtitle }}</p>
 
             <div class="tags">
-              <p-tag *ngFor="let t of lesson.tags" [value]="t"></p-tag>
+              <tc-tag *ngFor="let t of lesson.tags" [value]="t"></tc-tag>
             </div>
           </div>
 
@@ -148,7 +148,7 @@
               <div class="quiz-head">
                 <h3 i18n="@@course_quiz_title">Mini-quiz</h3>
                 <button type="button" class="btn-link" (click)="resetQuizForLesson(lesson)">
-                  <i class="pi pi-times"></i>
+                  <i class="tc-icon tc-icon-times"></i>
                   <span i18n="@@course_reset_quiz">Réinitialiser ce quiz</span>
                 </button>
               </div>
@@ -165,7 +165,7 @@
                     <div class="tc-select" [class.is-open]="openSelectId() === q.id">
                       <button type="button" class="tc-select-trigger" (click)="toggleSelect(q.id)">
                         <span class="tc-select-value">{{ selectLabel(q) }}</span>
-                        <i class="pi pi-chevron-down"></i>
+                        <i class="tc-icon tc-icon-chevron-down"></i>
                       </button>
 
                       <div class="tc-select-panel" *ngIf="openSelectId() === q.id">
@@ -204,18 +204,18 @@
 
                   <div class="quiz-actions">
                     <button type="button" class="btn-secondary" (click)="reveal(q.id)">
-                      <i class="pi pi-eye"></i>
+                      <i class="tc-icon tc-icon-eye"></i>
                       <span i18n="@@course_show_correction">Voir la correction</span>
                     </button>
 
                     <div class="badge" *ngIf="quizReveals()[q.id]">
                       <ng-container *ngIf="checkQuiz(q) as r">
                         <span class="badge-ok" *ngIf="r.ok">
-                          <i class="pi pi-check"></i>
+                          <i class="tc-icon tc-icon-check"></i>
                           <span i18n="@@course_ok">Correct</span>
                         </span>
                         <span class="badge-ko" *ngIf="!r.ok">
-                          <i class="pi pi-times"></i>
+                          <i class="tc-icon tc-icon-times"></i>
                           <span i18n="@@course_ko">Incorrect</span>
                         </span>
                       </ng-container>
@@ -235,7 +235,7 @@
                     </ng-container>
 
                     <div class="explain">
-                      <i class="pi pi-lightbulb"></i>
+                      <i class="tc-icon tc-icon-lightbulb"></i>
                       <span>{{ q.explanation }}</span>
                     </div>
                   </div>
@@ -248,13 +248,13 @@
 
           <div class="footer-nav">
             <button type="button" class="btn-secondary" (click)="prev()" [disabled]="activeIndex() <= 0">
-              <i class="pi pi-arrow-left"></i>
+              <i class="tc-icon tc-icon-arrow-left"></i>
               <span i18n="@@course_prev">Précédent</span>
             </button>
 
             <button type="button" class="btn-primary" (click)="next()" [disabled]="activeIndex() >= course.lessons.length - 1">
               <span i18n="@@course_next">Suivant</span>
-              <i class="pi pi-arrow-right"></i>
+              <i class="tc-icon tc-icon-arrow-right"></i>
             </button>
           </div>
         </div>

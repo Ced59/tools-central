@@ -4,7 +4,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon" aria-hidden="true">
-          <i class="pi pi-calculator"></i>
+          <i class="tc-icon tc-icon-calculator"></i>
         </div>
 
         <h1 i18n="@@rot3_title">Règle de trois simple</h1>
@@ -27,7 +27,7 @@
       <div class="calc-form calc-form-rot3">
         <div class="field field-main">
           <label for="a" i18n="@@rot3_a_label">a (référence)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="a"
             [formControl]="form.controls.a"
             [minFractionDigits]="0"
@@ -43,7 +43,7 @@
 
         <div class="field field-main">
           <label for="b" i18n="@@rot3_b_label">b (correspondant à a)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="b"
             [formControl]="form.controls.b"
             [minFractionDigits]="0"
@@ -59,7 +59,7 @@
 
         <div class="field field-main">
           <label for="c" i18n="@@rot3_c_label">c (nouvelle référence)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="c"
             [formControl]="form.controls.c"
             [minFractionDigits]="0"
@@ -75,7 +75,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -111,7 +111,7 @@
         <div class="divider"></div>
 
         <tc-math-formula
-          label="Formula"
+          label="Formule"
           i18n-label="@@tool_formula_title"
           mode="steps"
           [precision]="form.controls.precision.value ?? 2"
@@ -121,11 +121,11 @@
         ></tc-math-formula>
 
         <div class="actions">
-          <p-button
+          <tc-button
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -133,7 +133,7 @@
         </div>
 
         <div class="tip-box" *ngIf="aIsZero()">
-          <i class="pi pi-exclamation-triangle"></i>
+          <i class="tc-icon tc-icon-exclamation-triangle"></i>
           <span i18n="@@rot3_a_zero_note">
             Impossible de calculer : a = 0 (division par zéro).
           </span>
@@ -176,7 +176,7 @@
 
       <div class="explain-content">
         <tc-math-formula
-          label="Formula"
+          label="Formule"
           i18n-label="@@tool_formula_title"
           mode="katex"
           latex="\dfrac{b}{a}=\dfrac{x}{c}\quad\Rightarrow\quad x=\dfrac{b\times c}{a}"
@@ -196,7 +196,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@rot3_note">
             Exemple : a=10 correspond à b=25, alors c=4 correspond à x=10.
           </span>
@@ -208,7 +208,7 @@
     <div class="back-section">
       <!-- Ajuste la route selon ton groupe/catégorie -->
       <a routerLink="/categories/math/rule-of-three" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
     </div>

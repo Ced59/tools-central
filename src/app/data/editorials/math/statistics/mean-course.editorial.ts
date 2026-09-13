@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_course_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_mean_course_uc1_title:Réviser pour un contrôle ou un examen`,
@@ -48,7 +48,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_mean_course_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_mean_course_out1:Un cours structuré par types de moyennes : arithmétique, pondérée, géométrique, harmonique, RMS (quadratique), robustes (tronquée / winsorisée), mobile, et moyenne avec effectifs ou données groupées.`,
         $localize`:@@ed_math_statistics_mean_course_out2:Des formules claires et des exemples guidés pour passer de la définition à l’application (notes, prix, vitesses, rendements, séries temporelles…).`,
@@ -61,7 +61,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_course_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_statistics_mean_course_lim1:Une moyenne ne résume pas toute une distribution : sans information sur la dispersion (écart-type, quartiles…), elle peut masquer des écarts importants.`,
@@ -82,7 +82,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_statistics_mean_course_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_statistics_mean_course_q1:Ce cours remplace-t-il une calculatrice de moyennes ?`,
@@ -107,7 +107,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_mean_course_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_mean_course_tip:Avant de calculer, posez-vous une seule question : “Est-ce que j’additionne des valeurs, ou est-ce que je combine des poids / des ratios / des multiplicateurs ?” Cette étape évite la majorité des erreurs de moyenne.`,
     },

@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_increase_decrease_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_increase_decrease_uc1_title:Prix, salaires, budgets`,
@@ -32,7 +32,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_increase_decrease_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_increase_decrease_out1:La valeur finale après augmentation ou diminution du pourcentage indiqué, à partir de la valeur initiale.`,
         $localize`:@@ed_math_percentages_percentage_increase_decrease_out2:Un résultat cohérent avec la méthode des coefficients multiplicateurs (ex. +10 % ⇒ ×1,10 ; −20 % ⇒ ×0,80).`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_increase_decrease_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_increase_decrease_lim1:Une baisse de X % puis une hausse de X % ne ramènent pas à la valeur initiale (les effets ne s’annulent pas).`,
@@ -59,7 +59,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_increase_decrease_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_increase_decrease_q1:Quelle est la formule pour augmenter ou diminuer de X % ?`,
@@ -80,7 +80,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_increase_decrease_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_increase_decrease_tip:Retenez les coefficients : +10 % = ×1,10 ; +25 % = ×1,25 ; −20 % = ×0,80. C’est souvent plus rapide (et moins risqué) que de calculer la part puis l’ajouter/retirer.`,
     },

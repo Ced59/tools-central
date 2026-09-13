@@ -4,7 +4,7 @@
     <div class="container">
       <div class="hero-content">
         <div class="hero-icon">
-          <i class="pi pi-sort-alpha-down"></i>
+          <i class="tc-icon tc-icon-sort-alpha-down"></i>
         </div>
         <h1 i18n="@@text_case_h1">Majuscules / Minuscules</h1>
         <p class="hero-subtitle" i18n="@@text_case_subtitle">
@@ -29,7 +29,7 @@
 
           <textarea
             id="input"
-            pTextarea
+            tcInput
             [autoResize]="false"
             rows="8"
             [formControl]="form.controls.input"
@@ -64,71 +64,71 @@
       <!-- Actions -->
       <div class="actions-row">
         <div class="mode-buttons">
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-arrow-up"
+            icon="tc-icon tc-icon-arrow-up"
             label="MAJUSCULES"
             i18n-label="@@text_case_btn_upper"
             (click)="applyMode('upper')"
             [outlined]="mode() !== 'upper'"
-          ></p-button>
+          ></tc-button>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-arrow-down"
+            icon="tc-icon tc-icon-arrow-down"
             label="minuscules"
             i18n-label="@@text_case_btn_lower"
             (click)="applyMode('lower')"
             [outlined]="mode() !== 'lower'"
-          ></p-button>
+          ></tc-button>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             label="Inverser"
             i18n-label="@@text_case_btn_invert"
             (click)="applyMode('invert')"
             [outlined]="mode() !== 'invert'"
-          ></p-button>
+          ></tc-button>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-align-left"
+            icon="tc-icon tc-icon-align-left"
             label="Phrases"
             i18n-label="@@text_case_btn_sentence"
             (click)="applyMode('sentence')"
             [outlined]="mode() !== 'sentence'"
-          ></p-button>
+          ></tc-button>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-book"
+            icon="tc-icon tc-icon-book"
             label="Titre"
             i18n-label="@@text_case_btn_title"
             (click)="applyMode('title')"
             [outlined]="mode() !== 'title'"
-          ></p-button>
+          ></tc-button>
         </div>
 
         <div class="utility-buttons">
-          <p-button
+          <tc-button
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-trash"
+            icon="tc-icon tc-icon-trash"
             label="Effacer"
             i18n-label="@@text_case_btn_clear"
             (click)="clear()"
-          ></p-button>
+          ></tc-button>
 
-          <p-button
+          <tc-button
             type="button"
-            icon="pi pi-copy"
+            icon="tc-icon tc-icon-copy"
             label="Copier le résultat"
             i18n-label="@@text_case_btn_copy"
             (click)="copy()"
             [disabled]="!output()"
-          ></p-button>
+          ></tc-button>
         </div>
       </div>
     </div>
@@ -212,7 +212,7 @@
         [routerLink]="['/categories/text/case']"
         i18n="@@text_case_back"
       >
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         Retour à la section “Casse du texte”
       </a>
     </div>

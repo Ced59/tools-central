@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_significant_figures_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_significant_figures_uc1_title:Sciences expérimentales`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_significant_figures_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_significant_figures_out1:L’outil identifie le nombre de chiffres significatifs d’une valeur.`,
         $localize`:@@ed_math_significant_figures_out2:Il aide à présenter les résultats avec une précision cohérente.`
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_significant_figures_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_significant_figures_lim1:Les règles dépendent du contexte scientifique ou scolaire.` },
         { text: $localize`:@@ed_math_significant_figures_lim2:Un mauvais arrondi peut donner une fausse impression de précision.` }
@@ -50,7 +50,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_significant_figures_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_significant_figures_q1:Tous les zéros sont-ils significatifs ?`,
@@ -66,7 +66,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_significant_figures_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_significant_figures_tip:Utiliser la notation scientifique permet souvent de clarifier le nombre de chiffres significatifs.`
     }

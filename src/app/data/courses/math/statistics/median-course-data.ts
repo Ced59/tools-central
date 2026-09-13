@@ -162,7 +162,7 @@ x_{(\frac{n+1}{2})} & n=2k+1\\[4pt]
       tags: [
         $localize`:@@median_tag_outliers:valeurs extrêmes`,
         $localize`:@@median_tag_skew:asymétrie`,
-        $localize`:@@median_tag_robust:robustesse`,
+        $localize`:@@median_tag_robustness:robustesse`,
       ],
       sections: [
         {

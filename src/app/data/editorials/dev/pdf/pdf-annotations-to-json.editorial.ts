@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_uc1_title:Audit de commentaires`, text: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_uc1_text:Lister les notes, surlignages et tampons avant d’archiver ou de transmettre un PDF annoté.` },
         { title: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_uc2_title:Migration d’annotations`, text: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_uc2_text:Extraire une structure JSON pour reconstituer les annotations dans un autre outil (GED, viewer, workflow QA).` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_annotations_to_json_out1:Un export JSON des annotations par page (type, rectangle, contenu, auteur, dates, flags, action associée).`,
         $localize`:@@ed_dev_pdf_pdf_annotations_to_json_out2:Des informations exploitables pour filtrer, comparer deux versions d’un PDF et automatiser un rapport d’audit.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_lim1:Certaines annotations peuvent avoir un rendu (appearance) complexe : le JSON décrit la structure, pas toujours l’apparence exacte.` },
         { text: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_lim2:Sur des PDF chiffrés ou très endommagés, l’extraction peut être partielle ou impossible.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_q1:Est-ce que l’outil modifie mon PDF ?`, a: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_a1:Non. Il lit le fichier et génère un JSON ; votre PDF d’origine reste inchangé.` },
         { q: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_q2:Les liens cliquables sont-ils inclus ?`, a: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_a2:Oui, la plupart des liens sont des annotations (URI / GoTo) et apparaissent dans l’export.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_annotations_to_json_tip:Pour un audit complet, combinez cet export avec “Liens PDF → JSON” et “Métadonnées PDF → JSON” afin de repérer à la fois les annotations, les URL et les infos de document.`,
     },

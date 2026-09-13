@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -17,6 +17,7 @@ export interface RelatedToolConfig {
   standalone: true,
   imports: [CommonModule, RouterLink],
   templateUrl: './related-tools.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './related-tools.component.scss',
 })
 export class RelatedToolsComponent implements OnInit, OnDestroy {
@@ -216,6 +217,6 @@ export class RelatedToolsComponent implements OnInit, OnDestroy {
   }
 
   getToolIcon(tool: AtomicToolItem): string {
-    return tool.icon ?? 'pi pi-calculator';
+    return tool.icon ?? 'tc-icon tc-icon-calculator';
   }
 }

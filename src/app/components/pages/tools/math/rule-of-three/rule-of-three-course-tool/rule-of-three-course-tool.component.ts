@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CoursePageComponent } from '../../../../../shared/course/course-page/course-page.component';
 import {ruleOfThreeCourseData} from "../../../../../../data/courses/math/rule-of-three.data";
 
@@ -7,6 +7,7 @@ import {ruleOfThreeCourseData} from "../../../../../../data/courses/math/rule-of
   selector: 'app-rule-of-three-course-tool',
   standalone: true,
   imports: [CoursePageComponent],
+  changeDetection: ChangeDetectionStrategy.Eager,
   templateUrl: './rule-of-three-course-tool.component.html',
 })
 export class RuleOfThreeCourseToolComponent {
