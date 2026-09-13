@@ -91,6 +91,14 @@ test('sitemap XML builder generates, validates and remains responsive', async ({
   await expect(page.locator('#sitemap-content')).toHaveValue(/caf%C3%A9\?tri=nom&amp;ordre=asc/);
   await expect(page.getByTestId('sitemap-analysis')).toContainText('1');
 
+  const largeEntries = Array.from(
+    { length: 2_000 },
+    (_, index) => `<url><loc>https://www.tools-central.com/page-${index}</loc></url>`,
+  ).join('');
+  await page.locator('#sitemap-content').fill(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${largeEntries}</urlset>`);
+  await expect(page.locator('.report-card')).toHaveAttribute('aria-busy', 'false', { timeout: 10_000 });
+  await expect(page.getByTestId('sitemap-analysis').locator('strong').nth(1)).toHaveText(/2.?000/);
+
   await page.locator('#sitemap-content').fill('<urlset>');
   await expect(page.getByText('Le document XML est mal formé', { exact: false })).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);

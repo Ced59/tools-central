@@ -71,6 +71,8 @@ export interface SitemapGeneration {
 
 interface XmlElement {
   name: string;
+  namespace: string | null;
+  namespaces: Map<string, string>;
   attributes: Map<string, string>;
   children: XmlElement[];
   text: string;
@@ -94,6 +96,13 @@ export function generateSitemapXml(settings: SitemapBuilderSettings): SitemapGen
   const issues: SitemapIssue[] = [];
   const entries: SitemapEntry[] = [];
   const seen = new Set<string>();
+  const entryName = settings.kind === 'urlset' ? 'url' : 'sitemap';
+  const outputLines = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    `<${settings.kind} xmlns="${SITEMAP_NAMESPACE}">`,
+  ];
+  const closingLine = `</${settings.kind}>`;
+  let outputBytes = utf8ByteLength(`${outputLines.join('\n')}\n${closingLine}\n`);
 
   const addIssue = issueCollector(issues);
   for (let index = 0; index < settings.lines.length; index += 1) {
@@ -138,30 +147,31 @@ export function generateSitemapXml(settings: SitemapBuilderSettings): SitemapGen
       addIssue({ code: 'future-lastmod', severity: 'warning', line, detail: rawLastmod });
     }
 
-    seen.add(location);
-    entries.push({
+    const entry: SitemapEntry = {
       loc: location,
       lastmod: rawLastmod || null,
       changefreq: null,
       priority: null,
       line,
-    });
-  }
+    };
+    const entryLines = [`  <${entryName}>`, `    <loc>${escapeXml(entry.loc)}</loc>`];
+    if (entry.lastmod) entryLines.push(`    <lastmod>${escapeXml(entry.lastmod)}</lastmod>`);
+    entryLines.push(`  </${entryName}>`);
+    const entryBytes = utf8ByteLength(`${entryLines.join('\n')}\n`);
+    if (outputBytes + entryBytes > SITEMAP_MAX_BYTES) {
+      addIssue({ code: 'file-too-large', severity: 'error', line });
+      break;
+    }
 
-  const entryName = settings.kind === 'urlset' ? 'url' : 'sitemap';
-  const lines = [
-    '<?xml version="1.0" encoding="UTF-8"?>',
-    `<${settings.kind} xmlns="${SITEMAP_NAMESPACE}">`,
-  ];
-  for (const entry of entries) {
-    lines.push(`  <${entryName}>`, `    <loc>${escapeXml(entry.loc)}</loc>`);
-    if (entry.lastmod) lines.push(`    <lastmod>${escapeXml(entry.lastmod)}</lastmod>`);
-    lines.push(`  </${entryName}>`);
+    outputBytes += entryBytes;
+    seen.add(location);
+    entries.push(entry);
+    outputLines.push(...entryLines);
   }
-  lines.push(`</${settings.kind}>`);
+  outputLines.push(closingLine);
 
   return {
-    content: `${lines.join('\n')}\n`,
+    content: `${outputLines.join('\n')}\n`,
     entries,
     issues,
     siteValid: siteOrigin !== null,
@@ -209,7 +219,7 @@ export function analyzeSitemapXml(
     addIssue({ code: 'invalid-sitemap-url', severity: 'error', line: null, detail: sitemapUrl });
   }
   const expectedEntryName = kind === 'urlset' ? 'url' : 'sitemap';
-  const entryElements = parsed.root.children.filter(child => localName(child.name) === expectedEntryName);
+  const entryElements = directChildren(parsed.root, expectedEntryName);
   if (!entryElements.length) {
     addIssue({ code: 'empty-sitemap', severity: 'warning', line: parsed.root.line });
   }
@@ -383,14 +393,21 @@ function parseXml(source: string): XmlParseResult {
     elementCount += 1;
     if (elementCount > MAX_XML_ELEMENTS) return fail('element-limit');
     if (stack.length >= MAX_XML_DEPTH) return fail('depth-limit');
+    const parent = stack.at(-1);
+    const namespaces = new Map(parent?.namespaces);
+    for (const [attributeName, value] of opening.attributes) {
+      if (attributeName === 'xmlns') namespaces.set('', value);
+      else if (attributeName.startsWith('xmlns:')) namespaces.set(attributeName.slice(6), value);
+    }
     const element: XmlElement = {
       name: opening.name,
+      namespace: namespaces.get(elementPrefix(opening.name)) ?? null,
+      namespaces,
       attributes: opening.attributes,
       children: [],
       text: '',
       line: tokenLine,
     };
-    const parent = stack.at(-1);
     if (parent) parent.children.push(element);
     else if (root) return fail('multiple-roots');
     else root = element;
@@ -461,7 +478,9 @@ function isValidXmlCodePoint(codePoint: number): boolean {
 }
 
 function directChildren(element: XmlElement, childName: string): XmlElement[] {
-  return element.children.filter(child => localName(child.name) === childName);
+  return element.children.filter(child =>
+    child.namespace === SITEMAP_NAMESPACE && localName(child.name) === childName,
+  );
 }
 
 function textContent(element: XmlElement): string {
@@ -472,11 +491,13 @@ function localName(name: string): string {
   return name.includes(':') ? name.slice(name.lastIndexOf(':') + 1) : name;
 }
 
+function elementPrefix(name: string): string {
+  const separator = name.indexOf(':');
+  return separator < 0 ? '' : name.slice(0, separator);
+}
+
 function rootNamespace(root: XmlElement): string | null {
-  const separator = root.name.indexOf(':');
-  return separator < 0
-    ? (root.attributes.get('xmlns') ?? null)
-    : (root.attributes.get(`xmlns:${root.name.slice(0, separator)}`) ?? null);
+  return root.namespace;
 }
 
 function parseHttpOrigin(value: string): string | null {

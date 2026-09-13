@@ -102,6 +102,13 @@ describe('analyzeSitemapXml', () => {
     expect(empty.issues.map(issue => issue.code)).toEqual(['invalid-namespace', 'empty-sitemap']);
   });
 
+  it('does not accept look-alike entries from a foreign XML namespace', () => {
+    const document = analyzeSitemapXml(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:x="urn:wrong"><x:url><x:loc>https://example.com/a</x:loc></x:url></urlset>`, 'https://example.com/sitemap.xml', TODAY);
+
+    expect(document.entries).toEqual([]);
+    expect(document.issues.map(issue => issue.code)).toEqual(['empty-sitemap']);
+  });
+
   it('reports missing, invalid, duplicate and overlong locations', () => {
     const longLocation = `https://example.com/${'a'.repeat(2040)}`;
     const document = analyzeSitemapXml(`<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

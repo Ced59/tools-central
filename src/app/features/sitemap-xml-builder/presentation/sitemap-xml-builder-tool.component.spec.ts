@@ -36,14 +36,14 @@ describe('SitemapXmlBuilderToolComponent', () => {
   });
 
   it('updates validation when malformed XML is pasted', () => {
-    component.content.set('<urlset>');
+    component.updateContent(inputEvent('<urlset>'));
 
     expect(component.errorCount()).toBeGreaterThan(0);
     expect(component.analysis().issues.map(issue => issue.code)).toContain('malformed-xml');
   });
 
   it('reports invalid and duplicate builder lines before generation', () => {
-    component.sourceLines.set('/ok\n/ok\nhttps://other.test/page');
+    component.updateSourceLines(inputEvent('/ok\n/ok\nhttps://other.test/page'));
 
     expect(component.builderValidation().issues.map(issue => issue.code)).toEqual([
       'duplicate-loc',
@@ -62,3 +62,7 @@ describe('SitemapXmlBuilderToolComponent', () => {
     expect(component.sourceLines()).toContain('/fr/');
   });
 });
+
+function inputEvent(value: string): Event {
+  return { target: { value } } as unknown as Event;
+}

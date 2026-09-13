@@ -63,7 +63,7 @@
           <small i18n="@@sitemap_builder_lines_help">Exemples : /produits/chaise | 2026-09-01 ou https://example.com/sitemap-articles.xml</small>
         </div>
 
-        <button class="primary-button" type="submit">
+        <button class="primary-button" type="submit" [disabled]="generationPending()">
           <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
           <span i18n="@@sitemap_builder_generate">Générer et remplacer l’éditeur</span>
         </button>
@@ -88,7 +88,7 @@
             <h2 i18n="@@sitemap_builder_editor_title">2. Éditer et valider le XML</h2>
             <p i18n="@@sitemap_builder_editor_subtitle">Collez aussi un sitemap existant : l’analyse se met à jour instantanément dans le navigateur.</p>
           </div>
-          <button class="download-button" type="button" [disabled]="!content().trim()" (click)="download()">
+          <button class="download-button" type="button" [disabled]="!content().trim() || errorCount() > 0 || analysisPending()" (click)="download()">
             <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
             <span i18n="@@sitemap_builder_download">Télécharger le XML</span>
           </button>
@@ -104,7 +104,7 @@
         </div>
       </div>
 
-      <aside class="tool-card report-card">
+      <aside class="tool-card report-card" [attr.aria-busy]="analysisPending()">
         <div class="card-header">
           <h2 i18n="@@sitemap_builder_report_title">Rapport de validation</h2>
           <p>

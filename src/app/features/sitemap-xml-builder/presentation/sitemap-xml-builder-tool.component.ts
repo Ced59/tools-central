@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, LOCALE_ID, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, LOCALE_ID, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import {
@@ -10,6 +10,10 @@ import {
   type SitemapKind,
 } from '../application/sitemap-xml.use-cases';
 import { BrowserSitemapXmlDownloadAdapter } from '../infrastructure/browser-sitemap-xml-download.adapter';
+import { BrowserSitemapXmlProcessingAdapter } from '../infrastructure/browser-sitemap-xml-processing.adapter';
+
+const LIVE_PROCESSING_CHARACTER_LIMIT = 100_000;
+const PROCESSING_DEBOUNCE_MS = 300;
 
 @Component({
   selector: 'app-sitemap-xml-builder-tool',
@@ -23,6 +27,8 @@ export class SitemapXmlBuilderToolComponent {
   private readonly generateUseCase = new GenerateSitemapXmlUseCase();
   private readonly analyzeUseCase = new AnalyzeSitemapXmlUseCase();
   private readonly downloadUseCase = new DownloadSitemapXmlUseCase(new BrowserSitemapXmlDownloadAdapter());
+  private readonly analysisProcessor = new BrowserSitemapXmlProcessingAdapter();
+  private readonly generationProcessor = new BrowserSitemapXmlProcessingAdapter();
   private readonly locale = inject(LOCALE_ID);
   private readonly numberFormatter = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 0 });
   private readonly todayIso = new Date().toISOString().slice(0, 10);
@@ -38,10 +44,10 @@ export class SitemapXmlBuilderToolComponent {
   readonly sourceLines = signal(this.defaults.lines);
   readonly content = signal(this.generateCurrent().content);
 
-  readonly builderValidation = computed(() => this.generateCurrent());
-  readonly analysis = computed(() =>
-    this.analyzeUseCase.execute(this.content(), this.sitemapUrl(), this.todayIso),
-  );
+  readonly builderValidation = signal(this.generateCurrent());
+  readonly analysis = signal(this.analyzeUseCase.execute(this.content(), this.sitemapUrl(), this.todayIso));
+  readonly analysisPending = signal(false);
+  readonly generationPending = signal(false);
   readonly errorCount = computed(() =>
     this.analysis().issues.filter(issue => issue.severity === 'error').length,
   );
@@ -51,6 +57,19 @@ export class SitemapXmlBuilderToolComponent {
   readonly infoCount = computed(() =>
     this.analysis().issues.filter(issue => issue.severity === 'info').length,
   );
+  private analysisTimer: ReturnType<typeof setTimeout> | null = null;
+  private generationTimer: ReturnType<typeof setTimeout> | null = null;
+  private analysisVersion = 0;
+  private generationVersion = 0;
+
+  constructor() {
+    inject(DestroyRef).onDestroy(() => {
+      this.clearAnalysisTimer();
+      this.clearGenerationTimer();
+      this.analysisProcessor.cancel();
+      this.generationProcessor.cancel();
+    });
+  }
 
   setKind(kind: SitemapKind): void {
     this.kind.set(kind);
@@ -67,22 +86,42 @@ export class SitemapXmlBuilderToolComponent {
 
   updateSiteUrl(event: Event): void {
     this.siteUrl.set(readValue(event));
+    this.scheduleBuilderValidation();
   }
 
   updateSitemapUrl(event: Event): void {
     this.sitemapUrl.set(readValue(event));
+    this.scheduleAnalysis();
   }
 
   updateSourceLines(event: Event): void {
     this.sourceLines.set(readValue(event));
+    this.scheduleBuilderValidation();
   }
 
   updateContent(event: Event): void {
     this.content.set(readValue(event).slice(0, 10_500_000));
+    this.scheduleAnalysis();
   }
 
   generate(): void {
-    this.content.set(this.generateCurrent().content);
+    this.clearGenerationTimer();
+    const version = ++this.generationVersion;
+    this.generationProcessor.cancel();
+    const settings = this.currentSettings();
+    if (this.sourceLines().length <= LIVE_PROCESSING_CHARACTER_LIMIT) {
+      this.applyGeneration(this.generateUseCase.execute(settings));
+      return;
+    }
+
+    this.generationPending.set(true);
+    void this.generationProcessor.generate(settings)
+      .then(result => {
+        if (version === this.generationVersion) this.applyGeneration(result);
+      })
+      .catch(() => {
+        if (version === this.generationVersion) this.applyGeneration(this.generateUseCase.execute(settings));
+      });
   }
 
   reset(): void {
@@ -94,6 +133,7 @@ export class SitemapXmlBuilderToolComponent {
   }
 
   download(): void {
+    if (this.errorCount() > 0 || this.analysisPending()) return;
     this.downloadUseCase.execute(this.content(), this.analysis().kind ?? this.kind());
   }
 
@@ -161,12 +201,88 @@ export class SitemapXmlBuilderToolComponent {
   }
 
   private generateCurrent(): SitemapGeneration {
-    return this.generateUseCase.execute({
+    return this.generateUseCase.execute(this.currentSettings());
+  }
+
+  private currentSettings() {
+    return {
       kind: this.kind(),
       siteUrl: this.siteUrl(),
       lines: this.sourceLines().split(/\r\n|\n|\r/u),
       todayIso: this.todayIso,
-    });
+    } as const;
+  }
+
+  private scheduleBuilderValidation(): void {
+    this.clearGenerationTimer();
+    const version = ++this.generationVersion;
+    this.generationProcessor.cancel();
+    const settings = this.currentSettings();
+    if (this.sourceLines().length <= LIVE_PROCESSING_CHARACTER_LIMIT) {
+      this.builderValidation.set(this.generateUseCase.execute(settings));
+      this.generationPending.set(false);
+      return;
+    }
+
+    this.generationPending.set(true);
+    this.generationTimer = setTimeout(() => {
+      void this.generationProcessor.generate(settings)
+        .then(result => {
+          if (version === this.generationVersion) this.builderValidation.set(result);
+        })
+        .catch(() => {
+          if (version === this.generationVersion) this.builderValidation.set(this.generateUseCase.execute(settings));
+        })
+        .finally(() => {
+          if (version === this.generationVersion) this.generationPending.set(false);
+        });
+    }, PROCESSING_DEBOUNCE_MS);
+  }
+
+  private scheduleAnalysis(): void {
+    this.clearAnalysisTimer();
+    const version = ++this.analysisVersion;
+    this.analysisProcessor.cancel();
+    const source = this.content();
+    const sitemapUrl = this.sitemapUrl();
+    if (source.length <= LIVE_PROCESSING_CHARACTER_LIMIT) {
+      this.analysis.set(this.analyzeUseCase.execute(source, sitemapUrl, this.todayIso));
+      this.analysisPending.set(false);
+      return;
+    }
+
+    this.analysisPending.set(true);
+    this.analysisTimer = setTimeout(() => {
+      void this.analysisProcessor.analyze(source, sitemapUrl, this.todayIso)
+        .then(result => {
+          if (version === this.analysisVersion) this.analysis.set(result);
+        })
+        .catch(() => {
+          if (version === this.analysisVersion) {
+            this.analysis.set(this.analyzeUseCase.execute(source, sitemapUrl, this.todayIso));
+          }
+        })
+        .finally(() => {
+          if (version === this.analysisVersion) this.analysisPending.set(false);
+        });
+    }, PROCESSING_DEBOUNCE_MS);
+  }
+
+  private applyGeneration(result: SitemapGeneration): void {
+    this.builderValidation.set(result);
+    this.content.set(result.content);
+    this.generationPending.set(false);
+    this.scheduleAnalysis();
+  }
+
+  private clearAnalysisTimer(): void {
+    if (this.analysisTimer !== null) clearTimeout(this.analysisTimer);
+    this.analysisTimer = null;
+  }
+
+  private clearGenerationTimer(): void {
+    if (this.generationTimer !== null) clearTimeout(this.generationTimer);
+    this.generationTimer = null;
   }
 
   private siteOrigin(): string {
