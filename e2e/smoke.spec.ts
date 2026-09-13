@@ -36,3 +36,17 @@ test('unknown routes return the localized 404 page', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Cette page est introuvable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+test('SERP snippet preview adapts its pixel budget to mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/fr/categories/dev/seo/serp-snippet-preview');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Prévisualiseur de snippet Google');
+  await expect(page.getByText('580 px', { exact: false })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Mobile' }).click();
+
+  await expect(page.getByText('520 px', { exact: false })).toBeVisible();
+  await expect(page.getByTestId('serp-preview')).toHaveClass(/browser-frame--mobile/);
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

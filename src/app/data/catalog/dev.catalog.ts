@@ -223,6 +223,34 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
     },
 
     // -------------------------------------------------------------------------
+    // SEO & Web
+    // -------------------------------------------------------------------------
+    seo: {
+      title: $localize`:@@group_dev_seo_title:SEO & Web`,
+      description: $localize`:@@group_dev_seo_desc:Préparer, analyser et valider les éléments visibles par les moteurs de recherche.`,
+      icon: 'tc-icon tc-icon-search',
+      available: true,
+      subGroups: {
+        search: {
+          title: $localize`:@@dev_seo_sg_search_title:Résultats de recherche`,
+          description: $localize`:@@dev_seo_sg_search_desc:Optimiser la présentation des pages dans les résultats de recherche.`,
+          order: 1,
+          tools: {
+            'serp-snippet-preview': {
+              title: $localize`:@@tool_serp_snippet_preview_title:Prévisualiseur de snippet Google`,
+              description: $localize`:@@tool_serp_snippet_preview_desc:Tester un titre, une meta description et une URL sur ordinateur et mobile avec une estimation de largeur en pixels.`,
+              icon: 'tc-icon tc-icon-search',
+              available: true,
+              loadComponent: () =>
+                import('../../features/serp-snippet-preview/presentation/serp-snippet-preview-tool.component')
+                  .then(m => m.SerpSnippetPreviewToolComponent),
+            },
+          },
+        },
+      },
+    },
+
+    // -------------------------------------------------------------------------
     // OOXML
     // -------------------------------------------------------------------------
     ooxml: {
