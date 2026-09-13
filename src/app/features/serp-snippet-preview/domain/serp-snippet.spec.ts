@@ -18,6 +18,14 @@ describe('analyzeSerpSnippet', () => {
     expect(result.displayUrl).toBe('tools-central.com › fr › categories › dev › seo');
   });
 
+  it('keeps a valid URL when a path segment contains an undecodable escape', () => {
+    const result = analyzeSerpSnippet({ ...BASE_INPUT, url: 'https://example.com/caf%E9' });
+
+    expect(result.urlValid).toBe(true);
+    expect(result.displayUrl).toBe('example.com › caf%E9');
+    expect(result.recommendations).not.toContain('url-invalid');
+  });
+
   it('preserves a complete leading grapheme for the favicon', () => {
     const result = analyzeSerpSnippet({ ...BASE_INPUT, siteName: '👨‍👩‍👧‍👦 Famille' });
 

@@ -146,9 +146,10 @@ function parseDisplayUrl(rawUrl: string): { display: string; valid: boolean } {
     }
 
     const host = parsed.hostname.replace(/^www\./i, '');
-    const path = decodeURIComponent(parsed.pathname)
+    const path = parsed.pathname
       .split('/')
       .filter(Boolean)
+      .map(decodePathSegment)
       .map(segment => segment.replace(/[-_]+/g, ' '))
       .join(' › ');
 
@@ -158,6 +159,14 @@ function parseDisplayUrl(rawUrl: string): { display: string; valid: boolean } {
     };
   } catch {
     return { display: trimmed, valid: false };
+  }
+}
+
+function decodePathSegment(segment: string): string {
+  try {
+    return decodeURIComponent(segment);
+  } catch {
+    return segment;
   }
 }
 
