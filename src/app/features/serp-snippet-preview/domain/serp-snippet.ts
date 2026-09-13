@@ -60,6 +60,7 @@ const LIMITS: Record<SerpDevice, DeviceLimits> = {
 };
 
 const GRAPHEME_SEGMENTER = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+const WIDE_CYRILLIC_GLYPHS = new Set(Array.from('ЖМФШЩЪЫЮжмфшщъыю'));
 
 export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis {
   const siteName = normalizeCollapsibleWhitespace(input.siteName);
@@ -211,7 +212,9 @@ function estimateGraphemeWidthEm(grapheme: string): number {
     if (/\p{Mark}|\u200d|\ufe0f/u.test(character)) continue;
     if (/\s/u.test(character)) em += 0.28;
     else if (/[ilI1|.,'`:;]/u.test(character)) em += 0.3;
+    else if (WIDE_CYRILLIC_GLYPHS.has(character)) em += 0.92;
     else if (/[mwMW@%#&]/u.test(character)) em += 0.86;
+    else if (/\p{Script=Cyrillic}/u.test(character)) em += /\p{Uppercase_Letter}/u.test(character) ? 0.68 : 0.56;
     else if (/[A-ZÀ-Þ]/u.test(character)) em += 0.66;
     else if (/\p{Script=Han}|\p{Script=Hiragana}|\p{Script=Katakana}|\p{Script=Hangul}/u.test(character)) em += 1;
     else em += 0.52;

@@ -137,4 +137,12 @@ describe('analyzeSerpSnippet', () => {
     expect(result.title.status).toBe('likely-truncated');
     expect(result.title.preview.endsWith('…')).toBe(true);
   });
+
+  it('detects wide Cyrillic titles that exceed the desktop result width', () => {
+    const result = analyzeSerpSnippet({ ...BASE_INPUT, title: 'Ш'.repeat(32) });
+
+    expect(result.title.estimatedPixels).toBeGreaterThan(580);
+    expect(result.title.status).toBe('likely-truncated');
+    expect(result.title.preview.endsWith('…')).toBe(true);
+  });
 });
