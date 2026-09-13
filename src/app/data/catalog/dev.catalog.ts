@@ -247,6 +247,22 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
             },
           },
         },
+        technical: {
+          title: $localize`:@@dev_seo_sg_technical_title:Exploration technique`,
+          description: $localize`:@@dev_seo_sg_technical_desc:Créer et contrôler les fichiers qui guident les robots d’exploration.`,
+          order: 2,
+          tools: {
+            'robots-txt-builder': {
+              title: $localize`:@@tool_robots_txt_builder_title:Générateur et validateur robots.txt`,
+              description: $localize`:@@tool_robots_txt_builder_desc:Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.`,
+              icon: 'tc-icon tc-icon-sitemap',
+              available: true,
+              loadComponent: () =>
+                import('../../features/robots-txt-builder/presentation/robots-txt-builder-tool.component')
+                  .then(m => m.RobotsTxtBuilderToolComponent),
+            },
+          },
+        },
       },
     },
 

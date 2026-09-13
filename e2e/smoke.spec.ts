@@ -62,3 +62,18 @@ test('SERP snippet preview adapts its pixel budget to mobile', async ({ page }) 
   }).toBe(true);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('robots.txt builder validates and simulates a blocking rule locally', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/robots-txt-builder');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Générateur et validateur robots.txt');
+  await expect(page.getByText('Aucun problème détecté')).toBeVisible();
+
+  await page.locator('#robots-content').fill('User-agent: *\nDisallow: /');
+  await expect(page.getByTestId('robots-decision')).toContainText('Exploration bloquée');
+
+  await page.locator('#robots-test-url').fill('/robots.txt');
+  await expect(page.getByTestId('robots-decision')).toContainText('Exploration autorisée');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
