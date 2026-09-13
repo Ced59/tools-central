@@ -10,6 +10,8 @@
 }
 
 .related-tools {
+  min-width: 0;
+  box-sizing: border-box;
   // Utiliser le même container que le reste de l'app
   max-width: var(--container-max-width, 1200px);
   margin: 2rem auto;
@@ -23,6 +25,12 @@
   @media (max-width: 1200px) {
     margin-left: 1rem;
     margin-right: 1rem;
+  }
+
+  @media (max-width: 420px) {
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
+    padding: 1rem;
   }
 }
 
@@ -47,6 +55,7 @@
 
 .related-grid {
   display: grid;
+  min-width: 0;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.875rem;
 
@@ -61,6 +70,9 @@
 
 .related-card {
   display: flex;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   align-items: center;
   gap: 0.875rem;
   padding: 0.875rem 1rem;

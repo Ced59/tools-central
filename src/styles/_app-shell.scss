@@ -21,6 +21,7 @@
 
 .header-inner {
   display: flex;
+  min-width: 0;
   justify-content: space-between;
   align-items: center;
   padding-top: 1rem;
@@ -49,6 +50,7 @@
 
 .header-actions {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 1rem;
 }
@@ -60,6 +62,7 @@
   color: var(--text-color);
   font: inherit;
   max-width: 12rem;
+  min-width: 0;
   min-height: 2.5rem;
   padding: .45rem .7rem;
 
@@ -67,6 +70,25 @@
     border-color: var(--primary-color);
     box-shadow: var(--focus-ring);
     outline: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-inner {
+    gap: 0.5rem;
+  }
+
+  .header-actions {
+    flex: 0 1 auto;
+    gap: 0.5rem;
+  }
+
+  .locale-select {
+    width: clamp(7.5rem, 40vw, 10rem);
+  }
+
+  .theme-toggle {
+    flex: 0 0 2.5rem;
   }
 }
 
