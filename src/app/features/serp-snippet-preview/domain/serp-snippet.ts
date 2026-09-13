@@ -63,8 +63,8 @@ const GRAPHEME_SEGMENTER = new Intl.Segmenter(undefined, { granularity: 'graphem
 
 export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis {
   const siteName = input.siteName.trim();
-  const title = input.title.trim();
-  const description = input.description.trim();
+  const title = normalizeCollapsibleWhitespace(input.title);
+  const description = normalizeCollapsibleWhitespace(input.description);
   const parsedUrl = parseDisplayUrl(input.url);
   const limits = LIMITS[input.device];
   const titleAnalysis = analyzeField(title, limits.title, 20);
@@ -84,6 +84,10 @@ export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis
     description: descriptionAnalysis,
     recommendations,
   };
+}
+
+function normalizeCollapsibleWhitespace(value: string): string {
+  return value.replace(/\s+/gu, ' ').trim();
 }
 
 function analyzeField(

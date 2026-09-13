@@ -198,6 +198,22 @@
   background: #dc2626;
 }
 
+:host-context(.dark-mode) {
+  .error-text,
+  .status--likely-truncated,
+  .status--missing {
+    color: #fca5a5 !important;
+  }
+
+  .status--balanced {
+    color: #86efac;
+  }
+
+  .status--concise {
+    color: #fde68a;
+  }
+}
+
 .reset-button {
   align-self: flex-start;
   display: inline-flex;

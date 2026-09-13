@@ -66,6 +66,18 @@ describe('analyzeSerpSnippet', () => {
     expect(visibleGraphemes.every(grapheme => grapheme === family)).toBe(true);
   });
 
+  it('measures the whitespace collapsed by the rendered preview', () => {
+    const result = analyzeSerpSnippet({
+      ...BASE_INPUT,
+      title: `A${' '.repeat(100)}\t\nB`,
+    });
+
+    expect(result.title.characters).toBe(3);
+    expect(result.title.estimatedPixels).toBe(estimateTextWidth('A B', 20));
+    expect(result.title.preview).toBe('A B');
+    expect(result.title.status).toBe('concise');
+  });
+
   it('handles very large pasted content in a single bounded pass', () => {
     const result = analyzeSerpSnippet({
       ...BASE_INPUT,
