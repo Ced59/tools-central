@@ -80658,6 +80658,588 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">请输入准确的产品令牌，例如Googlebot。</target>
       </segment>
     </unit>
+    <unit id="tool_sitemap_xml_builder_title">
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+        <target state="translated">XML网站地图生成器和验证器</target>
+      </segment>
+    </unit>
+    <unit id="tool_sitemap_xml_builder_desc">
+      <segment>
+        <source>Créer un sitemap d’URL ou un index, valider le XML, les dates, les limites et le périmètre, puis télécharger le fichier localement.</source>
+        <target state="translated">创建URL网站地图或索引，验证XML、日期、限制和范围，然后将文件下载到本地.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_title">
+      <segment>
+        <source>Créer et contrôler un sitemap XML utile</source>
+        <target state="translated">创建和管理有用的XML网站地图</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_lead">
+      <segment>
+        <source>Un sitemap aide les moteurs à découvrir les URL canoniques d’un site. Cet outil génère un fichier minimal, analyse un XML existant et explique les erreurs qui empêchent son exploitation correcte.</source>
+        <target state="translated">网站地图帮助搜索引擎发现网站的规范URL。此工具生成一个最小文件，分析现有XML并解释阻止其正确使用的错误.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用案例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_title">
+      <segment>
+        <source>Publier un premier sitemap</source>
+        <target state="translated">发布第一个网站地图</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_text">
+      <segment>
+        <source>Transformez une liste de chemins ou d’URL en document XML UTF-8 avec des adresses absolues, échappées et dédupliquées.</source>
+        <target state="translated">将路径或URL列表转换为带有绝对地址、转义和去重的UTF-8 XML文档.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">审核现有文件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_text">
+      <segment>
+        <source>Collez son contenu pour contrôler la syntaxe XML, l’espace de noms, les URL, les dates, les doublons et les limites du protocole.</source>
+        <target state="translated">粘贴其内容以检查XML语法、命名空间、URL、日期、重复项和协议限制.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_title">
+      <segment>
+        <source>Découper un grand site</source>
+        <target state="translated">拆分大型网站</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_text">
+      <segment>
+        <source>Générez plusieurs sitemaps de 50 000 entrées au maximum, puis rassemblez leurs URL dans un index de sitemaps.</source>
+        <target state="translated">生成最多50,000个条目的多个网站地图，然后将它们的URL汇总到一个网站地图索引中.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_1">
+      <segment>
+        <source>Listez uniquement les URL absolues et canoniques que vous souhaitez proposer à l’indexation. Écartez les redirections, erreurs, doublons, pages noindex et variantes de paramètres inutiles.</source>
+        <target state="translated">仅列出您希望提交给索引的绝对和规范URL。排除重定向、错误、重复、noindex页面和不必要的参数变体.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_2">
+      <segment>
+        <source>Ajoutez lastmod seulement si sa valeur reflète une modification significative de la page. Une date artificiellement rafraîchie à chaque génération réduit la confiance accordée à ce signal.</source>
+        <target state="translated">仅在其值反映页面的重大修改时添加lastmod。每次生成时人为刷新日期会降低对此信号的信任.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_3">
+      <segment>
+        <source>Publiez le fichier à une adresse stable, référencez-le dans robots.txt ou soumettez-le dans la console du moteur, puis surveillez les URL découvertes et indexées.</source>
+        <target state="translated">将文件发布到稳定地址，在robots.txt中引用它或在搜索引擎控制台中提交，然后监控发现和索引的URL.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">需要了解的限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_1">
+      <segment>
+        <source>Un sitemap ou un index contient au maximum 50 000 entrées et pèse au maximum 50 Mio avant compression. Utilisez plusieurs fichiers au-delà.</source>
+        <target state="translated">一个网站地图或索引最多包含50,000个条目，压缩前最大为50MB。超出此限制请使用多个文件.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_2">
+      <segment>
+        <source>L’emplacement du fichier détermine normalement son périmètre. Un sitemap placé dans un sous-répertoire ne devrait pas lister des URL situées plus haut sans mécanisme de soumission intersites vérifié.</source>
+        <target state="translated">文件的位置通常决定其范围。放置在子目录中的网站地图不应列出更高位置的URL，除非有经过验证的跨站点提交机制.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_3">
+      <segment>
+        <source>Google ignore les valeurs priority et changefreq. Le fichier est un indice de découverte, pas une garantie d’exploration, d’indexation ou de classement.</source>
+        <target state="translated">Google忽略priority和changefreq值。该文件是发现的指标，而不是爬取、索引或排名的保证.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q1">
+      <segment>
+        <source>Faut-il inclure toutes les pages du site ?</source>
+        <target state="translated">是否需要包含网站的所有页面？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a1">
+      <segment>
+        <source>Non. Incluez les versions canoniques, indexables et utiles. Un sitemap propre aide davantage au diagnostic qu’un inventaire contenant des URL techniques ou dupliquées.</source>
+        <target state="translated">不。包括规范、可索引和有用的版本。干净的网站地图比包含技术或重复URL的清单更有助于诊断.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q2">
+      <segment>
+        <source>Quelle différence entre sitemap et index de sitemaps ?</source>
+        <target state="translated">网站地图和网站地图索引有什么区别？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a2">
+      <segment>
+        <source>Un sitemap liste des pages dans des éléments url. Un index liste des fichiers sitemap dans des éléments sitemap et permet de répartir un grand ensemble.</source>
+        <target state="translated">网站地图在url元素中列出页面。索引在sitemap元素中列出网站地图文件，并允许分配大型集合.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q3">
+      <segment>
+        <source>Mes URL sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">我的URL是否发送到Tools Central？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a3">
+      <segment>
+        <source>Non. La génération, l’analyse et le téléchargement sont réalisés localement dans le navigateur. L’outil ne visite pas les URL saisies.</source>
+        <target state="translated">不。生成、分析和下载是在浏览器中本地完成的。该工具不会访问输入的URL.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip_title">
+      <segment>
+        <source>Un fichier minimal est souvent meilleur</source>
+        <target state="translated">一个最小文件通常更好</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip">
+      <segment>
+        <source>Commencez par loc et un lastmod fiable. N’ajoutez pas des balises facultatives pour remplir le fichier : chaque valeur doit avoir une signification opérationnelle.</source>
+        <target state="translated">从loc和可靠的lastmod开始。不要添加可选标签来填充文件：每个值都必须具有操作意义.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_title">
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+        <target state="translated">XML网站地图生成器和验证器</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_subtitle">
+      <segment>
+        <source> Créez un sitemap d’URL ou un index, contrôlez sa structure et téléchargez un XML prêt à publier. </source>
+        <target state="translated">创建URL网站地图或索引，检查其结构并下载准备发布的XML.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun fichier n’est envoyé.</source>
+        <target state="translated">100%本地处理：没有URL或文件被发送.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_title">
+      <segment>
+        <source>1. Préparer les entrées</source>
+        <target state="translated">1. 准备输入</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne au format « URL ou chemin | lastmod facultatif ». Les doublons et lignes invalides sont écartés.</source>
+        <target state="translated">每行一个输入，格式为“URL或路径 | 可选lastmod”。重复项和无效行将被排除.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_aria">
+      <segment>
+        <source>Type de sitemap</source>
+        <target state="translated">网站地图类型</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_urlset">
+      <segment>
+        <source>Sitemap d’URL</source>
+        <target state="translated">URL网站地图</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_index">
+      <segment>
+        <source>Index de sitemaps</source>
+        <target state="translated">网站地图索引</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_label">
+      <segment>
+        <source>Origine du site</source>
+        <target state="translated">网站来源</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_help">
+      <segment>
+        <source>Les chemins relatifs sont résolus depuis cette origine et les autres domaines sont refusés à la génération.</source>
+        <target state="translated">相对路径从此来源解析，其他域在生成时被拒绝.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_valid">
+      <segment>
+        <source>Origine valide</source>
+        <target state="translated">有效来源</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_invalid">
+      <segment>
+        <source>Saisissez une origine HTTP ou HTTPS valide</source>
+        <target state="translated">请输入有效的HTTP或HTTPS来源</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_label">
+      <segment>
+        <source>Adresse publique du sitemap analysé</source>
+        <target state="translated">分析的 sitemap 公共地址</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_help">
+      <segment>
+        <source>Elle sert à vérifier l’origine et le périmètre des URL, sans effectuer de requête réseau.</source>
+        <target state="translated">它用于验证 URL 的来源和范围，而无需进行网络请求.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_urls_label">
+      <segment>
+        <source>URL des pages</source>
+        <target state="translated">页面的 URL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_indexes_label">
+      <segment>
+        <source>URL des fichiers sitemap</source>
+        <target state="translated">sitemap 文件的 URL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_lines_help">
+      <segment>
+        <source>Exemples : /produits/chaise | 2026-09-01 ou https://example.com/sitemap-articles.xml</source>
+        <target state="translated">示例：/produits/chaise | 2026-09-01 或 https://example.com/sitemap-articles.xml</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">生成并替换编辑器</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_rejected_lines">
+      <segment>
+        <source>Lignes à corriger avant génération</source>
+        <target state="translated">生成前需修正的行</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">行</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider le XML</source>
+        <target state="translated">2. 编辑和验证 XML</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un sitemap existant : l’analyse se met à jour instantanément dans le navigateur.</source>
+        <target state="translated">也可以粘贴现有的 sitemap：分析会在浏览器中即时更新.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_download">
+      <segment>
+        <source>Télécharger le XML</source>
+        <target state="translated">下载 XML</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_content_label">
+      <segment>
+        <source>Contenu XML du sitemap</source>
+        <target state="translated">sitemap 的 XML 内容</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_entries">
+      <segment>
+        <source>entrées</source>
+        <target state="translated">条目</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_bytes">
+      <segment>
+        <source>octets UTF-8</source>
+        <target state="translated">UTF-8 字节</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">验证报告</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">信息</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">未检测到问题</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue_help">
+      <segment>
+        <source>Le fichier reste une indication aux moteurs : vérifiez les URL et publiez-le à l’adresse déclarée.</source>
+        <target state="translated">该文件仍然是对搜索引擎的指示：请检查 URL 并将其发布到声明的地址.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">文件</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_title">
+      <segment>
+        <source>3. Publier un signal utile</source>
+        <target state="translated">3. 发布有用的信号</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_title">
+      <segment>
+        <source>URL absolues et canoniques</source>
+        <target state="translated">绝对和规范的 URL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_text">
+      <segment>
+        <source>Listez uniquement les URL que vous souhaitez voir dans les résultats, avec le protocole et l’hôte définitifs.</source>
+        <target state="translated">仅列出您希望在结果中看到的 URL，带有最终的协议和主机.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_title">
+      <segment>
+        <source>lastmod doit être exact</source>
+        <target state="translated">lastmod 必须准确</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_text">
+      <segment>
+        <source>Indiquez la dernière modification significative de la page, pas la date de génération du sitemap.</source>
+        <target state="translated">指示页面的最后重大修改，而不是 sitemap 的生成日期.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_title">
+      <segment>
+        <source>50 000 URL ou 50 Mio</source>
+        <target state="translated">50,000 个 URL 或 50 Mio</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_text">
+      <segment>
+        <source>Scindez les ensembles plus grands et référencez les fichiers obtenus dans un index de sitemaps.</source>
+        <target state="translated">将更大的集合拆分，并在 sitemap 索引中引用获得的文件.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_title">
+      <segment>
+        <source>Un indice, jamais une garantie</source>
+        <target state="translated">一个指标，绝不是保证</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_text">
+      <segment>
+        <source>Google ignore priority et changefreq. Un sitemap facilite la découverte mais ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">Google 忽略优先级和更改频率。sitemap 促进发现，但不保证抓取、索引或排名.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">返回 SEO 工具</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_urlset">
+      <segment>
+        <source>Sitemap d’URL</source>
+        <target state="translated">URL sitemap</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_index">
+      <segment>
+        <source>Index de sitemaps</source>
+        <target state="translated">sitemap 索引</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_unknown">
+      <segment>
+        <source>Type non reconnu</source>
+        <target state="translated">未识别的类型</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse la limite de 50 Mio non compressés.</source>
+        <target state="translated">文件超过 50 Mio 的未压缩限制.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_analysis_limit">
+      <segment>
+        <source>L’analyse interactive est limitée à 10 Mio pour protéger le navigateur.</source>
+        <target state="translated">交互式分析限制为 10 Mio，以保护浏览器.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_doctype">
+      <segment>
+        <source>DOCTYPE est refusé afin d’éviter les entités externes et les traitements dangereux.</source>
+        <target state="translated">拒绝 DOCTYPE 以避免外部实体和危险处理.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_malformed">
+      <segment>
+        <source>Le document XML est mal formé ou contient une entité non autorisée.</source>
+        <target state="translated">XML 文档格式不正确或包含不允许的实体.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_root">
+      <segment>
+        <source>L’élément racine doit être urlset ou sitemapindex.</source>
+        <target state="translated">根元素必须是 urlset 或 sitemapindex.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_namespace">
+      <segment>
+        <source>L’espace de noms officiel du protocole Sitemap est absent ou incorrect.</source>
+        <target state="translated">缺少或不正确的 Sitemap 协议官方命名空间.</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_sitemap_url">
+      <segment>
+        <source>L’adresse publique du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Sitemap 的公共地址必须是绝对的 HTTP 或 HTTPS URL。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_empty">
+      <segment>
+        <source>Le sitemap ne contient aucune entrée.</source>
+        <target state="translated">Sitemap 不包含任何条目。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_too_many">
+      <segment>
+        <source>Un fichier ne peut pas contenir plus de 50 000 entrées.</source>
+        <target state="translated">一个文件不能包含超过 50,000 个条目。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_missing_loc">
+      <segment>
+        <source>L’entrée ne contient aucun élément loc obligatoire.</source>
+        <target state="translated">条目不包含任何必需的 loc 元素。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_multiple_loc">
+      <segment>
+        <source>L’entrée contient plusieurs éléments loc.</source>
+        <target state="translated">条目包含多个 loc 元素。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_invalid_loc">
+      <segment>
+        <source>loc doit contenir une URL HTTP ou HTTPS absolue valide.</source>
+        <target state="translated">loc 必须包含有效的绝对 HTTP 或 HTTPS URL。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_loc_long">
+      <segment>
+        <source>L’URL loc atteint ou dépasse 2 048 caractères.</source>
+        <target state="translated">loc URL 达到或超过 2,048 个字符。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_duplicate">
+      <segment>
+        <source>Cette URL est dupliquée dans le fichier.</source>
+        <target state="translated">此 URL 在文件中重复。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_origin">
+      <segment>
+        <source>L’URL utilise une autre origine ; vérifiez les règles de soumission intersites.</source>
+        <target state="translated">URL 使用了其他来源；请检查跨站点提交规则。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_scope">
+      <segment>
+        <source>L’URL se trouve hors du répertoire gouverné par l’emplacement du sitemap.</source>
+        <target state="translated">URL 位于 sitemap 位置管理的目录之外。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_lastmod">
+      <segment>
+        <source>La date lastmod doit respecter le format W3C, par exemple 2026-09-13.</source>
+        <target state="translated">lastmod 日期必须遵循 W3C 格式，例如 2026-09-13。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_future">
+      <segment>
+        <source>La date lastmod est dans le futur.</source>
+        <target state="translated">lastmod 日期在未来。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_changefreq">
+      <segment>
+        <source>La valeur changefreq n’appartient pas aux valeurs prévues par le protocole.</source>
+        <target state="translated">changefreq 值不属于协议规定的值。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_priority">
+      <segment>
+        <source>La priorité doit être un nombre compris entre 0 et 1.</source>
+        <target state="translated">优先级必须是介于 0 和 1 之间的数字。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_changefreq">
+      <segment>
+        <source>Google ignore changefreq ; ne l’utilisez pas comme signal de fraîcheur.</source>
+        <target state="translated">Google 忽略 changefreq；请不要将其用作新鲜度信号。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_priority">
+      <segment>
+        <source>Google ignore priority ; cette valeur n’améliore pas le classement.</source>
+        <target state="translated">Google 忽略 priority；此值不会提高排名。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_builder_line">
+      <segment>
+        <source>La ligne du générateur doit suivre le format « URL | lastmod facultatif ».</source>
+        <target state="translated">生成器行必须遵循格式 "URL | 可选的 lastmod"。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

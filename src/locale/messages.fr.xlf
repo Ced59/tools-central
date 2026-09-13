@@ -2991,6 +2991,7 @@
         <note category="location">src/app/features/percentage-of-number/presentation/percentage-of-number-tool.component.html:109,110</note>
         <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.html:240,241</note>
         <note category="location">src/app/features/serp-snippet-preview/presentation/serp-snippet-preview-tool.component.html:150,151</note>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:174,176</note>
       </notes>
       <segment>
         <source>Réinitialiser</source>
@@ -15419,9 +15420,25 @@
         <source>Générer, analyser et télécharger un fichier robots.txt, puis simuler l’accès à une URL pour un robot précis.</source>
       </segment>
     </unit>
+    <unit id="tool_sitemap_xml_builder_title">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:265</note>
+      </notes>
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+      </segment>
+    </unit>
+    <unit id="tool_sitemap_xml_builder_desc">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:266</note>
+      </notes>
+      <segment>
+        <source>Créer un sitemap d’URL ou un index, valider le XML, les dates, les limites et le périmètre, puis télécharger le fichier localement.</source>
+      </segment>
+    </unit>
     <unit id="group_dev_ooxml_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:273</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:282</note>
       </notes>
       <segment>
         <source>Open XML (OOXML)</source>
@@ -15429,7 +15446,7 @@
     </unit>
     <unit id="group_dev_ooxml_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:274</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:283</note>
       </notes>
       <segment>
         <source>Inspecter les conteneurs OOXML (ZIP/XML) : relations, content types, métadonnées…</source>
@@ -15437,7 +15454,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:279</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:288</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15445,7 +15462,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:280</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:289</note>
       </notes>
       <segment>
         <source>Explorer le ZIP OOXML (fichiers, relations, content types, métadonnées) et exporter en JSON.</source>
@@ -15453,7 +15470,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:283</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:292</note>
       </notes>
       <segment>
         <source>Explorer un package OOXML (ZIP)</source>
@@ -15461,7 +15478,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:283</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:292</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un DOCX/XLSX/PPTX, prévisualiser les XML, et télécharger une sélection.</source>
@@ -15469,7 +15486,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:284</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:293</note>
       </notes>
       <segment>
         <source>Relationships OOXML → JSON</source>
@@ -15477,7 +15494,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:284</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:293</note>
       </notes>
       <segment>
         <source>Exporter toutes les relations (_rels/*.rels) : targets, types, ids et graphe des dépendances.</source>
@@ -15485,7 +15502,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:285</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:294</note>
       </notes>
       <segment>
         <source>[Content_Types].xml → JSON</source>
@@ -15493,7 +15510,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:285</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:294</note>
       </notes>
       <segment>
         <source>Inspecter les types de contenu déclarés (defaults/overrides) et détecter les incohérences.</source>
@@ -15501,7 +15518,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:286</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:295</note>
       </notes>
       <segment>
         <source>Métadonnées OOXML → JSON</source>
@@ -15509,7 +15526,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:286</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:295</note>
       </notes>
       <segment>
         <source>Extraire docProps (core/app/custom) : auteur, dates, application, titres, tags, etc.</source>
@@ -15517,7 +15534,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:287</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:296</note>
       </notes>
       <segment>
         <source>Médias OOXML → JSON</source>
@@ -15525,7 +15542,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:287</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:296</note>
       </notes>
       <segment>
         <source>Inventorier les médias (images/audio/vidéo) et leurs références (rels).</source>
@@ -15533,7 +15550,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:291</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:300</note>
       </notes>
       <segment>
         <source>Validation &amp; cohérence</source>
@@ -15541,7 +15558,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:292</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:301</note>
       </notes>
       <segment>
         <source>Vérifier la cohérence des relationships, références manquantes, content types, et produire un diagnostic.</source>
@@ -15549,7 +15566,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:295</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:304</note>
       </notes>
       <segment>
         <source>Vérifier l&apos;intégrité OOXML</source>
@@ -15557,7 +15574,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:295</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:304</note>
       </notes>
       <segment>
         <source>Détecter targets manquants, rels orphelins, content types incohérents et générer un rapport.</source>
@@ -15565,7 +15582,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:299</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:308</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -15573,7 +15590,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:300</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:309</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées, supprimer des parties, regénérer un package OOXML minimal.</source>
@@ -15581,7 +15598,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:303</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:312</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées OOXML</source>
@@ -15589,7 +15606,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:303</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:312</note>
       </notes>
       <segment>
         <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
@@ -15597,7 +15614,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:307</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:316</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -15605,7 +15622,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:308</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:317</note>
       </notes>
       <segment>
         <source>Graph des relations, arbre des parts, inspection des namespaces et fragments XML.</source>
@@ -15613,7 +15630,7 @@
     </unit>
     <unit id="tool_ooxml_diff_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:311</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:320</note>
       </notes>
       <segment>
         <source>Comparer 2 packages OOXML</source>
@@ -15621,7 +15638,7 @@
     </unit>
     <unit id="tool_ooxml_diff_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:311</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:320</note>
       </notes>
       <segment>
         <source>Comparer deux fichiers (DOCX/XLSX/PPTX) : diff par part (XML) + changements de médias et de relations.</source>
@@ -15629,7 +15646,7 @@
     </unit>
     <unit id="group_dev_word_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:321</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:330</note>
       </notes>
       <segment>
         <source>Word (DOCX)</source>
@@ -15637,7 +15654,7 @@
     </unit>
     <unit id="group_dev_word_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:322</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
       </notes>
       <segment>
         <source>Analyse et extraction de documents Word : texte, styles, champs, images, révisions…</source>
@@ -15645,7 +15662,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:327</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:336</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15653,7 +15670,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:328</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:337</note>
       </notes>
       <segment>
         <source>Texte, styles, polices, champs, images, liens, tables, en-têtes/pieds, notes et révisions.</source>
@@ -15661,7 +15678,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
       </notes>
       <segment>
         <source>DOCX → texte</source>
@@ -15669,7 +15686,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un DOCX (paragraphes, listes, tableaux) et l&apos;exporter (TXT/JSON).</source>
@@ -15677,7 +15694,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:332</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:341</note>
       </notes>
       <segment>
         <source>Styles DOCX → JSON</source>
@@ -15685,7 +15702,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:332</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:341</note>
       </notes>
       <segment>
         <source>Exporter les styles (paragraph/character/table) et leurs propriétés (héritage, basés sur, liens).</source>
@@ -15693,7 +15710,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:333</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:342</note>
       </notes>
       <segment>
         <source>Polices DOCX → JSON</source>
@@ -15701,7 +15718,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:333</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:342</note>
       </notes>
       <segment>
         <source>Lister les polices utilisées (runs/styles) et détecter celles qui ne sont jamais appliquées.</source>
@@ -15709,7 +15726,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:334</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:343</note>
       </notes>
       <segment>
         <source>Listes &amp; numérotation → JSON</source>
@@ -15717,7 +15734,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:334</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:343</note>
       </notes>
       <segment>
         <source>Exporter numbering.xml : niveaux, formats, indentations, numId/abstractNumId, et mapping par paragraphes.</source>
@@ -15725,7 +15742,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:335</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:344</note>
       </notes>
       <segment>
         <source>Commentaires DOCX → JSON</source>
@@ -15733,7 +15750,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:335</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:344</note>
       </notes>
       <segment>
         <source>Extraire comments.xml : auteurs, dates, ancres, contenu et statistiques.</source>
@@ -15741,7 +15758,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:336</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:345</note>
       </notes>
       <segment>
         <source>Révisions (track changes) → JSON</source>
@@ -15749,7 +15766,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:336</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:345</note>
       </notes>
       <segment>
         <source>Détecter insertions/suppressions, auteurs, dates et exporter un rapport de révisions.</source>
@@ -15757,7 +15774,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:337</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:346</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un DOCX</source>
@@ -15765,7 +15782,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:337</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:346</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + champs) et exporter en JSON/texte.</source>
@@ -15773,7 +15790,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:338</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:347</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un DOCX</source>
@@ -15781,7 +15798,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:338</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:347</note>
       </notes>
       <segment>
         <source>Extraire /word/media/* et produire un inventaire (dimensions, type, références).</source>
@@ -15789,7 +15806,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:339</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:348</note>
       </notes>
       <segment>
         <source>En-têtes &amp; pieds de page → JSON</source>
@@ -15797,7 +15814,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:339</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:348</note>
       </notes>
       <segment>
         <source>Exporter header*.xml/footer*.xml, avec leurs rels, et distinguer first/even/default.</source>
@@ -15805,7 +15822,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:349</note>
       </notes>
       <segment>
         <source>Notes de bas de page → JSON</source>
@@ -15813,7 +15830,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:349</note>
       </notes>
       <segment>
         <source>Extraire footnotes.xml et endnotes.xml : contenu, ancres et statistiques.</source>
@@ -15821,7 +15838,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:341</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:350</note>
       </notes>
       <segment>
         <source>Champs Word → JSON</source>
@@ -15829,7 +15846,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:341</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:350</note>
       </notes>
       <segment>
         <source>Détecter les champs (TOC, PAGE, REF, DATE, IF, etc.) et exporter leurs codes/instructions.</source>
@@ -15837,7 +15854,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:342</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:351</note>
       </notes>
       <segment>
         <source>MERGEFIELD (mail merge) → JSON</source>
@@ -15845,7 +15862,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:342</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:351</note>
       </notes>
       <segment>
         <source>Extraire la liste des champs de fusion (MERGEFIELD) et vérifier doublons/variantes/formatage.</source>
@@ -15853,7 +15870,7 @@
     </unit>
     <unit id="dev_word_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:346</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:355</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -15861,7 +15878,7 @@
     </unit>
     <unit id="dev_word_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:347</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:356</note>
       </notes>
       <segment>
         <source>Audit de compatibilité (styles, polices manquantes, liens cassés), et vérifs de conformité basiques.</source>
@@ -15869,7 +15886,7 @@
     </unit>
     <unit id="tool_docx_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:350</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:359</note>
       </notes>
       <segment>
         <source>DOCM : détecter les macros</source>
@@ -15877,7 +15894,7 @@
     </unit>
     <unit id="tool_docx_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:350</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:359</note>
       </notes>
       <segment>
         <source>Détecter la présence de vbaProject.bin (DOCM/DOTM) et exporter un diagnostic (sans exécution).</source>
@@ -15885,7 +15902,7 @@
     </unit>
     <unit id="tool_docx_style_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:351</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:360</note>
       </notes>
       <segment>
         <source>Audit de styles (DOCX)</source>
@@ -15893,7 +15910,7 @@
     </unit>
     <unit id="tool_docx_style_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:351</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:360</note>
       </notes>
       <segment>
         <source>Détecter styles dupliqués, non utilisés, overrides excessifs et incohérences typographiques.</source>
@@ -15901,7 +15918,7 @@
     </unit>
     <unit id="dev_word_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:355</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:364</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -15909,7 +15926,7 @@
     </unit>
     <unit id="dev_word_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:356</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:365</note>
       </notes>
       <segment>
         <source>Remplacement de placeholders, nettoyage (métadonnées), normalisation de styles, extraction en Markdown/HTML (approx).</source>
@@ -15917,7 +15934,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:359</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:368</note>
       </notes>
       <segment>
         <source>Remplacer des placeholders (DOCX)</source>
@@ -15925,7 +15942,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:359</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:368</note>
       </notes>
       <segment>
         <source>Remplacer des balises (ex: {{name}}) en respectant les runs et produire un DOCX de sortie.</source>
@@ -15933,7 +15950,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:360</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (DOCX)</source>
@@ -15941,7 +15958,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:360</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
       </notes>
       <segment>
         <source>Supprimer/normaliser les infos personnelles : docProps, commentaires, auteurs de révisions (optionnel).</source>
@@ -15949,7 +15966,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:361</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:370</note>
       </notes>
       <segment>
         <source>DOCX → Markdown (approx)</source>
@@ -15957,7 +15974,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:361</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:370</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens, images référencées.</source>
@@ -15965,7 +15982,7 @@
     </unit>
     <unit id="dev_word_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:365</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:374</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -15973,7 +15990,7 @@
     </unit>
     <unit id="dev_word_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:366</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:375</note>
       </notes>
       <segment>
         <source>Inspection des parts WordprocessingML (document.xml, numbering, styles, rels) et export JSON/graph.</source>
@@ -15981,7 +15998,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
       </notes>
       <segment>
         <source>Viewer XML WordprocessingML</source>
@@ -15989,7 +16006,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
       </notes>
       <segment>
         <source>Explorer document.xml/styles.xml/numbering.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -15997,7 +16014,7 @@
     </unit>
     <unit id="group_dev_excel_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:379</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:388</note>
       </notes>
       <segment>
         <source>Excel (XLSX)</source>
@@ -16005,7 +16022,7 @@
     </unit>
     <unit id="group_dev_excel_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:380</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:389</note>
       </notes>
       <segment>
         <source>Inspecter des fichiers Excel : feuilles, formules, styles, chaînes partagées, médias…</source>
@@ -16013,7 +16030,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:385</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:394</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16021,7 +16038,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:386</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
       </notes>
       <segment>
         <source>Feuilles, cellules, styles, sharedStrings, noms définis, formules, charts et médias.</source>
@@ -16029,7 +16046,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:389</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:398</note>
       </notes>
       <segment>
         <source>Feuilles XLSX → JSON</source>
@@ -16037,7 +16054,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:389</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:398</note>
       </notes>
       <segment>
         <source>Lister les feuilles (noms, états visibles/hidden, ids) et exporter la structure workbook.xml en JSON.</source>
@@ -16045,7 +16062,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:390</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:399</note>
       </notes>
       <segment>
         <source>Plage XLSX → CSV</source>
@@ -16053,7 +16070,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:390</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:399</note>
       </notes>
       <segment>
         <source>Extraire une plage (A1:D42) d&apos;une feuille et l&apos;exporter en CSV (en gérant sharedStrings et types de cellules).</source>
@@ -16061,7 +16078,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
       </notes>
       <segment>
         <source>Formules XLSX → JSON</source>
@@ -16069,7 +16086,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
       </notes>
       <segment>
         <source>Extraire les formules (f) et leurs adresses, détecter les formules partagées et produire un inventaire.</source>
@@ -16077,7 +16094,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:401</note>
       </notes>
       <segment>
         <source>Noms définis → JSON</source>
@@ -16085,7 +16102,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:401</note>
       </notes>
       <segment>
         <source>Exporter les definedNames : plages nommées, constantes, formules et portée (workbook/sheet).</source>
@@ -16093,7 +16110,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:393</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:402</note>
       </notes>
       <segment>
         <source>Styles XLSX → JSON</source>
@@ -16101,7 +16118,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:393</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:402</note>
       </notes>
       <segment>
         <source>Inspecter styles.xml (formats, fonts, fills, borders, numFmts) et produire un rapport lisible.</source>
@@ -16109,7 +16126,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:394</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:403</note>
       </notes>
       <segment>
         <source>SharedStrings → JSON</source>
@@ -16117,7 +16134,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:394</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:403</note>
       </notes>
       <segment>
         <source>Exporter sharedStrings.xml, stats (taille, doublons) et mapping vers les cellules.</source>
@@ -16125,7 +16142,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
       </notes>
       <segment>
         <source>Charts &amp; médias (XLSX)</source>
@@ -16133,7 +16150,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
       </notes>
       <segment>
         <source>Inventorier charts, drawings et médias, et exporter les relations vers /xl/media/* et /xl/charts/* .</source>
@@ -16141,7 +16158,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:399</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:408</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16149,7 +16166,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:409</note>
       </notes>
       <segment>
         <source>Détecter feuilles cachées, références cassées, formules invalides (surface), protections et compatibilité.</source>
@@ -16157,7 +16174,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:403</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:412</note>
       </notes>
       <segment>
         <source>Détecter les feuilles cachées</source>
@@ -16165,7 +16182,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:403</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:412</note>
       </notes>
       <segment>
         <source>Détecter sheets hidden/veryHidden, états de workbook et exporter un rapport de visibilité.</source>
@@ -16173,7 +16190,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:413</note>
       </notes>
       <segment>
         <source>Protection XLSX (audit)</source>
@@ -16181,7 +16198,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:413</note>
       </notes>
       <segment>
         <source>Détecter workbookProtection/sheetProtection (présence, options) et exporter un diagnostic (sans contournement).</source>
@@ -16189,7 +16206,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
       </notes>
       <segment>
         <source>XLSM : détecter les macros</source>
@@ -16197,7 +16214,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (XLSM/XLTM) et exporter un diagnostic (sans exécution).</source>
@@ -16205,7 +16222,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:409</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:418</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16213,7 +16230,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:410</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:419</note>
       </notes>
       <segment>
         <source>Exporter vers CSV/JSON, supprimer des feuilles, nettoyer des métadonnées, normaliser des styles.</source>
@@ -16221,7 +16238,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:413</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
       </notes>
       <segment>
         <source>Supprimer les feuilles cachées (XLSX)</source>
@@ -16229,7 +16246,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:413</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
       </notes>
       <segment>
         <source>Créer une copie en supprimant les feuilles hidden/veryHidden (best-effort, package-level).</source>
@@ -16237,7 +16254,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:423</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (XLSX)</source>
@@ -16245,7 +16262,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:423</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16253,7 +16270,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:418</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:427</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16261,7 +16278,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:419</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:428</note>
       </notes>
       <segment>
         <source>Explorer SpreadsheetML (workbook, worksheets, styles) et le graphe de relations OOXML.</source>
@@ -16269,7 +16286,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:431</note>
       </notes>
       <segment>
         <source>Viewer XML SpreadsheetML</source>
@@ -16277,7 +16294,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:431</note>
       </notes>
       <segment>
         <source>Explorer workbook.xml, worksheets, styles.xml et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16285,7 +16302,7 @@
     </unit>
     <unit id="group_dev_powerpoint_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:432</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:441</note>
       </notes>
       <segment>
         <source>PowerPoint (PPTX)</source>
@@ -16293,7 +16310,7 @@
     </unit>
     <unit id="group_dev_powerpoint_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:433</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
       </notes>
       <segment>
         <source>Extraction et audit de slides : texte, notes, thèmes, médias, animations…</source>
@@ -16301,7 +16318,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:438</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:447</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16309,7 +16326,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:448</note>
       </notes>
       <segment>
         <source>Texte des slides, notes, médias, thèmes, polices, liens et infos de deck.</source>
@@ -16317,7 +16334,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:451</note>
       </notes>
       <segment>
         <source>Slides PPTX → JSON</source>
@@ -16325,7 +16342,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:451</note>
       </notes>
       <segment>
         <source>Lister les slides, layouts, masters et exporter la structure PresentationML en JSON.</source>
@@ -16333,7 +16350,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:443</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
       </notes>
       <segment>
         <source>PPTX → texte</source>
@@ -16341,7 +16358,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:443</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
       </notes>
       <segment>
         <source>Extraire le texte des slides (shapes) et l&apos;exporter (TXT/JSON) avec repères slide/shape.</source>
@@ -16349,7 +16366,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:444</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:453</note>
       </notes>
       <segment>
         <source>Notes de présentation → JSON</source>
@@ -16357,7 +16374,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:444</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:453</note>
       </notes>
       <segment>
         <source>Extraire les notes (notesSlides) et les associer aux slides.</source>
@@ -16365,7 +16382,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
       </notes>
       <segment>
         <source>Polices PPTX → JSON</source>
@@ -16373,7 +16390,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
       </notes>
       <segment>
         <source>Inventorier les polices utilisées (thèmes + runs) et produire un rapport exploitable.</source>
@@ -16381,7 +16398,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:446</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
       </notes>
       <segment>
         <source>Extraire les médias (PPTX)</source>
@@ -16389,7 +16406,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:446</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
       </notes>
       <segment>
         <source>Extraire images/audio/vidéo de /ppt/media/* et exporter un inventaire avec références (rels).</source>
@@ -16397,7 +16414,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:447</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un PPTX</source>
@@ -16405,7 +16422,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:447</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + actions) et exporter en JSON/texte.</source>
@@ -16413,7 +16430,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:451</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:460</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16421,7 +16438,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:461</note>
       </notes>
       <segment>
         <source>Audit de cohérence (liens, médias manquants), compatibilité et état des animations/transitions (surface).</source>
@@ -16429,7 +16446,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
       </notes>
       <segment>
         <source>Audit animations/transitions</source>
@@ -16437,7 +16454,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
       </notes>
       <segment>
         <source>Détecter animations/transitions (timing) et exporter un rapport (surface) par slide.</source>
@@ -16445,7 +16462,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
       </notes>
       <segment>
         <source>PPTM : détecter les macros</source>
@@ -16453,7 +16470,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (PPTM/POTM) et exporter un diagnostic (sans exécution).</source>
@@ -16461,7 +16478,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:460</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16469,7 +16486,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:461</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:470</note>
       </notes>
       <segment>
         <source>Exporter texte, nettoyer métadonnées, extraire médias, regrouper/filtrer slides (approche package).</source>
@@ -16477,7 +16494,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (PPTX)</source>
@@ -16485,7 +16502,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16493,7 +16510,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:468</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:477</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16501,7 +16518,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:478</note>
       </notes>
       <segment>
         <source>Explorer PresentationML (slides, layouts, masters) et relationships.</source>
@@ -16509,7 +16526,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:472</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
       </notes>
       <segment>
         <source>Viewer XML PresentationML</source>
@@ -16517,7 +16534,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:472</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
       </notes>
       <segment>
         <source>Explorer presentation.xml, slides, masters/layouts et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16525,7 +16542,7 @@
     </unit>
     <unit id="group_dev_odf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:482</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
       </notes>
       <segment>
         <source>OpenDocument (ODF)</source>
@@ -16533,7 +16550,7 @@
     </unit>
     <unit id="group_dev_odf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : inspection ZIP/XML, texte, styles, métadonnées, médias…</source>
@@ -16541,7 +16558,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:488</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16549,7 +16566,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:489</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:498</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : explorer le ZIP ODF, extraire texte, styles, métadonnées et médias.</source>
@@ -16557,7 +16574,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:501</note>
       </notes>
       <segment>
         <source>Explorer un package ODF (ZIP)</source>
@@ -16565,7 +16582,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:501</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un ODT/ODS/ODP, prévisualiser content.xml/styles.xml/meta.xml et télécharger une sélection.</source>
@@ -16573,7 +16590,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:493</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:502</note>
       </notes>
       <segment>
         <source>ODT → texte</source>
@@ -16581,7 +16598,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:493</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:502</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un ODT (paragraphes, listes, tableaux simples) et l&apos;exporter (TXT/JSON).</source>
@@ -16589,7 +16606,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:494</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:503</note>
       </notes>
       <segment>
         <source>Styles ODT → JSON</source>
@@ -16597,7 +16614,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:494</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:503</note>
       </notes>
       <segment>
         <source>Exporter les styles ODF (styles.xml) : paragraphes, caractères, pages, et propriétés héritées.</source>
@@ -16605,7 +16622,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:495</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:504</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un ODT</source>
@@ -16613,7 +16630,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:495</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:504</note>
       </notes>
       <segment>
         <source>Extraire /Pictures/*, produire un inventaire (type, taille) et associer les images à leurs ancres dans content.xml.</source>
@@ -16621,7 +16638,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:496</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
       </notes>
       <segment>
         <source>Feuilles ODS → JSON</source>
@@ -16629,7 +16646,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:496</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
       </notes>
       <segment>
         <source>Lister les tables/feuilles (content.xml) et exporter la structure (noms, répétitions de colonnes/lignes).</source>
@@ -16637,7 +16654,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
       </notes>
       <segment>
         <source>Slides ODP → JSON</source>
@@ -16645,7 +16662,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
       </notes>
       <segment>
         <source>Lister les pages/diapos (content.xml) et exporter une structure exploitable (slides, shapes texte).</source>
@@ -16653,7 +16670,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:498</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:507</note>
       </notes>
       <segment>
         <source>Métadonnées ODF → JSON</source>
@@ -16661,7 +16678,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:498</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:507</note>
       </notes>
       <segment>
         <source>Extraire meta.xml : titre, auteur, dates, générateur, mots-clés, et statistiques document.</source>
@@ -16669,7 +16686,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:502</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:511</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16677,7 +16694,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:503</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:512</note>
       </notes>
       <segment>
         <source>Vérifier le manifest, les références de médias, et l&apos;intégrité des fichiers XML clés (content/styles/meta).</source>
@@ -16685,7 +16702,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:515</note>
       </notes>
       <segment>
         <source>Vérifier le manifest ODF</source>
@@ -16693,7 +16710,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:515</note>
       </notes>
       <segment>
         <source>Contrôler META-INF/manifest.xml : fichiers référencés, media-types, et références manquantes.</source>
@@ -16701,7 +16718,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:510</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:519</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16709,7 +16726,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:511</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:520</note>
       </notes>
       <segment>
         <source>Exporter vers texte/JSON, nettoyer des métadonnées, extraire médias, conversion simple (approximative).</source>
@@ -16717,7 +16734,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:514</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (ODF)</source>
@@ -16725,7 +16742,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:514</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
       </notes>
       <segment>
         <source>Nettoyer meta.xml (auteur, générateur, historiques) et produire un ODF &quot;privacy-first&quot;.</source>
@@ -16733,7 +16750,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:515</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
       </notes>
       <segment>
         <source>ODT → Markdown (approx)</source>
@@ -16741,7 +16758,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:515</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens et images référencées.</source>
@@ -16749,7 +16766,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:519</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16757,7 +16774,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:520</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:529</note>
       </notes>
       <segment>
         <source>Inspecter content.xml/styles.xml et le manifest ODF, avec export JSON.</source>
@@ -16765,7 +16782,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:532</note>
       </notes>
       <segment>
         <source>Viewer XML OpenDocument</source>
@@ -16773,7 +16790,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:532</note>
       </notes>
       <segment>
         <source>Explorer content.xml/styles.xml/meta.xml/manifest.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -16781,7 +16798,7 @@
     </unit>
     <unit id="group_dev_rtf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:533</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:542</note>
       </notes>
       <segment>
         <source>RTF</source>
@@ -16789,7 +16806,7 @@
     </unit>
     <unit id="group_dev_rtf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:543</note>
       </notes>
       <segment>
         <source>Outils legacy sur fichiers RTF : extraction texte, audit, conversion simple.</source>
@@ -16797,7 +16814,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:539</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:548</note>
       </notes>
       <segment>
         <source>Extraction</source>
@@ -16805,7 +16822,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:540</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:549</note>
       </notes>
       <segment>
         <source>Extraire le texte, détecter encodage, et récupérer des informations de base (polices, couleurs).</source>
@@ -16813,7 +16830,7 @@
     </unit>
     <unit id="tool_rtf_to_text_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:543</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:552</note>
       </notes>
       <segment>
         <source>RTF → texte</source>
@@ -16821,7 +16838,7 @@
     </unit>
     <unit id="tool_rtf_to_text_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:543</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:552</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un fichier RTF (best-effort) et exporter en TXT/JSON.</source>
@@ -16829,7 +16846,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:544</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
       </notes>
       <segment>
         <source>Table des polices RTF → JSON</source>
@@ -16837,7 +16854,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:544</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
       </notes>
       <segment>
         <source>Extraire la fonttbl (polices déclarées) et produire un inventaire.</source>
@@ -16845,7 +16862,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:548</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:557</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -16853,7 +16870,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:549</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:558</note>
       </notes>
       <segment>
         <source>Convertir RTF → texte/HTML/JSON simplifié (fidélité limitée).</source>
@@ -16861,7 +16878,7 @@
     </unit>
     <unit id="tool_rtf_to_html_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:552</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
       </notes>
       <segment>
         <source>RTF → HTML (approx)</source>
@@ -16869,7 +16886,7 @@
     </unit>
     <unit id="tool_rtf_to_html_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:552</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; vers HTML simple (paragraphes, gras/italique, listes limitées).</source>
@@ -16877,7 +16894,7 @@
     </unit>
     <unit id="tool_rtf_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:562</note>
       </notes>
       <segment>
         <source>RTF → JSON (structure)</source>
@@ -16885,7 +16902,7 @@
     </unit>
     <unit id="tool_rtf_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:562</note>
       </notes>
       <segment>
         <source>Parser RTF et exporter une structure (groupes, contrôles, texte) pour debug/traitement.</source>
@@ -16893,7 +16910,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:557</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:566</note>
       </notes>
       <segment>
         <source>Validation</source>
@@ -16901,7 +16918,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:558</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:567</note>
       </notes>
       <segment>
         <source>Détecter RTF corrompu, groupes non fermés, et anomalies de syntaxe courantes.</source>
@@ -16909,7 +16926,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
       </notes>
       <segment>
         <source>Vérifier la syntaxe RTF</source>
@@ -16917,7 +16934,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
       </notes>
       <segment>
         <source>Détecter anomalies courantes : groupes non fermés, contrôles invalides, encodage incohérent.</source>
@@ -16925,7 +16942,7 @@
     </unit>
     <unit id="group_dev_legacy_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:571</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:580</note>
       </notes>
       <segment>
         <source>Formats Office legacy</source>
@@ -16933,7 +16950,7 @@
     </unit>
     <unit id="group_dev_legacy_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:572</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:581</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT (binaires) : infos, détection et conversions.</source>
@@ -16941,7 +16958,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:577</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
       </notes>
       <segment>
         <source>Identification</source>
@@ -16949,7 +16966,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:587</note>
       </notes>
       <segment>
         <source>Reconnaître DOC/XLS/PPT (CFBF/OLE), afficher infos de base et signatures.</source>
@@ -16957,7 +16974,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:581</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:590</note>
       </notes>
       <segment>
         <source>CFBF/OLE : infos fichier</source>
@@ -16965,7 +16982,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:581</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:590</note>
       </notes>
       <segment>
         <source>Détecter un conteneur OLE (DOC/XLS/PPT) et afficher header, FAT, streams et statistiques basiques.</source>
@@ -16973,7 +16990,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:582</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:591</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT : détecter le format</source>
@@ -16981,7 +16998,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:582</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:591</note>
       </notes>
       <segment>
         <source>Identifier DOC vs XLS vs PPT (best-effort) via streams/clsid et produire un rapport.</source>
@@ -16989,7 +17006,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:595</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -16997,7 +17014,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:587</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:596</note>
       </notes>
       <segment>
         <source>Conversions vers formats modernes (souvent via backend) : DOC→DOCX, XLS→XLSX, PPT→PPTX.</source>
@@ -17005,7 +17022,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:590</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:599</note>
       </notes>
       <segment>
         <source>DOC → DOCX (conversion)</source>
@@ -17013,7 +17030,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:590</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:599</note>
       </notes>
       <segment>
         <source>Convertir un DOC binaire vers DOCX (généralement via backend/outils externes).</source>
@@ -17021,7 +17038,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:591</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:600</note>
       </notes>
       <segment>
         <source>XLS → XLSX (conversion)</source>
@@ -17029,7 +17046,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:591</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:600</note>
       </notes>
       <segment>
         <source>Convertir un XLS binaire vers XLSX (généralement via backend/outils externes).</source>
@@ -17037,7 +17054,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:592</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:601</note>
       </notes>
       <segment>
         <source>PPT → PPTX (conversion)</source>
@@ -17045,7 +17062,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:592</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:601</note>
       </notes>
       <segment>
         <source>Convertir un PPT binaire vers PPTX (généralement via backend/outils externes).</source>
@@ -29253,6 +29270,214 @@
       </notes>
       <segment>
         <source>Écrivez pour une personne, puis vérifiez la largeur. Un snippet précis et honnête vaut mieux qu’un texte artificiellement rempli jusqu’à la limite.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:6</note>
+      </notes>
+      <segment>
+        <source>Créer et contrôler un sitemap XML utile</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_lead">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:7</note>
+      </notes>
+      <segment>
+        <source>Un sitemap aide les moteurs à découvrir les URL canoniques d’un site. Cet outil génère un fichier minimal, analyse un XML existant et explique les erreurs qui empêchent son exploitation correcte.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_use_cases">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:13</note>
+      </notes>
+      <segment>
+        <source>Cas d’utilisation</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:17</note>
+      </notes>
+      <segment>
+        <source>Publier un premier sitemap</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:18</note>
+      </notes>
+      <segment>
+        <source>Transformez une liste de chemins ou d’URL en document XML UTF-8 avec des adresses absolues, échappées et dédupliquées.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:21</note>
+      </notes>
+      <segment>
+        <source>Auditer un fichier existant</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:22</note>
+      </notes>
+      <segment>
+        <source>Collez son contenu pour contrôler la syntaxe XML, l’espace de noms, les URL, les dates, les doublons et les limites du protocole.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:25</note>
+      </notes>
+      <segment>
+        <source>Découper un grand site</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:26</note>
+      </notes>
+      <segment>
+        <source>Générez plusieurs sitemaps de 50 000 entrées au maximum, puis rassemblez leurs URL dans un index de sitemaps.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:33</note>
+      </notes>
+      <segment>
+        <source>Méthode recommandée</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:36</note>
+      </notes>
+      <segment>
+        <source>Listez uniquement les URL absolues et canoniques que vous souhaitez proposer à l’indexation. Écartez les redirections, erreurs, doublons, pages noindex et variantes de paramètres inutiles.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:37</note>
+      </notes>
+      <segment>
+        <source>Ajoutez lastmod seulement si sa valeur reflète une modification significative de la page. Une date artificiellement rafraîchie à chaque génération réduit la confiance accordée à ce signal.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:38</note>
+      </notes>
+      <segment>
+        <source>Publiez le fichier à une adresse stable, référencez-le dans robots.txt ou soumettez-le dans la console du moteur, puis surveillez les URL découvertes et indexées.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limits">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:44</note>
+      </notes>
+      <segment>
+        <source>Limites à connaître</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:48</note>
+      </notes>
+      <segment>
+        <source>Un sitemap ou un index contient au maximum 50 000 entrées et pèse au maximum 50 Mio avant compression. Utilisez plusieurs fichiers au-delà.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:51</note>
+      </notes>
+      <segment>
+        <source>L’emplacement du fichier détermine normalement son périmètre. Un sitemap placé dans un sous-répertoire ne devrait pas lister des URL situées plus haut sans mécanisme de soumission intersites vérifié.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:54</note>
+      </notes>
+      <segment>
+        <source>Google ignore les valeurs priority et changefreq. Le fichier est un indice de découverte, pas une garantie d’exploration, d’indexation ou de classement.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_faq">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:61</note>
+      </notes>
+      <segment>
+        <source>Questions fréquentes</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:65</note>
+      </notes>
+      <segment>
+        <source>Faut-il inclure toutes les pages du site ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:66</note>
+      </notes>
+      <segment>
+        <source>Non. Incluez les versions canoniques, indexables et utiles. Un sitemap propre aide davantage au diagnostic qu’un inventaire contenant des URL techniques ou dupliquées.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:69</note>
+      </notes>
+      <segment>
+        <source>Quelle différence entre sitemap et index de sitemaps ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:70</note>
+      </notes>
+      <segment>
+        <source>Un sitemap liste des pages dans des éléments url. Un index liste des fichiers sitemap dans des éléments sitemap et permet de répartir un grand ensemble.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:73</note>
+      </notes>
+      <segment>
+        <source>Mes URL sont-elles envoyées à Tools Central ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:74</note>
+      </notes>
+      <segment>
+        <source>Non. La génération, l’analyse et le téléchargement sont réalisés localement dans le navigateur. L’outil ne visite pas les URL saisies.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:81</note>
+      </notes>
+      <segment>
+        <source>Un fichier minimal est souvent meilleur</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/sitemap-xml-builder.editorial.ts:84</note>
+      </notes>
+      <segment>
+        <source>Commencez par loc et un lastmod fiable. N’ajoutez pas des balises facultatives pour remplir le fichier : chaque valeur doit avoir une signification opérationnelle.</source>
       </segment>
     </unit>
     <unit id="ed_math_fractions_decimal_to_fraction_title">
@@ -43064,7 +43289,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_file_too_large">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:141</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:142</note>
       </notes>
       <segment>
         <source>Le fichier dépasse 500 Kio ; les moteurs peuvent ignorer la suite.</source>
@@ -43072,7 +43297,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_bom">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:143</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:144</note>
       </notes>
       <segment>
         <source>Le marqueur BOM initial est ignoré.</source>
@@ -43080,7 +43305,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_control">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:145</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:146</note>
       </notes>
       <segment>
         <source>Caractère de contrôle non autorisé.</source>
@@ -43088,7 +43313,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_html">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:147</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:148</note>
       </notes>
       <segment>
         <source>Le contenu ressemble à une page HTML, pas à un fichier robots.txt.</source>
@@ -43096,7 +43321,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_line">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:149</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:150</note>
       </notes>
       <segment>
         <source>Ligne invalide : une directive et un deux-points sont attendus.</source>
@@ -43104,7 +43329,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_empty_agent">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:151</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:152</note>
       </notes>
       <segment>
         <source>Le nom du robot est vide.</source>
@@ -43112,7 +43337,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_invalid_agent">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:153</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:154</note>
       </notes>
       <segment>
         <source>Le product token contient des caractères non autorisés.</source>
@@ -43120,7 +43345,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_orphan">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:155</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:156</note>
       </notes>
       <segment>
         <source>Cette règle n’est précédée d’aucun User-agent valide.</source>
@@ -43128,7 +43353,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_empty_rule">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:157</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:158</note>
       </notes>
       <segment>
         <source>La règle vide est ignorée et ne bloque aucune URL.</source>
@@ -43136,7 +43361,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_path">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:159</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:160</note>
       </notes>
       <segment>
         <source>Le chemin doit commencer par « / » et ne pas contenir d’espace brut.</source>
@@ -43144,7 +43369,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_dollar">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:161</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:162</note>
       </notes>
       <segment>
         <source>Le symbole « $ » ne peut apparaître qu’une fois, à la fin du chemin.</source>
@@ -43152,7 +43377,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_sitemap">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:163</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:164</note>
       </notes>
       <segment>
         <source>L’adresse du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
@@ -43160,7 +43385,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_crawl_delay">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:165</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:166</note>
       </notes>
       <segment>
         <source>Crawl-delay n’est pas pris en charge par Google.</source>
@@ -43168,7 +43393,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_unknown">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:167</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:168</note>
       </notes>
       <segment>
         <source>Directive inconnue ou non standard ; elle peut être ignorée par les robots.</source>
@@ -43176,7 +43401,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_duplicate_rule">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:169</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:170</note>
       </notes>
       <segment>
         <source>Règle dupliquée dans le même groupe.</source>
@@ -43184,7 +43409,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_duplicate_sitemap">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:171</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:172</note>
       </notes>
       <segment>
         <source>Sitemap dupliqué.</source>
@@ -43192,7 +43417,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_missing_agent">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:173</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:174</note>
       </notes>
       <segment>
         <source>Aucun groupe User-agent valide n’a été trouvé.</source>
@@ -43200,7 +43425,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_issue_truncated">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:175</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:176</note>
       </notes>
       <segment>
         <source>La liste est limitée aux 200 premiers problèmes.</source>
@@ -43208,7 +43433,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_matched">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:182</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:183</note>
       </notes>
       <segment>
         <source>Décision calculée avec la règle la plus spécifique.</source>
@@ -43216,7 +43441,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_no_rule">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:184</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:185</note>
       </notes>
       <segment>
         <source>Aucune règle applicable : l’exploration est autorisée par défaut.</source>
@@ -43224,7 +43449,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_file">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:186</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:187</note>
       </notes>
       <segment>
         <source>Le fichier /robots.txt lui-même est toujours autorisé.</source>
@@ -43232,7 +43457,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_invalid_site">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:188</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:189</note>
       </notes>
       <segment>
         <source>Corrigez l’URL du site avant de lancer le test.</source>
@@ -43240,7 +43465,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_invalid_url">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:190</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:191</note>
       </notes>
       <segment>
         <source>Saisissez une URL HTTP ou HTTPS valide à tester.</source>
@@ -43248,7 +43473,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_origin">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:192</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:193</note>
       </notes>
       <segment>
         <source>L’URL testée doit utiliser le même protocole, hôte et port que le site.</source>
@@ -43256,7 +43481,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="robots_decision_invalid_agent">
       <notes>
-        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:194</note>
+        <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.ts:195</note>
       </notes>
       <segment>
         <source>Saisissez un product token précis, par exemple Googlebot.</source>
@@ -43621,6 +43846,559 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       </notes>
       <segment>
         <source>Le titre, la description et l’URL sont prêts pour une vérification éditoriale finale.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:6,7</note>
+      </notes>
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_subtitle">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:8,10</note>
+      </notes>
+      <segment>
+        <source> Créez un sitemap d’URL ou un index, contrôlez sa structure et téléchargez un XML prêt à publier. </source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_privacy">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:12,15</note>
+      </notes>
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun fichier n’est envoyé.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:21,22</note>
+      </notes>
+      <segment>
+        <source>1. Préparer les entrées</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_subtitle">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:22,25</note>
+      </notes>
+      <segment>
+        <source>Une entrée par ligne au format « URL ou chemin | lastmod facultatif ». Les doublons et lignes invalides sont écartés.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_aria">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:25,26</note>
+      </notes>
+      <segment>
+        <source>Type de sitemap</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_urlset">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:27,29</note>
+      </notes>
+      <segment>
+        <source>Sitemap d’URL</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_index">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:30,34</note>
+      </notes>
+      <segment>
+        <source>Index de sitemaps</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_label">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:36,37</note>
+      </notes>
+      <segment>
+        <source>Origine du site</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_help">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:38,39</note>
+      </notes>
+      <segment>
+        <source>Les chemins relatifs sont résolus depuis cette origine et les autres domaines sont refusés à la génération.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_valid">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:41,43</note>
+      </notes>
+      <segment>
+        <source>Origine valide</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_invalid">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:43,46</note>
+      </notes>
+      <segment>
+        <source>Saisissez une origine HTTP ou HTTPS valide</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_label">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:49,50</note>
+      </notes>
+      <segment>
+        <source>Adresse publique du sitemap analysé</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_help">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:51,54</note>
+      </notes>
+      <segment>
+        <source>Elle sert à vérifier l’origine et le périmètre des URL, sans effectuer de requête réseau.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_urls_label">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:57,59</note>
+      </notes>
+      <segment>
+        <source>URL des pages</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_indexes_label">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:59,62</note>
+      </notes>
+      <segment>
+        <source>URL des fichiers sitemap</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_lines_help">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:63,66</note>
+      </notes>
+      <segment>
+        <source>Exemples : /produits/chaise | 2026-09-01 ou https://example.com/sitemap-articles.xml</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generate">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:68,70</note>
+      </notes>
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_rejected_lines">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:74,76</note>
+      </notes>
+      <segment>
+        <source>Lignes à corriger avant génération</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_line">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:77</note>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:129</note>
+      </notes>
+      <segment>
+        <source>Ligne</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:88,89</note>
+      </notes>
+      <segment>
+        <source>2. Éditer et valider le XML</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_subtitle">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:89,91</note>
+      </notes>
+      <segment>
+        <source>Collez aussi un sitemap existant : l’analyse se met à jour instantanément dans le navigateur.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_download">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:93,95</note>
+      </notes>
+      <segment>
+        <source>Télécharger le XML</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_content_label">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:97,98</note>
+      </notes>
+      <segment>
+        <source>Contenu XML du sitemap</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_entries">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:102,103</note>
+      </notes>
+      <segment>
+        <source>entrées</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_bytes">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:103,105</note>
+      </notes>
+      <segment>
+        <source>octets UTF-8</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_report_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:109,111</note>
+      </notes>
+      <segment>
+        <source>Rapport de validation</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_errors">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:111,112</note>
+      </notes>
+      <segment>
+        <source>erreurs</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_warnings">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:112,113</note>
+      </notes>
+      <segment>
+        <source>avertissements</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_infos">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:113,115</note>
+      </notes>
+      <segment>
+        <source>informations</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:120,121</note>
+      </notes>
+      <segment>
+        <source>Aucun problème détecté</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue_help">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:121,124</note>
+      </notes>
+      <segment>
+        <source>Le fichier reste une indication aux moteurs : vérifiez les URL et publiez-le à l’adresse déclarée.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_file_level">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:131,133</note>
+      </notes>
+      <segment>
+        <source>Fichier</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:145,147</note>
+      </notes>
+      <segment>
+        <source>3. Publier un signal utile</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:150,151</note>
+      </notes>
+      <segment>
+        <source>URL absolues et canoniques</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_text">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:151,154</note>
+      </notes>
+      <segment>
+        <source>Listez uniquement les URL que vous souhaitez voir dans les résultats, avec le protocole et l’hôte définitifs.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:155,156</note>
+      </notes>
+      <segment>
+        <source>lastmod doit être exact</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_text">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:156,159</note>
+      </notes>
+      <segment>
+        <source>Indiquez la dernière modification significative de la page, pas la date de génération du sitemap.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:160,161</note>
+      </notes>
+      <segment>
+        <source>50 000 URL ou 50 Mio</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_text">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:161,164</note>
+      </notes>
+      <segment>
+        <source>Scindez les ensembles plus grands et référencez les fichiers obtenus dans un index de sitemaps.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_title">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:165,166</note>
+      </notes>
+      <segment>
+        <source>Un indice, jamais une garantie</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_text">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:166,171</note>
+      </notes>
+      <segment>
+        <source>Google ignore priority et changefreq. Un sitemap facilite la découverte mais ne garantit ni exploration, ni indexation, ni classement.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_back">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:178,181</note>
+      </notes>
+      <segment>
+        <source>Retour aux outils SEO</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_urlset">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:105</note>
+      </notes>
+      <segment>
+        <source>Sitemap d’URL</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_index">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:106</note>
+      </notes>
+      <segment>
+        <source>Index de sitemaps</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_unknown">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:107</note>
+      </notes>
+      <segment>
+        <source>Type non reconnu</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_file_too_large">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:113</note>
+      </notes>
+      <segment>
+        <source>Le fichier dépasse la limite de 50 Mio non compressés.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_analysis_limit">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:115</note>
+      </notes>
+      <segment>
+        <source>L’analyse interactive est limitée à 10 Mio pour protéger le navigateur.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_doctype">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:117</note>
+      </notes>
+      <segment>
+        <source>DOCTYPE est refusé afin d’éviter les entités externes et les traitements dangereux.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_malformed">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:119</note>
+      </notes>
+      <segment>
+        <source>Le document XML est mal formé ou contient une entité non autorisée.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_root">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:121</note>
+      </notes>
+      <segment>
+        <source>L’élément racine doit être urlset ou sitemapindex.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_namespace">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:123</note>
+      </notes>
+      <segment>
+        <source>L’espace de noms officiel du protocole Sitemap est absent ou incorrect.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_sitemap_url">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:125</note>
+      </notes>
+      <segment>
+        <source>L’adresse publique du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_empty">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:127</note>
+      </notes>
+      <segment>
+        <source>Le sitemap ne contient aucune entrée.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_too_many">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:129</note>
+      </notes>
+      <segment>
+        <source>Un fichier ne peut pas contenir plus de 50 000 entrées.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_missing_loc">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:131</note>
+      </notes>
+      <segment>
+        <source>L’entrée ne contient aucun élément loc obligatoire.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_multiple_loc">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:133</note>
+      </notes>
+      <segment>
+        <source>L’entrée contient plusieurs éléments loc.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_invalid_loc">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:135</note>
+      </notes>
+      <segment>
+        <source>loc doit contenir une URL HTTP ou HTTPS absolue valide.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_loc_long">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:137</note>
+      </notes>
+      <segment>
+        <source>L’URL loc atteint ou dépasse 2 048 caractères.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_duplicate">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:139</note>
+      </notes>
+      <segment>
+        <source>Cette URL est dupliquée dans le fichier.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_origin">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:141</note>
+      </notes>
+      <segment>
+        <source>L’URL utilise une autre origine ; vérifiez les règles de soumission intersites.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_scope">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:143</note>
+      </notes>
+      <segment>
+        <source>L’URL se trouve hors du répertoire gouverné par l’emplacement du sitemap.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_lastmod">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:145</note>
+      </notes>
+      <segment>
+        <source>La date lastmod doit respecter le format W3C, par exemple 2026-09-13.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_future">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:147</note>
+      </notes>
+      <segment>
+        <source>La date lastmod est dans le futur.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_changefreq">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:149</note>
+      </notes>
+      <segment>
+        <source>La valeur changefreq n’appartient pas aux valeurs prévues par le protocole.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_priority">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:151</note>
+      </notes>
+      <segment>
+        <source>La priorité doit être un nombre compris entre 0 et 1.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_changefreq">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:153</note>
+      </notes>
+      <segment>
+        <source>Google ignore changefreq ; ne l’utilisez pas comme signal de fraîcheur.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_priority">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:155</note>
+      </notes>
+      <segment>
+        <source>Google ignore priority ; cette valeur n’améliore pas le classement.</source>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_builder_line">
+      <notes>
+        <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.ts:157</note>
+      </notes>
+      <segment>
+        <source>La ligne du générateur doit suivre le format « URL | lastmod facultatif ».</source>
       </segment>
     </unit>
   </file>

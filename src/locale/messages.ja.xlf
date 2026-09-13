@@ -80658,6 +80658,588 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Googlebotなどの正確なプロダクトトークンを入力してください。</target>
       </segment>
     </unit>
+    <unit id="tool_sitemap_xml_builder_title">
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+        <target state="translated">XMLサイトマップジェネレーターとバリデーター</target>
+      </segment>
+    </unit>
+    <unit id="tool_sitemap_xml_builder_desc">
+      <segment>
+        <source>Créer un sitemap d’URL ou un index, valider le XML, les dates, les limites et le périmètre, puis télécharger le fichier localement.</source>
+        <target state="translated">URLまたはインデックスのサイトマップを作成し、XML、日付、制限、範囲を検証し、ファイルをローカルにダウンロードします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_title">
+      <segment>
+        <source>Créer et contrôler un sitemap XML utile</source>
+        <target state="translated">役立つXMLサイトマップを作成して管理する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_lead">
+      <segment>
+        <source>Un sitemap aide les moteurs à découvrir les URL canoniques d’un site. Cet outil génère un fichier minimal, analyse un XML existant et explique les erreurs qui empêchent son exploitation correcte.</source>
+        <target state="translated">サイトマップは、検索エンジンがサイトの正規URLを発見するのを助けます。このツールは、最小限のファイルを生成し、既存のXMLを分析し、正しく利用できないエラーを説明します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_title">
+      <segment>
+        <source>Publier un premier sitemap</source>
+        <target state="translated">最初のサイトマップを公開する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc1_text">
+      <segment>
+        <source>Transformez une liste de chemins ou d’URL en document XML UTF-8 avec des adresses absolues, échappées et dédupliquées.</source>
+        <target state="translated">パスまたはURLのリストを、絶対アドレスでエスケープされ、重複のないUTF-8 XMLドキュメントに変換します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_title">
+      <segment>
+        <source>Auditer un fichier existant</source>
+        <target state="translated">既存のファイルを監査する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc2_text">
+      <segment>
+        <source>Collez son contenu pour contrôler la syntaxe XML, l’espace de noms, les URL, les dates, les doublons et les limites du protocole.</source>
+        <target state="translated">その内容を貼り付けて、XMLの構文、名前空間、URL、日付、重複、プロトコルの制限を確認します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_title">
+      <segment>
+        <source>Découper un grand site</source>
+        <target state="translated">大規模なサイトを分割する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_uc3_text">
+      <segment>
+        <source>Générez plusieurs sitemaps de 50 000 entrées au maximum, puis rassemblez leurs URL dans un index de sitemaps.</source>
+        <target state="translated">最大50,000エントリの複数のサイトマップを生成し、それらのURLをサイトマップインデックスにまとめます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推奨される方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_1">
+      <segment>
+        <source>Listez uniquement les URL absolues et canoniques que vous souhaitez proposer à l’indexation. Écartez les redirections, erreurs, doublons, pages noindex et variantes de paramètres inutiles.</source>
+        <target state="translated">インデックスに提案したい絶対的で正規のURLのみをリストします。リダイレクト、エラー、重複、noindexページ、および不要なパラメータのバリエーションは除外します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_2">
+      <segment>
+        <source>Ajoutez lastmod seulement si sa valeur reflète une modification significative de la page. Une date artificiellement rafraîchie à chaque génération réduit la confiance accordée à ce signal.</source>
+        <target state="translated">lastmodは、ページの重要な変更を反映する場合にのみ追加します。生成のたびに人工的に更新された日付は、この信号への信頼を低下させます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_method_3">
+      <segment>
+        <source>Publiez le fichier à une adresse stable, référencez-le dans robots.txt ou soumettez-le dans la console du moteur, puis surveillez les URL découvertes et indexées.</source>
+        <target state="translated">ファイルを安定したアドレスに公開し、robots.txtに参照を追加するか、検索エンジンのコンソールに提出し、発見されたURLとインデックスを監視します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">知っておくべき制限</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_1">
+      <segment>
+        <source>Un sitemap ou un index contient au maximum 50 000 entrées et pèse au maximum 50 Mio avant compression. Utilisez plusieurs fichiers au-delà.</source>
+        <target state="translated">サイトマップまたはインデックスは最大50,000エントリを含み、圧縮前に最大50MBのサイズです。それを超える場合は複数のファイルを使用します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_2">
+      <segment>
+        <source>L’emplacement du fichier détermine normalement son périmètre. Un sitemap placé dans un sous-répertoire ne devrait pas lister des URL situées plus haut sans mécanisme de soumission intersites vérifié.</source>
+        <target state="translated">ファイルの場所は通常、その範囲を決定します。サブディレクトリに配置されたサイトマップは、確認されたインタサイト提出メカニズムなしに上位のURLをリストすべきではありません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_limit_3">
+      <segment>
+        <source>Google ignore les valeurs priority et changefreq. Le fichier est un indice de découverte, pas une garantie d’exploration, d’indexation ou de classement.</source>
+        <target state="translated">Googleはpriorityおよびchangefreqの値を無視します。ファイルは発見の指標であり、クロール、インデックス、またはランキングの保証ではありません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">よくある質問</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q1">
+      <segment>
+        <source>Faut-il inclure toutes les pages du site ?</source>
+        <target state="translated">サイトのすべてのページを含める必要がありますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a1">
+      <segment>
+        <source>Non. Incluez les versions canoniques, indexables et utiles. Un sitemap propre aide davantage au diagnostic qu’un inventaire contenant des URL techniques ou dupliquées.</source>
+        <target state="translated">いいえ。正規の、インデックス可能で役立つバージョンを含めます。クリーンなサイトマップは、技術的または重複したURLを含むインベントリよりも診断に役立ちます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q2">
+      <segment>
+        <source>Quelle différence entre sitemap et index de sitemaps ?</source>
+        <target state="translated">サイトマップとサイトマップインデックスの違いは何ですか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a2">
+      <segment>
+        <source>Un sitemap liste des pages dans des éléments url. Un index liste des fichiers sitemap dans des éléments sitemap et permet de répartir un grand ensemble.</source>
+        <target state="translated">サイトマップはurl要素内のページをリストします。インデックスはsitemap要素内のサイトマップファイルをリストし、大規模なセットを分散させることができます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_q3">
+      <segment>
+        <source>Mes URL sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">私のURLはTools Centralに送信されますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_a3">
+      <segment>
+        <source>Non. La génération, l’analyse et le téléchargement sont réalisés localement dans le navigateur. L’outil ne visite pas les URL saisies.</source>
+        <target state="translated">いいえ。生成、分析、ダウンロードはブラウザ内でローカルに行われます。このツールは入力されたURLを訪問しません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip_title">
+      <segment>
+        <source>Un fichier minimal est souvent meilleur</source>
+        <target state="translated">最小限のファイルがしばしば最良です</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_sitemap_tip">
+      <segment>
+        <source>Commencez par loc et un lastmod fiable. N’ajoutez pas des balises facultatives pour remplir le fichier : chaque valeur doit avoir une signification opérationnelle.</source>
+        <target state="translated">locと信頼できるlastmodから始めます。ファイルを埋めるためにオプションのタグを追加しないでください：各値は運用上の意味を持つ必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_title">
+      <segment>
+        <source>Générateur et validateur sitemap XML</source>
+        <target state="translated">XMLサイトマップジェネレーターとバリデーター</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_subtitle">
+      <segment>
+        <source> Créez un sitemap d’URL ou un index, contrôlez sa structure et téléchargez un XML prêt à publier. </source>
+        <target state="translated">URLまたはインデックスのサイトマップを作成し、その構造を確認し、公開準備が整ったXMLをダウンロードします。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun fichier n’est envoyé.</source>
+        <target state="translated">100%ローカル処理：URLやファイルは送信されません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_title">
+      <segment>
+        <source>1. Préparer les entrées</source>
+        <target state="translated">1. エントリを準備する</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generator_subtitle">
+      <segment>
+        <source>Une entrée par ligne au format « URL ou chemin | lastmod facultatif ». Les doublons et lignes invalides sont écartés.</source>
+        <target state="translated">「URLまたはパス | オプションのlastmod」形式で1行に1エントリ。重複や無効な行は除外されます。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_aria">
+      <segment>
+        <source>Type de sitemap</source>
+        <target state="translated">サイトマップの種類</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_urlset">
+      <segment>
+        <source>Sitemap d’URL</source>
+        <target state="translated">URLサイトマップ</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_mode_index">
+      <segment>
+        <source>Index de sitemaps</source>
+        <target state="translated">サイトマップインデックス</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_label">
+      <segment>
+        <source>Origine du site</source>
+        <target state="translated">サイトの起源</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_help">
+      <segment>
+        <source>Les chemins relatifs sont résolus depuis cette origine et les autres domaines sont refusés à la génération.</source>
+        <target state="translated">相対パスはこの起源から解決され、他のドメインは生成から拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_valid">
+      <segment>
+        <source>Origine valide</source>
+        <target state="translated">有効な起源</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_site_invalid">
+      <segment>
+        <source>Saisissez une origine HTTP ou HTTPS valide</source>
+        <target state="translated">有効なHTTPまたはHTTPSの起源を入力してください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_label">
+      <segment>
+        <source>Adresse publique du sitemap analysé</source>
+        <target state="translated">解析されたサイトマップの公開アドレス</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_public_help">
+      <segment>
+        <source>Elle sert à vérifier l’origine et le périmètre des URL, sans effectuer de requête réseau.</source>
+        <target state="translated">URLの出所と範囲を確認するために使用され、ネットワークリクエストは行いません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_urls_label">
+      <segment>
+        <source>URL des pages</source>
+        <target state="translated">ページのURL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_indexes_label">
+      <segment>
+        <source>URL des fichiers sitemap</source>
+        <target state="translated">サイトマップファイルのURL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_lines_help">
+      <segment>
+        <source>Exemples : /produits/chaise | 2026-09-01 ou https://example.com/sitemap-articles.xml</source>
+        <target state="translated">例：/produits/chaise | 2026-09-01 または https://example.com/sitemap-articles.xml</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_generate">
+      <segment>
+        <source>Générer et remplacer l’éditeur</source>
+        <target state="translated">生成してエディタを置き換える</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_rejected_lines">
+      <segment>
+        <source>Lignes à corriger avant génération</source>
+        <target state="translated">生成前に修正が必要な行</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">行</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_title">
+      <segment>
+        <source>2. Éditer et valider le XML</source>
+        <target state="translated">2. XMLを編集して検証する</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_editor_subtitle">
+      <segment>
+        <source>Collez aussi un sitemap existant : l’analyse se met à jour instantanément dans le navigateur.</source>
+        <target state="translated">既存のサイトマップも貼り付けてください：分析はブラウザで即座に更新されます。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_download">
+      <segment>
+        <source>Télécharger le XML</source>
+        <target state="translated">XMLをダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_content_label">
+      <segment>
+        <source>Contenu XML du sitemap</source>
+        <target state="translated">サイトマップのXMLコンテンツ</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_entries">
+      <segment>
+        <source>entrées</source>
+        <target state="translated">エントリ</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_bytes">
+      <segment>
+        <source>octets UTF-8</source>
+        <target state="translated">UTF-8バイト</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_report_title">
+      <segment>
+        <source>Rapport de validation</source>
+        <target state="translated">検証レポート</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">情報</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue">
+      <segment>
+        <source>Aucun problème détecté</source>
+        <target state="translated">問題は検出されませんでした</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_no_issue_help">
+      <segment>
+        <source>Le fichier reste une indication aux moteurs : vérifiez les URL et publiez-le à l’adresse déclarée.</source>
+        <target state="translated">ファイルは検索エンジンへの指示として残ります：URLを確認し、宣言されたアドレスに公開してください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_file_level">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">ファイル</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_title">
+      <segment>
+        <source>3. Publier un signal utile</source>
+        <target state="translated">3. 有用なシグナルを公開する</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_title">
+      <segment>
+        <source>URL absolues et canoniques</source>
+        <target state="translated">絶対的かつ正規のURL</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_canonical_text">
+      <segment>
+        <source>Listez uniquement les URL que vous souhaitez voir dans les résultats, avec le protocole et l’hôte définitifs.</source>
+        <target state="translated">結果に表示したいURLのみをリストし、最終的なプロトコルとホストを含めてください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_title">
+      <segment>
+        <source>lastmod doit être exact</source>
+        <target state="translated">lastmodは正確でなければなりません</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_lastmod_text">
+      <segment>
+        <source>Indiquez la dernière modification significative de la page, pas la date de génération du sitemap.</source>
+        <target state="translated">ページの重要な最終変更を示し、サイトマップの生成日ではありません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_title">
+      <segment>
+        <source>50 000 URL ou 50 Mio</source>
+        <target state="translated">50,000 URLまたは50 Mio</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_limits_text">
+      <segment>
+        <source>Scindez les ensembles plus grands et référencez les fichiers obtenus dans un index de sitemaps.</source>
+        <target state="translated">より大きなセットを分割し、得られたファイルをサイトマップのインデックスに参照してください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_title">
+      <segment>
+        <source>Un indice, jamais une garantie</source>
+        <target state="translated">ヒント、決して保証ではありません</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_method_google_text">
+      <segment>
+        <source>Google ignore priority et changefreq. Un sitemap facilite la découverte mais ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">Googleはpriorityとchangefreqを無視します。サイトマップは発見を容易にしますが、探索、インデックス作成、ランキングを保証するものではありません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_builder_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEOツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_urlset">
+      <segment>
+        <source>Sitemap d’URL</source>
+        <target state="translated">URLサイトマップ</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_index">
+      <segment>
+        <source>Index de sitemaps</source>
+        <target state="translated">サイトマップのインデックス</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_kind_unknown">
+      <segment>
+        <source>Type non reconnu</source>
+        <target state="translated">不明なタイプ</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_file_too_large">
+      <segment>
+        <source>Le fichier dépasse la limite de 50 Mio non compressés.</source>
+        <target state="translated">ファイルは圧縮されていない50 Mioの制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_analysis_limit">
+      <segment>
+        <source>L’analyse interactive est limitée à 10 Mio pour protéger le navigateur.</source>
+        <target state="translated">インタラクティブな分析はブラウザを保護するために10 Mioに制限されています。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_doctype">
+      <segment>
+        <source>DOCTYPE est refusé afin d’éviter les entités externes et les traitements dangereux.</source>
+        <target state="translated">DOCTYPEは外部エンティティや危険な処理を避けるために拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_malformed">
+      <segment>
+        <source>Le document XML est mal formé ou contient une entité non autorisée.</source>
+        <target state="translated">XMLドキュメントが不正であるか、許可されていないエンティティを含んでいます。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_root">
+      <segment>
+        <source>L’élément racine doit être urlset ou sitemapindex.</source>
+        <target state="translated">ルート要素はurlsetまたはsitemapindexでなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_namespace">
+      <segment>
+        <source>L’espace de noms officiel du protocole Sitemap est absent ou incorrect.</source>
+        <target state="translated">Sitemapプロトコルの公式な名前空間が欠落しているか、正しくありません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_sitemap_url">
+      <segment>
+        <source>L’adresse publique du sitemap doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">サイトマップの公開アドレスは、絶対的なHTTPまたはHTTPS URLでなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_empty">
+      <segment>
+        <source>Le sitemap ne contient aucune entrée.</source>
+        <target state="translated">サイトマップにはエントリが含まれていません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_too_many">
+      <segment>
+        <source>Un fichier ne peut pas contenir plus de 50 000 entrées.</source>
+        <target state="translated">1つのファイルには50,000件を超えるエントリを含めることはできません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_missing_loc">
+      <segment>
+        <source>L’entrée ne contient aucun élément loc obligatoire.</source>
+        <target state="translated">エントリには必須のloc要素が含まれていません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_multiple_loc">
+      <segment>
+        <source>L’entrée contient plusieurs éléments loc.</source>
+        <target state="translated">エントリには複数のloc要素が含まれています。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_invalid_loc">
+      <segment>
+        <source>loc doit contenir une URL HTTP ou HTTPS absolue valide.</source>
+        <target state="translated">locは有効な絶対HTTPまたはHTTPS URLを含む必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_loc_long">
+      <segment>
+        <source>L’URL loc atteint ou dépasse 2 048 caractères.</source>
+        <target state="translated">locのURLは2,048文字に達するか、それを超えています。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_duplicate">
+      <segment>
+        <source>Cette URL est dupliquée dans le fichier.</source>
+        <target state="translated">このURLはファイル内で重複しています。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_origin">
+      <segment>
+        <source>L’URL utilise une autre origine ; vérifiez les règles de soumission intersites.</source>
+        <target state="translated">URLは別のオリジンを使用しています；クロスサイト送信のルールを確認してください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_scope">
+      <segment>
+        <source>L’URL se trouve hors du répertoire gouverné par l’emplacement du sitemap.</source>
+        <target state="translated">URLはサイトマップの位置によって管理されるディレクトリの外にあります。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_lastmod">
+      <segment>
+        <source>La date lastmod doit respecter le format W3C, par exemple 2026-09-13.</source>
+        <target state="translated">lastmodの日付はW3C形式に従う必要があります。例えば、2026-09-13。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_future">
+      <segment>
+        <source>La date lastmod est dans le futur.</source>
+        <target state="translated">lastmodの日付は未来の日付です。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_changefreq">
+      <segment>
+        <source>La valeur changefreq n’appartient pas aux valeurs prévues par le protocole.</source>
+        <target state="translated">changefreqの値はプロトコルで定義された値に属していません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_priority">
+      <segment>
+        <source>La priorité doit être un nombre compris entre 0 et 1.</source>
+        <target state="translated">優先度は0から1の間の数値でなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_changefreq">
+      <segment>
+        <source>Google ignore changefreq ; ne l’utilisez pas comme signal de fraîcheur.</source>
+        <target state="translated">Googleはchangefreqを無視します；新鮮さの信号として使用しないでください。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_google_priority">
+      <segment>
+        <source>Google ignore priority ; cette valeur n’améliore pas le classement.</source>
+        <target state="translated">Googleはpriorityを無視します；この値はランキングを改善しません。</target>
+      </segment>
+    </unit>
+    <unit id="sitemap_issue_builder_line">
+      <segment>
+        <source>La ligne du générateur doit suivre le format « URL | lastmod facultatif ».</source>
+        <target state="translated">生成器の行は「URL | 任意のlastmod」形式に従う必要があります。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

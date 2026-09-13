@@ -7,7 +7,7 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du prévisualiseur SERP.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Quatre features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview` et `robots-txt-builder`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 61 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Cinq features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder` et `sitemap-xml-builder`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 62 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,15 +16,15 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Q
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 654,06 kB brut, 164,49 kB transféré estimé |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 654,50 kB brut, 164,53 kB transféré estimé |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 97 fichiers, 154 tests verts sous Vitest |
-| Couverture | aucun seuil | 40 % statements, 24,21 % branches, 39,98 % fonctions, 43,30 % lignes |
-| E2E | aucun | 6 parcours Playwright verts |
-| Routes statiques | 2 | 76 publiques + une 404 par locale, soit 2 310 pages |
-| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 168 outils, 61 disponibles |
+| Tests unitaires | suite non compilable | 101 fichiers, 177 tests verts sous Vitest |
+| Couverture | aucun seuil | 41,82 % statements, 26,74 % branches, 41,29 % fonctions, 45,25 % lignes |
+| E2E | aucun | 7 parcours Playwright verts |
+| Routes statiques | 2 | 77 publiques + une 404 par locale, soit 2 340 pages |
+| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 169 outils, 62 disponibles |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 156 658 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 159 471 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
@@ -50,6 +50,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 - Extraction du nettoyage PDF dans domaine/application/infrastructure avec Web Worker et transfert d’`ArrayBuffer`.
 - Livraison de `serp-snippet-preview` dans une tranche verticale domaine/application/présentation, avec mesure typographique Unicode, validation d’URL, limites de travail, accessibilité et 19 tests ciblés.
 - Livraison de `robots-txt-builder` dans une tranche verticale complète, avec génération, diagnostic borné, simulation RFC 9309, export local, accessibilité et 26 tests ciblés.
+- Livraison de `sitemap-xml-builder` dans une tranche verticale complète, avec générateur `urlset`/index, parseur XML défensif, validation du protocole, Web Worker pour les gros fichiers, export local, accessibilité et 23 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -58,7 +59,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 
 - Migration Karma/Jasmine → runner Angular Vitest.
 - Correction des fixtures, providers, API navigateur JSDOM et spies incompatibles.
-- Seuils de couverture bloquants fixés au niveau actuel pour empêcher une baisse silencieuse.
+- Seuils de couverture bloquants relevés à 41 % statements, 26 % branches, 40 % fonctions et 44 % lignes pour empêcher une baisse silencieuse.
 - Tests métier du calcul de pourcentage, du cas d’usage et du moteur PDF.
 - Remplacement des tests superficiels des composants PDF modifiés par des scénarios valides et rejetés.
 - Playwright couvre accueil/langue/thème, calcul réel/réinitialisation, vraie 404/noindex et budgets performance mobile.
@@ -68,7 +69,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 5 402 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 156 658 segments techniquement complets.
+- 5 499 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 159 471 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -76,14 +77,14 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 
 - Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
 - Exclusion automatique des outils `available: false`.
-- 76 URLs publiques par locale et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- 77 URLs publiques par locale et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
 - Suppression du faux `lastmod` égal à la date de chaque build.
 - Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
 - Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
 - Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
 - Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
 - `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
-- Les deux premiers outils issus de cette shortlist, le prévisualiseur de snippet Google et le générateur/validateur robots.txt, sont publiés dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies.
+- Les trois premiers outils issus de cette shortlist, le prévisualiseur de snippet Google, le générateur/validateur robots.txt et le générateur/validateur sitemap XML, sont publiables dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies.
 
 ### CI, GitHub et déploiement
 
@@ -107,7 +108,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 |---|---|---|
 | 29 locales traduites automatiquement sans preuve de revue native | contresens, confiance et qualité SEO variables | relire un cluster prioritaire par langue, tracer qui/quand/quoi et corriger avant extension |
 | SSH utilise encore `VPS_PASSWORD` | secret plus exposé et droits potentiellement larges | clé dédiée au déploiement, compte limité, rotation du mot de passe |
-| 106 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
+| 107 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
 
 ### P1 — migration progressive
 
@@ -171,3 +172,5 @@ Le code, le build local, le HTML prérendu, la configuration GitHub et un déplo
 - Google, règles antispam : <https://developers.google.com/search/docs/essentials/spam-policies>
 - Google, Core Web Vitals : <https://developers.google.com/search/docs/appearance/core-web-vitals>
 - Google, sites multilingues : <https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites>
+- Protocole Sitemap officiel : <https://www.sitemaps.org/protocol.html>
+- Google, créer et soumettre un sitemap : <https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap>

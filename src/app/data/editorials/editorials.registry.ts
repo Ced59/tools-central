@@ -116,6 +116,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/seo/serp-snippet-preview.editorial'),
   },
+  'dev/seo/sitemap-xml-builder': {
+    available: true,
+    load: () => import('./dev/seo/sitemap-xml-builder.editorial'),
+  },
   'math/fractions/decimal-to-fraction': {
     available: true,
     load: () => import('./math/fractions/decimal-to-fraction.editorial'),
