@@ -26,6 +26,15 @@ describe('analyzeSerpSnippet', () => {
     expect(result.recommendations).not.toContain('url-invalid');
   });
 
+  it('rejects hostnames containing empty or malformed DNS labels', () => {
+    const emptyLabel = analyzeSerpSnippet({ ...BASE_INPUT, url: 'https://example..com/page' });
+    const leadingHyphen = analyzeSerpSnippet({ ...BASE_INPUT, url: 'https://-example.com/page' });
+
+    expect(emptyLabel.urlValid).toBe(false);
+    expect(leadingHyphen.urlValid).toBe(false);
+    expect(emptyLabel.recommendations).toContain('url-invalid');
+  });
+
   it('preserves a complete leading grapheme for the favicon', () => {
     const result = analyzeSerpSnippet({ ...BASE_INPUT, siteName: '👨‍👩‍👧‍👦 Famille' });
 
@@ -79,10 +88,10 @@ describe('analyzeSerpSnippet', () => {
   });
 
   it('preserves non-breaking spaces that remain visible in the preview', () => {
-    const title = 'A\u00a0\u00a0B';
+    const title = '\u00a0A\u00a0\u00a0B\u00a0';
     const result = analyzeSerpSnippet({ ...BASE_INPUT, title });
 
-    expect(result.title.characters).toBe(4);
+    expect(result.title.characters).toBe(6);
     expect(result.title.preview).toBe(title);
   });
 
@@ -119,5 +128,13 @@ describe('analyzeSerpSnippet', () => {
     expect(result.title.estimatedPixels).toBeLessThan(200);
     expect(result.title.status).not.toBe('likely-truncated');
     expect(estimateTextWidth('é', 20)).toBe(estimateTextWidth('é', 20));
+  });
+
+  it('counts East Asian full-width forms at their rendered width', () => {
+    const result = analyzeSerpSnippet({ ...BASE_INPUT, title: 'Ａ'.repeat(40) });
+
+    expect(result.title.estimatedPixels).toBeGreaterThan(580);
+    expect(result.title.status).toBe('likely-truncated');
+    expect(result.title.preview.endsWith('…')).toBe(true);
   });
 });

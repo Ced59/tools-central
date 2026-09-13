@@ -62,7 +62,7 @@ const LIMITS: Record<SerpDevice, DeviceLimits> = {
 const GRAPHEME_SEGMENTER = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
 
 export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis {
-  const siteName = input.siteName.trim();
+  const siteName = normalizeCollapsibleWhitespace(input.siteName);
   const title = normalizeCollapsibleWhitespace(input.title);
   const description = normalizeCollapsibleWhitespace(input.description);
   const parsedUrl = parseDisplayUrl(input.url);
@@ -87,7 +87,7 @@ export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis
 }
 
 function normalizeCollapsibleWhitespace(value: string): string {
-  return value.replace(/[ \t\n\f\r]+/g, ' ').trim();
+  return value.replace(/[ \t\n\f\r]+/g, ' ').replace(/^ +| +$/g, '');
 }
 
 function analyzeField(
@@ -145,11 +145,12 @@ function parseDisplayUrl(rawUrl: string): { display: string; valid: boolean } {
   try {
     const candidate = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
     const parsed = new URL(candidate);
-    if (!['http:', 'https:'].includes(parsed.protocol) || !parsed.hostname.includes('.')) {
+    const hostname = parsed.hostname.replace(/\.$/, '');
+    if (!['http:', 'https:'].includes(parsed.protocol) || !isValidDomainName(hostname)) {
       return { display: trimmed, valid: false };
     }
 
-    const host = parsed.hostname.replace(/^www\./i, '');
+    const host = hostname.replace(/^www\./i, '');
     const path = parsed.pathname
       .split('/')
       .filter(Boolean)
@@ -164,6 +165,17 @@ function parseDisplayUrl(rawUrl: string): { display: string; valid: boolean } {
   } catch {
     return { display: trimmed, valid: false };
   }
+}
+
+function isValidDomainName(hostname: string): boolean {
+  if (hostname.length > 253) return false;
+
+  const labels = hostname.split('.');
+  return labels.length >= 2 && labels.every(label => (
+    label.length >= 1
+    && label.length <= 63
+    && /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i.test(label)
+  ));
 }
 
 function decodePathSegment(segment: string): string {
@@ -192,6 +204,7 @@ function estimateTextWidthEm(value: string): number {
 
 function estimateGraphemeWidthEm(grapheme: string): number {
   if (/\p{Extended_Pictographic}|\p{Regional_Indicator}|\u20e3/u.test(grapheme)) return 1;
+  if (isEastAsianFullWidth(grapheme)) return 1;
 
   let em = 0;
   for (const character of grapheme) {
@@ -204,6 +217,27 @@ function estimateGraphemeWidthEm(grapheme: string): number {
     else em += 0.52;
   }
   return em;
+}
+
+function isEastAsianFullWidth(grapheme: string): boolean {
+  return Array.from(grapheme).some(character => {
+    const codePoint = character.codePointAt(0) ?? 0;
+    return codePoint >= 0x1100 && (
+      codePoint <= 0x115f
+      || codePoint === 0x2329
+      || codePoint === 0x232a
+      || (codePoint >= 0x2e80 && codePoint <= 0xa4cf && codePoint !== 0x303f)
+      || (codePoint >= 0xac00 && codePoint <= 0xd7a3)
+      || (codePoint >= 0xf900 && codePoint <= 0xfaff)
+      || (codePoint >= 0xfe10 && codePoint <= 0xfe19)
+      || (codePoint >= 0xfe30 && codePoint <= 0xfe6f)
+      || (codePoint >= 0xff01 && codePoint <= 0xff60)
+      || (codePoint >= 0xffe0 && codePoint <= 0xffe6)
+      || (codePoint >= 0x1b000 && codePoint <= 0x1b001)
+      || (codePoint >= 0x1f200 && codePoint <= 0x1f251)
+      || (codePoint >= 0x20000 && codePoint <= 0x3fffd)
+    );
+  });
 }
 
 function truncateToWidth(value: string, maximumPixels: number, fontSize: number): string {
@@ -222,7 +256,7 @@ function truncateToWidth(value: string, maximumPixels: number, fontSize: number)
     usedEm += graphemeEm;
   }
 
-  return `${accepted.join('').trimEnd()}${ellipsis}`;
+  return `${accepted.join('').replace(/ +$/g, '')}${ellipsis}`;
 }
 
 function segmentGraphemes(value: string): string[] {
