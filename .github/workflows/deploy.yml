@@ -154,7 +154,40 @@ jobs:
             deploy_root="${{ env.DEPLOY_PATH }}"
             release="$deploy_root/releases/${{ github.sha }}"
             current="$deploy_root/current"
-            previous=$(readlink -f "$current" 2>/dev/null || true)
+            previous=""
+            previous_is_legacy="false"
+
+            if [ -L "$current" ]; then
+              previous=$(readlink -f "$current")
+            elif [ -f "$deploy_root/docker-compose.yml" ] && [ -d "$deploy_root/site" ]; then
+              previous="$deploy_root"
+              previous_is_legacy="true"
+            fi
+
+            rollback_release() {
+              trap - ERR
+              if [ -z "$previous" ] || [ ! -d "$previous" ]; then
+                echo "No previous release is available for rollback."
+                return 1
+              fi
+
+              echo "Rolling back to $previous"
+              if [ "$previous_is_legacy" = "true" ]; then
+                rm -f "$current" "$deploy_root/current.next"
+              else
+                ln -sfn "$previous" "$deploy_root/current.next"
+                mv -Tf "$deploy_root/current.next" "$current"
+              fi
+              cd "$previous"
+              docker compose --project-name tools-central up -d --remove-orphans --force-recreate
+            }
+
+            rollback_on_error() {
+              status=$?
+              echo "Deployment command failed with status $status."
+              rollback_release || true
+              exit "$status"
+            }
 
             test -f "$release/docker-compose.yml"
             test -f "$release/nginx.conf"
@@ -162,15 +195,17 @@ jobs:
 
             ln -sfn "$release" "$deploy_root/current.next"
             mv -Tf "$deploy_root/current.next" "$current"
+            trap rollback_on_error ERR
             cd "$current"
-            docker compose up -d --remove-orphans --force-recreate
+            docker compose --project-name tools-central up -d --remove-orphans --force-recreate
 
             for attempt in $(seq 1 12); do
               status=$(docker inspect --format='{{.State.Health.Status}}' tools-central 2>/dev/null || true)
               if [ "$status" = "healthy" ]; then
-                docker compose ps
+                docker compose --project-name tools-central ps
                 if wget -q --spider http://127.0.0.1/fr/ && \
                    wget -q --spider http://127.0.0.1/fr/categories/math/percentages/percentage-of-number; then
+                  trap - ERR
                   exit 0
                 fi
                 echo "Container is healthy but required routes are unavailable."
@@ -179,16 +214,9 @@ jobs:
               sleep 5
             done
 
-            docker compose ps
+            docker compose --project-name tools-central ps || true
             docker logs --tail 100 tools-central || true
-
-            if [ -n "$previous" ] && [ -d "$previous" ]; then
-              echo "Healthcheck failed; rolling back to $previous"
-              ln -sfn "$previous" "$deploy_root/current.next"
-              mv -Tf "$deploy_root/current.next" "$current"
-              cd "$current"
-              docker compose up -d --remove-orphans --force-recreate
-            fi
+            rollback_release || true
             exit 1
 
       - name: Verify public deployment
