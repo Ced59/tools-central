@@ -14,7 +14,7 @@ Convertir un ratio (a:b) en fraction permet de le manipuler plus facilement en c
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_ratios_ratio_to_fraction_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_ratios_ratio_to_fraction_uc1_title:Mathématiques scolaires`,
@@ -37,7 +37,7 @@ Transformer un ratio en fraction pour l’intégrer dans un calcul de proportion
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_ratios_ratio_to_fraction_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_ratios_ratio_to_fraction_out1:
 La fraction équivalente au ratio saisi, sous la forme a/b.`,
@@ -49,7 +49,7 @@ Une écriture mathématique directement exploitable pour des calculs, comparaiso
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_ratios_ratio_to_fraction_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_ratios_ratio_to_fraction_lim1:
@@ -65,7 +65,7 @@ La fraction obtenue peut nécessiter une simplification pour être sous forme ir
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_ratios_ratio_to_fraction_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_ratios_ratio_to_fraction_q1:Un ratio et une fraction, est-ce la même chose ?`,
@@ -83,7 +83,7 @@ Oui, la fraction peut souvent être simplifiée en divisant le numérateur et le
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_ratios_ratio_to_fraction_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_ratios_ratio_to_fraction_tip:
 Après conversion, simplifie toujours la fraction : cela facilite les comparaisons et les calculs suivants.`,

@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-file-pdf"
+  icon="tc-icon tc-icon-file-pdf"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (filteredFields().length === 0) {
       <div class="empty-box">
-        <i class="pi pi-search" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
         <span i18n="@@pdf_fields_no_match">Aucun champ ne correspond au filtre.</span>
       </div>
     } @else {
@@ -33,7 +33,7 @@
           <div class="field-card-header">
             <div class="field-card-title">
               <div class="field-name">{{ f.Name }}</div>
-              <p-tag severity="info" [value]="f.Type"></p-tag>
+              <tc-tag severity="info" [value]="f.Type"></tc-tag>
             </div>
 
             <div class="field-card-page">
@@ -44,7 +44,7 @@
 
           <div class="field-card-value">
             <div class="muted" i18n="@@pdf_fields_value_label">Valeur</div>
-            <p-tag severity="contrast" [value]="JSON.stringify(f.Value)"></p-tag>
+            <tc-tag severity="contrast" [value]="JSON.stringify(f.Value)"></tc-tag>
           </div>
 
           @if (showAdvanced()) {
@@ -148,40 +148,38 @@
   <!-- ✅ Options droite (en bas du JSON panel) -->
   <div rightOptions>
     <div class="actions" style="flex-direction: column; align-items: flex-start;">
-      <p-button
+      <tc-button
         type="button"
-        icon="pi pi-align-left"
+        icon="tc-icon tc-icon-align-left"
         [severity]="pretty() ? 'help' : 'secondary'"
         [text]="!pretty()"
         (onClick)="togglePretty()"
         [label]="prettyLabel()"
-      ></p-button>
+      ></tc-button>
 
-      <p-button
+      <tc-button
         type="button"
-        icon="pi pi-filter"
+        icon="tc-icon tc-icon-filter"
         [severity]="includeEmpty() ? 'help' : 'secondary'"
         [text]="!includeEmpty()"
         (onClick)="toggleIncludeEmpty()"
         [label]="emptyLabel()"
-      ></p-button>
+      ></tc-button>
 
-      <p-button
+      <tc-button
         type="button"
-        icon="pi pi-sliders-h"
+        icon="tc-icon tc-icon-sliders-h"
         [severity]="showAdvanced() ? 'help' : 'secondary'"
         [text]="!showAdvanced()"
         (onClick)="toggleAdvanced()"
         [label]="advancedLabel()"
-      ></p-button>
+      ></tc-button>
     </div>
 
     @if (status() === 'ready' && fields().length === 0) {
       <div class="tip-box" role="status">
-        <i class="pi pi-info-circle" aria-hidden="true"></i>
-        <span i18n="@@pdf_fields_no_fields">
-          Aucun champ détecté. Le PDF ne contient peut-être pas d'AcroForm (ou utilise XFA).
-        </span>
+        <i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i>
+        <span i18n="@@pdf_fields_no_fields">Aucun champ détecté. Le PDF ne contient peut-être pas d'AcroForm (ou utilise XFA).</span>
       </div>
     }
   </div>
@@ -207,7 +205,7 @@
       </ul>
 
       <div class="tip-box">
-        <i class="pi pi-info-circle"></i>
+        <i class="tc-icon tc-icon-info-circle"></i>
         <span i18n="@@pdf_fields_page_minus1_help">
           Si <code>Page = -1</code>, cela signifie que la métadonnée permettant de relier le champ à une page
           n'est pas disponible (ou pas exploitable) côté navigateur.
@@ -215,7 +213,7 @@
       </div>
 
       <div class="tip-box">
-        <i class="pi pi-code"></i>
+        <i class="tc-icon tc-icon-code"></i>
         <span class="mono">
           Exemple :
           {{ '{' }} "Name": "NOM_PM_1", "Type": "e_text", "Widget": {{ '{' }} "Page": 1 {{ '}' }},

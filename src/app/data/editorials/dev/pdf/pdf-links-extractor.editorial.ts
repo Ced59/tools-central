@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_links_extractor_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_links_extractor_uc1_title:Audit de liens sortants`, text: $localize`:@@ed_dev_pdf_pdf_links_extractor_uc1_text:Lister toutes les URL présentes dans un PDF (site public, brochure, documentation) et détecter les liens obsolètes.` },
         { title: $localize`:@@ed_dev_pdf_pdf_links_extractor_uc2_title:Migration / refonte`, text: $localize`:@@ed_dev_pdf_pdf_links_extractor_uc2_text:Mettre à jour des domaines/chemins lors d’une migration, en partant d’un inventaire fiable des liens.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_links_extractor_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_links_extractor_out1:Un export JSON des liens par page : type d’action (URI/GoTo/GoToR), cible, rectangle de clic, texte/annotation associée si disponible.`,
         $localize`:@@ed_dev_pdf_pdf_links_extractor_out2:Une base exploitable pour automatiser des tests (crawler, validation HTTP, règles de conformité).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_links_extractor_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_links_extractor_lim1:Un lien peut être “dessiné” comme du texte sans annotation : dans ce cas, il n’est pas détectable comme lien cliquable.` },
         { text: $localize`:@@ed_dev_pdf_pdf_links_extractor_lim2:Selon le PDF, le texte visible et la cible peuvent différer (ex : bouton, annotation sans texte).` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_links_extractor_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_links_extractor_q1:Est-ce que l’outil vérifie si les liens répondent ?`, a: $localize`:@@ed_dev_pdf_pdf_links_extractor_a1:Non : il extrait les cibles. La vérification HTTP se fait ensuite via un script/crawler.` },
         { q: $localize`:@@ed_dev_pdf_pdf_links_extractor_q2:Les liens internes (sommaire) sont-ils inclus ?`, a: $localize`:@@ed_dev_pdf_pdf_links_extractor_a2:Oui, les actions de type GoTo/Named destination sont généralement exportées.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_links_extractor_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_links_extractor_tip:Pour des PDF destinés au public, exportez les liens puis passez la liste dans un validateur HTTP : c’est le moyen le plus fiable de détecter des URL cassées avant publication.`,
     },

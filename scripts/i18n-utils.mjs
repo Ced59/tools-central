@@ -261,7 +261,18 @@ export function readFile(filePath) {
 }
 
 export function writeFile(filePath, content) {
-    fs.writeFileSync(filePath, content, "utf8");
+    const retryableCodes = new Set(["EBUSY", "EPERM", "EACCES", "UNKNOWN"]);
+    for (let attempt = 1; attempt <= 6; attempt++) {
+        try {
+            fs.writeFileSync(filePath, content, "utf8");
+            return;
+        } catch (error) {
+            if (!retryableCodes.has(error?.code) || attempt === 6) {
+                throw error;
+            }
+            Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, attempt * 100);
+        }
+    }
 }
 
 export function ensureDir(dir) {

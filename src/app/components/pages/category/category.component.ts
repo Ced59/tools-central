@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -13,9 +13,10 @@ import { SeoService } from '../../../services/seo/seo.service';
   standalone: true,
   imports: [NgFor, NgIf, RouterLink, ToolCardComponent],
   templateUrl: './category.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './category.component.scss',
 })
-export class CategoryComponent {
+export class CategoryComponent implements OnInit {
   private seo = inject(SeoService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
@@ -43,7 +44,7 @@ export class CategoryComponent {
           id: g.id,
           title: g.title,
           description: g.description,
-          icon: g.icon ?? 'pi pi-wrench',
+          icon: g.icon ?? 'tc-icon tc-icon-wrench',
           route: g.route,
           available: g.available,
         });

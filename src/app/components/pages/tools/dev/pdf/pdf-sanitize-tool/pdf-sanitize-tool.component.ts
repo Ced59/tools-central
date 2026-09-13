@@ -1,18 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 import JSZip from 'jszip';
-import {
-  PDFArray,
-  PDFDict,
-  PDFDocument,
-  PDFName,
-} from 'pdf-lib';
+
+import { SanitizePdfUseCase } from '../../../../../../features/pdf-sanitize/application/sanitize-pdf.use-case';
+import type { PdfSanitizeCounts, PdfSanitizeOptions } from '../../../../../../features/pdf-sanitize/domain/pdf-sanitize.models';
+import { PdfSanitizeWorkerAdapter } from '../../../../../../features/pdf-sanitize/infrastructure/pdf-sanitize-worker.adapter';
 
 import {
   PdfToolShellComponent,
@@ -27,30 +25,12 @@ type SourceInfo = {
   mime: string;
 };
 
-type SanitizeCounts = {
-  pages: number;
-  annotationsRemoved: number;
-  openActionRemoved: boolean;
-  catalogAaRemoved: boolean;
-  namesRemoved: boolean;
-  acroFormRemoved: boolean;
-  metadataCleared: boolean;
-  rebuilt: boolean;
-};
-
 type SanitizeReport = {
   tool: 'pdf-sanitize';
   source: SourceInfo;
   output: { fileName: string; bytes: number };
-  options: {
-    clearMetadata: boolean;
-    removeAnnotations: boolean;
-    removeActions: boolean;
-    removeNames: boolean;
-    removeAcroForm: boolean;
-    rebuildPdf: boolean;
-  };
-  counts: SanitizeCounts;
+  options: PdfSanitizeOptions;
+  counts: PdfSanitizeCounts;
   notes: string[];
   warnings: string[];
 };
@@ -77,10 +57,12 @@ type SanitizeOutput = {
     TagModule,
   ],
   templateUrl: './pdf-sanitize-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-sanitize-tool.component.scss',
 })
 export class PdfSanitizeToolComponent {
   private readonly fb = new FormBuilder();
+  private readonly sanitizePdf = new SanitizePdfUseCase(new PdfSanitizeWorkerAdapter());
 
   readonly backLink = '/categories/dev/pdf';
 
@@ -214,7 +196,7 @@ export class PdfSanitizeToolComponent {
     this.errorMessage.set('');
     this.tipMessage.set(this.ui.tipPrivacy);
 
-    const options = {
+    const options: PdfSanitizeOptions = {
       clearMetadata: this.form.controls.clearMetadata.value,
       removeAnnotations: this.form.controls.removeAnnotations.value,
       removeActions: this.form.controls.removeActions.value,
@@ -224,81 +206,30 @@ export class PdfSanitizeToolComponent {
     };
 
     try {
-      const buf = await file.arrayBuffer();
-      const srcDoc = await PDFDocument.load(buf, { ignoreEncryption: false });
-
+      const processed = await this.sanitizePdf.execute({
+        pdfBytes: await file.arrayBuffer(),
+        options,
+      });
       const warnings: string[] = [];
       const notes: string[] = [
         this.ui.tipBestEffort,
         this.ui.tipPrivacy,
       ];
 
-      // 1) compter les annotations (source)
-      const annotationsBefore = safeCountAnnotations(srcDoc);
-
-      // 2) base: rebuild (recommandé pour enlever un max d'éléments)
-      let outDoc: PDFDocument;
-
-      if (options.rebuildPdf) {
-        outDoc = await rebuildDocumentByCopyingPages(srcDoc);
-      } else {
-        outDoc = srcDoc;
+      if (processed.annotationsMayRemain) {
+        warnings.push($localize`:@@pdf_sanitize_warn_annots:Certaines annotations peuvent subsister selon la structure du PDF.`);
       }
 
-      // 3) nettoyage bas niveau (sur outDoc)
-      const counts: SanitizeCounts = {
-        pages: outDoc.getPageCount(),
-        annotationsRemoved: 0,
-        openActionRemoved: false,
-        catalogAaRemoved: false,
-        namesRemoved: false,
-        acroFormRemoved: false,
-        metadataCleared: false,
-        rebuilt: options.rebuildPdf,
-      };
-
-      if (options.removeAnnotations) {
-        const removed = safeRemoveAnnotations(outDoc);
-        counts.annotationsRemoved = removed;
-        if (removed === 0 && annotationsBefore > 0) {
-          warnings.push($localize`:@@pdf_sanitize_warn_annots:Certaines annotations peuvent subsister selon la structure du PDF.`);
-        }
-      }
-
-      if (options.removeActions) {
-        const { openActionRemoved, catalogAaRemoved } = safeRemoveActions(outDoc);
-        counts.openActionRemoved = openActionRemoved;
-        counts.catalogAaRemoved = catalogAaRemoved;
-      }
-
-      if (options.removeNames) {
-        counts.namesRemoved = safeRemoveNames(outDoc);
-      }
-
-      if (options.removeAcroForm) {
-        counts.acroFormRemoved = safeRemoveAcroForm(outDoc);
-      }
-
-      if (options.clearMetadata) {
-        counts.metadataCleared = safeClearMetadata(outDoc);
-      }
-
-      // 4) sortie PDF
-      const outU8 = await outDoc.save();
-
-      // ✅ force un ArrayBuffer classique (pas SharedArrayBuffer)
-      const outBuf = Uint8Array.from(outU8).buffer;
-      const outBlob = new Blob([outBuf], { type: 'application/pdf' });
+      const outBlob = new Blob([processed.pdfBytes], { type: 'application/pdf' });
 
       const outputFileName = buildOutputName(info.name, this.form.controls.filePrefix.value);
 
-      // 5) report
       const rep: SanitizeReport = {
         tool: 'pdf-sanitize',
         source: info,
-        output: { fileName: outputFileName, bytes: outU8.byteLength },
+        output: { fileName: outputFileName, bytes: processed.pdfBytes.byteLength },
         options,
-        counts,
+        counts: processed.counts,
         notes,
         warnings,
       };
@@ -309,7 +240,7 @@ export class PdfSanitizeToolComponent {
         {
           index: 1,
           fileName: outputFileName,
-          bytes: outU8.byteLength,
+          bytes: processed.pdfBytes.byteLength,
           blob: outBlob,
           tag: 'PDF',
         },
@@ -387,143 +318,6 @@ export class PdfSanitizeToolComponent {
       this.sourceFile.set(null);
       this.sourceInfo.set(null);
     }
-  }
-}
-
-// =============================================================================
-// Helpers (pdf-lib best-effort)
-// =============================================================================
-
-async function rebuildDocumentByCopyingPages(srcDoc: PDFDocument): Promise<PDFDocument> {
-  const out = await PDFDocument.create();
-  const pages = await out.copyPages(srcDoc, srcDoc.getPageIndices());
-  for (const p of pages) out.addPage(p);
-  return out;
-}
-
-function safeCountAnnotations(doc: PDFDocument): number {
-  try {
-    let total = 0;
-    for (const p of doc.getPages()) {
-      const ann = (p as any).node?.lookupMaybe?.(PDFName.of('Annots'), PDFArray);
-      if (ann && ann instanceof PDFArray) total += ann.size();
-    }
-    return total;
-  } catch {
-    return 0;
-  }
-}
-
-function safeRemoveAnnotations(doc: PDFDocument): number {
-  let removed = 0;
-  try {
-    for (const p of doc.getPages()) {
-      const node = (p as any).node as PDFDict | undefined;
-      if (!node) continue;
-
-      const ann = node.lookupMaybe(PDFName.of('Annots'), PDFArray);
-      if (ann && ann instanceof PDFArray) {
-        removed += ann.size();
-        node.delete(PDFName.of('Annots'));
-      }
-
-      // Additional Actions au niveau page
-      if (node.has(PDFName.of('AA'))) {
-        node.delete(PDFName.of('AA'));
-      }
-    }
-  } catch {
-    // ignore
-  }
-  return removed;
-}
-
-function safeRemoveActions(doc: PDFDocument): { openActionRemoved: boolean; catalogAaRemoved: boolean } {
-  let openActionRemoved = false;
-  let catalogAaRemoved = false;
-
-  try {
-    const catalog = (doc as any).catalog as PDFDict | undefined;
-    if (!catalog) return { openActionRemoved, catalogAaRemoved };
-
-    if (catalog.has(PDFName.of('OpenAction'))) {
-      catalog.delete(PDFName.of('OpenAction'));
-      openActionRemoved = true;
-    }
-    if (catalog.has(PDFName.of('AA'))) {
-      catalog.delete(PDFName.of('AA'));
-      catalogAaRemoved = true;
-    }
-  } catch {
-    // ignore
-  }
-
-  return { openActionRemoved, catalogAaRemoved };
-}
-
-function safeRemoveNames(doc: PDFDocument): boolean {
-  try {
-    const catalog = (doc as any).catalog as PDFDict | undefined;
-    if (!catalog) return false;
-
-    // Names peut contenir JavaScript, EmbeddedFiles, etc.
-    if (catalog.has(PDFName.of('Names'))) {
-      catalog.delete(PDFName.of('Names'));
-      return true;
-    }
-  } catch {
-    // ignore
-  }
-  return false;
-}
-
-function safeRemoveAcroForm(doc: PDFDocument): boolean {
-  try {
-    const catalog = (doc as any).catalog as PDFDict | undefined;
-    if (!catalog) return false;
-
-    if (catalog.has(PDFName.of('AcroForm'))) {
-      catalog.delete(PDFName.of('AcroForm'));
-      return true;
-    }
-  } catch {
-    // ignore
-  }
-  return false;
-}
-
-function safeClearMetadata(doc: PDFDocument): boolean {
-  try {
-    // pdf-lib “Document Info”
-    doc.setTitle('');
-    doc.setAuthor('');
-    doc.setSubject('');
-    doc.setKeywords([]);
-    doc.setProducer('');
-    doc.setCreator('');
-
-    // dates — on évite d'inventer, on “neutralise” avec now (ou on peut tenter delete bas niveau)
-    const now = new Date();
-    try {
-      doc.setCreationDate(now);
-      doc.setModificationDate(now);
-    } catch {
-      // versions pdf-lib différentes
-    }
-
-    // tentative de suppression du Metadata stream (XMP) si présent
-    try {
-      const catalog = (doc as any).catalog as PDFDict | undefined;
-      if (catalog?.has(PDFName.of('Metadata'))) {
-        catalog.delete(PDFName.of('Metadata'));
-      }
-    } catch {
-      // ignore
-    }
-
-    return true;
-  } catch {
-    return false;
   }
 }
 

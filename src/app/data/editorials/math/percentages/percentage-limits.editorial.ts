@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_limits_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_limits_uc1_title:Décrypter une information trompeuse`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_limits_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_limits_out1:Des explications claires sur les situations où les pourcentages ne suffisent pas à décrire correctement une réalité.`,
         $localize`:@@ed_math_percentages_percentage_limits_out2:Des exemples concrets montrant les erreurs d’interprétation les plus courantes.`,
@@ -52,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_limits_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_limits_lim1:Un pourcentage n’a de sens que si la base de calcul est clairement définie.`,
@@ -73,7 +73,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_limits_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_limits_q1:Pourquoi dit-on que les pourcentages peuvent être trompeurs ?`,
@@ -94,7 +94,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_limits_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_limits_tip:Face à un pourcentage, posez toujours la question “par rapport à quoi ?” : la base est souvent plus importante que le chiffre lui-même.`,
     },

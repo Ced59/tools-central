@@ -11,7 +11,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_unicode_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_dev_pdf_unicode_uc1_title:Texte illisible ou incorrect`,
@@ -28,7 +28,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_unicode_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_unicode_out1:Les tables ToUnicode extraites et interprétées.`,
         $localize`:@@ed_dev_pdf_unicode_out2:Une vision claire des correspondances glyphes → caractères Unicode.`,
@@ -39,7 +39,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_unicode_limits:Limites`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_dev_pdf_unicode_lim1:Les PDF sans table ToUnicode restent difficiles à interpréter.`,

@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-sitemap"
+  icon="tc-icon tc-icon-sitemap"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="base" i18n="@@pct_comp_base">Valeur de base</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="base"
             [formControl]="form.controls.base"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -55,7 +55,7 @@
                 <span class="row-label" i18n="@@pct_comp_item_label">Niveau</span>
                 <span class="row-index">{{ i + 1 }}</span>
 
-                <p-inputNumber
+                <tc-number-input
                   [inputId]="'p' + i"
                   [formControl]="$any(percentCtrlAt(i))"
                   [minFractionDigits]="0"
@@ -67,37 +67,37 @@
                 />
               </div>
 
-              <p-button
+              <tc-button
                 type="button"
                 severity="secondary"
                 [text]="true"
-                icon="pi pi-trash"
+                icon="tc-icon tc-icon-trash"
                 (onClick)="removePercent(i)"
                 [disabled]="percentsArray.length <= 1"
                 aria-label="Supprimer"
                 i18n-aria-label="@@pct_comp_remove_aria"
-              ></p-button>
+              ></tc-button>
             </div>
           </div>
 
           <div class="percent-actions">
-            <p-button
+            <tc-button
               type="button"
-              icon="pi pi-plus"
+              icon="tc-icon tc-icon-plus"
               (onClick)="addPercent(0)"
               label="Ajouter un niveau"
               i18n-label="@@pct_comp_add"
-            ></p-button>
+            ></tc-button>
 
-            <p-button
+            <tc-button
               type="button"
               severity="secondary"
               [text]="true"
-              icon="pi pi-times"
+              icon="tc-icon tc-icon-times"
               (onClick)="clearPercents()"
               label="Vider"
               i18n-label="@@pct_comp_clear"
-            ></p-button>
+            ></tc-button>
           </div>
 
           <small class="hint" i18n="@@pct_comp_list_hint">
@@ -143,11 +143,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -213,7 +213,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

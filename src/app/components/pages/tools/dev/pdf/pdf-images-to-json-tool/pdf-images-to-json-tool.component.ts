@@ -1,22 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { PDFDocument } from 'pdf-lib';
 
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 import { extractPdfImages, type PdfExtractedImage } from './pdf-images-extractor';
 import { buildZipStore } from './zip-store';
-import {ButtonDirective} from "primeng/button";
+import {ButtonDirective} from "@ui";
 
 @Component({
   selector: 'app-pdf-images-to-json-tool',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent, ButtonDirective],
   templateUrl: './pdf-images-to-json-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-images-to-json-tool.component.scss',
 })
 export class PdfImagesToJsonToolComponent {

@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_uc1_title:Impression pro`, text: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_uc1_text:Vérifier que les polices sont embarquées avant envoi à un imprimeur ou à un prestataire.` },
         { title: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_uc2_title:Compatibilité multi-lecteurs`, text: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_uc2_text:Éviter les substitutions de polices entre Adobe Reader, navigateurs et viewers mobiles.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_font_embedding_check_out1:Un rapport indiquant, pour chaque police, si elle est embarquée, sous-ensemble (subset) ou référencée sans embedding.`,
         $localize`:@@ed_dev_pdf_pdf_font_embedding_check_out2:Des détails utiles : nom de base, type (Type0/TrueType/Type1…), encodage, présence d’un ToUnicode (si détectable).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_lim1:Une police “embarquée” ne garantit pas à 100% un rendu identique : l’encodage et le mapping Unicode comptent aussi.` },
         { text: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_lim2:Certains PDF utilisent des polices propriétaires ou des sous-ensembles aux noms “cryptiques” (ex : ABCDEF+Font).` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_q1:C’est quoi une police “subset” ?`, a: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_a1:C’est une police embarquée partiellement : seuls les glyphes utilisés dans le document sont inclus.` },
         { q: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_q2:Pourquoi mon PDF a une police non embarquée ?`, a: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_a2:Cela dépend de l’outil de génération/export. Beaucoup laissent la police externe par défaut.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_font_embedding_check_tip:Si votre objectif est l’extraction de texte fiable, vérifiez aussi la présence de ToUnicode : une police embarquée sans mapping peut rendre l’extraction difficile.`,
     },

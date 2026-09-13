@@ -1,0 +1,170 @@
+# Audit technique de Tools Central
+
+Date de référence : 13 septembre 2026  
+Périmètre : application Angular, architecture, dépendances, sécurité, tests, i18n, SEO technique, performance, catalogue et chaîne de déploiement.
+
+## Conclusion
+
+Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète.
+
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Deux features servent désormais de références (`percentage-of-number` et le moteur de nettoyage PDF), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 59 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+
+## Mesures vérifiées après corrections
+
+| Indicateur | Avant | État vérifié |
+|---|---:|---:|
+| Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
+| TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
+| Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 649,76 kB brut, 163,22 kB transféré estimé |
+| Vulnérabilités npm | 58, dont 5 critiques | 0 |
+| Tests unitaires | suite non compilable | 90 fichiers, 104 tests verts sous Vitest |
+| Couverture | aucun seuil | 37,72 % statements, 21,37 % branches, 37,98 % fonctions, 41,09 % lignes |
+| E2E | aucun | 4 parcours Playwright verts |
+| Routes statiques | 2 | 73 publiques + une 404 par locale, soit 2 220 pages |
+| Catalogue | incohérences possibles | 4 catégories, 17 groupes, 166 outils, 59 disponibles |
+| Locales | 30 configurées | 30 compilées et contrôlées |
+| Traductions secondaires | marqueurs incomplets non bloqués | 151 293 segments, 0 `TODO`, 0 warning technique |
+| Dette éditoriale source | 96 `TODO` | 0 `TODO` |
+| Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
+
+Mesure Playwright locale sur l’accueil mobile : LCP 1 972 ms, CLS 0,0039, `DOMContentLoaded` 390 ms et interaction thème 46 ms. Ce sont des garde-fous de laboratoire, pas des Core Web Vitals terrain.
+
+## Travaux réalisés
+
+### Dépendances et compilation
+
+- Migration Angular 21 → 22 avec Node 24 en CI et moteurs Node explicites.
+- Passage à TypeScript strict et Angular templates stricts.
+- Suppression de `primeng`, `@primeng/themes`, `primeicons`, de leur police et de toutes les classes `pi`; remplacement par les primitives internes et `tc-icon`.
+- Suppression d’Express SSR et des configurations/fichiers morts : la cible réelle est une sortie statique Nginx.
+- Suppression des dépendances inutiles identifiées et mise à jour des versions compatibles, dont KaTeX et JSDOM.
+- Audit npm complet et production à zéro vulnérabilité. TypeScript 7 et Vitest 5 sont volontairement refusés tant que les pairs d’Angular 22.1 exigent TypeScript `<6.1` et Vitest 4.
+- Budgets de production réalistes : 900 kB en avertissement et 1,2 MB en erreur pour le bundle initial.
+
+### Architecture et qualité du code
+
+- Ajout d’ESLint 10, angular-eslint, règles TypeScript, RxJS et accessibilité des templates.
+- Ajout d’un validateur de frontières : `domain`, `application`, `infrastructure`, `presentation`, imports inter-features publics et interdiction Prime.
+- Migration pilote de `percentage-of-number` vers une tranche verticale avec domaine pur, cas d’usage, présentation `OnPush` et tests métier.
+- Extraction du nettoyage PDF dans domaine/application/infrastructure avec Web Worker et transfert d’`ArrayBuffer`.
+- Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
+- Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
+- Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
+
+### Tests
+
+- Migration Karma/Jasmine → runner Angular Vitest.
+- Correction des fixtures, providers, API navigateur JSDOM et spies incompatibles.
+- Seuils de couverture bloquants fixés au niveau actuel pour empêcher une baisse silencieuse.
+- Tests métier du calcul de pourcentage, du cas d’usage et du moteur PDF.
+- Remplacement des tests superficiels des composants PDF modifiés par des scénarios valides et rejetés.
+- Playwright couvre accueil/langue/thème, calcul réel/réinitialisation, vraie 404/noindex et budgets performance mobile.
+
+### Internationalisation
+
+- Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
+- Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
+- Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
+- 5 217 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 151 293 segments techniquement complets.
+
+La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
+
+### SEO technique
+
+- Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
+- Exclusion automatique des outils `available: false`.
+- 73 URLs publiques par locale et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- Suppression du faux `lastmod` égal à la date de chaque build.
+- Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
+- Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
+- Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
+- Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
+- `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
+
+### CI, GitHub et déploiement
+
+- Job `Verify` obligatoire sur PR et push : périmètre atomique, `npm ci`, audit, lint, i18n stricte, catalogue, architecture, couverture, build complet, SEO rendu et E2E.
+- Job `Deploy production` séparé, uniquement sur push `master` et après succès de `Verify`.
+- Actions tierces épinglées par SHA et Dependabot configuré pour npm et GitHub Actions.
+- Artifact statique transféré entre jobs ; aucune reconstruction différente dans le job de production.
+- Releases VPS versionnées, bascule atomique du lien `current`, healthcheck Nginx, contrôles de deux routes, rollback N-1 et smoke HTTP public.
+- Protection de `master` appliquée et relue via l’API GitHub : PR requise, `Verify` requis et strict, administrateurs inclus, conversations résolues, historique linéaire, force-push/suppression interdits.
+- Fusion squash uniquement, titre de PR repris dans l’historique, et suppression automatique de la branche source après merge.
+- Environnement GitHub `production` créé avec une politique de déploiement limitée aux branches protégées.
+
+Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent donc temporairement à zéro ; elles devront passer à une dès qu’un second reviewer peut approuver. Cette exception évite de rendre le dépôt impossible à fusionner et ne permet pas de contourner `Verify`.
+
+## Risques et chantiers restants
+
+### P0 — avant une croissance SEO importante
+
+| Constat | Risque | Prochaine PR atomique |
+|---|---|---|
+| 29 locales traduites automatiquement sans preuve de revue native | contresens, confiance et qualité SEO variables | relire un cluster prioritaire par langue, tracer qui/quand/quoi et corriger avant extension |
+| Nouveau pipeline jamais exécuté jusqu’au bout sur le VPS depuis un merge | secrets, permissions ou environnement serveur encore incompatibles | merge contrôlé, surveillance du job, vérification publique et exercice du rollback |
+| SSH utilise encore `VPS_PASSWORD` | secret plus exposé et droits potentiellement larges | clé dédiée au déploiement, compte limité, rotation du mot de passe |
+| 107 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
+
+### P1 — migration progressive
+
+| Dette mesurée | Effet | Traitement attendu |
+|---|---|---|
+| 75 tests résiduels nommés `should create` | protection comportementale faible | remplacer au fil des features par cas normal, limite, erreur et interaction |
+| 82 composants en `ChangeDetectionStrategy.Eager` | travail de rendu évitable | passer à `OnPush` seulement avec tests de comportement |
+| 127 occurrences textuelles de `any` | contrats faibles ou faux positifs à examiner | typer feature par feature, sans conversion mécanique aveugle |
+| Architecture historique majoritaire hors `features/` | règles métier encore mêlées à l’UI | migrer un outil par PR en suivant les deux pilotes |
+| Couverture globale encore basse | zones historiques non protégées | augmenter les seuils par paliers ; exiger une forte couverture du nouveau domaine |
+| Parseurs PDF/ZIP encore exécutés dans certains composants | UI bloquée, pression mémoire | ports, limites, Workers et tests de fichiers hostiles |
+| Aucune vérification axe-core/régression visuelle | défauts accessibilité/UI non détectés | petite suite automatisée, puis revue clavier et lecteur d’écran |
+| Pas de données Web Vitals terrain | le test local ne reflète pas le 75e percentile réel | mesurer RUM/Search Console avant de resserrer les budgets |
+
+### P2 — dette acceptée et à surveiller
+
+- Angular replie `pt-BR` vers les données de locale `pt` et émet deux avertissements de build.
+- JSZip, QRCode et `pako` via PDF-Lib restent CommonJS ; ils sont chargés dans des chunks fonctionnels mais provoquent des avertissements d’optimisation.
+- Le Worker de nettoyage PDF pèse 432,53 kB brut ; c’est un chunk paresseux et non le bundle initial, mais sa mémoire et son temps doivent être testés sur de gros documents.
+- L’image Open Graph générique mérite un visuel social dédié et testé.
+- Les limites de taille/complexité ne sont pas encore uniformes pour chaque famille de fichiers.
+- La télémétrie et la conformité vie privée nécessitent une revue dédiée avant toute extension de mesure.
+
+## Marche à suivre
+
+`AGENTS.md` est la règle opérationnelle. Chaque PR doit garder une seule intention et suivre :
+
+```text
+domain <- application <- presentation
+              ^
+              └── infrastructure branchée par ports/composition
+```
+
+Ordre recommandé : revue linguistique prioritaire, premier déploiement contrôlé, rotation SSH, puis migration d’un outil historique à la fois. Les nouvelles opportunités SEO ne commencent qu’après validation réelle de la demande et doivent être livrées une par une.
+
+Contrôles locaux complets :
+
+```bash
+npm ci
+npm audit --omit=dev --audit-level=high
+npm run lint
+npm run i18n:check:strict
+npm run catalog:validate
+npm run architecture:validate
+npm run test:coverage
+npm run build:all && npm run seo:validate
+npm run test:e2e
+```
+
+## Limites de l’audit
+
+Le code, le build local, le HTML prérendu et la configuration GitHub ont été vérifiés. `docker compose config` passe, mais le démon Docker local arrêté n’a pas permis d’exécuter `nginx -t` dans l’image ; un défaut Nginx ferait échouer le healthcheck et déclencherait le rollback. Le job de production, les secrets, les permissions réelles du VPS, les métriques Search Console/Analytics et les Core Web Vitals terrain ne peuvent être prouvés sans un merge contrôlé et des données de production. Aucun volume de recherche ni gain de trafic n’est donc promis.
+
+## Références officielles
+
+- Angular, compatibilité des versions : <https://angular.dev/reference/versions>
+- Angular, calendrier de publication : <https://angular.dev/reference/releases>
+- Angular, génération statique : <https://angular.dev/guide/prerendering>
+- GitHub, protection des branches : <https://docs.github.com/en/rest/branches/branch-protection>
+- Google, contenu utile : <https://developers.google.com/search/docs/fundamentals/creating-helpful-content>
+- Google, règles antispam : <https://developers.google.com/search/docs/essentials/spam-policies>
+- Google, Core Web Vitals : <https://developers.google.com/search/docs/appearance/core-web-vitals>
+- Google, sites multilingues : <https://developers.google.com/search/docs/specialty/international/managing-multi-regional-sites>

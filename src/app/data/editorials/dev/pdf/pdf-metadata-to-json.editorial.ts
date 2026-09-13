@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_uc1_title:Audit conformité / RGPD`, text: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_uc1_text:Détecter des informations sensibles dans les métadonnées (auteur, logiciel interne, chemins, entreprise).` },
         { title: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_uc2_title:Debug de génération`, text: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_uc2_text:Identifier quel outil a produit le PDF (Producer/Creator) et quand il a été généré.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_metadata_to_json_out1:Un JSON complet des métadonnées standard (Title, Author, Subject, Keywords, Creator, Producer, CreationDate, ModDate…).`,
         $localize`:@@ed_dev_pdf_pdf_metadata_to_json_out2:L’export des blocs XMP quand ils existent (souvent plus riches et structurés que l’Info dictionary).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_lim1:Les métadonnées peuvent être vides, incohérentes ou volontairement falsifiées : ce n’est pas une preuve d’origine.` },
         { text: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_lim2:Les formats de date peuvent varier (timezone, format PDF) : interprétez-les avec attention.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_q1:Quelle différence entre Creator et Producer ?`, a: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_a1:Creator est souvent l’application qui a créé le contenu ; Producer l’outil qui a généré/transformé le PDF.` },
         { q: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_q2:Pourquoi je n’ai pas de XMP ?`, a: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_a2:Tous les PDF n’en contiennent pas. Beaucoup se limitent aux champs Info classiques.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_metadata_to_json_tip:Si vous publiez un PDF en ligne, vérifiez systématiquement les métadonnées avant diffusion : c’est un endroit fréquent de fuites d’informations (auteur, société, outils internes).`,
     },

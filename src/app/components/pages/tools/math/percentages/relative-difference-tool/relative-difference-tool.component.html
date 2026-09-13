@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-arrows-h"
+  icon="tc-icon tc-icon-arrows-h"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="a" i18n="@@rel_diff_a">Valeur A</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="a"
             [formControl]="form.controls.a"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-main">
           <label for="b" i18n="@@rel_diff_b">Valeur B</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="b"
             [formControl]="form.controls.b"
             [minFractionDigits]="0"
@@ -60,7 +60,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -110,11 +110,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -166,7 +166,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@rel_diff_note">
             Exemple : A=80, B=100. Par rapport à A : (100−80)/80×100 = +25%.
             Par rapport à B : (100−80)/100×100 = +20%.
@@ -176,7 +176,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

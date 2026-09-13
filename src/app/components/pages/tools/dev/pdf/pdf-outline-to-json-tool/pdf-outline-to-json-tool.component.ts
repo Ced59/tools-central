@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { PDFArray, PDFDict, PDFDocument, PDFHexString, PDFName, PDFRef, PDFString } from 'pdf-lib';
@@ -7,7 +7,6 @@ import { PDFArray, PDFDict, PDFDocument, PDFHexString, PDFName, PDFRef, PDFStrin
 
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 import {PdfToolShellComponent} from "../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component";
 
 interface OutlineItemJson {
@@ -22,6 +21,7 @@ interface OutlineItemJson {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-outline-to-json-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-outline-to-json-tool.component.scss',
 })
 export class PdfOutlineToJsonToolComponent {

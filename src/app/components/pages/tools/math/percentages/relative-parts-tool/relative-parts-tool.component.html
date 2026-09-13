@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-chart-pie"
+  icon="tc-icon tc-icon-chart-pie"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -39,7 +39,7 @@
                 <span class="row-label" i18n="@@rel_parts_item_label">Part</span>
                 <span class="row-index">{{ alphaLabel(i) }}</span>
 
-                <p-inputNumber
+                <tc-number-input
                   [inputId]="'part' + i"
                   [formControl]="$any(partCtrlAt(i))"
                   [minFractionDigits]="0"
@@ -50,37 +50,37 @@
                 />
               </div>
 
-              <p-button
+              <tc-button
                 type="button"
                 severity="secondary"
                 [text]="true"
-                icon="pi pi-trash"
+                icon="tc-icon tc-icon-trash"
                 (onClick)="removePart(i)"
                 [disabled]="partsArray.length <= 2"
                 aria-label="Supprimer"
                 i18n-aria-label="@@rel_parts_remove_aria"
-              ></p-button>
+              ></tc-button>
             </div>
           </div>
 
           <div class="parts-actions">
-            <p-button
+            <tc-button
               type="button"
-              icon="pi pi-plus"
+              icon="tc-icon tc-icon-plus"
               (onClick)="addPart(0)"
               label="Ajouter une valeur"
               i18n-label="@@rel_parts_add"
-            ></p-button>
+            ></tc-button>
 
-            <p-button
+            <tc-button
               type="button"
               severity="secondary"
               [text]="true"
-              icon="pi pi-times"
+              icon="tc-icon tc-icon-times"
               (onClick)="clearParts()"
               label="Vider"
               i18n-label="@@rel_parts_clear"
-            ></p-button>
+            ></tc-button>
           </div>
 
           <small class="hint" i18n="@@rel_parts_list_hint">
@@ -136,11 +136,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -204,7 +204,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@rel_parts_note">
             Si la somme vaut 0, les pourcentages ne sont pas définis.
           </span>
@@ -213,7 +213,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

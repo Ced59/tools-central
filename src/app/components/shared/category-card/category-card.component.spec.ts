@@ -14,6 +14,14 @@ describe('CategoryCardComponent', () => {
 
     fixture = TestBed.createComponent(CategoryCardComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('category', {
+      id: 'math',
+      title: 'Mathématiques',
+      description: 'Outils de calcul',
+      icon: 'tc-icon tc-icon-calculator',
+      route: '/categories/math',
+      available: true,
+    });
     fixture.detectChanges();
   });
 

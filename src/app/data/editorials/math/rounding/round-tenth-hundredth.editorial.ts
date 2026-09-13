@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_order_of_magnitude_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_order_of_magnitude_uc1_title:Estimation rapide`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_order_of_magnitude_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_order_of_magnitude_out1:L’outil détermine la puissance de 10 la plus proche associée à un nombre.`,
         $localize`:@@ed_math_order_of_magnitude_out2:Il fournit une approximation utile pour comparer rapidement des valeurs.`
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_order_of_magnitude_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_order_of_magnitude_lim1:Un ordre de grandeur est une estimation, pas une valeur exacte.` },
         { text: $localize`:@@ed_math_order_of_magnitude_lim2:Deux nombres de même ordre de grandeur peuvent rester sensiblement différents.` }
@@ -50,7 +50,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_order_of_magnitude_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_order_of_magnitude_q1:À quoi sert un ordre de grandeur ?`,
@@ -66,7 +66,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_order_of_magnitude_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_order_of_magnitude_tip:En estimation mentale, arrondissez toujours au chiffre significatif le plus proche avant de chercher l’ordre de grandeur.`
     }

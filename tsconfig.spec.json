@@ -5,12 +5,22 @@
   "compilerOptions": {
     "outDir": "./out-tsc/spec",
     "types": [
-      "jasmine",
-      "@angular/localize"
+      "@angular/localize",
+      "vitest/globals"
     ]
   },
   "include": [
     "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+    "src/**/*.d.ts",
+    "src/test-providers.ts",
+    "src/test-setup.ts"
+  ],
+  "angularCompilerOptions": {
+    "extendedDiagnostics": {
+      "checks": {
+        "nullishCoalescingNotNullable": "suppress",
+        "optionalChainNotNullable": "suppress"
+      }
+    }
+  }
 }

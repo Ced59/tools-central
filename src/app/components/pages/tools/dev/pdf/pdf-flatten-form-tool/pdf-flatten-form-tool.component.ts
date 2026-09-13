@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 import { PDFDocument } from 'pdf-lib';
 import JSZip from 'jszip';
@@ -60,6 +60,7 @@ type FlattenOutput = {
     TagModule,
   ],
   templateUrl: './pdf-flatten-form-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-flatten-form-tool.component.scss',
 })
 export class PdfFlattenFormToolComponent {

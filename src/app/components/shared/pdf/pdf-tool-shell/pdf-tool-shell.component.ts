@@ -1,11 +1,11 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 export type PdfToolStatus = 'idle' | 'loading' | 'ready' | 'error';
 
@@ -54,12 +54,13 @@ export interface PdfToolShellUi {
   ],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './pdf-tool-shell.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-tool-shell.component.scss',
 })
 export class PdfToolShellComponent {
   @Input({ required: true }) ui!: PdfToolShellUi;
 
-  @Input() icon = 'pi pi-file-pdf';
+  @Input() icon = 'tc-icon tc-icon-file-pdf';
   @Input() title = '';
   @Input() subtitle = '';
 
@@ -67,6 +68,7 @@ export class PdfToolShellComponent {
 
   @Input() accept = 'application/pdf';
   @Input() multiple = false;
+  @Input() maxFileSizeBytes = 100 * 1024 * 1024;
 
   /** ✅ pour désactiver “Télécharger” avant un résultat */
   @Input() downloadDisabled = false;
@@ -95,7 +97,7 @@ export class PdfToolShellComponent {
   @Input() exportFileBaseName: string | null = null; // ex: "pdf-fonts"
   @Input() includeMeta = true;
 
-  @Input() siteBaseUrl = 'https://tools-central.com'; // idéalement: environment.siteBaseUrl
+  @Input() siteBaseUrl = 'https://www.tools-central.com'; // idéalement: environment.siteBaseUrl
   @Input() locale: string | null = null;
   @Input() toolId: string | null = null;
   @Input() toolSlug: string | null = null;
@@ -108,8 +110,7 @@ export class PdfToolShellComponent {
   @Output() download = new EventEmitter<void>();
 
   readonly fileInputId = `pdf-tool-file-input-${Math.random().toString(16).slice(2)}`;
-
-
+  selectionError = '';
 
   triggerFilePick() {
     const el = document.getElementById(this.fileInputId) as HTMLInputElement | null;
@@ -122,6 +123,20 @@ export class PdfToolShellComponent {
     input.value = ''; // permet de re-sélectionner les mêmes fichiers
 
     if (list.length === 0) return;
+
+    this.selectionError = '';
+    const invalidType = list.find((file) => !/\.pdf$/i.test(file.name) && file.type !== 'application/pdf');
+    if (invalidType) {
+      this.selectionError = $localize`:@@pdf_shell_invalid_type:Sélection refusée : seuls les fichiers PDF sont acceptés.`;
+      return;
+    }
+
+    const invalidSize = list.find((file) => file.size === 0 || file.size > this.maxFileSizeBytes);
+    if (invalidSize) {
+      const limitMb = Math.round(this.maxFileSizeBytes / 1024 / 1024);
+      this.selectionError = $localize`:@@pdf_shell_invalid_size:Sélection refusée : chaque PDF doit être non vide et ne pas dépasser ${limitMb}:LIMIT_MB: Mo.`;
+      return;
+    }
 
     // ✅ si multiple=true -> on émet filesSelected
     if (this.multiple) {

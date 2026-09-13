@@ -313,7 +313,7 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     load: () => import('./math/rounding/significant-figures.editorial'),
   },
   'math/rounding/truncate': {
-    available: false,
+    available: true,
     load: () => import('./math/rounding/truncate.editorial'),
   },
   'math/rule-of-three/proportion-table-check': {
@@ -343,10 +343,6 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
   'math/rule-of-three/rule-of-three-table': {
     available: true,
     load: () => import('./math/rule-of-three/rule-of-three-table.editorial'),
-  },
-  'math/statistics/amplitude': {
-    available: true,
-    load: () => import('./math/statistics/amplitude.editorial'),
   },
   'math/statistics/mean': {
     available: true,

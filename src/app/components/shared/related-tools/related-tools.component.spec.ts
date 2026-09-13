@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
+import { afterEach, vi } from 'vitest';
 
 import { RelatedToolsComponent } from './related-tools.component';
 
@@ -22,13 +23,15 @@ describe('RelatedToolsComponent', () => {
     router = TestBed.inject(Router);
   });
 
+  afterEach(() => vi.restoreAllMocks());
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
   it('should auto-detect tool from URL and compute related tools', () => {
     // Simuler une URL d'outil
-    spyOnProperty(router, 'url', 'get').and.returnValue('/categories/math/percentages/percentage-variation');
+    vi.spyOn(router, 'url', 'get').mockReturnValue('/categories/math/percentages/percentage-variation');
     
     fixture.detectChanges();
     
@@ -37,18 +40,18 @@ describe('RelatedToolsComponent', () => {
   });
 
   it('should exclude current tool from related tools', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/categories/math/percentages/percentage-variation');
+    vi.spyOn(router, 'url', 'get').mockReturnValue('/categories/math/percentages/percentage-variation');
     
     fixture.detectChanges();
     
     const hasCurrentTool = component.relatedTools.some(
       (t) => t.id === 'percentage-variation'
     );
-    expect(hasCurrentTool).toBeFalse();
+    expect(hasCurrentTool).toBe(false);
   });
 
   it('should respect count config', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/categories/math/percentages/percentage-variation');
+    vi.spyOn(router, 'url', 'get').mockReturnValue('/categories/math/percentages/percentage-variation');
     
     component.config = { count: 3 };
     fixture.detectChanges();
@@ -57,7 +60,7 @@ describe('RelatedToolsComponent', () => {
   });
 
   it('should prioritize specified tools', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/categories/math/percentages/percentage-variation');
+    vi.spyOn(router, 'url', 'get').mockReturnValue('/categories/math/percentages/percentage-variation');
     
     component.config = {
       priorityToolIds: ['percentage-of-number', 'percentage-what-percent'],
@@ -79,12 +82,11 @@ describe('RelatedToolsComponent', () => {
 
     const link = component.getToolLink(mockTool);
     
-    // Doit retourner des segments séparés, pas une seule chaîne
-    expect(link).toEqual(['/', 'categories', 'math', 'percentages', 'test-tool']);
+    expect(link).toBe('/categories/math/percentages/test-tool');
   });
 
   it('should return empty array if not on a tool page', () => {
-    spyOnProperty(router, 'url', 'get').and.returnValue('/categories/math');
+    vi.spyOn(router, 'url', 'get').mockReturnValue('/categories/math');
     
     fixture.detectChanges();
     

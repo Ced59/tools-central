@@ -1,11 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
+import { InputNumberModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 
@@ -25,6 +25,7 @@ type ResultCode = 'need_data' | 'div0' | 'ok' | 'not_ok';
     MathFormulaComponent,
   ],
   templateUrl: './proportional-table-check-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './proportional-table-check-tool.component.scss',
 })
 export class ProportionalTableCheckToolComponent {
@@ -136,7 +137,11 @@ export class ProportionalTableCheckToolComponent {
     const r2 = this.r2Sig();
     let refA = 0, refB = 0;
     for (let i = 0; i < this.colCountSig(); i++) {
-      if (r1[i] != null && r2[i] != null) { refA = r1[i]!, refB = r2[i]!; break; }
+      if (r1[i] != null && r2[i] != null) {
+        refA = r1[i]!;
+        refB = r2[i]!;
+        break;
+      }
     }
 
     return [

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { PDFDocument } from 'pdf-lib';
@@ -20,6 +20,7 @@ interface PdfMetadataItem {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PdfToolShellComponent],
   templateUrl: './pdf-metadata-to-json-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-metadata-to-json-tool.component.scss',
 })
 export class PdfMetadataToJsonToolComponent {

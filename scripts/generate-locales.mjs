@@ -10,44 +10,44 @@ const locales = Object.keys(project.i18n?.locales ?? {});
 // On inclut la sourceLocale (fr) en tête
 const all = [sourceLocale, ...locales].filter((v, i, a) => a.indexOf(v) === i);
 
-// Nom natif + drapeau (flag-icons utilise des codes pays)
+// Nom natif de chaque langue.
 const meta = {
-  "fr": { name: "Français", flag: "fr" },
-  "en": { name: "English", flag: "gb" },
-  "es": { name: "Español", flag: "es" },
-  "de": { name: "Deutsch", flag: "de" },
-  "it": { name: "Italiano", flag: "it" },
-  "nl": { name: "Nederlands", flag: "nl" },
+  "fr": { name: "Français" },
+  "en": { name: "English" },
+  "es": { name: "Español" },
+  "de": { name: "Deutsch" },
+  "it": { name: "Italiano" },
+  "nl": { name: "Nederlands" },
 
-  "sv": { name: "Svenska", flag: "se" },
-  "da": { name: "Dansk", flag: "dk" },
-  "no": { name: "Norsk", flag: "no" },
-  "fi": { name: "Suomi", flag: "fi" },
+  "sv": { name: "Svenska" },
+  "da": { name: "Dansk" },
+  "no": { name: "Norsk" },
+  "fi": { name: "Suomi" },
 
-  "pl": { name: "Polski", flag: "pl" },
-  "cs": { name: "Čeština", flag: "cz" },
-  "sk": { name: "Slovenčina", flag: "sk" },
-  "ro": { name: "Română", flag: "ro" },
-  "hu": { name: "Magyar", flag: "hu" },
-  "tr": { name: "Türkçe", flag: "tr" },
+  "pl": { name: "Polski" },
+  "cs": { name: "Čeština" },
+  "sk": { name: "Slovenčina" },
+  "ro": { name: "Română" },
+  "hu": { name: "Magyar" },
+  "tr": { name: "Türkçe" },
 
-  "id": { name: "Bahasa Indonesia", flag: "id" },
-  "vi": { name: "Tiếng Việt", flag: "vn" },
-  "sw": { name: "Kiswahili", flag: "ke" },
-  "af": { name: "Afrikaans", flag: "za" },
-  "fil": { name: "Filipino", flag: "ph" },
+  "id": { name: "Bahasa Indonesia" },
+  "vi": { name: "Tiếng Việt" },
+  "sw": { name: "Kiswahili" },
+  "af": { name: "Afrikaans" },
+  "fil": { name: "Filipino" },
 
-  "pt-BR": { name: "Português (Brasil)", flag: "br" },
-  "pt-PT": { name: "Português (Portugal)", flag: "pt" },
+  "pt-BR": { name: "Português (Brasil)" },
+  "pt-PT": { name: "Português (Portugal)" },
 
-  "ru": { name: "Русский", flag: "ru" },
-  "uk": { name: "Українська", flag: "ua" },
-  "bg": { name: "Български", flag: "bg" },
-  "el": { name: "Ελληνικά", flag: "gr" },
+  "ru": { name: "Русский" },
+  "uk": { name: "Українська" },
+  "bg": { name: "Български" },
+  "el": { name: "Ελληνικά" },
 
-  "ja": { name: "日本語", flag: "jp" },
-  "ko": { name: "한국어", flag: "kr" },
-  "zh-Hans": { name: "中文（简体）", flag: "cn" }
+  "ja": { name: "日本語" },
+  "ko": { name: "한국어" },
+  "zh-Hans": { name: "中文（简体）" }
 };
 
 
@@ -57,14 +57,12 @@ export type AppLocale = ${all.map(l => JSON.stringify(l)).join(" | ")};
 export interface LocaleOption {
   locale: AppLocale;
   nameNative: string;
-  flag: string;
 }
 
 export const LOCALES: readonly LocaleOption[] = ${JSON.stringify(
   all.map(l => ({
     locale: l,
-    nameNative: meta[l]?.name ?? l,
-    flag: meta[l]?.flag ?? "un"
+    nameNative: meta[l]?.name ?? l
   })),
   null,
   2

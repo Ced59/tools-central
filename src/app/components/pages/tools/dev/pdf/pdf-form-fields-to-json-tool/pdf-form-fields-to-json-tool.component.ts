@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 import {
   PDFDocument,
@@ -21,7 +21,6 @@ import {
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 export type DotNetIsoField = {
   Name: string;
@@ -65,6 +64,7 @@ export type DotNetIsoField = {
     TagModule,
   ],
   templateUrl: './pdf-form-fields-to-json-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-form-fields-to-json-tool.component.scss',
 })
 export class PdfFormFieldsToJsonToolComponent {

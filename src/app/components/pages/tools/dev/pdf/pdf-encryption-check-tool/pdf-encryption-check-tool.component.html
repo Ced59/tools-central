@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-lock"
+  icon="tc-icon tc-icon-lock"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (!info()) {
       <div class="empty-box">
-        <i class="pi pi-lock" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
         <span i18n="@@pdf_enc_empty">Aucune donnée à afficher.</span>
       </div>
     } @else {
@@ -33,9 +33,9 @@
           <div class="field-card-title">
             <span class="field-name" i18n="@@pdf_enc_summary_title">Chiffrement</span>
             @if (info()!.encrypted) {
-              <p-tag value="Encrypted" severity="danger"></p-tag>
+              <tc-tag value="Encrypted" severity="danger"></tc-tag>
             } @else {
-              <p-tag value="Not encrypted" severity="success"></p-tag>
+              <tc-tag value="Not encrypted" severity="success"></tc-tag>
             }
           </div>
         </div>
@@ -93,10 +93,10 @@
           @for (p of filteredPermissions(); track p.id) {
             <div class="adv-kv">
               <div class="adv-k" style="display:flex; gap:.5rem; align-items:center;">
-                <p-tag
+                <tc-tag
                   [value]="p.allowed === true ? 'ALLOW' : (p.allowed === false ? 'DENY' : 'UNKNOWN')"
                   [severity]="permissionBadgeSeverity(p)"
-                ></p-tag>
+                ></tc-tag>
                 <span>{{ p.label }}</span>
               </div>
               <div class="adv-v mono">

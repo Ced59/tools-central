@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-check-circle"
+  icon="tc-icon tc-icon-check-circle"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (filteredFonts().length === 0) {
       <div class="empty-box">
-        <i class="pi pi-search" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
         <span i18n="@@pdf_font_embed_empty">Aucune police à afficher.</span>
       </div>
     } @else {
@@ -36,14 +36,14 @@
 
               @if (f.embedded === true) {
                 @if (f.subset === true) {
-                  <p-tag value="subset" severity="warn"></p-tag>
+                  <tc-tag value="subset" severity="warn"></tc-tag>
                 } @else {
-                  <p-tag value="embedded" severity="success"></p-tag>
+                  <tc-tag value="embedded" severity="success"></tc-tag>
                 }
               } @else if (f.embedded === false) {
-                <p-tag value="not embedded" severity="danger"></p-tag>
+                <tc-tag value="not embedded" severity="danger"></tc-tag>
               } @else {
-                <p-tag value="unknown" severity="secondary"></p-tag>
+                <tc-tag value="unknown" severity="secondary"></tc-tag>
               }
             </div>
 

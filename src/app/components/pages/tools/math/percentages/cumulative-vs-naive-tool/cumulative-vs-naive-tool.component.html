@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-sliders-v"
+  icon="tc-icon tc-icon-sliders-v"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="base" i18n="@@cum_naive_base">Valeur de base</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="base"
             [formControl]="form.controls.base"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-main">
           <label for="p1" i18n="@@cum_naive_p1">Pourcentage 1</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="p1"
             [formControl]="form.controls.p1"
             [minFractionDigits]="0"
@@ -50,7 +50,7 @@
 
         <div class="field field-main">
           <label for="p2" i18n="@@cum_naive_p2">Pourcentage 2</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="p2"
             [formControl]="form.controls.p2"
             [minFractionDigits]="0"
@@ -67,7 +67,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -119,11 +119,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -186,7 +186,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@cum_naive_note">
             Exemple : +10% puis +10% → cumulé = ×1,1×1,1 = ×1,21 (+21%), pas +20%.
           </span>
@@ -195,7 +195,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

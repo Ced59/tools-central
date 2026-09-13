@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_applied_rate_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_applied_rate_uc1_title:Retrouver une remise ou une majoration`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_applied_rate_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_applied_rate_out1:Le pourcentage appliqué entre la valeur initiale et la valeur finale (taux de modification).`,
         $localize`:@@ed_math_percentages_percentage_applied_rate_out2:Une interprétation simple : hausse ou baisse, selon le sens du changement.`,
@@ -52,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_applied_rate_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_applied_rate_lim1:La valeur initiale doit être différente de zéro, sinon le pourcentage appliqué est indéfini.`,
@@ -73,7 +73,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_applied_rate_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_applied_rate_q1:Quelle différence avec “pourcentage manquant” ?`,
@@ -94,7 +94,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_applied_rate_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_applied_rate_tip:Si vous connaissez la valeur initiale et la valeur finale, vous n’avez pas besoin de deviner le taux : calculez-le, puis utilisez “Augmenter / diminuer de X%” pour simuler d’autres scénarios.`,
     },

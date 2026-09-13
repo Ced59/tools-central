@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CategoryCardComponent, CategoryItem } from '../../shared/category-card/category-card.component';
@@ -10,9 +10,10 @@ import { SeoService } from '../../../services/seo/seo.service';
   standalone: true,
   imports: [NgFor, NgIf, RouterLink, CategoryCardComponent],
   templateUrl: './categories.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './categories.component.scss'
 })
-export class CategoriesComponent {
+export class CategoriesComponent implements OnInit {
   private seo = inject(SeoService);
 
   availableCategories: CategoryItem[] = [];

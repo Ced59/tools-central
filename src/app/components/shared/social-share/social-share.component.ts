@@ -31,7 +31,7 @@ type Region = 'GLOBAL' | 'EU_US' | 'CN' | 'JP' | 'KR' | 'RU_CIS';
 interface ShareNetwork {
   id: ShareNetworkId;
   label: string;
-  icon: string; // PrimeIcons class (pi pi-*)
+  icon: string; // Classe d’icône locale (tc-icon tc-icon-*).
   regions: Region[];
   buildUrl?: (url: string, title: string, text: string) => string;
   kind: 'link' | 'action';
@@ -98,14 +98,14 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'copy',
       label: $localize`:@@share_copy:Copier le lien`,
-      icon: 'pi pi-copy',
+      icon: 'tc-icon tc-icon-copy',
       regions: ['GLOBAL', 'EU_US', 'CN', 'JP', 'KR', 'RU_CIS'],
       kind: 'action',
     },
     {
       id: 'wechat_qr',
       label: $localize`:@@share_wechat_qr:QR code (WeChat)`,
-      icon: 'pi pi-qrcode',
+      icon: 'tc-icon tc-icon-qrcode',
       regions: ['CN'],
       kind: 'action',
     },
@@ -114,7 +114,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'email',
       label: $localize`:@@share_email:Email`,
-      icon: 'pi pi-envelope',
+      icon: 'tc-icon tc-icon-envelope',
       regions: ['GLOBAL', 'EU_US', 'CN', 'JP', 'KR', 'RU_CIS'],
       kind: 'link',
       buildUrl: (url, title, text) => {
@@ -126,7 +126,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'whatsapp',
       label: $localize`:@@share_whatsapp:WhatsApp`,
-      icon: 'pi pi-whatsapp',
+      icon: 'tc-icon tc-icon-whatsapp',
       regions: ['GLOBAL', 'EU_US', 'JP', 'KR', 'RU_CIS'],
       kind: 'link',
       buildUrl: (url, _title, text) => {
@@ -137,7 +137,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'telegram',
       label: $localize`:@@share_telegram:Telegram`,
-      icon: 'pi pi-send',
+      icon: 'tc-icon tc-icon-send',
       regions: ['GLOBAL', 'EU_US', 'RU_CIS'],
       kind: 'link',
       buildUrl: (url, title, text) => {
@@ -149,7 +149,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'linkedin',
       label: $localize`:@@share_linkedin:LinkedIn`,
-      icon: 'pi pi-linkedin',
+      icon: 'tc-icon tc-icon-linkedin',
       regions: ['EU_US'],
       kind: 'link',
       buildUrl: (url) => `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
@@ -157,7 +157,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'facebook',
       label: $localize`:@@share_facebook:Facebook`,
-      icon: 'pi pi-facebook',
+      icon: 'tc-icon tc-icon-facebook',
       regions: ['EU_US'],
       kind: 'link',
       buildUrl: (url) => `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
@@ -165,7 +165,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'x',
       label: $localize`:@@share_x:X`,
-      icon: 'pi pi-twitter',
+      icon: 'tc-icon tc-icon-twitter',
       regions: ['EU_US', 'GLOBAL'],
       kind: 'link',
       buildUrl: (url, _title, text) => {
@@ -177,7 +177,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'reddit',
       label: $localize`:@@share_reddit:Reddit`,
-      icon: 'pi pi-reddit',
+      icon: 'tc-icon tc-icon-reddit',
       regions: ['EU_US'],
       kind: 'link',
       buildUrl: (url, title) =>
@@ -186,7 +186,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'line',
       label: $localize`:@@share_line:LINE`,
-      icon: 'pi pi-comments',
+      icon: 'tc-icon tc-icon-comments',
       regions: ['JP'],
       kind: 'link',
       buildUrl: (url) => `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}`,
@@ -194,7 +194,7 @@ export class SocialShareComponent implements OnInit {
     {
       id: 'vk',
       label: $localize`:@@share_vk:VK`,
-      icon: 'pi pi-users',
+      icon: 'tc-icon tc-icon-users',
       regions: ['RU_CIS'],
       kind: 'link',
       buildUrl: (url, title) =>

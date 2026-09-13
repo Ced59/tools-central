@@ -11,7 +11,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_text_structure_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_dev_pdf_text_structure_uc1_title:Extraction fiable de texte`,
@@ -32,7 +32,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_text_structure_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_text_structure_out1:Une représentation JSON des glyphes, lignes et blocs de texte.`,
         $localize`:@@ed_dev_pdf_text_structure_out2:Des informations de position et d’ordre permettant de reconstruire la logique du texte.`,
@@ -43,7 +43,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_text_structure_limits:Limites`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_dev_pdf_text_structure_lim1:La structure visuelle ne correspond pas toujours à la structure sémantique.`,
@@ -55,7 +55,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_text_structure_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_text_structure_tip:Inspectez les coordonnées et l’ordre des glyphes pour détecter colonnes et tableaux implicites.`,
     },

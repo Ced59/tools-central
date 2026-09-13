@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_relative_difference_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_relative_difference_uc1_title:Comparer deux résultats`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_relative_difference_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_relative_difference_out1:Le pourcentage représentant l’écart entre les deux valeurs par rapport à la valeur de référence choisie.`,
         $localize`:@@ed_math_percentages_percentage_relative_difference_out2:Un indicateur clair pour quantifier une différence relative, indépendamment des unités ou des ordres de grandeur.`,
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_relative_difference_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_relative_difference_lim1:La valeur de référence ne doit pas être égale à zéro, sinon l’écart relatif est indéfini.`,
@@ -62,7 +62,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_relative_difference_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_relative_difference_q1:Quelle est la différence avec un pourcentage de variation ?`,
@@ -79,7 +79,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_relative_difference_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_relative_difference_tip:Si vous hésitez entre écart relatif et variation, demandez-vous s’il existe un “avant” et un “après” : sinon, l’écart relatif est le bon choix.`,
     },

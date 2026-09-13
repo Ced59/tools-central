@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_min_max_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_min_max_uc1_title:Définir une plage de valeurs`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_min_max_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_min_max_out1:La plus petite et la plus grande valeur de la série.`,
         $localize`:@@ed_math_statistics_min_max_out2:Une information immédiate sur l’étendue brute des données.`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_min_max_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_statistics_min_max_lim1:Très sensibles aux valeurs extrêmes.` },
         { text: $localize`:@@ed_math_statistics_min_max_lim2:Ne décrivent pas la distribution interne des données.` },
@@ -50,7 +50,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_min_max_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_min_max_tip:Utilisez minimum et maximum avec la médiane ou les quartiles pour une analyse plus fiable.`,
     },

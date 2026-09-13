@@ -1,11 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { InputNumberModule } from 'primeng/inputnumber';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
+import { InputNumberModule } from '@ui';
+import { ButtonModule } from '@ui';
+import { DividerModule } from '@ui';
 
 import { MathFormulaComponent } from '../../../../../shared/math-formula/math-formula.component';
 
@@ -32,6 +32,7 @@ type StatusCode =
     MathFormulaComponent,
   ],
   templateUrl: './proportional-table-complete-tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './proportional-table-complete-tool.component.scss',
 })
 export class ProportionalTableCompleteToolComponent {

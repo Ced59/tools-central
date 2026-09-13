@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_rot_simple_usecases:Quand utiliser cet outil ?`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_rot_simple_uc1_title:Calcul immédiat`, text: $localize`:@@ed_rot_simple_uc1_text:Résoudre un calcul de proportionnalité en quelques secondes.` },
         { title: $localize`:@@ed_rot_simple_uc2_title:Devoirs et révisions`, text: $localize`:@@ed_rot_simple_uc2_text:Vérifier un exercice de maths sans refaire tout le raisonnement.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_rot_simple_output:Résultat obtenu`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_rot_simple_out1:La valeur manquante calculée automatiquement.`,
         $localize`:@@ed_rot_simple_out2:Un calcul fiable basé sur le produit en croix.`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_rot_simple_limits:À vérifier avant d’utiliser`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_rot_simple_lim1:Les grandeurs doivent être proportionnelles.` },
         { text: $localize`:@@ed_rot_simple_lim2:Les unités doivent être cohérentes.` },
@@ -45,7 +45,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_rot_simple_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_rot_simple_tip:Si une grandeur double, l’autre doit aussi doubler : sinon ce n’est pas une proportionnalité directe.`,
     },

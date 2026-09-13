@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_uc1_title:Audit rapide des ressources`, text: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_uc1_text:Lister toutes les polices utilisées, leurs types et leurs encodages pour comprendre un PDF complexe.` },
         { title: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_uc2_title:Extraction & indexation`, text: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_uc2_text:Détecter les cas où l’extraction de texte est fragile (absence de ToUnicode, encodage non standard).` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_fonts_to_json_out1:Un JSON structuré listant les polices (BaseFont, Subtype, Encoding, flags d’embed/subset, ToUnicode si présent).`,
         $localize`:@@ed_dev_pdf_pdf_fonts_to_json_out2:Des informations de contexte : page(s) d’utilisation, ressources associées, identifiants d’objets (si disponibles).`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_lim1:Le même nom de police peut apparaître plusieurs fois via des sous-ensembles différents.` },
         { text: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_lim2:Certaines informations peuvent être absentes selon le générateur de PDF (métadonnées de police minimales).` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_q1:Cet export inclut-il les fichiers de police ?`, a: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_a1:Non : il décrit les polices et leurs propriétés. Pour embarquer une police, il faut regénérer le PDF.` },
         { q: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_q2:Pourquoi les noms ressemblent à “ABCDEF+Roboto” ?`, a: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_a2:C’est typique des polices en subset : un préfixe aléatoire est ajouté pour éviter les collisions.` },
@@ -57,7 +57,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_fonts_to_json_tip:Pour investiguer un problème de rendu, couplez cet outil avec “Pages PDF → JSON” afin de corréler polices et pages concernées.`,
     },

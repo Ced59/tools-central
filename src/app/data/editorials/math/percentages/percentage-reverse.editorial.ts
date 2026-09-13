@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_reverse_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_reverse_uc1_title:Retrouver un prix avant remise`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_reverse_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_reverse_out1:La valeur de départ avant l’application du pourcentage, calculée de façon exacte à partir du montant final et du taux.`,
         $localize`:@@ed_math_percentages_percentage_reverse_out2:Un résultat immédiatement exploitable pour analyser un prix réel, vérifier une facture ou résoudre un exercice.`,
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_reverse_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_reverse_lim1:Le pourcentage ne doit pas être égal à 100 %, sinon la valeur d’origine est mathématiquement impossible à déterminer.`,
@@ -62,7 +62,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_reverse_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_reverse_q1:Quelle est la différence avec un calcul de pourcentage classique ?`,
@@ -79,7 +79,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_reverse_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_reverse_tip:Pour vérifier un calcul de remise, refaites ensuite un calcul de pourcentage classique à partir du résultat obtenu : vous devez retrouver exactement le montant final.`,
     },

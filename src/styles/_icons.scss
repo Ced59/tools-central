@@ -1,0 +1,126 @@
+// Jeu d’icônes local et sans dépendance. Les glyphes sont décoratifs : le libellé
+// accessible appartient toujours au bouton, au lien ou au composant parent.
+$tc-icons: (
+  'align-left': '≡',
+  'arrow-down': '↓',
+  'arrow-down-right': '↘',
+  'arrow-left': '←',
+  'arrow-right': '→',
+  'arrow-up': '↑',
+  'arrow-up-right': '↗',
+  'arrows-h': '↔',
+  'arrows-v': '↕',
+  'bolt': '⚡',
+  'book': '▤',
+  'box': '◇',
+  'calculator': '∑',
+  'chart-bar': '▥',
+  'chart-line': '⌁',
+  'chart-pie': '◔',
+  'check': '✓',
+  'check-circle': '✓',
+  'check-square': '☑',
+  'chevron-down': '⌄',
+  'circle': '●',
+  'clock': '◷',
+  'clone': '◫',
+  'code': '</>',
+  'cog': '⚙',
+  'comments': '❝',
+  'compass': '◎',
+  'copy': '⧉',
+  'database': '⛁',
+  'download': '⇩',
+  'ellipsis-h': '…',
+  'envelope': '✉',
+  'exclamation-circle': '!',
+  'exclamation-triangle': '⚠',
+  'eye': '◉',
+  'eye-slash': '⊘',
+  'facebook': 'f',
+  'file': '▱',
+  'file-edit': '✎',
+  'file-export': '⇱',
+  'file-pdf': 'PDF',
+  'filter': '▽',
+  'folder-open': '▱',
+  'hashtag': '#',
+  'history': '↶',
+  'image': '▧',
+  'images': '▦',
+  'info-circle': 'i',
+  'language': '文',
+  'lightbulb': '◉',
+  'link': '∞',
+  'linkedin': 'in',
+  'list': '☷',
+  'lock': '▣',
+  'minus': '−',
+  'moon': '☾',
+  'palette': '◒',
+  'paperclip': '⌕',
+  'pencil': '✎',
+  'percentage': '%',
+  'plus': '+',
+  'qrcode': '▦',
+  'question': '?',
+  'question-circle': '?',
+  'receipt': '▥',
+  'reddit': 'r',
+  'refresh': '↻',
+  'replay': '↶',
+  'scissors': '✂',
+  'search': '⌕',
+  'send': '➤',
+  'share-alt': '↗',
+  'shield': '◈',
+  'sitemap': '⌘',
+  'sliders-h': '☷',
+  'sliders-v': '☰',
+  'sort-alpha-down': 'A↓',
+  'sort-amount-up': '≡↑',
+  'sort-numeric-down': '9↓',
+  'sort-numeric-up': '1↑',
+  'star': '★',
+  'sun': '☀',
+  'sync': '⇄',
+  'table': '▦',
+  'tag': '◇',
+  'th-large': '▦',
+  'times': '×',
+  'times-circle': '×',
+  'trash': '⌫',
+  'twitter': '𝕏',
+  'undo': '↶',
+  'upload': '⇧',
+  'user': '●',
+  'user-minus': '●−',
+  'users': '●●',
+  'verified': '✓',
+  'wallet': '▰',
+  'weight': '⚖',
+  'whatsapp': '◉',
+  'wrench': '⌑',
+);
+
+.tc-icon {
+  display: inline-block;
+  width: 1.25em;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: inherit;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  vertical-align: -0.08em;
+
+  &::before {
+    display: inline-block;
+  }
+}
+
+@each $name, $glyph in $tc-icons {
+  .tc-icon-#{$name}::before {
+    content: $glyph;
+  }
+}

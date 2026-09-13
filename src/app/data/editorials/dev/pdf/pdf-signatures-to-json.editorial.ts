@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_uc1_title:Audit de documents signés`, text: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_uc1_text:Inventorier les signatures présentes, leur position (champs) et les informations de certificat.` },
         { title: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_uc2_title:Contrôle conformité`, text: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_uc2_text:Vérifier qu’un PDF contient bien les champs/signatures attendus avant archivage ou envoi.` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_signatures_to_json_out1:Un JSON des signatures : champs, sous-type, signer name (si présent), raison, lieu, date, byte range et infos de certificat.`,
         $localize`:@@ed_dev_pdf_pdf_signatures_to_json_out2:Des éléments utiles pour corréler avec vos actions : présence de timestamp, nombre de signatures, champs vides à signer.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_lim1:La validation cryptographique complète dépend d’une chaîne de confiance (AC) et d’un environnement de vérification : le JSON seul ne suffit pas toujours.` },
         { text: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_lim2:Certaines informations (nom, raison) peuvent être absentes ou non standard selon le logiciel de signature.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_q1:L’outil dit-il si la signature est valide ?`, a: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_a1:Il fournit surtout les données et indicateurs. La validité stricte peut nécessiter une vérification cryptographique et une chaîne de confiance.` },
         { q: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_q2:Pourquoi ma signature devient invalide après fusion ?`, a: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_a2:Une signature couvre un byte range précis : toute modification du fichier change les octets et casse la signature.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_signatures_to_json_tip:Dans un workflow, faites toutes les transformations (merge/split/flatten/sanitize) avant la signature finale. Après signature, évitez toute modification du fichier.`,
     },

@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_variation_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_variation_uc1_title:Prix, promotions, inflation`,
@@ -34,7 +34,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_variation_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_variation_out1:L’outil calcule l’écart (final − initial), la variation en % et le coefficient multiplicateur (final ÷ initial).`,
         $localize`:@@ed_math_percentages_percentage_variation_out2:Le pourcentage sert à “normaliser” l’évolution, tandis que le coefficient permet d’enchaîner facilement plusieurs évolutions (ex : ×1,20 puis ×0,90).`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_variation_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_variation_lim1:Si la valeur initiale est 0, la variation en % n’est pas définie (division par zéro). Dans ce cas, on parle plutôt d’écart absolu.`,
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_variation_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_variation_q1:Quelle différence entre “écart” et “variation (%)” ?`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_variation_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_variation_tip:Pour “annuler” une hausse, ne soustrayez pas le même % : utilisez le coefficient. Exemple : +20% = ×1,20, donc pour revenir il faut ÷1,20 (soit −16,67%).`,
     },

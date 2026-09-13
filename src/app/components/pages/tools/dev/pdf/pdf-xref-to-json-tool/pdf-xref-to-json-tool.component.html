@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-sitemap"
+  icon="tc-icon tc-icon-sitemap"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -24,7 +24,7 @@
   <div leftList>
     @if (filteredEntries().length === 0) {
       <div class="empty-box">
-        <i class="pi pi-search" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
         <span i18n="@@pdf_xref_empty">Aucune entrée à afficher.</span>
       </div>
     } @else {
@@ -38,11 +38,11 @@
 
             <div class="field-card-page" style="display:flex; gap:.5rem; align-items:center;">
               @if (it.kind === 'inUse') {
-                <p-tag value="inUse" severity="success"></p-tag>
+                <tc-tag value="inUse" severity="success"></tc-tag>
               } @else if (it.kind === 'free') {
-                <p-tag value="free" severity="warn"></p-tag>
+                <tc-tag value="free" severity="warn"></tc-tag>
               } @else {
-                <p-tag value="compressed" severity="info"></p-tag>
+                <tc-tag value="compressed" severity="info"></tc-tag>
               }
             </div>
           </div>

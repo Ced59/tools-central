@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_points_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_points_uc1_title:Comparer deux taux sans ambiguïté`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_points_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_points_out1:La différence entre deux taux exprimée en points de pourcentage (écart direct entre les valeurs en %).`,
         $localize`:@@ed_math_percentages_percentage_points_out2:Un résultat conçu pour communiquer un écart entre pourcentages de manière claire, notamment dans les contextes économiques, financiers ou statistiques.`,
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_points_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_points_lim1:Les points de pourcentage comparent deux pourcentages entre eux ; ce n’est pas une variation relative par rapport à une valeur de départ.`,
@@ -62,7 +62,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_points_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_points_q1:Quelle est la différence entre points de pourcentage et pourcentage ?`,
@@ -79,7 +79,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_points_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_points_tip:Si les deux valeurs sont déjà des pourcentages, l’écart se donne presque toujours en points de pourcentage : c’est la formulation la plus lisible et la moins trompeuse.`,
     },

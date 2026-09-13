@@ -15,33 +15,33 @@
 
     <div class="hero-visual">
       <div class="hero-icon-grid">
-        <div class="floating-icon"><i class="pi pi-image"></i></div>
-        <div class="floating-icon"><i class="pi pi-calculator"></i></div>
-        <div class="floating-icon"><i class="pi pi-palette"></i></div>
-        <div class="floating-icon"><i class="pi pi-qrcode"></i></div>
+        <div class="floating-icon"><i class="tc-icon tc-icon-image"></i></div>
+        <div class="floating-icon"><i class="tc-icon tc-icon-calculator"></i></div>
+        <div class="floating-icon"><i class="tc-icon tc-icon-palette"></i></div>
+        <div class="floating-icon"><i class="tc-icon tc-icon-qrcode"></i></div>
       </div>
     </div>
 
     <div class="hero-cta">
-      <p-button
+      <tc-button
         label="Découvrir les catégories"
         i18n-label="@@hero_cta"
-        icon="pi pi-arrow-down"
+        icon="tc-icon tc-icon-arrow-down"
         severity="contrast"
         size="large"
         (onClick)="scrollToCategories()"
-      ></p-button>
+      ></tc-button>
 
-      <p-button
+      <tc-button
         label="Voir toutes les catégories"
         i18n-label="@@hero_all_categories"
-        icon="pi pi-arrow-right"
+        icon="tc-icon tc-icon-arrow-right"
         iconPos="right"
         severity="contrast"
         size="large"
         [outlined]="true"
         [routerLink]="categoriesRoute"
-      ></p-button>
+      ></tc-button>
     </div>
   </div>
 </section>
@@ -87,25 +87,25 @@
 
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon"><i class="pi pi-bolt"></i></div>
+        <div class="feature-icon"><i class="tc-icon tc-icon-bolt"></i></div>
         <h3 i18n="@@feature_fast_title">Ultra rapide</h3>
         <p i18n="@@feature_fast_desc">Traitement instantané, directement dans votre navigateur.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon"><i class="pi pi-lock"></i></div>
+        <div class="feature-icon"><i class="tc-icon tc-icon-lock"></i></div>
         <h3 i18n="@@feature_private_title">100% privé</h3>
         <p i18n="@@feature_private_desc">Vos fichiers ne quittent jamais votre appareil.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon"><i class="pi pi-wallet"></i></div>
+        <div class="feature-icon"><i class="tc-icon tc-icon-wallet"></i></div>
         <h3 i18n="@@feature_free_title">Gratuit</h3>
         <p i18n="@@feature_free_desc">Tous les outils sont gratuits, sans limite d'utilisation.</p>
       </div>
 
       <div class="feature-card">
-        <div class="feature-icon"><i class="pi pi-user"></i></div>
+        <div class="feature-icon"><i class="tc-icon tc-icon-user"></i></div>
         <h3 i18n="@@feature_no_signup_title">Sans inscription</h3>
         <p i18n="@@feature_no_signup_desc">Aucun compte requis, utilisez les outils immédiatement.</p>
       </div>

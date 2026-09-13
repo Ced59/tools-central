@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_sanitize_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_dev_pdf_pdf_sanitize_uc1_title:Partager un PDF en sécurité`, text: $localize`:@@ed_dev_pdf_pdf_sanitize_uc1_text:Retirer ce qui peut fuiter (métadonnées, liens de tracking, actions) avant envoi public ou externe.` },
         { title: $localize`:@@ed_dev_pdf_pdf_sanitize_uc2_title:Hygiène sécurité`, text: $localize`:@@ed_dev_pdf_pdf_sanitize_uc2_text:Neutraliser des fonctionnalités potentiellement dangereuses (JavaScript, actions automatiques, embedded files).` },
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_pdf_sanitize_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_pdf_sanitize_out1:Un PDF nettoyé (selon options) conservant le contenu visuel principal.`,
         $localize`:@@ed_dev_pdf_pdf_sanitize_out2:Un rapport listant les éléments détectés et supprimés/neutralisés (métadonnées, actions, pièces jointes, annotations, etc.).`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_pdf_sanitize_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_dev_pdf_pdf_sanitize_lim1:Sanitiser peut retirer des fonctionnalités utiles (formulaires interactifs, signets, annotations) selon la configuration.` },
         { text: $localize`:@@ed_dev_pdf_pdf_sanitize_lim2:Ce n’est pas un antivirus : un PDF peut rester dangereux via des failles de lecteur. Utilisez aussi une chaîne de sécurité adaptée.` },
@@ -47,7 +47,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_dev_pdf_pdf_sanitize_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         { q: $localize`:@@ed_dev_pdf_pdf_sanitize_q1:Le résultat est-il identique visuellement ?`, a: $localize`:@@ed_dev_pdf_pdf_sanitize_a1:Souvent oui, mais certains éléments interactifs peuvent disparaître. Vérifiez la version nettoyée avant diffusion.` },
         { q: $localize`:@@ed_dev_pdf_pdf_sanitize_q2:Est-ce que ça supprime les métadonnées ?`, a: $localize`:@@ed_dev_pdf_pdf_sanitize_a2:Oui, en général c’est un objectif clé. Pour vérifier, utilisez “Métadonnées PDF → JSON” avant/après.` },
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_pdf_sanitize_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_pdf_sanitize_tip:Pour une diffusion publique, appliquez la règle “inspecter → nettoyer → re-inspecter” : métadonnées/liaisons/attachments avant et après sanitization.`,
     },

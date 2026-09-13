@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-sort-numeric-up"
+  icon="tc-icon tc-icon-sort-numeric-up"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -18,14 +18,14 @@
     <div class="field field-main field-full">
           <label for="mode" i18n="@@dec_pct_mode">Mode</label>
 
-          <p-selectButton
+          <tc-select-button
             [options]="modeOptions"
             [formControl]="form.controls.mode"
             optionLabel="label"
             optionValue="value"
             aria-label="Mode"
             i18n-aria-label="@@dec_pct_mode_aria"
-          ></p-selectButton>
+          ></tc-select-button>
 
           <small class="hint" i18n="@@dec_pct_mode_hint">
             Choisissez la direction de conversion.
@@ -35,7 +35,7 @@
         <div class="field field-main">
           <label for="input" i18n="@@dec_pct_input">Valeur</label>
 
-          <p-inputNumber
+          <tc-number-input
             inputId="input"
             [formControl]="form.controls.input"
             [minFractionDigits]="0"
@@ -57,7 +57,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -107,11 +107,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -160,7 +160,7 @@
   <ng-container definition>
     <tc-math-formula
           label="Formules"
-          i18n-label="@@tool_formula_title"
+          i18n-label="@@tool_formulas_title"
           mode="katex"
           latex="\text{pct}=\text{décimal}\times 100\quad;\quad \text{décimal}=\frac{\text{pct}}{100}"
           i18n-latex="@@dec_pct_formula_katex"
@@ -169,7 +169,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

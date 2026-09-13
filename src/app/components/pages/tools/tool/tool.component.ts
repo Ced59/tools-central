@@ -1,4 +1,4 @@
-import { Component, Type, signal } from '@angular/core';
+import { Component, Type, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgComponentOutlet, NgIf } from '@angular/common';
 
@@ -10,7 +10,7 @@ import { routes } from '../../../../data/routes';
 
 import type { ToolEditorialModel } from '../../../../models/tool-editorial/tool-editorial.model';
 import { ToolEditorialSectionsComponent } from '../../../shared/tool-editorial-sections/tool-editorial-sections.component';
-import { ToolEditorialService } from '../../../../core/tools/toll-editorial.service';
+import { ToolEditorialService } from '../../../../core/tools/tool-editorial.service';
 import { RelatedToolsComponent } from '../../../shared/related-tools';
 
 import { map, distinctUntilChanged } from 'rxjs/operators';
@@ -25,6 +25,7 @@ type ToolRouteParams = {
   standalone: true,
   imports: [NgIf, NgComponentOutlet, RouterLink, ToolEditorialSectionsComponent, RelatedToolsComponent],
   templateUrl: './tool.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tool.component.scss',
 })
 export class ToolComponent {
@@ -138,7 +139,7 @@ export class ToolComponent {
         const groupRegistry = TOOL_GROUP_REGISTRY[catId];
         const group = groupRegistry?.[this.groupId];
         if (group?.title) {
-          return $localize`:@@back_to_tools:Retour aux outils ${group.title}`;
+          return $localize`:@@back_to_tools_in_group:Retour aux outils ${group.title}`;
         }
       }
     }

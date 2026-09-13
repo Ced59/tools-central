@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_weighted_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_weighted_uc1_title:Taux de réussite, satisfaction, conformité`,
@@ -34,7 +34,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_weighted_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_weighted_out1:L’outil calcule le pourcentage pondéré via la formule : somme(taux × poids) ÷ somme(poids).`,
         $localize`:@@ed_math_percentages_percentage_weighted_out2:C’est l’approche correcte dès que les groupes n’ont pas le même poids : elle évite les biais d’une moyenne simple des pourcentages.`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_weighted_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_weighted_lim1:Les poids doivent être cohérents avec ce que vous voulez représenter (effectifs, volumes, montants). Changer le poids change la signification du résultat.`,
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_weighted_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_weighted_q1:Quelle différence entre moyenne simple et pourcentage pondéré ?`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_weighted_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_weighted_tip:Si vous avez les “succès” et les “totaux”, vous pouvez aussi calculer le taux global directement : (somme des succès) ÷ (somme des totaux). C’est équivalent au pondéré et souvent plus intuitif.`,
     },

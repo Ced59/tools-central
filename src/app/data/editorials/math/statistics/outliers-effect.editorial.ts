@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_outliers_effect_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_outliers_effect_uc1_title:Analyse de données réelles`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_outliers_effect_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_outliers_effect_out1:Une compréhension claire de l’impact des outliers.`,
         $localize`:@@ed_math_statistics_outliers_effect_out2:Des indicateurs plus robustes à privilégier.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_outliers_effect_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_outliers_effect_tip:Comparez moyenne et médiane pour détecter rapidement la présence d’outliers.`,
     },

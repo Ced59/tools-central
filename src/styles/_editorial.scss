@@ -264,8 +264,9 @@
   }
 
   &::before {
-    content: '\e932'; // pi pi-info-circle
-    font-family: 'primeicons';
+    content: 'i';
+    font-family: Inter, system-ui, sans-serif;
+    font-weight: 700;
     font-size: 1.1rem;
     color: var(--primary-color);
     flex-shrink: 0;
@@ -282,7 +283,7 @@
   }
 
   &::before {
-    content: '\e957'; // pi pi-exclamation-triangle
+    content: '⚠';
     color: #f59e0b;
   }
 }
@@ -296,7 +297,7 @@
   }
 
   &::before {
-    content: '\e909'; // pi pi-check-circle
+    content: '✓';
     color: #22c55e;
   }
 }
@@ -310,7 +311,7 @@
   }
 
   &::before {
-    content: '\e994'; // pi pi-lightbulb
+    content: '◉';
     color: #8b5cf6;
   }
 }
@@ -372,8 +373,8 @@
   }
 
   &::after {
-    content: '\e902'; // pi pi-chevron-down
-    font-family: 'primeicons';
+    content: '⌄';
+    font-family: Inter, system-ui, sans-serif;
     font-size: 0.75rem;
     color: var(--text-color-secondary);
     transition: transform 0.2s ease;

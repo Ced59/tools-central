@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_share_of_total_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_share_of_total_uc1_title:Répartition d’un budget`,
@@ -34,7 +34,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_share_of_total_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_share_of_total_out1:L’outil calcule le total (somme des valeurs) puis la part de chaque élément : (valeur ÷ total) × 100.`,
         $localize`:@@ed_math_percentages_percentage_share_of_total_out2:Vous obtenez une répartition en pourcentages, utile pour classer les éléments, repérer les plus importants et vérifier la cohérence globale.`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_share_of_total_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_share_of_total_lim1:Si le total vaut 0 (toutes les valeurs à 0), les parts ne sont pas définies : il n’y a pas de base pour calculer une proportion.`,
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_share_of_total_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_share_of_total_q1:Pourquoi mes parts ne font pas exactement 100% ?`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_share_of_total_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_share_of_total_tip:Pour une répartition “propre” à afficher, garde 1 à 2 décimales maximum. Si tu veux absolument totaliser 100%, calcule une “part restante” (100 − somme des parts affichées) sur la dernière catégorie.`,
     },

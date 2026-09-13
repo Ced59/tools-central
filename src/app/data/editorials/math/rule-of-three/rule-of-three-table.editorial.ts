@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_rot_table_usecases:Pourquoi utiliser un tableau ?`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         { title: $localize`:@@ed_rot_table_uc1_title:Visualisation`, text: $localize`:@@ed_rot_table_uc1_text:Voir clairement les correspondances entre valeurs.` },
         { title: $localize`:@@ed_rot_table_uc2_title:Apprentissage`, text: $localize`:@@ed_rot_table_uc2_text:Méthode privilégiée au collège et lycée.` },
@@ -25,7 +25,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_rot_table_output:Résultat`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_rot_table_out1:Le tableau complété.`,
         $localize`:@@ed_rot_table_out2:La valeur recherchée calculée automatiquement.`,
@@ -35,7 +35,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_rot_table_limits:À surveiller`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_rot_table_lim1:Les colonnes doivent représenter les mêmes grandeurs.` },
         { text: $localize`:@@ed_rot_table_lim2:Les unités doivent être homogènes.` },
@@ -45,7 +45,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_rot_table_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_rot_table_tip:Lis le tableau verticalement : chaque colonne doit comparer des grandeurs compatibles.`,
     },

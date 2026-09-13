@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_vs_median_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_mean_vs_median_uc1_title:Comparer des groupes`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_mean_vs_median_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_mean_vs_median_out1:Une comparaison claire entre moyenne et médiane, avec leurs propriétés respectives.`,
         $localize`:@@ed_math_statistics_mean_vs_median_out2:Des règles simples pour choisir rapidement l’indicateur le plus pertinent.`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_mean_vs_median_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_statistics_mean_vs_median_lim1:La moyenne est sensible aux valeurs extrêmes.` },
         { text: $localize`:@@ed_math_statistics_mean_vs_median_lim2:La médiane ne tient pas compte des écarts entre valeurs.` },
@@ -50,7 +50,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_statistics_mean_vs_median_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_statistics_mean_vs_median_q1:Quand faut-il privilégier la médiane ?`,
@@ -66,7 +66,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_mean_vs_median_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_mean_vs_median_tip:Si la moyenne est très éloignée de la médiane, la distribution est probablement déséquilibrée.`,
     },

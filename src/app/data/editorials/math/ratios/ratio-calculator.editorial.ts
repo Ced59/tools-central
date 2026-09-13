@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_calculator_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_ratio_calculator_uc1_title:Comparaisons`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_ratio_calculator_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_ratio_calculator_out1:Le calcul exact du ratio entre deux valeurs.`,
         $localize`:@@ed_math_ratio_calculator_out2:Une interprétation claire du résultat obtenu.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_ratio_calculator_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_ratio_calculator_lim1:Un ratio n’indique pas une quantité absolue.` },
         { text: $localize`:@@ed_math_ratio_calculator_lim2:Attention aux divisions par zéro.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_ratio_calculator_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_ratio_calculator_tip:Pense à simplifier le ratio pour le rendre plus lisible.`,
     },

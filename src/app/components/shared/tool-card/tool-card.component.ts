@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
+import { ButtonModule } from '@ui';
 
 export interface ToolCardItem {
   id: string;
@@ -17,6 +17,7 @@ export interface ToolCardItem {
   standalone: true,
   imports: [NgIf, RouterLink, ButtonModule],
   templateUrl: './tool-card.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './tool-card.component.scss'
 })
 export class ToolCardComponent {

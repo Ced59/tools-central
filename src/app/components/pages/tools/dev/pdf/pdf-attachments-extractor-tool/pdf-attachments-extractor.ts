@@ -198,7 +198,6 @@ function dictToPlainObject(doc: PDFDocument, d: PDFDict): Record<string, unknown
 }
 
 function toPlain(doc: PDFDocument, v: unknown): unknown {
-  const ctx = doc.context;
   if (v instanceof PDFRef) return { ref: v.toString() };
   if (v instanceof PDFName) return v.asString();
   if (v instanceof PDFNumber) return v.asNumber();

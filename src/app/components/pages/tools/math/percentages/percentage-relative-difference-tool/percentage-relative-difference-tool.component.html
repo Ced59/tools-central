@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-arrows-h"
+  icon="tc-icon tc-icon-arrows-h"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="a" i18n="@@pct_rel_diff_a_label">Valeur A</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="a"
             [formControl]="form.controls.a"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-main">
           <label for="b" i18n="@@pct_rel_diff_b_label">Valeur B</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="b"
             [formControl]="form.controls.b"
             [minFractionDigits]="0"
@@ -49,7 +49,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@pct_rel_diff_precision_label">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -104,11 +104,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@pct_rel_diff_reset"
@@ -159,7 +159,7 @@
         </ol>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@pct_rel_diff_note">
             Si A et B valent 0, la moyenne vaut 0 : l’écart relatif n’est pas défini.
             Cette formule est symétrique : échanger A et B ne change pas le résultat.
@@ -169,7 +169,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

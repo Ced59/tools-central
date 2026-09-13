@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_course_usecases:À qui s’adresse ce cours ?`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_course_uc1_title:Apprendre ou réviser les bases`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_course_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_course_out1:Une vision claire et structurée des différents types de calculs de pourcentages.`,
         $localize`:@@ed_math_percentages_percentage_course_out2:Des explications conceptuelles pour comprendre le sens des résultats, pas seulement les formules.`,
@@ -52,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_course_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_course_lim1:Ce cours n’est pas un calculateur : pour obtenir un résultat chiffré, il faut utiliser les outils dédiés.`,
@@ -67,7 +67,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_course_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_course_q1:Pourquoi y a-t-il autant d’outils pour les pourcentages ?`,
@@ -88,7 +88,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_course_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_course_tip:Si vous hésitez entre plusieurs outils, commencez par ce cours : il vous aidera à formuler correctement votre question avant de calculer.`,
     },

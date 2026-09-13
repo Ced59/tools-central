@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_uc1_title:Hausses successives sur un prix`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_out1:La somme naïve des pourcentages (addition directe), utile uniquement comme comparaison.`,
         $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_out2:L’effet cumulé réel obtenu après applications successives, calculé via des coefficients.`,
@@ -56,7 +56,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_lim1:Le cumul dépend de l’ordre et du fait que chaque pourcentage s’applique à une nouvelle base.`,
@@ -71,7 +71,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_q1:Pourquoi ne peut-on pas additionner des pourcentages successifs ?`,
@@ -96,7 +96,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_cumulative_vs_naive_tip:Pensez en “×(1 ± X/100)” : dès qu’il y a plusieurs étapes, multipliez les coefficients au lieu d’additionner les pourcentages.`,
     },

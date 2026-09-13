@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percent_to_fraction_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percent_to_fraction_uc1_title:Exercices scolaires et révisions`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percent_to_fraction_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percent_to_fraction_out1:La conversion d’un pourcentage en fraction, avec une fraction simplifiée lorsque c’est possible.`,
         $localize`:@@ed_math_percentages_percent_to_fraction_out2:La conversion d’une fraction en pourcentage, utile pour interpréter rapidement une proportion.`,
@@ -56,7 +56,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percent_to_fraction_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percent_to_fraction_lim1:Certains pourcentages donnent des fractions avec de grands dénominateurs (ex. 33,33 %), selon l’arrondi choisi.`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percent_to_fraction_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percent_to_fraction_q1:Comment convertir un pourcentage en fraction ?`,
@@ -99,7 +99,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percent_to_fraction_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percent_to_fraction_tip:Certains pourcentages “classiques” se mémorisent facilement : 50 % = 1/2, 25 % = 1/4, 20 % = 1/5, 12,5 % = 1/8.`,
     },

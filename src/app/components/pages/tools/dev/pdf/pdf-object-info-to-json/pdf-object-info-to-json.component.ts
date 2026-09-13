@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TagModule } from 'primeng/tag';
+import { ButtonModule } from '@ui';
+import { InputTextModule } from '@ui';
+import { TagModule } from '@ui';
 
 import {
   PDFArray,
@@ -18,7 +18,6 @@ import {
 import { PdfToolShellComponent } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import type { PdfToolShellUi, PdfToolStatCard, PdfToolStatus } from '../../../../../shared/pdf/pdf-tool-shell/pdf-tool-shell.component';
 import { controlToSignal } from '../../../../../shared/pdf/pdf-tool-signals';
-import { PdfToolActionsService } from '../../../../../../services/pdf-tool-actions.service';
 
 type PdfObjKind = 'dict' | 'stream' | 'array' | 'other';
 
@@ -82,6 +81,7 @@ interface PdfObjectItem {
     TagModule,
   ],
   templateUrl: './pdf-object-info-to-json.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './pdf-object-info-to-json.component.scss',
 })
 export class PdfObjectInfoToJsonToolComponent {
@@ -759,7 +759,7 @@ function computeReachableIdsBestEffort(doc: PDFDocument, idToObj: Map<string, un
       visitedRefs.add(id);
       reachable.add(id);
 
-      let looked: any = null;
+      let looked: any;
       try {
         looked = doc.context.lookup(v);
       } catch {

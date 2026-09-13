@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-calculator"
+  icon="tc-icon tc-icon-calculator"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="true"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="a" i18n="@@ratio_pct_a">A (numérateur)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="a"
             [formControl]="form.controls.a"
             [minFractionDigits]="0"
@@ -30,7 +30,7 @@
 
         <div class="field field-main">
           <label for="b" i18n="@@ratio_pct_b">B (dénominateur)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="b"
             [formControl]="form.controls.b"
             [minFractionDigits]="0"
@@ -46,7 +46,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -87,7 +87,7 @@
         </div>
 
         <div class="tip-box" *ngIf="warning()">
-          <i class="pi pi-exclamation-triangle"></i>
+          <i class="tc-icon tc-icon-exclamation-triangle"></i>
           <span>{{ warning() }}</span>
         </div>
   </ng-container>
@@ -106,11 +106,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -166,7 +166,7 @@
         ></tc-math-formula>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@ratio_pct_note">
             Si A = B, alors A/B = 1 → 100%. Si A &gt; B, le pourcentage dépasse 100%.
           </span>
@@ -175,7 +175,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

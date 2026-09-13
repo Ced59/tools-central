@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_inverse_proportionality_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_inverse_proportionality_uc1_title:Temps et vitesse`,
@@ -26,7 +26,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_inverse_proportionality_output:Ce que vous apprenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_inverse_proportionality_out1:La différence fondamentale entre proportionnalité directe et inverse.`,
         $localize`:@@ed_math_inverse_proportionality_out2:La méthode basée sur le produit constant pour résoudre les exercices.`,
@@ -36,7 +36,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_inverse_proportionality_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         { text: $localize`:@@ed_math_inverse_proportionality_lim1:Ne pas confondre avec une simple diminution linéaire.` },
         { text: $localize`:@@ed_math_inverse_proportionality_lim2:Vérifier que le produit des deux grandeurs reste constant.` },
@@ -46,7 +46,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_inverse_proportionality_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_inverse_proportionality_tip:Si l’une des valeurs double et que l’autre est divisée par deux, tu es en proportionnalité inverse.`,
     },

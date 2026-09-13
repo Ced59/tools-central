@@ -14,7 +14,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_what_percent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_what_percent_uc1_title:Part sur total (stats, rapports)`,
@@ -34,7 +34,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_what_percent_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_what_percent_out1:L’outil calcule le pourcentage correspondant à la formule : (X ÷ Y) × 100.`,
         $localize`:@@ed_math_percentages_percentage_what_percent_out2:Le résultat sert à interpréter une proportion de façon standardisée : on compare plus facilement des parts (même si les totaux diffèrent).`,
@@ -44,7 +44,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_what_percent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_what_percent_lim1:Si Y = 0, le pourcentage n’est pas calculable (division par zéro). Il faut alors raisonner autrement (écart, valeur brute, ou “non défini”).`,
@@ -58,7 +58,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_what_percent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_what_percent_q1:Quelle est la différence avec une “variation en %” ?`,
@@ -74,7 +74,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_what_percent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_what_percent_tip:Pour éviter les confusions, écrivez toujours la phrase complète : “X représente P% de Y”. Le choix de Y (la référence) est ce qui donne du sens au pourcentage.`,
     },

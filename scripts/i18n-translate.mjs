@@ -13,6 +13,12 @@
 //
 // Variables d'environnement:
 //   OPENAI_API_KEY - Clé API OpenAI (obligatoire)
+//   OPENAI_TRANSLATION_MODEL - Modèle à utiliser (défaut: gpt-4o-mini)
+//   OPENAI_TRANSLATION_BATCH_SIZE - Taille d'un lot (défaut: 40)
+//   OPENAI_TRANSLATION_CONCURRENCY - Locales traitées en parallèle (défaut: 3)
+//   OPENAI_TRANSLATION_MAX_TOKENS - Budget de sortie par lot (défaut: 16384)
+//   OPENAI_TRANSLATION_ID_PREFIXES - Préfixes d'IDs à retraduire, séparés par des virgules
+//   OPENAI_TRANSLATION_LOCALES - Locales cibles séparées par des virgules (défaut: toutes)
 
 import "dotenv/config";
 import fs from "node:fs";
@@ -43,21 +49,35 @@ if (!OPENAI_API_KEY) {
   process.exit(1);
 }
 
-const MODEL = "gpt-4o-mini";
+const MODEL = process.env.OPENAI_TRANSLATION_MODEL || "gpt-4o-mini";
 const TEMPERATURE = 0;
-const BATCH_SIZE = 40;
+const BATCH_SIZE = positiveIntegerFromEnv("OPENAI_TRANSLATION_BATCH_SIZE", 40);
+const MAX_COMPLETION_TOKENS = positiveIntegerFromEnv("OPENAI_TRANSLATION_MAX_TOKENS", 16_384);
+const FORCED_ID_PREFIXES = (process.env.OPENAI_TRANSLATION_ID_PREFIXES ?? "")
+  .split(",")
+  .map((prefix) => prefix.trim())
+  .filter(Boolean);
+const REQUESTED_LOCALES = (process.env.OPENAI_TRANSLATION_LOCALES ?? "")
+  .split(",")
+  .map((locale) => locale.trim())
+  .filter(Boolean);
 
 const MAX_RETRIES = 5;
 const BASE_DELAY_MS = 1000;
 const REQUEST_TIMEOUT_MS = 60000;
 
 // Concurrence: nombre de locales traitées en parallèle
-const MAX_CONCURRENT_LOCALES = 3;
+const MAX_CONCURRENT_LOCALES = positiveIntegerFromEnv("OPENAI_TRANSLATION_CONCURRENCY", 3);
 
 // Split automatique des batches en cas d'échec
 const MAX_SPLIT_DEPTH = 6; // 40 -> 20 -> 10 -> 5 -> 3 -> 2 -> 1
 
 const CACHE_DIR = path.resolve("dist/i18n/cache");
+
+function positiveIntegerFromEnv(name, fallback) {
+  const parsed = Number.parseInt(process.env[name] ?? "", 10);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
+}
 
 // =============================================================================
 // Prompts
@@ -180,7 +200,7 @@ async function runWithConcurrency(items, limit, worker) {
 // =============================================================================
 // OpenAI API (Structured Outputs strict)
 // =============================================================================
-async function callOpenAI(messages) {
+async function callOpenAI(messages, expectedCount) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
@@ -194,6 +214,7 @@ async function callOpenAI(messages) {
       body: JSON.stringify({
         model: MODEL,
         temperature: TEMPERATURE,
+        max_completion_tokens: MAX_COMPLETION_TOKENS,
         messages,
         // ✅ Structured Outputs strict (réponse forcée au schéma)
         response_format: {
@@ -207,6 +228,8 @@ async function callOpenAI(messages) {
               properties: {
                 translations: {
                   type: "array",
+                  minItems: expectedCount,
+                  maxItems: expectedCount,
                   items: {
                     type: "object",
                     additionalProperties: false,
@@ -274,13 +297,17 @@ async function translateBatchStrict(locale, items) {
       const content = await callOpenAI([
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user", content: userPrompt },
-      ]);
+      ], items.length);
 
       const parsed = safeJsonParseObject(content);
       const arr = parsed?.translations;
 
       if (!Array.isArray(arr)) {
         throw new Error("Missing translations array");
+      }
+
+      if (arr.length !== items.length) {
+        throw new Error(`Incomplete translations array: got ${arr.length}, expected ${items.length}`);
       }
 
       // Map par id (robuste même si ordre change)
@@ -291,8 +318,15 @@ async function translateBatchStrict(locale, items) {
         ])
       );
 
-      // ✅ Taille exacte attendue
-      return items.map((it) => byId.get(it.id) ?? "");
+      const translations = items.map((item) => byId.get(item.id)?.trim() ?? "");
+      const invalidIndex = translations.findIndex(
+        (translation) => !translation || /\bTODO\b/.test(translation),
+      );
+      if (invalidIndex >= 0) {
+        throw new Error(`Missing or placeholder translation for ${items[invalidIndex].id}`);
+      }
+
+      return translations;
     } catch (error) {
       if (attempt === MAX_RETRIES) throw error;
       const delay = Math.min(BASE_DELAY_MS * Math.pow(2, attempt - 1), 30_000);
@@ -354,15 +388,17 @@ async function processLocale(locale) {
   let cacheHits = 0;
 
   for (const [id, unit] of units) {
+    const forced = FORCED_ID_PREFIXES.some((prefix) => id.startsWith(prefix));
     // Conditions pour traduire:
     // - state="new" ou state="needs-review"
     // - target="TODO" ou target vide
     const needsTranslation =
       unit.state === "new" ||
       unit.state === "needs-review" ||
-      unit.target === "TODO" ||
+      /\bTODO\b/.test(unit.target ?? "") ||
       unit.target === null ||
-      unit.target === "";
+      unit.target === "" ||
+      forced;
 
     if (!needsTranslation) continue;
 
@@ -381,7 +417,7 @@ async function processLocale(locale) {
     const cacheKey = getCacheKey(id, sourceText);
 
     // On évite d'utiliser le cache si "needs-review" (tu sembles vouloir retraduire)
-    if (cache[cacheKey] && unit.state !== "needs-review") {
+    if (cache[cacheKey] && unit.state !== "needs-review" && !forced) {
       let finalTarget = cache[cacheKey];
 
       // Ré-échapper pour KaTeX
@@ -485,7 +521,10 @@ async function processLocale(locale) {
 async function main() {
   console.log("[translate] Starting translation...\n");
 
-  const locales = getTargetLocales();
+  const allLocales = getTargetLocales();
+  const locales = REQUESTED_LOCALES.length > 0
+    ? allLocales.filter((locale) => REQUESTED_LOCALES.includes(locale))
+    : allLocales;
 
   // ✅ FIX: ne surtout pas relancer runWithConcurrency dans une boucle sur locales
   await runWithConcurrency(locales, MAX_CONCURRENT_LOCALES, processLocale);

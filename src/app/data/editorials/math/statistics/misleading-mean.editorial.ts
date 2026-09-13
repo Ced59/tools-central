@@ -10,7 +10,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_statistics_misleading_mean_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_statistics_misleading_mean_uc1_title:Salaires et revenus`,
@@ -30,7 +30,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_statistics_misleading_mean_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_statistics_misleading_mean_out1:Des exemples concrets de moyennes trompeuses.`,
         $localize`:@@ed_math_statistics_misleading_mean_out2:Des alternatives plus représentatives comme la médiane.`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_statistics_misleading_mean_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_statistics_misleading_mean_tip:Une moyenne élevée ne signifie pas que la majorité des valeurs sont élevées.`,
     },

@@ -14,6 +14,21 @@ describe('CoursePageComponent', () => {
 
     fixture = TestBed.createComponent(CoursePageComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('course', {
+      heroTitle: 'Cours de test',
+      heroSubtitle: 'Sous-titre',
+      backLink: '/',
+      lessons: [
+        {
+          id: 'intro',
+          title: 'Introduction',
+          subtitle: 'Bases',
+          tags: [],
+          sections: [],
+          quizzes: [],
+        },
+      ],
+    });
     fixture.detectChanges();
   });
 

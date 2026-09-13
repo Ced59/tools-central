@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-info-circle"
+  icon="tc-icon tc-icon-info-circle"
   backLink="/categories/math/percentages"
   [showExamples]="false"
   [showDefinition]="false"
@@ -17,7 +17,7 @@
   <ng-container calcInputs>
     <div class="field field-main">
           <label for="initial" i18n="@@pct_limits_initial">Valeur initiale</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="initial"
             [formControl]="form.controls.initial"
             [minFractionDigits]="0"
@@ -33,7 +33,7 @@
 
         <div class="field field-main">
           <label for="final" i18n="@@pct_limits_final">Valeur finale</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="final"
             [formControl]="form.controls.final"
             [minFractionDigits]="0"
@@ -49,7 +49,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -104,11 +104,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -116,7 +116,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

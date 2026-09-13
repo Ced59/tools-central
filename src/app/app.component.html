@@ -3,48 +3,34 @@
   <header #appHeader class="app-header">
     <div class="header-inner container">
       <a [attr.href]="homeHref" class="brand" aria-label="Tools Central">
-        <img ngSrc="/assets/icons/tools.png" alt="" class="brand-icon" width="32" height="32" priority />
+        <img ngSrc="assets/icons/tools.png" alt="" class="brand-icon" width="32" height="32" priority />
         <span class="brand-text">Tools Central</span>
       </a>
 
       <div class="header-actions">
-        <p-select
-          [options]="localeOptions"
-          [(ngModel)]="selectedLocale"
-          optionLabel="nameNative"
-          [filter]="true"
-          filterBy="nameNative,locale"
-          (onChange)="onLocaleChange(selectedLocale)"
+        <select
+          class="locale-select"
+          [value]="selectedLocale.locale"
+          (change)="onLocaleChange($any($event.target).value)"
           aria-label="Language"
           i18n-aria-label="@@lang_switcher_aria"
         >
-          <ng-template pTemplate="selectedItem" let-item>
-            <div class="lang-item">
-              <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
-              <span class="lang-text">{{ item.nameNative }}</span>
-            </div>
-          </ng-template>
+          @for (option of localeOptions; track option.locale) {
+            <option [value]="option.locale">{{ option.nameNative }} ({{ option.locale }})</option>
+          }
+        </select>
 
-          <ng-template pTemplate="item" let-item>
-            <div class="lang-item">
-              <img class="flag" [src]="'/assets/flags/' + item.flag + '.svg'" width="18" height="14" alt="" />
-              <span class="lang-text">{{ item.nameNative }}</span>
-              <span class="lang-locale">{{ item.locale }}</span>
-            </div>
-          </ng-template>
-        </p-select>
-
-        <p-button
-          [icon]="themeService.isDarkMode() ? 'pi pi-sun' : 'pi pi-moon'"
-          [rounded]="true"
-          [text]="true"
-          severity="secondary"
-          (onClick)="themeService.toggleTheme()"
+        <button
+          type="button"
+          class="theme-toggle"
+          (click)="themeService.toggleTheme()"
           [attr.aria-label]="themeService.isDarkMode()
             ? 'Activer le mode clair'
             : 'Activer le mode sombre'"
           i18n-attr.aria-label="@@aria_light_mode"
-        />
+        >
+          <i [class]="themeService.isDarkMode() ? 'tc-icon tc-icon-sun' : 'tc-icon tc-icon-moon'" aria-hidden="true"></i>
+        </button>
       </div>
     </div>
   </header>

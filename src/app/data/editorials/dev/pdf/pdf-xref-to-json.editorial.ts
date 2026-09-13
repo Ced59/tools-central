@@ -11,7 +11,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_xref_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_dev_pdf_xref_uc1_title:Debug de PDF corrompu`,
@@ -32,7 +32,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_dev_pdf_xref_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_dev_pdf_xref_out1:Une exportation JSON de la table XRef.`,
         $localize`:@@ed_dev_pdf_xref_out2:Les offsets, statuts et générations de chaque objet.`,
@@ -43,7 +43,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_dev_pdf_xref_limits:Limites`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_dev_pdf_xref_lim1:Les PDF hybrides (xref streams) nécessitent une interprétation avancée.`,
@@ -55,7 +55,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_dev_pdf_xref_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_dev_pdf_xref_tip:Combinez l’analyse XRef avec l’inspection des objets pour comprendre l’arborescence complète du PDF.`,
     },

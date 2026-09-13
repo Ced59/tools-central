@@ -25,13 +25,13 @@
 
           <div class="subgroup-badges">
             <span class="mini-badge available" *ngIf="s.availableCount > 0">
-              <i class="pi pi-check-circle"></i>
+              <i class="tc-icon tc-icon-check-circle"></i>
               <span i18n="@@available_now">Disponible</span>
               <span class="count">{{ s.availableCount }}</span>
             </span>
 
             <span class="mini-badge coming-soon" *ngIf="s.comingSoonCount > 0">
-              <i class="pi pi-clock"></i>
+              <i class="tc-icon tc-icon-clock"></i>
               <span i18n="@@coming_soon_label">Bientôt</span>
               <span class="count">{{ s.comingSoonCount }}</span>
             </span>
@@ -59,7 +59,7 @@
 <section class="back-section">
   <div class="container">
     <a [routerLink]="['/categories', categoryId]" class="back-link">
-      <i class="pi pi-arrow-left"></i>
+      <i class="tc-icon tc-icon-arrow-left"></i>
       <span i18n="@@back_to_categories">Retour aux catégories</span>
     </a>
   </div>

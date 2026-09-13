@@ -11,7 +11,7 @@ import type { CategoryId } from './categories';
 /** ✅ Single Source of Truth : dérivé du catalogue */
 export const TOOL_GROUP_REGISTRY: Record<CategoryId, Record<string, { title: string; description: string; icon: string; route: string; available: boolean }>> = deriveToolGroupRegistry();
 
-export type GroupId<C extends CategoryId> = string;
+export type GroupId<_C extends CategoryId> = string;
 
 export type ToolGroup = {
   category: CategoryId;

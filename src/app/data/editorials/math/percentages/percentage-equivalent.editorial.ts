@@ -15,7 +15,7 @@ export const editorial: ToolEditorialModel = {
       id: 'use-cases',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_equivalent_usecases:Cas d’utilisation`,
-      icon: 'pi pi-bolt',
+      icon: 'tc-icon tc-icon-bolt',
       items: [
         {
           title: $localize`:@@ed_math_percentages_percentage_equivalent_uc1_title:Remises ou hausses successives`,
@@ -40,7 +40,7 @@ export const editorial: ToolEditorialModel = {
       id: 'what-you-get',
       kind: 'text',
       heading: $localize`:@@ed_math_percentages_percentage_equivalent_output:Ce que vous obtenez`,
-      icon: 'pi pi-database',
+      icon: 'tc-icon tc-icon-database',
       paragraphs: [
         $localize`:@@ed_math_percentages_percentage_equivalent_out1:Le pourcentage équivalent correspondant à l’effet global des calculs appliqués.`,
         $localize`:@@ed_math_percentages_percentage_equivalent_out2:Un résultat unique permettant de résumer plusieurs variations en une seule.`,
@@ -52,7 +52,7 @@ export const editorial: ToolEditorialModel = {
       id: 'limits',
       kind: 'list',
       heading: $localize`:@@ed_math_percentages_percentage_equivalent_limits:Limites et points d’attention`,
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
         {
           text: $localize`:@@ed_math_percentages_percentage_equivalent_lim1:Les pourcentages successifs ne s’additionnent pas : l’équivalence passe par des coefficients multiplicateurs.`,
@@ -70,7 +70,7 @@ export const editorial: ToolEditorialModel = {
       id: 'faq',
       kind: 'faq',
       heading: $localize`:@@ed_math_percentages_percentage_equivalent_faq:Questions fréquentes`,
-      icon: 'pi pi-question-circle',
+      icon: 'tc-icon tc-icon-question-circle',
       items: [
         {
           q: $localize`:@@ed_math_percentages_percentage_equivalent_q1:Quelle différence avec une variation en pourcentage ?`,
@@ -87,7 +87,7 @@ export const editorial: ToolEditorialModel = {
       id: 'tip',
       kind: 'callout',
       heading: $localize`:@@ed_math_percentages_percentage_equivalent_tip_title:Astuce`,
-      icon: 'pi pi-lightbulb',
+      icon: 'tc-icon tc-icon-lightbulb',
       variant: 'info',
       text: $localize`:@@ed_math_percentages_percentage_equivalent_tip:Pensez toujours en coefficients (×0,9 ; ×1,2…) puis convertissez le résultat en pourcentage équivalent : c’est la méthode la plus fiable.`,
     },

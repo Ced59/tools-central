@@ -18,7 +18,7 @@
       <span class="tcdd-placeholder">{{ placeholder }}</span>
     </ng-template>
 
-    <i class="pi pi-chevron-down tcdd-caret" aria-hidden="true"></i>
+    <i class="tc-icon tc-icon-chevron-down tcdd-caret" aria-hidden="true"></i>
   </button>
 
   <small class="tcdd-hint" *ngIf="hint">{{ hint }}</small>
@@ -38,7 +38,7 @@
           <span class="tcdd-item-label">{{ opt.label }}</span>
           <span class="tcdd-item-desc" *ngIf="opt.description">{{ opt.description }}</span>
         </span>
-        <i class="pi pi-check" *ngIf="isSelected(opt)" aria-hidden="true"></i>
+        <i class="tc-icon tc-icon-check" *ngIf="isSelected(opt)" aria-hidden="true"></i>
       </button>
 
       <button

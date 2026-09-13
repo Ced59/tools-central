@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-chart-pie"
+  icon="tc-icon tc-icon-chart-pie"
   backLink="/categories/math/percentages"
   [showExamples]="false"
   [showDefinition]="true"
@@ -19,14 +19,14 @@
         <div class="field field-main field-full">
           <label for="mode" i18n="@@prop_part_mode">Mode</label>
 
-          <p-selectButton
+          <tc-select-button
             [options]="modeOptions"
             [formControl]="form.controls.mode"
             optionLabel="label"
             optionValue="value"
             aria-label="Mode"
             i18n-aria-label="@@prop_part_mode_aria"
-          ></p-selectButton>
+          ></tc-select-button>
 
           <small class="hint" i18n="@@prop_part_mode_hint">
             Choisissez ce que vous voulez trouver : le pourcentage, la valeur (part), ou le total.
@@ -36,7 +36,7 @@
         <!-- Inputs dynamiques selon mode -->
         <div class="field field-main" *ngIf="mode() !== 'valueFromPct'">
           <label for="part" i18n="@@prop_part_part">Part (valeur)</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="part"
             [formControl]="form.controls.part"
             [minFractionDigits]="0"
@@ -49,7 +49,7 @@
 
         <div class="field field-main" *ngIf="mode() !== 'pctFromPart'">
           <label for="pct" i18n="@@prop_part_pct">Pourcentage</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="pct"
             [formControl]="form.controls.pct"
             [minFractionDigits]="0"
@@ -63,7 +63,7 @@
 
         <div class="field field-main" *ngIf="mode() !== 'totalFromPartPct'">
           <label for="total" i18n="@@prop_part_total">Total</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="total"
             [formControl]="form.controls.total"
             [minFractionDigits]="0"
@@ -76,7 +76,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -117,7 +117,7 @@
         </div>
 
         <div class="tip-box" *ngIf="warning()">
-          <i class="pi pi-exclamation-triangle"></i>
+          <i class="tc-icon tc-icon-exclamation-triangle"></i>
           <span>{{ warning() }}</span>
         </div>
   </ng-container>
@@ -136,11 +136,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -158,14 +158,14 @@
   <ng-container definition>
     <tc-math-formula
           label="Formules"
-          i18n-label="@@tool_formula_title"
+          i18n-label="@@tool_formulas_title"
           mode="katex"
           latex="\text{(1) }p=\frac{\text{part}}{\text{total}}\times 100\quad;\quad \text{(2) part}=\frac{p}{100}\times total\quad;\quad \text{(3) total}=\frac{\text{part}}{p/100}"
           i18n-latex="@@prop_part_formula_katex"
         ></tc-math-formula>
 
         <div class="tip-box">
-          <i class="pi pi-lightbulb"></i>
+          <i class="tc-icon tc-icon-lightbulb"></i>
           <span i18n="@@prop_part_note">
             “X% de T” et “si X vaut Y%” sont des requêtes très fréquentes : cet outil couvre les deux.
           </span>
@@ -174,7 +174,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>

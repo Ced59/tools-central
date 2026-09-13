@@ -1,6 +1,6 @@
 <app-pdf-tool-shell
   [ui]="uiShell"
-  icon="pi pi-paperclip"
+  icon="tc-icon tc-icon-paperclip"
   [title]="ui.title"
   [subtitle]="ui.subtitle"
   [backLink]="backLink"
@@ -23,12 +23,12 @@
   <div leftList>
     <div class="actions" style="margin-bottom: .75rem; display:flex; gap:.5rem; flex-wrap:wrap;">
       <button
+        tcButton
         type="button"
-        class="p-button p-component"
         [disabled]="attachments().length === 0"
         (click)="downloadAllZip()"
       >
-        <span class="pi pi-download" style="margin-right:.5rem;"></span>
+        <span class="tc-icon tc-icon-download" style="margin-right:.5rem;"></span>
         <span>{{ ui.btnDownloadAll }}</span>
       </button>
     </div>
@@ -53,12 +53,13 @@
 
       <div class="field-card-advanced" style="display:flex; justify-content:flex-end;">
         <button
+          tcButton
           type="button"
-          class="p-button p-component p-button-secondary"
+          class="tc-button-secondary"
           [disabled]="!(it.bytes?.length)"
           (click)="downloadOne(it)"
         >
-          <span class="pi pi-download" style="margin-right:.5rem;"></span>
+          <span class="tc-icon tc-icon-download" style="margin-right:.5rem;"></span>
           <span>{{ ui.btnDownloadOne }}</span>
         </button>
       </div>

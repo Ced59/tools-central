@@ -1,5 +1,5 @@
 <app-math-tool-shell
-  icon="pi pi-sort-numeric-up"
+  icon="tc-icon tc-icon-sort-numeric-up"
   backLink="/categories/math/percentages"
   [showExamples]="true"
   [showDefinition]="false"
@@ -18,14 +18,14 @@
     <div class="field field-main field-full">
           <label for="mode" i18n="@@pct_frac_mode">Mode</label>
 
-          <p-selectButton
+          <tc-select-button
             [options]="modeOptions"
             [formControl]="form.controls.mode"
             optionLabel="label"
             optionValue="value"
             aria-label="Mode"
             i18n-aria-label="@@pct_frac_mode_aria"
-          ></p-selectButton>
+          ></tc-select-button>
 
           <small class="hint" i18n="@@pct_frac_mode_hint">
             Choisissez la direction : pourcentage → fraction, ou fraction → pourcentage.
@@ -35,7 +35,7 @@
         <!-- % -> fraction -->
         <div class="field field-main" *ngIf="mode() === 'pctToFrac'">
           <label for="pct" i18n="@@pct_frac_pct">Pourcentage</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="pct"
             [formControl]="form.controls.pct"
             [minFractionDigits]="0"
@@ -51,7 +51,7 @@
         <ng-container *ngIf="mode() === 'fracToPct'">
           <div class="field field-main">
             <label for="num" i18n="@@pct_frac_num">Numérateur</label>
-            <p-inputNumber
+            <tc-number-input
               inputId="num"
               [formControl]="form.controls.num"
               [minFractionDigits]="0"
@@ -64,7 +64,7 @@
 
           <div class="field field-main">
             <label for="den" i18n="@@pct_frac_den">Dénominateur</label>
-            <p-inputNumber
+            <tc-number-input
               inputId="den"
               [formControl]="form.controls.den"
               [minFractionDigits]="0"
@@ -81,7 +81,7 @@
 
         <div class="field field-precision">
           <label for="precision" i18n="@@tool_precision">Décimales</label>
-          <p-inputNumber
+          <tc-number-input
             inputId="precision"
             [formControl]="form.controls.precision"
             [min]="0"
@@ -117,7 +117,7 @@
         </div>
 
         <div class="tip-box" *ngIf="warning()">
-          <i class="pi pi-exclamation-triangle"></i>
+          <i class="tc-icon tc-icon-exclamation-triangle"></i>
           <span>{{ warning() }}</span>
         </div>
   </ng-container>
@@ -136,11 +136,11 @@
   </ng-container>
 
   <!-- Reset Button -->
-  <p-button resetButton
+  <tc-button resetButton
             type="button"
             severity="secondary"
             [text]="true"
-            icon="pi pi-refresh"
+            icon="tc-icon tc-icon-refresh"
             (onClick)="reset()"
             label="Réinitialiser"
             i18n-label="@@tool_reset"
@@ -179,7 +179,7 @@
 
   <!-- Back Link -->
   <a backLink routerLink="/categories/math/percentages" class="back-link">
-        <i class="pi pi-arrow-left"></i>
+        <i class="tc-icon tc-icon-arrow-left"></i>
         <span i18n="@@back_to_tools">Retour aux outils</span>
       </a>
 </app-math-tool-shell>
