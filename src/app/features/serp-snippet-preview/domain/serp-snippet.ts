@@ -87,7 +87,7 @@ export function analyzeSerpSnippet(input: SerpSnippetInput): SerpSnippetAnalysis
 }
 
 function normalizeCollapsibleWhitespace(value: string): string {
-  return value.replace(/\s+/gu, ' ').trim();
+  return value.replace(/[ \t\n\f\r]+/g, ' ').trim();
 }
 
 function analyzeField(

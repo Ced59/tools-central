@@ -78,6 +78,14 @@ describe('analyzeSerpSnippet', () => {
     expect(result.title.status).toBe('concise');
   });
 
+  it('preserves non-breaking spaces that remain visible in the preview', () => {
+    const title = 'A\u00a0\u00a0B';
+    const result = analyzeSerpSnippet({ ...BASE_INPUT, title });
+
+    expect(result.title.characters).toBe(4);
+    expect(result.title.preview).toBe(title);
+  });
+
   it('handles very large pasted content in a single bounded pass', () => {
     const result = analyzeSerpSnippet({
       ...BASE_INPUT,
