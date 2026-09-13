@@ -115,12 +115,15 @@ function deleteIfPresent(dictionary: PDFDict, key: string): boolean {
 
 function clearMetadata(document: PDFDocument): boolean {
   try {
+    const neutralDate = new Date(0);
     document.setTitle('');
     document.setAuthor('');
     document.setSubject('');
     document.setKeywords([]);
     document.setProducer('');
     document.setCreator('');
+    document.setCreationDate(neutralDate);
+    document.setModificationDate(neutralDate);
     document.catalog.delete(PDFName.of('Metadata'));
     return true;
   } catch {

@@ -7,6 +7,8 @@ import {
   forwardRef,
   HostBinding,
   Input,
+  inject,
+  LOCALE_ID,
   NgModule,
   OnChanges,
   Output,
@@ -15,6 +17,27 @@ import {
   ChangeDetectionStrategy
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+export function parseLocaleNumber(raw: string, locale: string): number | null {
+  const compact = raw.trim().replace(/[\u200e\u200f\u061c]/g, '');
+  if (!compact) return null;
+
+  const parts = new Intl.NumberFormat(locale).formatToParts(12_345.6);
+  const group = parts.find((part) => part.type === 'group')?.value;
+  const decimal = parts.find((part) => part.type === 'decimal')?.value;
+  let normalized = compact;
+
+  if (group) {
+    normalized = normalized.split(group).join('');
+  }
+  normalized = normalized.replace(/[\s\u00a0\u202f]/g, '');
+  if (decimal && decimal !== '.') {
+    normalized = normalized.split(decimal).join('.');
+  }
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
 
 type UiSeverity = 'primary' | 'secondary' | 'success' | 'info' | 'warn' | 'danger' | 'help' | 'contrast';
 type UiSize = 'small' | 'large';
@@ -221,6 +244,7 @@ export class TcNumberInputComponent implements ControlValueAccessor {
   disabled = false;
   displayValue = '';
   focused = false;
+  private readonly locale = inject(LOCALE_ID);
   private value: number | null = null;
   private onChange: (value: number | null) => void = () => undefined;
   private onTouched: () => void = () => undefined;
@@ -261,30 +285,12 @@ export class TcNumberInputComponent implements ControlValueAccessor {
   }
 
   private parse(raw: string): number | null {
-    const compact = raw.trim().replace(/[\s\u00a0\u202f]/g, '');
-    if (!compact) return null;
-
-    const lastComma = compact.lastIndexOf(',');
-    const lastDot = compact.lastIndexOf('.');
-    let normalized: string;
-    if (lastComma > lastDot) {
-      normalized = compact.replace(/\./g, '').replace(',', '.');
-    } else if (lastDot > lastComma && lastComma >= 0) {
-      normalized = compact.replace(/,/g, '');
-    } else {
-      normalized = compact.replace(',', '.');
-    }
-
-    const parsed = Number(normalized);
-    if (!Number.isFinite(parsed)) return null;
-    if (this.min != null && parsed < this.min) return parsed;
-    if (this.max != null && parsed > this.max) return parsed;
-    return parsed;
+    return parseLocaleNumber(raw, this.locale);
   }
 
   private format(value: number | null): string {
     if (value == null) return '';
-    return new Intl.NumberFormat(undefined, {
+    return new Intl.NumberFormat(this.locale, {
       useGrouping: this.useGrouping,
       minimumFractionDigits: this.minFractionDigits,
       maximumFractionDigits: this.maxFractionDigits,

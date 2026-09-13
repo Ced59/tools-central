@@ -169,9 +169,12 @@ jobs:
               status=$(docker inspect --format='{{.State.Health.Status}}' tools-central 2>/dev/null || true)
               if [ "$status" = "healthy" ]; then
                 docker compose ps
-                wget -q --spider http://127.0.0.1/fr/
-                wget -q --spider http://127.0.0.1/fr/categories/math/percentages/percentage-of-number
-                exit 0
+                if wget -q --spider http://127.0.0.1/fr/ && \
+                   wget -q --spider http://127.0.0.1/fr/categories/math/percentages/percentage-of-number; then
+                  exit 0
+                fi
+                echo "Container is healthy but required routes are unavailable."
+                break
               fi
               sleep 5
             done
