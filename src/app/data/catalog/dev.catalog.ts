@@ -261,6 +261,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/robots-txt-builder/presentation/robots-txt-builder-tool.component')
                   .then(m => m.RobotsTxtBuilderToolComponent),
             },
+            'sitemap-xml-builder': {
+              title: $localize`:@@tool_sitemap_xml_builder_title:Générateur et validateur sitemap XML`,
+              description: $localize`:@@tool_sitemap_xml_builder_desc:Créer un sitemap d’URL ou un index, valider le XML, les dates, les limites et le périmètre, puis télécharger le fichier localement.`,
+              icon: 'tc-icon tc-icon-sitemap',
+              available: true,
+              loadComponent: () =>
+                import('../../features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component')
+                  .then(m => m.SitemapXmlBuilderToolComponent),
+            },
           },
         },
       },

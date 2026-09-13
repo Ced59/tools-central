@@ -1,0 +1,182 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-sitemap"></i></div>
+        <h1 i18n="@@sitemap_builder_title">Générateur et validateur sitemap XML</h1>
+        <p class="hero-subtitle" i18n="@@sitemap_builder_subtitle">
+          Créez un sitemap d’URL ou un index, contrôlez sa structure et téléchargez un XML prêt à publier.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@sitemap_builder_privacy">Traitement 100 % local : aucune URL ni aucun fichier n’est envoyé.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="tool-card builder-card">
+      <div class="card-header">
+        <h2 i18n="@@sitemap_builder_generator_title">1. Préparer les entrées</h2>
+        <p i18n="@@sitemap_builder_generator_subtitle">Une entrée par ligne au format « URL ou chemin | lastmod facultatif ». Les doublons et lignes invalides sont écartés.</p>
+      </div>
+
+      <div class="mode-switch" role="group" i18n-aria-label="@@sitemap_builder_mode_aria" aria-label="Type de sitemap">
+        <button type="button" [class.active]="kind() === 'urlset'" [attr.aria-pressed]="kind() === 'urlset'" (click)="setKind('urlset')">
+          <span i18n="@@sitemap_builder_mode_urlset">Sitemap d’URL</span>
+        </button>
+        <button type="button" [class.active]="kind() === 'sitemapindex'" [attr.aria-pressed]="kind() === 'sitemapindex'" (click)="setKind('sitemapindex')">
+          <span i18n="@@sitemap_builder_mode_index">Index de sitemaps</span>
+        </button>
+      </div>
+
+      <form class="builder-grid" (submit)="$event.preventDefault(); generate()">
+        <div class="field">
+          <label for="sitemap-site-url" i18n="@@sitemap_builder_site_label">Origine du site</label>
+          <input id="sitemap-site-url" type="url" maxlength="2048" autocomplete="url" spellcheck="false" [value]="siteUrl()" (input)="updateSiteUrl($event)" aria-describedby="sitemap-site-help sitemap-site-status" />
+          <small id="sitemap-site-help" i18n="@@sitemap_builder_site_help">Les chemins relatifs sont résolus depuis cette origine et les autres domaines sont refusés à la génération.</small>
+          <small id="sitemap-site-status" aria-live="polite" [class.error-text]="!builderValidation().siteValid">
+            @if (builderValidation().siteValid) {
+              <span i18n="@@sitemap_builder_site_valid">Origine valide</span>
+            } @else {
+              <span i18n="@@sitemap_builder_site_invalid">Saisissez une origine HTTP ou HTTPS valide</span>
+            }
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="sitemap-public-url" i18n="@@sitemap_builder_public_label">Adresse publique du sitemap analysé</label>
+          <input id="sitemap-public-url" type="url" maxlength="2048" autocomplete="url" spellcheck="false" [value]="sitemapUrl()" (input)="updateSitemapUrl($event)" />
+          <small i18n="@@sitemap_builder_public_help">Elle sert à vérifier l’origine et le périmètre des URL, sans effectuer de requête réseau.</small>
+        </div>
+
+        <div class="field field--full">
+          <label for="sitemap-source-lines">
+            @if (kind() === 'urlset') {
+              <span i18n="@@sitemap_builder_urls_label">URL des pages</span>
+            } @else {
+              <span i18n="@@sitemap_builder_indexes_label">URL des fichiers sitemap</span>
+            }
+          </label>
+          <textarea id="sitemap-source-lines" rows="8" maxlength="10000000" spellcheck="false" [value]="sourceLines()" (input)="updateSourceLines($event)"></textarea>
+          <small i18n="@@sitemap_builder_lines_help">Exemples : /produits/chaise | 2026-09-01 ou https://example.com/sitemap-articles.xml</small>
+        </div>
+
+        <button class="primary-button" type="submit">
+          <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+          <span i18n="@@sitemap_builder_generate">Générer et remplacer l’éditeur</span>
+        </button>
+      </form>
+
+      @if (builderValidation().issues.length) {
+        <div class="builder-issues" role="status">
+          <strong i18n="@@sitemap_builder_rejected_lines">Lignes à corriger avant génération</strong>
+          <ul>
+            @for (issue of builderValidation().issues; track $index) {
+              <li><span i18n="@@sitemap_builder_line">Ligne</span> {{ formatNumber(issue.line ?? 0) }} — {{ issueLabel(issue.code) }} @if (issue.detail) { <code>{{ issue.detail }}</code> }</li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+
+    <div class="workspace-grid">
+      <div class="tool-card editor-card">
+        <div class="card-header inline-header">
+          <div>
+            <h2 i18n="@@sitemap_builder_editor_title">2. Éditer et valider le XML</h2>
+            <p i18n="@@sitemap_builder_editor_subtitle">Collez aussi un sitemap existant : l’analyse se met à jour instantanément dans le navigateur.</p>
+          </div>
+          <button class="download-button" type="button" [disabled]="!content().trim()" (click)="download()">
+            <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+            <span i18n="@@sitemap_builder_download">Télécharger le XML</span>
+          </button>
+        </div>
+
+        <label class="sr-only" for="sitemap-content" i18n="@@sitemap_builder_content_label">Contenu XML du sitemap</label>
+        <textarea id="sitemap-content" class="code-editor" rows="22" maxlength="10500000" spellcheck="false" [value]="content()" (input)="updateContent($event)" aria-describedby="sitemap-analysis-summary"></textarea>
+
+        <div id="sitemap-analysis-summary" class="stats" aria-live="polite" data-testid="sitemap-analysis">
+          <span><strong>{{ kindLabel(analysis().kind) }}</strong></span>
+          <span><strong>{{ formatNumber(analysis().entries.length) }}</strong> <span i18n="@@sitemap_builder_entries">entrées</span></span>
+          <span><strong>{{ formatNumber(analysis().sourceBytes) }}</strong> <span i18n="@@sitemap_builder_bytes">octets UTF-8</span></span>
+        </div>
+      </div>
+
+      <aside class="tool-card report-card">
+        <div class="card-header">
+          <h2 i18n="@@sitemap_builder_report_title">Rapport de validation</h2>
+          <p>
+            <span class="badge badge--error">{{ formatNumber(errorCount()) }} <span i18n="@@sitemap_builder_errors">erreurs</span></span>
+            <span class="badge badge--warning">{{ formatNumber(warningCount()) }} <span i18n="@@sitemap_builder_warnings">avertissements</span></span>
+            <span class="badge badge--info">{{ formatNumber(infoCount()) }} <span i18n="@@sitemap_builder_infos">informations</span></span>
+          </p>
+        </div>
+
+        @if (!analysis().issues.length) {
+          <div class="empty-report" role="status">
+            <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+            <strong i18n="@@sitemap_builder_no_issue">Aucun problème détecté</strong>
+            <span i18n="@@sitemap_builder_no_issue_help">Le fichier reste une indication aux moteurs : vérifiez les URL et publiez-le à l’adresse déclarée.</span>
+          </div>
+        } @else {
+          <ol class="issue-list">
+            @for (issue of analysis().issues; track $index) {
+              <li [class]="'issue issue--' + issue.severity">
+                <div>
+                  @if (issue.line !== null) {
+                    <strong><span i18n="@@sitemap_builder_line">Ligne</span> {{ formatNumber(issue.line) }}</strong>
+                  } @else {
+                    <strong i18n="@@sitemap_builder_file_level">Fichier</strong>
+                  }
+                  <span>{{ issueLabel(issue.code) }}</span>
+                </div>
+                @if (issue.detail) { <code>{{ issue.detail }}</code> }
+              </li>
+            }
+          </ol>
+        }
+      </aside>
+    </div>
+
+    <div class="tool-card method-card">
+      <div class="card-header">
+        <h2 i18n="@@sitemap_builder_method_title">3. Publier un signal utile</h2>
+      </div>
+      <div class="method-grid">
+        <div>
+          <i class="tc-icon tc-icon-link" aria-hidden="true"></i>
+          <h3 i18n="@@sitemap_builder_method_canonical_title">URL absolues et canoniques</h3>
+          <p i18n="@@sitemap_builder_method_canonical_text">Listez uniquement les URL que vous souhaitez voir dans les résultats, avec le protocole et l’hôte définitifs.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-calendar" aria-hidden="true"></i>
+          <h3 i18n="@@sitemap_builder_method_lastmod_title">lastmod doit être exact</h3>
+          <p i18n="@@sitemap_builder_method_lastmod_text">Indiquez la dernière modification significative de la page, pas la date de génération du sitemap.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-list" aria-hidden="true"></i>
+          <h3 i18n="@@sitemap_builder_method_limits_title">50 000 URL ou 50 Mio</h3>
+          <p i18n="@@sitemap_builder_method_limits_text">Scindez les ensembles plus grands et référencez les fichiers obtenus dans un index de sitemaps.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i>
+          <h3 i18n="@@sitemap_builder_method_google_title">Un indice, jamais une garantie</h3>
+          <p i18n="@@sitemap_builder_method_google_text">Google ignore priority et changefreq. Un sitemap facilite la découverte mais ne garantit ni exploration, ni indexation, ni classement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="reset-button" type="button" (click)="reset()">
+        <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+        <span i18n="@@tool_reset">Réinitialiser</span>
+      </button>
+      <a class="back-link" routerLink="/categories/dev/seo">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@sitemap_builder_back">Retour aux outils SEO</span>
+      </a>
+    </div>
+  </div>
+</section>

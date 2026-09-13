@@ -77,3 +77,21 @@ test('robots.txt builder validates and simulates a blocking rule locally', async
   await expect(page.getByTestId('robots-decision')).toContainText('Exploration autorisée');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('sitemap XML builder generates, validates and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/sitemap-xml-builder');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Générateur et validateur sitemap XML');
+  await expect(page.getByText('Aucun problème détecté')).toBeVisible();
+
+  await page.locator('#sitemap-source-lines').fill('/produits/café?tri=nom&ordre=asc | 2026-09-01');
+  await page.getByRole('button', { name: 'Générer et remplacer l’éditeur' }).click();
+
+  await expect(page.locator('#sitemap-content')).toHaveValue(/caf%C3%A9\?tri=nom&amp;ordre=asc/);
+  await expect(page.getByTestId('sitemap-analysis')).toContainText('1');
+
+  await page.locator('#sitemap-content').fill('<urlset>');
+  await expect(page.getByText('Le document XML est mal formé', { exact: false })).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
