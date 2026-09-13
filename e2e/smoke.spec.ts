@@ -38,7 +38,7 @@ test('unknown routes return the localized 404 page', async ({ page }) => {
 });
 
 test('SERP snippet preview adapts its pixel budget to mobile', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
+  await page.setViewportSize({ width: 320, height: 844 });
   await page.goto('/fr/categories/dev/seo/serp-snippet-preview');
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Prévisualiseur de snippet Google');
@@ -48,5 +48,17 @@ test('SERP snippet preview adapts its pixel budget to mobile', async ({ page }) 
 
   await expect(page.getByText('520 px', { exact: false })).toBeVisible();
   await expect(page.getByTestId('serp-preview')).toHaveClass(/browser-frame--mobile/);
+  await expect.poll(async () => {
+    const grid = await page.locator('.workspace-grid').boundingBox();
+    const editor = await page.locator('.editor').boundingBox();
+    return grid && editor ? editor.width <= grid.width + 1 : false;
+  }).toBe(true);
+  await expect.poll(async () => {
+    const card = await page.locator('.workspace-card').boundingBox();
+    const preview = await page.getByTestId('serp-preview').boundingBox();
+    return card && preview
+      ? preview.x >= card.x && preview.x + preview.width <= card.x + card.width + 1
+      : false;
+  }).toBe(true);
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
