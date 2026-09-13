@@ -108,6 +108,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/pdf/pdf-xref-to-json.editorial'),
   },
+  'dev/seo/serp-snippet-preview': {
+    available: true,
+    load: () => import('./dev/seo/serp-snippet-preview.editorial'),
+  },
   'math/fractions/decimal-to-fraction': {
     available: true,
     load: () => import('./math/fractions/decimal-to-fraction.editorial'),

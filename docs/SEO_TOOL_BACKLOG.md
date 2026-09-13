@@ -79,6 +79,10 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 | 29 | Optimiseur SVG | aperçu, diff, accessibilité, options sûres et taille gagnée | P0 | M |
 | 30 | Convertisseur et compresseur d'images | AVIF/WebP/PNG/JPEG, qualité comparée, lots et traitement local | P0 | L |
 
+### Outils livrés depuis l’audit
+
+- **Prévisualiseur de snippet Google** — implémenté en Clean Architecture, traitement local, vues ordinateur/mobile, estimation typographique en pixels, recommandations, tests unitaires et E2E. Route : `/categories/dev/seo/serp-snippet-preview`.
+
 ## Inventaire exhaustif des opportunités
 
 Les listes suivantes couvrent le périmètre pertinent pour Tools Central. Elles servent à alimenter la recherche et le tri, pas à lancer une fabrication en série.
@@ -464,6 +468,8 @@ Améliorer d'abord une page qui reçoit des impressions mais répond mal. Fusion
 - Google, créer du contenu utile et fiable : <https://developers.google.com/search/docs/fundamentals/creating-helpful-content>
 - Google, règles antispam : <https://developers.google.com/search/docs/essentials/spam-policies>
 - Google, Core Web Vitals : <https://developers.google.com/search/docs/appearance/core-web-vitals>
+- Google, contrôle des snippets : <https://developers.google.com/search/docs/appearance/snippet>
+- Google, liens de titre : <https://developers.google.com/search/docs/appearance/title-link>
 - Google, données structurées `SoftwareApplication` : <https://developers.google.com/search/docs/appearance/structured-data/software-app>
 - Google, sitemaps : <https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap>
 - Google, versions localisées : <https://developers.google.com/search/docs/specialty/international/localized-versions>

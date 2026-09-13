@@ -1,0 +1,228 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true">
+          <i class="tc-icon tc-icon-search"></i>
+        </div>
+        <h1 i18n="@@serp_preview_title">Prévisualiseur de snippet Google</h1>
+        <p class="hero-subtitle" i18n="@@serp_preview_subtitle">
+          Prévisualisez gratuitement le titre, la description et l’URL de votre page dans les résultats de recherche.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@serp_preview_privacy">Analyse instantanée dans votre navigateur : aucun contenu n’est envoyé à un serveur.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="tool-card workspace-card">
+      <div class="card-header">
+        <h2 i18n="@@serp_preview_editor_title">Votre résultat de recherche</h2>
+        <p i18n="@@serp_preview_editor_subtitle">Modifiez les champs : l’aperçu et les indicateurs se mettent à jour immédiatement.</p>
+      </div>
+
+      <div class="device-switch" role="group" i18n-aria-label="@@serp_preview_device_aria" aria-label="Appareil simulé">
+        <button
+          type="button"
+          [class.active]="device() === 'desktop'"
+          [attr.aria-pressed]="device() === 'desktop'"
+          (click)="selectDevice('desktop')"
+        >
+          <i class="tc-icon tc-icon-eye" aria-hidden="true"></i>
+          <span i18n="@@serp_preview_desktop">Ordinateur</span>
+        </button>
+        <button
+          type="button"
+          [class.active]="device() === 'mobile'"
+          [attr.aria-pressed]="device() === 'mobile'"
+          (click)="selectDevice('mobile')"
+        >
+          <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+          <span i18n="@@serp_preview_mobile">Mobile</span>
+        </button>
+      </div>
+
+      <div class="workspace-grid">
+        <form class="editor" (submit)="$event.preventDefault()">
+          <div class="field-row">
+            <div class="field">
+              <label for="serp-site-name" i18n="@@serp_preview_site_label">Nom du site</label>
+              <input
+                id="serp-site-name"
+                type="text"
+                [value]="siteName()"
+                (input)="updateSiteName($event)"
+                maxlength="80"
+                autocomplete="organization"
+              />
+            </div>
+            <div class="field">
+              <label for="serp-url" i18n="@@serp_preview_url_label">URL de la page</label>
+              <input
+                id="serp-url"
+                type="url"
+                [value]="url()"
+                (input)="updateUrl($event)"
+                maxlength="2048"
+                spellcheck="false"
+                autocomplete="url"
+                aria-describedby="serp-url-status"
+              />
+              <small id="serp-url-status" aria-live="polite" [class.error-text]="!analysis().urlValid">
+                @if (analysis().urlValid) {
+                  <span i18n="@@serp_preview_url_valid">URL valide</span>
+                } @else {
+                  <span i18n="@@serp_preview_url_invalid">URL à corriger</span>
+                }
+              </small>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label-line">
+              <label for="serp-title" i18n="@@serp_preview_title_label">Balise title</label>
+              <span id="serp-title-status" aria-live="polite" class="status" [class]="'status status--' + analysis().title.status">
+                {{ statusLabel(analysis().title.status) }}
+              </span>
+            </div>
+            <input
+              id="serp-title"
+              type="text"
+              [value]="title()"
+              (input)="updateTitle($event)"
+              maxlength="600"
+              aria-describedby="serp-title-measure serp-title-status"
+            />
+            <div id="serp-title-measure" class="measure-line">
+              <span>{{ formatNumber(analysis().title.characters) }} <span i18n="@@serp_preview_characters">caractères</span></span>
+              <span>{{ formatNumber(analysis().title.estimatedPixels) }} / {{ formatNumber(analysis().title.maximumPixels) }} px</span>
+            </div>
+            <div
+              class="meter"
+              role="progressbar"
+              i18n-aria-label="@@serp_preview_title_meter_aria"
+              aria-label="Largeur estimée de la balise title"
+              aria-valuemin="0"
+              [attr.aria-valuemax]="analysis().title.maximumPixels"
+              [attr.aria-valuenow]="meterValue(analysis().title.estimatedPixels, analysis().title.maximumPixels)"
+            >
+              <span [class]="'meter__fill meter__fill--' + analysis().title.status" [style.width.%]="analysis().title.usageRatio * 100"></span>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="label-line">
+              <label for="serp-description" i18n="@@serp_preview_description_label">Meta description</label>
+              <span id="serp-description-status" aria-live="polite" class="status" [class]="'status status--' + analysis().description.status">
+                {{ statusLabel(analysis().description.status) }}
+              </span>
+            </div>
+            <textarea
+              id="serp-description"
+              rows="5"
+              [value]="description()"
+              (input)="updateDescription($event)"
+              maxlength="1500"
+              aria-describedby="serp-description-measure serp-description-status"
+            ></textarea>
+            <div id="serp-description-measure" class="measure-line">
+              <span>{{ formatNumber(analysis().description.characters) }} <span i18n="@@serp_preview_characters">caractères</span></span>
+              <span>{{ formatNumber(analysis().description.estimatedPixels) }} / {{ formatNumber(analysis().description.maximumPixels) }} px</span>
+            </div>
+            <div
+              class="meter"
+              role="progressbar"
+              i18n-aria-label="@@serp_preview_description_meter_aria"
+              aria-label="Largeur estimée de la meta description"
+              aria-valuemin="0"
+              [attr.aria-valuemax]="analysis().description.maximumPixels"
+              [attr.aria-valuenow]="meterValue(analysis().description.estimatedPixels, analysis().description.maximumPixels)"
+            >
+              <span [class]="'meter__fill meter__fill--' + analysis().description.status" [style.width.%]="analysis().description.usageRatio * 100"></span>
+            </div>
+          </div>
+
+          <button class="reset-button" type="button" (click)="reset()">
+            <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+            <span i18n="@@tool_reset">Réinitialiser</span>
+          </button>
+        </form>
+
+        <div class="preview-column">
+          <h3 i18n="@@serp_preview_preview_title">Aperçu</h3>
+          <div class="browser-frame" [class.browser-frame--mobile]="device() === 'mobile'" data-testid="serp-preview">
+            <div class="browser-label">
+              @if (device() === 'desktop') {
+                <span i18n="@@serp_preview_desktop_result">Résultat sur ordinateur</span>
+              } @else {
+                <span i18n="@@serp_preview_mobile_result">Résultat sur mobile</span>
+              }
+            </div>
+            <article class="google-result">
+              <div class="result-origin">
+                <span class="favicon" aria-hidden="true">{{ analysis().siteInitial || 'T' }}</span>
+                <span>
+                  <strong>{{ analysis().siteName || 'Tools Central' }}</strong>
+                  <small>{{ analysis().displayUrl || 'example.com' }}</small>
+                </span>
+              </div>
+              <div class="result-title">{{ analysis().title.preview || '—' }}</div>
+              <p class="result-description">{{ analysis().description.preview || '—' }}</p>
+            </article>
+          </div>
+
+          <div class="recommendations">
+            <h3 i18n="@@serp_preview_recommendations_title">Recommandations</h3>
+            <ul>
+              @for (recommendation of analysis().recommendations; track recommendation) {
+                <li [class.ready]="recommendation === 'ready'">
+                  <i
+                    class="tc-icon"
+                    [class.tc-icon-check-circle]="recommendation === 'ready'"
+                    [class.tc-icon-lightbulb]="recommendation !== 'ready'"
+                    aria-hidden="true"
+                  ></i>
+                  <span>{{ recommendationLabel(recommendation) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card method-card">
+      <div class="card-header centered">
+        <h2 i18n="@@serp_preview_method_title">Comment interpréter l’aperçu ?</h2>
+        <p i18n="@@serp_preview_method_subtitle">La largeur visuelle compte davantage que le nombre brut de caractères.</p>
+      </div>
+      <div class="method-grid">
+        <div>
+          <i class="tc-icon tc-icon-arrows-h" aria-hidden="true"></i>
+          <h3 i18n="@@serp_preview_method_pixels_title">Estimation en pixels</h3>
+          <p i18n="@@serp_preview_method_pixels_text">Chaque caractère est pondéré selon sa largeur typographique. Un « W » occupe donc plus de place qu’un « i ».</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+          <h3 i18n="@@serp_preview_method_device_title">Ordinateur et mobile</h3>
+          <p i18n="@@serp_preview_method_device_text">Les espaces disponibles diffèrent selon l’écran. Testez les deux vues et placez l’essentiel au début.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i>
+          <h3 i18n="@@serp_preview_method_limit_title">Un aperçu, pas une garantie</h3>
+          <p i18n="@@serp_preview_method_limit_text">Google peut reformuler le titre ou le snippet selon la requête, le contenu de la page et l’appareil utilisé.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="back-section">
+      <a class="back-link" routerLink="/categories/dev/seo">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@serp_preview_back">Retour aux outils SEO</span>
+      </a>
+    </div>
+  </div>
+</section>
