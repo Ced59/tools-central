@@ -4,6 +4,7 @@ import {
   buildImagesPdfFileName,
   compressionQuality,
   createImagePageLayout,
+  estimateEmbeddedImageBytes,
   exceedsImagesPdfOutputBudget,
   inspectRasterImageHeader,
   reorderById,
@@ -99,5 +100,10 @@ describe('image PDF options', () => {
   it('reserves PDF structure space before serialization', () => {
     expect(exceedsImagesPdfOutputBudget(148 * 1024 * 1024, 2)).toBe(false);
     expect(exceedsImagesPdfOutputBudget(150 * 1024 * 1024, 1)).toBe(true);
+  });
+
+  it('budgets the RGB and alpha streams retained by pdf-lib for PNG images', () => {
+    expect(estimateEmbeddedImageBytes('jpeg', 1_000, 1_000, 250_000)).toBe(250_000);
+    expect(estimateEmbeddedImageBytes('png', 1_000, 1_000, 250_000)).toBeGreaterThan(4_000_000);
   });
 });

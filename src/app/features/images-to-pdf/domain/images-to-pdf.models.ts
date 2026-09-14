@@ -96,10 +96,23 @@ export function compressionQuality(compression: ImagesToPdfCompression): number 
   return 0.96;
 }
 
-export function exceedsImagesPdfOutputBudget(encodedBytes: number, pageCount: number): boolean {
+export function exceedsImagesPdfOutputBudget(retainedStreamBytes: number, pageCount: number): boolean {
   const reservedBytes = IMAGES_TO_PDF_OUTPUT_BASE_RESERVE_BYTES
     + Math.max(0, pageCount) * IMAGES_TO_PDF_OUTPUT_PAGE_RESERVE_BYTES;
-  return encodedBytes + reservedBytes > IMAGES_TO_PDF_MAX_OUTPUT_BYTES;
+  return retainedStreamBytes + reservedBytes > IMAGES_TO_PDF_MAX_OUTPUT_BYTES;
+}
+
+export function estimateEmbeddedImageBytes(
+  format: 'png' | 'jpeg',
+  width: number,
+  height: number,
+  encodedBytes: number,
+): number {
+  if (format === 'jpeg') return encodedBytes;
+  const pixels = width * height;
+  const rgbStream = deflateUpperBound(pixels * 3);
+  const alphaStream = deflateUpperBound(pixels);
+  return Math.max(encodedBytes, rgbStream + alphaStream);
 }
 
 export function reorderById<T extends { id: string }>(
@@ -283,4 +296,8 @@ function readUint32Endian(bytes: Uint8Array, offset: number, littleEndian: boole
 function clampMargin(value: number): number {
   if (!Number.isFinite(value)) return 10;
   return Math.min(30, Math.max(0, value));
+}
+
+function deflateUpperBound(uncompressedBytes: number): number {
+  return Math.ceil(uncompressedBytes * 1.15) + 64;
 }

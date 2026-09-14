@@ -9,6 +9,7 @@ import {
   IMAGES_TO_PDF_MAX_SIDE_PIXELS,
   compressionQuality,
   createImagePageLayout,
+  estimateEmbeddedImageBytes,
   exceedsImagesPdfOutputBudget,
   type ImagesToPdfCompression,
   type SupportedRasterFormat,
@@ -29,12 +30,17 @@ async function createPdf(command: ImagePdfWorkerCommand): Promise<void> {
     pdf.setCreator('Tools Central');
     pdf.setProducer('Tools Central');
     pdf.setTitle('Images to PDF');
-    let encodedPayloadBytes = 0;
+    let retainedImageStreamBytes = 0;
     for (let index = 0; index < command.images.length; index += 1) {
       const source = command.images[index];
       const encoded = await normalizeImage(source.blob, source.format, command.settings.compression);
-      encodedPayloadBytes += encoded.blob.size;
-      if (exceedsImagesPdfOutputBudget(encodedPayloadBytes, index + 1)) {
+      retainedImageStreamBytes += estimateEmbeddedImageBytes(
+        encoded.format,
+        encoded.width,
+        encoded.height,
+        encoded.blob.size,
+      );
+      if (exceedsImagesPdfOutputBudget(retainedImageStreamBytes, index + 1)) {
         throw createOutputBudgetError();
       }
       const bytes = new Uint8Array(await encoded.blob.arrayBuffer());
