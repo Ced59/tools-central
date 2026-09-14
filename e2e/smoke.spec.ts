@@ -134,3 +134,37 @@ test('hreflang checker generates formats, finds a missing return and remains res
   await expect(page.getByTestId('hreflang-audit-report')).toContainText('La page cible fournie ne contient aucun lien retour');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('structured data extractor inventories a mixed graph and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/structured-data-extractor');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Extracteur de données structurées');
+  await expect(page.getByTestId('structured-data-summary')).toContainText(/2\s*entités extraites/u);
+
+  await page.locator('#structured-data-base-url').fill('https://example.com/catalogue/');
+  await page.locator('#structured-data-source').fill(`
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"WebSite","@id":"#site","name":"Exemple"}
+    </script>
+    <article itemscope itemtype="https://schema.org/Article" itemid="#article">
+      <h2 itemprop="headline">Guide</h2>
+      <a itemprop="url" href="guide">Lire</a>
+    </article>
+    <div vocab="https://schema.org/" typeof="Organization" about="#org">
+      <span property="name">Studio</span>
+    </div>
+  `);
+  await page.getByRole('button', { name: 'Extraire et analyser' }).click();
+
+  await expect(page.getByTestId('structured-data-summary')).toContainText(/3\s*entités extraites/u);
+  await expect(page.getByTestId('structured-data-summary')).toContainText(/1\s*JSON-LD/u);
+  await expect(page.getByTestId('structured-data-summary')).toContainText(/1\s*Microdata/u);
+  await expect(page.getByTestId('structured-data-summary')).toContainText(/1\s*RDFa/u);
+  await expect(page.getByTestId('structured-data-graph')).toContainText('https://example.com/catalogue/guide');
+
+  await page.locator('#structured-data-source').fill('<script type="application/ld+json">{"@type":</script>');
+  await page.getByRole('button', { name: 'Extraire et analyser' }).click();
+  await expect(page.getByText('Ce bloc JSON-LD n’est pas un JSON valide.')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});

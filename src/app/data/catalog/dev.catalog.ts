@@ -279,6 +279,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/hreflang-checker/presentation/hreflang-checker-tool.component')
                   .then(m => m.HreflangCheckerToolComponent),
             },
+            'structured-data-extractor': {
+              title: $localize`:@@tool_structured_data_extractor_title:Extracteur de données structurées`,
+              description: $localize`:@@tool_structured_data_extractor_desc:Extraire localement JSON-LD, Microdata et RDFa depuis du HTML, explorer les entités et relations, puis exporter un rapport JSON borné.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              loadComponent: () =>
+                import('../../features/structured-data-extractor/presentation/structured-data-extractor-tool.component')
+                  .then(m => m.StructuredDataExtractorToolComponent),
+            },
           },
         },
       },

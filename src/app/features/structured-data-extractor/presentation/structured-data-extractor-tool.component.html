@@ -1,0 +1,189 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-code"></i></div>
+        <h1 i18n="@@structured_data_extractor_title">Extracteur de données structurées</h1>
+        <p class="hero-subtitle" i18n="@@structured_data_extractor_subtitle">
+          Inventoriez JSON-LD, Microdata et RDFa, puis explorez les entités et relations dans un rapport local.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@structured_data_extractor_privacy">Traitement 100 % local : le HTML saisi n’est ni envoyé, ni stocké, ni exécuté.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="workspace-grid">
+      <div class="tool-card source-card">
+        <div class="card-header">
+          <h2 i18n="@@structured_data_source_title">1. Coller le balisage à inspecter</h2>
+          <p i18n="@@structured_data_source_subtitle">Utilisez le HTML de la page, un fragment, ou directement un objet ou tableau JSON-LD.</p>
+        </div>
+
+        <div class="field">
+          <label for="structured-data-base-url" i18n="@@structured_data_base_label">URL de base facultative</label>
+          <input id="structured-data-base-url" type="url" maxlength="2048" autocomplete="url" spellcheck="false" [value]="baseUrl()" (input)="updateBaseUrl($event)" />
+          <small i18n="@@structured_data_base_help">Elle sert uniquement à résoudre les URL relatives trouvées dans Microdata. Aucune requête réseau n’est effectuée.</small>
+        </div>
+
+        <div class="field">
+          <label for="structured-data-source" i18n="@@structured_data_source_label">Source HTML ou JSON-LD</label>
+          <textarea id="structured-data-source" rows="20" maxlength="1000001" spellcheck="false" [value]="source()" (input)="updateSource($event)" aria-describedby="structured-data-source-help"></textarea>
+          <small id="structured-data-source-help" i18n="@@structured_data_source_help">Limite : 1 000 000 de caractères, 500 entités, 5 000 propriétés et 32 niveaux JSON.</small>
+        </div>
+
+        <button class="primary-button" type="button" (click)="analyze()">
+          <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
+          <span i18n="@@structured_data_analyze">Extraire et analyser</span>
+        </button>
+      </div>
+
+      <aside class="tool-card summary-card" aria-live="polite" data-testid="structured-data-summary">
+        <div class="card-header">
+          <h2 i18n="@@structured_data_summary_title">2. Résumé du document</h2>
+          <p i18n="@@structured_data_summary_subtitle">Les compteurs décrivent uniquement la source collée, sans vérification auprès de Google.</p>
+        </div>
+
+        <div class="headline-stat">
+          <strong>{{ formatNumber(analysis().nodes.length) }}</strong>
+          <span i18n="@@structured_data_entities">entités extraites</span>
+        </div>
+        <div class="format-grid">
+          <div><strong>{{ formatNumber(analysis().formatCounts.jsonLd) }}</strong><span>JSON-LD</span></div>
+          <div><strong>{{ formatNumber(analysis().formatCounts.microdata) }}</strong><span>Microdata</span></div>
+          <div><strong>{{ formatNumber(analysis().formatCounts.rdfa) }}</strong><span>RDFa</span></div>
+        </div>
+        <div class="stats">
+          <span><strong>{{ formatNumber(analysis().propertyCount) }}</strong> <span i18n="@@structured_data_properties">propriétés</span></span>
+          <span><strong>{{ formatNumber(analysis().edgeCount) }}</strong> <span i18n="@@structured_data_relations">relations</span></span>
+        </div>
+        <div class="stats">
+          <span class="badge badge--error">{{ formatNumber(errorCount()) }} <span i18n="@@structured_data_errors">erreurs</span></span>
+          <span class="badge badge--warning">{{ formatNumber(warningCount()) }} <span i18n="@@structured_data_warnings">avertissements</span></span>
+          <span class="badge badge--info">{{ formatNumber(infoCount()) }} <span i18n="@@structured_data_infos">informations</span></span>
+        </div>
+        <div class="report-actions">
+          <button class="secondary-button" type="button" [disabled]="analysis().nodes.length === 0" (click)="copyReport()">
+            <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
+            @if (copied()) { <span i18n="@@structured_data_copied">Rapport copié</span> } @else { <span i18n="@@structured_data_copy">Copier le JSON</span> }
+          </button>
+          <button class="secondary-button" type="button" [disabled]="analysis().nodes.length === 0" (click)="downloadReport()">
+            <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+            <span i18n="@@structured_data_download">Télécharger le rapport</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    @if (analysis().issues.length) {
+      <div class="tool-card issue-card" aria-live="polite">
+        <div class="card-header"><h2 i18n="@@structured_data_diagnostics_title">Diagnostics d’extraction</h2></div>
+        <ol class="issue-list">
+          @for (issue of analysis().issues; track $index) {
+            <li [class]="'issue issue--' + issue.severity">
+              <div>
+                <strong>{{ issueLabel(issue.code) }}</strong>
+                @if (issue.sourceIndex !== null) { <span><span i18n="@@structured_data_source_position">Élément source</span> {{ formatNumber(issue.sourceIndex) }}</span> }
+              </div>
+              @if (issue.nodeId) { <code>{{ issue.nodeId }}</code> }
+              @if (issue.detail) { <code>{{ issue.detail }}</code> }
+            </li>
+          }
+        </ol>
+      </div>
+    }
+
+    <div class="tool-card graph-card" data-testid="structured-data-graph">
+      <div class="card-header">
+        <h2 i18n="@@structured_data_graph_title">3. Explorer le graphe extrait</h2>
+        <p i18n="@@structured_data_graph_subtitle">Sélectionnez une entité pour examiner ses types, valeurs et relations sortantes.</p>
+      </div>
+
+      @if (analysis().nodes.length === 0) {
+        <div class="empty-report" role="status">
+          <i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i>
+          <strong i18n="@@structured_data_empty_graph">Aucune entité à afficher</strong>
+          <span i18n="@@structured_data_empty_graph_help">Corrigez la source ou collez un balisage JSON-LD, Microdata ou RDFa.</span>
+        </div>
+      } @else {
+        <div class="graph-grid">
+          <div class="node-list" role="list" i18n-aria-label="@@structured_data_node_list_aria" aria-label="Entités extraites">
+            @for (node of displayedNodes(); track node.format + ':' + node.id) {
+              <button type="button" role="listitem" [class.active]="selectedNode()?.id === node.id && selectedNode()?.format === node.format" [attr.aria-pressed]="selectedNode()?.id === node.id && selectedNode()?.format === node.format" (click)="selectNode(node.format, node.id)">
+                <span class="format-tag">{{ formatLabel(node.format) }}</span>
+                <strong>{{ node.types.join(', ') || '—' }}</strong>
+                <code>{{ node.id }}</code>
+              </button>
+            }
+          </div>
+
+          @if (selectedNode(); as node) {
+            <section class="node-detail">
+              <div class="node-heading">
+                <span class="format-tag">{{ formatLabel(node.format) }}</span>
+                <h3>{{ node.types.join(', ') || '—' }}</h3>
+                <code>{{ node.id }}</code>
+              </div>
+              @if (node.properties.length === 0) {
+                <p class="muted" i18n="@@structured_data_no_properties">Cette entité ne contient aucune propriété extraite.</p>
+              } @else {
+                <dl>
+                  @for (property of node.properties; track $index) {
+                    <div>
+                      <dt>{{ property.name }}</dt>
+                      <dd>
+                        <code>{{ property.value || '—' }}</code>
+                        @if (property.targetId) { <span class="relation-label" i18n="@@structured_data_relation_label">relation vers une entité</span> }
+                      </dd>
+                    </div>
+                  }
+                </dl>
+              }
+            </section>
+          }
+        </div>
+        @if (analysis().nodes.length > displayedNodes().length) {
+          <p class="display-limit" i18n="@@structured_data_display_limit">L’interface affiche les 100 premières entités ; le rapport JSON conserve toute l’analyse bornée.</p>
+        }
+      }
+    </div>
+
+    @if (analysis().typeCounts.length) {
+      <div class="tool-card type-card">
+        <div class="card-header"><h2 i18n="@@structured_data_types_title">Types détectés</h2></div>
+        <div class="type-list">
+          @for (entry of analysis().typeCounts; track entry.type) {
+            <span><code>{{ entry.type }}</code><strong>{{ formatNumber(entry.count) }}</strong></span>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="tool-card guidance-card">
+      <div class="card-header"><h2 i18n="@@structured_data_guidance_title">4. Interpréter le rapport correctement</h2></div>
+      <div class="guidance-grid">
+        <div><i class="tc-icon tc-icon-code" aria-hidden="true"></i><h3>JSON-LD, Microdata, RDFa</h3><p i18n="@@structured_data_guidance_formats">Les trois formats sont inventoriés. JSON-LD est généralement le plus simple à maintenir, mais l’outil ne convertit pas automatiquement un vocabulaire dans un autre.</p></div>
+        <div><i class="tc-icon tc-icon-sitemap" aria-hidden="true"></i><h3 i18n="@@structured_data_guidance_graph_title">Graphe, pas simple tableau</h3><p i18n="@@structured_data_guidance_graph">Les objets imbriqués et les identifiants deviennent des entités reliées, ce qui aide à repérer une organisation, un auteur ou une page décrits plusieurs fois.</p></div>
+        <div><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i><h3 i18n="@@structured_data_guidance_validation_title">Extraction ≠ éligibilité</h3><p i18n="@@structured_data_guidance_validation">Un JSON valide peut rester incomplet ou trompeur. Consultez les propriétés requises du type concerné et testez ensuite la page publiée avec les outils officiels.</p></div>
+        <div><i class="tc-icon tc-icon-lock" aria-hidden="true"></i><h3 i18n="@@structured_data_guidance_security_title">Source non exécutée</h3><p i18n="@@structured_data_guidance_security">Le HTML est analysé dans un document inerte. Les scripts, pixels, images et liens présents dans la source ne sont pas chargés par l’outil.</p></div>
+      </div>
+    </div>
+
+    <nav class="related-card" i18n-aria-label="@@structured_data_related_aria" aria-label="Outils SEO associés">
+      <strong i18n="@@structured_data_related_title">Continuer le contrôle de la page</strong>
+      <div>
+        <a routerLink="/categories/dev/seo/serp-snippet-preview" i18n="@@structured_data_related_serp">Prévisualiser le snippet</a>
+        <a routerLink="/categories/dev/seo/hreflang-checker" i18n="@@structured_data_related_hreflang">Vérifier hreflang</a>
+        <a routerLink="/categories/dev/seo/sitemap-xml-builder" i18n="@@structured_data_related_sitemap">Contrôler le sitemap</a>
+      </div>
+    </nav>
+
+    <div class="action-row">
+      <button class="reset-button" type="button" (click)="reset()"><i class="tc-icon tc-icon-refresh" aria-hidden="true"></i><span i18n="@@tool_reset">Réinitialiser</span></button>
+      <a class="back-link" routerLink="/categories/dev/seo"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@structured_data_back">Retour aux outils SEO</span></a>
+    </div>
+  </div>
+</section>
