@@ -137,10 +137,10 @@ export interface SoftwareApplicationSchemaResult {
 }
 
 interface ValidatedAggregateRating {
-  ratingValue: number;
+  ratingValue: string;
   ratingCount: number;
-  bestRating: number;
-  worstRating: number;
+  bestRating: string;
+  worstRating: string;
 }
 
 export function buildSoftwareApplicationSchema(input: SoftwareApplicationSchemaInput): SoftwareApplicationSchemaResult {
@@ -251,16 +251,21 @@ function validateAggregateRating(
   if (ratingCount === null || ratingCount < 1 || ratingCount > SOFTWARE_APPLICATION_MAX_RATING_COUNT) {
     issues.push(issue('invalid-rating-count', 'error', 'ratingCount', input.ratingCount.trim()));
   }
-  if (bestRating === null || worstRating === null || bestRating <= worstRating) {
+  if (bestRating === null || worstRating === null || compareUnsignedDecimals(bestRating, worstRating) <= 0) {
     issues.push(issue('invalid-rating-scale', 'error', 'ratingScale', `${input.worstRating.trim()}–${input.bestRating.trim()}`));
-  } else if (ratingValue !== null && (ratingValue < worstRating || ratingValue > bestRating)) {
+  } else if (
+    ratingValue !== null
+    && (compareUnsignedDecimals(ratingValue, worstRating) < 0
+      || compareUnsignedDecimals(ratingValue, bestRating) > 0)
+  ) {
     issues.push(issue('rating-out-of-range', 'error', 'ratingValue', input.ratingValue.trim()));
   }
 
   return ratingValue !== null && ratingCount !== null && ratingCount >= 1
     && ratingCount <= SOFTWARE_APPLICATION_MAX_RATING_COUNT && bestRating !== null
-    && worstRating !== null && bestRating > worstRating
-    && ratingValue >= worstRating && ratingValue <= bestRating
+    && worstRating !== null && compareUnsignedDecimals(bestRating, worstRating) > 0
+    && compareUnsignedDecimals(ratingValue, worstRating) >= 0
+    && compareUnsignedDecimals(ratingValue, bestRating) <= 0
     ? { ratingValue, ratingCount, bestRating, worstRating }
     : null;
 }
@@ -300,12 +305,11 @@ function parsePrice(source: string): string | null {
   return value.replace(',', '.');
 }
 
-function parseDecimal(source: string, maximumDecimalPlaces: number): number | null {
+function parseDecimal(source: string, maximumDecimalPlaces: number): string | null {
   const value = source.trim();
   const pattern = new RegExp(`^(?:0|[1-9]\\d*)(?:[.,]\\d{1,${String(maximumDecimalPlaces)}})?$`, 'u');
   if (!pattern.test(value)) return null;
-  const parsed = Number(value.replace(',', '.'));
-  return Number.isFinite(parsed) ? parsed : null;
+  return value.replace(',', '.');
 }
 
 function isZeroDecimal(value: string): boolean {

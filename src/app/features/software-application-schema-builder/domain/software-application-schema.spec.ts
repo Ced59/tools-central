@@ -34,10 +34,29 @@ describe('buildSoftwareApplicationSchema', () => {
     expect(result.issues).toHaveLength(0);
     expect(result.schema?.['aggregateRating']).toEqual({
       '@type': 'AggregateRating',
-      ratingValue: 4.7,
+      ratingValue: '4.7',
       ratingCount: 128,
-      bestRating: 5,
-      worstRating: 1,
+      bestRating: '5',
+      worstRating: '1',
+    });
+  });
+
+  it('préserve exactement les notes au-delà de la précision de Number', () => {
+    const result = buildSoftwareApplicationSchema(validInput({
+      includeAggregateRating: true,
+      ratingValue: '9999999999999999',
+      ratingCount: '1',
+      bestRating: '10000000000000000',
+      worstRating: '0',
+    }));
+
+    expect(result.state).toBe('google-ready');
+    expect(result.schema?.['aggregateRating']).toEqual({
+      '@type': 'AggregateRating',
+      ratingValue: '9999999999999999',
+      ratingCount: 1,
+      bestRating: '10000000000000000',
+      worstRating: '0',
     });
   });
 
