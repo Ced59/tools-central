@@ -173,6 +173,8 @@ export class HreflangCheckerToolComponent {
         return $localize`:@@hreflang_issue_invalid_canonical:La canonical doit être une URL HTTP ou HTTPS absolue, sans identifiants ni fragment.`;
       case 'canonical-mismatch':
         return $localize`:@@hreflang_issue_canonical_mismatch:La canonical cible une autre URL ; confirmez qu’elle reste dans la même langue et que ce regroupement est voulu.`;
+      case 'empty-audit':
+        return $localize`:@@hreflang_issue_empty_audit:Aucun bloc PAGE valide n’a été fourni ; aucune réciprocité ne peut être conclue.`;
       case 'alternate-before-page':
         return $localize`:@@hreflang_issue_before_page:Cette variante apparaît avant le premier en-tête PAGE.`;
       case 'duplicate-page':

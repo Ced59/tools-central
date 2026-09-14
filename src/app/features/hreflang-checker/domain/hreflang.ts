@@ -26,6 +26,7 @@ export type HreflangIssueCode =
   | 'missing-canonical'
   | 'invalid-canonical'
   | 'canonical-mismatch'
+  | 'empty-audit'
   | 'alternate-before-page'
   | 'duplicate-page'
   | 'too-many-pages'
@@ -81,6 +82,10 @@ const LANGUAGE_CODES = new Set(
 );
 const REGION_CODES = new Set(
   'AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ DE DJ DK DM DO DZ EC EE EG EH ER ES ET FI FJ FK FM FO FR GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY HK HM HN HR HT HU ID IE IL IM IN IO IQ IR IS IT JE JM JO JP KE KG KH KI KM KN KP KR KW KY KZ LA LB LC LI LK LR LS LT LU LV LY MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ NA NC NE NF NG NI NL NO NP NR NU NZ OM PA PE PF PG PH PK PL PM PN PR PS PT PW PY QA RE RO RS RU RW SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ UA UG UM US UY UZ VA VC VE VG VI VN VU WF WS YE YT ZA ZM ZW'.split(' '),
+);
+// ISO 15924 registry snapshot, checked against the Unicode Registration Authority on 2026-09-14.
+const SCRIPT_CODES = new Set(
+  'Adlm Afak Aghb Ahom Arab Aran Armi Armn Avst Bali Bamu Bass Batk Beng Berf Bhks Blis Bopo Brah Brai Bugi Buhd Cakm Cans Cari Cham Cher Chis Chrs Cirt Copt Cpmn Cprt Cyrl Cyrs Deva Diak Dogr Dsrt Dupl Egyd Egyh Egyp Elba Elym Ethi Gara Geok Geor Glag Gong Gonm Goth Gran Grek Gujr Gukh Guru Hanb Hang Hani Hano Hans Hant Hatr Hebr Hira Hluw Hmng Hmnp Hntl Hrkt Hung Inds Ital Jamo Java Jpan Jurc Kali Kana Kawi Khar Khmr Khoj Kitl Kits Knda Kore Kpel Krai Kthi Lana Laoo Latf Latg Latn Leke Lepc Limb Lina Linb Lisu Loma Lyci Lydi Mahj Maka Mand Mani Marc Maya Medf Mend Merc Mero Mlym Modi Mong Moon Mroo Mtei Mult Mymr Nagm Nand Narb Nbat Newa Nkdb Nkgb Nkoo Nshu Ogam Olck Onao Orkh Orya Osge Osma Ougr Palm Pauc Pcun Pelm Perm Phag Phli Phlp Phlv Phnx Plrd Piqd Prti Psin Qaaa Qabx Ranj Rjng Rohg Roro Runr Samr Sara Sarb Saur Seal Sgnw Shaw Shrd Shui Sidd Sidt Sind Sinh Sogd Sogo Sora Soyo Sund Sunu Sylo Syrc Syre Syrj Syrn Tagb Takr Tale Talu Taml Tang Tavt Tayo Telu Teng Tfng Tglg Thaa Thai Tibt Tirh Tnsa Todr Tols Toto Tutg Ugar Vaii Visp Vith Wara Wcho Wole Xpeo Xsux Yezi Yiii Zanb Zinh Zmth Zsye Zsym Zxxx Zyyy Zzzz'.split(' '),
 );
 const CODE_PATTERN = /^([A-Za-z]{2})(?:-([A-Za-z]{4}))?(?:-([A-Za-z]{2}))?$/u;
 const CONTROL_CHARACTER_PATTERN = /[\u0000-\u001f\u007f]/u;
@@ -208,6 +213,10 @@ export function analyzeHreflangAudit(source: string): HreflangAudit {
     currentPage.entryLines.push(rawLine);
   }
   commitPage();
+
+  if (!pages.length) {
+    addIssue({ code: 'empty-audit', severity: 'error', line: null });
+  }
 
   const uniquePages = new Map<string, HreflangAuditPage>();
   for (const page of pages) {
@@ -424,8 +433,16 @@ function canonicalizeHreflang(source: string): string | null {
   const language = match[1].toLowerCase();
   const script = match[2] ? `${match[2][0].toUpperCase()}${match[2].slice(1).toLowerCase()}` : null;
   const region = match[3] ? match[3].toUpperCase() : null;
-  if (!LANGUAGE_CODES.has(language) || (region && !REGION_CODES.has(region))) return null;
+  if (
+    !LANGUAGE_CODES.has(language)
+    || (script && !isRegisteredScript(script))
+    || (region && !REGION_CODES.has(region))
+  ) return null;
   return [language, script, region].filter(Boolean).join('-');
+}
+
+function isRegisteredScript(script: string): boolean {
+  return SCRIPT_CODES.has(script) || (script >= 'Qaaa' && script <= 'Qabx');
 }
 
 function createIssueSink(issues: HreflangIssue[]): IssueSink {

@@ -16,15 +16,15 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. S
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 654,94 kB brut, 164,61 kB transféré estimé |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 654,94 kB brut, 164,63 kB transféré estimé |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 104 fichiers, 199 tests verts sous Vitest |
-| Couverture | aucun seuil | 42,81 % statements, 27,71 % branches, 42,58 % fonctions, 46,22 % lignes |
+| Tests unitaires | suite non compilable | 104 fichiers, 202 tests verts sous Vitest |
+| Couverture | aucun seuil | 42,86 % statements, 27,81 % branches, 42,65 % fonctions, 46,27 % lignes |
 | E2E | aucun | 8 parcours Playwright verts |
 | Routes statiques | 2 | 78 publiques + une 404 par locale, soit 2 370 pages |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 170 outils, 63 disponibles |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 162 661 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 162 690 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
@@ -51,7 +51,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 - Livraison de `serp-snippet-preview` dans une tranche verticale domaine/application/présentation, avec mesure typographique Unicode, validation d’URL, limites de travail, accessibilité et 19 tests ciblés.
 - Livraison de `robots-txt-builder` dans une tranche verticale complète, avec génération, diagnostic borné, simulation RFC 9309, export local, accessibilité et 26 tests ciblés.
 - Livraison de `sitemap-xml-builder` dans une tranche verticale complète, avec générateur `urlset`/index, parseur XML défensif, validation du protocole, Web Worker pour les gros fichiers, export local, accessibilité et 23 tests ciblés.
-- Livraison de `hreflang-checker` dans une tranche verticale complète, avec sorties HTML/HTTP/sitemap, validation locale des codes et URL, contrôle des canonicals et de la réciprocité à partir des pages fournies, export, accessibilité et 23 tests ciblés.
+- Livraison de `hreflang-checker` dans une tranche verticale complète, avec sorties HTML/HTTP/sitemap, validation locale des codes et URL, contrôle des canonicals et de la réciprocité à partir des pages fournies, export, accessibilité et 25 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -70,7 +70,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 5 609 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 162 661 segments techniquement complets.
+- 5 610 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 162 690 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 

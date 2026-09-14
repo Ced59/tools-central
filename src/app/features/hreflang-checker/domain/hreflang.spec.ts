@@ -45,6 +45,19 @@ describe('hreflang domain', () => {
     expect(analysis.issues.filter(issue => issue.code === 'invalid-code')).toHaveLength(3);
   });
 
+  it('accepts registered ISO 15924 scripts and rejects invented ones', () => {
+    const analysis = analyzeHreflangSet(
+      'https://example.com/zh-hant',
+      'zh-Hant | https://example.com/zh-hant\nen-Fake | https://example.com/fake\nx-default | https://example.com/',
+    );
+
+    expect(analysis.entries.map(entry => entry.code)).toContain('zh-Hant');
+    expect(analysis.issues).toContainEqual(expect.objectContaining({
+      code: 'invalid-code',
+      detail: 'en-Fake',
+    }));
+  });
+
   it('rejects relative, credentialed and fragment URLs', () => {
     const analysis = analyzeHreflangSet(
       'https://example.com/fr',
@@ -167,6 +180,16 @@ describe('hreflang domain', () => {
 
     expect(audit.pages).toEqual([]);
     expect(audit.issues.map(issue => issue.code)).toContain('alternate-before-page');
+  });
+
+  it('does not report success for an empty audit', () => {
+    const audit = analyzeHreflangAudit('');
+
+    expect(audit.pages).toEqual([]);
+    expect(audit.issues).toContainEqual(expect.objectContaining({
+      code: 'empty-audit',
+      severity: 'error',
+    }));
   });
 
   it('reports missing, invalid and cross-page canonical declarations', () => {
