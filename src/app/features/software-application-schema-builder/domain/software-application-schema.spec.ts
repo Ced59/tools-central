@@ -19,7 +19,7 @@ describe('buildSoftwareApplicationSchema', () => {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'Outil exemple',
-      offers: { '@type': 'Offer', price: 0 },
+      offers: { '@type': 'Offer', price: '0' },
     }));
   });
 
@@ -61,8 +61,12 @@ describe('buildSoftwareApplicationSchema', () => {
     ]));
   });
 
-  it('avertit lorsqu’une offre payante ne précise pas sa devise', () => {
-    const result = buildSoftwareApplicationSchema(validInput({ price: '12.50', priceCurrency: '' }));
+  it('refuse l’état Google-ready lorsqu’une offre payante ne précise pas sa devise', () => {
+    const result = buildSoftwareApplicationSchema(validInput({
+      price: '12.50',
+      priceCurrency: '',
+      includeAggregateRating: true,
+    }));
 
     expect(result.state).toBe('schema-valid');
     expect(result.issues).toContainEqual(expect.objectContaining({ code: 'missing-price-currency' }));
@@ -96,9 +100,31 @@ describe('buildSoftwareApplicationSchema', () => {
     expect(result.issues).not.toContainEqual(expect.objectContaining({ code: 'invalid-price' }));
     expect(result.schema?.['offers']).toEqual({
       '@type': 'Offer',
-      price: 1.234,
+      price: '1.234',
       priceCurrency: 'KWD',
     });
+  });
+
+  it('préserve exactement un prix décimal au-delà de la précision de Number', () => {
+    const result = buildSoftwareApplicationSchema(validInput({
+      price: '123456789.123456789',
+      priceCurrency: 'EUR',
+    }));
+
+    expect(result.state).toBe('schema-valid');
+    expect(result.schema?.['offers']).toEqual(expect.objectContaining({
+      price: '123456789.123456789',
+    }));
+    expect(result.jsonLd).toContain('"price": "123456789.123456789"');
+  });
+
+  it('compare exactement les décimales à la limite de prix', () => {
+    const accepted = buildSoftwareApplicationSchema(validInput({ price: '999999999.990' }));
+    const rejected = buildSoftwareApplicationSchema(validInput({ price: '999999999.9901' }));
+
+    expect(accepted.issues).not.toContainEqual(expect.objectContaining({ code: 'price-too-large' }));
+    expect(accepted.schema?.['offers']).toEqual(expect.objectContaining({ price: '999999999.990' }));
+    expect(rejected.issues).toContainEqual(expect.objectContaining({ code: 'price-too-large' }));
   });
 
   it('refuse une note hors de son échelle et un compteur non entier', () => {

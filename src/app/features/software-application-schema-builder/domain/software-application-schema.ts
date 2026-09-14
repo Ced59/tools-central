@@ -5,6 +5,7 @@ export const SOFTWARE_APPLICATION_MAX_OPERATING_SYSTEM_LENGTH = 200;
 export const SOFTWARE_APPLICATION_MAX_VERSION_LENGTH = 100;
 export const SOFTWARE_APPLICATION_MAX_PRICE = 999_999_999.99;
 export const SOFTWARE_APPLICATION_MAX_RATING_COUNT = 9_007_199_254_740_991;
+const SOFTWARE_APPLICATION_MAX_PRICE_DECIMAL = String(SOFTWARE_APPLICATION_MAX_PRICE);
 
 // SIX ISO 4217 Maintenance Agency, List One (current currencies and funds), published 2026-01-01.
 // https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml
@@ -165,16 +166,16 @@ export function buildSoftwareApplicationSchema(input: SoftwareApplicationSchemaI
 
   const url = validateUrl(input.url, 'url', issues);
   const screenshotUrl = validateUrl(input.screenshotUrl, 'screenshotUrl', issues);
-  const price = parseDecimal(input.price);
-  if (price === null || price < 0) issues.push(issue('invalid-price', 'error', 'price', input.price.trim()));
-  else if (price > SOFTWARE_APPLICATION_MAX_PRICE) {
+  const price = parsePrice(input.price);
+  if (price === null) issues.push(issue('invalid-price', 'error', 'price', input.price.trim()));
+  else if (compareUnsignedDecimals(price, SOFTWARE_APPLICATION_MAX_PRICE_DECIMAL) > 0) {
     issues.push(issue('price-too-large', 'error', 'price', input.price.trim()));
   }
 
   const priceCurrency = input.priceCurrency.trim().toUpperCase();
   if (priceCurrency && !ISO_4217_CURRENCY_CODES.has(priceCurrency)) {
     issues.push(issue('invalid-price-currency', 'error', 'priceCurrency', priceCurrency));
-  } else if (price !== null && price > 0 && !priceCurrency) {
+  } else if (price !== null && !isZeroDecimal(price) && !priceCurrency) {
     issues.push(issue('missing-price-currency', 'warning', 'priceCurrency'));
   }
 
@@ -222,7 +223,10 @@ export function buildSoftwareApplicationSchema(input: SoftwareApplicationSchemaI
 
   const jsonLd = JSON.stringify(schema, null, 2);
   const scriptSafeJson = jsonLd.replace(/</gu, '\\u003C');
-  const state: SoftwareApplicationSchemaState = aggregateRating ? 'google-ready' : 'schema-valid';
+  const hasRequiredPriceCurrency = price === null || isZeroDecimal(price) || Boolean(priceCurrency);
+  const state: SoftwareApplicationSchemaState = aggregateRating && hasRequiredPriceCurrency
+    ? 'google-ready'
+    : 'schema-valid';
   return {
     schema,
     jsonLd,
@@ -290,15 +294,35 @@ function validateUrl(
   }
 }
 
-function parseDecimal(source: string, maximumDecimalPlaces?: number): number | null {
+function parsePrice(source: string): string | null {
   const value = source.trim();
-  const decimalPart = maximumDecimalPlaces === undefined
-    ? '\\d+'
-    : `\\d{1,${String(maximumDecimalPlaces)}}`;
-  const pattern = new RegExp(`^(?:0|[1-9]\\d*)(?:[.,]${decimalPart})?$`, 'u');
+  if (!/^(?:0|[1-9]\d*)(?:[.,]\d+)?$/u.test(value)) return null;
+  return value.replace(',', '.');
+}
+
+function parseDecimal(source: string, maximumDecimalPlaces: number): number | null {
+  const value = source.trim();
+  const pattern = new RegExp(`^(?:0|[1-9]\\d*)(?:[.,]\\d{1,${String(maximumDecimalPlaces)}})?$`, 'u');
   if (!pattern.test(value)) return null;
   const parsed = Number(value.replace(',', '.'));
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+function isZeroDecimal(value: string): boolean {
+  return /^0(?:\.0+)?$/u.test(value);
+}
+
+function compareUnsignedDecimals(left: string, right: string): number {
+  const [leftInteger, leftFraction = ''] = left.split('.');
+  const [rightInteger, rightFraction = ''] = right.split('.');
+  if (leftInteger.length !== rightInteger.length) return leftInteger.length > rightInteger.length ? 1 : -1;
+  if (leftInteger !== rightInteger) return leftInteger > rightInteger ? 1 : -1;
+
+  const fractionLength = Math.max(leftFraction.length, rightFraction.length);
+  const normalizedLeftFraction = leftFraction.padEnd(fractionLength, '0');
+  const normalizedRightFraction = rightFraction.padEnd(fractionLength, '0');
+  if (normalizedLeftFraction === normalizedRightFraction) return 0;
+  return normalizedLeftFraction > normalizedRightFraction ? 1 : -1;
 }
 
 function parseInteger(source: string): number | null {
