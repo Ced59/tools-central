@@ -17,6 +17,24 @@ describe('BrowserImageHeaderReaderAdapter', () => {
     await expect(new BrowserImageHeaderReaderAdapter().inspect(new Blob([bytes], { type: 'text/plain' })))
       .resolves.toMatchObject({ format: 'png', width: 2, height: 3 });
   });
+
+  it('continues across large JPEG metadata until it finds the dimensions', async () => {
+    const metadataSegments = Array.from({ length: 17 }, () => {
+      const segment = new Uint8Array(65_537);
+      segment.set([0xff, 0xe0, 0xff, 0xff]);
+      return segment;
+    });
+    const jpeg = new Blob([
+      new Uint8Array([0xff, 0xd8]),
+      ...metadataSegments,
+      new Uint8Array([
+        0xff, 0xc0, 0x00, 0x0b, 0x08, 0x01, 0xe0, 0x02, 0x80, 0x01, 0x01, 0x11, 0x00,
+      ]),
+    ]);
+
+    await expect(new BrowserImageHeaderReaderAdapter().inspect(jpeg))
+      .resolves.toMatchObject({ format: 'jpeg', width: 640, height: 480 });
+  });
 });
 
 describe('PdfLibImagePdfGeneratorAdapter', () => {

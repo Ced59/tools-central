@@ -1,15 +1,31 @@
 import type { ImageHeaderReaderPort } from '../application/images-to-pdf.ports';
-import { inspectRasterImageHeader, type RasterImageHeader } from '../domain/images-to-pdf.models';
+import {
+  IMAGES_TO_PDF_MAX_FILE_BYTES,
+  inspectRasterImageHeader,
+  type RasterImageHeader,
+} from '../domain/images-to-pdf.models';
 
-const IMAGE_HEADER_SCAN_BYTES = 1024 * 1024;
+const INITIAL_IMAGE_HEADER_SCAN_BYTES = 64 * 1024;
 
 export class BrowserImageHeaderReaderAdapter implements ImageHeaderReaderPort {
   async inspect(blob: Blob, signal?: AbortSignal): Promise<RasterImageHeader | null> {
-    throwIfAborted(signal);
-    const header = new Uint8Array(await blob.slice(0, IMAGE_HEADER_SCAN_BYTES).arrayBuffer());
-    throwIfAborted(signal);
-    return inspectRasterImageHeader(header);
+    const maximum = Math.min(blob.size, IMAGES_TO_PDF_MAX_FILE_BYTES);
+    let scanBytes = Math.min(maximum, INITIAL_IMAGE_HEADER_SCAN_BYTES);
+    while (scanBytes > 0) {
+      throwIfAborted(signal);
+      const bytes = new Uint8Array(await blob.slice(0, scanBytes).arrayBuffer());
+      throwIfAborted(signal);
+      const header = inspectRasterImageHeader(bytes);
+      if (header) return header;
+      if (!isJpeg(bytes) || scanBytes >= maximum) return null;
+      scanBytes = Math.min(maximum, scanBytes * 2);
+    }
+    return null;
   }
+}
+
+function isJpeg(bytes: Uint8Array): boolean {
+  return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
 }
 
 function throwIfAborted(signal?: AbortSignal): void {

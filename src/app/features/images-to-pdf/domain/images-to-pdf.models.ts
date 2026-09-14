@@ -126,6 +126,7 @@ function inspectPng(bytes: Uint8Array): RasterImageHeader | null {
 function inspectJpeg(bytes: Uint8Array): RasterImageHeader | null {
   if (bytes.length < 10 || bytes[0] !== 0xff || bytes[1] !== 0xd8 || bytes[2] !== 0xff) return null;
   let offset = 2;
+  let swapDimensions = false;
   while (offset + 6 < bytes.length) {
     if (bytes[offset] !== 0xff) {
       offset += 1;
@@ -139,15 +140,53 @@ function inspectJpeg(bytes: Uint8Array): RasterImageHeader | null {
     if (offset + 1 >= bytes.length) break;
     const segmentLength = (bytes[offset] << 8) | bytes[offset + 1];
     if (segmentLength < 2 || offset + segmentLength > bytes.length) break;
+    if (marker === 0xe1) {
+      const orientation = readExifOrientation(bytes, offset + 2, segmentLength - 2);
+      if (orientation !== null) swapDimensions = orientation >= 5 && orientation <= 8;
+    }
     if (isJpegStartOfFrame(marker) && segmentLength >= 7) {
+      const width = (bytes[offset + 5] << 8) | bytes[offset + 6];
+      const height = (bytes[offset + 3] << 8) | bytes[offset + 4];
       return validHeader(
         'jpeg',
         'image/jpeg',
-        (bytes[offset + 5] << 8) | bytes[offset + 6],
-        (bytes[offset + 3] << 8) | bytes[offset + 4],
+        swapDimensions ? height : width,
+        swapDimensions ? width : height,
       );
     }
     offset += segmentLength;
+  }
+  return null;
+}
+
+function readExifOrientation(bytes: Uint8Array, start: number, length: number): number | null {
+  const end = Math.min(bytes.length, start + length);
+  if (
+    length < 20
+    || readAscii(bytes, start, 4) !== 'Exif'
+    || bytes[start + 4] !== 0
+    || bytes[start + 5] !== 0
+  ) return null;
+
+  const tiffStart = start + 6;
+  const byteOrder = readAscii(bytes, tiffStart, 2);
+  const littleEndian = byteOrder === 'II';
+  if (!littleEndian && byteOrder !== 'MM') return null;
+  if (readUint16(bytes, tiffStart + 2, littleEndian) !== 42) return null;
+  const directoryOffset = readUint32Endian(bytes, tiffStart + 4, littleEndian);
+  const directoryStart = tiffStart + directoryOffset;
+  if (directoryStart + 2 > end) return null;
+  const entryCount = readUint16(bytes, directoryStart, littleEndian);
+  for (let index = 0; index < entryCount; index += 1) {
+    const entry = directoryStart + 2 + index * 12;
+    if (entry + 12 > end) return null;
+    const tag = readUint16(bytes, entry, littleEndian);
+    const type = readUint16(bytes, entry + 2, littleEndian);
+    const count = readUint32Endian(bytes, entry + 4, littleEndian);
+    if (tag === 0x0112 && type === 3 && count === 1) {
+      const orientation = readUint16(bytes, entry + 8, littleEndian);
+      return orientation >= 1 && orientation <= 8 ? orientation : null;
+    }
   }
   return null;
 }
@@ -213,6 +252,24 @@ function readUint32(bytes: Uint8Array, offset: number): number {
 
 function readUint24LittleEndian(bytes: Uint8Array, offset: number): number {
   return bytes[offset] | (bytes[offset + 1] << 8) | (bytes[offset + 2] << 16);
+}
+
+function readUint16(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
+  return littleEndian
+    ? bytes[offset] | (bytes[offset + 1] << 8)
+    : (bytes[offset] << 8) | bytes[offset + 1];
+}
+
+function readUint32Endian(bytes: Uint8Array, offset: number, littleEndian: boolean): number {
+  if (littleEndian) {
+    return (
+      bytes[offset]
+      + bytes[offset + 1] * 0x100
+      + bytes[offset + 2] * 0x10000
+      + bytes[offset + 3] * 0x1000000
+    );
+  }
+  return readUint32(bytes, offset);
 }
 
 function clampMargin(value: number): number {
