@@ -279,7 +279,7 @@ Une fonctionnalité est terminée seulement si :
 
 ## 15. État du socle et ordre des prochains chantiers
 
-Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, une feature pilote en Clean Architecture et un premier moteur PDF en Web Worker.
+Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, plusieurs tranches verticales en Clean Architecture et un premier moteur PDF en Web Worker. Les outils SEO `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder` et `hreflang-checker` servent de références récentes.
 
 Chaque ligne restante doit être une PR distincte :
 

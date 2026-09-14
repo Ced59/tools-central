@@ -270,6 +270,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component')
                   .then(m => m.SitemapXmlBuilderToolComponent),
             },
+            'hreflang-checker': {
+              title: $localize`:@@tool_hreflang_checker_title:Générateur et vérificateur hreflang`,
+              description: $localize`:@@tool_hreflang_checker_desc:Créer des annotations HTML, HTTP ou sitemap, puis vérifier localement les auto-références, canonicals et liens retour entre pages multilingues.`,
+              icon: 'tc-icon tc-icon-language',
+              available: true,
+              loadComponent: () =>
+                import('../../features/hreflang-checker/presentation/hreflang-checker-tool.component')
+                  .then(m => m.HreflangCheckerToolComponent),
+            },
           },
         },
       },

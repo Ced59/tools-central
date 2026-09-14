@@ -103,3 +103,34 @@ test('sitemap XML builder generates, validates and remains responsive', async ({
   await expect(page.getByText('Le document XML est mal formé', { exact: false })).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('hreflang checker generates formats, finds a missing return and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/hreflang-checker');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Générateur et vérificateur hreflang');
+  await expect(page.getByTestId('hreflang-set-analysis')).toContainText(/4\s*variantes valides/u);
+
+  await page.locator('#hreflang-current-url').fill('https://example.com/fr/page?a=1&b=2');
+  await page.locator('#hreflang-alternates').fill([
+    'fr | https://example.com/fr/page?a=1&b=2',
+    'en | https://example.com/en/page',
+    'x-default | https://example.com/',
+  ].join('\n'));
+  await expect(page.locator('#hreflang-output')).toHaveValue(/a=1&amp;b=2/u);
+
+  await page.getByRole('button', { name: 'En-tête HTTP' }).click();
+  await expect(page.locator('#hreflang-output')).toHaveValue(/^Link:/u);
+
+  await page.locator('#hreflang-audit-source').fill([
+    'PAGE https://example.com/fr | https://example.com/fr',
+    'fr | https://example.com/fr',
+    'en | https://example.com/en',
+    'x-default | https://example.com/',
+    'PAGE https://example.com/en | https://example.com/en',
+    'en | https://example.com/en',
+  ].join('\n'));
+  await page.getByRole('button', { name: 'Analyser les blocs fournis' }).click();
+  await expect(page.getByTestId('hreflang-audit-report')).toContainText('La page cible fournie ne contient aucun lien retour');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
