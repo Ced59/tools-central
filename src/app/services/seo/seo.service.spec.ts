@@ -13,4 +13,19 @@ describe('SeoService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('limite les hreflang d’un outil aux locales éditorialement relues', () => {
+    const applyForUrl = (service as unknown as { applyForUrl(url: string): void }).applyForUrl.bind(service);
+
+    applyForUrl('/en/categories/dev/seo/software-application-schema-builder');
+
+    const alternates = Array.from(document.head.querySelectorAll<HTMLLinkElement>(
+      'link[rel="alternate"][hreflang]',
+    ));
+    expect(alternates.map(link => link.hreflang)).toEqual(['fr', 'x-default']);
+    expect(alternates.map(link => link.href)).toEqual([
+      'https://www.tools-central.com/fr/categories/dev/seo/software-application-schema-builder',
+      'https://www.tools-central.com/fr/categories/dev/seo/software-application-schema-builder',
+    ]);
+  });
 });

@@ -19,16 +19,18 @@ function localizedPath(locale, baseRoute) {
   return baseRoute === '/' ? `/${locale}/` : `/${locale}${baseRoute}`;
 }
 
-function buildUrlset(entries, locales) {
+function buildUrlset(entries, localesByRoute) {
   const urls = entries
     .map(({ baseRoute, locale }) => {
-      const alternates = locales
+      const routeLocales = localesByRoute.get(baseRoute) ?? [];
+      const alternates = routeLocales
         .map(
           (alternateLocale) =>
             `    <xhtml:link rel="alternate" hreflang="${alternateLocale}" href="${SITE}${localizedPath(alternateLocale, baseRoute)}" />`,
         )
         .join('\n');
-      const xDefault = `${SITE}${localizedPath(DEFAULT_LOCALE, baseRoute)}`;
+      const xDefaultLocale = routeLocales.includes(DEFAULT_LOCALE) ? DEFAULT_LOCALE : routeLocales[0];
+      const xDefault = `${SITE}${localizedPath(xDefaultLocale, baseRoute)}`;
 
       return `  <url>
     <loc>${SITE}${localizedPath(locale, baseRoute)}</loc>
@@ -73,11 +75,20 @@ if (!fs.existsSync(DIST_DIR)) {
 }
 
 const locales = readLocales();
-const routes = new Set(['/', '/categories']);
-for (const route of extractStaticAppRoutes()) routes.add(route);
-for (const route of extractAvailableCatalogRoutes()) routes.add(route);
-
-const baseRoutes = [...routes].sort((a, b) => a.localeCompare(b));
+const staticRoutes = new Set(['/', '/categories', ...extractStaticAppRoutes()]);
+const routesByLocale = new Map(locales.map(locale => [
+  locale,
+  [...new Set([...staticRoutes, ...extractAvailableCatalogRoutes(locale)])]
+    .sort((a, b) => a.localeCompare(b)),
+]));
+const localesByRoute = new Map();
+for (const [locale, routes] of routesByLocale) {
+  for (const route of routes) {
+    const routeLocales = localesByRoute.get(route) ?? [];
+    routeLocales.push(locale);
+    localesByRoute.set(route, routeLocales);
+  }
+}
 const sitemapFiles = [];
 
 for (const locale of locales) {
@@ -88,10 +99,13 @@ for (const locale of locales) {
   }
 
   const file = `sitemap-${locale}.xml`;
-  const entries = baseRoutes.map((baseRoute) => ({ baseRoute, locale }));
-  write(file, buildUrlset(entries, locales));
+  const entries = (routesByLocale.get(locale) ?? []).map((baseRoute) => ({ baseRoute, locale }));
+  write(file, buildUrlset(entries, localesByRoute));
   sitemapFiles.push(file);
 }
 
 write('sitemap.xml', buildSitemapIndex(sitemapFiles));
-console.log(`Sitemaps generated: ${sitemapFiles.length} locales x ${baseRoutes.length} routes`);
+const routeCounts = [...routesByLocale.values()].map(routes => routes.length);
+console.log(
+  `Sitemaps generated: ${sitemapFiles.length} locales, ${Math.min(...routeCounts)}-${Math.max(...routeCounts)} routes`,
+);

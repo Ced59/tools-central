@@ -201,3 +201,33 @@ test('HTML head auditor reports contradictory metadata and remains responsive', 
   await expect(page.locator('#html-head-source')).toHaveValue(/hreflang="tl" href="https:\/\/example\.com\/fil\/guide"/u);
   await expect(page.locator('.issue')).toHaveCount(0);
 });
+
+test('SoftwareApplication schema builder validates real ratings and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/software-application-schema-builder');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Générateur Schema.org SoftwareApplication');
+  await expect(page.getByTestId('software-schema-summary')).toContainText('Schema.org valide, résultat enrichi Google incomplet');
+  await expect(page.getByTestId('software-schema-output')).toContainText('"@type": "WebApplication"');
+  await expect(page.getByTestId('software-schema-output')).not.toContainText('aggregateRating');
+
+  await page.getByLabel('Inclure une AggregateRating réelle').check();
+  await expect(page.getByTestId('software-schema-summary')).toContainText('Propriétés requises par Google présentes');
+  await expect(page.getByTestId('software-schema-output')).toContainText('"ratingCount": 128');
+
+  await page.locator('#software-schema-price').fill('12.50');
+  await page.locator('#software-schema-currency').fill('');
+  await expect(page.getByTestId('software-schema-diagnostics')).toContainText('ajoutez une devise ISO 4217');
+
+  await page.getByRole('button', { name: 'JSON-LD seul' }).click();
+  await expect(page.getByTestId('software-schema-output')).not.toContainText('<script');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/seo');
+  await expect(page.getByText('Schema.org SoftwareApplication Generator', { exact: true })).toHaveCount(0);
+
+  await page.goto('/en/categories/dev/seo/software-application-schema-builder');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.locator('#software-schema-name')).toHaveCount(0);
+});

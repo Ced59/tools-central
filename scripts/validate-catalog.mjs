@@ -4,7 +4,11 @@ import ts from 'typescript';
 
 const CATALOG_INDEX = path.resolve('src/app/data/catalog/index.ts');
 const EDITORIAL_ROOT = path.resolve('src/app/data/editorials');
+const ANGULAR_JSON = path.resolve('angular.json');
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const angular = JSON.parse(fs.readFileSync(ANGULAR_JSON, 'utf8'));
+const i18n = angular.projects?.['tools-central']?.i18n;
+const configuredLocales = new Set([i18n?.sourceLocale, ...Object.keys(i18n?.locales ?? {})].filter(Boolean));
 
 function sourceFile(file) {
   return ts.createSourceFile(
@@ -87,6 +91,24 @@ function booleanValue(object, name) {
   if (value?.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (value?.kind === ts.SyntaxKind.FalseKeyword) return false;
   return null;
+}
+
+function stringArrayValue(object, name, context, errors) {
+  const expression = unwrap(property(object, name));
+  if (!expression) return null;
+  if (!ts.isArrayLiteralExpression(expression)) {
+    errors.push(`${context}: ${name} doit être un tableau littéral.`);
+    return [];
+  }
+  const values = [];
+  for (const element of expression.elements) {
+    if (!ts.isStringLiteralLike(element)) {
+      errors.push(`${context}: ${name} ne doit contenir que des chaînes littérales.`);
+      continue;
+    }
+    values.push(element.text);
+  }
+  return values;
 }
 
 function dynamicImportPath(object) {
@@ -243,6 +265,20 @@ function main() {
           if (available === null) {
             errors.push(`${context}: available doit être un booléen littéral.`);
             continue;
+          }
+          const reviewedLocales = stringArrayValue(tool, 'reviewedLocales', context, errors);
+          if (reviewedLocales) {
+            if (reviewedLocales.length === 0) {
+              errors.push(`${context}: reviewedLocales ne doit pas être vide.`);
+            }
+            if (new Set(reviewedLocales).size !== reviewedLocales.length) {
+              errors.push(`${context}: reviewedLocales contient un doublon.`);
+            }
+            for (const locale of reviewedLocales) {
+              if (!configuredLocales.has(locale)) {
+                errors.push(`${context}: locale relue inconnue « ${locale} ».`);
+              }
+            }
           }
           if (!available) continue;
 

@@ -59,6 +59,16 @@ function isAvailable(object) {
   return unwrap(getProperty(object, 'available'))?.kind === ts.SyntaxKind.TrueKeyword;
 }
 
+function isPublishedForLocale(object, locale) {
+  if (!locale) return true;
+  const expression = unwrap(getProperty(object, 'reviewedLocales'));
+  if (!expression) return true;
+  if (!ts.isArrayLiteralExpression(expression)) {
+    throw new Error('reviewedLocales doit être un tableau littéral.');
+  }
+  return expression.elements.some(element => ts.isStringLiteralLike(element) && element.text === locale);
+}
+
 function findVariable(source, variableName) {
   let result;
   const visit = (node) => {
@@ -85,7 +95,7 @@ function catalogImports(source) {
   return imports;
 }
 
-export function extractAvailableCatalogRoutes() {
+export function extractAvailableCatalogRoutes(locale = null) {
   const indexSource = readSource(CATALOG_INDEX);
   const imports = catalogImports(indexSource);
   const catalog = asObject(findVariable(indexSource, 'CATALOG'), 'CATALOG');
@@ -124,7 +134,7 @@ export function extractAvailableCatalogRoutes() {
 
         for (const [toolId, toolExpression] of entries(tools)) {
           const tool = asObject(toolExpression, `${categoryId}.${groupId}.${subGroupId}.${toolId}`);
-          if (!isAvailable(tool)) continue;
+          if (!isAvailable(tool) || !isPublishedForLocale(tool, locale)) continue;
           routes.add(`/categories/${categoryId}/${groupId}/${toolId}`);
         }
       }

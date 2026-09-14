@@ -12,13 +12,24 @@ const dist = path.resolve('dist', projectName, 'browser');
 const angular = JSON.parse(fs.readFileSync('angular.json', 'utf8'));
 const i18n = angular.projects?.[projectName]?.i18n;
 const locales = [i18n?.sourceLocale, ...Object.keys(i18n?.locales ?? {})].filter(Boolean);
-const publicRoutes = [...new Set([
+const staticRoutes = [...new Set([
   '/',
   '/categories',
   ...extractStaticAppRoutes(),
-  ...extractAvailableCatalogRoutes(),
 ])].sort();
-const pageRoutes = [...publicRoutes, '/404'];
+const routesByLocale = new Map(locales.map(locale => [
+  locale,
+  [...new Set([...staticRoutes, ...extractAvailableCatalogRoutes(locale)])].sort(),
+]));
+const allPublicRoutes = [...new Set([...routesByLocale.values()].flat())].sort();
+const localesByRoute = new Map();
+for (const [locale, routes] of routesByLocale) {
+  for (const route of routes) {
+    const routeLocales = localesByRoute.get(route) ?? [];
+    routeLocales.push(locale);
+    localesByRoute.set(route, routeLocales);
+  }
+}
 const errors = [];
 
 function expectedUrl(locale, route) {
@@ -38,7 +49,7 @@ function report(message) {
   errors.push(message);
 }
 
-function validateInternalLinks(html, source) {
+function validateInternalLinks(html, source, publishedRoutes) {
   for (const [, rawHref] of matches(html, /<a\b[^>]*\shref="([^"]+)"/gi)) {
     if (!rawHref.startsWith('/') || rawHref.startsWith('//')) continue;
     const pathname = rawHref.split(/[?#]/)[0];
@@ -47,6 +58,12 @@ function validateInternalLinks(html, source) {
     const segments = pathname.split('/').filter(Boolean);
     const locale = segments[0];
     if (!locales.includes(locale)) continue;
+
+    const baseRoute = segments.length === 1 ? '/' : `/${segments.slice(1).join('/')}`;
+    if (!publishedRoutes.has(baseRoute)) {
+      report(`${source}: lien interne vers une variante non publiée (${pathname}).`);
+      continue;
+    }
 
     const target = path.join(dist, ...segments, 'index.html');
     if (!fs.existsSync(target)) {
@@ -60,6 +77,9 @@ if (!fs.existsSync(dist)) {
 }
 
 for (const locale of locales) {
+  const publicRoutes = routesByLocale.get(locale) ?? [];
+  const publishedRoutes = new Set(publicRoutes);
+  const pageRoutes = [...publicRoutes, '/404'];
   for (const route of pageRoutes) {
     const file = pageFile(locale, route);
     const label = `${locale}${route}`;
@@ -82,7 +102,7 @@ for (const locale of locales) {
 
     const alternates = matches(html, /<link\s+rel="alternate"\s+href="[^"]+"\s+hreflang="([^"]+)"/gi)
       .map((match) => match[1]);
-    const expectedAlternates = [...locales, 'x-default'];
+    const expectedAlternates = [...(localesByRoute.get(route) ?? locales), 'x-default'];
     if (
       alternates.length !== expectedAlternates.length ||
       expectedAlternates.some((alternate) => !alternates.includes(alternate))
@@ -108,7 +128,26 @@ for (const locale of locales) {
       report(`${label}: robots=${robots ?? 'absent'} inattendu.`);
     }
 
-    validateInternalLinks(html, label);
+    validateInternalLinks(html, label, publishedRoutes);
+  }
+
+  for (const route of allPublicRoutes.filter(candidate => !publishedRoutes.has(candidate))) {
+    const file = pageFile(locale, route);
+    if (!fs.existsSync(file)) continue;
+    const html = fs.readFileSync(file, 'utf8');
+    const robots = html.match(/<meta\s+name="robots"\s+content="([^"]+)"/i)?.[1];
+    if (robots !== 'noindex,follow') {
+      report(`${locale}${route}: variante non publiée sans noindex,follow.`);
+    }
+    const alternates = matches(html, /<link\s+rel="alternate"\s+href="[^"]+"\s+hreflang="([^"]+)"/gi)
+      .map((match) => match[1]);
+    const expectedAlternates = [...(localesByRoute.get(route) ?? []), 'x-default'];
+    if (
+      alternates.length !== expectedAlternates.length
+      || expectedAlternates.some(alternate => !alternates.includes(alternate))
+    ) {
+      report(`${locale}${route}: alternates d’une variante non publiée incorrects.`);
+    }
   }
 
   const sitemapFile = path.join(dist, `sitemap-${locale}.xml`);
@@ -123,6 +162,11 @@ for (const locale of locales) {
   }
   if (sitemap.includes(`/${locale}/404`)) {
     report(`sitemap-${locale}.xml: la page 404 ne doit pas être indexée.`);
+  }
+  for (const route of allPublicRoutes.filter(route => !publicRoutes.includes(route))) {
+    if (sitemap.includes(expectedUrl(locale, route))) {
+      report(`sitemap-${locale}.xml: variante non publiée présente (${route}).`);
+    }
   }
 }
 
@@ -139,5 +183,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `[seo] ✅ ${locales.length} locales × ${pageRoutes.length} pages, ${publicRoutes.length} URLs publiques par sitemap.`,
+  `[seo] ✅ ${locales.length} locales, ${routesByLocale.size > 0 ? [...routesByLocale.values()].reduce((sum, routes) => sum + routes.length, 0) : 0} URLs indexables, variantes non relues exclues.`,
 );

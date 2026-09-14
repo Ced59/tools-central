@@ -171,6 +171,7 @@ export interface DerivedAtomicTool {
   icon: string;
   route: string;
   available: boolean;
+  reviewedLocales?: readonly string[];
   loadComponent?: () => Promise<Type<unknown>>;
 }
 
@@ -190,6 +191,7 @@ export function deriveAtomicTools(): Record<string, DerivedAtomicTool> {
             icon: tool.icon,
             route: routes.tool(catId, groupId, toolId),
             available: tool.available,
+            reviewedLocales: tool.reviewedLocales,
             loadComponent: tool.loadComponent,
           };
         }

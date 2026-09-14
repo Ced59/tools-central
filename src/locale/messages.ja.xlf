@@ -83215,6 +83215,792 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">ウェブページの重要なメタデータを確認するための完全な例。</target>
       </segment>
     </unit>
+    <unit id="tool_software_application_schema_builder_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplicationジェネレーター</target>
+      </segment>
+    </unit>
+    <unit id="tool_software_application_schema_builder_desc">
+      <segment>
+        <source>Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.</source>
+        <target state="translated">オファー、プラットフォーム、実際の集約評価を持つJSON-LD SoftwareApplicationをローカルで生成および検証し、コードをコピーまたはダウンロードします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_title">
+      <segment>
+        <source>Créer un balisage SoftwareApplication utile et vérifiable</source>
+        <target state="translated">有用で検証可能なSoftwareApplicationマークアップを作成する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_lead">
+      <segment>
+        <source>Ce générateur transforme les informations réellement publiées sur une application en JSON-LD Schema.org. Il distingue la validité du schéma de l’éligibilité au résultat enrichi Google, contrôle les champs sensibles et produit une balise script sûre sans transmettre les données saisies.</source>
+        <target state="translated">このジェネレーターは、アプリケーションに実際に公開された情報をJSON-LD Schema.orgに変換します。スキーマの有効性とGoogleのリッチリザルトの適格性を区別し、センシティブなフィールドをチェックし、入力されたデータを送信せずに安全なスクリプトタグを生成します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">ユースケース</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_title">
+      <segment>
+        <source>Baliser la page officielle d’une application</source>
+        <target state="translated">アプリケーションの公式ページをマークアップする</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_text">
+      <segment>
+        <source>Décrivez une application web, mobile ou logicielle avec son nom, son URL, sa plateforme, sa catégorie et son offre, puis intégrez le bloc JSON-LD dans la page correspondante.</source>
+        <target state="translated">アプリケーションの名前、URL、プラットフォーム、カテゴリ、オファーを記述し、対応するページにJSON-LDブロックを統合します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_title">
+      <segment>
+        <source>Contrôler les propriétés exigées par Google</source>
+        <target state="translated">Googleが要求するプロパティを確認する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_text">
+      <segment>
+        <source>L’état de validation sépare les erreurs bloquantes, les recommandations et l’absence de note agrégée réelle nécessaire à l’éligibilité du résultat enrichi.</source>
+        <target state="translated">検証状態は、ブロッキングエラー、推奨事項、リッチリザルトの適格性に必要な実際の集約評価の欠如を区別します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_title">
+      <segment>
+        <source>Livrer un extrait reproductible</source>
+        <target state="translated">再現可能なスニペットを提供する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_text">
+      <segment>
+        <source>Copiez la balise script prête à intégrer ou téléchargez le JSON-LD seul afin de le versionner, le relire et le tester dans votre chaîne de publication.</source>
+        <target state="translated">統合準備が整ったスクリプトタグをコピーするか、JSON-LDのみをダウンロードして、バージョン管理、再確認、テストを行います。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推奨方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_1">
+      <segment>
+        <source>Commencez par la page canonique consacrée à l’application. Reprenez exactement le nom, le prix et les systèmes affichés aux visiteurs ; utilisez un prix égal à zéro pour une application gratuite.</source>
+        <target state="translated">アプリケーションに関するカノニカルページから始めます。訪問者に表示される名前、価格、システムを正確に再現し、無料アプリケーションの場合は価格をゼロに設定します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_2">
+      <segment>
+        <source>Choisissez uniquement une catégorie reconnue par Google. SoftwareApplication convient au cas général ; WebApplication et MobileApplication précisent la nature du produit lorsque cette distinction est réelle.</source>
+        <target state="translated">Googleが認識するカテゴリのみを選択します。SoftwareApplicationは一般的なケースに適しており、WebApplicationおよびMobileApplicationは、実際にその区別がある場合に製品の性質を明確にします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_3">
+      <segment>
+        <source>N’activez AggregateRating que si la moyenne, l’échelle et le nombre de notes proviennent de données réelles visibles sur la page. Testez ensuite le HTML publié, pas seulement le fragment généré.</source>
+        <target state="translated">AggregateRatingを有効にするのは、平均、スケール、評価数がページ上の実際のデータから来ている場合のみです。その後、生成されたフラグメントだけでなく、公開されたHTMLをテストします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_requirements">
+      <segment>
+        <source>Propriétés et interprétation</source>
+        <target state="translated">プロパティと解釈</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_title">
+      <segment>
+        <source>Requis pour Google</source>
+        <target state="translated">Googleに必要</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_text">
+      <segment>
+        <source>Le nom et offers.price sont obligatoires. Il faut aussi fournir soit une note agrégée, soit un avis conforme ; cet outil prend en charge la voie AggregateRating.</source>
+        <target state="translated">nameとoffers.priceは必須です。また、集約評価または準拠したレビューのいずれかを提供する必要があります。このツールはAggregateRatingの経路をサポートします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_title">
+      <segment>
+        <source>Recommandé</source>
+        <target state="translated">推奨</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_text">
+      <segment>
+        <source>applicationCategory et operatingSystem donnent du contexte. Pour une offre payante, priceCurrency évite que le moteur doive deviner la devise.</source>
+        <target state="translated">applicationCategoryとoperatingSystemは文脈を提供します。有料オファーの場合、priceCurrencyはエンジンが通貨を推測するのを防ぎます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_title">
+      <segment>
+        <source>Complément Schema.org</source>
+        <target state="translated">Schema.orgの補足</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_text">
+      <segment>
+        <source>Description, URL, capture et version enrichissent l’entité Schema.org même si elles ne remplacent aucune propriété obligatoire du résultat Google.</source>
+        <target state="translated">description、URL、screenshot、versionは、Googleのリザルトの必須プロパティを置き換えなくてもSchema.orgエンティティを豊かにします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limits">
+      <segment>
+        <source>Limites, sécurité et honnêteté</source>
+        <target state="translated">制限、安全性、誠実さ</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_1">
+      <segment>
+        <source>Le générateur ne crawle pas la page et ne peut donc pas prouver que les valeurs sont visibles. Cette cohérence doit être contrôlée lors de la revue éditoriale et dans le HTML publié.</source>
+        <target state="translated">ジェネレーターはページをクロールせず、したがって値が表示されていることを証明できません。この整合性は、編集レビューおよび公開されたHTMLで確認する必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_2">
+      <segment>
+        <source>Les URL sont limitées à HTTP et HTTPS sans identifiants intégrés. Les champs textuels et numériques sont bornés, et les chevrons sont échappés dans la sortie script pour empêcher une fermeture prématurée de la balise.</source>
+        <target state="translated">URLはHTTPおよびHTTPSに制限され、組み込みの識別子はありません。テキストおよび数値フィールドには制限があり、スクリプト出力では山括弧がエスケープされ、タグの早期終了を防ぎます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_3">
+      <segment>
+        <source>Un état « propriétés présentes » ne garantit ni résultat enrichi, ni indexation, ni classement. Google conserve la décision finale et peut appliquer des règles non détectables localement.</source>
+        <target state="translated">「プロパティが存在する」状態は、リッチリザルト、インデックス、ランキングを保証しません。Googleが最終的な決定を保持し、ローカルで検出できないルールを適用することがあります。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">よくある質問</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q1">
+      <segment>
+        <source>Faut-il mettre une devise pour une application gratuite ?</source>
+        <target state="translated">無料アプリケーションに通貨を設定する必要がありますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a1">
+      <segment>
+        <source>Le prix zéro est la propriété essentielle pour une application gratuite. La devise devient surtout importante lorsque le prix est supérieur à zéro ; l’outil accepte donc une offre gratuite sans devise.</source>
+        <target state="translated">価格ゼロは無料アプリケーションにとって重要なプロパティです。価格がゼロを超える場合、通貨は特に重要になります。したがって、このツールは通貨なしで無料オファーを受け入れます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q2">
+      <segment>
+        <source>Pourquoi le schéma peut-il être valide mais incomplet pour Google ?</source>
+        <target state="translated">スキーマが有効でもGoogleにとって不完全な場合はありますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a2">
+      <segment>
+        <source>Schema.org autorise de nombreuses descriptions partielles. Le résultat enrichi SoftwareApplication ajoute ses propres propriétés obligatoires, notamment une note agrégée ou un avis réel en plus du nom et du prix.</source>
+        <target state="translated">Schema.orgは多くの部分的な説明を許可します。リッチリザルトSoftwareApplicationは、名前と価格に加えて、集約評価または実際のレビューなどの独自の必須プロパティを追加します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q3">
+      <segment>
+        <source>Peut-on utiliser une note provenant d’une autre plateforme ?</source>
+        <target state="translated">他のプラットフォームからの評価を使用できますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a3">
+      <segment>
+        <source>Ne recopiez pas une note sans vérifier les règles de la plateforme, la représentativité de la valeur et sa présence visible sur la page. Le balisage doit rester fidèle et vérifiable par le visiteur.</source>
+        <target state="translated">プラットフォームのルール、値の代表性、およびページ上での可視性を確認せずに評価をコピーしないでください。マークアップは訪問者によって忠実で検証可能である必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip_title">
+      <segment>
+        <source>Valider le document final</source>
+        <target state="translated">最終文書を検証する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip">
+      <segment>
+        <source>Après intégration, passez l’URL publique dans le test des résultats enrichis puis utilisez l’inspection d’URL de Search Console. Un fragment correct peut être supprimé, dupliqué ou modifié par le rendu de la page.</source>
+        <target state="translated">統合後、公開URLをリッチリザルトテストに通し、Search ConsoleのURL検査を使用します。正しいフラグメントは、ページのレンダリングによって削除、複製、または変更される可能性があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplicationジェネレーター</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_subtitle">
+      <segment>
+        <source>Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</source>
+        <target state="translated">アプリケーション、オファー、および実際に表示される評価に一致するJSON-LDを作成します。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_privacy">
+      <segment>
+        <source>Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</source>
+        <target state="translated">100%ローカル生成：入力された値はサーバーに送信されません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_title">
+      <segment>
+        <source>1. Décrire l’application visible</source>
+        <target state="translated">1. 表示されるアプリケーションを説明する</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_help">
+      <segment>
+        <source>Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</source>
+        <target state="translated">生成された値は、訪問者が同じページで確認できるコンテンツと一致する必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_type_label">
+      <segment>
+        <source>Type Schema.org</source>
+        <target state="translated">タイプ Schema.org</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_label">
+      <segment>
+        <source>Catégorie Google</source>
+        <target state="translated">Google カテゴリ</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_empty">
+      <segment>
+        <source>Non renseignée</source>
+        <target state="translated">未指定</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_label">
+      <segment>
+        <source>Nom de l’application</source>
+        <target state="translated">アプリケーション名</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_help">
+      <segment>
+        <source>Obligatoire pour le résultat enrichi Google.</source>
+        <target state="translated">Google のリッチリザルトに必須です。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_description_label">
+      <segment>
+        <source>Description</source>
+        <target state="translated">説明</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_url_label">
+      <segment>
+        <source>URL publique de l’application</source>
+        <target state="translated">アプリケーションの公開 URL</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_label">
+      <segment>
+        <source>URL publique d’une capture</source>
+        <target state="translated">スクリーンショットの公開 URL</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_help">
+      <segment>
+        <source>Facultative. Utilisez une image qui montre réellement l’application décrite.</source>
+        <target state="translated">任意です。説明されているアプリケーションを実際に示す画像を使用してください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_os_label">
+      <segment>
+        <source>Système ou plateforme</source>
+        <target state="translated">システムまたはプラットフォーム</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_version_label">
+      <segment>
+        <source>Version</source>
+        <target state="translated">バージョン</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_legend">
+      <segment>
+        <source>Offre</source>
+        <target state="translated">オファー</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_help">
+      <segment>
+        <source>Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</source>
+        <target state="translated">価格は必須です。アプリケーションが無料の場合は 0 を入力してください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_price_label">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">価格</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_currency_label">
+      <segment>
+        <source>Devise ISO 4217</source>
+        <target state="translated">通貨 ISO 4217</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_legend">
+      <segment>
+        <source>Note agrégée</source>
+        <target state="translated">集約評価</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_enable">
+      <segment>
+        <source>Inclure une AggregateRating réelle</source>
+        <target state="translated">実際の AggregateRating を含める</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_warning">
+      <segment>
+        <source>Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</source>
+        <target state="translated">この平均と評価数がページ上で表示され、検証可能な場合のみ有効にしてください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_value_label">
+      <segment>
+        <source>Note moyenne</source>
+        <target state="translated">平均評価</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_count_label">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">評価数</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_worst_rating_label">
+      <segment>
+        <source>Note minimale</source>
+        <target state="translated">最低評価</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_best_rating_label">
+      <segment>
+        <source>Note maximale</source>
+        <target state="translated">最高評価</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_title">
+      <segment>
+        <source>2. Validation et sortie</source>
+        <target state="translated">2. 検証と出力</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_help">
+      <segment>
+        <source>La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</source>
+        <target state="translated">技術的な適合性は、検索結果に表示されることを保証するものではありません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_format_aria">
+      <segment>
+        <source>Format de sortie</source>
+        <target state="translated">出力形式</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_empty_output">
+      <segment>
+        <source>La sortie apparaîtra après correction des erreurs.</source>
+        <target state="translated">エラーが修正された後に出力が表示されます。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">コピーしました</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">コピー</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">ダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. 診断</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_help">
+      <segment>
+        <source>Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</source>
+        <target state="translated">エラーはエクスポートをブロックします。警告は推奨されるプロパティまたは編集条件を示します。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_no_issue">
+      <segment>
+        <source>Aucun problème détecté dans les champs pris en charge</source>
+        <target state="translated">サポートされているフィールドに問題は検出されませんでした</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guidance_title">
+      <segment>
+        <source>4. Publier sans surpromesse</source>
+        <target state="translated">4. 過剰な約束をせずに公開する</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_title">
+      <segment>
+        <source>Même contenu visible</source>
+        <target state="translated">同じ内容が表示される</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_text">
+      <segment>
+        <source>Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</source>
+        <target state="translated">名前、価格、プラットフォーム、評価は、マークアップされたページで訪問者によって存在または検証可能でなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_title">
+      <segment>
+        <source>Aucune note inventée</source>
+        <target state="translated">虚偽の評価はありません</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_text">
+      <segment>
+        <source>Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</source>
+        <target state="translated">虚偽の平均はマークアップを誤解させます。実際のデータがない限り、評価を無効にしてください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_title">
+      <segment>
+        <source>Tester le code publié</source>
+        <target state="translated">公開されたコードをテストする</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_text">
+      <segment>
+        <source>Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</source>
+        <target state="translated">最終的なHTMLをリッチ結果テストで検証し、Googleに実際にアクセス可能なページを確認してください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_title">
+      <segment>
+        <source>Éligibilité sans garantie</source>
+        <target state="translated">保証なしの適格性</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_text">
+      <segment>
+        <source>Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</source>
+        <target state="translated">完全であっても、マークアップはリッチ表示、インデックス、またはランキングを保証しません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_google_docs">
+      <segment>
+        <source>Documentation Google SoftwareApplication</source>
+        <target state="translated">Google SoftwareApplication ドキュメント</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_aria">
+      <segment>
+        <source>Outils de données structurées associés</source>
+        <target state="translated">関連する構造化データツール</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_title">
+      <segment>
+        <source>Poursuivre le contrôle des données structurées</source>
+        <target state="translated">構造化データのチェックを続ける</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_extract">
+      <segment>
+        <source>Extraire le balisage publié</source>
+        <target state="translated">公開されたマークアップを抽出する</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_head">
+      <segment>
+        <source>Auditer le head HTML</source>
+        <target state="translated">HTMLヘッダーを監査する</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">スニペットをプレビューする</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEOツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_script">
+      <segment>
+        <source>Balise script prête à intégrer</source>
+        <target state="translated">統合準備が整ったスクリプトタグ</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_json">
+      <segment>
+        <source>JSON-LD seul</source>
+        <target state="translated">単独のJSON-LD</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_google">
+      <segment>
+        <source>Propriétés requises par Google présentes</source>
+        <target state="translated">Googleによって要求されるプロパティが存在する</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_schema">
+      <segment>
+        <source>Schema.org valide, résultat enrichi Google incomplet</source>
+        <target state="translated">Schema.orgが有効で、Googleのリッチ結果が不完全</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_invalid">
+      <segment>
+        <source>Corrigez les erreurs avant export</source>
+        <target state="translated">エクスポート前にエラーを修正してください</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_name">
+      <segment>
+        <source>Nom</source>
+        <target state="translated">名前</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">説明</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_screenshot">
+      <segment>
+        <source>Capture</source>
+        <target state="translated">スクリーンショット</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">カテゴリ</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_os">
+      <segment>
+        <source>Système</source>
+        <target state="translated">システム</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">バージョン</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_price">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">価格</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_currency">
+      <segment>
+        <source>Devise</source>
+        <target state="translated">通貨</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating">
+      <segment>
+        <source>Note</source>
+        <target state="translated">評価</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_count">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">評価の数</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_scale">
+      <segment>
+        <source>Échelle</source>
+        <target state="translated">スケール</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_missing_name">
+      <segment>
+        <source>Le nom de l’application est obligatoire.</source>
+        <target state="translated">アプリケーション名は必須です。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_name_long">
+      <segment>
+        <source>Le nom dépasse la limite de 200 caractères.</source>
+        <target state="translated">名前は200文字の制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_description_long">
+      <segment>
+        <source>La description dépasse la limite de 2 000 caractères.</source>
+        <target state="translated">説明は2,000文字の制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_long">
+      <segment>
+        <source>Le système dépasse la limite de 200 caractères.</source>
+        <target state="translated">システムは200文字の制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_version_long">
+      <segment>
+        <source>La version dépasse la limite de 100 caractères.</source>
+        <target state="translated">バージョンは100文字の制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url">
+      <segment>
+        <source>L’URL de l’application doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">アプリケーションのURLは絶対的なHTTPまたはHTTPSアドレスである必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de l’application sont refusés.</source>
+        <target state="translated">アプリケーションのURLに埋め込まれた資格情報は拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_fragment">
+      <segment>
+        <source>L’URL contient un fragment ; vérifiez que la page décrite reste canonique.</source>
+        <target state="translated">URLにフラグメントが含まれています；記述されたページが正規であることを確認してください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_url">
+      <segment>
+        <source>L’URL de capture doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">スクリーンショットのURLは絶対的なHTTPまたはHTTPSアドレスである必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de capture sont refusés.</source>
+        <target state="translated">スクリーンショットのURLに埋め込まれた資格情報は拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price">
+      <segment>
+        <source>Le prix doit être un nombre positif ou zéro, sans séparateur de milliers ; utilisez un point ou une virgule pour les décimales.</source>
+        <target state="translated">価格は正の数またはゼロで、桁区切り記号は使用できません。小数にはピリオドまたはカンマを使用してください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price_large">
+      <segment>
+        <source>Le prix dépasse la limite prise en charge par cet outil.</source>
+        <target state="translated">価格はこのツールがサポートする制限を超えています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_missing">
+      <segment>
+        <source>Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.</source>
+        <target state="translated">有料オファーの場合、ISO 4217通貨を追加してあいまいな解釈を避けてください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_invalid">
+      <segment>
+        <source>La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.</source>
+        <target state="translated">通貨は正確に3文字のISO 4217を含む必要があります。例えば、EURまたはUSD。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_missing">
+      <segment>
+        <source>Google exige une note agrégée ou un avis réel pour ce résultat enrichi. N’inventez jamais cette donnée.</source>
+        <target state="translated">Googleはこのリッチリザルトに対して集約評価または実際のレビューを要求します。このデータを決して作成しないでください。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_value">
+      <segment>
+        <source>La note moyenne doit être un nombre avec au plus deux décimales.</source>
+        <target state="translated">平均評価は小数点以下2桁までの数値でなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_count">
+      <segment>
+        <source>Le nombre de notes doit être un entier strictement positif.</source>
+        <target state="translated">評価の数は正の整数でなければなりません。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_scale">
+      <segment>
+        <source>L’échelle est invalide : la meilleure note doit être supérieure à la plus basse.</source>
+        <target state="translated">スケールが無効です：最高評価は最低評価を上回る必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_range">
+      <segment>
+        <source>La note moyenne doit rester comprise dans l’échelle déclarée.</source>
+        <target state="translated">平均評価は宣言されたスケール内に収まる必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_category_missing">
+      <segment>
+        <source>La catégorie est recommandée par Google et améliore la précision du balisage.</source>
+        <target state="translated">カテゴリはGoogleによって推奨されており、マークアップの精度を向上させます。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_missing">
+      <segment>
+        <source>Le système d’exploitation est recommandé par Google.</source>
+        <target state="translated">オペレーティングシステムはGoogleによって推奨されています。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_name">
+      <segment>
+        <source>Planificateur de projet</source>
+        <target state="translated">プロジェクトスケジューラ</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_description">
+      <segment>
+        <source>Une application web pour organiser des tâches, des échéances et des projets.</source>
+        <target state="translated">タスク、締切、プロジェクトを整理するためのウェブアプリケーションです。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_os">
+      <segment>
+        <source>Navigateur web moderne</source>
+        <target state="translated">最新のウェブブラウザ</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</source>
+        <target state="translated">自動コピーに失敗しました。コードを選択して手動でコピーしてください。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

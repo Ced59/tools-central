@@ -83215,6 +83215,792 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">一个完整的示例，用于检查网页的基本元数据。</target>
       </segment>
     </unit>
+    <unit id="tool_software_application_schema_builder_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org 软件应用生成器</target>
+      </segment>
+    </unit>
+    <unit id="tool_software_application_schema_builder_desc">
+      <segment>
+        <source>Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.</source>
+        <target state="translated">生成并本地验证一个包含实际报价、平台和聚合评分的 JSON-LD 软件应用，然后复制或下载代码.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_title">
+      <segment>
+        <source>Créer un balisage SoftwareApplication utile et vérifiable</source>
+        <target state="translated">创建有用且可验证的 SoftwareApplication 标记</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_lead">
+      <segment>
+        <source>Ce générateur transforme les informations réellement publiées sur une application en JSON-LD Schema.org. Il distingue la validité du schéma de l’éligibilité au résultat enrichi Google, contrôle les champs sensibles et produit une balise script sûre sans transmettre les données saisies.</source>
+        <target state="translated">该生成器将实际发布的应用信息转换为 JSON-LD Schema.org。它区分模式的有效性和 Google 丰富结果的资格，检查敏感字段，并生成安全的脚本标记，而不传递输入的数据.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用案例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_title">
+      <segment>
+        <source>Baliser la page officielle d’une application</source>
+        <target state="translated">标记应用的官方网站</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_text">
+      <segment>
+        <source>Décrivez une application web, mobile ou logicielle avec son nom, son URL, sa plateforme, sa catégorie et son offre, puis intégrez le bloc JSON-LD dans la page correspondante.</source>
+        <target state="translated">描述一个网页、移动或软件应用，包括其名称、URL、平台、类别和报价，然后将 JSON-LD 块集成到相应的页面中.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_title">
+      <segment>
+        <source>Contrôler les propriétés exigées par Google</source>
+        <target state="translated">检查 Google 要求的属性</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_text">
+      <segment>
+        <source>L’état de validation sépare les erreurs bloquantes, les recommandations et l’absence de note agrégée réelle nécessaire à l’éligibilité du résultat enrichi.</source>
+        <target state="translated">验证状态将错误分为阻止性错误、建议和缺少的实际聚合评分，这些都是丰富结果资格所必需的.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_title">
+      <segment>
+        <source>Livrer un extrait reproductible</source>
+        <target state="translated">提供可重现的片段</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_text">
+      <segment>
+        <source>Copiez la balise script prête à intégrer ou téléchargez le JSON-LD seul afin de le versionner, le relire et le tester dans votre chaîne de publication.</source>
+        <target state="translated">复制准备好集成的脚本标记或单独下载 JSON-LD，以便在您的发布链中进行版本控制、审阅和测试.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_1">
+      <segment>
+        <source>Commencez par la page canonique consacrée à l’application. Reprenez exactement le nom, le prix et les systèmes affichés aux visiteurs ; utilisez un prix égal à zéro pour une application gratuite.</source>
+        <target state="translated">从专门针对应用的规范页面开始。准确复制名称、价格和展示给访客的系统；对于免费应用，使用零价格.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_2">
+      <segment>
+        <source>Choisissez uniquement une catégorie reconnue par Google. SoftwareApplication convient au cas général ; WebApplication et MobileApplication précisent la nature du produit lorsque cette distinction est réelle.</source>
+        <target state="translated">仅选择 Google 认可的类别。SoftwareApplication 适用于一般情况；WebApplication 和 MobileApplication 在这种区分真实时明确产品的性质.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_3">
+      <segment>
+        <source>N’activez AggregateRating que si la moyenne, l’échelle et le nombre de notes proviennent de données réelles visibles sur la page. Testez ensuite le HTML publié, pas seulement le fragment généré.</source>
+        <target state="translated">仅在平均值、评分范围和评分数量来自页面上可见的真实数据时启用 AggregateRating。然后测试发布的 HTML，而不仅仅是生成的片段.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_requirements">
+      <segment>
+        <source>Propriétés et interprétation</source>
+        <target state="translated">属性和解释</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_title">
+      <segment>
+        <source>Requis pour Google</source>
+        <target state="translated">Google 的要求</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_text">
+      <segment>
+        <source>Le nom et offers.price sont obligatoires. Il faut aussi fournir soit une note agrégée, soit un avis conforme ; cet outil prend en charge la voie AggregateRating.</source>
+        <target state="translated">名称和 offers.price 是必需的。还必须提供聚合评分或符合的评论；该工具支持 AggregateRating 路径.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_title">
+      <segment>
+        <source>Recommandé</source>
+        <target state="translated">推荐</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_text">
+      <segment>
+        <source>applicationCategory et operatingSystem donnent du contexte. Pour une offre payante, priceCurrency évite que le moteur doive deviner la devise.</source>
+        <target state="translated">applicationCategory 和 operatingSystem 提供上下文。对于付费报价，priceCurrency 可以避免搜索引擎猜测货币.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_title">
+      <segment>
+        <source>Complément Schema.org</source>
+        <target state="translated">Schema.org 补充</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_text">
+      <segment>
+        <source>Description, URL, capture et version enrichissent l’entité Schema.org même si elles ne remplacent aucune propriété obligatoire du résultat Google.</source>
+        <target state="translated">描述、URL、截图和版本丰富了 Schema.org 实体，即使它们不替代 Google 结果的任何必需属性.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limits">
+      <segment>
+        <source>Limites, sécurité et honnêteté</source>
+        <target state="translated">限制、安全性和诚实</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_1">
+      <segment>
+        <source>Le générateur ne crawle pas la page et ne peut donc pas prouver que les valeurs sont visibles. Cette cohérence doit être contrôlée lors de la revue éditoriale et dans le HTML publié.</source>
+        <target state="translated">生成器不会爬取页面，因此无法证明值是可见的。此一致性必须在编辑审查和发布的 HTML 中进行检查.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_2">
+      <segment>
+        <source>Les URL sont limitées à HTTP et HTTPS sans identifiants intégrés. Les champs textuels et numériques sont bornés, et les chevrons sont échappés dans la sortie script pour empêcher une fermeture prématurée de la balise.</source>
+        <target state="translated">URL 限制为 HTTP 和 HTTPS，且不包含嵌入的标识符。文本和数字字段是有限制的，尖括号在脚本输出中被转义，以防止标签的提前关闭.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_3">
+      <segment>
+        <source>Un état « propriétés présentes » ne garantit ni résultat enrichi, ni indexation, ni classement. Google conserve la décision finale et peut appliquer des règles non détectables localement.</source>
+        <target state="translated">“属性存在”状态并不保证丰富结果、索引或排名。Google 保留最终决定权，并可能应用无法在本地检测到的规则.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q1">
+      <segment>
+        <source>Faut-il mettre une devise pour une application gratuite ?</source>
+        <target state="translated">免费应用是否需要标明货币？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a1">
+      <segment>
+        <source>Le prix zéro est la propriété essentielle pour une application gratuite. La devise devient surtout importante lorsque le prix est supérieur à zéro ; l’outil accepte donc une offre gratuite sans devise.</source>
+        <target state="translated">零价格是免费应用的基本属性。当价格超过零时，货币变得尤为重要；因此，该工具接受没有货币的免费报价.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q2">
+      <segment>
+        <source>Pourquoi le schéma peut-il être valide mais incomplet pour Google ?</source>
+        <target state="translated">为什么模式可能对 Google 有效但不完整？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a2">
+      <segment>
+        <source>Schema.org autorise de nombreuses descriptions partielles. Le résultat enrichi SoftwareApplication ajoute ses propres propriétés obligatoires, notamment une note agrégée ou un avis réel en plus du nom et du prix.</source>
+        <target state="translated">Schema.org 允许许多部分描述。丰富结果 SoftwareApplication 添加了自己的必需属性，包括聚合评分或真实评论，以及名称和价格.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q3">
+      <segment>
+        <source>Peut-on utiliser une note provenant d’une autre plateforme ?</source>
+        <target state="translated">可以使用来自其他平台的评分吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a3">
+      <segment>
+        <source>Ne recopiez pas une note sans vérifier les règles de la plateforme, la représentativité de la valeur et sa présence visible sur la page. Le balisage doit rester fidèle et vérifiable par le visiteur.</source>
+        <target state="translated">在未检查平台规则、值的代表性及其在页面上可见性之前，请勿复制评分。标记必须保持真实并可由访客验证.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip_title">
+      <segment>
+        <source>Valider le document final</source>
+        <target state="translated">验证最终文档</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip">
+      <segment>
+        <source>Après intégration, passez l’URL publique dans le test des résultats enrichis puis utilisez l’inspection d’URL de Search Console. Un fragment correct peut être supprimé, dupliqué ou modifié par le rendu de la page.</source>
+        <target state="translated">集成后，将公共 URL 传入丰富结果测试，然后使用 Search Console 的 URL 检查。正确的片段可能会被页面渲染删除、重复或修改.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org 软件应用生成器</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_subtitle">
+      <segment>
+        <source>Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</source>
+        <target state="translated">创建与您的应用、报价和实际可见评分一致的 JSON-LD.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_privacy">
+      <segment>
+        <source>Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</source>
+        <target state="translated">100% 本地生成：没有输入的值被发送到服务器.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_title">
+      <segment>
+        <source>1. Décrire l’application visible</source>
+        <target state="translated">1. 描述可见的应用</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_help">
+      <segment>
+        <source>Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</source>
+        <target state="translated">生成的值必须与访客可以在同一页面上验证的内容相符.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_type_label">
+      <segment>
+        <source>Type Schema.org</source>
+        <target state="translated">类型 Schema.org</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_label">
+      <segment>
+        <source>Catégorie Google</source>
+        <target state="translated">Google 类别</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_empty">
+      <segment>
+        <source>Non renseignée</source>
+        <target state="translated">未提供</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_label">
+      <segment>
+        <source>Nom de l’application</source>
+        <target state="translated">应用名称</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_help">
+      <segment>
+        <source>Obligatoire pour le résultat enrichi Google.</source>
+        <target state="translated">Google 丰富结果所必需。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_description_label">
+      <segment>
+        <source>Description</source>
+        <target state="translated">描述</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_url_label">
+      <segment>
+        <source>URL publique de l’application</source>
+        <target state="translated">应用的公共 URL</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_label">
+      <segment>
+        <source>URL publique d’une capture</source>
+        <target state="translated">截图的公共 URL</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_help">
+      <segment>
+        <source>Facultative. Utilisez une image qui montre réellement l’application décrite.</source>
+        <target state="translated">可选。使用实际展示所描述应用的图像。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_os_label">
+      <segment>
+        <source>Système ou plateforme</source>
+        <target state="translated">系统或平台</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_version_label">
+      <segment>
+        <source>Version</source>
+        <target state="translated">版本</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_legend">
+      <segment>
+        <source>Offre</source>
+        <target state="translated">优惠</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_help">
+      <segment>
+        <source>Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</source>
+        <target state="translated">价格是必需的。如果应用是免费的，请输入 0。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_price_label">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">价格</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_currency_label">
+      <segment>
+        <source>Devise ISO 4217</source>
+        <target state="translated">ISO 4217 货币</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_legend">
+      <segment>
+        <source>Note agrégée</source>
+        <target state="translated">综合评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_enable">
+      <segment>
+        <source>Inclure une AggregateRating réelle</source>
+        <target state="translated">包含真实的 AggregateRating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_warning">
+      <segment>
+        <source>Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</source>
+        <target state="translated">仅在此平均值和评分数量在页面上可见且可验证时启用。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_value_label">
+      <segment>
+        <source>Note moyenne</source>
+        <target state="translated">平均评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_count_label">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">评分数量</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_worst_rating_label">
+      <segment>
+        <source>Note minimale</source>
+        <target state="translated">最低评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_best_rating_label">
+      <segment>
+        <source>Note maximale</source>
+        <target state="translated">最高评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_title">
+      <segment>
+        <source>2. Validation et sortie</source>
+        <target state="translated">2. 验证和输出</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_help">
+      <segment>
+        <source>La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</source>
+        <target state="translated">技术合规性并不保证在搜索结果中显示。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_format_aria">
+      <segment>
+        <source>Format de sortie</source>
+        <target state="translated">输出格式</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_empty_output">
+      <segment>
+        <source>La sortie apparaîtra après correction des erreurs.</source>
+        <target state="translated">输出将在错误修正后出现。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">已复制</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">下载</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. 诊断</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_help">
+      <segment>
+        <source>Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</source>
+        <target state="translated">错误会阻止导出；警告表示推荐的属性或编辑条件。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_no_issue">
+      <segment>
+        <source>Aucun problème détecté dans les champs pris en charge</source>
+        <target state="translated">在支持的字段中未检测到问题</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guidance_title">
+      <segment>
+        <source>4. Publier sans surpromesse</source>
+        <target state="translated">4. 发布时不做过度承诺</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_title">
+      <segment>
+        <source>Même contenu visible</source>
+        <target state="translated">可见内容相同</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_text">
+      <segment>
+        <source>Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</source>
+        <target state="translated">名称、价格、平台和评分必须在标记页面上对访客可见或可验证。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_title">
+      <segment>
+        <source>Aucune note inventée</source>
+        <target state="translated">没有虚构的评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_text">
+      <segment>
+        <source>Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</source>
+        <target state="translated">虚构的平均值使标记具有误导性。在您没有真实数据之前，请保持评分禁用。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_title">
+      <segment>
+        <source>Tester le code publié</source>
+        <target state="translated">测试发布的代码</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_text">
+      <segment>
+        <source>Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</source>
+        <target state="translated">使用增强结果测试验证最终的HTML，然后检查Google实际可访问的页面。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_title">
+      <segment>
+        <source>Éligibilité sans garantie</source>
+        <target state="translated">无保证的资格</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_text">
+      <segment>
+        <source>Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</source>
+        <target state="translated">即使是完整的标记，也不能保证丰富的展示、索引或排名。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_google_docs">
+      <segment>
+        <source>Documentation Google SoftwareApplication</source>
+        <target state="translated">Google SoftwareApplication文档</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_aria">
+      <segment>
+        <source>Outils de données structurées associés</source>
+        <target state="translated">相关的结构化数据工具</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_title">
+      <segment>
+        <source>Poursuivre le contrôle des données structurées</source>
+        <target state="translated">继续检查结构化数据</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_extract">
+      <segment>
+        <source>Extraire le balisage publié</source>
+        <target state="translated">提取已发布的标记</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_head">
+      <segment>
+        <source>Auditer le head HTML</source>
+        <target state="translated">审核HTML头部</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">预览片段</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">返回SEO工具</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_script">
+      <segment>
+        <source>Balise script prête à intégrer</source>
+        <target state="translated">准备集成的脚本标签</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_json">
+      <segment>
+        <source>JSON-LD seul</source>
+        <target state="translated">仅JSON-LD</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_google">
+      <segment>
+        <source>Propriétés requises par Google présentes</source>
+        <target state="translated">存在Google所需的属性</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_schema">
+      <segment>
+        <source>Schema.org valide, résultat enrichi Google incomplet</source>
+        <target state="translated">有效的Schema.org，Google丰富结果不完整</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_invalid">
+      <segment>
+        <source>Corrigez les erreurs avant export</source>
+        <target state="translated">在导出之前修正错误</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_name">
+      <segment>
+        <source>Nom</source>
+        <target state="translated">名称</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">描述</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_screenshot">
+      <segment>
+        <source>Capture</source>
+        <target state="translated">截图</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">类别</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_os">
+      <segment>
+        <source>Système</source>
+        <target state="translated">系统</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">版本</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_price">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">价格</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_currency">
+      <segment>
+        <source>Devise</source>
+        <target state="translated">货币</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating">
+      <segment>
+        <source>Note</source>
+        <target state="translated">评分</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_count">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">评分数量</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_scale">
+      <segment>
+        <source>Échelle</source>
+        <target state="translated">评分范围</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_missing_name">
+      <segment>
+        <source>Le nom de l’application est obligatoire.</source>
+        <target state="translated">应用程序名称是必填项。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_name_long">
+      <segment>
+        <source>Le nom dépasse la limite de 200 caractères.</source>
+        <target state="translated">名称超过200个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_description_long">
+      <segment>
+        <source>La description dépasse la limite de 2 000 caractères.</source>
+        <target state="translated">描述超过2000个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_long">
+      <segment>
+        <source>Le système dépasse la limite de 200 caractères.</source>
+        <target state="translated">系统超过200个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_version_long">
+      <segment>
+        <source>La version dépasse la limite de 100 caractères.</source>
+        <target state="translated">版本超过100个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url">
+      <segment>
+        <source>L’URL de l’application doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">应用程序的URL必须是绝对的HTTP或HTTPS地址。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de l’application sont refusés.</source>
+        <target state="translated">应用程序的URL中嵌入的凭据被拒绝。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_fragment">
+      <segment>
+        <source>L’URL contient un fragment ; vérifiez que la page décrite reste canonique.</source>
+        <target state="translated">URL包含片段；请检查所描述的页面是否保持规范。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_url">
+      <segment>
+        <source>L’URL de capture doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">截图的URL必须是绝对的HTTP或HTTPS地址。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de capture sont refusés.</source>
+        <target state="translated">截图的URL中嵌入的凭据被拒绝。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price">
+      <segment>
+        <source>Le prix doit être un nombre positif ou zéro, sans séparateur de milliers ; utilisez un point ou une virgule pour les décimales.</source>
+        <target state="translated">价格必须是正数或零，不能使用千位分隔符；小数请使用句点或逗号。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price_large">
+      <segment>
+        <source>Le prix dépasse la limite prise en charge par cet outil.</source>
+        <target state="translated">价格超过该工具支持的限制。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_missing">
+      <segment>
+        <source>Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.</source>
+        <target state="translated">对于付费报价，请添加ISO 4217货币以避免歧义。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_invalid">
+      <segment>
+        <source>La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.</source>
+        <target state="translated">货币必须包含恰好三个ISO 4217字母，例如EUR或USD。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_missing">
+      <segment>
+        <source>Google exige une note agrégée ou un avis réel pour ce résultat enrichi. N’inventez jamais cette donnée.</source>
+        <target state="translated">Google要求为此丰富结果提供聚合评分或真实评论。切勿虚构此数据。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_value">
+      <segment>
+        <source>La note moyenne doit être un nombre avec au plus deux décimales.</source>
+        <target state="translated">平均评分必须是一个最多有两位小数的数字。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_count">
+      <segment>
+        <source>Le nombre de notes doit être un entier strictement positif.</source>
+        <target state="translated">评分数量必须是一个严格正整数。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_scale">
+      <segment>
+        <source>L’échelle est invalide : la meilleure note doit être supérieure à la plus basse.</source>
+        <target state="translated">评分范围无效：最高评分必须高于最低评分。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_range">
+      <segment>
+        <source>La note moyenne doit rester comprise dans l’échelle déclarée.</source>
+        <target state="translated">平均评分必须保持在声明的范围内。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_category_missing">
+      <segment>
+        <source>La catégorie est recommandée par Google et améliore la précision du balisage.</source>
+        <target state="translated">类别是Google推荐的，可以提高标记的准确性。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_missing">
+      <segment>
+        <source>Le système d’exploitation est recommandé par Google.</source>
+        <target state="translated">操作系统是Google推荐的。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_name">
+      <segment>
+        <source>Planificateur de projet</source>
+        <target state="translated">项目计划工具</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_description">
+      <segment>
+        <source>Une application web pour organiser des tâches, des échéances et des projets.</source>
+        <target state="translated">一个用于组织任务、截止日期和项目的网络应用。</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_os">
+      <segment>
+        <source>Navigateur web moderne</source>
+        <target state="translated">现代网络浏览器</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</source>
+        <target state="translated">自动复制失败。请手动选择代码并复制。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

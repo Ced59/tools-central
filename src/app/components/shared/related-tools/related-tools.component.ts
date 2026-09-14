@@ -1,9 +1,14 @@
-import { Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, inject, ChangeDetectionStrategy, LOCALE_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 
-import { ATOMIC_TOOL_LIST, ATOMIC_TOOLS, AtomicToolItem } from '../../../data/atomic-tools';
+import {
+  ATOMIC_TOOL_LIST,
+  ATOMIC_TOOLS,
+  AtomicToolItem,
+  isToolPublishedForLocale,
+} from '../../../data/atomic-tools';
 
 export interface RelatedToolConfig {
   /** Nombre d'outils à afficher (défaut: 6) */
@@ -25,6 +30,7 @@ export class RelatedToolsComponent implements OnInit, OnDestroy {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private readonly locale = inject(LOCALE_ID);
 
   private sub = new Subscription();
 
@@ -143,7 +149,7 @@ export class RelatedToolsComponent implements OnInit, OnDestroy {
     const subGroup = currentTool.subGroup;
 
     const availableTools = ATOMIC_TOOL_LIST.filter(
-      (tool) => tool.available && tool.id !== currentId
+      (tool) => isToolPublishedForLocale(tool, this.locale) && tool.id !== currentId
     );
 
     const result: AtomicToolItem[] = [];

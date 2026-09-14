@@ -1,11 +1,11 @@
-import { Component, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 
 import { CATEGORIES, ToolCategory } from '../../../data/categories';
 import { TOOL_GROUPS, ToolGroup } from '../../../data/tool-groups';
 import { TOOL_SUBGROUPS } from '../../../data/tool-subgroups';
-import { ATOMIC_TOOL_LIST, AtomicToolItem } from '../../../data/atomic-tools';
+import { ATOMIC_TOOL_LIST, AtomicToolItem, isToolPublishedForLocale } from '../../../data/atomic-tools';
 
 import { ToolCardComponent, ToolCardItem } from '../../shared/tool-card/tool-card.component';
 import { SeoService } from '../../../services/seo/seo.service';
@@ -36,6 +36,7 @@ type ToolSection = {
 })
 export class ToolGroupComponent implements OnInit {
   private seo = inject(SeoService);
+  private readonly locale = inject(LOCALE_ID);
 
   categoryId = '';
   groupId = '';
@@ -61,7 +62,9 @@ export class ToolGroupComponent implements OnInit {
     this.group = TOOL_GROUPS.find(g => g.category === this.categoryId && g.id === this.groupId);
 
     const tools: AtomicToolItem[] = ATOMIC_TOOL_LIST.filter(t =>
-      t.category === this.categoryId && t.group === this.groupId
+      t.category === this.categoryId
+      && t.group === this.groupId
+      && (!t.available || isToolPublishedForLocale(t, this.locale))
     );
 
     const mapTool = (t: AtomicToolItem): ToolCardItem => ({

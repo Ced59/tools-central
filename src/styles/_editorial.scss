@@ -133,16 +133,19 @@
 
 .tc-editorial__content {
   display: grid;
+  min-width: 0;
   gap: 1rem;
 }
 
 /* ---------- Sections ---------- */
 
 .tc-editorial__section {
+  min-width: 0;
   padding: 1.25rem;
   border-radius: 0.875rem;
   background: var(--surface-ground);
   border: 1px solid var(--border-color);
+  overflow-wrap: anywhere;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   // Scroll anchor offset

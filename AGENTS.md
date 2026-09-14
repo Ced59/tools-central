@@ -130,11 +130,12 @@ Un nouvel outil ne doit être déclaré `available: true` qu’après validation
 - liens vers des outils connexes du même parcours ;
 - chaînes visibles passées par `$localize` ;
 - entrée ajoutée uniquement dans `src/app/data/catalog/` ;
+- `reviewedLocales` renseigné pour limiter catalogue, chargement, sitemap et `hreflang` aux traductions réellement relues ;
 - génération de routes confirmée avec `node scripts/generate-prerender-routes.mjs` ;
 - aucun `TODO`, texte factice ou fonctionnalité trompeuse ;
 - tests et build de production verts.
 
-Une entrée `available: false` n’est ni prérendue ni ajoutée au sitemap. Elle ne doit pas être rendue indexable par un autre chemin.
+Une entrée `available: false` n’est ni prérendue ni ajoutée au sitemap. Une locale absente de `reviewedLocales` reste également masquée du catalogue, exclue du sitemap et rendue en `noindex,follow` si son URL est appelée directement. Elle ne doit pas être rendue indexable par un autre chemin.
 
 ## 6. Exigences SEO
 
@@ -279,7 +280,7 @@ Une fonctionnalité est terminée seulement si :
 
 ## 15. État du socle et ordre des prochains chantiers
 
-Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, plusieurs tranches verticales en Clean Architecture et un premier moteur PDF en Web Worker. Les outils SEO `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor` et `html-head-auditor` servent de références récentes.
+Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, plusieurs tranches verticales en Clean Architecture et un premier moteur PDF en Web Worker. Les outils SEO `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor` et `software-application-schema-builder` servent de références récentes.
 
 Chaque ligne restante doit être une PR distincte :
 
