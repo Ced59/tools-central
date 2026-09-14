@@ -31,4 +31,15 @@ describe('PdfToImagesToolComponent', () => {
     component.pageSelection.set('4');
     expect(component.selectionErrorLabel()).toContain('sort du document');
   });
+
+  it('invalidates in-flight work when the component is destroyed', () => {
+    const fixture = TestBed.createComponent(PdfToImagesToolComponent);
+    const component = fixture.componentInstance;
+    const internals = component as unknown as { taskRevision: number };
+    const initialRevision = internals.taskRevision;
+
+    fixture.destroy();
+
+    expect(internals.taskRevision).toBe(initialRevision + 1);
+  });
 });

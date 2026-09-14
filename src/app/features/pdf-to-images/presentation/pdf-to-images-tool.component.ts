@@ -87,6 +87,7 @@ export class PdfToImagesToolComponent {
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
+      this.taskRevision += 1;
       this.releasePreviews();
     });
   }
