@@ -109,10 +109,14 @@ export function estimateEmbeddedImageBytes(
   encodedBytes: number,
 ): number {
   if (format === 'jpeg') return encodedBytes;
+  return Math.max(encodedBytes, estimatePngPdfStreamBytes(width, height));
+}
+
+export function estimatePngPdfStreamBytes(width: number, height: number): number {
   const pixels = width * height;
   const rgbStream = deflateUpperBound(pixels * 3);
   const alphaStream = deflateUpperBound(pixels);
-  return Math.max(encodedBytes, rgbStream + alphaStream);
+  return rgbStream + alphaStream;
 }
 
 export function reorderById<T extends { id: string }>(

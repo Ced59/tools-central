@@ -5,6 +5,7 @@ import {
   compressionQuality,
   createImagePageLayout,
   estimateEmbeddedImageBytes,
+  estimatePngPdfStreamBytes,
   exceedsImagesPdfOutputBudget,
   inspectRasterImageHeader,
   reorderById,
@@ -105,5 +106,8 @@ describe('image PDF options', () => {
   it('budgets the RGB and alpha streams retained by pdf-lib for PNG images', () => {
     expect(estimateEmbeddedImageBytes('jpeg', 1_000, 1_000, 250_000)).toBe(250_000);
     expect(estimateEmbeddedImageBytes('png', 1_000, 1_000, 250_000)).toBeGreaterThan(4_000_000);
+    expect(estimatePngPdfStreamBytes(1_000, 1_000)).toBe(
+      estimateEmbeddedImageBytes('png', 1_000, 1_000, 250_000),
+    );
   });
 });

@@ -10,6 +10,7 @@ import {
   compressionQuality,
   createImagePageLayout,
   estimateEmbeddedImageBytes,
+  estimatePngPdfStreamBytes,
   exceedsImagesPdfOutputBudget,
   type ImagesToPdfCompression,
   type SupportedRasterFormat,
@@ -33,6 +34,14 @@ async function createPdf(command: ImagePdfWorkerCommand): Promise<void> {
     let retainedImageStreamBytes = 0;
     for (let index = 0; index < command.images.length; index += 1) {
       const source = command.images[index];
+      if (
+        source.format === 'png'
+        && command.settings.compression === 'quality'
+        && exceedsImagesPdfOutputBudget(
+          retainedImageStreamBytes + estimatePngPdfStreamBytes(source.width, source.height),
+          index + 1,
+        )
+      ) throw createOutputBudgetError();
       const encoded = await normalizeImage(source.blob, source.format, command.settings.compression);
       retainedImageStreamBytes += estimateEmbeddedImageBytes(
         encoded.format,
