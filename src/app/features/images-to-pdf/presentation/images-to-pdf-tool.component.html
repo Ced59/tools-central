@@ -80,8 +80,8 @@
 
     @if (state() === 'generating') {
       <section class="tool-card progress-card" aria-live="polite">
-        <div class="progress-copy"><strong i18n="@@images_to_pdf_generating">Création locale du PDF…</strong><span>{{ progress().completed }} / {{ progress().total }}</span></div>
-        <progress [value]="progress().completed" [max]="progress().total"></progress>
+        <div class="progress-copy"><strong id="images-to-pdf-progress-label" i18n="@@images_to_pdf_generating">Création locale du PDF…</strong><span>{{ progress().completed }} / {{ progress().total }}</span></div>
+        <progress [value]="progress().completed" [max]="progress().total" aria-labelledby="images-to-pdf-progress-label"></progress>
         <button type="button" class="cancel-button" (click)="reset()" i18n="@@images_to_pdf_cancel">Annuler</button>
       </section>
     }

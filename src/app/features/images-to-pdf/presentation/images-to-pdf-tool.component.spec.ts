@@ -75,8 +75,11 @@ describe('ImagesToPdfToolComponent', () => {
     fixture.detectChanges();
     const button = (fixture.nativeElement as HTMLElement)
       .querySelector<HTMLButtonElement>('.progress-card .cancel-button');
+    const progress = (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLProgressElement>('.progress-card progress');
 
     expect(button?.textContent).toContain('Annuler');
     expect(button?.disabled).toBe(false);
+    expect(progress?.getAttribute('aria-labelledby')).toBe('images-to-pdf-progress-label');
   });
 });
