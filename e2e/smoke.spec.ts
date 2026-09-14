@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { PDFDocument, rgb } from 'pdf-lib';
 
 test('home, locale and theme remain usable', async ({ page }) => {
   await page.goto('/fr/');
@@ -230,4 +231,35 @@ test('SoftwareApplication schema builder validates real ratings and remains resp
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
   await expect(page.locator('#software-schema-name')).toHaveCount(0);
+});
+
+test('PDF to images renders locally, previews output and remains responsive', async ({ page }) => {
+  const source = await PDFDocument.create();
+  const first = source.addPage([144, 72]);
+  first.drawRectangle({ x: 0, y: 0, width: 144, height: 72, color: rgb(1, 1, 1) });
+  first.drawText('Tools Central', { x: 18, y: 30, size: 12, color: rgb(0.1, 0.25, 0.7) });
+  source.addPage([72, 144]);
+  const bytes = await source.save();
+
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/pdf/pdf-to-images');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Convertir un PDF en images');
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'test-local.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from(bytes),
+  });
+  await expect(page.getByText('PDF chargé')).toBeVisible({ timeout: 10_000 });
+  await page.locator('#pdf-to-images-pages').fill('1');
+  await page.locator('#pdf-to-images-dpi').selectOption('72');
+  await expect(page.getByTestId('pdf-to-images-estimate')).toContainText('144 × 72 px');
+  await page.getByRole('button', { name: 'Convertir les pages' }).click();
+  await expect(page.getByTestId('pdf-to-images-results').locator('img')).toHaveCount(1, { timeout: 15_000 });
+  await expect(page.getByTestId('pdf-to-images-results')).toContainText('test-local-page-01.png');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/pdf/pdf-to-images');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });

@@ -1,0 +1,139 @@
+<main class="tool-page">
+  <section class="tool-hero">
+    <div class="tool-hero__inner">
+      <a class="back-link" routerLink="/categories/dev/pdf">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@pdf_to_images_back">Retour aux outils PDF</span>
+      </a>
+      <div class="tool-hero__badge"><i class="tc-icon tc-icon-images" aria-hidden="true"></i></div>
+      <h1 i18n="@@pdf_to_images_title">Convertir un PDF en images</h1>
+      <p i18n="@@pdf_to_images_subtitle">Transformez localement les pages d’un PDF en PNG, JPEG ou WebP, choisissez la résolution et téléchargez une image ou une archive ZIP.</p>
+      <p class="privacy-note"><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><span i18n="@@pdf_to_images_privacy">Aucun envoi : le PDF et les images restent dans votre navigateur.</span></p>
+    </div>
+  </section>
+
+  <section class="tool-content" aria-labelledby="pdf-to-images-workspace-title">
+    <h2 id="pdf-to-images-workspace-title" class="sr-only" i18n="@@pdf_to_images_workspace">Espace de conversion</h2>
+    <div class="workspace-grid">
+      <article class="tool-card source-card">
+        <div class="card-heading">
+          <div><p class="eyebrow" i18n="@@pdf_to_images_step_one">Étape 1</p><h2 i18n="@@pdf_to_images_source_title">Choisir le PDF</h2></div>
+          @if (documentSummary()) { <span class="status-badge status-badge--ok" i18n="@@pdf_to_images_loaded">PDF chargé</span> }
+        </div>
+
+        <label class="file-picker" [class.file-picker--disabled]="isBusy()">
+          <i class="tc-icon tc-icon-file-pdf" aria-hidden="true"></i>
+          <span class="file-picker__title" i18n="@@pdf_to_images_pick">Sélectionner un fichier PDF</span>
+          <span i18n="@@pdf_to_images_file_limit">Maximum {{ maxFileSizeLabel }}. Traitement entièrement local.</span>
+          <input type="file" accept="application/pdf,.pdf" [disabled]="isBusy()" (change)="selectFile($event)" />
+        </label>
+
+        <div class="field">
+          <label for="pdf-to-images-password" i18n="@@pdf_to_images_password">Mot de passe, si nécessaire</label>
+          <input id="pdf-to-images-password" type="password" autocomplete="off" maxlength="256" [value]="password()" [disabled]="isBusy()" (input)="updatePassword($event)" />
+          <small i18n="@@pdf_to_images_password_help">Le mot de passe sert uniquement au déchiffrement local et n’est jamais conservé.</small>
+        </div>
+
+        @if (sourceName()) {
+          <dl class="file-summary">
+            <div><dt i18n="@@pdf_to_images_file">Fichier</dt><dd>{{ sourceName() }}</dd></div>
+            <div><dt i18n="@@pdf_to_images_size">Taille</dt><dd>{{ formatFileSize(sourceSize()) }}</dd></div>
+            @if (documentSummary(); as summary) {
+              <div><dt i18n="@@pdf_to_images_pages">Pages</dt><dd>{{ formatNumber(summary.pageCount) }}</dd></div>
+            }
+          </dl>
+        }
+
+        @if (state() === 'inspecting') {
+          <p class="live-state" role="status"><span class="spinner" aria-hidden="true"></span><span i18n="@@pdf_to_images_inspecting">Analyse du document…</span></p>
+        }
+        @if (errorMessage()) {
+          <p class="alert alert--error" role="alert"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>{{ errorMessage() }}</p>
+        }
+      </article>
+
+      <article class="tool-card settings-card">
+        <div class="card-heading"><div><p class="eyebrow" i18n="@@pdf_to_images_step_two">Étape 2</p><h2 i18n="@@pdf_to_images_settings">Régler la sortie</h2></div></div>
+        <div class="field">
+          <label for="pdf-to-images-pages" i18n="@@pdf_to_images_pages_label">Pages à convertir</label>
+          <input id="pdf-to-images-pages" type="text" inputmode="numeric" maxlength="500" placeholder="1-3, 7" [value]="pageSelection()" [disabled]="!documentSummary() || isBusy()" [attr.aria-invalid]="selectionErrorLabel() ? 'true' : null" [attr.aria-describedby]="selectionErrorLabel() ? 'pdf-to-images-pages-error' : 'pdf-to-images-pages-help'" (input)="updatePageSelection($event)" />
+          <small id="pdf-to-images-pages-help" i18n="@@pdf_to_images_pages_help">Plages et pages séparées par des virgules, dans la limite de {{ maxSelectedPages }} pages.</small>
+          @if (selectionErrorLabel(); as error) { <small id="pdf-to-images-pages-error" class="field-error">{{ error }}</small> }
+        </div>
+
+        <div class="settings-grid">
+          <div class="field">
+            <label for="pdf-to-images-format" i18n="@@pdf_to_images_format">Format</label>
+            <select id="pdf-to-images-format" [value]="format()" [disabled]="!documentSummary() || isBusy()" (change)="updateFormat($event)">
+              @for (item of formats; track item) { <option [value]="item">{{ formatLabel(item) }}</option> }
+            </select>
+          </div>
+          <div class="field">
+            <label for="pdf-to-images-dpi" i18n="@@pdf_to_images_dpi">Résolution</label>
+            <select id="pdf-to-images-dpi" [value]="dpi()" [disabled]="!documentSummary() || isBusy()" (change)="updateDpi($event)">
+              @for (item of dpiValues; track item) { <option [value]="item">{{ item }} DPI</option> }
+            </select>
+          </div>
+        </div>
+
+        @if (format() !== 'png') {
+          <div class="field">
+            <label for="pdf-to-images-quality" i18n="@@pdf_to_images_quality">Qualité : {{ qualityPercent() }} %</label>
+            <input id="pdf-to-images-quality" type="range" min="10" max="100" step="1" [value]="qualityPercent()" [disabled]="!documentSummary() || isBusy()" (input)="updateQuality($event)" />
+            <small i18n="@@pdf_to_images_quality_help">Une qualité plus basse réduit généralement le poids, au prix de détails plus visibles.</small>
+          </div>
+        }
+
+        <div class="field field--color">
+          <label for="pdf-to-images-background" i18n="@@pdf_to_images_background">Fond des zones transparentes</label>
+          <input id="pdf-to-images-background" type="color" [value]="background()" [disabled]="!documentSummary() || isBusy()" (input)="updateBackground($event)" />
+        </div>
+
+        @if (estimate(); as value) {
+          <div class="estimate" [class.estimate--error]="!value.allowed" data-testid="pdf-to-images-estimate">
+            <div><span i18n="@@pdf_to_images_selected">Pages sélectionnées</span><strong>{{ formatNumber(value.pageCount) }}</strong></div>
+            <div><span i18n="@@pdf_to_images_largest">Plus grande image</span><strong>{{ formatNumber(value.largestWidth) }} × {{ formatNumber(value.largestHeight) }} px</strong></div>
+            <div><span i18n="@@pdf_to_images_pixels">Pixels à rendre</span><strong>{{ formatNumber(value.totalPixels) }}</strong></div>
+          </div>
+          @if (estimateErrorLabel(); as error) { <p class="alert alert--error" role="alert">{{ error }}</p> }
+        }
+
+        <button type="button" class="primary-button" [disabled]="!canConvert()" (click)="convert()">
+          <i class="tc-icon tc-icon-images" aria-hidden="true"></i><span i18n="@@pdf_to_images_convert">Convertir les pages</span>
+        </button>
+        <button type="button" class="reset-button" [disabled]="isBusy()" (click)="reset()" i18n="@@pdf_to_images_reset">Réinitialiser</button>
+      </article>
+    </div>
+
+    @if (state() === 'rendering') {
+      <article class="tool-card progress-card" aria-live="polite">
+        <div class="progress-copy"><strong i18n="@@pdf_to_images_rendering">Rendu en cours…</strong><span>{{ progress().completed }} / {{ progress().total }}</span></div>
+        <progress [value]="progress().completed" [max]="progress().total || 1"></progress>
+      </article>
+    }
+
+    @if (previews().length > 0) {
+      <article class="tool-card results-card" data-testid="pdf-to-images-results">
+        <div class="results-heading">
+          <div><p class="eyebrow" i18n="@@pdf_to_images_step_three">Étape 3</p><h2 i18n="@@pdf_to_images_results">Images générées</h2><p i18n="@@pdf_to_images_results_summary">{{ previews().length }} image(s), {{ formatFileSize(totalOutputBytes()) }} au total.</p></div>
+          <button type="button" class="primary-button" (click)="downloadAll()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@pdf_to_images_download_all">Télécharger tout</span></button>
+        </div>
+        @if (downloadError()) { <p class="alert alert--error" role="alert" i18n="@@pdf_to_images_download_error">Le téléchargement n’a pas pu démarrer. Réessayez ou téléchargez les images séparément.</p> }
+        <div class="preview-grid">
+          @for (image of previews(); track image.pageNumber) {
+            <figure class="preview-card">
+              <img [src]="image.objectUrl" [alt]="previewAlt(image.pageNumber)" loading="lazy" />
+              <figcaption><div><strong>{{ image.fileName }}</strong><span i18n="@@pdf_to_images_page_details">Page {{ image.pageNumber }} · {{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.bytes.byteLength) }}</span></div><button type="button" class="icon-button" (click)="downloadOne(image)" [attr.aria-label]="downloadPageLabel(image.pageNumber)"><i class="tc-icon tc-icon-download" aria-hidden="true"></i></button></figcaption>
+            </figure>
+          }
+        </div>
+      </article>
+    }
+
+    <div class="guidance-grid">
+      <div><i class="tc-icon tc-icon-envelope" aria-hidden="true"></i><h3 i18n="@@pdf_to_images_guide_web">Web et e-mail</h3><p i18n="@@pdf_to_images_guide_web_text">96 à 144 DPI suffisent souvent. JPEG convient aux photos, PNG aux schémas et WebP réduit généralement le poids.</p></div>
+      <div><i class="tc-icon tc-icon-print" aria-hidden="true"></i><h3 i18n="@@pdf_to_images_guide_print">Impression</h3><p i18n="@@pdf_to_images_guide_print_text">200 à 300 DPI produisent de grandes images. Vérifiez l’estimation mémoire avant une conversion de plusieurs pages.</p></div>
+      <div><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i><h3 i18n="@@pdf_to_images_guide_limits">Limites</h3><p i18n="@@pdf_to_images_guide_limits_text">La conversion crée des pixels : le texte ne reste pas sélectionnable et les liens ou formulaires ne sont pas conservés.</p></div>
+    </div>
+  </section>
+</main>

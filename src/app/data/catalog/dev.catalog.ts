@@ -188,6 +188,16 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../components/pages/tools/dev/pdf/pdf-split-tool/pdf-split-tool.component')
                   .then(m => m.PdfSplitToolComponent),
             },
+            'pdf-to-images': {
+              title: $localize`:@@tool_pdf_to_images_title:PDF vers images`,
+              description: $localize`:@@tool_pdf_to_images_desc:Convertir localement des pages PDF en PNG, JPEG ou WebP, avec résolution, sélection de pages, aperçu et archive ZIP.` ,
+              icon: 'tc-icon tc-icon-images',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/pdf-to-images/presentation/pdf-to-images-tool.component')
+                  .then(m => m.PdfToImagesToolComponent),
+            },
             'pdf-flatten-forms': {
               title: $localize`:@@tool_pdf_flatten_forms_title:Aplatir un formulaire PDF`,
               description: $localize`:@@tool_pdf_flatten_forms_desc:Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.`,
