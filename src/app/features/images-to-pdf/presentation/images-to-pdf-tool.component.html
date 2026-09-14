@@ -62,7 +62,7 @@
         <div class="image-grid" data-testid="images-to-pdf-list">
           @for (image of images(); track image.id; let index = $index; let first = $first; let last = $last) {
             <article class="image-card" [draggable]="!isBusy()" (dragstart)="startImageDrag(image.id, $event)" (dragover)="allowImageDrop($event)" (drop)="dropImage(image.id, $event)">
-              <div class="page-preview" [style.aspect-ratio]="pageAspectRatio(image)"><img [src]="image.objectUrl" [alt]="previewAlt(image, index)" [style.width.%]="previewImageWidth(image)" [style.height.%]="previewImageHeight(image)" /></div>
+              <div class="page-preview" [style.aspect-ratio]="pageAspectRatio(image)" [style.width.rem]="previewPageWidth(image)"><img [src]="image.objectUrl" [alt]="previewAlt(image, index)" [style.width.%]="previewImageWidth(image)" [style.height.%]="previewImageHeight(image)" /></div>
               <div class="image-card__copy"><strong><span class="page-number">{{ index + 1 }}</span>{{ image.fileName }}</strong><span>{{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.size) }}</span></div>
               <div class="image-card__actions">
                 <button type="button" class="icon-button" [disabled]="first || isBusy()" (click)="moveImage(image.id, -1)" [attr.aria-label]="moveUpLabel(image.fileName)"><i class="tc-icon tc-icon-arrow-up" aria-hidden="true"></i></button>

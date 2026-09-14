@@ -32,7 +32,7 @@ dt { color: var(--text-color-secondary); } dd { margin: 0; color: var(--text-col
 .image-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
 .image-card { min-width: 0; border: 1px solid var(--border-color); border-radius: 13px; overflow: hidden; background: var(--surface-ground); cursor: grab; }
 .image-card:active { cursor: grabbing; }
-.page-preview { display: flex; width: min(100%, 13rem); max-height: 16rem; box-sizing: border-box; align-items: center; justify-content: center; margin: 1rem auto; border: 1px solid var(--border-color); overflow: hidden; background: #fff; box-shadow: 0 4px 16px rgba(15,23,42,.1); }
+.page-preview { display: flex; max-width: 100%; box-sizing: border-box; align-items: center; justify-content: center; margin: 1rem auto; border: 1px solid var(--border-color); overflow: hidden; background: #fff; box-shadow: 0 4px 16px rgba(15,23,42,.1); }
 .page-preview img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; }
 .image-card__copy { display: flex; min-width: 0; flex-direction: column; gap: .25rem; padding: .75rem; }
 .image-card__copy strong { min-width: 0; overflow-wrap: anywhere; color: var(--text-color); }

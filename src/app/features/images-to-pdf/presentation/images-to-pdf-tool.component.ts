@@ -230,6 +230,11 @@ export class ImagesToPdfToolComponent {
     return `${String(layout.pageWidth)} / ${String(layout.pageHeight)}`;
   }
 
+  previewPageWidth(image: PreviewImage): number {
+    const layout = createImagePageLayout(image.width, image.height, this.pageFormat(), this.marginMm());
+    return Math.min(13, 16 * layout.pageWidth / layout.pageHeight);
+  }
+
   previewImageWidth(image: PreviewImage): number {
     const layout = createImagePageLayout(image.width, image.height, this.pageFormat(), this.marginMm());
     return layout.imageWidth / layout.pageWidth * 100;

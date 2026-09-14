@@ -1,10 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import { BrowserImageHeaderReaderAdapter } from './browser-image-header-reader.adapter';
+import {
+  BrowserImageHeaderReaderAdapter,
+  type ImageHeaderWorkerFactory,
+} from './browser-image-header-reader.adapter';
 import {
   PdfLibImagePdfGeneratorAdapter,
   type ImagePdfWorkerFactory,
 } from './pdf-lib-image-pdf-generator.adapter';
+import { inspectImageBlob } from './progressive-image-header-reader';
 import type { PreparedPdfImage } from '../application/images-to-pdf.ports';
 
 describe('BrowserImageHeaderReaderAdapter', () => {
@@ -14,8 +18,18 @@ describe('BrowserImageHeaderReaderAdapter', () => {
     bytes.set([0x49, 0x48, 0x44, 0x52], 12);
     bytes.set([0, 0, 0, 2, 0, 0, 0, 3], 16);
 
-    await expect(new BrowserImageHeaderReaderAdapter().inspect(new Blob([bytes], { type: 'text/plain' })))
-      .resolves.toMatchObject({ format: 'png', width: 2, height: 3 });
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImageHeaderWorkerFactory;
+    const blob = new Blob([bytes], { type: 'text/plain' });
+    const inspection = new BrowserImageHeaderReaderAdapter(createWorker).inspect(blob);
+
+    expect(worker.postMessage).toHaveBeenCalledWith({ blob });
+    worker.onmessage?.(new MessageEvent('message', {
+      data: { type: 'success', header: { format: 'png', mimeType: 'image/png', width: 2, height: 3 } },
+    }));
+
+    await expect(inspection).resolves.toMatchObject({ format: 'png', width: 2, height: 3 });
+    expect(worker.terminate).toHaveBeenCalledOnce();
   });
 
   it('continues across large JPEG metadata until it finds the dimensions', async () => {
@@ -32,8 +46,21 @@ describe('BrowserImageHeaderReaderAdapter', () => {
       ]),
     ]);
 
-    await expect(new BrowserImageHeaderReaderAdapter().inspect(jpeg))
+    await expect(inspectImageBlob(jpeg))
       .resolves.toMatchObject({ format: 'jpeg', width: 640, height: 480 });
+  });
+
+  it('terminates header inspection when the caller aborts', async () => {
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImageHeaderWorkerFactory;
+    const abortController = new AbortController();
+    const inspection = new BrowserImageHeaderReaderAdapter(createWorker)
+      .inspect(new Blob(['image']), abortController.signal);
+
+    abortController.abort();
+
+    await expect(inspection).rejects.toMatchObject({ name: 'AbortError' });
+    expect(worker.terminate).toHaveBeenCalledOnce();
   });
 });
 

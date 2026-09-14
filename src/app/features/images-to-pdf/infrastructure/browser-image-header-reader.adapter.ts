@@ -1,36 +1,62 @@
 import type { ImageHeaderReaderPort } from '../application/images-to-pdf.ports';
-import {
-  IMAGES_TO_PDF_MAX_FILE_BYTES,
-  inspectRasterImageHeader,
-  type RasterImageHeader,
-} from '../domain/images-to-pdf.models';
+import type { RasterImageHeader } from '../domain/images-to-pdf.models';
+import type { ImageHeaderWorkerResponse } from './image-header.worker.messages';
 
-const INITIAL_IMAGE_HEADER_SCAN_BYTES = 64 * 1024;
+export type ImageHeaderWorkerFactory = () => Worker;
 
 export class BrowserImageHeaderReaderAdapter implements ImageHeaderReaderPort {
+  constructor(private readonly createWorker: ImageHeaderWorkerFactory = createImageHeaderWorker) {}
+
   async inspect(blob: Blob, signal?: AbortSignal): Promise<RasterImageHeader | null> {
-    const maximum = Math.min(blob.size, IMAGES_TO_PDF_MAX_FILE_BYTES);
-    let scanBytes = Math.min(maximum, INITIAL_IMAGE_HEADER_SCAN_BYTES);
-    while (scanBytes > 0) {
-      throwIfAborted(signal);
-      const bytes = new Uint8Array(await blob.slice(0, scanBytes).arrayBuffer());
-      throwIfAborted(signal);
-      const header = inspectRasterImageHeader(bytes);
-      if (header) return header;
-      if (!isJpeg(bytes) || scanBytes >= maximum) return null;
-      scanBytes = Math.min(maximum, scanBytes * 2);
-    }
-    return null;
+    const worker = this.createWorker();
+    return await new Promise((resolve, reject) => {
+      let settled = false;
+      const finish = (callback: () => void): void => {
+        if (settled) return;
+        settled = true;
+        signal?.removeEventListener('abort', abort);
+        worker.terminate();
+        callback();
+      };
+      const abort = (): void => {
+        finish(() => {
+          reject(createAbortError());
+        });
+      };
+
+      if (signal?.aborted) {
+        abort();
+        return;
+      }
+      signal?.addEventListener('abort', abort, { once: true });
+      worker.onmessage = ({ data }: MessageEvent<ImageHeaderWorkerResponse>) => {
+        if (data.type === 'success') {
+          finish(() => {
+            resolve(data.header);
+          });
+          return;
+        }
+        finish(() => {
+          reject(new Error(data.message));
+        });
+      };
+      worker.onerror = (event: ErrorEvent) => {
+        finish(() => {
+          reject(new Error(event.message || 'The image header worker failed.'));
+        });
+      };
+      worker.postMessage({ blob });
+    });
   }
 }
 
-function isJpeg(bytes: Uint8Array): boolean {
-  return bytes.length >= 3 && bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+function createImageHeaderWorker(): Worker {
+  if (typeof Worker === 'undefined') throw new Error('Web Workers are not supported by this browser.');
+  return new Worker(new URL('./image-header.worker', import.meta.url), { type: 'module' });
 }
 
-function throwIfAborted(signal?: AbortSignal): void {
-  if (!signal?.aborted) return;
+function createAbortError(): Error {
   const error = new Error('Image inspection was cancelled.');
   error.name = 'AbortError';
-  throw error;
+  return error;
 }
