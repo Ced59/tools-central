@@ -2994,6 +2994,7 @@
         <note category="location">src/app/features/robots-txt-builder/presentation/robots-txt-builder-tool.component.html:240,241</note>
         <note category="location">src/app/features/serp-snippet-preview/presentation/serp-snippet-preview-tool.component.html:150,151</note>
         <note category="location">src/app/features/sitemap-xml-builder/presentation/sitemap-xml-builder-tool.component.html:174,175</note>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:163</note>
         <note category="location">src/app/features/structured-data-extractor/presentation/structured-data-extractor-tool.component.html:185,186</note>
       </notes>
       <segment>
@@ -15471,9 +15472,25 @@
         <source>Extraire localement JSON-LD, Microdata et RDFa depuis du HTML, explorer les entités et relations, puis exporter un rapport JSON borné.</source>
       </segment>
     </unit>
-    <unit id="tool_html_head_auditor_title">
+    <unit id="tool_software_application_schema_builder_title">
       <notes>
         <note category="location">src/app/data/catalog/dev.catalog.ts:292</note>
+      </notes>
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+      </segment>
+    </unit>
+    <unit id="tool_software_application_schema_builder_desc">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:293</note>
+      </notes>
+      <segment>
+        <source>Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.</source>
+      </segment>
+    </unit>
+    <unit id="tool_html_head_auditor_title">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:301</note>
       </notes>
       <segment>
         <source>Auditeur de head HTML</source>
@@ -15481,7 +15498,7 @@
     </unit>
     <unit id="tool_html_head_auditor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:293</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:302</note>
       </notes>
       <segment>
         <source>Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.</source>
@@ -15489,7 +15506,7 @@
     </unit>
     <unit id="group_dev_ooxml_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:309</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:318</note>
       </notes>
       <segment>
         <source>Open XML (OOXML)</source>
@@ -15497,7 +15514,7 @@
     </unit>
     <unit id="group_dev_ooxml_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:310</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:319</note>
       </notes>
       <segment>
         <source>Inspecter les conteneurs OOXML (ZIP/XML) : relations, content types, métadonnées…</source>
@@ -15505,7 +15522,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:315</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:324</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15513,7 +15530,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:316</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:325</note>
       </notes>
       <segment>
         <source>Explorer le ZIP OOXML (fichiers, relations, content types, métadonnées) et exporter en JSON.</source>
@@ -15521,7 +15538,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:319</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:328</note>
       </notes>
       <segment>
         <source>Explorer un package OOXML (ZIP)</source>
@@ -15529,7 +15546,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:319</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:328</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un DOCX/XLSX/PPTX, prévisualiser les XML, et télécharger une sélection.</source>
@@ -15537,7 +15554,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:320</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:329</note>
       </notes>
       <segment>
         <source>Relationships OOXML → JSON</source>
@@ -15545,7 +15562,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:320</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:329</note>
       </notes>
       <segment>
         <source>Exporter toutes les relations (_rels/*.rels) : targets, types, ids et graphe des dépendances.</source>
@@ -15553,7 +15570,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:321</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:330</note>
       </notes>
       <segment>
         <source>[Content_Types].xml → JSON</source>
@@ -15561,7 +15578,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:321</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:330</note>
       </notes>
       <segment>
         <source>Inspecter les types de contenu déclarés (defaults/overrides) et détecter les incohérences.</source>
@@ -15569,7 +15586,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:322</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
       </notes>
       <segment>
         <source>Métadonnées OOXML → JSON</source>
@@ -15577,7 +15594,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:322</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
       </notes>
       <segment>
         <source>Extraire docProps (core/app/custom) : auteur, dates, application, titres, tags, etc.</source>
@@ -15585,7 +15602,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:323</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:332</note>
       </notes>
       <segment>
         <source>Médias OOXML → JSON</source>
@@ -15593,7 +15610,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:323</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:332</note>
       </notes>
       <segment>
         <source>Inventorier les médias (images/audio/vidéo) et leurs références (rels).</source>
@@ -15601,7 +15618,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:327</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:336</note>
       </notes>
       <segment>
         <source>Validation &amp; cohérence</source>
@@ -15609,7 +15626,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:328</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:337</note>
       </notes>
       <segment>
         <source>Vérifier la cohérence des relationships, références manquantes, content types, et produire un diagnostic.</source>
@@ -15617,7 +15634,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
       </notes>
       <segment>
         <source>Vérifier l&apos;intégrité OOXML</source>
@@ -15625,7 +15642,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:331</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:340</note>
       </notes>
       <segment>
         <source>Détecter targets manquants, rels orphelins, content types incohérents et générer un rapport.</source>
@@ -15633,7 +15650,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:335</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:344</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -15641,7 +15658,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:336</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:345</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées, supprimer des parties, regénérer un package OOXML minimal.</source>
@@ -15649,7 +15666,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:339</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:348</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées OOXML</source>
@@ -15657,7 +15674,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:339</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:348</note>
       </notes>
       <segment>
         <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
@@ -15665,7 +15682,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:343</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:352</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -15673,7 +15690,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:344</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:353</note>
       </notes>
       <segment>
         <source>Graph des relations, arbre des parts, inspection des namespaces et fragments XML.</source>
@@ -15681,7 +15698,7 @@
     </unit>
     <unit id="tool_ooxml_diff_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:347</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:356</note>
       </notes>
       <segment>
         <source>Comparer 2 packages OOXML</source>
@@ -15689,7 +15706,7 @@
     </unit>
     <unit id="tool_ooxml_diff_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:347</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:356</note>
       </notes>
       <segment>
         <source>Comparer deux fichiers (DOCX/XLSX/PPTX) : diff par part (XML) + changements de médias et de relations.</source>
@@ -15697,7 +15714,7 @@
     </unit>
     <unit id="group_dev_word_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:357</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:366</note>
       </notes>
       <segment>
         <source>Word (DOCX)</source>
@@ -15705,7 +15722,7 @@
     </unit>
     <unit id="group_dev_word_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:358</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:367</note>
       </notes>
       <segment>
         <source>Analyse et extraction de documents Word : texte, styles, champs, images, révisions…</source>
@@ -15713,7 +15730,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:363</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:372</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15721,7 +15738,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:364</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:373</note>
       </notes>
       <segment>
         <source>Texte, styles, polices, champs, images, liens, tables, en-têtes/pieds, notes et révisions.</source>
@@ -15729,7 +15746,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:367</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:376</note>
       </notes>
       <segment>
         <source>DOCX → texte</source>
@@ -15737,7 +15754,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:367</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:376</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un DOCX (paragraphes, listes, tableaux) et l&apos;exporter (TXT/JSON).</source>
@@ -15745,7 +15762,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:368</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:377</note>
       </notes>
       <segment>
         <source>Styles DOCX → JSON</source>
@@ -15753,7 +15770,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:368</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:377</note>
       </notes>
       <segment>
         <source>Exporter les styles (paragraph/character/table) et leurs propriétés (héritage, basés sur, liens).</source>
@@ -15761,7 +15778,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
       </notes>
       <segment>
         <source>Polices DOCX → JSON</source>
@@ -15769,7 +15786,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:369</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
       </notes>
       <segment>
         <source>Lister les polices utilisées (runs/styles) et détecter celles qui ne sont jamais appliquées.</source>
@@ -15777,7 +15794,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:370</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:379</note>
       </notes>
       <segment>
         <source>Listes &amp; numérotation → JSON</source>
@@ -15785,7 +15802,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:370</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:379</note>
       </notes>
       <segment>
         <source>Exporter numbering.xml : niveaux, formats, indentations, numId/abstractNumId, et mapping par paragraphes.</source>
@@ -15793,7 +15810,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:371</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:380</note>
       </notes>
       <segment>
         <source>Commentaires DOCX → JSON</source>
@@ -15801,7 +15818,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:371</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:380</note>
       </notes>
       <segment>
         <source>Extraire comments.xml : auteurs, dates, ancres, contenu et statistiques.</source>
@@ -15809,7 +15826,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:372</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:381</note>
       </notes>
       <segment>
         <source>Révisions (track changes) → JSON</source>
@@ -15817,7 +15834,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:372</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:381</note>
       </notes>
       <segment>
         <source>Détecter insertions/suppressions, auteurs, dates et exporter un rapport de révisions.</source>
@@ -15825,7 +15842,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:373</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:382</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un DOCX</source>
@@ -15833,7 +15850,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:373</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:382</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + champs) et exporter en JSON/texte.</source>
@@ -15841,7 +15858,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:374</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:383</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un DOCX</source>
@@ -15849,7 +15866,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:374</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:383</note>
       </notes>
       <segment>
         <source>Extraire /word/media/* et produire un inventaire (dimensions, type, références).</source>
@@ -15857,7 +15874,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:375</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:384</note>
       </notes>
       <segment>
         <source>En-têtes &amp; pieds de page → JSON</source>
@@ -15865,7 +15882,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:375</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:384</note>
       </notes>
       <segment>
         <source>Exporter header*.xml/footer*.xml, avec leurs rels, et distinguer first/even/default.</source>
@@ -15873,7 +15890,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:376</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:385</note>
       </notes>
       <segment>
         <source>Notes de bas de page → JSON</source>
@@ -15881,7 +15898,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:376</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:385</note>
       </notes>
       <segment>
         <source>Extraire footnotes.xml et endnotes.xml : contenu, ancres et statistiques.</source>
@@ -15889,7 +15906,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:377</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:386</note>
       </notes>
       <segment>
         <source>Champs Word → JSON</source>
@@ -15897,7 +15914,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:377</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:386</note>
       </notes>
       <segment>
         <source>Détecter les champs (TOC, PAGE, REF, DATE, IF, etc.) et exporter leurs codes/instructions.</source>
@@ -15905,7 +15922,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:387</note>
       </notes>
       <segment>
         <source>MERGEFIELD (mail merge) → JSON</source>
@@ -15913,7 +15930,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:387</note>
       </notes>
       <segment>
         <source>Extraire la liste des champs de fusion (MERGEFIELD) et vérifier doublons/variantes/formatage.</source>
@@ -15921,7 +15938,7 @@
     </unit>
     <unit id="dev_word_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:382</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -15929,7 +15946,7 @@
     </unit>
     <unit id="dev_word_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:383</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
       </notes>
       <segment>
         <source>Audit de compatibilité (styles, polices manquantes, liens cassés), et vérifs de conformité basiques.</source>
@@ -15937,7 +15954,7 @@
     </unit>
     <unit id="tool_docx_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:386</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
       </notes>
       <segment>
         <source>DOCM : détecter les macros</source>
@@ -15945,7 +15962,7 @@
     </unit>
     <unit id="tool_docx_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:386</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
       </notes>
       <segment>
         <source>Détecter la présence de vbaProject.bin (DOCM/DOTM) et exporter un diagnostic (sans exécution).</source>
@@ -15953,7 +15970,7 @@
     </unit>
     <unit id="tool_docx_style_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:387</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
       </notes>
       <segment>
         <source>Audit de styles (DOCX)</source>
@@ -15961,7 +15978,7 @@
     </unit>
     <unit id="tool_docx_style_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:387</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
       </notes>
       <segment>
         <source>Détecter styles dupliqués, non utilisés, overrides excessifs et incohérences typographiques.</source>
@@ -15969,7 +15986,7 @@
     </unit>
     <unit id="dev_word_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -15977,7 +15994,7 @@
     </unit>
     <unit id="dev_word_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:401</note>
       </notes>
       <segment>
         <source>Remplacement de placeholders, nettoyage (métadonnées), normalisation de styles, extraction en Markdown/HTML (approx).</source>
@@ -15985,7 +16002,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
       </notes>
       <segment>
         <source>Remplacer des placeholders (DOCX)</source>
@@ -15993,7 +16010,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
       </notes>
       <segment>
         <source>Remplacer des balises (ex: {{name}}) en respectant les runs et produire un DOCX de sortie.</source>
@@ -16001,7 +16018,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (DOCX)</source>
@@ -16009,7 +16026,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
       </notes>
       <segment>
         <source>Supprimer/normaliser les infos personnelles : docProps, commentaires, auteurs de révisions (optionnel).</source>
@@ -16017,7 +16034,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:397</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:406</note>
       </notes>
       <segment>
         <source>DOCX → Markdown (approx)</source>
@@ -16025,7 +16042,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:397</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:406</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens, images référencées.</source>
@@ -16033,7 +16050,7 @@
     </unit>
     <unit id="dev_word_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:401</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:410</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16041,7 +16058,7 @@
     </unit>
     <unit id="dev_word_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:402</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:411</note>
       </notes>
       <segment>
         <source>Inspection des parts WordprocessingML (document.xml, numbering, styles, rels) et export JSON/graph.</source>
@@ -16049,7 +16066,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
       </notes>
       <segment>
         <source>Viewer XML WordprocessingML</source>
@@ -16057,7 +16074,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
       </notes>
       <segment>
         <source>Explorer document.xml/styles.xml/numbering.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -16065,7 +16082,7 @@
     </unit>
     <unit id="group_dev_excel_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:415</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:424</note>
       </notes>
       <segment>
         <source>Excel (XLSX)</source>
@@ -16073,7 +16090,7 @@
     </unit>
     <unit id="group_dev_excel_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:416</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:425</note>
       </notes>
       <segment>
         <source>Inspecter des fichiers Excel : feuilles, formules, styles, chaînes partagées, médias…</source>
@@ -16081,7 +16098,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:421</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:430</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16089,7 +16106,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:431</note>
       </notes>
       <segment>
         <source>Feuilles, cellules, styles, sharedStrings, noms définis, formules, charts et médias.</source>
@@ -16097,7 +16114,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:425</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:434</note>
       </notes>
       <segment>
         <source>Feuilles XLSX → JSON</source>
@@ -16105,7 +16122,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:425</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:434</note>
       </notes>
       <segment>
         <source>Lister les feuilles (noms, états visibles/hidden, ids) et exporter la structure workbook.xml en JSON.</source>
@@ -16113,7 +16130,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:426</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:435</note>
       </notes>
       <segment>
         <source>Plage XLSX → CSV</source>
@@ -16121,7 +16138,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:426</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:435</note>
       </notes>
       <segment>
         <source>Extraire une plage (A1:D42) d&apos;une feuille et l&apos;exporter en CSV (en gérant sharedStrings et types de cellules).</source>
@@ -16129,7 +16146,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:427</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:436</note>
       </notes>
       <segment>
         <source>Formules XLSX → JSON</source>
@@ -16137,7 +16154,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:427</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:436</note>
       </notes>
       <segment>
         <source>Extraire les formules (f) et leurs adresses, détecter les formules partagées et produire un inventaire.</source>
@@ -16145,7 +16162,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:428</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:437</note>
       </notes>
       <segment>
         <source>Noms définis → JSON</source>
@@ -16153,7 +16170,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:428</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:437</note>
       </notes>
       <segment>
         <source>Exporter les definedNames : plages nommées, constantes, formules et portée (workbook/sheet).</source>
@@ -16161,7 +16178,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:429</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:438</note>
       </notes>
       <segment>
         <source>Styles XLSX → JSON</source>
@@ -16169,7 +16186,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:429</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:438</note>
       </notes>
       <segment>
         <source>Inspecter styles.xml (formats, fonts, fills, borders, numFmts) et produire un rapport lisible.</source>
@@ -16177,7 +16194,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:430</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
       </notes>
       <segment>
         <source>SharedStrings → JSON</source>
@@ -16185,7 +16202,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:430</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
       </notes>
       <segment>
         <source>Exporter sharedStrings.xml, stats (taille, doublons) et mapping vers les cellules.</source>
@@ -16193,7 +16210,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:431</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:440</note>
       </notes>
       <segment>
         <source>Charts &amp; médias (XLSX)</source>
@@ -16201,7 +16218,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:431</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:440</note>
       </notes>
       <segment>
         <source>Inventorier charts, drawings et médias, et exporter les relations vers /xl/media/* et /xl/charts/* .</source>
@@ -16209,7 +16226,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:435</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:444</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16217,7 +16234,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:436</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
       </notes>
       <segment>
         <source>Détecter feuilles cachées, références cassées, formules invalides (surface), protections et compatibilité.</source>
@@ -16225,7 +16242,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:448</note>
       </notes>
       <segment>
         <source>Détecter les feuilles cachées</source>
@@ -16233,7 +16250,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:448</note>
       </notes>
       <segment>
         <source>Détecter sheets hidden/veryHidden, états de workbook et exporter un rapport de visibilité.</source>
@@ -16241,7 +16258,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:440</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
       </notes>
       <segment>
         <source>Protection XLSX (audit)</source>
@@ -16249,7 +16266,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:440</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
       </notes>
       <segment>
         <source>Détecter workbookProtection/sheetProtection (présence, options) et exporter un diagnostic (sans contournement).</source>
@@ -16257,7 +16274,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:441</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
       </notes>
       <segment>
         <source>XLSM : détecter les macros</source>
@@ -16265,7 +16282,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:441</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (XLSM/XLTM) et exporter un diagnostic (sans exécution).</source>
@@ -16273,7 +16290,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16281,7 +16298,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:446</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
       </notes>
       <segment>
         <source>Exporter vers CSV/JSON, supprimer des feuilles, nettoyer des métadonnées, normaliser des styles.</source>
@@ -16289,7 +16306,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:458</note>
       </notes>
       <segment>
         <source>Supprimer les feuilles cachées (XLSX)</source>
@@ -16297,7 +16314,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:458</note>
       </notes>
       <segment>
         <source>Créer une copie en supprimant les feuilles hidden/veryHidden (best-effort, package-level).</source>
@@ -16305,7 +16322,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:459</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (XLSX)</source>
@@ -16313,7 +16330,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:459</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16321,7 +16338,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:463</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16329,7 +16346,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
       </notes>
       <segment>
         <source>Explorer SpreadsheetML (workbook, worksheets, styles) et le graphe de relations OOXML.</source>
@@ -16337,7 +16354,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:458</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:467</note>
       </notes>
       <segment>
         <source>Viewer XML SpreadsheetML</source>
@@ -16345,7 +16362,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:458</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:467</note>
       </notes>
       <segment>
         <source>Explorer workbook.xml, worksheets, styles.xml et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16353,7 +16370,7 @@
     </unit>
     <unit id="group_dev_powerpoint_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:468</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:477</note>
       </notes>
       <segment>
         <source>PowerPoint (PPTX)</source>
@@ -16361,7 +16378,7 @@
     </unit>
     <unit id="group_dev_powerpoint_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:478</note>
       </notes>
       <segment>
         <source>Extraction et audit de slides : texte, notes, thèmes, médias, animations…</source>
@@ -16369,7 +16386,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:474</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16377,7 +16394,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:475</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:484</note>
       </notes>
       <segment>
         <source>Texte des slides, notes, médias, thèmes, polices, liens et infos de deck.</source>
@@ -16385,7 +16402,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:478</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:487</note>
       </notes>
       <segment>
         <source>Slides PPTX → JSON</source>
@@ -16393,7 +16410,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:478</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:487</note>
       </notes>
       <segment>
         <source>Lister les slides, layouts, masters et exporter la structure PresentationML en JSON.</source>
@@ -16401,7 +16418,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:479</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:488</note>
       </notes>
       <segment>
         <source>PPTX → texte</source>
@@ -16409,7 +16426,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:479</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:488</note>
       </notes>
       <segment>
         <source>Extraire le texte des slides (shapes) et l&apos;exporter (TXT/JSON) avec repères slide/shape.</source>
@@ -16417,7 +16434,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:480</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:489</note>
       </notes>
       <segment>
         <source>Notes de présentation → JSON</source>
@@ -16425,7 +16442,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:480</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:489</note>
       </notes>
       <segment>
         <source>Extraire les notes (notesSlides) et les associer aux slides.</source>
@@ -16433,7 +16450,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:490</note>
       </notes>
       <segment>
         <source>Polices PPTX → JSON</source>
@@ -16441,7 +16458,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:490</note>
       </notes>
       <segment>
         <source>Inventorier les polices utilisées (thèmes + runs) et produire un rapport exploitable.</source>
@@ -16449,7 +16466,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:482</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
       </notes>
       <segment>
         <source>Extraire les médias (PPTX)</source>
@@ -16457,7 +16474,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:482</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
       </notes>
       <segment>
         <source>Extraire images/audio/vidéo de /ppt/media/* et exporter un inventaire avec références (rels).</source>
@@ -16465,7 +16482,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un PPTX</source>
@@ -16473,7 +16490,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + actions) et exporter en JSON/texte.</source>
@@ -16481,7 +16498,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:487</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:496</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16489,7 +16506,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:488</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
       </notes>
       <segment>
         <source>Audit de cohérence (liens, médias manquants), compatibilité et état des animations/transitions (surface).</source>
@@ -16497,7 +16514,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
       </notes>
       <segment>
         <source>Audit animations/transitions</source>
@@ -16505,7 +16522,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
       </notes>
       <segment>
         <source>Détecter animations/transitions (timing) et exporter un rapport (surface) par slide.</source>
@@ -16513,7 +16530,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:501</note>
       </notes>
       <segment>
         <source>PPTM : détecter les macros</source>
@@ -16521,7 +16538,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:501</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (PPTM/POTM) et exporter un diagnostic (sans exécution).</source>
@@ -16529,7 +16546,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:496</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16537,7 +16554,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
       </notes>
       <segment>
         <source>Exporter texte, nettoyer métadonnées, extraire médias, regrouper/filtrer slides (approche package).</source>
@@ -16545,7 +16562,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:509</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (PPTX)</source>
@@ -16553,7 +16570,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:509</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16561,7 +16578,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:504</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:513</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16569,7 +16586,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:514</note>
       </notes>
       <segment>
         <source>Explorer PresentationML (slides, layouts, masters) et relationships.</source>
@@ -16577,7 +16594,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:508</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:517</note>
       </notes>
       <segment>
         <source>Viewer XML PresentationML</source>
@@ -16585,7 +16602,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:508</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:517</note>
       </notes>
       <segment>
         <source>Explorer presentation.xml, slides, masters/layouts et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16593,7 +16610,7 @@
     </unit>
     <unit id="group_dev_odf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:518</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:527</note>
       </notes>
       <segment>
         <source>OpenDocument (ODF)</source>
@@ -16601,7 +16618,7 @@
     </unit>
     <unit id="group_dev_odf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:519</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : inspection ZIP/XML, texte, styles, métadonnées, médias…</source>
@@ -16609,7 +16626,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:533</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16617,7 +16634,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:525</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : explorer le ZIP ODF, extraire texte, styles, métadonnées et médias.</source>
@@ -16625,7 +16642,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:537</note>
       </notes>
       <segment>
         <source>Explorer un package ODF (ZIP)</source>
@@ -16633,7 +16650,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:537</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un ODT/ODS/ODP, prévisualiser content.xml/styles.xml/meta.xml et télécharger une sélection.</source>
@@ -16641,7 +16658,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:529</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:538</note>
       </notes>
       <segment>
         <source>ODT → texte</source>
@@ -16649,7 +16666,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:529</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:538</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un ODT (paragraphes, listes, tableaux simples) et l&apos;exporter (TXT/JSON).</source>
@@ -16657,7 +16674,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:530</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:539</note>
       </notes>
       <segment>
         <source>Styles ODT → JSON</source>
@@ -16665,7 +16682,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:530</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:539</note>
       </notes>
       <segment>
         <source>Exporter les styles ODF (styles.xml) : paragraphes, caractères, pages, et propriétés héritées.</source>
@@ -16673,7 +16690,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:531</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:540</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un ODT</source>
@@ -16681,7 +16698,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:531</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:540</note>
       </notes>
       <segment>
         <source>Extraire /Pictures/*, produire un inventaire (type, taille) et associer les images à leurs ancres dans content.xml.</source>
@@ -16689,7 +16706,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:532</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:541</note>
       </notes>
       <segment>
         <source>Feuilles ODS → JSON</source>
@@ -16697,7 +16714,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:532</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:541</note>
       </notes>
       <segment>
         <source>Lister les tables/feuilles (content.xml) et exporter la structure (noms, répétitions de colonnes/lignes).</source>
@@ -16705,7 +16722,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:533</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:542</note>
       </notes>
       <segment>
         <source>Slides ODP → JSON</source>
@@ -16713,7 +16730,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:533</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:542</note>
       </notes>
       <segment>
         <source>Lister les pages/diapos (content.xml) et exporter une structure exploitable (slides, shapes texte).</source>
@@ -16721,7 +16738,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:543</note>
       </notes>
       <segment>
         <source>Métadonnées ODF → JSON</source>
@@ -16729,7 +16746,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:543</note>
       </notes>
       <segment>
         <source>Extraire meta.xml : titre, auteur, dates, générateur, mots-clés, et statistiques document.</source>
@@ -16737,7 +16754,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:538</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:547</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16745,7 +16762,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:539</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:548</note>
       </notes>
       <segment>
         <source>Vérifier le manifest, les références de médias, et l&apos;intégrité des fichiers XML clés (content/styles/meta).</source>
@@ -16753,7 +16770,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:542</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:551</note>
       </notes>
       <segment>
         <source>Vérifier le manifest ODF</source>
@@ -16761,7 +16778,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:542</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:551</note>
       </notes>
       <segment>
         <source>Contrôler META-INF/manifest.xml : fichiers référencés, media-types, et références manquantes.</source>
@@ -16769,7 +16786,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:546</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:555</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16777,7 +16794,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:547</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:556</note>
       </notes>
       <segment>
         <source>Exporter vers texte/JSON, nettoyer des métadonnées, extraire médias, conversion simple (approximative).</source>
@@ -16785,7 +16802,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:550</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (ODF)</source>
@@ -16793,7 +16810,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:550</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
       </notes>
       <segment>
         <source>Nettoyer meta.xml (auteur, générateur, historiques) et produire un ODF &quot;privacy-first&quot;.</source>
@@ -16801,7 +16818,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:551</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:560</note>
       </notes>
       <segment>
         <source>ODT → Markdown (approx)</source>
@@ -16809,7 +16826,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:551</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:560</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens et images référencées.</source>
@@ -16817,7 +16834,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:555</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:564</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16825,7 +16842,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:556</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:565</note>
       </notes>
       <segment>
         <source>Inspecter content.xml/styles.xml et le manifest ODF, avec export JSON.</source>
@@ -16833,7 +16850,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:568</note>
       </notes>
       <segment>
         <source>Viewer XML OpenDocument</source>
@@ -16841,7 +16858,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:568</note>
       </notes>
       <segment>
         <source>Explorer content.xml/styles.xml/meta.xml/manifest.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -16849,7 +16866,7 @@
     </unit>
     <unit id="group_dev_rtf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:569</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
       </notes>
       <segment>
         <source>RTF</source>
@@ -16857,7 +16874,7 @@
     </unit>
     <unit id="group_dev_rtf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:579</note>
       </notes>
       <segment>
         <source>Outils legacy sur fichiers RTF : extraction texte, audit, conversion simple.</source>
@@ -16865,7 +16882,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:575</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:584</note>
       </notes>
       <segment>
         <source>Extraction</source>
@@ -16873,7 +16890,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:576</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:585</note>
       </notes>
       <segment>
         <source>Extraire le texte, détecter encodage, et récupérer des informations de base (polices, couleurs).</source>
@@ -16881,7 +16898,7 @@
     </unit>
     <unit id="tool_rtf_to_text_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:579</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:588</note>
       </notes>
       <segment>
         <source>RTF → texte</source>
@@ -16889,7 +16906,7 @@
     </unit>
     <unit id="tool_rtf_to_text_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:579</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:588</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un fichier RTF (best-effort) et exporter en TXT/JSON.</source>
@@ -16897,7 +16914,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:580</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:589</note>
       </notes>
       <segment>
         <source>Table des polices RTF → JSON</source>
@@ -16905,7 +16922,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:580</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:589</note>
       </notes>
       <segment>
         <source>Extraire la fonttbl (polices déclarées) et produire un inventaire.</source>
@@ -16913,7 +16930,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:584</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:593</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -16921,7 +16938,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:585</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:594</note>
       </notes>
       <segment>
         <source>Convertir RTF → texte/HTML/JSON simplifié (fidélité limitée).</source>
@@ -16929,7 +16946,7 @@
     </unit>
     <unit id="tool_rtf_to_html_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:588</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:597</note>
       </notes>
       <segment>
         <source>RTF → HTML (approx)</source>
@@ -16937,7 +16954,7 @@
     </unit>
     <unit id="tool_rtf_to_html_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:588</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:597</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; vers HTML simple (paragraphes, gras/italique, listes limitées).</source>
@@ -16945,7 +16962,7 @@
     </unit>
     <unit id="tool_rtf_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:589</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:598</note>
       </notes>
       <segment>
         <source>RTF → JSON (structure)</source>
@@ -16953,7 +16970,7 @@
     </unit>
     <unit id="tool_rtf_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:589</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:598</note>
       </notes>
       <segment>
         <source>Parser RTF et exporter une structure (groupes, contrôles, texte) pour debug/traitement.</source>
@@ -16961,7 +16978,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:593</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:602</note>
       </notes>
       <segment>
         <source>Validation</source>
@@ -16969,7 +16986,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:594</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:603</note>
       </notes>
       <segment>
         <source>Détecter RTF corrompu, groupes non fermés, et anomalies de syntaxe courantes.</source>
@@ -16977,7 +16994,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:597</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:606</note>
       </notes>
       <segment>
         <source>Vérifier la syntaxe RTF</source>
@@ -16985,7 +17002,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:597</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:606</note>
       </notes>
       <segment>
         <source>Détecter anomalies courantes : groupes non fermés, contrôles invalides, encodage incohérent.</source>
@@ -16993,7 +17010,7 @@
     </unit>
     <unit id="group_dev_legacy_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:607</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:616</note>
       </notes>
       <segment>
         <source>Formats Office legacy</source>
@@ -17001,7 +17018,7 @@
     </unit>
     <unit id="group_dev_legacy_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:608</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:617</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT (binaires) : infos, détection et conversions.</source>
@@ -17009,7 +17026,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:613</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:622</note>
       </notes>
       <segment>
         <source>Identification</source>
@@ -17017,7 +17034,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:614</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:623</note>
       </notes>
       <segment>
         <source>Reconnaître DOC/XLS/PPT (CFBF/OLE), afficher infos de base et signatures.</source>
@@ -17025,7 +17042,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:617</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
       </notes>
       <segment>
         <source>CFBF/OLE : infos fichier</source>
@@ -17033,7 +17050,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:617</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
       </notes>
       <segment>
         <source>Détecter un conteneur OLE (DOC/XLS/PPT) et afficher header, FAT, streams et statistiques basiques.</source>
@@ -17041,7 +17058,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:618</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT : détecter le format</source>
@@ -17049,7 +17066,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:618</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
       </notes>
       <segment>
         <source>Identifier DOC vs XLS vs PPT (best-effort) via streams/clsid et produire un rapport.</source>
@@ -17057,7 +17074,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:622</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:631</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -17065,7 +17082,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:623</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:632</note>
       </notes>
       <segment>
         <source>Conversions vers formats modernes (souvent via backend) : DOC→DOCX, XLS→XLSX, PPT→PPTX.</source>
@@ -17073,7 +17090,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:635</note>
       </notes>
       <segment>
         <source>DOC → DOCX (conversion)</source>
@@ -17081,7 +17098,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:635</note>
       </notes>
       <segment>
         <source>Convertir un DOC binaire vers DOCX (généralement via backend/outils externes).</source>
@@ -17089,7 +17106,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:636</note>
       </notes>
       <segment>
         <source>XLS → XLSX (conversion)</source>
@@ -17097,7 +17114,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:636</note>
       </notes>
       <segment>
         <source>Convertir un XLS binaire vers XLSX (généralement via backend/outils externes).</source>
@@ -17105,7 +17122,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
       </notes>
       <segment>
         <source>PPT → PPTX (conversion)</source>
@@ -17113,7 +17130,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
       </notes>
       <segment>
         <source>Convertir un PPT binaire vers PPTX (généralement via backend/outils externes).</source>
@@ -30057,6 +30074,270 @@
       </notes>
       <segment>
         <source>Commencez par loc et un lastmod fiable. N’ajoutez pas des balises facultatives pour remplir le fichier : chaque valeur doit avoir une signification opérationnelle.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:6</note>
+      </notes>
+      <segment>
+        <source>Créer un balisage SoftwareApplication utile et vérifiable</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_lead">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:7</note>
+      </notes>
+      <segment>
+        <source>Ce générateur transforme les informations réellement publiées sur une application en JSON-LD Schema.org. Il distingue la validité du schéma de l’éligibilité au résultat enrichi Google, contrôle les champs sensibles et produit une balise script sûre sans transmettre les données saisies.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_use_cases">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:13</note>
+      </notes>
+      <segment>
+        <source>Cas d’utilisation</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:17</note>
+      </notes>
+      <segment>
+        <source>Baliser la page officielle d’une application</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:18</note>
+      </notes>
+      <segment>
+        <source>Décrivez une application web, mobile ou logicielle avec son nom, son URL, sa plateforme, sa catégorie et son offre, puis intégrez le bloc JSON-LD dans la page correspondante.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:21</note>
+      </notes>
+      <segment>
+        <source>Contrôler les propriétés exigées par Google</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:22</note>
+      </notes>
+      <segment>
+        <source>L’état de validation sépare les erreurs bloquantes, les recommandations et l’absence de note agrégée réelle nécessaire à l’éligibilité du résultat enrichi.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:25</note>
+      </notes>
+      <segment>
+        <source>Livrer un extrait reproductible</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:26</note>
+      </notes>
+      <segment>
+        <source>Copiez la balise script prête à intégrer ou téléchargez le JSON-LD seul afin de le versionner, le relire et le tester dans votre chaîne de publication.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:33</note>
+      </notes>
+      <segment>
+        <source>Méthode recommandée</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:36</note>
+      </notes>
+      <segment>
+        <source>Commencez par la page canonique consacrée à l’application. Reprenez exactement le nom, le prix et les systèmes affichés aux visiteurs ; utilisez un prix égal à zéro pour une application gratuite.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:37</note>
+      </notes>
+      <segment>
+        <source>Choisissez uniquement une catégorie reconnue par Google. SoftwareApplication convient au cas général ; WebApplication et MobileApplication précisent la nature du produit lorsque cette distinction est réelle.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:38</note>
+      </notes>
+      <segment>
+        <source>N’activez AggregateRating que si la moyenne, l’échelle et le nombre de notes proviennent de données réelles visibles sur la page. Testez ensuite le HTML publié, pas seulement le fragment généré.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_requirements">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:44</note>
+      </notes>
+      <segment>
+        <source>Propriétés et interprétation</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:48</note>
+      </notes>
+      <segment>
+        <source>Requis pour Google</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:49</note>
+      </notes>
+      <segment>
+        <source>Le nom et offers.price sont obligatoires. Il faut aussi fournir soit une note agrégée, soit un avis conforme ; cet outil prend en charge la voie AggregateRating.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:52</note>
+      </notes>
+      <segment>
+        <source>Recommandé</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:53</note>
+      </notes>
+      <segment>
+        <source>applicationCategory et operatingSystem donnent du contexte. Pour une offre payante, priceCurrency évite que le moteur doive deviner la devise.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:56</note>
+      </notes>
+      <segment>
+        <source>Complément Schema.org</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:57</note>
+      </notes>
+      <segment>
+        <source>Description, URL, capture et version enrichissent l’entité Schema.org même si elles ne remplacent aucune propriété obligatoire du résultat Google.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limits">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:64</note>
+      </notes>
+      <segment>
+        <source>Limites, sécurité et honnêteté</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:68</note>
+      </notes>
+      <segment>
+        <source>Le générateur ne crawle pas la page et ne peut donc pas prouver que les valeurs sont visibles. Cette cohérence doit être contrôlée lors de la revue éditoriale et dans le HTML publié.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:71</note>
+      </notes>
+      <segment>
+        <source>Les URL sont limitées à HTTP et HTTPS sans identifiants intégrés. Les champs textuels et numériques sont bornés, et les chevrons sont échappés dans la sortie script pour empêcher une fermeture prématurée de la balise.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:74</note>
+      </notes>
+      <segment>
+        <source>Un état « propriétés présentes » ne garantit ni résultat enrichi, ni indexation, ni classement. Google conserve la décision finale et peut appliquer des règles non détectables localement.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_faq">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:81</note>
+      </notes>
+      <segment>
+        <source>Questions fréquentes</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:85</note>
+      </notes>
+      <segment>
+        <source>Faut-il mettre une devise pour une application gratuite ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:86</note>
+      </notes>
+      <segment>
+        <source>Le prix zéro est la propriété essentielle pour une application gratuite. La devise devient surtout importante lorsque le prix est supérieur à zéro ; l’outil accepte donc une offre gratuite sans devise.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:89</note>
+      </notes>
+      <segment>
+        <source>Pourquoi le schéma peut-il être valide mais incomplet pour Google ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:90</note>
+      </notes>
+      <segment>
+        <source>Schema.org autorise de nombreuses descriptions partielles. Le résultat enrichi SoftwareApplication ajoute ses propres propriétés obligatoires, notamment une note agrégée ou un avis réel en plus du nom et du prix.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:93</note>
+      </notes>
+      <segment>
+        <source>Peut-on utiliser une note provenant d’une autre plateforme ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:94</note>
+      </notes>
+      <segment>
+        <source>Ne recopiez pas une note sans vérifier les règles de la plateforme, la représentativité de la valeur et sa présence visible sur la page. Le balisage doit rester fidèle et vérifiable par le visiteur.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:101</note>
+      </notes>
+      <segment>
+        <source>Valider le document final</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/seo/software-application-schema-builder.editorial.ts:104</note>
+      </notes>
+      <segment>
+        <source>Après intégration, passez l’URL publique dans le test des résultats enrichis puis utilisez l’inspection d’URL de Search Console. Un fragment correct peut être supprimé, dupliqué ou modifié par le rendu de la page.</source>
       </segment>
     </unit>
     <unit id="ed_dev_seo_structured_data_title">
@@ -44214,7 +44495,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_auditor_privacy">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:8,11</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:8,10</note>
       </notes>
       <segment>
         <source>Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</source>
@@ -44270,7 +44551,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_analyze">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:30,33</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:30,32</note>
       </notes>
       <segment>
         <source>Auditer le head</source>
@@ -44334,7 +44615,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_infos">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:53,55</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:53,54</note>
       </notes>
       <segment>
         <source>informations</source>
@@ -44358,7 +44639,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_download">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:57,59</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:57,58</note>
       </notes>
       <segment>
         <source>Télécharger</source>
@@ -44494,7 +44775,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_guidance_local">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:102,106</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:102,105</note>
       </notes>
       <segment>
         <source>Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</source>
@@ -44894,7 +45175,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_example_title">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.ts:153</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.ts:154</note>
       </notes>
       <segment>
         <source>Guide pratique pour auditer un head HTML</source>
@@ -44902,7 +45183,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="html_head_example_description">
       <notes>
-        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.ts:154</note>
+        <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.ts:155</note>
       </notes>
       <segment>
         <source>Un exemple complet pour contrôler les métadonnées essentielles d’une page web.</source>
@@ -46567,6 +46848,774 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       </notes>
       <segment>
         <source>La ligne du générateur doit suivre le format « URL | lastmod facultatif ».</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:6,7</note>
+      </notes>
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_subtitle">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:7,8</note>
+      </notes>
+      <segment>
+        <source>Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_privacy">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:8,11</note>
+      </notes>
+      <segment>
+        <source>Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:17,18</note>
+      </notes>
+      <segment>
+        <source>1. Décrire l’application visible</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:18,21</note>
+      </notes>
+      <segment>
+        <source>Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_type_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:23,24</note>
+      </notes>
+      <segment>
+        <source>Type Schema.org</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:29,30</note>
+      </notes>
+      <segment>
+        <source>Catégorie Google</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_empty">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:31,32</note>
+      </notes>
+      <segment>
+        <source>Non renseignée</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:38,39</note>
+      </notes>
+      <segment>
+        <source>Nom de l’application</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:40,43</note>
+      </notes>
+      <segment>
+        <source>Obligatoire pour le résultat enrichi Google.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_description_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:44,45</note>
+      </notes>
+      <segment>
+        <source>Description</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_url_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:49,50</note>
+      </notes>
+      <segment>
+        <source>URL publique de l’application</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:54,55</note>
+      </notes>
+      <segment>
+        <source>URL publique d’une capture</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:56,59</note>
+      </notes>
+      <segment>
+        <source>Facultative. Utilisez une image qui montre réellement l’application décrite.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_os_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:61,62</note>
+      </notes>
+      <segment>
+        <source>Système ou plateforme</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_version_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:65,66</note>
+      </notes>
+      <segment>
+        <source>Version</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_legend">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:71,72</note>
+      </notes>
+      <segment>
+        <source>Offre</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:72,73</note>
+      </notes>
+      <segment>
+        <source>Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_price_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:75,76</note>
+      </notes>
+      <segment>
+        <source>Prix</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_currency_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:79,80</note>
+      </notes>
+      <segment>
+        <source>Devise ISO 4217</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_legend">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:86,87</note>
+      </notes>
+      <segment>
+        <source>Note agrégée</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_enable">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:89</note>
+      </notes>
+      <segment>
+        <source>Inclure une AggregateRating réelle</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_warning">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:89,91</note>
+      </notes>
+      <segment>
+        <source>Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_value_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:93</note>
+      </notes>
+      <segment>
+        <source>Note moyenne</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_count_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:94</note>
+      </notes>
+      <segment>
+        <source>Nombre de notes</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_worst_rating_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:95</note>
+      </notes>
+      <segment>
+        <source>Note minimale</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_best_rating_label">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:96</note>
+      </notes>
+      <segment>
+        <source>Note maximale</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:104,105</note>
+      </notes>
+      <segment>
+        <source>2. Validation et sortie</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:105,107</note>
+      </notes>
+      <segment>
+        <source>La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_errors">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:111</note>
+      </notes>
+      <segment>
+        <source>erreurs</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_warnings">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:111,113</note>
+      </notes>
+      <segment>
+        <source>avertissements</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_format_aria">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:113,114</note>
+      </notes>
+      <segment>
+        <source>Format de sortie</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_empty_output">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:121,124</note>
+      </notes>
+      <segment>
+        <source>La sortie apparaîtra après correction des erreurs.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_copied">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:125</note>
+      </notes>
+      <segment>
+        <source>Copié</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:125,126</note>
+      </notes>
+      <segment>
+        <source>Copier</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_download">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:126,128</note>
+      </notes>
+      <segment>
+        <source>Télécharger</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy_failed">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:129,134</note>
+      </notes>
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:135</note>
+      </notes>
+      <segment>
+        <source>3. Diagnostics</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_help">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:135,136</note>
+      </notes>
+      <segment>
+        <source>Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_no_issue">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:137,139</note>
+      </notes>
+      <segment>
+        <source>Aucun problème détecté dans les champs pris en charge</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_guidance_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:148,149</note>
+      </notes>
+      <segment>
+        <source>4. Publier sans surpromesse</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:150</note>
+      </notes>
+      <segment>
+        <source>Même contenu visible</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_text">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:150,151</note>
+      </notes>
+      <segment>
+        <source>Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:151</note>
+      </notes>
+      <segment>
+        <source>Aucune note inventée</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_text">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:151,152</note>
+      </notes>
+      <segment>
+        <source>Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:152</note>
+      </notes>
+      <segment>
+        <source>Tester le code publié</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_text">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:152,153</note>
+      </notes>
+      <segment>
+        <source>Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:153</note>
+      </notes>
+      <segment>
+        <source>Éligibilité sans garantie</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_text">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:153,155</note>
+      </notes>
+      <segment>
+        <source>Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_google_docs">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:155</note>
+      </notes>
+      <segment>
+        <source>Documentation Google SoftwareApplication</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_aria">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:158,159</note>
+      </notes>
+      <segment>
+        <source>Outils de données structurées associés</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_title">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:159,160</note>
+      </notes>
+      <segment>
+        <source>Poursuivre le contrôle des données structurées</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_extract">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:160</note>
+      </notes>
+      <segment>
+        <source>Extraire le balisage publié</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_head">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:160</note>
+      </notes>
+      <segment>
+        <source>Auditer le head HTML</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_serp">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:160,163</note>
+      </notes>
+      <segment>
+        <source>Prévisualiser le snippet</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_back">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.html:163,165</note>
+      </notes>
+      <segment>
+        <source>Retour aux outils SEO</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_script">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:168</note>
+      </notes>
+      <segment>
+        <source>Balise script prête à intégrer</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_json">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:169</note>
+      </notes>
+      <segment>
+        <source>JSON-LD seul</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_google">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:174</note>
+      </notes>
+      <segment>
+        <source>Propriétés requises par Google présentes</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_schema">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:177</note>
+      </notes>
+      <segment>
+        <source>Schema.org valide, résultat enrichi Google incomplet</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_invalid">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:179</note>
+      </notes>
+      <segment>
+        <source>Corrigez les erreurs avant export</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_name">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:184</note>
+      </notes>
+      <segment>
+        <source>Nom</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_description">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:185</note>
+      </notes>
+      <segment>
+        <source>Description</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_screenshot">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:187</note>
+      </notes>
+      <segment>
+        <source>Capture</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_category">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:188</note>
+      </notes>
+      <segment>
+        <source>Catégorie</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_os">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:189</note>
+      </notes>
+      <segment>
+        <source>Système</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_version">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:190</note>
+      </notes>
+      <segment>
+        <source>Version</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_price">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:191</note>
+      </notes>
+      <segment>
+        <source>Prix</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_currency">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:192</note>
+      </notes>
+      <segment>
+        <source>Devise</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:193</note>
+      </notes>
+      <segment>
+        <source>Note</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_count">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:194</note>
+      </notes>
+      <segment>
+        <source>Nombre de notes</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_scale">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:195</note>
+      </notes>
+      <segment>
+        <source>Échelle</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_missing_name">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:202</note>
+      </notes>
+      <segment>
+        <source>Le nom de l’application est obligatoire.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_name_long">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:203</note>
+      </notes>
+      <segment>
+        <source>Le nom dépasse la limite de 200 caractères.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_description_long">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:204</note>
+      </notes>
+      <segment>
+        <source>La description dépasse la limite de 2 000 caractères.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_long">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:205</note>
+      </notes>
+      <segment>
+        <source>Le système dépasse la limite de 200 caractères.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_version_long">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:206</note>
+      </notes>
+      <segment>
+        <source>La version dépasse la limite de 100 caractères.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:207</note>
+      </notes>
+      <segment>
+        <source>L’URL de l’application doit être une adresse HTTP ou HTTPS absolue.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_credentials">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:208</note>
+      </notes>
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de l’application sont refusés.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_fragment">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:209</note>
+      </notes>
+      <segment>
+        <source>L’URL contient un fragment ; vérifiez que la page décrite reste canonique.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_url">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:210</note>
+      </notes>
+      <segment>
+        <source>L’URL de capture doit être une adresse HTTP ou HTTPS absolue.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_credentials">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:211</note>
+      </notes>
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de capture sont refusés.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:212</note>
+      </notes>
+      <segment>
+        <source>Le prix doit être un nombre positif ou zéro, avec au plus deux décimales.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price_large">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:213</note>
+      </notes>
+      <segment>
+        <source>Le prix dépasse la limite prise en charge par cet outil.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_missing">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:214</note>
+      </notes>
+      <segment>
+        <source>Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_invalid">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:215</note>
+      </notes>
+      <segment>
+        <source>La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_missing">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:216</note>
+      </notes>
+      <segment>
+        <source>Google exige une note agrégée ou un avis réel pour ce résultat enrichi. N’inventez jamais cette donnée.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_value">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:217</note>
+      </notes>
+      <segment>
+        <source>La note moyenne doit être un nombre avec au plus deux décimales.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_count">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:218</note>
+      </notes>
+      <segment>
+        <source>Le nombre de notes doit être un entier strictement positif.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_scale">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:219</note>
+      </notes>
+      <segment>
+        <source>L’échelle est invalide : la meilleure note doit être supérieure à la plus basse.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_range">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:220</note>
+      </notes>
+      <segment>
+        <source>La note moyenne doit rester comprise dans l’échelle déclarée.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_category_missing">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:221</note>
+      </notes>
+      <segment>
+        <source>La catégorie est recommandée par Google et améliore la précision du balisage.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_missing">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:222</note>
+      </notes>
+      <segment>
+        <source>Le système d’exploitation est recommandé par Google.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_name">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:236</note>
+      </notes>
+      <segment>
+        <source>Planificateur de projet</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_description">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:237</note>
+      </notes>
+      <segment>
+        <source>Une application web pour organiser des tâches, des échéances et des projets.</source>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_os">
+      <notes>
+        <note category="location">src/app/features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component.ts:241</note>
+      </notes>
+      <segment>
+        <source>Navigateur web moderne</source>
       </segment>
     </unit>
     <unit id="structured_data_extractor_title">

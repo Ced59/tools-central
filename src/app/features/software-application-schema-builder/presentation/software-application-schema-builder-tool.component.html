@@ -1,0 +1,165 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-code"></i></div>
+        <h1 i18n="@@software_schema_title">Générateur Schema.org SoftwareApplication</h1>
+        <p class="hero-subtitle" i18n="@@software_schema_subtitle">Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</p>
+        <div class="privacy-note"><i class="tc-icon tc-icon-lock" aria-hidden="true"></i><span i18n="@@software_schema_privacy">Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="workspace-grid">
+      <section class="tool-card form-card">
+        <div class="card-header">
+          <h2 i18n="@@software_schema_form_title">1. Décrire l’application visible</h2>
+          <p i18n="@@software_schema_form_help">Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</p>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="software-schema-type" i18n="@@software_schema_type_label">Type Schema.org</label>
+            <select id="software-schema-type" [value]="type()" (change)="updateType($event)">
+              @for (item of types; track item) { <option [value]="item">{{ item }}</option> }
+            </select>
+          </div>
+          <div class="field">
+            <label for="software-schema-category" i18n="@@software_schema_category_label">Catégorie Google</label>
+            <select id="software-schema-category" [value]="applicationCategory()" (change)="updateCategory($event)">
+              <option value="" i18n="@@software_schema_category_empty">Non renseignée</option>
+              @for (item of categories; track item) { <option [value]="item">{{ item }}</option> }
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="software-schema-name" i18n="@@software_schema_name_label">Nom de l’application</label>
+          <input id="software-schema-name" type="text" maxlength="201" autocomplete="off" [value]="name()" (input)="updateName($event)" />
+          <small i18n="@@software_schema_name_help">Obligatoire pour le résultat enrichi Google.</small>
+        </div>
+
+        <div class="field">
+          <label for="software-schema-description" i18n="@@software_schema_description_label">Description</label>
+          <textarea id="software-schema-description" rows="4" maxlength="2001" [value]="description()" (input)="updateDescription($event)"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="software-schema-url" i18n="@@software_schema_url_label">URL publique de l’application</label>
+          <input id="software-schema-url" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="url()" (input)="updateUrl($event)" />
+        </div>
+
+        <div class="field">
+          <label for="software-schema-screenshot" i18n="@@software_schema_screenshot_label">URL publique d’une capture</label>
+          <input id="software-schema-screenshot" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="screenshotUrl()" (input)="updateScreenshotUrl($event)" />
+          <small i18n="@@software_schema_screenshot_help">Facultative. Utilisez une image qui montre réellement l’application décrite.</small>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="software-schema-os" i18n="@@software_schema_os_label">Système ou plateforme</label>
+            <input id="software-schema-os" type="text" maxlength="201" [value]="operatingSystem()" (input)="updateOperatingSystem($event)" />
+          </div>
+          <div class="field">
+            <label for="software-schema-version" i18n="@@software_schema_version_label">Version</label>
+            <input id="software-schema-version" type="text" maxlength="101" autocomplete="off" [value]="softwareVersion()" (input)="updateSoftwareVersion($event)" />
+          </div>
+        </div>
+
+        <fieldset class="fieldset">
+          <legend i18n="@@software_schema_offer_legend">Offre</legend>
+          <p i18n="@@software_schema_offer_help">Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</p>
+          <div class="field-grid field-grid--compact">
+            <div class="field">
+              <label for="software-schema-price" i18n="@@software_schema_price_label">Prix</label>
+              <input id="software-schema-price" type="text" inputmode="decimal" maxlength="32" [value]="price()" (input)="updatePrice($event)" />
+            </div>
+            <div class="field">
+              <label for="software-schema-currency" i18n="@@software_schema_currency_label">Devise ISO 4217</label>
+              <input id="software-schema-currency" type="text" inputmode="text" maxlength="3" placeholder="EUR" [value]="priceCurrency()" (input)="updatePriceCurrency($event)" />
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="fieldset rating-fieldset">
+          <legend i18n="@@software_schema_rating_legend">Note agrégée</legend>
+          <label class="check-row" for="software-schema-rating-enabled">
+            <input id="software-schema-rating-enabled" type="checkbox" [checked]="includeAggregateRating()" (change)="updateIncludeAggregateRating($event)" />
+            <span><strong i18n="@@software_schema_rating_enable">Inclure une AggregateRating réelle</strong><small i18n="@@software_schema_rating_warning">Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</small></span>
+          </label>
+          @if (includeAggregateRating()) {
+            <div class="rating-grid">
+              <div class="field"><label for="software-schema-rating-value" i18n="@@software_schema_rating_value_label">Note moyenne</label><input id="software-schema-rating-value" type="text" inputmode="decimal" maxlength="32" [value]="ratingValue()" (input)="updateRatingValue($event)" /></div>
+              <div class="field"><label for="software-schema-rating-count" i18n="@@software_schema_rating_count_label">Nombre de notes</label><input id="software-schema-rating-count" type="text" inputmode="numeric" maxlength="32" [value]="ratingCount()" (input)="updateRatingCount($event)" /></div>
+              <div class="field"><label for="software-schema-worst-rating" i18n="@@software_schema_worst_rating_label">Note minimale</label><input id="software-schema-worst-rating" type="text" inputmode="decimal" maxlength="32" [value]="worstRating()" (input)="updateWorstRating($event)" /></div>
+              <div class="field"><label for="software-schema-best-rating" i18n="@@software_schema_best_rating_label">Note maximale</label><input id="software-schema-best-rating" type="text" inputmode="decimal" maxlength="32" [value]="bestRating()" (input)="updateBestRating($event)" /></div>
+            </div>
+          }
+        </fieldset>
+      </section>
+
+      <aside class="tool-card output-card" aria-live="polite" data-testid="software-schema-summary">
+        <div class="card-header">
+          <h2 i18n="@@software_schema_output_title">2. Validation et sortie</h2>
+          <p i18n="@@software_schema_output_help">La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</p>
+        </div>
+        <div class="health" [class.health--ok]="result().state === 'google-ready'" [class.health--invalid]="result().state === 'invalid'">
+          <i class="tc-icon" [class.tc-icon-check]="result().state === 'google-ready'" [class.tc-icon-info-circle]="result().state === 'schema-valid'" [class.tc-icon-exclamation-triangle]="result().state === 'invalid'" aria-hidden="true"></i>
+          <strong>{{ stateLabel() }}</strong>
+        </div>
+        <div class="badges"><span class="badge badge--error">{{ formatNumber(errorCount()) }} <span i18n="@@software_schema_errors">erreurs</span></span><span class="badge badge--warning">{{ formatNumber(warningCount()) }} <span i18n="@@software_schema_warnings">avertissements</span></span></div>
+
+        <div class="format-tabs" role="group" i18n-aria-label="@@software_schema_format_aria" aria-label="Format de sortie">
+          <button type="button" [class.is-active]="outputFormat() === 'scriptTag'" [attr.aria-pressed]="outputFormat() === 'scriptTag'" (click)="setOutputFormat('scriptTag')">{{ outputLabel('scriptTag') }}</button>
+          <button type="button" [class.is-active]="outputFormat() === 'jsonLd'" [attr.aria-pressed]="outputFormat() === 'jsonLd'" (click)="setOutputFormat('jsonLd')">{{ outputLabel('jsonLd') }}</button>
+        </div>
+
+        @if (activeOutput()) {
+          <pre class="code-output" tabindex="0" data-testid="software-schema-output"><code>{{ activeOutput() }}</code></pre>
+        } @else {
+          <div class="empty-output" role="status"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i><span i18n="@@software_schema_empty_output">La sortie apparaîtra après correction des erreurs.</span></div>
+        }
+
+        <div class="output-actions">
+          <button class="secondary-button" type="button" [disabled]="!activeOutput()" (click)="copyOutput()"><i class="tc-icon tc-icon-copy" aria-hidden="true"></i>@if (copied()) { <span i18n="@@software_schema_copied">Copié</span> } @else { <span i18n="@@software_schema_copy">Copier</span> }</button>
+          <button class="secondary-button" type="button" [disabled]="!activeOutput()" (click)="downloadOutput()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@software_schema_download">Télécharger</span></button>
+        </div>
+        @if (copyFailed()) {
+          <p class="copy-feedback" role="status" aria-live="polite" i18n="@@software_schema_copy_failed">Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</p>
+        }
+      </aside>
+    </div>
+
+    <section class="tool-card diagnostics-card" data-testid="software-schema-diagnostics" aria-live="polite">
+      <div class="card-header"><h2 i18n="@@software_schema_diagnostics_title">3. Diagnostics</h2><p i18n="@@software_schema_diagnostics_help">Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</p></div>
+      @if (result().issues.length === 0) {
+        <div class="empty-report"><i class="tc-icon tc-icon-check" aria-hidden="true"></i><strong i18n="@@software_schema_no_issue">Aucun problème détecté dans les champs pris en charge</strong></div>
+      } @else {
+        <ul class="issue-list">
+          @for (item of result().issues; track $index) {
+            <li [class]="'issue issue--' + item.severity"><div><strong>{{ issueLabel(item.code) }}</strong><span>{{ fieldLabel(item.field) }}</span></div>@if (item.detail) { <code>{{ item.detail }}</code> }</li>
+          }
+        </ul>
+      }
+    </section>
+
+    <section class="tool-card guidance-card">
+      <div class="card-header"><h2 i18n="@@software_schema_guidance_title">4. Publier sans surpromesse</h2></div>
+      <div class="guidance-grid">
+        <div><i class="tc-icon tc-icon-eye" aria-hidden="true"></i><h3 i18n="@@software_schema_visible_title">Même contenu visible</h3><p i18n="@@software_schema_visible_text">Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</p></div>
+        <div><i class="tc-icon tc-icon-star" aria-hidden="true"></i><h3 i18n="@@software_schema_reviews_title">Aucune note inventée</h3><p i18n="@@software_schema_reviews_text">Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</p></div>
+        <div><i class="tc-icon tc-icon-code" aria-hidden="true"></i><h3 i18n="@@software_schema_test_title">Tester le code publié</h3><p i18n="@@software_schema_test_text">Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</p></div>
+        <div><i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i><h3 i18n="@@software_schema_guarantee_title">Éligibilité sans garantie</h3><p i18n="@@software_schema_guarantee_text">Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</p></div>
+      </div>
+      <div class="official-links"><a href="https://developers.google.com/search/docs/appearance/structured-data/software-app" target="_blank" rel="noopener noreferrer" i18n="@@software_schema_google_docs">Documentation Google SoftwareApplication</a><a href="https://schema.org/SoftwareApplication" target="_blank" rel="noopener noreferrer">Schema.org SoftwareApplication</a></div>
+    </section>
+
+    <nav class="related-card" i18n-aria-label="@@software_schema_related_aria" aria-label="Outils de données structurées associés">
+      <strong i18n="@@software_schema_related_title">Poursuivre le contrôle des données structurées</strong>
+      <div><a routerLink="/categories/dev/seo/structured-data-extractor" i18n="@@software_schema_related_extract">Extraire le balisage publié</a><a routerLink="/categories/dev/seo/html-head-auditor" i18n="@@software_schema_related_head">Auditer le head HTML</a><a routerLink="/categories/dev/seo/serp-snippet-preview" i18n="@@software_schema_related_serp">Prévisualiser le snippet</a></div>
+    </nav>
+
+    <div class="action-row"><button class="reset-button" type="button" (click)="reset()"><i class="tc-icon tc-icon-refresh" aria-hidden="true"></i><span i18n="@@tool_reset">Réinitialiser</span></button><a class="back-link" routerLink="/categories/dev/seo"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@software_schema_back">Retour aux outils SEO</span></a></div>
+  </div>
+</section>

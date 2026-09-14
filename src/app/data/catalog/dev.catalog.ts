@@ -288,6 +288,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/structured-data-extractor/presentation/structured-data-extractor-tool.component')
                   .then(m => m.StructuredDataExtractorToolComponent),
             },
+            'software-application-schema-builder': {
+              title: $localize`:@@tool_software_application_schema_builder_title:Générateur Schema.org SoftwareApplication`,
+              description: $localize`:@@tool_software_application_schema_builder_desc:Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              loadComponent: () =>
+                import('../../features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component')
+                  .then(m => m.SoftwareApplicationSchemaBuilderToolComponent),
+            },
             'html-head-auditor': {
               title: $localize`:@@tool_html_head_auditor_title:Auditeur de head HTML`,
               description: $localize`:@@tool_html_head_auditor_desc:Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.`,

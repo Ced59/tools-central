@@ -124,6 +124,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/seo/serp-snippet-preview.editorial'),
   },
+  'dev/seo/software-application-schema-builder': {
+    available: true,
+    load: () => import('./dev/seo/software-application-schema-builder.editorial'),
+  },
   'dev/seo/sitemap-xml-builder': {
     available: true,
     load: () => import('./dev/seo/sitemap-xml-builder.editorial'),

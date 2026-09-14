@@ -83187,6 +83187,792 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">A complete example to check the essential metadata of a web page.</target>
       </segment>
     </unit>
+    <unit id="tool_software_application_schema_builder_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplication Generator</target>
+      </segment>
+    </unit>
+    <unit id="tool_software_application_schema_builder_desc">
+      <segment>
+        <source>Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.</source>
+        <target state="translated">Generate and validate a JSON-LD SoftwareApplication locally with offer, platform, and actual aggregate rating, then copy or download the code.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_title">
+      <segment>
+        <source>Créer un balisage SoftwareApplication utile et vérifiable</source>
+        <target state="translated">Create useful and verifiable SoftwareApplication markup</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_lead">
+      <segment>
+        <source>Ce générateur transforme les informations réellement publiées sur une application en JSON-LD Schema.org. Il distingue la validité du schéma de l’éligibilité au résultat enrichi Google, contrôle les champs sensibles et produit une balise script sûre sans transmettre les données saisies.</source>
+        <target state="translated">This generator transforms the information actually published about an application into JSON-LD Schema.org. It distinguishes schema validity from eligibility for Google rich results, checks sensitive fields, and produces a safe script tag without transmitting the entered data.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Use cases</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_title">
+      <segment>
+        <source>Baliser la page officielle d’une application</source>
+        <target state="translated">Markup the official page of an application</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_text">
+      <segment>
+        <source>Décrivez une application web, mobile ou logicielle avec son nom, son URL, sa plateforme, sa catégorie et son offre, puis intégrez le bloc JSON-LD dans la page correspondante.</source>
+        <target state="translated">Describe a web, mobile, or software application with its name, URL, platform, category, and offer, then integrate the JSON-LD block into the corresponding page.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_title">
+      <segment>
+        <source>Contrôler les propriétés exigées par Google</source>
+        <target state="translated">Check the properties required by Google</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_text">
+      <segment>
+        <source>L’état de validation sépare les erreurs bloquantes, les recommandations et l’absence de note agrégée réelle nécessaire à l’éligibilité du résultat enrichi.</source>
+        <target state="translated">The validation status separates blocking errors, recommendations, and the absence of the actual aggregate rating needed for eligibility for rich results.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_title">
+      <segment>
+        <source>Livrer un extrait reproductible</source>
+        <target state="translated">Deliver a reproducible snippet</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_text">
+      <segment>
+        <source>Copiez la balise script prête à intégrer ou téléchargez le JSON-LD seul afin de le versionner, le relire et le tester dans votre chaîne de publication.</source>
+        <target state="translated">Copy the ready-to-integrate script tag or download the JSON-LD alone to version, review, and test it in your publishing pipeline.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Recommended method</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_1">
+      <segment>
+        <source>Commencez par la page canonique consacrée à l’application. Reprenez exactement le nom, le prix et les systèmes affichés aux visiteurs ; utilisez un prix égal à zéro pour une application gratuite.</source>
+        <target state="translated">Start with the canonical page dedicated to the application. Exactly replicate the name, price, and systems displayed to visitors; use a price of zero for a free application.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_2">
+      <segment>
+        <source>Choisissez uniquement une catégorie reconnue par Google. SoftwareApplication convient au cas général ; WebApplication et MobileApplication précisent la nature du produit lorsque cette distinction est réelle.</source>
+        <target state="translated">Choose only a category recognized by Google. SoftwareApplication fits the general case; WebApplication and MobileApplication specify the nature of the product when this distinction is real.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_3">
+      <segment>
+        <source>N’activez AggregateRating que si la moyenne, l’échelle et le nombre de notes proviennent de données réelles visibles sur la page. Testez ensuite le HTML publié, pas seulement le fragment généré.</source>
+        <target state="translated">Activate AggregateRating only if the average, scale, and number of ratings come from actual data visible on the page. Then test the published HTML, not just the generated fragment.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_requirements">
+      <segment>
+        <source>Propriétés et interprétation</source>
+        <target state="translated">Properties and interpretation</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_title">
+      <segment>
+        <source>Requis pour Google</source>
+        <target state="translated">Required for Google</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_text">
+      <segment>
+        <source>Le nom et offers.price sont obligatoires. Il faut aussi fournir soit une note agrégée, soit un avis conforme ; cet outil prend en charge la voie AggregateRating.</source>
+        <target state="translated">The name and offers.price are mandatory. You must also provide either an aggregate rating or a compliant review; this tool supports the AggregateRating path.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_title">
+      <segment>
+        <source>Recommandé</source>
+        <target state="translated">Recommended</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_text">
+      <segment>
+        <source>applicationCategory et operatingSystem donnent du contexte. Pour une offre payante, priceCurrency évite que le moteur doive deviner la devise.</source>
+        <target state="translated">applicationCategory and operatingSystem provide context. For a paid offer, priceCurrency prevents the engine from having to guess the currency.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_title">
+      <segment>
+        <source>Complément Schema.org</source>
+        <target state="translated">Schema.org Supplement</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_text">
+      <segment>
+        <source>Description, URL, capture et version enrichissent l’entité Schema.org même si elles ne remplacent aucune propriété obligatoire du résultat Google.</source>
+        <target state="translated">Description, URL, screenshot, and version enrich the Schema.org entity even if they do not replace any mandatory property of the Google result.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limits">
+      <segment>
+        <source>Limites, sécurité et honnêteté</source>
+        <target state="translated">Limits, security, and honesty</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_1">
+      <segment>
+        <source>Le générateur ne crawle pas la page et ne peut donc pas prouver que les valeurs sont visibles. Cette cohérence doit être contrôlée lors de la revue éditoriale et dans le HTML publié.</source>
+        <target state="translated">The generator does not crawl the page and therefore cannot prove that the values are visible. This consistency must be checked during the editorial review and in the published HTML.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_2">
+      <segment>
+        <source>Les URL sont limitées à HTTP et HTTPS sans identifiants intégrés. Les champs textuels et numériques sont bornés, et les chevrons sont échappés dans la sortie script pour empêcher une fermeture prématurée de la balise.</source>
+        <target state="translated">URLs are limited to HTTP and HTTPS without embedded credentials. Textual and numerical fields are bounded, and angle brackets are escaped in the script output to prevent premature tag closure.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_3">
+      <segment>
+        <source>Un état « propriétés présentes » ne garantit ni résultat enrichi, ni indexation, ni classement. Google conserve la décision finale et peut appliquer des règles non détectables localement.</source>
+        <target state="translated">A "properties present" status does not guarantee rich results, indexing, or ranking. Google retains the final decision and may apply undetectable rules locally.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Frequently asked questions</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q1">
+      <segment>
+        <source>Faut-il mettre une devise pour une application gratuite ?</source>
+        <target state="translated">Should a currency be specified for a free application?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a1">
+      <segment>
+        <source>Le prix zéro est la propriété essentielle pour une application gratuite. La devise devient surtout importante lorsque le prix est supérieur à zéro ; l’outil accepte donc une offre gratuite sans devise.</source>
+        <target state="translated">Zero price is the essential property for a free application. The currency becomes especially important when the price is above zero; the tool thus accepts a free offer without a currency.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q2">
+      <segment>
+        <source>Pourquoi le schéma peut-il être valide mais incomplet pour Google ?</source>
+        <target state="translated">Why can the schema be valid but incomplete for Google?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a2">
+      <segment>
+        <source>Schema.org autorise de nombreuses descriptions partielles. Le résultat enrichi SoftwareApplication ajoute ses propres propriétés obligatoires, notamment une note agrégée ou un avis réel en plus du nom et du prix.</source>
+        <target state="translated">Schema.org allows for many partial descriptions. The rich result SoftwareApplication adds its own mandatory properties, including an aggregate rating or actual review in addition to the name and price.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q3">
+      <segment>
+        <source>Peut-on utiliser une note provenant d’une autre plateforme ?</source>
+        <target state="translated">Can a rating from another platform be used?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a3">
+      <segment>
+        <source>Ne recopiez pas une note sans vérifier les règles de la plateforme, la représentativité de la valeur et sa présence visible sur la page. Le balisage doit rester fidèle et vérifiable par le visiteur.</source>
+        <target state="translated">Do not copy a rating without checking the platform's rules, the representativeness of the value, and its visible presence on the page. The markup must remain faithful and verifiable by the visitor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip_title">
+      <segment>
+        <source>Valider le document final</source>
+        <target state="translated">Validate the final document</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip">
+      <segment>
+        <source>Après intégration, passez l’URL publique dans le test des résultats enrichis puis utilisez l’inspection d’URL de Search Console. Un fragment correct peut être supprimé, dupliqué ou modifié par le rendu de la page.</source>
+        <target state="translated">After integration, pass the public URL through the rich results test and then use the URL inspection in Search Console. A correct fragment may be removed, duplicated, or modified by the page rendering.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplication Generator</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_subtitle">
+      <segment>
+        <source>Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</source>
+        <target state="translated">Create a coherent JSON-LD with your application, its offer, and its actually visible ratings.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_privacy">
+      <segment>
+        <source>Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</source>
+        <target state="translated">100% local generation: no entered value is sent to a server.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_title">
+      <segment>
+        <source>1. Décrire l’application visible</source>
+        <target state="translated">1. Describe the visible application</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_help">
+      <segment>
+        <source>Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</source>
+        <target state="translated">The generated values must match the content that visitors can verify on the same page.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_type_label">
+      <segment>
+        <source>Type Schema.org</source>
+        <target state="translated">Type Schema.org</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_label">
+      <segment>
+        <source>Catégorie Google</source>
+        <target state="translated">Google Category</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_empty">
+      <segment>
+        <source>Non renseignée</source>
+        <target state="translated">Not specified</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_label">
+      <segment>
+        <source>Nom de l’application</source>
+        <target state="translated">Application Name</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_help">
+      <segment>
+        <source>Obligatoire pour le résultat enrichi Google.</source>
+        <target state="translated">Required for Google rich results.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_description_label">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Description</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_url_label">
+      <segment>
+        <source>URL publique de l’application</source>
+        <target state="translated">Public URL of the application</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_label">
+      <segment>
+        <source>URL publique d’une capture</source>
+        <target state="translated">Public URL of a screenshot</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_help">
+      <segment>
+        <source>Facultative. Utilisez une image qui montre réellement l’application décrite.</source>
+        <target state="translated">Optional. Use an image that actually shows the described application.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_os_label">
+      <segment>
+        <source>Système ou plateforme</source>
+        <target state="translated">System or platform</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_version_label">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Version</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_legend">
+      <segment>
+        <source>Offre</source>
+        <target state="translated">Offer</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_help">
+      <segment>
+        <source>Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</source>
+        <target state="translated">Price is required. Enter 0 if the application is free.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_price_label">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">Price</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_currency_label">
+      <segment>
+        <source>Devise ISO 4217</source>
+        <target state="translated">ISO 4217 Currency</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_legend">
+      <segment>
+        <source>Note agrégée</source>
+        <target state="translated">Aggregate Rating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_enable">
+      <segment>
+        <source>Inclure une AggregateRating réelle</source>
+        <target state="translated">Include a real AggregateRating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_warning">
+      <segment>
+        <source>Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</source>
+        <target state="translated">Enable only if this average and number of ratings are visible and verifiable on the page.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_value_label">
+      <segment>
+        <source>Note moyenne</source>
+        <target state="translated">Average Rating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_count_label">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">Number of Ratings</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_worst_rating_label">
+      <segment>
+        <source>Note minimale</source>
+        <target state="translated">Minimum Rating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_best_rating_label">
+      <segment>
+        <source>Note maximale</source>
+        <target state="translated">Maximum Rating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_title">
+      <segment>
+        <source>2. Validation et sortie</source>
+        <target state="translated">2. Validation and Output</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_help">
+      <segment>
+        <source>La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</source>
+        <target state="translated">Technical compliance does not guarantee display in search results.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">errors</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">warnings</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_format_aria">
+      <segment>
+        <source>Format de sortie</source>
+        <target state="translated">Output format</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_empty_output">
+      <segment>
+        <source>La sortie apparaîtra après correction des erreurs.</source>
+        <target state="translated">The output will appear after correcting errors.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Copied</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copy</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Download</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Diagnostics</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_help">
+      <segment>
+        <source>Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</source>
+        <target state="translated">Errors block export; warnings indicate a recommended property or editorial condition.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_no_issue">
+      <segment>
+        <source>Aucun problème détecté dans les champs pris en charge</source>
+        <target state="translated">No issues detected in supported fields</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guidance_title">
+      <segment>
+        <source>4. Publier sans surpromesse</source>
+        <target state="translated">4. Publish without overpromising</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_title">
+      <segment>
+        <source>Même contenu visible</source>
+        <target state="translated">Same visible content</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_text">
+      <segment>
+        <source>Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</source>
+        <target state="translated">Name, price, platform, and rating must be present or verifiable by visitors on the marked page.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_title">
+      <segment>
+        <source>Aucune note inventée</source>
+        <target state="translated">No fabricated ratings</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_text">
+      <segment>
+        <source>Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</source>
+        <target state="translated">A fictitious average makes the markup misleading. Keep the rating disabled until you have real data.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_title">
+      <segment>
+        <source>Tester le code publié</source>
+        <target state="translated">Test the published code</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_text">
+      <segment>
+        <source>Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</source>
+        <target state="translated">Validate the final HTML with the enriched results test, then inspect the page actually accessible to Google.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_title">
+      <segment>
+        <source>Éligibilité sans garantie</source>
+        <target state="translated">Eligibility without guarantee</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_text">
+      <segment>
+        <source>Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</source>
+        <target state="translated">Even if complete, markup does not guarantee rich display, indexing, or ranking.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_google_docs">
+      <segment>
+        <source>Documentation Google SoftwareApplication</source>
+        <target state="translated">Google SoftwareApplication Documentation</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_aria">
+      <segment>
+        <source>Outils de données structurées associés</source>
+        <target state="translated">Related structured data tools</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_title">
+      <segment>
+        <source>Poursuivre le contrôle des données structurées</source>
+        <target state="translated">Continue structured data validation</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_extract">
+      <segment>
+        <source>Extraire le balisage publié</source>
+        <target state="translated">Extract the published markup</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_head">
+      <segment>
+        <source>Auditer le head HTML</source>
+        <target state="translated">Audit the HTML head</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Preview the snippet</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Back to SEO tools</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_script">
+      <segment>
+        <source>Balise script prête à intégrer</source>
+        <target state="translated">Script tag ready to integrate</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_json">
+      <segment>
+        <source>JSON-LD seul</source>
+        <target state="translated">JSON-LD only</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_google">
+      <segment>
+        <source>Propriétés requises par Google présentes</source>
+        <target state="translated">Required properties by Google present</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_schema">
+      <segment>
+        <source>Schema.org valide, résultat enrichi Google incomplet</source>
+        <target state="translated">Valid Schema.org, incomplete Google rich result</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_invalid">
+      <segment>
+        <source>Corrigez les erreurs avant export</source>
+        <target state="translated">Fix errors before export</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_name">
+      <segment>
+        <source>Nom</source>
+        <target state="translated">Name</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Description</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_screenshot">
+      <segment>
+        <source>Capture</source>
+        <target state="translated">Screenshot</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">Category</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_os">
+      <segment>
+        <source>Système</source>
+        <target state="translated">System</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Version</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_price">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">Price</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_currency">
+      <segment>
+        <source>Devise</source>
+        <target state="translated">Currency</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating">
+      <segment>
+        <source>Note</source>
+        <target state="translated">Rating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_count">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">Number of ratings</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_scale">
+      <segment>
+        <source>Échelle</source>
+        <target state="translated">Scale</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_missing_name">
+      <segment>
+        <source>Le nom de l’application est obligatoire.</source>
+        <target state="translated">The application name is required.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_name_long">
+      <segment>
+        <source>Le nom dépasse la limite de 200 caractères.</source>
+        <target state="translated">The name exceeds the 200 character limit.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_description_long">
+      <segment>
+        <source>La description dépasse la limite de 2 000 caractères.</source>
+        <target state="translated">The description exceeds the 2,000 character limit.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_long">
+      <segment>
+        <source>Le système dépasse la limite de 200 caractères.</source>
+        <target state="translated">The system exceeds the 200 character limit.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_version_long">
+      <segment>
+        <source>La version dépasse la limite de 100 caractères.</source>
+        <target state="translated">The version exceeds the 100 character limit.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url">
+      <segment>
+        <source>L’URL de l’application doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">The application URL must be an absolute HTTP or HTTPS address.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de l’application sont refusés.</source>
+        <target state="translated">Credentials embedded in the application URL are not allowed.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_fragment">
+      <segment>
+        <source>L’URL contient un fragment ; vérifiez que la page décrite reste canonique.</source>
+        <target state="translated">The URL contains a fragment; ensure the described page remains canonical.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_url">
+      <segment>
+        <source>L’URL de capture doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">The screenshot URL must be an absolute HTTP or HTTPS address.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de capture sont refusés.</source>
+        <target state="translated">Credentials embedded in the screenshot URL are not allowed.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price">
+      <segment>
+        <source>Le prix doit être un nombre positif ou zéro, avec au plus deux décimales.</source>
+        <target state="translated">The price must be a positive number or zero, with at most two decimal places.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price_large">
+      <segment>
+        <source>Le prix dépasse la limite prise en charge par cet outil.</source>
+        <target state="translated">The price exceeds the limit supported by this tool.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_missing">
+      <segment>
+        <source>Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.</source>
+        <target state="translated">For a paid offer, add an ISO 4217 currency to avoid ambiguous interpretation.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_invalid">
+      <segment>
+        <source>La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.</source>
+        <target state="translated">The currency must contain exactly three ISO 4217 letters, such as EUR or USD.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_missing">
+      <segment>
+        <source>Google exige une note agrégée ou un avis réel pour ce résultat enrichi. N’inventez jamais cette donnée.</source>
+        <target state="translated">Google requires an aggregate rating or a real review for this rich result. Never invent this data.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_value">
+      <segment>
+        <source>La note moyenne doit être un nombre avec au plus deux décimales.</source>
+        <target state="translated">The average rating must be a number with at most two decimal places.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_count">
+      <segment>
+        <source>Le nombre de notes doit être un entier strictement positif.</source>
+        <target state="translated">The number of ratings must be a strictly positive integer.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_scale">
+      <segment>
+        <source>L’échelle est invalide : la meilleure note doit être supérieure à la plus basse.</source>
+        <target state="translated">The scale is invalid: the highest rating must be greater than the lowest.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_range">
+      <segment>
+        <source>La note moyenne doit rester comprise dans l’échelle déclarée.</source>
+        <target state="translated">The average rating must remain within the declared scale.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_category_missing">
+      <segment>
+        <source>La catégorie est recommandée par Google et améliore la précision du balisage.</source>
+        <target state="translated">The category is recommended by Google and improves the accuracy of the markup.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_missing">
+      <segment>
+        <source>Le système d’exploitation est recommandé par Google.</source>
+        <target state="translated">The operating system is recommended by Google.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_name">
+      <segment>
+        <source>Planificateur de projet</source>
+        <target state="translated">Project Planner</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_description">
+      <segment>
+        <source>Une application web pour organiser des tâches, des échéances et des projets.</source>
+        <target state="translated">A web application for organizing tasks, deadlines, and projects.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_os">
+      <segment>
+        <source>Navigateur web moderne</source>
+        <target state="translated">Modern web browser</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</source>
+        <target state="translated">Automatic copy failed. Please select the code and copy it manually.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

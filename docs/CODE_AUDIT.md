@@ -5,9 +5,9 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 ## Conclusion
 
-Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du prévisualiseur SERP.
+Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge de l’auditeur de head HTML.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Huit features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor` et `html-head-auditor`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 65 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Neuf features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor` et `software-application-schema-builder`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 66 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,15 +16,15 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. H
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 655,82 kB brut, 164,80 kB transféré estimé |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 656,40 kB brut, 164,98 kB transféré estimé |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 113 fichiers, 263 tests verts sous Vitest |
-| Couverture | aucun seuil | 45,05 % statements, 31,02 % branches, 45,27 % fonctions, 48,31 % lignes |
-| E2E | aucun | 10 parcours Playwright verts |
-| Routes statiques | 2 | 80 publiques + une 404 par locale, soit 2 430 pages |
-| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 172 outils, 65 disponibles |
+| Tests unitaires | suite non compilable | 116 fichiers, 283 tests verts sous Vitest |
+| Couverture | aucun seuil | 45,94 % statements, 32,27 % branches, 45,53 % fonctions, 49,22 % lignes |
+| E2E | aucun | 11 parcours Playwright verts |
+| Routes statiques | 2 | 81 publiques + une 404 par locale, soit 2 460 pages |
+| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 173 outils, 66 disponibles |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 168 954 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 172 811 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
@@ -54,6 +54,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 048 ms, CLS 0,
 - Livraison de `hreflang-checker` dans une tranche verticale complète, avec sorties HTML/HTTP/sitemap, validation locale des codes et URL, contrôle des canonicals et de la réciprocité à partir des pages fournies, export, accessibilité et 25 tests ciblés.
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
+- Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, sortie HTML sûre, export, accessibilité et 20 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -72,7 +73,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 048 ms, CLS 0,
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 5 826 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 168 954 segments techniquement complets.
+- 5 959 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 172 811 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -80,14 +81,14 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 
 - Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
 - Exclusion automatique des outils `available: false`.
-- 80 URLs publiques par locale et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- 81 URLs publiques par locale et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
 - Suppression du faux `lastmod` égal à la date de chaque build.
 - Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
 - Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
 - Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
 - Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
 - `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
-- Six outils issus du backlog, le prévisualiseur de snippet Google, le générateur/validateur robots.txt, le générateur/validateur sitemap XML, le vérificateur hreflang, l’extracteur de données structurées et l’auditeur de head HTML, sont publiables dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies.
+- Sept outils issus du backlog, le prévisualiseur de snippet Google, le générateur/validateur robots.txt, le générateur/validateur sitemap XML, le vérificateur hreflang, l’extracteur de données structurées, l’auditeur de head HTML et le générateur SoftwareApplication, sont publiables dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies.
 
 ### CI, GitHub et déploiement
 

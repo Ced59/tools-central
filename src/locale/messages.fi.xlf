@@ -83215,6 +83215,792 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Kattava esimerkki verkkosivun olennaisten metatietojen tarkistamiseen.</target>
       </segment>
     </unit>
+    <unit id="tool_software_application_schema_builder_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplication -generaattori</target>
+      </segment>
+    </unit>
+    <unit id="tool_software_application_schema_builder_desc">
+      <segment>
+        <source>Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.</source>
+        <target state="translated">Luo ja validoi paikallisesti JSON-LD SoftwareApplication, jossa on tarjous, alusta ja todellinen aggregoitu arvio, ja kopioi tai lataa koodi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_title">
+      <segment>
+        <source>Créer un balisage SoftwareApplication utile et vérifiable</source>
+        <target state="translated">Luo hyödyllinen ja tarkistettava SoftwareApplication -merkintä</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_lead">
+      <segment>
+        <source>Ce générateur transforme les informations réellement publiées sur une application en JSON-LD Schema.org. Il distingue la validité du schéma de l’éligibilité au résultat enrichi Google, contrôle les champs sensibles et produit une balise script sûre sans transmettre les données saisies.</source>
+        <target state="translated">Tämä generaattori muuntaa sovelluksesta julkaistut tiedot JSON-LD Schema.org -muotoon. Se erottaa skeeman voimassaolon Google-rikkaan tuloksen kelpoisuudesta, tarkistaa herkät kentät ja tuottaa turvallisen skriptimerkin ilman syötettyjen tietojen siirtämistä.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Käyttötapaukset</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_title">
+      <segment>
+        <source>Baliser la page officielle d’une application</source>
+        <target state="translated">Merkitse sovelluksen virallinen sivu</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc1_text">
+      <segment>
+        <source>Décrivez une application web, mobile ou logicielle avec son nom, son URL, sa plateforme, sa catégorie et son offre, puis intégrez le bloc JSON-LD dans la page correspondante.</source>
+        <target state="translated">Kuvaa verkkosovellus, mobiilisovellus tai ohjelmisto sen nimen, URL-osoitteen, alustan, kategorian ja tarjouksen avulla, ja integroi JSON-LD-lohko vastaavalle sivulle.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_title">
+      <segment>
+        <source>Contrôler les propriétés exigées par Google</source>
+        <target state="translated">Tarkista Google:n vaatimukset</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc2_text">
+      <segment>
+        <source>L’état de validation sépare les erreurs bloquantes, les recommandations et l’absence de note agrégée réelle nécessaire à l’éligibilité du résultat enrichi.</source>
+        <target state="translated">Validointitila erottaa estävät virheet, suositukset ja todellisen aggregoidun arvion puuttumisen, joka on tarpeen rikkaan tuloksen kelpoisuudelle.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_title">
+      <segment>
+        <source>Livrer un extrait reproductible</source>
+        <target state="translated">Toimita toistettava ote</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_uc3_text">
+      <segment>
+        <source>Copiez la balise script prête à intégrer ou téléchargez le JSON-LD seul afin de le versionner, le relire et le tester dans votre chaîne de publication.</source>
+        <target state="translated">Kopioi integroimiseen valmis skriptimerkki tai lataa vain JSON-LD, jotta voit versioida, tarkistaa ja testata sen julkaisuketjussasi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Suositeltu menetelmä</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_1">
+      <segment>
+        <source>Commencez par la page canonique consacrée à l’application. Reprenez exactement le nom, le prix et les systèmes affichés aux visiteurs ; utilisez un prix égal à zéro pour une application gratuite.</source>
+        <target state="translated">Aloita sovellukselle omistetulta kanoniselta sivulta. Ota tarkasti mukaan nimi, hinta ja järjestelmät, jotka näkyvät kävijöille; käytä nollahintaa ilmaiselle sovellukselle.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_2">
+      <segment>
+        <source>Choisissez uniquement une catégorie reconnue par Google. SoftwareApplication convient au cas général ; WebApplication et MobileApplication précisent la nature du produit lorsque cette distinction est réelle.</source>
+        <target state="translated">Valitse vain Google:n tunnustama kategoria. SoftwareApplication sopii yleiseen tapaukseen; WebApplication ja MobileApplication tarkentavat tuotteen luonteen, kun tämä ero on todellinen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_method_3">
+      <segment>
+        <source>N’activez AggregateRating que si la moyenne, l’échelle et le nombre de notes proviennent de données réelles visibles sur la page. Testez ensuite le HTML publié, pas seulement le fragment généré.</source>
+        <target state="translated">Ota käyttöön AggregateRating vain, jos keskiarvo, skaala ja arvioiden määrä perustuvat todellisiin, sivulla näkyviin tietoihin. Testaa sitten julkaistu HTML, ei vain luotua fragmenttia.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_requirements">
+      <segment>
+        <source>Propriétés et interprétation</source>
+        <target state="translated">Ominaisuudet ja tulkinta</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_title">
+      <segment>
+        <source>Requis pour Google</source>
+        <target state="translated">Pakollinen Google:lle</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_required_text">
+      <segment>
+        <source>Le nom et offers.price sont obligatoires. Il faut aussi fournir soit une note agrégée, soit un avis conforme ; cet outil prend en charge la voie AggregateRating.</source>
+        <target state="translated">Nimi ja offers.price ovat pakollisia. On myös annettava joko aggregoitu arvio tai hyväksyttävä arvio; tämä työkalu tukee AggregateRating-reittiä.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_title">
+      <segment>
+        <source>Recommandé</source>
+        <target state="translated">Suositeltu</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_recommended_text">
+      <segment>
+        <source>applicationCategory et operatingSystem donnent du contexte. Pour une offre payante, priceCurrency évite que le moteur doive deviner la devise.</source>
+        <target state="translated">applicationCategory ja operatingSystem antavat kontekstia. Maksulliselle tarjoukselle priceCurrency estää hakukonetta arvaamasta valuuttaa.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_title">
+      <segment>
+        <source>Complément Schema.org</source>
+        <target state="translated">Schema.org -lisäosa</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_optional_text">
+      <segment>
+        <source>Description, URL, capture et version enrichissent l’entité Schema.org même si elles ne remplacent aucune propriété obligatoire du résultat Google.</source>
+        <target state="translated">Kuvaus, URL, kaappaus ja versio rikastuttavat Schema.org -entiteettiä, vaikka ne eivät korvaisi mitään pakollista Google-tulosta.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limits">
+      <segment>
+        <source>Limites, sécurité et honnêteté</source>
+        <target state="translated">Rajoitukset, turvallisuus ja rehellisyys</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_1">
+      <segment>
+        <source>Le générateur ne crawle pas la page et ne peut donc pas prouver que les valeurs sont visibles. Cette cohérence doit être contrôlée lors de la revue éditoriale et dans le HTML publié.</source>
+        <target state="translated">Generaattori ei indeksoi sivua, joten se ei voi todistaa, että arvot ovat näkyvissä. Tämä johdonmukaisuus on tarkistettava toimituskatsauksessa ja julkaistussa HTML:ssä.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_2">
+      <segment>
+        <source>Les URL sont limitées à HTTP et HTTPS sans identifiants intégrés. Les champs textuels et numériques sont bornés, et les chevrons sont échappés dans la sortie script pour empêcher une fermeture prématurée de la balise.</source>
+        <target state="translated">URL-osoitteet rajoittuvat HTTP:hen ja HTTPS:ään ilman sisäänrakennettuja tunnuksia. Teksti- ja numeeriset kentät ovat rajallisia, ja kulmat on paettu skriptin ulostulossa estämään merkin ennenaikainen sulkeminen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_limit_3">
+      <segment>
+        <source>Un état « propriétés présentes » ne garantit ni résultat enrichi, ni indexation, ni classement. Google conserve la décision finale et peut appliquer des règles non détectables localement.</source>
+        <target state="translated">Tila "ominaisuudet läsnä" ei takaa rikkaan tuloksen, indeksoinnin tai sijoituksen saavuttamista. Google pidättää lopullisen päätöksen ja voi soveltaa paikallisesti havaitsemattomia sääntöjä.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Usein kysytyt kysymykset</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q1">
+      <segment>
+        <source>Faut-il mettre une devise pour une application gratuite ?</source>
+        <target state="translated">Onko ilmaiselle sovellukselle pakko ilmoittaa valuutta?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a1">
+      <segment>
+        <source>Le prix zéro est la propriété essentielle pour une application gratuite. La devise devient surtout importante lorsque le prix est supérieur à zéro ; l’outil accepte donc une offre gratuite sans devise.</source>
+        <target state="translated">Nollahinta on keskeinen ominaisuus ilmaiselle sovellukselle. Valuuttatieto on erityisen tärkeä, kun hinta on suurempi kuin nolla; työkalu hyväksyy siis ilmaisen tarjouksen ilman valuuttaa.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q2">
+      <segment>
+        <source>Pourquoi le schéma peut-il être valide mais incomplet pour Google ?</source>
+        <target state="translated">Miksi skeema voi olla voimassa mutta puutteellinen Google:lle?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a2">
+      <segment>
+        <source>Schema.org autorise de nombreuses descriptions partielles. Le résultat enrichi SoftwareApplication ajoute ses propres propriétés obligatoires, notamment une note agrégée ou un avis réel en plus du nom et du prix.</source>
+        <target state="translated">Schema.org sallii monia osittaisia kuvauksia. Rikas tulos SoftwareApplication lisää omat pakolliset ominaisuutensa, mukaan lukien aggregoitu arvio tai todellinen arvio nimen ja hinnan lisäksi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_q3">
+      <segment>
+        <source>Peut-on utiliser une note provenant d’une autre plateforme ?</source>
+        <target state="translated">Voiko arvio olla peräisin toiselta alustalta?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_a3">
+      <segment>
+        <source>Ne recopiez pas une note sans vérifier les règles de la plateforme, la représentativité de la valeur et sa présence visible sur la page. Le balisage doit rester fidèle et vérifiable par le visiteur.</source>
+        <target state="translated">Älä kopioi arviota ilman, että tarkistat alustan säännöt, arvon edustavuuden ja sen näkyvyyden sivulla. Merkinnän on pysyttävä uskollisena ja tarkistettavana kävijälle.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip_title">
+      <segment>
+        <source>Valider le document final</source>
+        <target state="translated">Vahvista lopullinen asiakirja</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_software_schema_tip">
+      <segment>
+        <source>Après intégration, passez l’URL publique dans le test des résultats enrichis puis utilisez l’inspection d’URL de Search Console. Un fragment correct peut être supprimé, dupliqué ou modifié par le rendu de la page.</source>
+        <target state="translated">Integroinnin jälkeen syötä julkinen URL osoitteeseen rikkaiden tulosten testiin ja käytä Search Consolen URL-tarkistusta. Oikea fragmentti voidaan poistaa, kopioida tai muuttaa sivun renderöinnin myötä.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_title">
+      <segment>
+        <source>Générateur Schema.org SoftwareApplication</source>
+        <target state="translated">Schema.org SoftwareApplication -generaattori</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_subtitle">
+      <segment>
+        <source>Créez un JSON-LD cohérent avec votre application, son offre et ses notes réellement visibles.</source>
+        <target state="translated">Luo JSON-LD, joka on johdonmukainen sovelluksesi, sen tarjouksen ja todellisten arvioiden kanssa.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_privacy">
+      <segment>
+        <source>Génération 100 % locale : aucune valeur saisie n’est envoyée à un serveur.</source>
+        <target state="translated">100 % paikallinen generointi: mitään syötettyjä arvoja ei lähetetä palvelimelle.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_title">
+      <segment>
+        <source>1. Décrire l’application visible</source>
+        <target state="translated">1. Kuvaile näkyvää sovellusta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_form_help">
+      <segment>
+        <source>Les valeurs générées doivent correspondre au contenu que les visiteurs peuvent vérifier sur la même page.</source>
+        <target state="translated">Luodut arvot on vastattava sisältöä, jonka kävijät voivat tarkistaa samalla sivulla.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_type_label">
+      <segment>
+        <source>Type Schema.org</source>
+        <target state="translated">Tyyppi Schema.org</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_label">
+      <segment>
+        <source>Catégorie Google</source>
+        <target state="translated">Google-kategoria</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_category_empty">
+      <segment>
+        <source>Non renseignée</source>
+        <target state="translated">Ei ilmoitettu</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_label">
+      <segment>
+        <source>Nom de l’application</source>
+        <target state="translated">Sovelluksen nimi</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_name_help">
+      <segment>
+        <source>Obligatoire pour le résultat enrichi Google.</source>
+        <target state="translated">Pakollinen Google-rikkaan tuloksen vuoksi.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_description_label">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Kuvaus</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_url_label">
+      <segment>
+        <source>URL publique de l’application</source>
+        <target state="translated">Sovelluksen julkinen URL-osoite</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_label">
+      <segment>
+        <source>URL publique d’une capture</source>
+        <target state="translated">Julkinen kuvakaappauksen URL-osoite</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_screenshot_help">
+      <segment>
+        <source>Facultative. Utilisez une image qui montre réellement l’application décrite.</source>
+        <target state="translated">Valinnainen. Käytä kuvaa, joka todella näyttää kuvattavan sovelluksen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_os_label">
+      <segment>
+        <source>Système ou plateforme</source>
+        <target state="translated">Käyttöjärjestelmä tai alusta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_version_label">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Versio</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_legend">
+      <segment>
+        <source>Offre</source>
+        <target state="translated">Tarjous</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_offer_help">
+      <segment>
+        <source>Le prix est obligatoire. Saisissez 0 si l’application est gratuite.</source>
+        <target state="translated">Hinta on pakollinen. Syötä 0, jos sovellus on ilmainen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_price_label">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">Hinta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_currency_label">
+      <segment>
+        <source>Devise ISO 4217</source>
+        <target state="translated">Valuutta ISO 4217</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_legend">
+      <segment>
+        <source>Note agrégée</source>
+        <target state="translated">Kokonaisarvosana</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_enable">
+      <segment>
+        <source>Inclure une AggregateRating réelle</source>
+        <target state="translated">Sisällytä todellinen AggregateRating</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_warning">
+      <segment>
+        <source>Activez uniquement si cette moyenne et ce nombre de notes sont visibles et vérifiables sur la page.</source>
+        <target state="translated">Ota käyttöön vain, jos tämä keskiarvo ja arvioiden määrä ovat näkyvissä ja tarkistettavissa sivulla.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_value_label">
+      <segment>
+        <source>Note moyenne</source>
+        <target state="translated">Keskimääräinen arvosana</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_rating_count_label">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">Arvioiden määrä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_worst_rating_label">
+      <segment>
+        <source>Note minimale</source>
+        <target state="translated">Alin arvosana</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_best_rating_label">
+      <segment>
+        <source>Note maximale</source>
+        <target state="translated">Korkein arvosana</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_title">
+      <segment>
+        <source>2. Validation et sortie</source>
+        <target state="translated">2. Vahvistus ja tulostus</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_help">
+      <segment>
+        <source>La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</source>
+        <target state="translated">Tekninen vaatimustenmukaisuus ei koskaan takaa näkyvyyttä hakutuloksissa.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">virheitä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">varoituksia</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_format_aria">
+      <segment>
+        <source>Format de sortie</source>
+        <target state="translated">Tulostusmuoto</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_empty_output">
+      <segment>
+        <source>La sortie apparaîtra après correction des erreurs.</source>
+        <target state="translated">Tulostus näkyy virheiden korjaamisen jälkeen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Kopioitu</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopioi</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Lataa</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Diagnostiikka</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_diagnostics_help">
+      <segment>
+        <source>Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</source>
+        <target state="translated">Virheet estävät viennin; varoitukset ilmoittavat suositellusta ominaisuudesta tai toimitusehdosta.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_no_issue">
+      <segment>
+        <source>Aucun problème détecté dans les champs pris en charge</source>
+        <target state="translated">Ei havaittu ongelmia tuetuissa kentissä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guidance_title">
+      <segment>
+        <source>4. Publier sans surpromesse</source>
+        <target state="translated">4. Julkaise ilman liioittelua</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_title">
+      <segment>
+        <source>Même contenu visible</source>
+        <target state="translated">Sama näkyvä sisältö</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_visible_text">
+      <segment>
+        <source>Nom, prix, plateforme et note doivent être présents ou vérifiables par les visiteurs sur la page balisée.</source>
+        <target state="translated">Nimi, hinta, alusta ja arvosana on oltava läsnä tai tarkistettavissa vierailijoiden toimesta merkitsemällä sivulla.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_title">
+      <segment>
+        <source>Aucune note inventée</source>
+        <target state="translated">Ei keksittyjä arvioita</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_reviews_text">
+      <segment>
+        <source>Une moyenne fictive rend le balisage trompeur. Laissez la note désactivée tant que vous ne disposez pas de données réelles.</source>
+        <target state="translated">Keksitty keskiarvo tekee merkitsemisestä harhaanjohtavaa. Jätä arvosana pois, kunnes sinulla on todellisia tietoja.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_title">
+      <segment>
+        <source>Tester le code publié</source>
+        <target state="translated">Testaa julkaistua koodia</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_test_text">
+      <segment>
+        <source>Validez le HTML final avec le test des résultats enrichis, puis inspectez la page réellement accessible à Google.</source>
+        <target state="translated">Vahvista lopullinen HTML rikastettujen tulosten testillä ja tarkista sitten Googlelle oikeasti saavutettavissa oleva sivu.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_title">
+      <segment>
+        <source>Éligibilité sans garantie</source>
+        <target state="translated">Kelpoisuus ilman takuuta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_guarantee_text">
+      <segment>
+        <source>Même complet, un balisage ne garantit ni affichage enrichi, ni indexation, ni positionnement.</source>
+        <target state="translated">Vaikka merkintä olisi täydellinen, se ei takaa rikastettua näyttöä, indeksointia tai sijoitusta.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_google_docs">
+      <segment>
+        <source>Documentation Google SoftwareApplication</source>
+        <target state="translated">Google SoftwareApplication -dokumentaatio</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_aria">
+      <segment>
+        <source>Outils de données structurées associés</source>
+        <target state="translated">Liittyvät rakenteelliset tiedot -työkalut</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_title">
+      <segment>
+        <source>Poursuivre le contrôle des données structurées</source>
+        <target state="translated">Jatka rakenteellisten tietojen tarkistamista</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_extract">
+      <segment>
+        <source>Extraire le balisage publié</source>
+        <target state="translated">Julkaistun merkinnän purkaminen</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_head">
+      <segment>
+        <source>Auditer le head HTML</source>
+        <target state="translated">HTML-headin auditointi</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Esikatselu snippetistä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Takaisin SEO-työkaluihin</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_script">
+      <segment>
+        <source>Balise script prête à intégrer</source>
+        <target state="translated">Integroimiseen valmis script-merkintä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_output_json">
+      <segment>
+        <source>JSON-LD seul</source>
+        <target state="translated">Vain JSON-LD</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_google">
+      <segment>
+        <source>Propriétés requises par Google présentes</source>
+        <target state="translated">Googlelle vaaditut ominaisuudet läsnä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_schema">
+      <segment>
+        <source>Schema.org valide, résultat enrichi Google incomplet</source>
+        <target state="translated">Schema.org voimassa, Google-rikastettu tulos puutteellinen</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_state_invalid">
+      <segment>
+        <source>Corrigez les erreurs avant export</source>
+        <target state="translated">Korjaa virheet ennen vientiä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_name">
+      <segment>
+        <source>Nom</source>
+        <target state="translated">Nimi</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Kuvaus</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_screenshot">
+      <segment>
+        <source>Capture</source>
+        <target state="translated">Kuvakaappaus</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">Kategoria</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_os">
+      <segment>
+        <source>Système</source>
+        <target state="translated">Järjestelmä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Versio</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_price">
+      <segment>
+        <source>Prix</source>
+        <target state="translated">Hinta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_currency">
+      <segment>
+        <source>Devise</source>
+        <target state="translated">Valuutta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating">
+      <segment>
+        <source>Note</source>
+        <target state="translated">Arvosana</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_count">
+      <segment>
+        <source>Nombre de notes</source>
+        <target state="translated">Arvostelujen määrä</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_field_rating_scale">
+      <segment>
+        <source>Échelle</source>
+        <target state="translated">Mittakaava</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_missing_name">
+      <segment>
+        <source>Le nom de l’application est obligatoire.</source>
+        <target state="translated">Sovelluksen nimi on pakollinen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_name_long">
+      <segment>
+        <source>Le nom dépasse la limite de 200 caractères.</source>
+        <target state="translated">Nimi ylittää 200 merkin rajan.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_description_long">
+      <segment>
+        <source>La description dépasse la limite de 2 000 caractères.</source>
+        <target state="translated">Kuvaus ylittää 2 000 merkin rajan.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_long">
+      <segment>
+        <source>Le système dépasse la limite de 200 caractères.</source>
+        <target state="translated">Järjestelmä ylittää 200 merkin rajan.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_version_long">
+      <segment>
+        <source>La version dépasse la limite de 100 caractères.</source>
+        <target state="translated">Versio ylittää 100 merkin rajan.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url">
+      <segment>
+        <source>L’URL de l’application doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">Sovelluksen URL-osoitteen on oltava absoluuttinen HTTP- tai HTTPS-osoite.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de l’application sont refusés.</source>
+        <target state="translated">Sovelluksen URL-osoitteeseen upotetut tunnistetiedot hylätään.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_url_fragment">
+      <segment>
+        <source>L’URL contient un fragment ; vérifiez que la page décrite reste canonique.</source>
+        <target state="translated">URL-osoite sisältää fragmentin; varmista, että kuvattu sivu pysyy kanonisen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_url">
+      <segment>
+        <source>L’URL de capture doit être une adresse HTTP ou HTTPS absolue.</source>
+        <target state="translated">Kuvakaappauksen URL-osoitteen on oltava absoluuttinen HTTP- tai HTTPS-osoite.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_screenshot_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans l’URL de capture sont refusés.</source>
+        <target state="translated">Kuvakaappauksen URL-osoitteeseen upotetut tunnistetiedot hylätään.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price">
+      <segment>
+        <source>Le prix doit être un nombre positif ou zéro, avec au plus deux décimales.</source>
+        <target state="translated">Hinnan on oltava positiivinen luku tai nolla, enintään kahdella desimaalilla.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_price_large">
+      <segment>
+        <source>Le prix dépasse la limite prise en charge par cet outil.</source>
+        <target state="translated">Hinta ylittää tämän työkalun tukeman rajan.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_missing">
+      <segment>
+        <source>Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.</source>
+        <target state="translated">Maksullista tarjousta varten lisää ISO 4217 -valuutta välttääksesi epäselvyyksiä.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_currency_invalid">
+      <segment>
+        <source>La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.</source>
+        <target state="translated">Valuuttakoodin on sisällettävä tarkalleen kolme ISO 4217 -kirjainta, kuten EUR tai USD.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_missing">
+      <segment>
+        <source>Google exige une note agrégée ou un avis réel pour ce résultat enrichi. N’inventez jamais cette donnée.</source>
+        <target state="translated">Google vaatii aggregoitua arvosanaa tai todellista arvostelua tätä rikastettua tulosta varten. Älä koskaan keksi tätä tietoa.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_value">
+      <segment>
+        <source>La note moyenne doit être un nombre avec au plus deux décimales.</source>
+        <target state="translated">Keskimääräisen arvosanan on oltava numero, jossa on enintään kaksi desimaalia.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_count">
+      <segment>
+        <source>Le nombre de notes doit être un entier strictement positif.</source>
+        <target state="translated">Arvostelujen määrä on oltava tiukasti positiivinen kokonaisluku.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_scale">
+      <segment>
+        <source>L’échelle est invalide : la meilleure note doit être supérieure à la plus basse.</source>
+        <target state="translated">Mittakaava on virheellinen: paras arvosana on oltava suurempi kuin alin.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_rating_range">
+      <segment>
+        <source>La note moyenne doit rester comprise dans l’échelle déclarée.</source>
+        <target state="translated">Keskimääräisen arvosanan on pysyttävä ilmoitetussa mittakaavassa.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_category_missing">
+      <segment>
+        <source>La catégorie est recommandée par Google et améliore la précision du balisage.</source>
+        <target state="translated">Kategoria on suositeltu Googlen toimesta ja parantaa merkintöjen tarkkuutta.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_issue_os_missing">
+      <segment>
+        <source>Le système d’exploitation est recommandé par Google.</source>
+        <target state="translated">Käyttöjärjestelmä on suositeltu Googlen toimesta.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_name">
+      <segment>
+        <source>Planificateur de projet</source>
+        <target state="translated">Projektinhallinta</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_description">
+      <segment>
+        <source>Une application web pour organiser des tâches, des échéances et des projets.</source>
+        <target state="translated">Verkkosovellus tehtävien, määräaikojen ja projektien järjestämiseen.</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_default_os">
+      <segment>
+        <source>Navigateur web moderne</source>
+        <target state="translated">Moderni verkkoselain</target>
+      </segment>
+    </unit>
+    <unit id="software_schema_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez le code et copiez-le manuellement.</source>
+        <target state="translated">Automaattinen kopiointi epäonnistui. Valitse koodi ja kopioi se manuaalisesti.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
