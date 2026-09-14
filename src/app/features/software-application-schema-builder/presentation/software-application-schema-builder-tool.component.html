@@ -36,34 +36,34 @@
 
         <div class="field">
           <label for="software-schema-name" i18n="@@software_schema_name_label">Nom de l’application</label>
-          <input id="software-schema-name" type="text" maxlength="201" autocomplete="off" [value]="name()" (input)="updateName($event)" />
+          <input id="software-schema-name" type="text" maxlength="201" autocomplete="off" [value]="name()" [attr.aria-invalid]="hasFieldError('name') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('name')" (input)="updateName($event)" />
           <small i18n="@@software_schema_name_help">Obligatoire pour le résultat enrichi Google.</small>
         </div>
 
         <div class="field">
           <label for="software-schema-description" i18n="@@software_schema_description_label">Description</label>
-          <textarea id="software-schema-description" rows="4" maxlength="2001" [value]="description()" (input)="updateDescription($event)"></textarea>
+          <textarea id="software-schema-description" rows="4" maxlength="2001" [value]="description()" [attr.aria-invalid]="hasFieldError('description') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('description')" (input)="updateDescription($event)"></textarea>
         </div>
 
         <div class="field">
           <label for="software-schema-url" i18n="@@software_schema_url_label">URL publique de l’application</label>
-          <input id="software-schema-url" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="url()" (input)="updateUrl($event)" />
+          <input id="software-schema-url" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="url()" [attr.aria-invalid]="hasFieldError('url') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('url')" (input)="updateUrl($event)" />
         </div>
 
         <div class="field">
           <label for="software-schema-screenshot" i18n="@@software_schema_screenshot_label">URL publique d’une capture</label>
-          <input id="software-schema-screenshot" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="screenshotUrl()" (input)="updateScreenshotUrl($event)" />
+          <input id="software-schema-screenshot" type="url" maxlength="2049" autocomplete="url" spellcheck="false" [value]="screenshotUrl()" [attr.aria-invalid]="hasFieldError('screenshotUrl') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('screenshotUrl')" (input)="updateScreenshotUrl($event)" />
           <small i18n="@@software_schema_screenshot_help">Facultative. Utilisez une image qui montre réellement l’application décrite.</small>
         </div>
 
         <div class="field-grid">
           <div class="field">
             <label for="software-schema-os" i18n="@@software_schema_os_label">Système ou plateforme</label>
-            <input id="software-schema-os" type="text" maxlength="201" [value]="operatingSystem()" (input)="updateOperatingSystem($event)" />
+            <input id="software-schema-os" type="text" maxlength="201" [value]="operatingSystem()" [attr.aria-invalid]="hasFieldError('operatingSystem') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('operatingSystem')" (input)="updateOperatingSystem($event)" />
           </div>
           <div class="field">
             <label for="software-schema-version" i18n="@@software_schema_version_label">Version</label>
-            <input id="software-schema-version" type="text" maxlength="101" autocomplete="off" [value]="softwareVersion()" (input)="updateSoftwareVersion($event)" />
+            <input id="software-schema-version" type="text" maxlength="101" autocomplete="off" [value]="softwareVersion()" [attr.aria-invalid]="hasFieldError('softwareVersion') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('softwareVersion')" (input)="updateSoftwareVersion($event)" />
           </div>
         </div>
 
@@ -73,11 +73,11 @@
           <div class="field-grid field-grid--compact">
             <div class="field">
               <label for="software-schema-price" i18n="@@software_schema_price_label">Prix</label>
-              <input id="software-schema-price" type="text" inputmode="decimal" maxlength="32" [value]="price()" (input)="updatePrice($event)" />
+              <input id="software-schema-price" type="text" inputmode="decimal" maxlength="32" [value]="price()" [attr.aria-invalid]="hasFieldError('price') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('price')" (input)="updatePrice($event)" />
             </div>
             <div class="field">
               <label for="software-schema-currency" i18n="@@software_schema_currency_label">Devise ISO 4217</label>
-              <input id="software-schema-currency" type="text" inputmode="text" maxlength="32" placeholder="EUR" [value]="priceCurrency()" (input)="updatePriceCurrency($event)" />
+              <input id="software-schema-currency" type="text" inputmode="text" maxlength="32" placeholder="EUR" [value]="priceCurrency()" [attr.aria-invalid]="hasFieldError('priceCurrency') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('priceCurrency')" (input)="updatePriceCurrency($event)" />
             </div>
           </div>
         </fieldset>
@@ -90,10 +90,10 @@
           </label>
           @if (includeAggregateRating()) {
             <div class="rating-grid">
-              <div class="field"><label for="software-schema-rating-value" i18n="@@software_schema_rating_value_label">Note moyenne</label><input id="software-schema-rating-value" type="text" inputmode="decimal" maxlength="32" [value]="ratingValue()" (input)="updateRatingValue($event)" /></div>
-              <div class="field"><label for="software-schema-rating-count" i18n="@@software_schema_rating_count_label">Nombre de notes</label><input id="software-schema-rating-count" type="text" inputmode="numeric" maxlength="32" [value]="ratingCount()" (input)="updateRatingCount($event)" /></div>
-              <div class="field"><label for="software-schema-worst-rating" i18n="@@software_schema_worst_rating_label">Note minimale</label><input id="software-schema-worst-rating" type="text" inputmode="decimal" maxlength="32" [value]="worstRating()" (input)="updateWorstRating($event)" /></div>
-              <div class="field"><label for="software-schema-best-rating" i18n="@@software_schema_best_rating_label">Note maximale</label><input id="software-schema-best-rating" type="text" inputmode="decimal" maxlength="32" [value]="bestRating()" (input)="updateBestRating($event)" /></div>
+              <div class="field"><label for="software-schema-rating-value" i18n="@@software_schema_rating_value_label">Note moyenne</label><input id="software-schema-rating-value" type="text" inputmode="decimal" maxlength="32" [value]="ratingValue()" [attr.aria-invalid]="hasFieldError('ratingValue') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('ratingValue')" (input)="updateRatingValue($event)" /></div>
+              <div class="field"><label for="software-schema-rating-count" i18n="@@software_schema_rating_count_label">Nombre de notes</label><input id="software-schema-rating-count" type="text" inputmode="numeric" maxlength="32" [value]="ratingCount()" [attr.aria-invalid]="hasFieldError('ratingCount') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('ratingCount')" (input)="updateRatingCount($event)" /></div>
+              <div class="field"><label for="software-schema-worst-rating" i18n="@@software_schema_worst_rating_label">Note minimale</label><input id="software-schema-worst-rating" type="text" inputmode="decimal" maxlength="32" [value]="worstRating()" [attr.aria-invalid]="hasFieldError('worstRating') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('worstRating')" (input)="updateWorstRating($event)" /></div>
+              <div class="field"><label for="software-schema-best-rating" i18n="@@software_schema_best_rating_label">Note maximale</label><input id="software-schema-best-rating" type="text" inputmode="decimal" maxlength="32" [value]="bestRating()" [attr.aria-invalid]="hasFieldError('bestRating') ? 'true' : null" [attr.aria-describedby]="fieldErrorIds('bestRating')" (input)="updateBestRating($event)" /></div>
             </div>
           }
         </fieldset>
@@ -138,7 +138,7 @@
       } @else {
         <ul class="issue-list">
           @for (item of result().issues; track $index) {
-            <li [class]="'issue issue--' + item.severity"><div><strong>{{ issueLabel(item.code) }}</strong><span>{{ fieldLabel(item.field) }}</span></div>@if (item.detail) { <code>{{ item.detail }}</code> }</li>
+            <li [id]="issueDomId(item.code)" [class]="'issue issue--' + item.severity"><div><strong>{{ issueLabel(item.code) }}</strong><span>{{ fieldLabel(item.field) }}</span></div>@if (item.detail) { <code>{{ item.detail }}</code> }</li>
           }
         </ul>
       }

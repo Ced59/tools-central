@@ -16,6 +16,8 @@ import {
 import { BrowserSoftwareApplicationSchemaClipboardAdapter } from '../infrastructure/browser-software-application-schema-clipboard.adapter';
 import { BrowserSoftwareApplicationSchemaDownloadAdapter } from '../infrastructure/browser-software-application-schema-download.adapter';
 
+type SoftwareApplicationSchemaControlField = SoftwareApplicationSchemaField | 'bestRating' | 'worstRating';
+
 @Component({
   selector: 'app-software-application-schema-builder-tool',
   standalone: true,
@@ -197,6 +199,21 @@ export class SoftwareApplicationSchemaBuilderToolComponent {
     return labels[field];
   }
 
+  hasFieldError(field: SoftwareApplicationSchemaControlField): boolean {
+    return this.fieldErrorIds(field) !== null;
+  }
+
+  fieldErrorIds(field: SoftwareApplicationSchemaControlField): string | null {
+    const ids = this.result().issues
+      .filter(item => item.severity === 'error' && this.issueTargetsField(item.field, field))
+      .map(item => this.issueDomId(item.code));
+    return ids.length > 0 ? ids.join(' ') : null;
+  }
+
+  issueDomId(code: SoftwareApplicationSchemaIssueCode): string {
+    return `software-schema-issue-${code}`;
+  }
+
   issueLabel(code: SoftwareApplicationSchemaIssueCode): string {
     const labels: Record<SoftwareApplicationSchemaIssueCode, string> = {
       'missing-name': $localize`:@@software_schema_issue_missing_name:Le nom de l’application est obligatoire.`,
@@ -227,6 +244,14 @@ export class SoftwareApplicationSchemaBuilderToolComponent {
   private clearCopiedTimer(): void {
     if (this.copiedTimer !== null) clearTimeout(this.copiedTimer);
     this.copiedTimer = null;
+  }
+
+  private issueTargetsField(
+    issueField: SoftwareApplicationSchemaField,
+    controlField: SoftwareApplicationSchemaControlField,
+  ): boolean {
+    return issueField === controlField
+      || (issueField === 'ratingScale' && (controlField === 'bestRating' || controlField === 'worstRating'));
   }
 }
 

@@ -102,4 +102,29 @@ describe('SoftwareApplicationSchemaBuilderToolComponent', () => {
     expect(label).toContain('un point ou une virgule');
     expect(label).not.toContain('deux décimales');
   });
+
+  it('relie chaque champ invalide à ses diagnostics accessibles', () => {
+    component.name.set('');
+    component.url.set('ftp://example.com');
+    component.price.set('not-a-price');
+    component.includeAggregateRating.set(true);
+    component.worstRating.set('5');
+    component.bestRating.set('1');
+    fixture.detectChanges();
+
+    const host = fixture.nativeElement as HTMLElement;
+    for (const id of ['software-schema-name', 'software-schema-url', 'software-schema-price']) {
+      const control = host.querySelector<HTMLElement>(`#${id}`);
+      const describedBy = control?.getAttribute('aria-describedby');
+      expect(control?.getAttribute('aria-invalid')).toBe('true');
+      expect(describedBy).toBeTruthy();
+      expect(describedBy ? host.querySelector(`#${describedBy}`) : null).not.toBeNull();
+    }
+
+    for (const id of ['software-schema-worst-rating', 'software-schema-best-rating']) {
+      const control = host.querySelector<HTMLElement>(`#${id}`);
+      expect(control?.getAttribute('aria-invalid')).toBe('true');
+      expect(control?.getAttribute('aria-describedby')).toBe('software-schema-issue-invalid-rating-scale');
+    }
+  });
 });
