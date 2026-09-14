@@ -296,6 +296,55 @@ describe('sanitizeOoxmlBuffer', () => {
     await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-cdata');
   });
 
+  it('preserves an ordinary image that only happens to use the conventional thumbnail path', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships/>');
+    source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rImage" '
+      + 'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+      + 'Target="../../docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    expect(output.file('docProps/thumbnail.jpeg')).not.toBeNull();
+    await expect(output.file('word/_rels/document.xml.rels')?.async('string'))
+      .resolves.toContain('../../docProps/thumbnail.jpeg');
+    expect(result.report.detected.some(finding => finding.scope === 'thumbnail')).toBe(false);
+  });
+
+  it('removes thousands of declared thumbnail relationships in one linear reconstruction', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const relationships = Array.from(
+      { length: 10_000 },
+      (_, index) => `<Relationship Id="rThumb${String(index)}" `
+        + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" '
+        + 'Target="docProps/thumbnail.jpeg"/>',
+    ).join('');
+    source.file('_rels/.rels', `<?xml version="1.0"?><Relationships>${relationships}</Relationships>`);
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({
+        type: 'uint8array',
+        compression: 'DEFLATE',
+        compressionOptions: { level: 9 },
+      }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.toBe(
+      '<?xml version="1.0"?><Relationships></Relationships>',
+    );
+    expect(output.file('docProps/thumbnail.jpeg')).toBeNull();
+  });
+
   it('caps relationship-addressed paths before adding them to the visible report', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const longPath = `metadata/${'a'.repeat(60_000)}/custom.xml`;
@@ -452,6 +501,42 @@ describe('sanitizeOoxmlBuffer', () => {
     )).rejects.toEqual(expect.objectContaining({
       code: 'signed-package-unsupported',
       entryName: '/security/signature.data',
+    }));
+  });
+
+  it('rejects a renamed VBA project declared by a document relationship', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('word/macros.data', new Uint8Array([1, 2, 3]));
+    source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rVba" '
+      + 'Type="http://schemas.microsoft.com/office/2006/relationships/vbaProject" '
+      + 'Target="macros.data"/>'
+      + '</Relationships>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'macro-package-unsupported',
+      entryName: 'macros.data',
+    }));
+  });
+
+  it('rejects a renamed VBA project declared only through its content type', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('word/macros.data', new Uint8Array([1, 2, 3]));
+    source.file('[Content_Types].xml', '<?xml version="1.0"?><Types>'
+      + '<Override PartName="/word/macros.data" ContentType="application/vnd.ms-office.vbaProject"/>'
+      + '</Types>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'macro-package-unsupported',
+      entryName: '/word/macros.data',
     }));
   });
 });

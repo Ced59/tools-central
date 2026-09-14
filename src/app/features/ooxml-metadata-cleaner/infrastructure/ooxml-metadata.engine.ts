@@ -69,6 +69,13 @@ const DIGITAL_SIGNATURE_CONTENT_TYPES = new Set([
   'application/vnd.openxmlformats-package.digital-signature-certificate',
 ]);
 
+const MACRO_RELATIONSHIP_TYPES = new Set([
+  'http://schemas.microsoft.com/office/2006/relationships/vbaproject',
+  'http://schemas.microsoft.com/office/2006/relationships/vbaprojectsignature',
+  'http://schemas.microsoft.com/office/2014/relationships/vbaprojectsignatureagile',
+  'http://schemas.microsoft.com/office/2020/07/relationships/vbaprojectsignaturev3',
+]);
+
 interface FindingAccumulator {
   visible: OoxmlMetadataFinding[];
   counts: Record<OoxmlMetadataScope, number>;
@@ -560,9 +567,7 @@ async function resolveMetadataParts(
     core: new Set(files.has('docprops/core.xml') ? ['docprops/core.xml'] : []),
     application: new Set(files.has('docprops/app.xml') ? ['docprops/app.xml'] : []),
     custom: new Set(files.has('docprops/custom.xml') ? ['docprops/custom.xml'] : []),
-    thumbnail: new Set(
-      [...files.keys()].filter(path => /^docprops\/thumbnail\.[^/]+$/iu.test(path)),
-    ),
+    thumbnail: new Set(),
   };
   const relationships = files.get('_rels/.rels');
   if (!relationships) return toMetadataParts(paths);
@@ -728,9 +733,7 @@ function encodeXmlPart(text: string, encoding: XmlEncoding, hasBom: boolean): Ui
 function stripThumbnailRelationships(xml: string): string {
   return removeXmlElements(xml, 'Relationship', attributes => {
     const type = attributes.get('Type') ?? '';
-    const target = attributes.get('Target') ?? '';
-    return metadataScopeFromRelationshipType(type) === 'thumbnail'
-      || /(?:^|\/)docprops\/thumbnail\.[^/]+$/iu.test(target);
+    return metadataScopeFromRelationshipType(type) === 'thumbnail';
   });
 }
 
@@ -756,11 +759,24 @@ function removeXmlElements(
     const end = closingIndex === null ? tag.end : tags[closingIndex].end;
     ranges.push({ start: tag.start, end });
   }
-  let output = xml;
-  for (const range of ranges.reverse()) {
-    output = output.slice(0, range.start) + output.slice(range.end);
+  if (ranges.length === 0) return xml;
+  const merged: Array<{ start: number; end: number }> = [];
+  for (const range of ranges) {
+    const previous = merged.at(-1);
+    if (previous && range.start <= previous.end) {
+      previous.end = Math.max(previous.end, range.end);
+    } else {
+      merged.push({ ...range });
+    }
   }
-  return output;
+  const retained: string[] = [];
+  let cursor = 0;
+  for (const range of merged) {
+    retained.push(xml.slice(cursor, range.start));
+    cursor = range.end;
+  }
+  retained.push(xml.slice(cursor));
+  return retained.join('');
 }
 
 function findMatchingClosingTag(tags: readonly XmlTag[], startIndex: number): number | null {
@@ -926,43 +942,55 @@ async function validateUnsupportedPackageMarkup(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
 ): Promise<void> {
-  const relationships = files.get('_rels/.rels');
-  if (relationships) {
-    validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
+  for (const [lowerPath, relationships] of files) {
+    if (!lowerPath.endsWith('.rels')) continue;
+    validateMetadataEntry(entries.get(lowerPath), relationships.name);
     const tags = parseXmlTags(await readXmlPart(relationships));
     const rootIndex = tags.findIndex(tag => !tag.closing);
-    const signatureRelationship = tags.find(tag => (
-      !tag.closing
-      && tag.parentIndex === rootIndex
-      && tag.localName === 'Relationship'
-      && DIGITAL_SIGNATURE_RELATIONSHIP_TYPES.has((tag.attributes.get('Type') ?? '').trim())
-    ));
-    if (signatureRelationship) {
-      throw new OoxmlMetadataEngineError(
-        'signed-package-unsupported',
-        signatureRelationship.attributes.get('Target') ?? relationships.name,
-      );
+    for (const tag of tags) {
+      if (
+        tag.closing
+        || tag.parentIndex !== rootIndex
+        || tag.localName !== 'Relationship'
+      ) continue;
+      const type = (tag.attributes.get('Type') ?? '').trim();
+      const target = tag.attributes.get('Target') ?? relationships.name;
+      if (DIGITAL_SIGNATURE_RELATIONSHIP_TYPES.has(type)) {
+        throw new OoxmlMetadataEngineError('signed-package-unsupported', target);
+      }
+      if (MACRO_RELATIONSHIP_TYPES.has(type.toLowerCase())) {
+        throw new OoxmlMetadataEngineError('macro-package-unsupported', target);
+      }
     }
   }
 
   const contentTypes = files.get('[content_types].xml');
   if (!contentTypes) return;
   validateMetadataEntry(entries.get('[content_types].xml'), contentTypes.name);
-  const signatureContentType = parseXmlTags(await readXmlPart(contentTypes)).find(tag => (
-    !tag.closing
-    && (tag.localName === 'Default' || tag.localName === 'Override')
-    && DIGITAL_SIGNATURE_CONTENT_TYPES.has(
-      (tag.attributes.get('ContentType') ?? '').trim().toLowerCase(),
-    )
-  ));
-  if (signatureContentType) {
-    throw new OoxmlMetadataEngineError(
-      'signed-package-unsupported',
-      signatureContentType.attributes.get('PartName')
-        ?? signatureContentType.attributes.get('Extension')
-        ?? contentTypes.name,
-    );
+  const tags = parseXmlTags(await readXmlPart(contentTypes));
+  const rootIndex = tags.findIndex(tag => !tag.closing);
+  for (const tag of tags) {
+    if (
+      tag.closing
+      || tag.parentIndex !== rootIndex
+      || (tag.localName !== 'Default' && tag.localName !== 'Override')
+    ) continue;
+    const contentType = (tag.attributes.get('ContentType') ?? '').trim().toLowerCase();
+    const partName = tag.attributes.get('PartName')
+      ?? tag.attributes.get('Extension')
+      ?? contentTypes.name;
+    if (DIGITAL_SIGNATURE_CONTENT_TYPES.has(contentType)) {
+      throw new OoxmlMetadataEngineError('signed-package-unsupported', partName);
+    }
+    if (isMacroContentType(contentType)) {
+      throw new OoxmlMetadataEngineError('macro-package-unsupported', partName);
+    }
   }
+}
+
+function isMacroContentType(contentType: string): boolean {
+  return contentType === 'application/vnd.ms-office.vbaproject'
+    || contentType.includes('.macroenabled.');
 }
 
 function validateUnsupportedParts(entries: readonly ZipDirectoryEntry[]): void {
