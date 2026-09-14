@@ -81,5 +81,13 @@ describe('ImagesToPdfToolComponent', () => {
     expect(button?.textContent).toContain('Annuler');
     expect(button?.disabled).toBe(false);
     expect(progress?.getAttribute('aria-labelledby')).toBe('images-to-pdf-progress-label');
+
+    fixture.componentInstance.generatedPdf.set(new Blob(['pdf'], { type: 'application/pdf' }));
+    fixture.componentInstance.state.set('done');
+    fixture.detectChanges();
+    const result = (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLElement>('[data-testid="images-to-pdf-result"]');
+    expect(result?.getAttribute('role')).toBe('status');
+    expect(result?.getAttribute('aria-live')).toBe('polite');
   });
 });

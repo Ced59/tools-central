@@ -87,7 +87,7 @@
     }
 
     @if (generatedPdf(); as pdf) {
-      <section class="tool-card result-card" data-testid="images-to-pdf-result" aria-labelledby="images-to-pdf-result-title">
+      <section class="tool-card result-card" data-testid="images-to-pdf-result" role="status" aria-live="polite" aria-atomic="true" aria-labelledby="images-to-pdf-result-title">
         <div><p class="eyebrow" i18n="@@images_to_pdf_step_three">Étape 3</p><h2 id="images-to-pdf-result-title" i18n="@@images_to_pdf_result_title">PDF prêt à télécharger</h2><p i18n="@@images_to_pdf_result_summary">{{ images().length }} page(s) · {{ formatFileSize(pdf.size) }}</p></div>
         <button type="button" class="primary-button" (click)="download()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@images_to_pdf_download">Télécharger le PDF</span></button>
       </section>
