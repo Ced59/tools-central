@@ -175,6 +175,89 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(new TextDecoder('utf-16le').decode(contentTypeBytes)).not.toContain('thumbnail');
   });
 
+  it('resolves and cleans metadata parts declared at nonconventional package paths', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const core = await source.file('docProps/core.xml')?.async('uint8array');
+    const application = await source.file('docProps/app.xml')?.async('uint8array');
+    const custom = await source.file('docProps/custom.xml')?.async('uint8array');
+    const thumbnail = await source.file('docProps/thumbnail.jpeg')?.async('uint8array');
+    if (!core || !application || !custom || !thumbnail) throw new Error('Expected fixture metadata.');
+    source.remove('docProps');
+    source.file('metadata/core.xml', core);
+    source.file('metadata/application.xml', application);
+    source.file('metadata/custom.xml', custom);
+    source.file('previews/cover.jpeg', thumbnail);
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCore" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="metadata/core.xml"/>'
+      + '<Relationship Id="rApp" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="metadata/application.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom.xml"/>'
+      + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="previews/cover.jpeg"/>'
+      + '</Relationships>');
+    source.file('[Content_Types].xml', '<?xml version="1.0"?><Types>'
+      + '<Override PartName="/metadata/core.xml" ContentType="application/core"/>'
+      + '<Override PartName="/metadata/application.xml" ContentType="application/app"/>'
+      + '<Override PartName="/metadata/custom.xml" ContentType="application/custom"/>'
+      + '<Override PartName="/previews/cover.jpeg" ContentType="image/jpeg"/>'
+      + '</Types>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('metadata/core.xml')?.async('string')).resolves.not.toContain('Alice');
+    await expect(output.file('metadata/application.xml')?.async('string')).resolves.not.toContain('Exemple SA');
+    await expect(output.file('metadata/custom.xml')?.async('string')).resolves.not.toContain('Société secrète');
+    expect(output.file('previews/cover.jpeg')).toBeNull();
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.not.toContain('previews/cover.jpeg');
+    await expect(output.file('[Content_Types].xml')?.async('string')).resolves.not.toContain('/previews/cover.jpeg');
+    expect(result.report.detectedCount).toBe(8);
+    expect(result.report.removedCount).toBe(8);
+    expect(result.report.remainingCount).toBe(0);
+    expect(result.report.detected.map(finding => finding.path)).toContain('metadata/core.xml');
+  });
+
+  it('decodes UTF-16 metadata parts when reporting values that remain', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('docProps/core.xml', encodeUtf16Le(
+      '<?xml version="1.0" encoding="UTF-16"?><cp:coreProperties xmlns:cp="core" xmlns:dc="dc">'
+      + '<dc:title>Projet confidentiel</dc:title><dc:creator>Alice UTF16</dc:creator>'
+      + '<cp:lastModifiedBy>Bob UTF16</cp:lastModifiedBy></cp:coreProperties>',
+    ));
+    source.file('docProps/app.xml', encodeUtf16Le(
+      '<?xml version="1.0" encoding="UTF-16"?><Properties><Application>Word UTF16</Application>'
+      + '<AppVersion>16.0</AppVersion><Company>Exemple UTF16</Company></Properties>',
+    ));
+    source.file('docProps/custom.xml', encodeUtf16Le(
+      '<?xml version="1.0" encoding="UTF-16"?><Properties>'
+      + '<property name="Client UTF16"><vt:lpwstr xmlns:vt="vt">Secret UTF16</vt:lpwstr></property>'
+      + '</Properties>',
+    ));
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      {
+        removeCoreProperties: false,
+        removeApplicationProperties: false,
+        removeCustomProperties: false,
+        removeThumbnail: false,
+      },
+    );
+
+    expect(result.report.detectedCount).toBe(8);
+    expect(result.report.removedCount).toBe(0);
+    expect(result.report.remainingCount).toBe(8);
+    expect(result.report.remaining.map(finding => finding.value)).toEqual(expect.arrayContaining([
+      'Projet confidentiel',
+      'Alice UTF16',
+      'Exemple UTF16',
+      'Secret UTF16',
+    ]));
+  });
+
   it('rejects a ZIP whose contents do not match the chosen extension', async () => {
     await expect(sanitizeOoxmlBuffer(await createPackage('docx'), 'xlsx', allOptions))
       .rejects.toEqual(expect.objectContaining<OoxmlMetadataEngineError>({

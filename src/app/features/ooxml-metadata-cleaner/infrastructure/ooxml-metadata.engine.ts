@@ -122,36 +122,37 @@ export async function sanitizeOoxmlBuffer(
   const filesByLowerName = new Map(
     Object.values(zip.files).map(file => [file.name.toLowerCase(), file] as const),
   );
+  const metadataParts = await resolveMetadataParts(filesByLowerName, entriesByLowerName);
   const detected: OoxmlMetadataFinding[] = [];
 
-  await collectPartFindings(filesByLowerName, entriesByLowerName, 'docprops/core.xml', 'core', CORE_FIELDS, detected);
+  await collectPartFindings(filesByLowerName, entriesByLowerName, metadataParts.core, 'core', CORE_FIELDS, detected);
   await collectPartFindings(
     filesByLowerName,
     entriesByLowerName,
-    'docprops/app.xml',
+    metadataParts.application,
     'application',
     APPLICATION_FIELDS,
     detected,
   );
-  await collectCustomFindings(filesByLowerName, entriesByLowerName, detected);
-  collectThumbnailFindings(inspection.entries, detected);
+  await collectCustomFindings(filesByLowerName, entriesByLowerName, metadataParts.custom, detected);
+  collectThumbnailFindings(filesByLowerName, entriesByLowerName, metadataParts.thumbnail, detected);
   onProgress?.(32);
 
   const removedScopes = new Set<OoxmlMetadataScope>();
   if (options.removeCoreProperties) {
-    replacePart(zip, filesByLowerName, 'docprops/core.xml', EMPTY_CORE_PROPERTIES);
+    replaceParts(zip, filesByLowerName, metadataParts.core, EMPTY_CORE_PROPERTIES);
     removedScopes.add('core');
   }
   if (options.removeApplicationProperties) {
-    replacePart(zip, filesByLowerName, 'docprops/app.xml', EMPTY_APPLICATION_PROPERTIES);
+    replaceParts(zip, filesByLowerName, metadataParts.application, EMPTY_APPLICATION_PROPERTIES);
     removedScopes.add('application');
   }
   if (options.removeCustomProperties) {
-    replacePart(zip, filesByLowerName, 'docprops/custom.xml', EMPTY_CUSTOM_PROPERTIES);
+    replaceParts(zip, filesByLowerName, metadataParts.custom, EMPTY_CUSTOM_PROPERTIES);
     removedScopes.add('custom');
   }
   if (options.removeThumbnail) {
-    await removeThumbnails(zip, filesByLowerName);
+    await removeThumbnails(zip, filesByLowerName, entriesByLowerName, metadataParts.thumbnail);
     removedScopes.add('thumbnail');
   }
 
@@ -326,18 +327,20 @@ const CRC32_TABLE = Uint32Array.from({ length: 256 }, (_, index) => {
 async function collectPartFindings(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
-  lowerPath: string,
+  lowerPaths: readonly string[],
   scope: OoxmlMetadataScope,
   fields: readonly string[],
   output: OoxmlMetadataFinding[],
 ): Promise<void> {
-  const file = files.get(lowerPath);
-  if (!file) return;
-  validateMetadataEntry(entries.get(lowerPath), file.name);
-  const xml = await file.async('string');
-  for (const field of fields) {
-    for (const value of extractElementValues(xml, field)) {
-      if (value) output.push({ scope, name: field, value, path: file.name });
+  for (const lowerPath of lowerPaths) {
+    const file = files.get(lowerPath);
+    if (!file) continue;
+    validateMetadataEntry(entries.get(lowerPath), file.name);
+    const xml = await readXmlPart(file);
+    for (const field of fields) {
+      for (const value of extractElementValues(xml, field)) {
+        if (value) output.push({ scope, name: field, value, path: file.name });
+      }
     }
   }
 }
@@ -345,31 +348,39 @@ async function collectPartFindings(
 async function collectCustomFindings(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
+  lowerPaths: readonly string[],
   output: OoxmlMetadataFinding[],
 ): Promise<void> {
-  const file = files.get('docprops/custom.xml');
-  if (!file) return;
-  validateMetadataEntry(entries.get('docprops/custom.xml'), file.name);
-  const xml = await file.async('string');
-  const propertyPattern = /<(?:[\w.-]+:)?property\b([^>]*)>([\s\S]*?)<\/(?:[\w.-]+:)?property\s*>/giu;
-  for (const match of xml.matchAll(propertyPattern)) {
-    const name = extractAttribute(match[1], 'name') || 'Propriété personnalisée';
-    const value = normalizeXmlValue(match[2]);
-    output.push({ scope: 'custom', name, value, path: file.name });
+  for (const lowerPath of lowerPaths) {
+    const file = files.get(lowerPath);
+    if (!file) continue;
+    validateMetadataEntry(entries.get(lowerPath), file.name);
+    const xml = await readXmlPart(file);
+    const propertyPattern = /<(?:[\w.-]+:)?property\b([^>]*)>([\s\S]*?)<\/(?:[\w.-]+:)?property\s*>/giu;
+    for (const match of xml.matchAll(propertyPattern)) {
+      const name = extractAttribute(match[1], 'name') || 'Propriété personnalisée';
+      const value = normalizeXmlValue(match[2]);
+      output.push({ scope: 'custom', name, value, path: file.name });
+    }
   }
 }
 
 function collectThumbnailFindings(
-  entries: readonly ZipDirectoryEntry[],
+  files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+  lowerPaths: readonly string[],
   output: OoxmlMetadataFinding[],
 ): void {
-  for (const entry of entries) {
-    if (!/^docprops\/thumbnail\.[^/]+$/iu.test(entry.name)) continue;
+  for (const lowerPath of lowerPaths) {
+    const file = files.get(lowerPath);
+    const entry = entries.get(lowerPath);
+    if (!file || !entry) continue;
+    validateMetadataEntry(entry, file.name);
     output.push({
       scope: 'thumbnail',
       name: 'Aperçu intégré',
       value: `${String(entry.uncompressedSize)} octets`,
-      path: entry.name,
+      path: file.name,
     });
   }
 }
@@ -394,30 +405,38 @@ function extractAttribute(attributes: string, name: string): string {
   return match ? normalizeXmlValue(match[2]) : '';
 }
 
-function replacePart(
+function replaceParts(
   zip: JSZip,
   files: ReadonlyMap<string, JSZipObject>,
-  lowerPath: string,
+  lowerPaths: readonly string[],
   xml: string,
 ): void {
-  const file = files.get(lowerPath);
-  if (file) zip.file(file.name, xml);
+  for (const lowerPath of lowerPaths) {
+    const file = files.get(lowerPath);
+    if (file) zip.file(file.name, xml);
+  }
 }
 
 async function removeThumbnails(
   zip: JSZip,
   files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+  lowerPaths: readonly string[],
 ): Promise<void> {
-  for (const file of Object.values(zip.files)) {
-    if (/^docprops\/thumbnail\.[^/]+$/iu.test(file.name)) zip.remove(file.name);
+  for (const lowerPath of lowerPaths) {
+    const file = files.get(lowerPath);
+    if (file) zip.remove(file.name);
   }
   const relationships = files.get('_rels/.rels');
   if (relationships) {
+    validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
     await rewriteXmlPart(zip, relationships, stripThumbnailRelationships);
   }
   const contentTypes = files.get('[content_types].xml');
   if (contentTypes) {
-    await rewriteXmlPart(zip, contentTypes, stripThumbnailOverrides);
+    validateMetadataEntry(entries.get('[content_types].xml'), contentTypes.name);
+    const thumbnailPaths = new Set(lowerPaths);
+    await rewriteXmlPart(zip, contentTypes, xml => stripThumbnailOverrides(xml, thumbnailPaths));
   }
 }
 
@@ -427,6 +446,93 @@ interface DecodedXmlPart {
   text: string;
   encoding: XmlEncoding;
   hasBom: boolean;
+}
+
+interface OoxmlMetadataParts {
+  core: readonly string[];
+  application: readonly string[];
+  custom: readonly string[];
+  thumbnail: readonly string[];
+}
+
+async function resolveMetadataParts(
+  files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+): Promise<OoxmlMetadataParts> {
+  const paths: Record<OoxmlMetadataScope, Set<string>> = {
+    core: new Set(files.has('docprops/core.xml') ? ['docprops/core.xml'] : []),
+    application: new Set(files.has('docprops/app.xml') ? ['docprops/app.xml'] : []),
+    custom: new Set(files.has('docprops/custom.xml') ? ['docprops/custom.xml'] : []),
+    thumbnail: new Set(
+      [...files.keys()].filter(path => /^docprops\/thumbnail\.[^/]+$/iu.test(path)),
+    ),
+  };
+  const relationships = files.get('_rels/.rels');
+  if (!relationships) return toMetadataParts(paths);
+  validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
+
+  const xml = await readXmlPart(relationships);
+  const relationshipPattern = /<(?:[\w.-]+:)?Relationship\b[^>]*(?:\/>|>[\s\S]*?<\/(?:[\w.-]+:)?Relationship\s*>)/giu;
+  for (const element of xml.matchAll(relationshipPattern)) {
+    if (extractAttribute(element[0], 'TargetMode').toLowerCase() === 'external') continue;
+    const scope = metadataScopeFromRelationshipType(extractAttribute(element[0], 'Type'));
+    const path = resolvePackageTarget(extractAttribute(element[0], 'Target'));
+    if (!scope || !path || !files.has(path)) continue;
+    paths[scope].add(path);
+  }
+  return toMetadataParts(paths);
+}
+
+function toMetadataParts(
+  paths: Readonly<Record<OoxmlMetadataScope, ReadonlySet<string>>>,
+): OoxmlMetadataParts {
+  return {
+    core: [...paths.core],
+    application: [...paths.application],
+    custom: [...paths.custom],
+    thumbnail: [...paths.thumbnail],
+  };
+}
+
+function metadataScopeFromRelationshipType(type: string): OoxmlMetadataScope | null {
+  const normalized = type.trim().replace(/\/+$/u, '').toLowerCase();
+  if (normalized.endsWith('/metadata/core-properties')) return 'core';
+  if (normalized.endsWith('/extended-properties')) return 'application';
+  if (normalized.endsWith('/custom-properties')) return 'custom';
+  if (normalized.endsWith('/metadata/thumbnail')) return 'thumbnail';
+  return null;
+}
+
+function resolvePackageTarget(target: string): string | null {
+  const path = target.trim().split(/[?#]/u, 1)[0];
+  if (!path || path.includes('\\')) return null;
+  const resolved: string[] = [];
+  for (const encodedPart of path.replace(/^\/+|\/+$/gu, '').split('/')) {
+    let part: string;
+    try {
+      part = decodeURIComponent(encodedPart);
+    } catch {
+      return null;
+    }
+    if (!part || part === '.') continue;
+    if (part === '..') {
+      if (resolved.length === 0) return null;
+      resolved.pop();
+      continue;
+    }
+    if (part.includes('/') || part.includes('\\') || part.includes('\u0000')) return null;
+    resolved.push(part);
+  }
+  return resolved.length > 0 ? resolved.join('/').toLowerCase() : null;
+}
+
+async function readXmlPart(file: JSZipObject): Promise<string> {
+  try {
+    return decodeXmlPart(await file.async('uint8array')).text;
+  } catch (error: unknown) {
+    if (error instanceof OoxmlMetadataEngineError) throw error;
+    throw new OoxmlMetadataEngineError('corrupt-document', file.name);
+  }
 }
 
 async function rewriteXmlPart(
@@ -506,10 +612,11 @@ function stripThumbnailRelationships(xml: string): string {
   });
 }
 
-function stripThumbnailOverrides(xml: string): string {
+function stripThumbnailOverrides(xml: string, thumbnailPaths: ReadonlySet<string>): string {
   return xml.replace(/<(?:[\w.-]+:)?Override\b[^>]*(?:\/>|>[\s\S]*?<\/(?:[\w.-]+:)?Override\s*>)/giu, element => {
     const partName = extractAttribute(element, 'PartName');
-    return /^\/docprops\/thumbnail\.[^/]+$/iu.test(partName) ? '' : element;
+    const resolved = resolvePackageTarget(partName);
+    return resolved && thumbnailPaths.has(resolved) ? '' : element;
   });
 }
 

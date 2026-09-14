@@ -16,10 +16,10 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,15 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,07 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 132 fichiers, 397 tests verts sous Vitest |
-| Couverture | aucun seuil | 48,06 % statements, 34,65 % branches, 48,13 % fonctions, 51,43 % lignes |
+| Tests unitaires | suite non compilable | 132 fichiers, 399 tests verts sous Vitest |
+| Couverture | aucun seuil | 48,17 % statements, 34,87 % branches, 48,26 % fonctions, 51,56 % lignes |
 | E2E | aucun | 14 parcours Playwright verts |
 | Routes statiques | 2 | 85 routes de base + une 404 prérendues par locale, soit 2 580 pages ; 2 405 URL sont indexables après filtrage éditorial par locale |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 175 outils, 69 disponibles en français et 65 dans les locales secondaires |
@@ -28,7 +28,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 064 ms, CLS 0,0043, `DOMContentLoaded` 507 ms et interaction thème 95,8 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale sur l’accueil mobile : LCP 896 ms, CLS 0,0043, `DOMContentLoaded` 822 ms et interaction thème 115,5 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
