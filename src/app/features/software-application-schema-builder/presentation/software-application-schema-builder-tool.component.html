@@ -77,7 +77,7 @@
             </div>
             <div class="field">
               <label for="software-schema-currency" i18n="@@software_schema_currency_label">Devise ISO 4217</label>
-              <input id="software-schema-currency" type="text" inputmode="text" maxlength="3" placeholder="EUR" [value]="priceCurrency()" (input)="updatePriceCurrency($event)" />
+              <input id="software-schema-currency" type="text" inputmode="text" maxlength="32" placeholder="EUR" [value]="priceCurrency()" (input)="updatePriceCurrency($event)" />
             </div>
           </div>
         </fieldset>

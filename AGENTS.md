@@ -130,11 +130,12 @@ Un nouvel outil ne doit être déclaré `available: true` qu’après validation
 - liens vers des outils connexes du même parcours ;
 - chaînes visibles passées par `$localize` ;
 - entrée ajoutée uniquement dans `src/app/data/catalog/` ;
+- `reviewedLocales` renseigné pour limiter catalogue, chargement, sitemap et `hreflang` aux traductions réellement relues ;
 - génération de routes confirmée avec `node scripts/generate-prerender-routes.mjs` ;
 - aucun `TODO`, texte factice ou fonctionnalité trompeuse ;
 - tests et build de production verts.
 
-Une entrée `available: false` n’est ni prérendue ni ajoutée au sitemap. Elle ne doit pas être rendue indexable par un autre chemin.
+Une entrée `available: false` n’est ni prérendue ni ajoutée au sitemap. Une locale absente de `reviewedLocales` reste également masquée du catalogue, exclue du sitemap et rendue en `noindex,follow` si son URL est appelée directement. Elle ne doit pas être rendue indexable par un autre chemin.
 
 ## 6. Exigences SEO
 

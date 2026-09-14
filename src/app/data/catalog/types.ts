@@ -12,6 +12,8 @@ export interface CatalogToolDefinition {
   description: string;
   icon: string;
   available: boolean;
+  /** Locales dont le contenu éditorial est relu et publiable. Absence = comportement historique, toutes les locales. */
+  reviewedLocales?: readonly string[];
   loadComponent?: () => Promise<Type<unknown>>;
 }
 

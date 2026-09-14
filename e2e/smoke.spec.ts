@@ -223,7 +223,11 @@ test('SoftwareApplication schema builder validates real ratings and remains resp
   await expect(page.getByTestId('software-schema-output')).not.toContainText('<script');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
+  await page.goto('/en/categories/dev/seo');
+  await expect(page.getByText('Schema.org SoftwareApplication Generator', { exact: true })).toHaveCount(0);
+
   await page.goto('/en/categories/dev/seo/software-application-schema-builder');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Schema.org SoftwareApplication Generator');
-  await expect(page.locator('#software-schema-name')).toHaveValue('Project Planner');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+  await expect(page.locator('#software-schema-name')).toHaveCount(0);
 });

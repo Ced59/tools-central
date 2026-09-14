@@ -1,5 +1,5 @@
-import { Injectable, Type, isDevMode } from '@angular/core';
-import { ATOMIC_TOOL_LIST, AtomicToolItem } from '../../data/atomic-tools';
+import { inject, Injectable, LOCALE_ID, Type, isDevMode } from '@angular/core';
+import { ATOMIC_TOOL_LIST, AtomicToolItem, isToolPublishedForLocale } from '../../data/atomic-tools';
 import { CATEGORIES, type CategoryId, type ToolCategory } from '../../data/categories';
 import { TOOL_GROUPS, type ToolGroup } from '../../data/tool-groups';
 import { routes } from '../../data/routes';
@@ -17,6 +17,7 @@ export type ResolvedTool = AtomicToolItem & {
 
 @Injectable({ providedIn: 'root' })
 export class ToolRegistryService {
+  private readonly locale = inject(LOCALE_ID);
   private readonly categories = CATEGORIES;
   private readonly groups = TOOL_GROUPS;
   private readonly tools: AtomicToolItem[] = ATOMIC_TOOL_LIST;
@@ -54,13 +55,18 @@ export class ToolRegistryService {
 
   listToolsByGroup(category: CategoryId, group: string): AtomicToolItem[] {
     return this.tools
-      .filter(t => t.category === category && t.group === group)
+      .filter(
+        t =>
+          t.category === category
+          && t.group === group
+          && isToolPublishedForLocale(t, this.locale)
+      )
       .sort((a, b) => a.title.localeCompare(b.title));
   }
 
   async loadToolComponent(key: ToolKey): Promise<Type<unknown> | null> {
     const tool = this.getTool(key);
-    if (!tool || !tool.available || !tool.loadComponent) return null;
+    if (!tool || !isToolPublishedForLocale(tool, this.locale) || !tool.loadComponent) return null;
 
     try {
       return await tool.loadComponent();

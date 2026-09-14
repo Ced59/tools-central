@@ -20,6 +20,7 @@ export interface AtomicTool<C extends CategoryId, G extends GroupId<C>> {
   icon?: string;
   route: string;
   available: boolean;
+  reviewedLocales?: readonly string[];
   loadComponent?: () => Promise<Type<unknown>>;
 }
 
@@ -40,4 +41,19 @@ export const ATOMIC_TOOL_LIST: AtomicToolItem[] = deriveAtomicToolList() as Atom
 
 export function getToolById(id: ToolId) {
   return ATOMIC_TOOLS[id];
+}
+
+export function isToolPublishedForLocale(
+  tool: Pick<DerivedAtomicTool, 'available' | 'reviewedLocales'>,
+  locale: string,
+): boolean {
+  if (!tool.available) return false;
+  if (!tool.reviewedLocales) return true;
+
+  const normalizedLocale = locale.replace(/_/gu, '-').toLowerCase();
+  return tool.reviewedLocales.some((reviewedLocale) => {
+    const normalizedReviewedLocale = reviewedLocale.toLowerCase();
+    return normalizedLocale === normalizedReviewedLocale
+      || (!normalizedReviewedLocale.includes('-') && normalizedLocale.startsWith(`${normalizedReviewedLocale}-`));
+  });
 }

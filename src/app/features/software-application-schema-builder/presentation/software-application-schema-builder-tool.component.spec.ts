@@ -68,4 +68,20 @@ describe('SoftwareApplicationSchemaBuilderToolComponent', () => {
     expect(feedback?.getAttribute('role')).toBe('status');
     expect(feedback?.textContent).toContain('Copie automatique impossible');
   });
+
+  it('conserve un code de devise trop long pour que le domaine le refuse', () => {
+    const input = document.createElement('input');
+    input.value = 'USDT';
+    input.addEventListener('input', event => {
+      component.updatePriceCurrency(event);
+    });
+
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+
+    expect(component.priceCurrency()).toBe('USDT');
+    expect(component.result().issues).toContainEqual(expect.objectContaining({
+      code: 'invalid-price-currency',
+      detail: 'USDT',
+    }));
+  });
 });

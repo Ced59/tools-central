@@ -293,6 +293,7 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
               description: $localize`:@@tool_software_application_schema_builder_desc:Générer et valider localement un JSON-LD SoftwareApplication avec offre, plateforme et note agrégée réelle, puis copier ou télécharger le code.`,
               icon: 'tc-icon tc-icon-code',
               available: true,
+              reviewedLocales: ['fr'],
               loadComponent: () =>
                 import('../../features/software-application-schema-builder/presentation/software-application-schema-builder-tool.component')
                   .then(m => m.SoftwareApplicationSchemaBuilderToolComponent),

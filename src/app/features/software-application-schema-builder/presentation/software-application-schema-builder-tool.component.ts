@@ -105,7 +105,7 @@ export class SoftwareApplicationSchemaBuilderToolComponent {
   updateOperatingSystem(event: Event): void { this.operatingSystem.set(readValue(event).slice(0, 201)); }
   updateSoftwareVersion(event: Event): void { this.softwareVersion.set(readValue(event).slice(0, 101)); }
   updatePrice(event: Event): void { this.price.set(readValue(event).slice(0, 32)); }
-  updatePriceCurrency(event: Event): void { this.priceCurrency.set(readValue(event).slice(0, 3).toUpperCase()); }
+  updatePriceCurrency(event: Event): void { this.priceCurrency.set(readValue(event).slice(0, 32).toUpperCase()); }
 
   updateIncludeAggregateRating(event: Event): void {
     this.includeAggregateRating.set((event.target as HTMLInputElement).checked);

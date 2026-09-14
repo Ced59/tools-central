@@ -12,6 +12,7 @@ import type { ToolEditorialModel } from '../../../../models/tool-editorial/tool-
 import { ToolEditorialSectionsComponent } from '../../../shared/tool-editorial-sections/tool-editorial-sections.component';
 import { ToolEditorialService } from '../../../../core/tools/tool-editorial.service';
 import { RelatedToolsComponent } from '../../../shared/related-tools';
+import { SeoService } from '../../../../services/seo/seo.service';
 
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
@@ -43,7 +44,8 @@ export class ToolComponent {
   constructor(
     private route: ActivatedRoute,
     private registry: ToolRegistryService,
-    private editorialService: ToolEditorialService
+    private editorialService: ToolEditorialService,
+    private seo: SeoService,
   ) {
     // ⚠️ IMPORTANT: écouter les changements de params (pas snapshot)
     this.route.paramMap
@@ -110,6 +112,7 @@ export class ToolComponent {
 
         this.toolComponent.set(cmp);
         this.editorial.set(ed);
+        if (!cmp) this.seo.setRobots('noindex,follow');
         this.isLoading.set(false);
       })
       .catch(() => {
@@ -117,6 +120,7 @@ export class ToolComponent {
 
         this.toolComponent.set(null);
         this.editorial.set(null);
+        this.seo.setRobots('noindex,follow');
         this.isLoading.set(false);
       });
   }

@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 
 import { SeoLinksService, type HreflangEntry } from './seo-links.service';
 import { LOCALES } from '../../i18n/locales.generated';
+import { ATOMIC_TOOL_LIST, isToolPublishedForLocale } from '../../data/atomic-tools';
 
 export type SeoConfig = {
   title: string;
@@ -87,6 +88,10 @@ export class SeoService {
     }
   }
 
+  setRobots(content: string): void {
+    this.setMetaName('robots', content);
+  }
+
   // ---------------------------------------------------------------------------
   // Canonical + hreflang (auto, jamais à appeler depuis les components)
   // ---------------------------------------------------------------------------
@@ -102,14 +107,18 @@ export class SeoService {
     // hreflang (+ x-default)
     const { restPath } = this.splitLocaleFromPath(canonicalPath);
 
-    const entries: HreflangEntry[] = LOCALES.map(l => ({
+    const alternateLocales = this.alternateLocalesForPath(restPath);
+    const entries: HreflangEntry[] = alternateLocales.map(l => ({
       hreflang: String(l.locale),
       hrefAbs: this.toAbsUrl(this.buildLocalePath(String(l.locale), restPath)),
     }));
 
+    const xDefaultLocale = alternateLocales.some(locale => locale.locale === this.defaultLocale)
+      ? this.defaultLocale
+      : String(alternateLocales[0]?.locale ?? this.defaultLocale);
     entries.push({
       hreflang: 'x-default',
-      hrefAbs: this.toAbsUrl(this.buildLocalePath(this.defaultLocale, restPath)),
+      hrefAbs: this.toAbsUrl(this.buildLocalePath(xDefaultLocale, restPath)),
     });
 
     this.links.setHreflangs(entries);
@@ -174,6 +183,14 @@ export class SeoService {
 
   private buildLocalePath(locale: string, restPath: string): string {
     return restPath ? `/${locale}/${restPath}` : `/${locale}/`;
+  }
+
+  private alternateLocalesForPath(restPath: string): typeof LOCALES {
+    const route = restPath ? `/${restPath}` : '/';
+    const tool = ATOMIC_TOOL_LIST.find(candidate => candidate.route === route);
+    return tool?.reviewedLocales
+      ? LOCALES.filter(locale => isToolPublishedForLocale(tool, String(locale.locale)))
+      : LOCALES;
   }
 
   private buildXDefaultPath(restPath: string): string {
