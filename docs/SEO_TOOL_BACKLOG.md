@@ -1,6 +1,6 @@
 # Backlog d'outils à forte valeur produit et SEO
 
-Date de référence : 13 septembre 2026
+Date de référence : 14 septembre 2026
 
 ## Objectif et garde-fous
 
@@ -84,6 +84,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 - **Prévisualiseur de snippet Google** — implémenté en Clean Architecture, traitement local, vues ordinateur/mobile, estimation typographique en pixels, recommandations, tests unitaires et E2E. Route : `/categories/dev/seo/serp-snippet-preview`.
 - **Générateur et validateur robots.txt** — implémenté en Clean Architecture, traitement local, génération sûre, validation bornée à 500 Kio, simulation URL/user-agent conforme à RFC 9309, export texte, tests unitaires et E2E. Route : `/categories/dev/seo/robots-txt-builder`.
 - **Générateur et validateur sitemap XML** — implémenté en Clean Architecture, traitement local, génération de sitemap ou d’index, validation XML bornée, contrôle des URL, dates, doublons, périmètre et limites du protocole, export XML, tests unitaires et E2E. Route : `/categories/dev/seo/sitemap-xml-builder`.
+- **Générateur et vérificateur hreflang** — implémenté en Clean Architecture, traitement local, sorties HTML/HTTP/sitemap, validation des codes et URL, contrôle des auto-références, canonicals, ensembles et liens retour à partir de blocs fournis, export local, tests unitaires et E2E. Route : `/categories/dev/seo/hreflang-checker`.
 
 ## Inventaire exhaustif des opportunités
 

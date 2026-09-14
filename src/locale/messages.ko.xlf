@@ -81240,6 +81240,672 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">생성기 라인은 "URL | 선택적 lastmod" 형식을 따라야 합니다.</target>
       </segment>
     </unit>
+    <unit id="tool_hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">hreflang 생성기 및 검사기</target>
+      </segment>
+    </unit>
+    <unit id="tool_hreflang_checker_desc">
+      <segment>
+        <source>Créer des annotations HTML, HTTP ou sitemap, puis vérifier localement les auto-références, canonicals et liens retour entre pages multilingues.</source>
+        <target state="translated">HTML, HTTP 또는 사이트맵 주석을 생성한 후, 다국어 페이지 간의 자기 참조, 정규화 및 백링크를 로컬에서 확인합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_title">
+      <segment>
+        <source>Créer et auditer des annotations hreflang cohérentes</source>
+        <target state="translated">일관된 hreflang 주석 생성 및 감사</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_lead">
+      <segment>
+        <source>Les annotations hreflang relient les versions linguistiques ou régionales équivalentes d’une page. Le générateur produit trois formats et l’audit local repère les codes invalides, auto-références absentes, canonicals suspects et liens retour manquants dans les données fournies.</source>
+        <target state="translated">hreflang 주석은 페이지의 동등한 언어 또는 지역 버전을 연결합니다. 생성기는 세 가지 형식을 생성하고, 로컬 감사는 제공된 데이터에서 잘못된 코드, 누락된 자기 참조, 의심스러운 정규화 및 누락된 백링크를 찾아냅니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">사용 사례</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_title">
+      <segment>
+        <source>Préparer une nouvelle traduction</source>
+        <target state="translated">새 번역 준비하기</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_text">
+      <segment>
+        <source>Associez chaque code de langue ou de région à son URL absolue, incluez la page courante et choisissez une destination x-default pour les visiteurs non couverts.</source>
+        <target state="translated">각 언어 또는 지역 코드를 해당 절대 URL에 연결하고, 현재 페이지를 포함하며, 커버되지 않은 방문자를 위한 x-default 대상을 선택합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_title">
+      <segment>
+        <source>Comparer plusieurs modèles de page</source>
+        <target state="translated">여러 페이지 템플릿 비교하기</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_text">
+      <segment>
+        <source>Collez les annotations observées sur chaque page afin de trouver un retour absent, un ensemble différent ou une canonical qui ne pointe pas vers la page attendue.</source>
+        <target state="translated">각 페이지에서 관찰된 주석을 붙여넣어 누락된 백링크, 다른 세트 또는 예상 페이지를 가리키지 않는 정규화를 찾습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_title">
+      <segment>
+        <source>Déployer hors du HTML</source>
+        <target state="translated">HTML 외부로 배포하기</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_text">
+      <segment>
+        <source>Générez un en-tête Link pour un document non HTML ou un fragment xhtml:link à intégrer dans un sitemap XML existant.</source>
+        <target state="translated">HTML이 아닌 문서에 대한 Link 헤더를 생성하거나 기존 XML 사이트맵에 통합할 xhtml:link 조각을 생성합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">권장 방법</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_1">
+      <segment>
+        <source>Construisez un ensemble à partir de pages réellement équivalentes. Chaque version doit déclarer sa propre URL et les autres variantes au moyen d’adresses HTTP ou HTTPS complètes.</source>
+        <target state="translated">실제로 동등한 페이지에서 세트를 구축합니다. 각 버전은 자신의 URL과 다른 변형을 HTTP 또는 HTTPS 전체 주소를 통해 선언해야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_2">
+      <segment>
+        <source>Installez le même ensemble sur les pages concernées et contrôlez les liens dans les deux sens. Une cible qui ne renvoie pas vers la source peut rendre la paire inutilisable pour Google.</source>
+        <target state="translated">관련 페이지에 동일한 세트를 설치하고 양방향 링크를 확인합니다. 소스로 돌아가지 않는 대상은 Google에 대해 쌍을 사용할 수 없게 만들 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_3">
+      <segment>
+        <source>Vérifiez séparément que chaque URL répond correctement, reste indexable, affiche la bonne langue et utilise une canonical compatible. L’outil n’effectue aucune requête réseau.</source>
+        <target state="translated">각 URL이 올바르게 응답하고, 인덱스 가능하며, 올바른 언어를 표시하고, 호환 가능한 정규화를 사용하는지 별도로 확인합니다. 도구는 네트워크 요청을 수행하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_codes">
+      <segment>
+        <source>Codes et variantes</source>
+        <target state="translated">코드 및 변형</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_1">
+      <segment>
+        <source>La langue utilise un code ISO 639-1 à deux lettres, par exemple fr ou en. Un code pays seul n’est pas un ciblage valide.</source>
+        <target state="translated">언어는 fr 또는 en과 같은 두 글자의 ISO 639-1 코드를 사용합니다. 국가 코드만으로는 유효한 타겟팅이 아닙니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_2">
+      <segment>
+        <source>Une région ISO 3166-1 alpha-2 peut suivre la langue, par exemple en-GB. Le générateur normalise sa casse sans modifier l’intention.</source>
+        <target state="translated">ISO 3166-1 alpha-2 지역이 언어 뒤에 올 수 있으며, 예를 들어 en-GB입니다. 생성기는 의도를 변경하지 않고 대소문자를 정규화합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_3">
+      <segment>
+        <source>Un script ISO 15924 peut être explicite, comme zh-Hant. x-default désigne la page de repli lorsque les autres codes ne correspondent pas.</source>
+        <target state="translated">ISO 15924 스크립트는 zh-Hant와 같이 명시적일 수 있습니다. x-default는 다른 코드가 일치하지 않을 때의 대체 페이지를 나타냅니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">알아야 할 한계</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_1">
+      <segment>
+        <source>L’audit ne visite pas le Web. Une cible absente des blocs PAGE est signalée comme non vérifiable, sans conclure que son lien retour manque réellement.</source>
+        <target state="translated">감사는 웹을 방문하지 않습니다. PAGE 블록에 없는 대상은 확인할 수 없는 것으로 표시되며, 실제로 백링크가 누락되었다고 결론짓지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_2">
+      <segment>
+        <source>Une différence d’ensemble est un avertissement, pas toujours une erreur. Google autorise certains sous-ensembles tant que les relations importantes restent bidirectionnelles.</source>
+        <target state="translated">세트의 차이는 경고이며 항상 오류는 아닙니다. Google은 중요한 관계가 양방향으로 유지되는 한 일부 하위 집합을 허용합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_3">
+      <segment>
+        <source>hreflang aide au choix de la version dans les résultats ; il ne traduit pas la page et ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">hreflang은 결과에서 버전을 선택하는 데 도움을 주지만 페이지를 번역하지 않으며 탐색, 인덱싱 또는 순위를 보장하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">자주 묻는 질문</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q1">
+      <segment>
+        <source>Faut-il publier HTML, en-tête HTTP et sitemap en même temps ?</source>
+        <target state="translated">HTML, HTTP 헤더 및 사이트맵을 동시에 게시해야 하나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a1">
+      <segment>
+        <source>Non. Google considère les trois méthodes comme équivalentes. Une seule méthode bien maintenue réduit le risque de divergence entre plusieurs sources.</source>
+        <target state="translated">아니요. Google은 세 가지 방법을 동등하게 간주합니다. 잘 유지된 단일 방법은 여러 소스 간의 불일치 위험을 줄입니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q2">
+      <segment>
+        <source>Deux codes peuvent-ils pointer vers la même URL ?</source>
+        <target state="translated">두 코드가 동일한 URL을 가리킬 수 있나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a2">
+      <segment>
+        <source>Oui, notamment lorsqu’une version linguistique sert aussi de x-default. L’outil l’indique comme information afin que vous confirmiez ce choix.</source>
+        <target state="translated">예, 특히 언어 버전이 x-default로도 사용될 때 가능합니다. 도구는 이 선택을 확인할 수 있도록 정보를 제공합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q3">
+      <segment>
+        <source>Les URL saisies sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">입력된 URL이 Tools Central에 전송되나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a3">
+      <segment>
+        <source>Non. La validation, la génération, la comparaison et l’export s’exécutent localement dans le navigateur. Aucun crawl ni stockage distant n’est déclenché.</source>
+        <target state="translated">아니요. 검증, 생성, 비교 및 내보내기는 브라우저에서 로컬로 실행됩니다. 크롤링이나 원격 저장이 발생하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip_title">
+      <segment>
+        <source>La langue visible reste décisive</source>
+        <target state="translated">보이는 언어는 결정적입니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip">
+      <segment>
+        <source>Google détermine la langue à partir du contenu visible, pas uniquement du code hreflang ou de l’attribut lang. Évitez les pages dont seul le menu est traduit.</source>
+        <target state="translated">Google은 hreflang 코드나 lang 속성만이 아니라 보이는 콘텐츠에서 언어를 결정합니다. 메뉴만 번역된 페이지는 피하세요.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">hreflang 생성기 및 검사기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_subtitle">
+      <segment>
+        <source> Créez des annotations multilingues cohérentes et contrôlez les liens retour entre plusieurs pages. </source>
+        <target state="translated">일관된 다국어 주석을 생성하고 여러 페이지 간의 백링크를 확인합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun contenu n’est envoyé ou exploré.</source>
+        <target state="translated">100% 로컬 처리: URL이나 콘텐츠가 전송되거나 탐색되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_title">
+      <segment>
+        <source>1. Définir l’ensemble des variantes</source>
+        <target state="translated">1. 변형 세트 정의하기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_subtitle">
+      <segment>
+        <source>Ajoutez une ligne par version au format « code | URL absolue ». La page courante doit aussi figurer dans la liste.</source>
+        <target state="translated">각 버전마다 « 코드 | 절대 URL » 형식으로 한 줄을 추가합니다. 현재 페이지도 목록에 포함되어야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_label">
+      <segment>
+        <source>URL de la page courante</source>
+        <target state="translated">현재 페이지의 URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_help">
+      <segment>
+        <source>Cette URL devient le loc du fragment sitemap et sert au contrôle de l’auto-référence.</source>
+        <target state="translated">이 URL은 사이트맵의 loc 조각이 되며 자기 참조 확인에 사용됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_label">
+      <segment>
+        <source>Codes et URL alternatives</source>
+        <target state="translated">대체 코드 및 URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_help">
+      <segment>
+        <source>Exemples : fr, en, en-GB, zh-Hant ou x-default. Les chemins relatifs sont refusés.</source>
+        <target state="translated">예: fr, en, en-GB, zh-Hant 또는 x-default. 상대 경로는 허용되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_variants">
+      <segment>
+        <source>variantes valides</source>
+        <target state="translated">유효한 변형</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">오류</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">경고</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">정보</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">라인</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_set_level">
+      <segment>
+        <source>Ensemble</source>
+        <target state="translated">세트</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_title">
+      <segment>
+        <source>2. Copier ou exporter</source>
+        <target state="translated">2. 복사 또는 내보내기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_subtitle">
+      <segment>
+        <source>Choisissez une seule méthode de publication pour limiter les divergences de configuration.</source>
+        <target state="translated">구성의 차이를 줄이기 위해 단일 게시 방법을 선택하세요.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_format_aria">
+      <segment>
+        <source>Format de sortie hreflang</source>
+        <target state="translated">hreflang 출력 형식</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_code_label">
+      <segment>
+        <source>Code hreflang généré</source>
+        <target state="translated">생성된 hreflang 코드</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">복사됨</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">복사</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">다운로드</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_title">
+      <segment>
+        <source>3. Vérifier les liens retour entre pages</source>
+        <target state="translated">3. 페이지 간의 백링크 확인</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_subtitle">
+      <segment>
+        <source>Collez un bloc par page. L’audit compare uniquement les données fournies : il n’effectue aucun crawl réseau.</source>
+        <target state="translated">페이지마다 블록을 붙여넣으세요. 감사는 제공된 데이터만 비교합니다: 네트워크 크롤링은 수행하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_label">
+      <segment>
+        <source>Pages et annotations observées</source>
+        <target state="translated">관찰된 페이지 및 주석</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_help">
+      <segment>
+        <source>Commencez chaque bloc par « PAGE URL | canonical », puis listez ses lignes « code | URL ».</source>
+        <target state="translated">각 블록을 "PAGE URL | canonical"로 시작한 다음, "code | URL" 형식으로 나열하세요.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_run_audit">
+      <segment>
+        <source>Analyser les blocs fournis</source>
+        <target state="translated">제공된 블록 분석</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_pages">
+      <segment>
+        <source>pages</source>
+        <target state="translated">페이지</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_links">
+      <segment>
+        <source>liens</source>
+        <target state="translated">링크</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue">
+      <segment>
+        <source>Ensemble réciproque dans les données fournies</source>
+        <target state="translated">제공된 데이터의 상호 참조 세트</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue_help">
+      <segment>
+        <source>Chaque page fournie se référence elle-même et les cibles fournies contiennent un lien retour.</source>
+        <target state="translated">제공된 각 페이지는 자신을 참조하고 제공된 대상에는 백링크가 포함되어 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_level">
+      <segment>
+        <source>Audit</source>
+        <target state="translated">감사</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_title">
+      <segment>
+        <source>4. Publier sans créer de signaux contradictoires</source>
+        <target state="translated">4. 모순 신호를 생성하지 않고 게시하기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_title">
+      <segment>
+        <source>URL absolues</source>
+        <target state="translated">절대 URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_text">
+      <segment>
+        <source>Déclarez le protocole et l’hôte complets. Les variantes peuvent vivre sur des domaines différents.</source>
+        <target state="translated">프로토콜과 호스트를 완전하게 선언하세요. 변형은 서로 다른 도메인에서 존재할 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_title">
+      <segment>
+        <source>Retours bidirectionnels</source>
+        <target state="translated">양방향 반환</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_text">
+      <segment>
+        <source>Une page cible doit pointer en retour vers la source, sinon les annotations concernées peuvent être ignorées.</source>
+        <target state="translated">대상 페이지는 소스로 다시 가리켜야 하며, 그렇지 않으면 관련 주석이 무시될 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_title">
+      <segment>
+        <source>x-default et langue générique</source>
+        <target state="translated">x-default 및 일반 언어</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_text">
+      <segment>
+        <source>Prévoyez une destination de repli et, avec plusieurs régions, une version générique de la langue quand elle existe.</source>
+        <target state="translated">대체 대상을 계획하고, 여러 지역이 있을 경우 존재하는 경우 언어의 일반 버전을 준비하세요.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_title">
+      <segment>
+        <source>Contrôle local, pas un crawl</source>
+        <target state="translated">크롤링이 아닌 로컬 제어</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_text">
+      <segment>
+        <source>L’outil vérifie les blocs collés. Contrôlez ensuite les réponses HTTP, canonicals et indexabilité sur le site publié.</source>
+        <target state="translated">도구는 붙여넣은 블록을 확인합니다. 그런 다음 HTTP 응답, canonical 및 게시된 사이트의 인덱스 가능성을 확인하세요.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">관련 SEO 도구</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_title">
+      <segment>
+        <source>Continuer le parcours SEO technique</source>
+        <target state="translated">기술 SEO 여정 계속하기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">스니펫 미리보기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_sitemap">
+      <segment>
+        <source>Créer le sitemap XML</source>
+        <target state="translated">XML 사이트맵 생성</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_robots">
+      <segment>
+        <source>Contrôler robots.txt</source>
+        <target state="translated">robots.txt 확인</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEO 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_html">
+      <segment>
+        <source>Balises HTML</source>
+        <target state="translated">HTML 태그</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_http">
+      <segment>
+        <source>En-tête HTTP</source>
+        <target state="translated">HTTP 헤더</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_sitemap">
+      <segment>
+        <source>Fragment sitemap</source>
+        <target state="translated">사이트맵 조각</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">소스가 1,000,000자를 초과하여 잘렸습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_line">
+      <segment>
+        <source>La ligne doit suivre le format « code | URL absolue ».</source>
+        <target state="translated">라인은 "코드 | 절대 URL" 형식을 따라야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_code">
+      <segment>
+        <source>Le code de langue est manquant.</source>
+        <target state="translated">언어 코드가 누락되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_code">
+      <segment>
+        <source>Le code doit contenir une langue ISO 639-1, puis éventuellement un script et une région.</source>
+        <target state="translated">코드는 ISO 639-1 언어를 포함해야 하며, 선택적으로 스크립트와 지역을 포함할 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_noncanonical_code">
+      <segment>
+        <source>La casse du code a été normalisée dans la sortie.</source>
+        <target state="translated">코드의 대소문자가 출력에서 정규화되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_url">
+      <segment>
+        <source>L’URL associée au code est manquante.</source>
+        <target state="translated">코드와 연결된 URL이 누락되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_url">
+      <segment>
+        <source>L’adresse doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">주소는 절대 HTTP 또는 HTTPS URL이어야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans une URL sont refusés.</source>
+        <target state="translated">URL에 포함된 자격 증명은 거부됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_fragment">
+      <segment>
+        <source>Une URL hreflang ne doit pas cibler un fragment de page.</source>
+        <target state="translated">hreflang URL은 페이지의 조각을 타겟팅해서는 안 됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_code">
+      <segment>
+        <source>Ce code hreflang apparaît plusieurs fois dans le même ensemble.</source>
+        <target state="translated">이 hreflang 코드는 동일한 세트에서 여러 번 나타납니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_alternates">
+      <segment>
+        <source>L’analyse est limitée à 100 variantes par page.</source>
+        <target state="translated">분석은 페이지당 100개의 변형으로 제한됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_current">
+      <segment>
+        <source>L’URL de la page courante est obligatoire.</source>
+        <target state="translated">현재 페이지의 URL은 필수입니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_current">
+      <segment>
+        <source>L’URL courante doit être absolue, sans identifiants ni fragment.</source>
+        <target state="translated">현재 URL은 절대적이어야 하며, 자격 증명이나 조각이 없어야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_self">
+      <segment>
+        <source>La page courante ne se référence pas elle-même dans l’ensemble.</source>
+        <target state="translated">현재 페이지는 세트에서 자신을 참조하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_x_default">
+      <segment>
+        <source>Aucune variante x-default n’est déclarée pour les langues non couvertes.</source>
+        <target state="translated">커버되지 않은 언어에 대한 x-default 변형이 선언되지 않았습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_language_fallback">
+      <segment>
+        <source>Des variantes régionales existent sans version générique pour cette langue.</source>
+        <target state="translated">이 언어에 대한 일반 버전 없이 지역 변형이 존재합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_same_url">
+      <segment>
+        <source>Plusieurs codes ciblent la même URL ; cela peut être volontaire, notamment pour x-default.</source>
+        <target state="translated">여러 코드가 동일한 URL을 타겟팅하고 있습니다; 이는 x-default의 경우 의도적일 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_page_header">
+      <segment>
+        <source>L’en-tête doit commencer par PAGE suivi d’une URL absolue valide.</source>
+        <target state="translated">헤더는 PAGE로 시작하고 유효한 절대 URL을 따라야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_canonical">
+      <segment>
+        <source>L’URL canonical n’est pas fournie pour cette page.</source>
+        <target state="translated">이 페이지에 대한 canonical URL이 제공되지 않았습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_canonical">
+      <segment>
+        <source>La canonical doit être une URL HTTP ou HTTPS absolue, sans identifiants ni fragment.</source>
+        <target state="translated">canonical은 절대 HTTP 또는 HTTPS URL이어야 하며, 자격 증명이나 조각이 없어야 합니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_canonical_mismatch">
+      <segment>
+        <source>La canonical cible une autre URL ; confirmez qu’elle reste dans la même langue et que ce regroupement est voulu.</source>
+        <target state="translated">canonical이 다른 URL을 타겟팅하고 있습니다; 동일한 언어 내에서 유지되고 이 그룹화가 의도된 것인지 확인하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_before_page">
+      <segment>
+        <source>Cette variante apparaît avant le premier en-tête PAGE.</source>
+        <target state="translated">이 변형은 첫 번째 PAGE 헤더 이전에 나타납니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_page">
+      <segment>
+        <source>Cette page est déclarée plusieurs fois dans l’audit.</source>
+        <target state="translated">이 페이지는 감사에서 여러 번 선언되었습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_pages">
+      <segment>
+        <source>L’audit local est limité à 200 pages.</source>
+        <target state="translated">로컬 감사는 200페이지로 제한됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_target_missing">
+      <segment>
+        <source>La cible n’est pas fournie comme bloc PAGE ; son lien retour ne peut pas être vérifié.</source>
+        <target state="translated">대상이 PAGE 블록으로 제공되지 않았습니다; 그 링크는 확인할 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_return">
+      <segment>
+        <source>La page cible fournie ne contient aucun lien retour vers la page source.</source>
+        <target state="translated">제공된 대상 페이지에는 소스 페이지로의 링크가 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_inconsistent">
+      <segment>
+        <source>L’ensemble diffère de celui de la première page ; vérifiez si cette différence est volontaire.</source>
+        <target state="translated">세트가 첫 번째 페이지와 다릅니다; 이 차이가 의도된 것인지 확인하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">목록은 처음 200개의 문제로 제한됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_empty_audit">
+      <segment>
+        <source>Aucun bloc PAGE valide n’a été fourni ; aucune réciprocité ne peut être conclue.</source>
+        <target state="translated">유효한 PAGE 블록이 제공되지 않았습니다. 상호 참조를 결론지을 수 없습니다.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

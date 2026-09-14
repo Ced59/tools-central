@@ -81212,6 +81212,672 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">De regel van de generator moet het formaat "URL | optionele lastmod" volgen.</target>
       </segment>
     </unit>
+    <unit id="tool_hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">Hreflang-generator en -checker</target>
+      </segment>
+    </unit>
+    <unit id="tool_hreflang_checker_desc">
+      <segment>
+        <source>Créer des annotations HTML, HTTP ou sitemap, puis vérifier localement les auto-références, canonicals et liens retour entre pages multilingues.</source>
+        <target state="translated">Maak HTML-, HTTP- of sitemap-annotaties en controleer vervolgens lokaal de zelfreferenties, canonicals en teruglinks tussen meertalige pagina's.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_title">
+      <segment>
+        <source>Créer et auditer des annotations hreflang cohérentes</source>
+        <target state="translated">Creëer en controleer consistente hreflang-annotaties</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_lead">
+      <segment>
+        <source>Les annotations hreflang relient les versions linguistiques ou régionales équivalentes d’une page. Le générateur produit trois formats et l’audit local repère les codes invalides, auto-références absentes, canonicals suspects et liens retour manquants dans les données fournies.</source>
+        <target state="translated">Hreflang-annotaties verbinden de equivalente taalkundige of regionale versies van een pagina. De generator produceert drie formaten en de lokale audit identificeert ongeldige codes, ontbrekende zelfreferenties, verdachte canonicals en ontbrekende teruglinks in de aangeleverde gegevens.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Gebruikscases</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_title">
+      <segment>
+        <source>Préparer une nouvelle traduction</source>
+        <target state="translated">Bereid een nieuwe vertaling voor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_text">
+      <segment>
+        <source>Associez chaque code de langue ou de région à son URL absolue, incluez la page courante et choisissez une destination x-default pour les visiteurs non couverts.</source>
+        <target state="translated">Koppel elke taal- of regiocode aan zijn absolute URL, voeg de huidige pagina toe en kies een x-default-bestemming voor niet gedekte bezoekers.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_title">
+      <segment>
+        <source>Comparer plusieurs modèles de page</source>
+        <target state="translated">Vergelijk meerdere paginamodellen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_text">
+      <segment>
+        <source>Collez les annotations observées sur chaque page afin de trouver un retour absent, un ensemble différent ou une canonical qui ne pointe pas vers la page attendue.</source>
+        <target state="translated">Plak de waargenomen annotaties op elke pagina om een ontbrekende teruglink, een andere set of een canonical die niet naar de verwachte pagina wijst, te vinden.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_title">
+      <segment>
+        <source>Déployer hors du HTML</source>
+        <target state="translated">Implementeren buiten HTML</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_text">
+      <segment>
+        <source>Générez un en-tête Link pour un document non HTML ou un fragment xhtml:link à intégrer dans un sitemap XML existant.</source>
+        <target state="translated">Genereer een Link-header voor een niet-HTML-document of een fragment xhtml:link om in een bestaand XML-sitemap te integreren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Aanbevolen methode</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_1">
+      <segment>
+        <source>Construisez un ensemble à partir de pages réellement équivalentes. Chaque version doit déclarer sa propre URL et les autres variantes au moyen d’adresses HTTP ou HTTPS complètes.</source>
+        <target state="translated">Bouw een set op basis van daadwerkelijk equivalente pagina's. Elke versie moet zijn eigen URL en de andere varianten verklaren met volledige HTTP- of HTTPS-adressen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_2">
+      <segment>
+        <source>Installez le même ensemble sur les pages concernées et contrôlez les liens dans les deux sens. Une cible qui ne renvoie pas vers la source peut rendre la paire inutilisable pour Google.</source>
+        <target state="translated">Installeer dezelfde set op de betrokken pagina's en controleer de links in beide richtingen. Een doel dat niet naar de bron verwijst, kan de paar onbruikbaar maken voor Google.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_3">
+      <segment>
+        <source>Vérifiez séparément que chaque URL répond correctement, reste indexable, affiche la bonne langue et utilise une canonical compatible. L’outil n’effectue aucune requête réseau.</source>
+        <target state="translated">Controleer afzonderlijk of elke URL correct reageert, indexeerbaar blijft, de juiste taal weergeeft en een compatibele canonical gebruikt. De tool voert geen netwerkverzoeken uit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_codes">
+      <segment>
+        <source>Codes et variantes</source>
+        <target state="translated">Codes en varianten</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_1">
+      <segment>
+        <source>La langue utilise un code ISO 639-1 à deux lettres, par exemple fr ou en. Un code pays seul n’est pas un ciblage valide.</source>
+        <target state="translated">De taal gebruikt een ISO 639-1 tweecijferige code, bijvoorbeeld fr of en. Alleen een landcode is geen geldige targeting.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_2">
+      <segment>
+        <source>Une région ISO 3166-1 alpha-2 peut suivre la langue, par exemple en-GB. Le générateur normalise sa casse sans modifier l’intention.</source>
+        <target state="translated">Een ISO 3166-1 alpha-2 regio kan de taal volgen, bijvoorbeeld en-GB. De generator normaliseert de hoofdletters zonder de intentie te wijzigen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_3">
+      <segment>
+        <source>Un script ISO 15924 peut être explicite, comme zh-Hant. x-default désigne la page de repli lorsque les autres codes ne correspondent pas.</source>
+        <target state="translated">Een ISO 15924-script kan expliciet zijn, zoals zh-Hant. x-default verwijst naar de fallback-pagina wanneer de andere codes niet overeenkomen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">Beperkingen om te kennen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_1">
+      <segment>
+        <source>L’audit ne visite pas le Web. Une cible absente des blocs PAGE est signalée comme non vérifiable, sans conclure que son lien retour manque réellement.</source>
+        <target state="translated">De audit bezoekt het web niet. Een doel dat ontbreekt in de PAGE-blokken wordt gemeld als niet verifieerbaar, zonder te concluderen dat de teruglink daadwerkelijk ontbreekt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_2">
+      <segment>
+        <source>Une différence d’ensemble est un avertissement, pas toujours une erreur. Google autorise certains sous-ensembles tant que les relations importantes restent bidirectionnelles.</source>
+        <target state="translated">Een verschil in set is een waarschuwing, niet altijd een fout. Google staat bepaalde subsets toe zolang de belangrijke relaties bidirectioneel blijven.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_3">
+      <segment>
+        <source>hreflang aide au choix de la version dans les résultats ; il ne traduit pas la page et ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">hreflang helpt bij het kiezen van de versie in de resultaten; het vertaalt de pagina niet en garandeert geen verkenning, indexering of ranking.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Veelgestelde vragen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q1">
+      <segment>
+        <source>Faut-il publier HTML, en-tête HTTP et sitemap en même temps ?</source>
+        <target state="translated">Moet ik HTML, HTTP-header en sitemap tegelijkertijd publiceren?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a1">
+      <segment>
+        <source>Non. Google considère les trois méthodes comme équivalentes. Une seule méthode bien maintenue réduit le risque de divergence entre plusieurs sources.</source>
+        <target state="translated">Nee. Google beschouwt de drie methoden als gelijkwaardig. Een enkele goed onderhouden methode vermindert het risico op divergentie tussen meerdere bronnen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q2">
+      <segment>
+        <source>Deux codes peuvent-ils pointer vers la même URL ?</source>
+        <target state="translated">Kunnen twee codes naar dezelfde URL wijzen?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a2">
+      <segment>
+        <source>Oui, notamment lorsqu’une version linguistique sert aussi de x-default. L’outil l’indique comme information afin que vous confirmiez ce choix.</source>
+        <target state="translated">Ja, vooral wanneer een taalkundige versie ook als x-default dient. De tool geeft dit aan als informatie zodat u deze keuze kunt bevestigen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q3">
+      <segment>
+        <source>Les URL saisies sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">Worden de ingevoerde URL's naar Tools Central gestuurd?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a3">
+      <segment>
+        <source>Non. La validation, la génération, la comparaison et l’export s’exécutent localement dans le navigateur. Aucun crawl ni stockage distant n’est déclenché.</source>
+        <target state="translated">Nee. Validatie, generatie, vergelijking en export worden lokaal in de browser uitgevoerd. Er wordt geen crawl of externe opslag geactiveerd.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip_title">
+      <segment>
+        <source>La langue visible reste décisive</source>
+        <target state="translated">De zichtbare taal blijft cruciaal</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip">
+      <segment>
+        <source>Google détermine la langue à partir du contenu visible, pas uniquement du code hreflang ou de l’attribut lang. Évitez les pages dont seul le menu est traduit.</source>
+        <target state="translated">Google bepaalt de taal op basis van de zichtbare inhoud, niet alleen op basis van de hreflang-code of het lang-attribuut. Vermijd pagina's waarvan alleen het menu is vertaald.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">Hreflang-generator en -checker</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_subtitle">
+      <segment>
+        <source> Créez des annotations multilingues cohérentes et contrôlez les liens retour entre plusieurs pages. </source>
+        <target state="translated">Creëer consistente meertalige annotaties en controleer de teruglinks tussen meerdere pagina's.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun contenu n’est envoyé ou exploré.</source>
+        <target state="translated">100% lokale verwerking: geen URL of inhoud wordt verzonden of verkend.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_title">
+      <segment>
+        <source>1. Définir l’ensemble des variantes</source>
+        <target state="translated">1. Definieer de set van varianten</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_subtitle">
+      <segment>
+        <source>Ajoutez une ligne par version au format « code | URL absolue ». La page courante doit aussi figurer dans la liste.</source>
+        <target state="translated">Voeg een regel per versie toe in het formaat "code | absolute URL". De huidige pagina moet ook in de lijst staan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_label">
+      <segment>
+        <source>URL de la page courante</source>
+        <target state="translated">URL van de huidige pagina</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_help">
+      <segment>
+        <source>Cette URL devient le loc du fragment sitemap et sert au contrôle de l’auto-référence.</source>
+        <target state="translated">Deze URL wordt de loc van het sitemapfragment en dient voor de controle van de zelfreferentie.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_label">
+      <segment>
+        <source>Codes et URL alternatives</source>
+        <target state="translated">Codes en alternatieve URL's</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_help">
+      <segment>
+        <source>Exemples : fr, en, en-GB, zh-Hant ou x-default. Les chemins relatifs sont refusés.</source>
+        <target state="translated">Voorbeelden: fr, en, en-GB, zh-Hant of x-default. Relatieve paden zijn niet toegestaan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_variants">
+      <segment>
+        <source>variantes valides</source>
+        <target state="translated">geldige varianten</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">fouten</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">waarschuwingen</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">informatie</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">Regel</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_set_level">
+      <segment>
+        <source>Ensemble</source>
+        <target state="translated">Set</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_title">
+      <segment>
+        <source>2. Copier ou exporter</source>
+        <target state="translated">2. Kopiëren of exporteren</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_subtitle">
+      <segment>
+        <source>Choisissez une seule méthode de publication pour limiter les divergences de configuration.</source>
+        <target state="translated">Kies één publicatiemethode om configuratieverschillen te beperken.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_format_aria">
+      <segment>
+        <source>Format de sortie hreflang</source>
+        <target state="translated">hreflang uitvoerformaat</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_code_label">
+      <segment>
+        <source>Code hreflang généré</source>
+        <target state="translated">Gegenereerde hreflang-code</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Gekopieerd</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopiëren</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Downloaden</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_title">
+      <segment>
+        <source>3. Vérifier les liens retour entre pages</source>
+        <target state="translated">3. Controleer de teruglinks tussen pagina's</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_subtitle">
+      <segment>
+        <source>Collez un bloc par page. L’audit compare uniquement les données fournies : il n’effectue aucun crawl réseau.</source>
+        <target state="translated">Plak een blok per pagina. De audit vergelijkt alleen de verstrekte gegevens: het voert geen netwerkcrawl uit.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_label">
+      <segment>
+        <source>Pages et annotations observées</source>
+        <target state="translated">Geobserveerde pagina's en annotaties</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_help">
+      <segment>
+        <source>Commencez chaque bloc par « PAGE URL | canonical », puis listez ses lignes « code | URL ».</source>
+        <target state="translated">Begin elk blok met "PAGE URL | canonical", en lijst vervolgens zijn regels "code | URL".</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_run_audit">
+      <segment>
+        <source>Analyser les blocs fournis</source>
+        <target state="translated">Analyseer de verstrekte blokken</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_pages">
+      <segment>
+        <source>pages</source>
+        <target state="translated">pagina's</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_links">
+      <segment>
+        <source>liens</source>
+        <target state="translated">links</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue">
+      <segment>
+        <source>Ensemble réciproque dans les données fournies</source>
+        <target state="translated">Wederzijdse set in de verstrekte gegevens</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue_help">
+      <segment>
+        <source>Chaque page fournie se référence elle-même et les cibles fournies contiennent un lien retour.</source>
+        <target state="translated">Elke verstrekte pagina verwijst naar zichzelf en de verstrekte doelen bevatten een teruglink.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_level">
+      <segment>
+        <source>Audit</source>
+        <target state="translated">Audit</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_title">
+      <segment>
+        <source>4. Publier sans créer de signaux contradictoires</source>
+        <target state="translated">4. Publiceren zonder tegenstrijdige signalen te creëren</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_title">
+      <segment>
+        <source>URL absolues</source>
+        <target state="translated">Absolute URL's</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_text">
+      <segment>
+        <source>Déclarez le protocole et l’hôte complets. Les variantes peuvent vivre sur des domaines différents.</source>
+        <target state="translated">Geef het volledige protocol en de host op. De varianten kunnen op verschillende domeinen bestaan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_title">
+      <segment>
+        <source>Retours bidirectionnels</source>
+        <target state="translated">Tweerichtingsverkeer</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_text">
+      <segment>
+        <source>Une page cible doit pointer en retour vers la source, sinon les annotations concernées peuvent être ignorées.</source>
+        <target state="translated">Een doelpagina moet terugwijzen naar de bron, anders kunnen de betreffende annotaties worden genegeerd.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_title">
+      <segment>
+        <source>x-default et langue générique</source>
+        <target state="translated">x-default en generieke taal</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_text">
+      <segment>
+        <source>Prévoyez une destination de repli et, avec plusieurs régions, une version générique de la langue quand elle existe.</source>
+        <target state="translated">Voorzie in een fallback-bestemming en, met meerdere regio's, een generieke versie van de taal wanneer deze bestaat.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_title">
+      <segment>
+        <source>Contrôle local, pas un crawl</source>
+        <target state="translated">Lokale controle, geen crawl</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_text">
+      <segment>
+        <source>L’outil vérifie les blocs collés. Contrôlez ensuite les réponses HTTP, canonicals et indexabilité sur le site publié.</source>
+        <target state="translated">De tool controleert de geplakte blokken. Controleer vervolgens de HTTP-responses, canonicals en indexeerbaarheid op de gepubliceerde site.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Gerelateerde SEO-tools</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_title">
+      <segment>
+        <source>Continuer le parcours SEO technique</source>
+        <target state="translated">Ga verder met de technische SEO-reis</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Voorbeeld van de snippet</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_sitemap">
+      <segment>
+        <source>Créer le sitemap XML</source>
+        <target state="translated">Maak de XML-sitemap</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_robots">
+      <segment>
+        <source>Contrôler robots.txt</source>
+        <target state="translated">Controleer robots.txt</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Terug naar SEO-tools</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_html">
+      <segment>
+        <source>Balises HTML</source>
+        <target state="translated">HTML-tags</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_http">
+      <segment>
+        <source>En-tête HTTP</source>
+        <target state="translated">HTTP-header</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_sitemap">
+      <segment>
+        <source>Fragment sitemap</source>
+        <target state="translated">Sitemap-fragment</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">De bron overschrijdt 1.000.000 tekens en is afgekapt.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_line">
+      <segment>
+        <source>La ligne doit suivre le format « code | URL absolue ».</source>
+        <target state="translated">De regel moet het formaat « code | absolute URL » volgen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_code">
+      <segment>
+        <source>Le code de langue est manquant.</source>
+        <target state="translated">De taalcodes ontbreken.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_code">
+      <segment>
+        <source>Le code doit contenir une langue ISO 639-1, puis éventuellement un script et une région.</source>
+        <target state="translated">De code moet een ISO 639-1 taal bevatten, eventueel gevolgd door een script en een regio.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_noncanonical_code">
+      <segment>
+        <source>La casse du code a été normalisée dans la sortie.</source>
+        <target state="translated">De hoofdletters van de code zijn genormaliseerd in de output.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_url">
+      <segment>
+        <source>L’URL associée au code est manquante.</source>
+        <target state="translated">De URL die aan de code is gekoppeld, ontbreekt.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_url">
+      <segment>
+        <source>L’adresse doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Het adres moet een absolute HTTP- of HTTPS-URL zijn.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans une URL sont refusés.</source>
+        <target state="translated">Ingebedde inloggegevens in een URL zijn niet toegestaan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_fragment">
+      <segment>
+        <source>Une URL hreflang ne doit pas cibler un fragment de page.</source>
+        <target state="translated">Een hreflang-URL mag geen paginafragment targeten.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_code">
+      <segment>
+        <source>Ce code hreflang apparaît plusieurs fois dans le même ensemble.</source>
+        <target state="translated">Deze hreflang-code verschijnt meerdere keren in dezelfde set.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_alternates">
+      <segment>
+        <source>L’analyse est limitée à 100 variantes par page.</source>
+        <target state="translated">De analyse is beperkt tot 100 varianten per pagina.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_current">
+      <segment>
+        <source>L’URL de la page courante est obligatoire.</source>
+        <target state="translated">De URL van de huidige pagina is verplicht.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_current">
+      <segment>
+        <source>L’URL courante doit être absolue, sans identifiants ni fragment.</source>
+        <target state="translated">De huidige URL moet absoluut zijn, zonder inloggegevens of fragment.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_self">
+      <segment>
+        <source>La page courante ne se référence pas elle-même dans l’ensemble.</source>
+        <target state="translated">De huidige pagina verwijst niet naar zichzelf in de set.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_x_default">
+      <segment>
+        <source>Aucune variante x-default n’est déclarée pour les langues non couvertes.</source>
+        <target state="translated">Er is geen x-default variant gedeclareerd voor niet gedekte talen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_language_fallback">
+      <segment>
+        <source>Des variantes régionales existent sans version générique pour cette langue.</source>
+        <target state="translated">Regionale varianten bestaan zonder generieke versie voor deze taal.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_same_url">
+      <segment>
+        <source>Plusieurs codes ciblent la même URL ; cela peut être volontaire, notamment pour x-default.</source>
+        <target state="translated">Meerdere codes targeten dezelfde URL; dit kan opzettelijk zijn, vooral voor x-default.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_page_header">
+      <segment>
+        <source>L’en-tête doit commencer par PAGE suivi d’une URL absolue valide.</source>
+        <target state="translated">De header moet beginnen met PAGE gevolgd door een geldige absolute URL.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_canonical">
+      <segment>
+        <source>L’URL canonical n’est pas fournie pour cette page.</source>
+        <target state="translated">De canonical URL is niet opgegeven voor deze pagina.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_canonical">
+      <segment>
+        <source>La canonical doit être une URL HTTP ou HTTPS absolue, sans identifiants ni fragment.</source>
+        <target state="translated">De canonical moet een absolute HTTP- of HTTPS-URL zijn, zonder inloggegevens of fragment.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_canonical_mismatch">
+      <segment>
+        <source>La canonical cible une autre URL ; confirmez qu’elle reste dans la même langue et que ce regroupement est voulu.</source>
+        <target state="translated">De canonical target een andere URL; bevestig dat deze in dezelfde taal blijft en dat deze groepering opzettelijk is.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_before_page">
+      <segment>
+        <source>Cette variante apparaît avant le premier en-tête PAGE.</source>
+        <target state="translated">Deze variant verschijnt vóór de eerste PAGE-header.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_page">
+      <segment>
+        <source>Cette page est déclarée plusieurs fois dans l’audit.</source>
+        <target state="translated">Deze pagina is meerdere keren gedeclareerd in de audit.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_pages">
+      <segment>
+        <source>L’audit local est limité à 200 pages.</source>
+        <target state="translated">De lokale audit is beperkt tot 200 pagina's.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_target_missing">
+      <segment>
+        <source>La cible n’est pas fournie comme bloc PAGE ; son lien retour ne peut pas être vérifié.</source>
+        <target state="translated">De target is niet opgegeven als PAGE-blok; de teruglink kan niet worden gecontroleerd.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_return">
+      <segment>
+        <source>La page cible fournie ne contient aucun lien retour vers la page source.</source>
+        <target state="translated">De opgegeven targetpagina bevat geen teruglink naar de brondpagina.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_inconsistent">
+      <segment>
+        <source>L’ensemble diffère de celui de la première page ; vérifiez si cette différence est volontaire.</source>
+        <target state="translated">De set verschilt van die van de eerste pagina; controleer of dit verschil opzettelijk is.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">De lijst is beperkt tot de eerste 200 problemen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_empty_audit">
+      <segment>
+        <source>Aucun bloc PAGE valide n’a été fourni ; aucune réciprocité ne peut être conclue.</source>
+        <target state="translated">Er is geen geldig PAGE-blok opgegeven; er kan geen wederkerigheid worden vastgesteld.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

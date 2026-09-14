@@ -81240,6 +81240,672 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Generatorlinjen måste följa formatet "URL | valfri lastmod".</target>
       </segment>
     </unit>
+    <unit id="tool_hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">Hreflang-generator och verifierare</target>
+      </segment>
+    </unit>
+    <unit id="tool_hreflang_checker_desc">
+      <segment>
+        <source>Créer des annotations HTML, HTTP ou sitemap, puis vérifier localement les auto-références, canonicals et liens retour entre pages multilingues.</source>
+        <target state="translated">Skapa HTML-, HTTP- eller sitemap-anteckningar och kontrollera lokalt självreferenser, kanoniska och återkopplingslänkar mellan flerspråkiga sidor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_title">
+      <segment>
+        <source>Créer et auditer des annotations hreflang cohérentes</source>
+        <target state="translated">Skapa och granska konsekventa hreflang-anteckningar</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_lead">
+      <segment>
+        <source>Les annotations hreflang relient les versions linguistiques ou régionales équivalentes d’une page. Le générateur produit trois formats et l’audit local repère les codes invalides, auto-références absentes, canonicals suspects et liens retour manquants dans les données fournies.</source>
+        <target state="translated">Hreflang-anteckningar kopplar samman motsvarande språkliga eller regionala versioner av en sida. Generatorn producerar tre format och den lokala granskningen identifierar ogiltiga koder, saknade självreferenser, misstänkta kanoniska och saknade återkopplingslänkar i de angivna uppgifterna.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Användningsfall</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_title">
+      <segment>
+        <source>Préparer une nouvelle traduction</source>
+        <target state="translated">Förbered en ny översättning</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_text">
+      <segment>
+        <source>Associez chaque code de langue ou de région à son URL absolue, incluez la page courante et choisissez une destination x-default pour les visiteurs non couverts.</source>
+        <target state="translated">Koppla varje språk- eller regionskod till dess absoluta URL, inkludera den aktuella sidan och välj en x-default-destination för besökare som inte täcks.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_title">
+      <segment>
+        <source>Comparer plusieurs modèles de page</source>
+        <target state="translated">Jämför flera sidmodeller</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_text">
+      <segment>
+        <source>Collez les annotations observées sur chaque page afin de trouver un retour absent, un ensemble différent ou une canonical qui ne pointe pas vers la page attendue.</source>
+        <target state="translated">Klistra in de observerade anteckningarna på varje sida för att hitta en saknad återkoppling, en annan uppsättning eller en kanonisk som inte pekar på den förväntade sidan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_title">
+      <segment>
+        <source>Déployer hors du HTML</source>
+        <target state="translated">Distribuera utanför HTML</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_text">
+      <segment>
+        <source>Générez un en-tête Link pour un document non HTML ou un fragment xhtml:link à intégrer dans un sitemap XML existant.</source>
+        <target state="translated">Generera en Link-header för ett icke-HTML-dokument eller ett fragment xhtml:link att integrera i en befintlig XML-sitemap.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Rekommenderad metod</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_1">
+      <segment>
+        <source>Construisez un ensemble à partir de pages réellement équivalentes. Chaque version doit déclarer sa propre URL et les autres variantes au moyen d’adresses HTTP ou HTTPS complètes.</source>
+        <target state="translated">Bygg en uppsättning från faktiskt motsvarande sidor. Varje version ska deklarera sin egen URL och de andra varianterna med hjälp av fullständiga HTTP- eller HTTPS-adresser.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_2">
+      <segment>
+        <source>Installez le même ensemble sur les pages concernées et contrôlez les liens dans les deux sens. Une cible qui ne renvoie pas vers la source peut rendre la paire inutilisable pour Google.</source>
+        <target state="translated">Installera samma uppsättning på de berörda sidorna och kontrollera länkarna i båda riktningarna. En målsida som inte pekar tillbaka till källan kan göra paret oanvändbart för Google.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_3">
+      <segment>
+        <source>Vérifiez séparément que chaque URL répond correctement, reste indexable, affiche la bonne langue et utilise une canonical compatible. L’outil n’effectue aucune requête réseau.</source>
+        <target state="translated">Kontrollera separat att varje URL svarar korrekt, förblir indexerbar, visar rätt språk och använder en kompatibel kanonisk. Verktyget gör inga nätverksförfrågningar.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_codes">
+      <segment>
+        <source>Codes et variantes</source>
+        <target state="translated">Koder och varianter</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_1">
+      <segment>
+        <source>La langue utilise un code ISO 639-1 à deux lettres, par exemple fr ou en. Un code pays seul n’est pas un ciblage valide.</source>
+        <target state="translated">Språket använder en tvåbokstavskod enligt ISO 639-1, till exempel fr eller en. Enbart en landskod är inte en giltig inriktning.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_2">
+      <segment>
+        <source>Une région ISO 3166-1 alpha-2 peut suivre la langue, par exemple en-GB. Le générateur normalise sa casse sans modifier l’intention.</source>
+        <target state="translated">En ISO 3166-1 alpha-2-region kan följa språket, till exempel en-GB. Generatorn normaliserar dess versaler utan att ändra avsikten.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_3">
+      <segment>
+        <source>Un script ISO 15924 peut être explicite, comme zh-Hant. x-default désigne la page de repli lorsque les autres codes ne correspondent pas.</source>
+        <target state="translated">Ett ISO 15924-skript kan vara uttryckligt, som zh-Hant. x-default betecknar fallback-sidan när de andra koderna inte matchar.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">Gränser att känna till</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_1">
+      <segment>
+        <source>L’audit ne visite pas le Web. Une cible absente des blocs PAGE est signalée comme non vérifiable, sans conclure que son lien retour manque réellement.</source>
+        <target state="translated">Granskningen besöker inte webben. En målsida som saknas i PAGE-blocken rapporteras som icke-verifierbar, utan att dra slutsatsen att dess återkopplingslänk faktiskt saknas.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_2">
+      <segment>
+        <source>Une différence d’ensemble est un avertissement, pas toujours une erreur. Google autorise certains sous-ensembles tant que les relations importantes restent bidirectionnelles.</source>
+        <target state="translated">En uppsättningsskillnad är en varning, inte alltid ett fel. Google tillåter vissa delmängder så länge viktiga relationer förblir ömsesidiga.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_3">
+      <segment>
+        <source>hreflang aide au choix de la version dans les résultats ; il ne traduit pas la page et ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">hreflang hjälper till att välja versionen i resultaten; det översätter inte sidan och garanterar varken genomsökning, indexering eller ranking.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Vanliga frågor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q1">
+      <segment>
+        <source>Faut-il publier HTML, en-tête HTTP et sitemap en même temps ?</source>
+        <target state="translated">Ska HTML, HTTP-header och sitemap publiceras samtidigt?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a1">
+      <segment>
+        <source>Non. Google considère les trois méthodes comme équivalentes. Une seule méthode bien maintenue réduit le risque de divergence entre plusieurs sources.</source>
+        <target state="translated">Nej. Google betraktar de tre metoderna som likvärdiga. En enda väl underhållen metod minskar risken för avvikelser mellan flera källor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q2">
+      <segment>
+        <source>Deux codes peuvent-ils pointer vers la même URL ?</source>
+        <target state="translated">Kan två koder peka på samma URL?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a2">
+      <segment>
+        <source>Oui, notamment lorsqu’une version linguistique sert aussi de x-default. L’outil l’indique comme information afin que vous confirmiez ce choix.</source>
+        <target state="translated">Ja, särskilt när en språklig version också fungerar som x-default. Verktyget indikerar detta som information så att du kan bekräfta detta val.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q3">
+      <segment>
+        <source>Les URL saisies sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">Sänds de angivna URL:erna till Tools Central?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a3">
+      <segment>
+        <source>Non. La validation, la génération, la comparaison et l’export s’exécutent localement dans le navigateur. Aucun crawl ni stockage distant n’est déclenché.</source>
+        <target state="translated">Nej. Validering, generering, jämförelse och export utförs lokalt i webbläsaren. Ingen genomsökning eller fjärrlagring utlöses.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip_title">
+      <segment>
+        <source>La langue visible reste décisive</source>
+        <target state="translated">Det synliga språket förblir avgörande</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip">
+      <segment>
+        <source>Google détermine la langue à partir du contenu visible, pas uniquement du code hreflang ou de l’attribut lang. Évitez les pages dont seul le menu est traduit.</source>
+        <target state="translated">Google bestämmer språket utifrån det synliga innehållet, inte bara från hreflang-koden eller lang-attributet. Undvik sidor där endast menyn är översatt.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">Hreflang-generator och verifierare</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_subtitle">
+      <segment>
+        <source> Créez des annotations multilingues cohérentes et contrôlez les liens retour entre plusieurs pages. </source>
+        <target state="translated">Skapa konsekventa flerspråkiga anteckningar och kontrollera återkopplingslänkar mellan flera sidor.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun contenu n’est envoyé ou exploré.</source>
+        <target state="translated">100 % lokal behandling: ingen URL eller något innehåll skickas eller genomsöks.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_title">
+      <segment>
+        <source>1. Définir l’ensemble des variantes</source>
+        <target state="translated">1. Definiera uppsättningen av varianter</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_subtitle">
+      <segment>
+        <source>Ajoutez une ligne par version au format « code | URL absolue ». La page courante doit aussi figurer dans la liste.</source>
+        <target state="translated">Lägg till en rad per version i formatet "kod | absolut URL". Den aktuella sidan måste också finnas med i listan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_label">
+      <segment>
+        <source>URL de la page courante</source>
+        <target state="translated">URL för den aktuella sidan</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_help">
+      <segment>
+        <source>Cette URL devient le loc du fragment sitemap et sert au contrôle de l’auto-référence.</source>
+        <target state="translated">Denna URL blir loc för fragmentet i sitemap och används för att kontrollera självreferensen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_label">
+      <segment>
+        <source>Codes et URL alternatives</source>
+        <target state="translated">Koder och alternativa URL:er</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_help">
+      <segment>
+        <source>Exemples : fr, en, en-GB, zh-Hant ou x-default. Les chemins relatifs sont refusés.</source>
+        <target state="translated">Exempel: fr, en, en-GB, zh-Hant eller x-default. Relativa sökvägar accepteras inte.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_variants">
+      <segment>
+        <source>variantes valides</source>
+        <target state="translated">giltiga varianter</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">fel</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">varningar</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">information</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">Rad</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_set_level">
+      <segment>
+        <source>Ensemble</source>
+        <target state="translated">Set</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_title">
+      <segment>
+        <source>2. Copier ou exporter</source>
+        <target state="translated">2. Kopiera eller exportera</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_subtitle">
+      <segment>
+        <source>Choisissez une seule méthode de publication pour limiter les divergences de configuration.</source>
+        <target state="translated">Välj en enda publiceringsmetod för att begränsa konfigurationsavvikelser.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_format_aria">
+      <segment>
+        <source>Format de sortie hreflang</source>
+        <target state="translated">hreflang utdataformat</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_code_label">
+      <segment>
+        <source>Code hreflang généré</source>
+        <target state="translated">Genererad hreflang-kod</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Kopierad</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopiera</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Ladda ner</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_title">
+      <segment>
+        <source>3. Vérifier les liens retour entre pages</source>
+        <target state="translated">3. Kontrollera återkopplingslänkar mellan sidor</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_subtitle">
+      <segment>
+        <source>Collez un bloc par page. L’audit compare uniquement les données fournies : il n’effectue aucun crawl réseau.</source>
+        <target state="translated">Klistra in ett block per sida. Granskningen jämför endast de angivna uppgifterna: den utför ingen nätcrawl.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_label">
+      <segment>
+        <source>Pages et annotations observées</source>
+        <target state="translated">Observerade sidor och anteckningar</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_help">
+      <segment>
+        <source>Commencez chaque bloc par « PAGE URL | canonical », puis listez ses lignes « code | URL ».</source>
+        <target state="translated">Börja varje block med "SIDA URL | canonical", och lista sedan dess rader "kod | URL".</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_run_audit">
+      <segment>
+        <source>Analyser les blocs fournis</source>
+        <target state="translated">Analysera de angivna blocken</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_pages">
+      <segment>
+        <source>pages</source>
+        <target state="translated">sidor</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_links">
+      <segment>
+        <source>liens</source>
+        <target state="translated">länkar</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue">
+      <segment>
+        <source>Ensemble réciproque dans les données fournies</source>
+        <target state="translated">Ömsesidigt set i de angivna uppgifterna</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue_help">
+      <segment>
+        <source>Chaque page fournie se référence elle-même et les cibles fournies contiennent un lien retour.</source>
+        <target state="translated">Varje angiven sida refererar till sig själv och de angivna målen innehåller en återkopplingslänk.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_level">
+      <segment>
+        <source>Audit</source>
+        <target state="translated">Granskning</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_title">
+      <segment>
+        <source>4. Publier sans créer de signaux contradictoires</source>
+        <target state="translated">4. Publicera utan att skapa motstridiga signaler</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_title">
+      <segment>
+        <source>URL absolues</source>
+        <target state="translated">Absoluta URL:er</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_text">
+      <segment>
+        <source>Déclarez le protocole et l’hôte complets. Les variantes peuvent vivre sur des domaines différents.</source>
+        <target state="translated">Ange den fullständiga protokollet och värden. Varianter kan finnas på olika domäner.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_title">
+      <segment>
+        <source>Retours bidirectionnels</source>
+        <target state="translated">Ömsesidiga återkopplingar</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_text">
+      <segment>
+        <source>Une page cible doit pointer en retour vers la source, sinon les annotations concernées peuvent être ignorées.</source>
+        <target state="translated">En målsida måste peka tillbaka mot källan, annars kan de berörda anteckningarna ignoreras.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_title">
+      <segment>
+        <source>x-default et langue générique</source>
+        <target state="translated">x-default och generisk språkversion</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_text">
+      <segment>
+        <source>Prévoyez une destination de repli et, avec plusieurs régions, une version générique de la langue quand elle existe.</source>
+        <target state="translated">Planera en fallback-destination och, med flera regioner, en generisk version av språket när den finns.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_title">
+      <segment>
+        <source>Contrôle local, pas un crawl</source>
+        <target state="translated">Lokal kontroll, inte en crawl</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_text">
+      <segment>
+        <source>L’outil vérifie les blocs collés. Contrôlez ensuite les réponses HTTP, canonicals et indexabilité sur le site publié.</source>
+        <target state="translated">Verktyget kontrollerar de klistrade blocken. Kontrollera sedan HTTP-svar, kanoniska och indexerbarhet på den publicerade webbplatsen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Relaterade SEO-verktyg</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_title">
+      <segment>
+        <source>Continuer le parcours SEO technique</source>
+        <target state="translated">Fortsätt den tekniska SEO-resan</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Förhandsgranska snippet</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_sitemap">
+      <segment>
+        <source>Créer le sitemap XML</source>
+        <target state="translated">Skapa XML-sitemap</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_robots">
+      <segment>
+        <source>Contrôler robots.txt</source>
+        <target state="translated">Kontrollera robots.txt</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Tillbaka till SEO-verktyg</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_html">
+      <segment>
+        <source>Balises HTML</source>
+        <target state="translated">HTML-taggar</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_http">
+      <segment>
+        <source>En-tête HTTP</source>
+        <target state="translated">HTTP-header</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_sitemap">
+      <segment>
+        <source>Fragment sitemap</source>
+        <target state="translated">Sitemap-fragment</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">Källan överskrider 1 000 000 tecken och har trunkerats.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_line">
+      <segment>
+        <source>La ligne doit suivre le format « code | URL absolue ».</source>
+        <target state="translated">Raden måste följa formatet "kod | absolut URL".</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_code">
+      <segment>
+        <source>Le code de langue est manquant.</source>
+        <target state="translated">Språkkoden saknas.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_code">
+      <segment>
+        <source>Le code doit contenir une langue ISO 639-1, puis éventuellement un script et une région.</source>
+        <target state="translated">Koden måste innehålla ett ISO 639-1-språk, eventuellt följt av ett skript och en region.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_noncanonical_code">
+      <segment>
+        <source>La casse du code a été normalisée dans la sortie.</source>
+        <target state="translated">Koden har normaliserats i utdata.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_url">
+      <segment>
+        <source>L’URL associée au code est manquante.</source>
+        <target state="translated">URL:en kopplad till koden saknas.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_url">
+      <segment>
+        <source>L’adresse doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Adressen måste vara en absolut HTTP- eller HTTPS-URL.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans une URL sont refusés.</source>
+        <target state="translated">Inbäddade autentiseringsuppgifter i en URL accepteras inte.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_fragment">
+      <segment>
+        <source>Une URL hreflang ne doit pas cibler un fragment de page.</source>
+        <target state="translated">En hreflang-URL får inte rikta sig mot ett sidfragment.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_code">
+      <segment>
+        <source>Ce code hreflang apparaît plusieurs fois dans le même ensemble.</source>
+        <target state="translated">Denna hreflang-kod förekommer flera gånger i samma uppsättning.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_alternates">
+      <segment>
+        <source>L’analyse est limitée à 100 variantes par page.</source>
+        <target state="translated">Analysen är begränsad till 100 varianter per sida.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_current">
+      <segment>
+        <source>L’URL de la page courante est obligatoire.</source>
+        <target state="translated">URL:en för den aktuella sidan är obligatorisk.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_current">
+      <segment>
+        <source>L’URL courante doit être absolue, sans identifiants ni fragment.</source>
+        <target state="translated">Den aktuella URL:en måste vara absolut, utan autentiseringsuppgifter eller fragment.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_self">
+      <segment>
+        <source>La page courante ne se référence pas elle-même dans l’ensemble.</source>
+        <target state="translated">Den aktuella sidan refererar inte till sig själv i uppsättningen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_x_default">
+      <segment>
+        <source>Aucune variante x-default n’est déclarée pour les langues non couvertes.</source>
+        <target state="translated">Ingen x-default-variant har deklarerats för icke-täckta språk.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_language_fallback">
+      <segment>
+        <source>Des variantes régionales existent sans version générique pour cette langue.</source>
+        <target state="translated">Regionala varianter finns utan en generell version för detta språk.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_same_url">
+      <segment>
+        <source>Plusieurs codes ciblent la même URL ; cela peut être volontaire, notamment pour x-default.</source>
+        <target state="translated">Flera koder riktar sig mot samma URL; detta kan vara avsiktligt, särskilt för x-default.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_page_header">
+      <segment>
+        <source>L’en-tête doit commencer par PAGE suivi d’une URL absolue valide.</source>
+        <target state="translated">Huvudet måste börja med PAGE följt av en giltig absolut URL.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_canonical">
+      <segment>
+        <source>L’URL canonical n’est pas fournie pour cette page.</source>
+        <target state="translated">Den kanoniska URL:en tillhandahålls inte för denna sida.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_canonical">
+      <segment>
+        <source>La canonical doit être une URL HTTP ou HTTPS absolue, sans identifiants ni fragment.</source>
+        <target state="translated">Den kanoniska URL:en måste vara en absolut HTTP- eller HTTPS-URL, utan autentiseringsuppgifter eller fragment.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_canonical_mismatch">
+      <segment>
+        <source>La canonical cible une autre URL ; confirmez qu’elle reste dans la même langue et que ce regroupement est voulu.</source>
+        <target state="translated">Den kanoniska URL:en riktar sig mot en annan URL; bekräfta att den förblir på samma språk och att denna gruppering är avsiktlig.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_before_page">
+      <segment>
+        <source>Cette variante apparaît avant le premier en-tête PAGE.</source>
+        <target state="translated">Denna variant förekommer före den första PAGE-headern.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_page">
+      <segment>
+        <source>Cette page est déclarée plusieurs fois dans l’audit.</source>
+        <target state="translated">Denna sida har deklarerats flera gånger i granskningen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_pages">
+      <segment>
+        <source>L’audit local est limité à 200 pages.</source>
+        <target state="translated">Den lokala granskningen är begränsad till 200 sidor.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_target_missing">
+      <segment>
+        <source>La cible n’est pas fournie comme bloc PAGE ; son lien retour ne peut pas être vérifié.</source>
+        <target state="translated">Målet tillhandahålls inte som en PAGE-block; dess återkoppling kan inte verifieras.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_return">
+      <segment>
+        <source>La page cible fournie ne contient aucun lien retour vers la page source.</source>
+        <target state="translated">Den angivna målsidan innehåller ingen återkoppling till källsidan.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_inconsistent">
+      <segment>
+        <source>L’ensemble diffère de celui de la première page ; vérifiez si cette différence est volontaire.</source>
+        <target state="translated">Uppsättningen skiljer sig från den första sidan; kontrollera om denna skillnad är avsiktlig.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">Listan är begränsad till de 200 första problemen.</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_empty_audit">
+      <segment>
+        <source>Aucun bloc PAGE valide n’a été fourni ; aucune réciprocité ne peut être conclue.</source>
+        <target state="translated">Inga giltiga SID-block har tillhandahållits; ingen ömsesidighet kan fastställas.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

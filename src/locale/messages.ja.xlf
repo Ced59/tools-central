@@ -81240,6 +81240,672 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">生成器の行は「URL | 任意のlastmod」形式に従う必要があります。</target>
       </segment>
     </unit>
+    <unit id="tool_hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">hreflang チェッカーの生成と検証</target>
+      </segment>
+    </unit>
+    <unit id="tool_hreflang_checker_desc">
+      <segment>
+        <source>Créer des annotations HTML, HTTP ou sitemap, puis vérifier localement les auto-références, canonicals et liens retour entre pages multilingues.</source>
+        <target state="translated">HTML、HTTP、またはサイトマップの注釈を作成し、マルチリンガルページ間の自己参照、カノニカル、および戻りリンクをローカルで検証します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_title">
+      <segment>
+        <source>Créer et auditer des annotations hreflang cohérentes</source>
+        <target state="translated">一貫した hreflang 注釈を作成および監査する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_lead">
+      <segment>
+        <source>Les annotations hreflang relient les versions linguistiques ou régionales équivalentes d’une page. Le générateur produit trois formats et l’audit local repère les codes invalides, auto-références absentes, canonicals suspects et liens retour manquants dans les données fournies.</source>
+        <target state="translated">hreflang 注釈は、ページの同等の言語または地域のバージョンを結びつけます。ジェネレーターは 3 つのフォーマットを生成し、ローカル監査は無効なコード、欠落した自己参照、疑わしいカノニカル、および提供されたデータ内の欠落した戻りリンクを特定します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_title">
+      <segment>
+        <source>Préparer une nouvelle traduction</source>
+        <target state="translated">新しい翻訳を準備する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc1_text">
+      <segment>
+        <source>Associez chaque code de langue ou de région à son URL absolue, incluez la page courante et choisissez une destination x-default pour les visiteurs non couverts.</source>
+        <target state="translated">各言語または地域のコードをその絶対 URL に関連付け、現在のページを含め、カバーされていない訪問者のために x-default の宛先を選択します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_title">
+      <segment>
+        <source>Comparer plusieurs modèles de page</source>
+        <target state="translated">複数のページテンプレートを比較する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc2_text">
+      <segment>
+        <source>Collez les annotations observées sur chaque page afin de trouver un retour absent, un ensemble différent ou une canonical qui ne pointe pas vers la page attendue.</source>
+        <target state="translated">各ページで観察された注釈を貼り付けて、欠落した戻りリンク、異なるセット、または期待されるページを指さないカノニカルを見つけます。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_title">
+      <segment>
+        <source>Déployer hors du HTML</source>
+        <target state="translated">HTML から展開する</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_uc3_text">
+      <segment>
+        <source>Générez un en-tête Link pour un document non HTML ou un fragment xhtml:link à intégrer dans un sitemap XML existant.</source>
+        <target state="translated">HTML 以外のドキュメント用の Link ヘッダーまたは既存の XML サイトマップに統合する xhtml:link フラグメントを生成します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推奨方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_1">
+      <segment>
+        <source>Construisez un ensemble à partir de pages réellement équivalentes. Chaque version doit déclarer sa propre URL et les autres variantes au moyen d’adresses HTTP ou HTTPS complètes.</source>
+        <target state="translated">実際に同等のページからセットを構築します。各バージョンは、自分の URL と他のバリエーションを完全な HTTP または HTTPS アドレスで宣言する必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_2">
+      <segment>
+        <source>Installez le même ensemble sur les pages concernées et contrôlez les liens dans les deux sens. Une cible qui ne renvoie pas vers la source peut rendre la paire inutilisable pour Google.</source>
+        <target state="translated">関連するページに同じセットをインストールし、双方向のリンクを確認します。ソースに戻らないターゲットは、Google にとってペアを無効にする可能性があります。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_method_3">
+      <segment>
+        <source>Vérifiez séparément que chaque URL répond correctement, reste indexable, affiche la bonne langue et utilise une canonical compatible. L’outil n’effectue aucune requête réseau.</source>
+        <target state="translated">各 URL が正しく応答し、インデックス可能で、正しい言語を表示し、互換性のあるカノニカルを使用していることを個別に確認します。このツールはネットワークリクエストを行いません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_codes">
+      <segment>
+        <source>Codes et variantes</source>
+        <target state="translated">コードとバリエーション</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_1">
+      <segment>
+        <source>La langue utilise un code ISO 639-1 à deux lettres, par exemple fr ou en. Un code pays seul n’est pas un ciblage valide.</source>
+        <target state="translated">言語は、例えば fr や en のように、2 文字の ISO 639-1 コードを使用します。国コードのみは有効なターゲティングではありません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_2">
+      <segment>
+        <source>Une région ISO 3166-1 alpha-2 peut suivre la langue, par exemple en-GB. Le générateur normalise sa casse sans modifier l’intention.</source>
+        <target state="translated">ISO 3166-1 alpha-2 の地域が言語の後に続くことができます。例えば en-GB のように。ジェネレーターは意図を変更せずに大文字小文字を正規化します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_code_3">
+      <segment>
+        <source>Un script ISO 15924 peut être explicite, comme zh-Hant. x-default désigne la page de repli lorsque les autres codes ne correspondent pas.</source>
+        <target state="translated">ISO 15924 スクリプトは明示的である場合があります。例えば zh-Hant のように。x-default は、他のコードが一致しない場合のフォールバックページを指します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limits">
+      <segment>
+        <source>Limites à connaître</source>
+        <target state="translated">知っておくべき制限</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_1">
+      <segment>
+        <source>L’audit ne visite pas le Web. Une cible absente des blocs PAGE est signalée comme non vérifiable, sans conclure que son lien retour manque réellement.</source>
+        <target state="translated">監査はウェブを訪問しません。PAGE ブロックに存在しないターゲットは、検証不可能として報告され、実際に戻りリンクが欠落しているとは限りません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_2">
+      <segment>
+        <source>Une différence d’ensemble est un avertissement, pas toujours une erreur. Google autorise certains sous-ensembles tant que les relations importantes restent bidirectionnelles.</source>
+        <target state="translated">セットの違いは警告であり、必ずしもエラーではありません。Google は、重要な関係が双方向である限り、特定のサブセットを許可します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_limit_3">
+      <segment>
+        <source>hreflang aide au choix de la version dans les résultats ; il ne traduit pas la page et ne garantit ni exploration, ni indexation, ni classement.</source>
+        <target state="translated">hreflang は、結果内のバージョンの選択を助けますが、ページを翻訳せず、クロール、インデックス、またはランキングを保証しません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">よくある質問</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q1">
+      <segment>
+        <source>Faut-il publier HTML, en-tête HTTP et sitemap en même temps ?</source>
+        <target state="translated">HTML、HTTP ヘッダー、サイトマップを同時に公開する必要がありますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a1">
+      <segment>
+        <source>Non. Google considère les trois méthodes comme équivalentes. Une seule méthode bien maintenue réduit le risque de divergence entre plusieurs sources.</source>
+        <target state="translated">いいえ。Google は、3 つの方法を同等と見なします。1 つの適切に維持された方法は、複数のソース間の乖離のリスクを減らします。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q2">
+      <segment>
+        <source>Deux codes peuvent-ils pointer vers la même URL ?</source>
+        <target state="translated">2 つのコードが同じ URL を指すことはできますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a2">
+      <segment>
+        <source>Oui, notamment lorsqu’une version linguistique sert aussi de x-default. L’outil l’indique comme information afin que vous confirmiez ce choix.</source>
+        <target state="translated">はい、特に言語バージョンが x-default としても機能する場合。ツールはこの選択を確認するための情報として示します。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_q3">
+      <segment>
+        <source>Les URL saisies sont-elles envoyées à Tools Central ?</source>
+        <target state="translated">入力された URL は Tools Central に送信されますか？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_a3">
+      <segment>
+        <source>Non. La validation, la génération, la comparaison et l’export s’exécutent localement dans le navigateur. Aucun crawl ni stockage distant n’est déclenché.</source>
+        <target state="translated">いいえ。検証、生成、比較、およびエクスポートは、ブラウザ内でローカルに実行されます。クロールやリモートストレージはトリガーされません。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip_title">
+      <segment>
+        <source>La langue visible reste décisive</source>
+        <target state="translated">表示される言語は決定的です</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_hreflang_tip">
+      <segment>
+        <source>Google détermine la langue à partir du contenu visible, pas uniquement du code hreflang ou de l’attribut lang. Évitez les pages dont seul le menu est traduit.</source>
+        <target state="translated">Google は、hreflang コードや lang 属性だけでなく、表示されるコンテンツから言語を決定します。メニューだけが翻訳されたページは避けてください。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_title">
+      <segment>
+        <source>Générateur et vérificateur hreflang</source>
+        <target state="translated">hreflang チェッカーの生成と検証</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_subtitle">
+      <segment>
+        <source> Créez des annotations multilingues cohérentes et contrôlez les liens retour entre plusieurs pages. </source>
+        <target state="translated">一貫した多言語注釈を作成し、複数のページ間の戻りリンクを確認します。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_checker_privacy">
+      <segment>
+        <source>Traitement 100 % local : aucune URL ni aucun contenu n’est envoyé ou exploré.</source>
+        <target state="translated">100% ローカル処理：URL やコンテンツは送信またはクロールされません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_title">
+      <segment>
+        <source>1. Définir l’ensemble des variantes</source>
+        <target state="translated">1. バリエーションのセットを定義する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_builder_subtitle">
+      <segment>
+        <source>Ajoutez une ligne par version au format « code | URL absolue ». La page courante doit aussi figurer dans la liste.</source>
+        <target state="translated">「コード | 絶対 URL」形式で、バージョンごとに 1 行を追加します。現在のページもリストに含める必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_label">
+      <segment>
+        <source>URL de la page courante</source>
+        <target state="translated">現在のページの URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_current_url_help">
+      <segment>
+        <source>Cette URL devient le loc du fragment sitemap et sert au contrôle de l’auto-référence.</source>
+        <target state="translated">この URL はサイトマップのフラグメントの loc となり、自己参照の検証に使用されます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_label">
+      <segment>
+        <source>Codes et URL alternatives</source>
+        <target state="translated">コードと代替 URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_alternates_help">
+      <segment>
+        <source>Exemples : fr, en, en-GB, zh-Hant ou x-default. Les chemins relatifs sont refusés.</source>
+        <target state="translated">例：fr、en、en-GB、zh-Hant または x-default。相対パスは拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_variants">
+      <segment>
+        <source>variantes valides</source>
+        <target state="translated">有効なバリアント</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">エラー</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">情報</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_line">
+      <segment>
+        <source>Ligne</source>
+        <target state="translated">行</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_set_level">
+      <segment>
+        <source>Ensemble</source>
+        <target state="translated">セット</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_title">
+      <segment>
+        <source>2. Copier ou exporter</source>
+        <target state="translated">2. コピーまたはエクスポート</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_subtitle">
+      <segment>
+        <source>Choisissez une seule méthode de publication pour limiter les divergences de configuration.</source>
+        <target state="translated">設定の不一致を制限するために、1つの公開方法を選択してください。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_format_aria">
+      <segment>
+        <source>Format de sortie hreflang</source>
+        <target state="translated">hreflang 出力形式</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_code_label">
+      <segment>
+        <source>Code hreflang généré</source>
+        <target state="translated">生成された hreflang コード</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">コピーしました</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">コピー</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">ダウンロード</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_title">
+      <segment>
+        <source>3. Vérifier les liens retour entre pages</source>
+        <target state="translated">3. ページ間のリダイレクトリンクを確認する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_subtitle">
+      <segment>
+        <source>Collez un bloc par page. L’audit compare uniquement les données fournies : il n’effectue aucun crawl réseau.</source>
+        <target state="translated">ページごとにブロックを貼り付けます。監査は提供されたデータのみを比較します：ネットワーククローリングは行いません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_label">
+      <segment>
+        <source>Pages et annotations observées</source>
+        <target state="translated">観察されたページと注釈</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_source_help">
+      <segment>
+        <source>Commencez chaque bloc par « PAGE URL | canonical », puis listez ses lignes « code | URL ».</source>
+        <target state="translated">各ブロックを「PAGE URL | canonical」で始め、その後「code | URL」の行をリストします。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_run_audit">
+      <segment>
+        <source>Analyser les blocs fournis</source>
+        <target state="translated">提供されたブロックを分析する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_pages">
+      <segment>
+        <source>pages</source>
+        <target state="translated">ページ</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_links">
+      <segment>
+        <source>liens</source>
+        <target state="translated">リンク</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue">
+      <segment>
+        <source>Ensemble réciproque dans les données fournies</source>
+        <target state="translated">提供されたデータの相互セット</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_no_issue_help">
+      <segment>
+        <source>Chaque page fournie se référence elle-même et les cibles fournies contiennent un lien retour.</source>
+        <target state="translated">提供された各ページは自分自身を参照し、提供されたターゲットにはリダイレクトリンクが含まれています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_audit_level">
+      <segment>
+        <source>Audit</source>
+        <target state="translated">監査</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_title">
+      <segment>
+        <source>4. Publier sans créer de signaux contradictoires</source>
+        <target state="translated">4. 矛盾する信号を作成せずに公開する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_title">
+      <segment>
+        <source>URL absolues</source>
+        <target state="translated">絶対URL</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_absolute_text">
+      <segment>
+        <source>Déclarez le protocole et l’hôte complets. Les variantes peuvent vivre sur des domaines différents.</source>
+        <target state="translated">プロトコルとホストを完全に宣言します。バリアントは異なるドメインで存在することがあります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_title">
+      <segment>
+        <source>Retours bidirectionnels</source>
+        <target state="translated">双方向リダイレクト</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_return_text">
+      <segment>
+        <source>Une page cible doit pointer en retour vers la source, sinon les annotations concernées peuvent être ignorées.</source>
+        <target state="translated">ターゲットページはソースに戻る必要があります。そうしないと、関連する注釈は無視される可能性があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_title">
+      <segment>
+        <source>x-default et langue générique</source>
+        <target state="translated">x-default と一般的な言語</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_default_text">
+      <segment>
+        <source>Prévoyez une destination de repli et, avec plusieurs régions, une version générique de la langue quand elle existe.</source>
+        <target state="translated">フォールバック先を用意し、複数の地域がある場合は、存在する場合に一般的な言語のバージョンを用意します。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_title">
+      <segment>
+        <source>Contrôle local, pas un crawl</source>
+        <target state="translated">ローカルチェック、クローリングではない</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_guidance_limit_text">
+      <segment>
+        <source>L’outil vérifie les blocs collés. Contrôlez ensuite les réponses HTTP, canonicals et indexabilité sur le site publié.</source>
+        <target state="translated">ツールは貼り付けられたブロックをチェックします。その後、公開されたサイトでHTTPレスポンス、canonical、インデックス可能性を確認します。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">関連SEOツール</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_title">
+      <segment>
+        <source>Continuer le parcours SEO technique</source>
+        <target state="translated">技術的SEOの旅を続ける</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">スニペットをプレビューする</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_sitemap">
+      <segment>
+        <source>Créer le sitemap XML</source>
+        <target state="translated">XMLサイトマップを作成する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_related_robots">
+      <segment>
+        <source>Contrôler robots.txt</source>
+        <target state="translated">robots.txtを確認する</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEOツールに戻る</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_html">
+      <segment>
+        <source>Balises HTML</source>
+        <target state="translated">HTMLタグ</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_http">
+      <segment>
+        <source>En-tête HTTP</source>
+        <target state="translated">HTTPヘッダー</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_output_sitemap">
+      <segment>
+        <source>Fragment sitemap</source>
+        <target state="translated">サイトマップのフラグメント</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">ソースが1,000,000文字を超え、切り捨てられました。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_line">
+      <segment>
+        <source>La ligne doit suivre le format « code | URL absolue ».</source>
+        <target state="translated">行は「コード | 絶対URL」の形式に従う必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_code">
+      <segment>
+        <source>Le code de langue est manquant.</source>
+        <target state="translated">言語コードが欠落しています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_code">
+      <segment>
+        <source>Le code doit contenir une langue ISO 639-1, puis éventuellement un script et une région.</source>
+        <target state="translated">コードはISO 639-1の言語を含む必要があり、必要に応じてスクリプトと地域を含めることができます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_noncanonical_code">
+      <segment>
+        <source>La casse du code a été normalisée dans la sortie.</source>
+        <target state="translated">コードの大文字小文字が出力で正規化されました。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_url">
+      <segment>
+        <source>L’URL associée au code est manquante.</source>
+        <target state="translated">コードに関連付けられたURLが欠落しています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_url">
+      <segment>
+        <source>L’adresse doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">アドレスは絶対的なHTTPまたはHTTPSのURLである必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_credentials">
+      <segment>
+        <source>Les identifiants intégrés dans une URL sont refusés.</source>
+        <target state="translated">URLに埋め込まれた認証情報は拒否されます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_fragment">
+      <segment>
+        <source>Une URL hreflang ne doit pas cibler un fragment de page.</source>
+        <target state="translated">hreflang URLはページのフラグメントをターゲットにしてはいけません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_code">
+      <segment>
+        <source>Ce code hreflang apparaît plusieurs fois dans le même ensemble.</source>
+        <target state="translated">このhreflangコードは同じセット内で複数回表示されます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_alternates">
+      <segment>
+        <source>L’analyse est limitée à 100 variantes par page.</source>
+        <target state="translated">解析はページごとに100のバリエーションに制限されています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_current">
+      <segment>
+        <source>L’URL de la page courante est obligatoire.</source>
+        <target state="translated">現在のページのURLは必須です。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_current">
+      <segment>
+        <source>L’URL courante doit être absolue, sans identifiants ni fragment.</source>
+        <target state="translated">現在のURLは絶対的で、認証情報やフラグメントを含まない必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_self">
+      <segment>
+        <source>La page courante ne se référence pas elle-même dans l’ensemble.</source>
+        <target state="translated">現在のページはセット内で自分自身を参照していません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_x_default">
+      <segment>
+        <source>Aucune variante x-default n’est déclarée pour les langues non couvertes.</source>
+        <target state="translated">カバーされていない言語のためにx-defaultのバリエーションが宣言されていません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_language_fallback">
+      <segment>
+        <source>Des variantes régionales existent sans version générique pour cette langue.</source>
+        <target state="translated">この言語の一般的なバージョンがない地域バリエーションがあります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_same_url">
+      <segment>
+        <source>Plusieurs codes ciblent la même URL ; cela peut être volontaire, notamment pour x-default.</source>
+        <target state="translated">複数のコードが同じURLをターゲットにしています。これは特にx-defaultの場合、意図的である可能性があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_page_header">
+      <segment>
+        <source>L’en-tête doit commencer par PAGE suivi d’une URL absolue valide.</source>
+        <target state="translated">ヘッダーはPAGEで始まり、有効な絶対URLを続ける必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_missing_canonical">
+      <segment>
+        <source>L’URL canonical n’est pas fournie pour cette page.</source>
+        <target state="translated">このページのcanonical URLが提供されていません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_invalid_canonical">
+      <segment>
+        <source>La canonical doit être une URL HTTP ou HTTPS absolue, sans identifiants ni fragment.</source>
+        <target state="translated">canonicalは絶対的なHTTPまたはHTTPSのURLで、認証情報やフラグメントを含まない必要があります。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_canonical_mismatch">
+      <segment>
+        <source>La canonical cible une autre URL ; confirmez qu’elle reste dans la même langue et que ce regroupement est voulu.</source>
+        <target state="translated">canonicalが別のURLをターゲットにしています。このURLが同じ言語に留まることを確認し、このグループ化が意図されたものであるか確認してください。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_before_page">
+      <segment>
+        <source>Cette variante apparaît avant le premier en-tête PAGE.</source>
+        <target state="translated">このバリエーションは最初のPAGEヘッダーの前に表示されます。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_duplicate_page">
+      <segment>
+        <source>Cette page est déclarée plusieurs fois dans l’audit.</source>
+        <target state="translated">このページは監査で複数回宣言されています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_too_many_pages">
+      <segment>
+        <source>L’audit local est limité à 200 pages.</source>
+        <target state="translated">ローカル監査は200ページに制限されています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_target_missing">
+      <segment>
+        <source>La cible n’est pas fournie comme bloc PAGE ; son lien retour ne peut pas être vérifié.</source>
+        <target state="translated">ターゲットがPAGEブロックとして提供されていません。そのリンクの戻りは確認できません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_return">
+      <segment>
+        <source>La page cible fournie ne contient aucun lien retour vers la page source.</source>
+        <target state="translated">提供されたターゲットページには、ソースページへの戻りリンクが含まれていません。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_inconsistent">
+      <segment>
+        <source>L’ensemble diffère de celui de la première page ; vérifiez si cette différence est volontaire.</source>
+        <target state="translated">セットが最初のページのものと異なります。この違いが意図的かどうかを確認してください。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers problèmes.</source>
+        <target state="translated">リストは最初の200の問題に制限されています。</target>
+      </segment>
+    </unit>
+    <unit id="hreflang_issue_empty_audit">
+      <segment>
+        <source>Aucun bloc PAGE valide n’a été fourni ; aucune réciprocité ne peut être conclue.</source>
+        <target state="translated">有効なページブロックが提供されていないため、相互性を結ぶことはできません。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

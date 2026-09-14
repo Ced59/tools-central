@@ -1,0 +1,202 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-language"></i></div>
+        <h1 i18n="@@hreflang_checker_title">Générateur et vérificateur hreflang</h1>
+        <p class="hero-subtitle" i18n="@@hreflang_checker_subtitle">
+          Créez des annotations multilingues cohérentes et contrôlez les liens retour entre plusieurs pages.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@hreflang_checker_privacy">Traitement 100 % local : aucune URL ni aucun contenu n’est envoyé ou exploré.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="workspace-grid">
+      <div class="tool-card editor-card">
+        <div class="card-header">
+          <h2 i18n="@@hreflang_builder_title">1. Définir l’ensemble des variantes</h2>
+          <p i18n="@@hreflang_builder_subtitle">Ajoutez une ligne par version au format « code | URL absolue ». La page courante doit aussi figurer dans la liste.</p>
+        </div>
+
+        <div class="field">
+          <label for="hreflang-current-url" i18n="@@hreflang_current_url_label">URL de la page courante</label>
+          <input id="hreflang-current-url" type="url" maxlength="2048" autocomplete="url" spellcheck="false" [value]="currentUrl()" (input)="updateCurrentUrl($event)" />
+          <small i18n="@@hreflang_current_url_help">Cette URL devient le loc du fragment sitemap et sert au contrôle de l’auto-référence.</small>
+        </div>
+
+        <div class="field">
+          <label for="hreflang-alternates" i18n="@@hreflang_alternates_label">Codes et URL alternatives</label>
+          <textarea id="hreflang-alternates" rows="12" maxlength="1000001" spellcheck="false" [value]="alternateLines()" (input)="updateAlternateLines($event)" aria-describedby="hreflang-builder-summary"></textarea>
+          <small i18n="@@hreflang_alternates_help">Exemples : fr, en, en-GB, zh-Hant ou x-default. Les chemins relatifs sont refusés.</small>
+        </div>
+
+        <div id="hreflang-builder-summary" class="stats" aria-live="polite" data-testid="hreflang-set-analysis">
+          <span><strong>{{ formatNumber(setAnalysis().entries.length) }}</strong> <span i18n="@@hreflang_variants">variantes valides</span></span>
+          <span class="badge badge--error">{{ formatNumber(builderErrorCount()) }} <span i18n="@@hreflang_errors">erreurs</span></span>
+          <span class="badge badge--warning">{{ formatNumber(builderWarningCount()) }} <span i18n="@@hreflang_warnings">avertissements</span></span>
+          <span class="badge badge--info">{{ formatNumber(builderInfoCount()) }} <span i18n="@@hreflang_infos">informations</span></span>
+        </div>
+
+        @if (setAnalysis().issues.length) {
+          <ol class="issue-list issue-list--builder">
+            @for (issue of setAnalysis().issues; track $index) {
+              <li [class]="'issue issue--' + issue.severity">
+                <div>
+                  @if (issue.line !== null) {
+                    <strong><span i18n="@@hreflang_line">Ligne</span> {{ formatNumber(issue.line) }}</strong>
+                  } @else {
+                    <strong i18n="@@hreflang_set_level">Ensemble</strong>
+                  }
+                  <span>{{ issueLabel(issue.code) }}</span>
+                </div>
+                @if (issue.detail) { <code>{{ issue.detail }}</code> }
+              </li>
+            }
+          </ol>
+        }
+      </div>
+
+      <aside class="tool-card output-card">
+        <div class="card-header">
+          <h2 i18n="@@hreflang_output_title">2. Copier ou exporter</h2>
+          <p i18n="@@hreflang_output_subtitle">Choisissez une seule méthode de publication pour limiter les divergences de configuration.</p>
+        </div>
+
+        <div class="mode-switch" role="group" i18n-aria-label="@@hreflang_output_format_aria" aria-label="Format de sortie hreflang">
+          @for (format of outputFormats; track format) {
+            <button type="button" [class.active]="outputFormat() === format" [attr.aria-pressed]="outputFormat() === format" (click)="setOutputFormat(format)">
+              {{ outputLabel(format) }}
+            </button>
+          }
+        </div>
+
+        <label class="sr-only" for="hreflang-output" i18n="@@hreflang_output_code_label">Code hreflang généré</label>
+        <textarea id="hreflang-output" class="code-output" rows="15" readonly spellcheck="false" [value]="activeOutput()"></textarea>
+
+        <div class="output-actions">
+          <button class="secondary-button" type="button" [disabled]="builderErrorCount() > 0 || !activeOutput()" (click)="copyOutput()">
+            <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
+            @if (copiedFormat() === outputFormat()) {
+              <span i18n="@@hreflang_copied">Copié</span>
+            } @else {
+              <span i18n="@@hreflang_copy">Copier</span>
+            }
+          </button>
+          <button class="secondary-button" type="button" [disabled]="builderErrorCount() > 0 || !activeOutput()" (click)="downloadOutput()">
+            <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+            <span i18n="@@hreflang_download">Télécharger</span>
+          </button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="tool-card audit-card">
+      <div class="card-header">
+        <h2 i18n="@@hreflang_audit_title">3. Vérifier les liens retour entre pages</h2>
+        <p i18n="@@hreflang_audit_subtitle">Collez un bloc par page. L’audit compare uniquement les données fournies : il n’effectue aucun crawl réseau.</p>
+      </div>
+
+      <div class="audit-grid">
+        <div class="field">
+          <label for="hreflang-audit-source" i18n="@@hreflang_audit_source_label">Pages et annotations observées</label>
+          <textarea id="hreflang-audit-source" rows="18" maxlength="1000001" spellcheck="false" [value]="auditSource()" (input)="updateAuditSource($event)"></textarea>
+          <small i18n="@@hreflang_audit_source_help">Commencez chaque bloc par « PAGE URL | canonical », puis listez ses lignes « code | URL ».</small>
+          <button class="primary-button" type="button" (click)="runAudit()">
+            <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
+            <span i18n="@@hreflang_run_audit">Analyser les blocs fournis</span>
+          </button>
+        </div>
+
+        <div class="audit-report" aria-live="polite" data-testid="hreflang-audit-report">
+          <div class="stats audit-stats">
+            <span><strong>{{ formatNumber(audit().pages.length) }}</strong> <span i18n="@@hreflang_pages">pages</span></span>
+            <span><strong>{{ formatNumber(audit().linkCount) }}</strong> <span i18n="@@hreflang_links">liens</span></span>
+          </div>
+          <div class="stats">
+            <span class="badge badge--error">{{ formatNumber(auditErrorCount()) }} <span i18n="@@hreflang_errors">erreurs</span></span>
+            <span class="badge badge--warning">{{ formatNumber(auditWarningCount()) }} <span i18n="@@hreflang_warnings">avertissements</span></span>
+            <span class="badge badge--info">{{ formatNumber(auditInfoCount()) }} <span i18n="@@hreflang_infos">informations</span></span>
+          </div>
+
+          @if (!audit().issues.length) {
+            <div class="empty-report" role="status">
+              <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+              <strong i18n="@@hreflang_no_issue">Ensemble réciproque dans les données fournies</strong>
+              <span i18n="@@hreflang_no_issue_help">Chaque page fournie se référence elle-même et les cibles fournies contiennent un lien retour.</span>
+            </div>
+          } @else {
+            <ol class="issue-list">
+              @for (issue of audit().issues; track $index) {
+                <li [class]="'issue issue--' + issue.severity">
+                  <div>
+                    @if (issue.line !== null) {
+                      <strong><span i18n="@@hreflang_line">Ligne</span> {{ formatNumber(issue.line) }}</strong>
+                    } @else {
+                      <strong i18n="@@hreflang_audit_level">Audit</strong>
+                    }
+                    <span>{{ issueLabel(issue.code) }}</span>
+                  </div>
+                  @if (issue.pageUrl) { <code>{{ issue.pageUrl }}</code> }
+                  @if (issue.detail) { <code>{{ issue.detail }}</code> }
+                </li>
+              }
+            </ol>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="tool-card guidance-card">
+      <div class="card-header">
+        <h2 i18n="@@hreflang_guidance_title">4. Publier sans créer de signaux contradictoires</h2>
+      </div>
+      <div class="guidance-grid">
+        <div>
+          <i class="tc-icon tc-icon-link" aria-hidden="true"></i>
+          <h3 i18n="@@hreflang_guidance_absolute_title">URL absolues</h3>
+          <p i18n="@@hreflang_guidance_absolute_text">Déclarez le protocole et l’hôte complets. Les variantes peuvent vivre sur des domaines différents.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+          <h3 i18n="@@hreflang_guidance_return_title">Retours bidirectionnels</h3>
+          <p i18n="@@hreflang_guidance_return_text">Une page cible doit pointer en retour vers la source, sinon les annotations concernées peuvent être ignorées.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-language" aria-hidden="true"></i>
+          <h3 i18n="@@hreflang_guidance_default_title">x-default et langue générique</h3>
+          <p i18n="@@hreflang_guidance_default_text">Prévoyez une destination de repli et, avec plusieurs régions, une version générique de la langue quand elle existe.</p>
+        </div>
+        <div>
+          <i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i>
+          <h3 i18n="@@hreflang_guidance_limit_title">Contrôle local, pas un crawl</h3>
+          <p i18n="@@hreflang_guidance_limit_text">L’outil vérifie les blocs collés. Contrôlez ensuite les réponses HTTP, canonicals et indexabilité sur le site publié.</p>
+        </div>
+      </div>
+    </div>
+
+    <nav class="related-card" i18n-aria-label="@@hreflang_related_aria" aria-label="Outils SEO associés">
+      <strong i18n="@@hreflang_related_title">Continuer le parcours SEO technique</strong>
+      <div>
+        <a routerLink="/categories/dev/seo/serp-snippet-preview" i18n="@@hreflang_related_serp">Prévisualiser le snippet</a>
+        <a routerLink="/categories/dev/seo/sitemap-xml-builder" i18n="@@hreflang_related_sitemap">Créer le sitemap XML</a>
+        <a routerLink="/categories/dev/seo/robots-txt-builder" i18n="@@hreflang_related_robots">Contrôler robots.txt</a>
+      </div>
+    </nav>
+
+    <div class="action-row">
+      <button class="reset-button" type="button" (click)="reset()">
+        <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+        <span i18n="@@tool_reset">Réinitialiser</span>
+      </button>
+      <a class="back-link" routerLink="/categories/dev/seo">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@hreflang_back">Retour aux outils SEO</span>
+      </a>
+    </div>
+  </div>
+</section>
