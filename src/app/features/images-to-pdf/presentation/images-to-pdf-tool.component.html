@@ -21,7 +21,7 @@
         <input type="file" multiple accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" [disabled]="isBusy()" (change)="selectFiles($event)" />
       </label>
       @if (state() === 'inspecting') {
-        <div class="live-state" role="status"><span class="spinner" aria-hidden="true"></span><span i18n="@@images_to_pdf_inspecting">Vérification des images {{ progress().completed }} / {{ progress().total }}…</span></div>
+        <div class="live-state" role="status"><span class="spinner" aria-hidden="true"></span><span i18n="@@images_to_pdf_inspecting">Vérification des images {{ progress().completed }} / {{ progress().total }}…</span><button type="button" class="cancel-button" (click)="reset()" i18n="@@images_to_pdf_cancel">Annuler</button></div>
       }
       @if (errorMessage()) {
         <p class="alert alert--error" role="alert"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>{{ errorMessage() }}</p>
@@ -74,7 +74,7 @@
         </div>
 
         <button type="button" class="primary-button" [disabled]="!canGenerate()" (click)="generate()"><i class="tc-icon tc-icon-file" aria-hidden="true"></i><span i18n="@@images_to_pdf_generate">Créer le PDF</span></button>
-        <button type="button" class="reset-button" [disabled]="isBusy()" (click)="reset()" i18n="@@images_to_pdf_reset">Réinitialiser</button>
+        <button type="button" class="reset-button" (click)="reset()" i18n="@@images_to_pdf_reset">Réinitialiser</button>
       </section>
     }
 
@@ -82,6 +82,7 @@
       <section class="tool-card progress-card" aria-live="polite">
         <div class="progress-copy"><strong i18n="@@images_to_pdf_generating">Création locale du PDF…</strong><span>{{ progress().completed }} / {{ progress().total }}</span></div>
         <progress [value]="progress().completed" [max]="progress().total"></progress>
+        <button type="button" class="cancel-button" (click)="reset()" i18n="@@images_to_pdf_cancel">Annuler</button>
       </section>
     }
 

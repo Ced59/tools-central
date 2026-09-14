@@ -39,9 +39,11 @@ dt { color: var(--text-color-secondary); } dd { margin: 0; color: var(--text-col
 .image-card__copy > span { color: var(--text-color-secondary); font-size: .8rem; }
 .page-number { display: inline-flex; width: 1.7rem; height: 1.7rem; align-items: center; justify-content: center; margin-right: .45rem; border-radius: 50%; color: #fff; background: var(--primary-color); font-size: .75rem; }
 .image-card__actions { display: flex; justify-content: flex-end; gap: .45rem; padding: 0 .75rem .75rem; }
-.primary-button, .reset-button, .icon-button { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 10px; cursor: pointer; font: inherit; font-weight: 750; &:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary-color) 35%, transparent); outline-offset: 2px; } &:disabled { cursor: not-allowed; opacity: .55; } }
+.primary-button, .reset-button, .cancel-button, .icon-button { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; border-radius: 10px; cursor: pointer; font: inherit; font-weight: 750; &:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary-color) 35%, transparent); outline-offset: 2px; } &:disabled { cursor: not-allowed; opacity: .55; } }
 .primary-button { margin-top: 1rem; border: 1px solid var(--primary-color); padding: .72rem .95rem; color: #fff; background: var(--primary-color); }
 .reset-button { margin: 1rem 0 0 .5rem; border: 1px solid var(--border-color); padding: .72rem .95rem; color: var(--text-color); background: var(--surface-ground); }
+.cancel-button { flex: 0 0 auto; margin-left: auto; border: 1px solid var(--border-color); padding: .55rem .75rem; color: var(--text-color); background: var(--surface-card); }
+.progress-card > .cancel-button { margin-top: .75rem; }
 .icon-button { flex: 0 0 auto; border: 1px solid var(--border-color); padding: .55rem; color: var(--primary-color); background: var(--surface-card); }
 .icon-button--danger { color: #b91c1c; }
 .live-state, .alert { display: flex; align-items: center; gap: .6rem; margin-top: 1rem; border-radius: 11px; padding: .75rem .85rem; line-height: 1.45; }
@@ -60,4 +62,5 @@ progress { width: 100%; height: .8rem; margin-top: .8rem; accent-color: var(--pr
   .selection-summary { grid-template-columns: minmax(0, 1fr); }
   .result-card { flex-direction: column; }
   .primary-button, .reset-button, .result-card .primary-button, .back-link { width: 100%; box-sizing: border-box; margin-right: 0; margin-left: 0; }
+  .live-state { flex-wrap: wrap; } .live-state .cancel-button { width: 100%; margin-left: 0; }
 }

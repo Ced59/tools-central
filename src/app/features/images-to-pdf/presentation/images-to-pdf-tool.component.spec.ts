@@ -67,4 +67,16 @@ describe('ImagesToPdfToolComponent', () => {
     expect(preventDefault).toHaveBeenCalledOnce();
     expect(setData).not.toHaveBeenCalled();
   });
+
+  it('keeps a visible cancel action available during generation', () => {
+    const fixture = TestBed.createComponent(ImagesToPdfToolComponent);
+    fixture.componentInstance.progress.set({ completed: 1, total: 3 });
+    fixture.componentInstance.state.set('generating');
+    fixture.detectChanges();
+    const button = (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLButtonElement>('.progress-card .cancel-button');
+
+    expect(button?.textContent).toContain('Annuler');
+    expect(button?.disabled).toBe(false);
+  });
 });
