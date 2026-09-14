@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { PDFDocument, rgb } from 'pdf-lib';
+import { readFile } from 'node:fs/promises';
 
 test('home, locale and theme remain usable', async ({ page }) => {
   await page.goto('/fr/');
@@ -267,6 +268,52 @@ test('PDF to images renders locally, previews output and remains responsive', as
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
   await page.goto('/en/categories/dev/pdf/pdf-to-images');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
+
+test('images to PDF preserves order, creates a real document and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/pdf/images-to-pdf');
+  const png = Buffer.from(await page.evaluate(() => {
+    const canvas = document.createElement('canvas');
+    canvas.width = 40;
+    canvas.height = 20;
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Canvas 2D is unavailable in the test browser.');
+    context.fillStyle = '#2563eb';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL('image/png').split(',')[1];
+  }), 'base64');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Convertir des images en PDF');
+  await page.locator('input[type="file"]').setInputFiles([
+    { name: 'premiere.png', mimeType: 'image/png', buffer: png },
+    { name: 'seconde.png', mimeType: 'image/png', buffer: png },
+  ]);
+  const list = page.getByTestId('images-to-pdf-list');
+  await expect(list.locator('.image-card')).toHaveCount(2);
+  await page.getByRole('button', { name: 'Monter seconde.png' }).click();
+  await expect(list.locator('.image-card strong').first()).toContainText('seconde.png');
+  await page.locator('#images-to-pdf-page-format').selectOption('image');
+  await page.locator('#images-to-pdf-margin').selectOption('0');
+  await page.locator('#images-to-pdf-compression').selectOption('quality');
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Créer le PDF' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+  await expect(page.getByTestId('images-to-pdf-result')).toContainText('2 page(s)', { timeout: 20_000 });
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Télécharger le PDF' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('seconde-images.pdf');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const pdf = await PDFDocument.load(await readFile(path as string));
+  expect(pdf.getPageCount()).toBe(2);
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/pdf/images-to-pdf');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });

@@ -1,0 +1,128 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import {
+  BrowserImageHeaderReaderAdapter,
+  type ImageHeaderWorkerFactory,
+} from './browser-image-header-reader.adapter';
+import {
+  PdfLibImagePdfGeneratorAdapter,
+  type ImagePdfWorkerFactory,
+} from './pdf-lib-image-pdf-generator.adapter';
+import { inspectImageBlob } from './progressive-image-header-reader';
+import type { PreparedPdfImage } from '../application/images-to-pdf.ports';
+
+describe('BrowserImageHeaderReaderAdapter', () => {
+  it('identifies a PNG from its bytes instead of trusting its MIME type', async () => {
+    const bytes = new Uint8Array(24);
+    bytes.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+    bytes.set([0x49, 0x48, 0x44, 0x52], 12);
+    bytes.set([0, 0, 0, 2, 0, 0, 0, 3], 16);
+
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImageHeaderWorkerFactory;
+    const blob = new Blob([bytes], { type: 'text/plain' });
+    const inspection = new BrowserImageHeaderReaderAdapter(createWorker).inspect(blob);
+
+    expect(worker.postMessage).toHaveBeenCalledWith({ blob });
+    worker.onmessage?.(new MessageEvent('message', {
+      data: { type: 'success', header: { format: 'png', mimeType: 'image/png', width: 2, height: 3 } },
+    }));
+
+    await expect(inspection).resolves.toMatchObject({ format: 'png', width: 2, height: 3 });
+    expect(worker.terminate).toHaveBeenCalledOnce();
+  });
+
+  it('continues across large JPEG metadata until it finds the dimensions', async () => {
+    const metadataSegments = Array.from({ length: 17 }, () => {
+      const segment = new Uint8Array(65_537);
+      segment.set([0xff, 0xe0, 0xff, 0xff]);
+      return segment;
+    });
+    const jpeg = new Blob([
+      new Uint8Array([0xff, 0xd8]),
+      ...metadataSegments,
+      new Uint8Array([
+        0xff, 0xc0, 0x00, 0x0b, 0x08, 0x01, 0xe0, 0x02, 0x80, 0x01, 0x01, 0x11, 0x00,
+      ]),
+    ]);
+
+    await expect(inspectImageBlob(jpeg))
+      .resolves.toMatchObject({ format: 'jpeg', width: 640, height: 480 });
+  });
+
+  it('terminates header inspection when the caller aborts', async () => {
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImageHeaderWorkerFactory;
+    const abortController = new AbortController();
+    const inspection = new BrowserImageHeaderReaderAdapter(createWorker)
+      .inspect(new Blob(['image']), abortController.signal);
+
+    abortController.abort();
+
+    await expect(inspection).rejects.toMatchObject({ name: 'AbortError' });
+    expect(worker.terminate).toHaveBeenCalledOnce();
+  });
+});
+
+describe('PdfLibImagePdfGeneratorAdapter', () => {
+  it('shares immutable image Blobs with the worker and returns its PDF', async () => {
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImagePdfWorkerFactory;
+    const blob = new Blob(['png'], { type: 'image/png' });
+    const image = preparedImage(blob);
+    const adapter = new PdfLibImagePdfGeneratorAdapter(createWorker);
+    const progress = vi.fn();
+    const creation = adapter.create(
+      [image],
+      { pageFormat: 'a4-portrait', marginMm: 10, compression: 'balanced' },
+      progress,
+    );
+
+    expect(worker.postMessage).toHaveBeenCalledWith({
+      images: [image],
+      settings: { pageFormat: 'a4-portrait', marginMm: 10, compression: 'balanced' },
+    });
+    worker.onmessage?.(new MessageEvent('message', {
+      data: { type: 'progress', completed: 1, total: 1 },
+    }));
+    const pdf = new Blob(['pdf'], { type: 'application/pdf' });
+    worker.onmessage?.(new MessageEvent('message', { data: { type: 'success', pdf } }));
+
+    await expect(creation).resolves.toBe(pdf);
+    expect(progress).toHaveBeenCalledWith(1, 1);
+    expect(worker.terminate).toHaveBeenCalledOnce();
+  });
+
+  it('terminates the conversion worker when the caller aborts', async () => {
+    const worker = fakeWorker();
+    const createWorker = vi.fn(() => worker as unknown as Worker) as ImagePdfWorkerFactory;
+    const abortController = new AbortController();
+    const creation = new PdfLibImagePdfGeneratorAdapter(createWorker).create(
+      [preparedImage(new Blob(['png']))],
+      { pageFormat: 'image', marginMm: 0, compression: 'quality' },
+      undefined,
+      abortController.signal,
+    );
+
+    abortController.abort();
+
+    await expect(creation).rejects.toMatchObject({ name: 'AbortError' });
+    expect(worker.terminate).toHaveBeenCalledOnce();
+  });
+});
+
+function fakeWorker() {
+  return {
+    onmessage: null as ((event: MessageEvent) => void) | null,
+    onerror: null as ((event: ErrorEvent) => void) | null,
+    postMessage: vi.fn(),
+    terminate: vi.fn(),
+  };
+}
+
+function preparedImage(blob: Blob): PreparedPdfImage {
+  return {
+    id: 'one', fileName: 'one.png', blob, size: blob.size,
+    format: 'png', mimeType: 'image/png', width: 2, height: 3,
+  };
+}

@@ -198,6 +198,16 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/pdf-to-images/presentation/pdf-to-images-tool.component')
                   .then(m => m.PdfToImagesToolComponent),
             },
+            'images-to-pdf': {
+              title: $localize`:@@tool_images_to_pdf_title:Images vers PDF`,
+              description: $localize`:@@tool_images_to_pdf_desc:Assembler localement des images PNG, JPEG ou WebP dans un PDF ordonné, avec format de page, marges et compression.`,
+              icon: 'tc-icon tc-icon-file-pdf',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/images-to-pdf/presentation/images-to-pdf-tool.component')
+                  .then(m => m.ImagesToPdfToolComponent),
+            },
             'pdf-flatten-forms': {
               title: $localize`:@@tool_pdf_flatten_forms_title:Aplatir un formulaire PDF`,
               description: $localize`:@@tool_pdf_flatten_forms_desc:Convertir les champs de formulaire en contenu statique (flatten), pour partage/archivage.`,

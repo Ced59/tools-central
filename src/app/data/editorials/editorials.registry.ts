@@ -12,6 +12,10 @@ export interface EditorialRegistryEntry {
  * Run: npm run editorials:gen
  */
 export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
+  'dev/pdf/images-to-pdf': {
+    available: true,
+    load: () => import('./dev/pdf/images-to-pdf.editorial'),
+  },
   'dev/pdf/pdf-annotations-to-json': {
     available: true,
     load: () => import('./dev/pdf/pdf-annotations-to-json.editorial'),
