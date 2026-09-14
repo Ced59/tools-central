@@ -1,0 +1,113 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-code"></i></div>
+        <h1 i18n="@@html_head_auditor_title">Auditeur de head HTML</h1>
+        <p class="hero-subtitle" i18n="@@html_head_auditor_subtitle">Contrôlez les métadonnées SEO, sociales, mobiles et multilingues d’un code HTML collé.</p>
+        <div class="privacy-note"><i class="tc-icon tc-icon-lock" aria-hidden="true"></i><span i18n="@@html_head_auditor_privacy">Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="workspace-grid">
+      <div class="tool-card source-card">
+        <div class="card-header">
+          <h2 i18n="@@html_head_source_title">1. Coller le head à contrôler</h2>
+          <p i18n="@@html_head_source_subtitle">Un document HTML complet ou un fragment de head convient. Le parseur reste inerte.</p>
+        </div>
+        <div class="field">
+          <label for="html-head-page-url" i18n="@@html_head_page_url_label">URL publique de la page</label>
+          <input id="html-head-page-url" type="url" maxlength="2048" autocomplete="url" spellcheck="false" [value]="pageUrl()" (input)="updatePageUrl($event)" />
+          <small i18n="@@html_head_page_url_help">Facultative, elle permet de comparer canonical, og:url et auto-référence hreflang. Aucune requête n’est envoyée.</small>
+        </div>
+        <div class="field">
+          <label for="html-head-source" i18n="@@html_head_source_label">Code HTML</label>
+          <textarea id="html-head-source" rows="22" maxlength="1000001" spellcheck="false" [value]="source()" (input)="updateSource($event)" aria-describedby="html-head-source-help"></textarea>
+          <small id="html-head-source-help" i18n="@@html_head_source_help">Limite : 1 000 000 de caractères, 1 000 balises et 200 diagnostics.</small>
+        </div>
+        <button class="primary-button" type="button" (click)="analyze()"><i class="tc-icon tc-icon-search" aria-hidden="true"></i><span i18n="@@html_head_analyze">Auditer le head</span></button>
+      </div>
+
+      <aside class="tool-card summary-card" aria-live="polite" data-testid="html-head-summary">
+        <div class="card-header">
+          <h2 i18n="@@html_head_summary_title">2. Synthèse</h2>
+          <p i18n="@@html_head_summary_subtitle">Un diagnostic local aide à relire le code, sans prédire l’affichage d’un moteur ou d’un réseau social.</p>
+        </div>
+        <div class="health" [class.health--ok]="errorCount() === 0 && warningCount() === 0">
+          <strong>{{ formatNumber(errorCount() + warningCount()) }}</strong>
+          <span i18n="@@html_head_attention_count">points à vérifier</span>
+        </div>
+        <dl class="summary-list">
+          <div><dt>title</dt><dd>{{ formatNumber(audit().titleLength) }} <span i18n="@@html_head_characters">caractères</span></dd></div>
+          <div><dt>description</dt><dd>{{ formatNumber(audit().descriptionLength) }} <span i18n="@@html_head_characters_2">caractères</span></dd></div>
+          <div><dt>canonical</dt><dd><code>{{ audit().canonical || '—' }}</code></dd></div>
+          <div><dt>robots</dt><dd><code>{{ audit().robotsDirectives.join(', ') || '—' }}</code></dd></div>
+          <div><dt>hreflang</dt><dd>{{ formatNumber(audit().alternates.length) }}</dd></div>
+          <div><dt>JSON-LD</dt><dd>{{ formatNumber(audit().jsonLdCount) }}</dd></div>
+        </dl>
+        <div class="badges">
+          <span class="badge badge--error">{{ formatNumber(errorCount()) }} <span i18n="@@html_head_errors">erreurs</span></span>
+          <span class="badge badge--warning">{{ formatNumber(warningCount()) }} <span i18n="@@html_head_warnings">avertissements</span></span>
+          <span class="badge badge--info">{{ formatNumber(infoCount()) }} <span i18n="@@html_head_infos">informations</span></span>
+        </div>
+        <div class="report-actions">
+          <button class="secondary-button" type="button" (click)="copyReport()"><i class="tc-icon tc-icon-copy" aria-hidden="true"></i>@if (copied()) { <span i18n="@@html_head_copied">Rapport copié</span> } @else { <span i18n="@@html_head_copy">Copier le JSON</span> }</button>
+          <button class="secondary-button" type="button" (click)="downloadReport()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@html_head_download">Télécharger</span></button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="tool-card diagnostics-card" data-testid="html-head-diagnostics" aria-live="polite">
+      <div class="card-header"><h2 i18n="@@html_head_diagnostics_title">3. Diagnostics</h2><p><span i18n="@@html_head_tags_scanned">Balises parcourues</span> : {{ formatNumber(audit().tagCount) }}</p></div>
+      @if (audit().issues.length === 0) {
+        <div class="empty-report" role="status"><i class="tc-icon tc-icon-check" aria-hidden="true"></i><strong i18n="@@html_head_no_issue">Aucun problème détecté par les règles locales</strong><span i18n="@@html_head_no_issue_help">Contrôlez encore le HTML publié et son rendu dans les outils officiels.</span></div>
+      } @else {
+        <ol class="issue-list">
+          @for (issue of audit().issues; track $index) {
+            <li [class]="'issue issue--' + issue.severity">
+              <div><strong>{{ issueLabel(issue.code) }}</strong>@if (issue.position !== null) { <span><span i18n="@@html_head_position">Balise</span> {{ formatNumber(issue.position) }}</span> }</div>
+              @if (issue.detail) { <code>{{ issue.detail }}</code> }
+            </li>
+          }
+        </ol>
+      }
+    </div>
+
+    <div class="inventory-grid">
+      <section class="tool-card">
+        <div class="card-header"><h2 i18n="@@html_head_alternates_title">Alternatives linguistiques</h2></div>
+        @if (audit().alternates.length === 0) { <p class="muted" i18n="@@html_head_no_alternates">Aucune annotation hreflang détectée.</p> }
+        @else { <dl class="metadata-list">@for (alternate of audit().alternates; track $index) { <div><dt><code>{{ alternate.hreflang }}</code></dt><dd><code>{{ alternate.href }}</code></dd></div> }</dl> }
+      </section>
+      <section class="tool-card">
+        <div class="card-header"><h2 i18n="@@html_head_social_title">Métadonnées sociales</h2></div>
+        @if (openGraphEntries().length === 0 && twitterEntries().length === 0) { <p class="muted" i18n="@@html_head_no_social">Aucune métadonnée Open Graph ou Twitter détectée.</p> }
+        @else {
+          <dl class="metadata-list">
+            @for (entry of openGraphEntries(); track entry.key) { <div><dt><code>{{ entry.key }}</code></dt><dd><code>{{ entry.values.join(' · ') }}</code></dd></div> }
+            @for (entry of twitterEntries(); track entry.key) { <div><dt><code>{{ entry.key }}</code></dt><dd><code>{{ entry.values.join(' · ') }}</code></dd></div> }
+          </dl>
+        }
+      </section>
+    </div>
+
+    <div class="tool-card guidance-card">
+      <div class="card-header"><h2 i18n="@@html_head_guidance_title">4. Bien interpréter l’audit</h2></div>
+      <div class="guidance-grid">
+        <div><i class="tc-icon tc-icon-search" aria-hidden="true"></i><h3 i18n="@@html_head_guidance_search_title">Signaux, pas garanties</h3><p i18n="@@html_head_guidance_search">Une canonical reste un signal et un moteur peut reformuler le titre ou l’extrait selon la requête.</p></div>
+        <div><i class="tc-icon tc-icon-th-large" aria-hidden="true"></i><h3 i18n="@@html_head_guidance_mobile_title">Responsive</h3><p i18n="@@html_head_guidance_mobile">width=device-width permet au navigateur d’adapter la largeur de mise en page à l’appareil.</p></div>
+        <div><i class="tc-icon tc-icon-language" aria-hidden="true"></i><h3>hreflang</h3><p i18n="@@html_head_guidance_hreflang">Chaque variante doit employer une URL absolue et inclure l’URL courante dans son groupe.</p></div>
+        <div><i class="tc-icon tc-icon-lock" aria-hidden="true"></i><h3 i18n="@@html_head_guidance_local_title">Traitement local</h3><p i18n="@@html_head_guidance_local">Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</p></div>
+      </div>
+    </div>
+
+    <nav class="related-card" i18n-aria-label="@@html_head_related_aria" aria-label="Outils SEO associés">
+      <strong i18n="@@html_head_related_title">Poursuivre l’audit SEO</strong>
+      <div><a routerLink="/categories/dev/seo/serp-snippet-preview" i18n="@@html_head_related_serp">Prévisualiser le snippet</a><a routerLink="/categories/dev/seo/hreflang-checker" i18n="@@html_head_related_hreflang">Vérifier hreflang</a><a routerLink="/categories/dev/seo/structured-data-extractor" i18n="@@html_head_related_structured">Extraire les données structurées</a></div>
+    </nav>
+
+    <div class="action-row"><button class="reset-button" type="button" (click)="reset()"><i class="tc-icon tc-icon-refresh" aria-hidden="true"></i><span i18n="@@tool_reset">Réinitialiser</span></button><a class="back-link" routerLink="/categories/dev/seo"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@html_head_back">Retour aux outils SEO</span></a></div>
+  </div>
+</section>

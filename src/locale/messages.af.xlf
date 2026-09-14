@@ -82452,6 +82452,769 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Die lys is beperk tot die eerste 200 diagnose.</target>
       </segment>
     </unit>
+    <unit id="tool_html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">HTML Head Auditor</target>
+      </segment>
+    </unit>
+    <unit id="tool_html_head_auditor_desc">
+      <segment>
+        <source>Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.</source>
+        <target state="translated">Auditeer plaaslik title, beskrywing, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter en JSON-LD vanaf gekopieerde HTML.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_title">
+      <segment>
+        <source>Auditer les balises essentielles d’un head HTML</source>
+        <target state="translated">Auditeer die noodsaaklike etikette van 'n HTML head</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_lead">
+      <segment>
+        <source>Le head rassemble des signaux qui aident navigateurs, moteurs de recherche et plateformes sociales à comprendre une page. Cet auditeur examine localement title, description, canonical, robots, viewport, encodage, hreflang, Open Graph, Twitter et JSON-LD sans crawler le site ni exécuter le code collé.</source>
+        <target state="translated">Die head versamel seine wat help om blaaier, soekenjins en sosiale platforms te laat verstaan hoe 'n bladsy werk. Hierdie auditor ondersoek plaaslik title, beskrywing, canonical, robots, viewport, kodering, hreflang, Open Graph, Twitter en JSON-LD sonder om die webwerf te kruip of die gekopieerde kode uit te voer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_use_cases">
+      <segment>
+        <source>Quand utiliser cet auditeur</source>
+        <target state="translated">Wanneer om hierdie auditor te gebruik</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_title">
+      <segment>
+        <source>Relire un template avant publication</source>
+        <target state="translated">Herlees 'n sjabloon voor publikasie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_text">
+      <segment>
+        <source>Repérez rapidement une balise manquante, vide ou dupliquée avant d’intégrer un nouveau modèle de page dans la chaîne de déploiement.</source>
+        <target state="translated">Identifiseer vinnig 'n ontbrekende, leë of gedupliseerde etikette voordat jy 'n nuwe bladsy sjabloon in die ontplooiingsketting integreer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_title">
+      <segment>
+        <source>Comparer le HTML réellement rendu</source>
+        <target state="translated">Vergelyk die werklike HTML wat gerender is</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_text">
+      <segment>
+        <source>Copiez le head depuis les outils de développement pour vérifier les métadonnées après rendu côté serveur ou hydratation côté client.</source>
+        <target state="translated">Kopieer die head vanaf ontwikkelingsinstrumente om die metadata na serverkant rendering of kliëntkant hidrasie te verifieer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_title">
+      <segment>
+        <source>Documenter une recette SEO</source>
+        <target state="translated">Dokumenteer 'n SEO resep</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_text">
+      <segment>
+        <source>Téléchargez le rapport JSON afin de conserver les valeurs, les alternatives linguistiques et les diagnostics associés à une version donnée.</source>
+        <target state="translated">Laai die JSON verslag af om die waardes, taalkeuses en diagnose wat met 'n gegewe weergawe geassosieer word, te behou.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method">
+      <segment>
+        <source>Méthode de vérification</source>
+        <target state="translated">Verifikasiemetode</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_1">
+      <segment>
+        <source>Renseignez l’URL publique exacte, puis collez le document HTML rendu ou seulement son head. Cette URL sert aux comparaisons locales avec canonical, og:url et les variantes hreflang ; elle n’est jamais ouverte par l’outil.</source>
+        <target state="translated">Voer die presiese publieke URL in, en plak dan die gerenderde HTML dokument of net sy head. Hierdie URL dien vir plaaslike vergelykings met canonical, og:url en die hreflang variasies; dit word nooit deur die instrument geopen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_2">
+      <segment>
+        <source>Traitez d’abord les erreurs structurelles comme plusieurs title, une canonical relative ou un hreflang invalide. Examinez ensuite noindex, les métadonnées absentes et les incohérences informatives selon l’intention de la page.</source>
+        <target state="translated">Hanteer eers struktuurfoute soos verskeie title, 'n relatiewe canonical of 'n ongeldige hreflang. Ondersoek dan noindex, ontbrekende metadata en informele inkonsekwensies volgens die bladsy se bedoeling.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_3">
+      <segment>
+        <source>Après correction, contrôlez la réponse HTTP et le HTML publié. Une directive X-Robots-Tag, une redirection, le rendu JavaScript ou une canonical envoyée par en-tête ne figurent pas nécessairement dans le code collé.</source>
+        <target state="translated">Na regstelling, kontroleer die HTTP antwoord en die gepubliseerde HTML. 'n X-Robots-Tag riglyn, 'n omleiding, JavaScript rendering of 'n canonical wat deur 'n kop gestuur word, verskyn nie noodwendig in die gekopieerde kode nie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_checks">
+      <segment>
+        <source>Contrôles effectués</source>
+        <target state="translated">Kontroles uitgevoer</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_title">
+      <segment>
+        <source>Recherche et indexation</source>
+        <target state="translated">Soek en indeksasie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_text">
+      <segment>
+        <source>Présence et unicité de title, description et canonical, validité de la canonical, directives robots contradictoires, noindex et meta refresh.</source>
+        <target state="translated">Teenwoordigheid en uniekheid van title, beskrywing en canonical, geldigheid van die canonical, teenstrydige robots riglyne, noindex en meta refresh.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_title">
+      <segment>
+        <source>Document et mobile</source>
+        <target state="translated">Dokument en mobiele</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_text">
+      <segment>
+        <source>Déclaration UTF-8, viewport contenant width=device-width, présence d’une balise base et nombre de blocs JSON-LD.</source>
+        <target state="translated">UTF-8 verklaring, viewport wat width=device-width bevat, teenwoordigheid van 'n basis-tag en aantal JSON-LD blokke.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_title">
+      <segment>
+        <source>International et partage social</source>
+        <target state="translated">Internasionaal en sosiale deel</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_text">
+      <segment>
+        <source>Codes et URL hreflang, auto-référence, propriétés Open Graph de base, cohérence entre og:url et canonical, puis type de carte Twitter.</source>
+        <target state="translated">Hreflang kodes en URL's, outo-verwysing, basiese Open Graph eienskappe, konsekwentheid tussen og:url en canonical, en dan Twitter kaart tipe.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_interpretation">
+      <segment>
+        <source>Ce que le rapport ne promet pas</source>
+        <target state="translated">Wat die verslag nie belowe nie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_1">
+      <segment>
+        <source>Une URL canonical constitue un signal de regroupement, pas une obligation imposée au moteur. Sa cohérence avec les redirections, liens internes et sitemaps reste importante.</source>
+        <target state="translated">‘n Canonical URL is 'n groepeeringssein, nie 'n verpligting aan die soekenjin nie. Die konsekwentheid daarvan met herleidings, interne skakels en sitemaps bly belangrik.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_2">
+      <segment>
+        <source>La longueur seule ne décide pas du titre ou de la description affichés. Les moteurs peuvent générer ou reformuler un résultat selon le contenu et la requête ; l’outil affiche donc les comptes sans seuil arbitraire.</source>
+        <target state="translated">Slegs die lengte bepaal nie die titel of beskrywing wat vertoon word nie. Soekenjins kan 'n resultaat genereer of herskryf volgens die inhoud en die versoek; die hulpmiddel vertoon dus die tellings sonder 'n arbitrêre drempel.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_3">
+      <segment>
+        <source>Les aperçus sociaux et résultats enrichis dépendent aussi de l’accessibilité des ressources, du cache des plateformes, du contenu visible et de règles extérieures à ce parseur.</source>
+        <target state="translated">Sosiale vooruitsigte en ryk resultate hang ook af van die toeganklikheid van hulpbronne, die platforms se kas, die sigbare inhoud en reëls buite hierdie parser.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits">
+      <segment>
+        <source>Limites et confidentialité</source>
+        <target state="translated">Grense en privaatheid</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_1">
+      <segment>
+        <source>La source est limitée à 1 000 000 de caractères, 1 000 balises et 200 diagnostics. Ces bornes réduisent le risque de blocage avec un document volontairement excessif.</source>
+        <target state="translated">Die bron is beperk tot 1 000 000 karakters, 1 000 etikette en 200 diagnose. Hierdie grense verminder die risiko van blokkering met 'n doelbewus oortollige dokument.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_2">
+      <segment>
+        <source>Le parseur traite une chaîne de texte sans DOM actif. Il n’insère pas le HTML, ne charge ni image ni script, n’exécute aucun gestionnaire et n’envoie aucune donnée à un service distant.</source>
+        <target state="translated">Die parser verwerk 'n teksstring sonder 'n aktiewe DOM. Dit voeg nie die HTML in nie, laai geen prent of skrip nie, voer geen handlers uit nie en stuur geen data na 'n eksterne diens.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Gereelde vrae</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q1">
+      <segment>
+        <source>Faut-il absolument une meta description ?</source>
+        <target state="translated">Is 'n meta beskrywing absoluut noodsaaklik?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a1">
+      <segment>
+        <source>Elle n’est pas nécessaire à l’indexation, mais une description spécifique peut aider le moteur à composer un extrait utile. Son absence est donc un avertissement, pas une preuve de blocage.</source>
+        <target state="translated">Dit is nie noodsaaklik vir indextisering nie, maar 'n spesifieke beskrywing kan die enjin help om 'n nuttige uittreksel saam te stel. Die afwesigheid daarvan is dus 'n waarskuwing, nie 'n bewys van blokkering nie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q2">
+      <segment>
+        <source>Pourquoi une canonical différente n’est-elle qu’une information ?</source>
+        <target state="translated">Waarom is 'n ander canonical net 'n inligting?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a2">
+      <segment>
+        <source>Une page peut volontairement désigner une autre URL représentative. Le rapport met la différence en évidence sans supposer qu’il s’agit d’une erreur métier.</source>
+        <target state="translated">‘n Bladsy kan doelbewus 'n ander verteenwoordigende URL aandui. Die verslag beklemtoon die verskil sonder om aan te neem dat dit 'n besigheidsfout is.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q3">
+      <segment>
+        <source>L’outil peut-il analyser directement une URL ?</source>
+        <target state="translated">Kan die hulpmiddel direk 'n URL analiseer?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a3">
+      <segment>
+        <source>Non. Il ne crawle aucun site. Cette contrainte rend le traitement prévisible et confidentiel ; copiez le HTML rendu pour auditer précisément la version voulue.</source>
+        <target state="translated">Nee. Dit kruip nie enige webwerf nie. Hierdie beperking maak die verwerking voorspelbaar en vertroulik; kopieer die gerenderde HTML om die verlangde weergawe presies te oudit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip_title">
+      <segment>
+        <source>Auditez aussi la réponse HTTP</source>
+        <target state="translated">Oudit ook die HTTP-antwoord</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip">
+      <segment>
+        <source>Le meilleur head ne compense pas une page inaccessible, une chaîne de redirections, une erreur serveur ou un X-Robots-Tag noindex. Utilisez ce rapport comme une étape de contrôle, puis vérifiez la réponse réellement servie.</source>
+        <target state="translated">Die beste head kan nie 'n ontoeganklike bladsy, 'n ketting van omleidings, 'n bedienerfout of 'n X-Robots-Tag noindex kompenseer nie. Gebruik hierdie verslag as 'n kontrolepunt, en verifieer dan die werklike antwoord wat bedien word.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">HTML head ouditor</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_subtitle">
+      <segment>
+        <source>Contrôlez les métadonnées SEO, sociales, mobiles et multilingues d’un code HTML collé.</source>
+        <target state="translated">Kontroleer die SEO, sosiale, mobiele en meertalige metadata van 'n geplakte HTML-kode.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_privacy">
+      <segment>
+        <source>Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</source>
+        <target state="translated">100% plaaslike analise: geen webwerf word aangeroep nie en geen geplakte kode word uitgevoer nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_title">
+      <segment>
+        <source>1. Coller le head à contrôler</source>
+        <target state="translated">1. Plak die head om te kontroleer</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_subtitle">
+      <segment>
+        <source>Un document HTML complet ou un fragment de head convient. Le parseur reste inerte.</source>
+        <target state="translated">‘n Volledige HTML-dokument of 'n fragment van die head is geskik. Die parser bly inaktief.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_label">
+      <segment>
+        <source>URL publique de la page</source>
+        <target state="translated">Publieke URL van die bladsy</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_help">
+      <segment>
+        <source>Facultative, elle permet de comparer canonical, og:url et auto-référence hreflang. Aucune requête n’est envoyée.</source>
+        <target state="translated">Opsioneel, dit stel jou in staat om canonical, og:url en outo-verwysing hreflang te vergelyk. Geen versoek word gestuur nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_label">
+      <segment>
+        <source>Code HTML</source>
+        <target state="translated">HTML-kode</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 1 000 balises et 200 diagnostics.</source>
+        <target state="translated">Grens: 1 000 000 karakters, 1 000 etikette en 200 diagnostiek.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_analyze">
+      <segment>
+        <source>Auditer le head</source>
+        <target state="translated">Oudit die head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_title">
+      <segment>
+        <source>2. Synthèse</source>
+        <target state="translated">2. Samevatting</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_subtitle">
+      <segment>
+        <source>Un diagnostic local aide à relire le code, sans prédire l’affichage d’un moteur ou d’un réseau social.</source>
+        <target state="translated">‘n Plaaslike diagnose help om die kode te hersien, sonder om die vertoning van 'n soekenjin of sosiale netwerk te voorspel.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_attention_count">
+      <segment>
+        <source>points à vérifier</source>
+        <target state="translated">punte om te kontroleer</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">karakters</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters_2">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">karakters</target>
+      </segment>
+    </unit>
+    <unit id="html_head_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">foute</target>
+      </segment>
+    </unit>
+    <unit id="html_head_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">waarskuwings</target>
+      </segment>
+    </unit>
+    <unit id="html_head_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">inligting</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Verslag gekopieer</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">Kopieer die JSON</target>
+      </segment>
+    </unit>
+    <unit id="html_head_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Laai af</target>
+      </segment>
+    </unit>
+    <unit id="html_head_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Diagnostiek</target>
+      </segment>
+    </unit>
+    <unit id="html_head_tags_scanned">
+      <segment>
+        <source>Balises parcourues</source>
+        <target state="translated">Etikette deurgeloop</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue">
+      <segment>
+        <source>Aucun problème détecté par les règles locales</source>
+        <target state="translated">Geen probleem deur die plaaslike reëls opgespoor nie</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue_help">
+      <segment>
+        <source>Contrôlez encore le HTML publié et son rendu dans les outils officiels.</source>
+        <target state="translated">Kontroleer weer die gepubliseerde HTML en sy weergave in die amptelike gereedskap.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_position">
+      <segment>
+        <source>Balise</source>
+        <target state="translated">Etiket</target>
+      </segment>
+    </unit>
+    <unit id="html_head_alternates_title">
+      <segment>
+        <source>Alternatives linguistiques</source>
+        <target state="translated">Taalalternatiewe</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_alternates">
+      <segment>
+        <source>Aucune annotation hreflang détectée.</source>
+        <target state="translated">Geen hreflang-annotasie opgespoor nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_social_title">
+      <segment>
+        <source>Métadonnées sociales</source>
+        <target state="translated">Sosiale metadata</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_social">
+      <segment>
+        <source>Aucune métadonnée Open Graph ou Twitter détectée.</source>
+        <target state="translated">Geen Open Graph of Twitter metadata opgespoor nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_title">
+      <segment>
+        <source>4. Bien interpréter l’audit</source>
+        <target state="translated">4. Goed om die oudit te interpreteer</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search_title">
+      <segment>
+        <source>Signaux, pas garanties</source>
+        <target state="translated">Sein, nie waarborge nie</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search">
+      <segment>
+        <source>Une canonical reste un signal et un moteur peut reformuler le titre ou l’extrait selon la requête.</source>
+        <target state="translated">'n Canonical is 'n sein en 'n motor kan die titel of die uittreksel volgens die versoek herformuleer.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile_title">
+      <segment>
+        <source>Responsive</source>
+        <target state="translated">Reagerend</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile">
+      <segment>
+        <source>width=device-width permet au navigateur d’adapter la largeur de mise en page à l’appareil.</source>
+        <target state="translated">width=device-width laat die blaaier toe om die lay-out se breedte aan die toestel aan te pas.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_hreflang">
+      <segment>
+        <source>Chaque variante doit employer une URL absolue et inclure l’URL courante dans son groupe.</source>
+        <target state="translated">Elke variasie moet 'n absolute URL gebruik en die huidige URL in sy groep insluit.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local_title">
+      <segment>
+        <source>Traitement local</source>
+        <target state="translated">Plaaslike verwerking</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local">
+      <segment>
+        <source>Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</source>
+        <target state="translated">Die parser lees begrensde teks. Dit voeg nie HTML in die bladsy in nie, laai geen hulpbronne nie en voer geen skripte uit nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Verwante SEO-gereedskap</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_title">
+      <segment>
+        <source>Poursuivre l’audit SEO</source>
+        <target state="translated">Gaan voort met die SEO-audit</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Voorskou die snippet</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">Kontroleer hreflang</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_structured">
+      <segment>
+        <source>Extraire les données structurées</source>
+        <target state="translated">Onthul die gestruktureerde data</target>
+      </segment>
+    </unit>
+    <unit id="html_head_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Terug na SEO-gereedskap</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">Die bron oorskry 1 000 000 karakters en is afgekort.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty">
+      <segment>
+        <source>Collez un document HTML ou le contenu d’un head avant l’analyse.</source>
+        <target state="translated">Plak 'n HTML-dokument of die inhoud van 'n head voor die analise.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_tag_limit">
+      <segment>
+        <source>L’analyse est limitée aux 1 000 premières balises.</source>
+        <target state="translated">Die analise is beperk tot die eerste 1 000 etikette.</target>
+      </segment>
+    </unit>
+
+    <unit id="html_head_issue_missing_title">
+      <segment>
+        <source>La balise title est absente.</source>
+        <target state="translated">Die title-etiket is afwesig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_title">
+      <segment>
+        <source>Plusieurs balises title sont présentes.</source>
+        <target state="translated">Meerdere title-etikette is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_title">
+      <segment>
+        <source>La balise title est vide.</source>
+        <target state="translated">Die title-etiket is leeg.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_description">
+      <segment>
+        <source>La meta description est absente.</source>
+        <target state="translated">Die meta-beskrywing is afwesig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_description">
+      <segment>
+        <source>Plusieurs meta descriptions sont présentes.</source>
+        <target state="translated">Meerdere meta-beskrywings is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_description">
+      <segment>
+        <source>La meta description est vide.</source>
+        <target state="translated">Die meta-beskrywing is leeg.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_canonical">
+      <segment>
+        <source>Le lien canonical est absent.</source>
+        <target state="translated">Die canonical skakel is afwesig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_canonical">
+      <segment>
+        <source>Plusieurs liens canonical sont présents.</source>
+        <target state="translated">Meerdere canonical skakels is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_canonical">
+      <segment>
+        <source>L’URL canonical doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Die canonical URL moet 'n absolute HTTP of HTTPS URL wees.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_fragment">
+      <segment>
+        <source>L’URL canonical contient un fragment, ignoré dans le rapport.</source>
+        <target state="translated">Die canonical URL bevat 'n fragment, wat in die verslag geïgnoreer word.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_credentials">
+      <segment>
+        <source>L’URL canonical expose des identifiants.</source>
+        <target state="translated">Die canonical URL stel inligting bekend.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_different">
+      <segment>
+        <source>La canonical diffère de l’URL de page fournie.</source>
+        <target state="translated">Die canonical verskil van die verskafde bladsy-URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_robots_conflict">
+      <segment>
+        <source>Des directives robots contradictoires sont déclarées.</source>
+        <target state="translated">Teenstrydige robotsriglyne is verklaar.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_noindex">
+      <segment>
+        <source>Une directive demande de ne pas indexer cette page.</source>
+        <target state="translated">'n Riglyn vra om hierdie bladsy nie te indeks nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_robots">
+      <segment>
+        <source>Une directive robots n’est pas reconnue par cet auditeur.</source>
+        <target state="translated">'n Robotsriglyn word nie deur hierdie ouditor erken nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_refresh">
+      <segment>
+        <source>Une redirection ou actualisation meta refresh est présente.</source>
+        <target state="translated">'n Meta-refresh herleiding of opdatering is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_viewport">
+      <segment>
+        <source>La meta viewport est absente.</source>
+        <target state="translated">Die meta viewport is afwesig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_viewport">
+      <segment>
+        <source>Plusieurs meta viewport sont présentes.</source>
+        <target state="translated">Meerdere meta viewports is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_viewport_responsive">
+      <segment>
+        <source>La meta viewport ne déclare pas width=device-width.</source>
+        <target state="translated">Die meta viewport verklaar nie width=device-width.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_charset">
+      <segment>
+        <source>L’encodage du document n’est pas déclaré dans le head.</source>
+        <target state="translated">Die kodering van die dokument is nie in die head verklaar nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_charset">
+      <segment>
+        <source>Plusieurs déclarations d’encodage sont présentes.</source>
+        <target state="translated">Meerdere kodering verklarings is teenwoordig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_non_utf8">
+      <segment>
+        <source>L’encodage déclaré n’est pas UTF-8.</source>
+        <target state="translated">Die verklaarde kodering is nie UTF-8 nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_duplicate_hreflang">
+      <segment>
+        <source>Une langue hreflang est déclarée plusieurs fois.</source>
+        <target state="translated">‘n Hreflang-taal is verskeie kere verklaar.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_url">
+      <segment>
+        <source>Une URL hreflang n’est pas une URL HTTP ou HTTPS absolue sans fragment.</source>
+        <target state="translated">‘n Hreflang-URL is nie ‘n absolute HTTP of HTTPS-URL sonder fragment nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_code">
+      <segment>
+        <source>Un code de langue hreflang est invalide.</source>
+        <target state="translated">‘n Hreflang-taal kode is ongeldig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_hreflang_self">
+      <segment>
+        <source>Le groupe hreflang ne contient pas d’auto-référence vers l’URL fournie.</source>
+        <target state="translated">Die hreflang-groep bevat nie ‘n selfverwysing na die gegewe URL nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_og">
+      <segment>
+        <source>Une propriété Open Graph de base est absente.</source>
+        <target state="translated">‘n Basiese Open Graph eienskap is afwesig.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_og_url">
+      <segment>
+        <source>La propriété og:url n’est pas une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Die eienskap og:url is nie ‘n absolute HTTP of HTTPS-URL nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_og_mismatch">
+      <segment>
+        <source>La propriété og:url diffère de la canonical.</source>
+        <target state="translated">Die eienskap og:url verskil van die canonical.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_twitter_card">
+      <segment>
+        <source>Les métadonnées Twitter sont présentes sans twitter:card.</source>
+        <target state="translated">Die Twitter-metadata is teenwoordig sonder twitter:card.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_twitter_card">
+      <segment>
+        <source>Le type twitter:card n’est pas reconnu.</source>
+        <target state="translated">Die tipe twitter:card word nie erken nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_base">
+      <segment>
+        <source>Une balise base peut modifier la résolution des URL relatives.</source>
+        <target state="translated">‘n Base-tag kan die resolusie van relatiewe URL's verander.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Die lys is beperk tot die eerste 200 diagnose.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_comment">
+      <segment>
+        <source>Un commentaire HTML n’est pas terminé.</source>
+        <target state="translated">'n HTML-opmerking is nie voltooi nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_tag">
+      <segment>
+        <source>Une balise HTML n’est pas terminée.</source>
+        <target state="translated">'n HTML-tag is nie voltooi nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_malformed">
+      <segment>
+        <source>Une balise HTML mal formée a été ignorée.</source>
+        <target state="translated">'n Swak gevormde HTML-tag is geïgnoreer.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_title">
+      <segment>
+        <source>La balise title n’est pas terminée.</source>
+        <target state="translated">Die title-tag is nie voltooi nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_script">
+      <segment>
+        <source>Une balise script n’est pas terminée.</source>
+        <target state="translated">'n script-tag is nie voltooi nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_head">
+      <segment>
+        <source>La balise head n’est pas terminée.</source>
+        <target state="translated">Die head-tag is nie voltooi nie.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_page_url">
+      <segment>
+        <source>L’URL publique doit être une URL HTTP ou HTTPS absolue sans identifiants.</source>
+        <target state="translated">Die publieke URL moet 'n absolute HTTP of HTTPS URL wees sonder identifikasies.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_title">
+      <segment>
+        <source>Guide pratique pour auditer un head HTML</source>
+        <target state="translated">Praktiese gids om 'n HTML-kop te oudit</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_description">
+      <segment>
+        <source>Un exemple complet pour contrôler les métadonnées essentielles d’une page web.</source>
+        <target state="translated">‘n Volledige voorbeeld om die noodsaaklike metadata van 'n webblad te kontroleer.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

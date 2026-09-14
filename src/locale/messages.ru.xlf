@@ -82424,6 +82424,769 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Список ограничен первыми 200 диагностическими сообщениями.</target>
       </segment>
     </unit>
+    <unit id="tool_html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">Аудитор заголовка HTML</target>
+      </segment>
+    </unit>
+    <unit id="tool_html_head_auditor_desc">
+      <segment>
+        <source>Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.</source>
+        <target state="translated">Локально проверяйте title, описание, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter и JSON-LD из вставленного HTML.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_title">
+      <segment>
+        <source>Auditer les balises essentielles d’un head HTML</source>
+        <target state="translated">Проверка основных тегов заголовка HTML</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_lead">
+      <segment>
+        <source>Le head rassemble des signaux qui aident navigateurs, moteurs de recherche et plateformes sociales à comprendre une page. Cet auditeur examine localement title, description, canonical, robots, viewport, encodage, hreflang, Open Graph, Twitter et JSON-LD sans crawler le site ni exécuter le code collé.</source>
+        <target state="translated">Заголовок собирает сигналы, которые помогают браузерам, поисковым системам и социальным платформам понять страницу. Этот аудитор локально проверяет title, описание, canonical, robots, viewport, кодировку, hreflang, Open Graph, Twitter и JSON-LD без обхода сайта или выполнения вставленного кода.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_use_cases">
+      <segment>
+        <source>Quand utiliser cet auditeur</source>
+        <target state="translated">Когда использовать этот аудитор</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_title">
+      <segment>
+        <source>Relire un template avant publication</source>
+        <target state="translated">Перепроверка шаблона перед публикацией</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_text">
+      <segment>
+        <source>Repérez rapidement une balise manquante, vide ou dupliquée avant d’intégrer un nouveau modèle de page dans la chaîne de déploiement.</source>
+        <target state="translated">Быстро находите отсутствующий, пустой или дублирующийся тег перед интеграцией нового шаблона страницы в цепочку развертывания.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_title">
+      <segment>
+        <source>Comparer le HTML réellement rendu</source>
+        <target state="translated">Сравнение фактически отрендеренного HTML</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_text">
+      <segment>
+        <source>Copiez le head depuis les outils de développement pour vérifier les métadonnées après rendu côté serveur ou hydratation côté client.</source>
+        <target state="translated">Скопируйте заголовок из инструментов разработчика, чтобы проверить метаданные после рендеринга на стороне сервера или гидратации на стороне клиента.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_title">
+      <segment>
+        <source>Documenter une recette SEO</source>
+        <target state="translated">Документирование SEO-рецепта</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_text">
+      <segment>
+        <source>Téléchargez le rapport JSON afin de conserver les valeurs, les alternatives linguistiques et les diagnostics associés à une version donnée.</source>
+        <target state="translated">Скачайте отчет JSON, чтобы сохранить значения, языковые альтернативы и связанные с ними диагностические данные для данной версии.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method">
+      <segment>
+        <source>Méthode de vérification</source>
+        <target state="translated">Метод проверки</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_1">
+      <segment>
+        <source>Renseignez l’URL publique exacte, puis collez le document HTML rendu ou seulement son head. Cette URL sert aux comparaisons locales avec canonical, og:url et les variantes hreflang ; elle n’est jamais ouverte par l’outil.</source>
+        <target state="translated">Введите точный публичный URL, затем вставьте отрендеренный HTML-документ или только его заголовок. Этот URL используется для локальных сравнений с canonical, og:url и вариантами hreflang; он никогда не открывается инструментом.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_2">
+      <segment>
+        <source>Traitez d’abord les erreurs structurelles comme plusieurs title, une canonical relative ou un hreflang invalide. Examinez ensuite noindex, les métadonnées absentes et les incohérences informatives selon l’intention de la page.</source>
+        <target state="translated">Сначала исправьте структурные ошибки, такие как несколько title, относительная canonical или недействительный hreflang. Затем проверьте noindex, отсутствующие метаданные и информационные несоответствия в зависимости от намерения страницы.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_3">
+      <segment>
+        <source>Après correction, contrôlez la réponse HTTP et le HTML publié. Une directive X-Robots-Tag, une redirection, le rendu JavaScript ou une canonical envoyée par en-tête ne figurent pas nécessairement dans le code collé.</source>
+        <target state="translated">После исправления проверьте HTTP-ответ и опубликованный HTML. Директива X-Robots-Tag, редирект, рендеринг JavaScript или canonical, отправленная в заголовке, не обязательно присутствуют в вставленном коде.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_checks">
+      <segment>
+        <source>Contrôles effectués</source>
+        <target state="translated">Проверки выполнены</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_title">
+      <segment>
+        <source>Recherche et indexation</source>
+        <target state="translated">Поиск и индексация</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_text">
+      <segment>
+        <source>Présence et unicité de title, description et canonical, validité de la canonical, directives robots contradictoires, noindex et meta refresh.</source>
+        <target state="translated">Наличие и уникальность title, описания и canonical, действительность canonical, противоречивые директивы robots, noindex и meta refresh.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_title">
+      <segment>
+        <source>Document et mobile</source>
+        <target state="translated">Документ и мобильный</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_text">
+      <segment>
+        <source>Déclaration UTF-8, viewport contenant width=device-width, présence d’une balise base et nombre de blocs JSON-LD.</source>
+        <target state="translated">Заявление UTF-8, viewport с width=device-width, наличие тега base и количество блоков JSON-LD.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_title">
+      <segment>
+        <source>International et partage social</source>
+        <target state="translated">Международный и социальный обмен</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_text">
+      <segment>
+        <source>Codes et URL hreflang, auto-référence, propriétés Open Graph de base, cohérence entre og:url et canonical, puis type de carte Twitter.</source>
+        <target state="translated">Коды и URL hreflang, авто-ссылка, основные свойства Open Graph, согласованность между og:url и canonical, а также тип карты Twitter.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_interpretation">
+      <segment>
+        <source>Ce que le rapport ne promet pas</source>
+        <target state="translated">Что отчет не обещает</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_1">
+      <segment>
+        <source>Une URL canonical constitue un signal de regroupement, pas une obligation imposée au moteur. Sa cohérence avec les redirections, liens internes et sitemaps reste importante.</source>
+        <target state="translated">Канонический URL является сигналом группировки, а не обязательством для поисковой системы. Его согласованность с редиректами, внутренними ссылками и картами сайта остается важной.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_2">
+      <segment>
+        <source>La longueur seule ne décide pas du titre ou de la description affichés. Les moteurs peuvent générer ou reformuler un résultat selon le contenu et la requête ; l’outil affiche donc les comptes sans seuil arbitraire.</source>
+        <target state="translated">Длина сама по себе не определяет заголовок или описание, которые будут отображаться. Поисковые системы могут генерировать или переформулировать результат в зависимости от содержания и запроса; инструмент отображает счета без произвольного порога.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_3">
+      <segment>
+        <source>Les aperçus sociaux et résultats enrichis dépendent aussi de l’accessibilité des ressources, du cache des plateformes, du contenu visible et de règles extérieures à ce parseur.</source>
+        <target state="translated">Социальные превью и расширенные результаты также зависят от доступности ресурсов, кэша платформ, видимого контента и правил, не относящихся к этому парсеру.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits">
+      <segment>
+        <source>Limites et confidentialité</source>
+        <target state="translated">Ограничения и конфиденциальность</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_1">
+      <segment>
+        <source>La source est limitée à 1 000 000 de caractères, 1 000 balises et 200 diagnostics. Ces bornes réduisent le risque de blocage avec un document volontairement excessif.</source>
+        <target state="translated">Источник ограничен 1 000 000 символов, 1 000 тегами и 200 диагностическими сообщениями. Эти пределы снижают риск блокировки с намеренно чрезмерным документом.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_2">
+      <segment>
+        <source>Le parseur traite une chaîne de texte sans DOM actif. Il n’insère pas le HTML, ne charge ni image ni script, n’exécute aucun gestionnaire et n’envoie aucune donnée à un service distant.</source>
+        <target state="translated">Парсер обрабатывает строку текста без активного DOM. Он не вставляет HTML, не загружает изображения или скрипты, не выполняет обработчики и не отправляет данные на удаленный сервис.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Часто задаваемые вопросы</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q1">
+      <segment>
+        <source>Faut-il absolument une meta description ?</source>
+        <target state="translated">Обязательно ли наличие мета-описания?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a1">
+      <segment>
+        <source>Elle n’est pas nécessaire à l’indexation, mais une description spécifique peut aider le moteur à composer un extrait utile. Son absence est donc un avertissement, pas une preuve de blocage.</source>
+        <target state="translated">Оно не требуется для индексации, но конкретное описание может помочь поисковой системе составить полезный фрагмент. Его отсутствие является предупреждением, а не доказательством блокировки.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q2">
+      <segment>
+        <source>Pourquoi une canonical différente n’est-elle qu’une information ?</source>
+        <target state="translated">Почему канонический URL отличается и это всего лишь информация?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a2">
+      <segment>
+        <source>Une page peut volontairement désigner une autre URL représentative. Le rapport met la différence en évidence sans supposer qu’il s’agit d’une erreur métier.</source>
+        <target state="translated">Страница может намеренно указывать на другой представительный URL. Отчет подчеркивает разницу, не предполагая, что это ошибка бизнеса.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q3">
+      <segment>
+        <source>L’outil peut-il analyser directement une URL ?</source>
+        <target state="translated">Может ли инструмент напрямую анализировать URL?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a3">
+      <segment>
+        <source>Non. Il ne crawle aucun site. Cette contrainte rend le traitement prévisible et confidentiel ; copiez le HTML rendu pour auditer précisément la version voulue.</source>
+        <target state="translated">Нет. Он не сканирует ни один сайт. Это ограничение делает обработку предсказуемой и конфиденциальной; скопируйте отрендеренный HTML, чтобы точно проверить нужную версию.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip_title">
+      <segment>
+        <source>Auditez aussi la réponse HTTP</source>
+        <target state="translated">Также проверьте HTTP-ответ</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip">
+      <segment>
+        <source>Le meilleur head ne compense pas une page inaccessible, une chaîne de redirections, une erreur serveur ou un X-Robots-Tag noindex. Utilisez ce rapport comme une étape de contrôle, puis vérifiez la réponse réellement servie.</source>
+        <target state="translated">Лучший head не компенсирует недоступную страницу, цепочку перенаправлений, ошибку сервера или X-Robots-Tag noindex. Используйте этот отчет как контрольный этап, затем проверьте фактически предоставленный ответ.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">Аудитор HTML head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_subtitle">
+      <segment>
+        <source>Contrôlez les métadonnées SEO, sociales, mobiles et multilingues d’un code HTML collé.</source>
+        <target state="translated">Проверьте SEO, социальные, мобильные и многоязычные метаданные вставленного HTML-кода.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_privacy">
+      <segment>
+        <source>Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</source>
+        <target state="translated">100% локальный анализ: ни один сайт не вызывается и ни один вставленный код не выполняется.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_title">
+      <segment>
+        <source>1. Coller le head à contrôler</source>
+        <target state="translated">1. Вставьте head для проверки</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_subtitle">
+      <segment>
+        <source>Un document HTML complet ou un fragment de head convient. Le parseur reste inerte.</source>
+        <target state="translated">Полный HTML-документ или фрагмент head подходит. Парсер остается неактивным.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_label">
+      <segment>
+        <source>URL publique de la page</source>
+        <target state="translated">Публичный URL страницы</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_help">
+      <segment>
+        <source>Facultative, elle permet de comparer canonical, og:url et auto-référence hreflang. Aucune requête n’est envoyée.</source>
+        <target state="translated">Необязательно, позволяет сравнить canonical, og:url и авто-ссылку hreflang. Запросы не отправляются.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_label">
+      <segment>
+        <source>Code HTML</source>
+        <target state="translated">HTML-код</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 1 000 balises et 200 diagnostics.</source>
+        <target state="translated">Ограничение: 1 000 000 символов, 1 000 тегов и 200 диагностик.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_analyze">
+      <segment>
+        <source>Auditer le head</source>
+        <target state="translated">Аудировать head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_title">
+      <segment>
+        <source>2. Synthèse</source>
+        <target state="translated">2. Сводка</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_subtitle">
+      <segment>
+        <source>Un diagnostic local aide à relire le code, sans prédire l’affichage d’un moteur ou d’un réseau social.</source>
+        <target state="translated">Локальная диагностика помогает перепроверить код, не предсказывая отображение в поисковой системе или социальной сети.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_attention_count">
+      <segment>
+        <source>points à vérifier</source>
+        <target state="translated">пунктов для проверки</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">символов</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters_2">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">символов</target>
+      </segment>
+    </unit>
+    <unit id="html_head_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">ошибок</target>
+      </segment>
+    </unit>
+    <unit id="html_head_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">предупреждений</target>
+      </segment>
+    </unit>
+    <unit id="html_head_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">информации</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Отчет скопирован</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">Скопировать JSON</target>
+      </segment>
+    </unit>
+    <unit id="html_head_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Скачать</target>
+      </segment>
+    </unit>
+    <unit id="html_head_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Диагностика</target>
+      </segment>
+    </unit>
+    <unit id="html_head_tags_scanned">
+      <segment>
+        <source>Balises parcourues</source>
+        <target state="translated">Просмотренные теги</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue">
+      <segment>
+        <source>Aucun problème détecté par les règles locales</source>
+        <target state="translated">Проблем не обнаружено по локальным правилам</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue_help">
+      <segment>
+        <source>Contrôlez encore le HTML publié et son rendu dans les outils officiels.</source>
+        <target state="translated">Проверьте еще раз опубликованный HTML и его отображение в официальных инструментах.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_position">
+      <segment>
+        <source>Balise</source>
+        <target state="translated">Тег</target>
+      </segment>
+    </unit>
+    <unit id="html_head_alternates_title">
+      <segment>
+        <source>Alternatives linguistiques</source>
+        <target state="translated">Языковые альтернативы</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_alternates">
+      <segment>
+        <source>Aucune annotation hreflang détectée.</source>
+        <target state="translated">Не обнаружено аннотаций hreflang.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_social_title">
+      <segment>
+        <source>Métadonnées sociales</source>
+        <target state="translated">Социальные метаданные</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_social">
+      <segment>
+        <source>Aucune métadonnée Open Graph ou Twitter détectée.</source>
+        <target state="translated">Не обнаружено метаданных Open Graph или Twitter.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_title">
+      <segment>
+        <source>4. Bien interpréter l’audit</source>
+        <target state="translated">4. Как правильно интерпретировать аудит</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search_title">
+      <segment>
+        <source>Signaux, pas garanties</source>
+        <target state="translated">Сигналы, а не гарантии</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search">
+      <segment>
+        <source>Une canonical reste un signal et un moteur peut reformuler le titre ou l’extrait selon la requête.</source>
+        <target state="translated">Каноническая ссылка остается сигналом, и движок может переформулировать заголовок или отрывок в зависимости от запроса.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile_title">
+      <segment>
+        <source>Responsive</source>
+        <target state="translated">Адаптивный</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile">
+      <segment>
+        <source>width=device-width permet au navigateur d’adapter la largeur de mise en page à l’appareil.</source>
+        <target state="translated">width=device-width позволяет браузеру адаптировать ширину макета к устройству.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_hreflang">
+      <segment>
+        <source>Chaque variante doit employer une URL absolue et inclure l’URL courante dans son groupe.</source>
+        <target state="translated">Каждый вариант должен использовать абсолютный URL и включать текущий URL в свою группу.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local_title">
+      <segment>
+        <source>Traitement local</source>
+        <target state="translated">Локальная обработка</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local">
+      <segment>
+        <source>Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</source>
+        <target state="translated">Парсер читает ограниченный текст. Он не вставляет HTML на страницу, не загружает ресурсы и не запускает скрипты.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Связанные инструменты SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_title">
+      <segment>
+        <source>Poursuivre l’audit SEO</source>
+        <target state="translated">Продолжить аудит SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Предварительный просмотр сниппета</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">Проверить hreflang</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_structured">
+      <segment>
+        <source>Extraire les données structurées</source>
+        <target state="translated">Извлечь структурированные данные</target>
+      </segment>
+    </unit>
+    <unit id="html_head_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Вернуться к инструментам SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">Источник превышает 1 000 000 символов и был обрезан.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty">
+      <segment>
+        <source>Collez un document HTML ou le contenu d’un head avant l’analyse.</source>
+        <target state="translated">Вставьте HTML-документ или содержимое head перед анализом.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_tag_limit">
+      <segment>
+        <source>L’analyse est limitée aux 1 000 premières balises.</source>
+        <target state="translated">Анализ ограничен первыми 1 000 тегами.</target>
+      </segment>
+    </unit>
+
+    <unit id="html_head_issue_missing_title">
+      <segment>
+        <source>La balise title est absente.</source>
+        <target state="translated">Тег title отсутствует.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_title">
+      <segment>
+        <source>Plusieurs balises title sont présentes.</source>
+        <target state="translated">Присутствует несколько тегов title.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_title">
+      <segment>
+        <source>La balise title est vide.</source>
+        <target state="translated">Тег title пуст.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_description">
+      <segment>
+        <source>La meta description est absente.</source>
+        <target state="translated">Мета-описание отсутствует.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_description">
+      <segment>
+        <source>Plusieurs meta descriptions sont présentes.</source>
+        <target state="translated">Присутствует несколько мета-описаний.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_description">
+      <segment>
+        <source>La meta description est vide.</source>
+        <target state="translated">Мета-описание пусто.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_canonical">
+      <segment>
+        <source>Le lien canonical est absent.</source>
+        <target state="translated">Каноническая ссылка отсутствует.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_canonical">
+      <segment>
+        <source>Plusieurs liens canonical sont présents.</source>
+        <target state="translated">Присутствует несколько канонических ссылок.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_canonical">
+      <segment>
+        <source>L’URL canonical doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Канонический URL должен быть абсолютным URL HTTP или HTTPS.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_fragment">
+      <segment>
+        <source>L’URL canonical contient un fragment, ignoré dans le rapport.</source>
+        <target state="translated">Канонический URL содержит фрагмент, который игнорируется в отчете.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_credentials">
+      <segment>
+        <source>L’URL canonical expose des identifiants.</source>
+        <target state="translated">Канонический URL раскрывает учетные данные.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_different">
+      <segment>
+        <source>La canonical diffère de l’URL de page fournie.</source>
+        <target state="translated">Каноническая ссылка отличается от предоставленного URL страницы.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_robots_conflict">
+      <segment>
+        <source>Des directives robots contradictoires sont déclarées.</source>
+        <target state="translated">Объявлены противоречивые директивы для роботов.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_noindex">
+      <segment>
+        <source>Une directive demande de ne pas indexer cette page.</source>
+        <target state="translated">Директива требует не индексировать эту страницу.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_robots">
+      <segment>
+        <source>Une directive robots n’est pas reconnue par cet auditeur.</source>
+        <target state="translated">Директива для роботов не распознана этим аудитором.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_refresh">
+      <segment>
+        <source>Une redirection ou actualisation meta refresh est présente.</source>
+        <target state="translated">Присутствует редирект или мета-обновление.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_viewport">
+      <segment>
+        <source>La meta viewport est absente.</source>
+        <target state="translated">Мета-viewport отсутствует.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_viewport">
+      <segment>
+        <source>Plusieurs meta viewport sont présentes.</source>
+        <target state="translated">Присутствует несколько мета-viewport.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_viewport_responsive">
+      <segment>
+        <source>La meta viewport ne déclare pas width=device-width.</source>
+        <target state="translated">Мета-viewport не объявляет width=device-width.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_charset">
+      <segment>
+        <source>L’encodage du document n’est pas déclaré dans le head.</source>
+        <target state="translated">Кодировка документа не указана в заголовке.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_charset">
+      <segment>
+        <source>Plusieurs déclarations d’encodage sont présentes.</source>
+        <target state="translated">Присутствуют несколько объявлений кодировки.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_non_utf8">
+      <segment>
+        <source>L’encodage déclaré n’est pas UTF-8.</source>
+        <target state="translated">Указанная кодировка не является UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_duplicate_hreflang">
+      <segment>
+        <source>Une langue hreflang est déclarée plusieurs fois.</source>
+        <target state="translated">Язык hreflang указан несколько раз.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_url">
+      <segment>
+        <source>Une URL hreflang n’est pas une URL HTTP ou HTTPS absolue sans fragment.</source>
+        <target state="translated">URL hreflang не является абсолютным URL HTTP или HTTPS без фрагмента.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_code">
+      <segment>
+        <source>Un code de langue hreflang est invalide.</source>
+        <target state="translated">Код языка hreflang недействителен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_hreflang_self">
+      <segment>
+        <source>Le groupe hreflang ne contient pas d’auto-référence vers l’URL fournie.</source>
+        <target state="translated">Группа hreflang не содержит самоссылку на предоставленный URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_og">
+      <segment>
+        <source>Une propriété Open Graph de base est absente.</source>
+        <target state="translated">Отсутствует основное свойство Open Graph.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_og_url">
+      <segment>
+        <source>La propriété og:url n’est pas une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Свойство og:url не является абсолютным URL HTTP или HTTPS.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_og_mismatch">
+      <segment>
+        <source>La propriété og:url diffère de la canonical.</source>
+        <target state="translated">Свойство og:url отличается от канонического.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_twitter_card">
+      <segment>
+        <source>Les métadonnées Twitter sont présentes sans twitter:card.</source>
+        <target state="translated">Метаданные Twitter присутствуют без twitter:card.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_twitter_card">
+      <segment>
+        <source>Le type twitter:card n’est pas reconnu.</source>
+        <target state="translated">Тип twitter:card не распознан.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_base">
+      <segment>
+        <source>Une balise base peut modifier la résolution des URL relatives.</source>
+        <target state="translated">Тег base может изменить разрешение относительных URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Список ограничен первыми 200 диагностическими сообщениями.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_comment">
+      <segment>
+        <source>Un commentaire HTML n’est pas terminé.</source>
+        <target state="translated">HTML-комментарий не завершен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_tag">
+      <segment>
+        <source>Une balise HTML n’est pas terminée.</source>
+        <target state="translated">HTML-тег не завершен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_malformed">
+      <segment>
+        <source>Une balise HTML mal formée a été ignorée.</source>
+        <target state="translated">Неправильный HTML-тег был проигнорирован.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_title">
+      <segment>
+        <source>La balise title n’est pas terminée.</source>
+        <target state="translated">Тег title не завершен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_script">
+      <segment>
+        <source>Une balise script n’est pas terminée.</source>
+        <target state="translated">Тег script не завершен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_head">
+      <segment>
+        <source>La balise head n’est pas terminée.</source>
+        <target state="translated">Тег head не завершен.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_page_url">
+      <segment>
+        <source>L’URL publique doit être une URL HTTP ou HTTPS absolue sans identifiants.</source>
+        <target state="translated">Публичный URL должен быть абсолютным HTTP или HTTPS URL без учетных данных.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_title">
+      <segment>
+        <source>Guide pratique pour auditer un head HTML</source>
+        <target state="translated">Практическое руководство по аудиту HTML заголовка</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_description">
+      <segment>
+        <source>Un exemple complet pour contrôler les métadonnées essentielles d’une page web.</source>
+        <target state="translated">Полный пример для проверки основных метаданных веб-страницы.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

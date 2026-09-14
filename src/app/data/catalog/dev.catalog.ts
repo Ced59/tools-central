@@ -288,6 +288,15 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
                 import('../../features/structured-data-extractor/presentation/structured-data-extractor-tool.component')
                   .then(m => m.StructuredDataExtractorToolComponent),
             },
+            'html-head-auditor': {
+              title: $localize`:@@tool_html_head_auditor_title:Auditeur de head HTML`,
+              description: $localize`:@@tool_html_head_auditor_desc:Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              loadComponent: () =>
+                import('../../features/html-head-auditor/presentation/html-head-auditor-tool.component')
+                  .then(m => m.HtmlHeadAuditorToolComponent),
+            },
           },
         },
       },

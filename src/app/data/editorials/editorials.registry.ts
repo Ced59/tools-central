@@ -112,6 +112,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/seo/hreflang-checker.editorial'),
   },
+  'dev/seo/html-head-auditor': {
+    available: true,
+    load: () => import('./dev/seo/html-head-auditor.editorial'),
+  },
   'dev/seo/robots-txt-builder': {
     available: true,
     load: () => import('./dev/seo/robots-txt-builder.editorial'),

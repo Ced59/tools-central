@@ -82461,6 +82461,769 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Liste ilk 200 tanıya sınırlıdır.</target>
       </segment>
     </unit>
+    <unit id="tool_html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">HTML Başlığı Denetleyici</target>
+      </segment>
+    </unit>
+    <unit id="tool_html_head_auditor_desc">
+      <segment>
+        <source>Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.</source>
+        <target state="translated">Yapıştırılmış HTML'den başlık, açıklama, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter ve JSON-LD'yi yerel olarak denetleyin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_title">
+      <segment>
+        <source>Auditer les balises essentielles d’un head HTML</source>
+        <target state="translated">HTML başlığının temel etiketlerini denetleyin</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_lead">
+      <segment>
+        <source>Le head rassemble des signaux qui aident navigateurs, moteurs de recherche et plateformes sociales à comprendre une page. Cet auditeur examine localement title, description, canonical, robots, viewport, encodage, hreflang, Open Graph, Twitter et JSON-LD sans crawler le site ni exécuter le code collé.</source>
+        <target state="translated">Başlık, tarayıcılara, arama motorlarına ve sosyal platformlara bir sayfayı anlamalarına yardımcı olan sinyalleri toplar. Bu denetleyici, siteyi taramadan veya yapıştırılmış kodu çalıştırmadan yerel olarak başlık, açıklama, canonical, robots, viewport, kodlama, hreflang, Open Graph, Twitter ve JSON-LD'yi inceler.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_use_cases">
+      <segment>
+        <source>Quand utiliser cet auditeur</source>
+        <target state="translated">Bu denetleyiciyi ne zaman kullanmalısınız?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_title">
+      <segment>
+        <source>Relire un template avant publication</source>
+        <target state="translated">Yayınlamadan önce bir şablonu gözden geçirin</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_text">
+      <segment>
+        <source>Repérez rapidement une balise manquante, vide ou dupliquée avant d’intégrer un nouveau modèle de page dans la chaîne de déploiement.</source>
+        <target state="translated">Yeni bir sayfa şablonunu dağıtım zincirine entegre etmeden önce eksik, boş veya kopyalanmış bir etiketi hızlıca tespit edin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_title">
+      <segment>
+        <source>Comparer le HTML réellement rendu</source>
+        <target state="translated">Gerçekten render edilen HTML'i karşılaştırın</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_text">
+      <segment>
+        <source>Copiez le head depuis les outils de développement pour vérifier les métadonnées après rendu côté serveur ou hydratation côté client.</source>
+        <target state="translated">Geliştirme araçlarından başlığı kopyalayın ve sunucu tarafında render veya istemci tarafında hidratasyon sonrası meta verileri kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_title">
+      <segment>
+        <source>Documenter une recette SEO</source>
+        <target state="translated">SEO tarifini belgeleyin</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_text">
+      <segment>
+        <source>Téléchargez le rapport JSON afin de conserver les valeurs, les alternatives linguistiques et les diagnostics associés à une version donnée.</source>
+        <target state="translated">Belirli bir sürüme ait değerleri, dil alternatiflerini ve ilişkili tanıları saklamak için JSON raporunu indirin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method">
+      <segment>
+        <source>Méthode de vérification</source>
+        <target state="translated">Kontrol yöntemi</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_1">
+      <segment>
+        <source>Renseignez l’URL publique exacte, puis collez le document HTML rendu ou seulement son head. Cette URL sert aux comparaisons locales avec canonical, og:url et les variantes hreflang ; elle n’est jamais ouverte par l’outil.</source>
+        <target state="translated">Tam kamu URL'sini girin, ardından render edilmiş HTML belgesini veya sadece başlığını yapıştırın. Bu URL, canonical, og:url ve hreflang varyantları ile yerel karşılaştırmalar için kullanılır; araç tarafından asla açılmaz.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_2">
+      <segment>
+        <source>Traitez d’abord les erreurs structurelles comme plusieurs title, une canonical relative ou un hreflang invalide. Examinez ensuite noindex, les métadonnées absentes et les incohérences informatives selon l’intention de la page.</source>
+        <target state="translated">Öncelikle birden fazla başlık, göreli bir canonical veya geçersiz bir hreflang gibi yapısal hataları ele alın. Ardından, noindex, eksik meta veriler ve sayfanın niyetine göre bilgi tutarsızlıklarını inceleyin.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_3">
+      <segment>
+        <source>Après correction, contrôlez la réponse HTTP et le HTML publié. Une directive X-Robots-Tag, une redirection, le rendu JavaScript ou une canonical envoyée par en-tête ne figurent pas nécessairement dans le code collé.</source>
+        <target state="translated">Düzeltme sonrası, HTTP yanıtını ve yayınlanan HTML'i kontrol edin. Bir X-Robots-Tag yönergesi, yönlendirme, JavaScript render'ı veya başlıkla gönderilen bir canonical, yapıştırılmış kodda mutlaka yer almaz.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_checks">
+      <segment>
+        <source>Contrôles effectués</source>
+        <target state="translated">Gerçekleştirilen kontroller</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_title">
+      <segment>
+        <source>Recherche et indexation</source>
+        <target state="translated">Arama ve dizinleme</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_text">
+      <segment>
+        <source>Présence et unicité de title, description et canonical, validité de la canonical, directives robots contradictoires, noindex et meta refresh.</source>
+        <target state="translated">Başlık, açıklama ve canonical'ın varlığı ve benzersizliği, canonical'ın geçerliliği, çelişkili robot yönergeleri, noindex ve meta refresh.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_title">
+      <segment>
+        <source>Document et mobile</source>
+        <target state="translated">Belge ve mobil</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_text">
+      <segment>
+        <source>Déclaration UTF-8, viewport contenant width=device-width, présence d’une balise base et nombre de blocs JSON-LD.</source>
+        <target state="translated">UTF-8 bildirimi, viewport içeren width=device-width, bir base etiketi varlığı ve JSON-LD blok sayısı.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_title">
+      <segment>
+        <source>International et partage social</source>
+        <target state="translated">Uluslararası ve sosyal paylaşım</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_text">
+      <segment>
+        <source>Codes et URL hreflang, auto-référence, propriétés Open Graph de base, cohérence entre og:url et canonical, puis type de carte Twitter.</source>
+        <target state="translated">Hreflang kodları ve URL'leri, kendi kendine referans, temel Open Graph özellikleri, og:url ve canonical arasındaki tutarlılık, ardından Twitter kartı türü.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_interpretation">
+      <segment>
+        <source>Ce que le rapport ne promet pas</source>
+        <target state="translated">Raporun vaat etmediği şeyler</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_1">
+      <segment>
+        <source>Une URL canonical constitue un signal de regroupement, pas une obligation imposée au moteur. Sa cohérence avec les redirections, liens internes et sitemaps reste importante.</source>
+        <target state="translated">Bir canonical URL, bir gruplama sinyali oluşturur, motor için zorunluluk değildir. Yönlendirmeler, dahili bağlantılar ve site haritaları ile tutarlılığı önemlidir.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_2">
+      <segment>
+        <source>La longueur seule ne décide pas du titre ou de la description affichés. Les moteurs peuvent générer ou reformuler un résultat selon le contenu et la requête ; l’outil affiche donc les comptes sans seuil arbitraire.</source>
+        <target state="translated">Uzunluk tek başına gösterilen başlık veya açıklamayı belirlemez. Motorlar, içerik ve sorguya göre bir sonuç oluşturabilir veya yeniden formüle edebilir; bu nedenle araç, keyfi bir eşik olmadan sayımları gösterir.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_3">
+      <segment>
+        <source>Les aperçus sociaux et résultats enrichis dépendent aussi de l’accessibilité des ressources, du cache des plateformes, du contenu visible et de règles extérieures à ce parseur.</source>
+        <target state="translated">Sosyal önizlemeler ve zengin sonuçlar, kaynakların erişilebilirliğine, platformların önbelleğine, görünür içeriğe ve bu ayrıştırıcıya dışsal kurallara da bağlıdır.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits">
+      <segment>
+        <source>Limites et confidentialité</source>
+        <target state="translated">Sınırlar ve gizlilik</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_1">
+      <segment>
+        <source>La source est limitée à 1 000 000 de caractères, 1 000 balises et 200 diagnostics. Ces bornes réduisent le risque de blocage avec un document volontairement excessif.</source>
+        <target state="translated">Kaynak, 1.000.000 karakter, 1.000 etiket ve 200 tanı ile sınırlıdır. Bu sınırlar, kasıtlı olarak aşırı bir belge ile engellenme riskini azaltır.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_2">
+      <segment>
+        <source>Le parseur traite une chaîne de texte sans DOM actif. Il n’insère pas le HTML, ne charge ni image ni script, n’exécute aucun gestionnaire et n’envoie aucune donnée à un service distant.</source>
+        <target state="translated">Ayrıştırıcı, aktif bir DOM olmadan bir metin dizesini işler. HTML eklemez, resim veya script yüklemez, hiçbir yöneticiyi çalıştırmaz ve uzak bir hizmete veri göndermez.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Sıkça Sorulan Sorular</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q1">
+      <segment>
+        <source>Faut-il absolument une meta description ?</source>
+        <target state="translated">Kesinlikle bir meta açıklama gerekli mi?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a1">
+      <segment>
+        <source>Elle n’est pas nécessaire à l’indexation, mais une description spécifique peut aider le moteur à composer un extrait utile. Son absence est donc un avertissement, pas une preuve de blocage.</source>
+        <target state="translated">İndeksleme için gerekli değildir, ancak belirli bir açıklama motorun faydalı bir özet oluşturmasına yardımcı olabilir. Yokluğu bir uyarıdır, engellenme kanıtı değildir.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q2">
+      <segment>
+        <source>Pourquoi une canonical différente n’est-elle qu’une information ?</source>
+        <target state="translated">Neden farklı bir canonical sadece bir bilgi?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a2">
+      <segment>
+        <source>Une page peut volontairement désigner une autre URL représentative. Le rapport met la différence en évidence sans supposer qu’il s’agit d’une erreur métier.</source>
+        <target state="translated">Bir sayfa, kasıtlı olarak başka bir temsilci URL'yi belirtebilir. Rapor, bunun bir iş hatası olduğunu varsaymadan farkı vurgular.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q3">
+      <segment>
+        <source>L’outil peut-il analyser directement une URL ?</source>
+        <target state="translated">Araç doğrudan bir URL'yi analiz edebilir mi?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a3">
+      <segment>
+        <source>Non. Il ne crawle aucun site. Cette contrainte rend le traitement prévisible et confidentiel ; copiez le HTML rendu pour auditer précisément la version voulue.</source>
+        <target state="translated">Hayır. Hiçbir siteyi taramaz. Bu kısıtlama işlemi öngörülebilir ve gizli hale getirir; istenen sürümü tam olarak denetlemek için oluşturulan HTML'yi kopyalayın.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip_title">
+      <segment>
+        <source>Auditez aussi la réponse HTTP</source>
+        <target state="translated">HTTP yanıtını da denetleyin</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip">
+      <segment>
+        <source>Le meilleur head ne compense pas une page inaccessible, une chaîne de redirections, une erreur serveur ou un X-Robots-Tag noindex. Utilisez ce rapport comme une étape de contrôle, puis vérifiez la réponse réellement servie.</source>
+        <target state="translated">En iyi başlık, erişilemeyen bir sayfayı, yönlendirme zincirini, sunucu hatasını veya noindex X-Robots-Tag'ini telafi etmez. Bu raporu bir kontrol aşaması olarak kullanın, ardından gerçekten sunulan yanıtı kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">HTML Başlık Denetleyici</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_subtitle">
+      <segment>
+        <source>Contrôlez les métadonnées SEO, sociales, mobiles et multilingues d’un code HTML collé.</source>
+        <target state="translated">Yapıştırılmış bir HTML kodunun SEO, sosyal, mobil ve çok dilli meta verilerini kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_privacy">
+      <segment>
+        <source>Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</source>
+        <target state="translated">%100 yerel analiz: hiçbir site çağrılmaz ve hiçbir yapıştırılan kod çalıştırılmaz.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_title">
+      <segment>
+        <source>1. Coller le head à contrôler</source>
+        <target state="translated">1. Denetlenecek başlığı yapıştırın</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_subtitle">
+      <segment>
+        <source>Un document HTML complet ou un fragment de head convient. Le parseur reste inerte.</source>
+        <target state="translated">Tam bir HTML belgesi veya bir başlık parçası uygundur. Ayrıştırıcı hareketsiz kalır.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_label">
+      <segment>
+        <source>URL publique de la page</source>
+        <target state="translated">Sayfanın genel URL'si</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_help">
+      <segment>
+        <source>Facultative, elle permet de comparer canonical, og:url et auto-référence hreflang. Aucune requête n’est envoyée.</source>
+        <target state="translated">İsteğe bağlıdır, canonical, og:url ve otomatik referans hreflang'ı karşılaştırmaya olanak tanır. Hiçbir istek gönderilmez.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_label">
+      <segment>
+        <source>Code HTML</source>
+        <target state="translated">HTML Kodu</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 1 000 balises et 200 diagnostics.</source>
+        <target state="translated">Sınır: 1.000.000 karakter, 1.000 etiket ve 200 tanı.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_analyze">
+      <segment>
+        <source>Auditer le head</source>
+        <target state="translated">Başlığı denetle</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_title">
+      <segment>
+        <source>2. Synthèse</source>
+        <target state="translated">2. Özet</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_subtitle">
+      <segment>
+        <source>Un diagnostic local aide à relire le code, sans prédire l’affichage d’un moteur ou d’un réseau social.</source>
+        <target state="translated">Yerel bir tanı, kodu gözden geçirmeye yardımcı olur, bir motorun veya sosyal ağın görüntüsünü tahmin etmez.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_attention_count">
+      <segment>
+        <source>points à vérifier</source>
+        <target state="translated">kontrol edilecek nokta</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">karakter</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters_2">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">karakter</target>
+      </segment>
+    </unit>
+    <unit id="html_head_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">hata</target>
+      </segment>
+    </unit>
+    <unit id="html_head_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">uyarı</target>
+      </segment>
+    </unit>
+    <unit id="html_head_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">bilgi</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Rapor kopyalandı</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">JSON'u kopyala</target>
+      </segment>
+    </unit>
+    <unit id="html_head_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">İndir</target>
+      </segment>
+    </unit>
+    <unit id="html_head_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Tanılar</target>
+      </segment>
+    </unit>
+    <unit id="html_head_tags_scanned">
+      <segment>
+        <source>Balises parcourues</source>
+        <target state="translated">Tarayıcı etiketleri</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue">
+      <segment>
+        <source>Aucun problème détecté par les règles locales</source>
+        <target state="translated">Yerel kurallar tarafından tespit edilen hiçbir sorun yok</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue_help">
+      <segment>
+        <source>Contrôlez encore le HTML publié et son rendu dans les outils officiels.</source>
+        <target state="translated">Yayınlanan HTML'yi ve resmi araçlardaki görüntüsünü tekrar kontrol edin.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_position">
+      <segment>
+        <source>Balise</source>
+        <target state="translated">Etiket</target>
+      </segment>
+    </unit>
+    <unit id="html_head_alternates_title">
+      <segment>
+        <source>Alternatives linguistiques</source>
+        <target state="translated">Dil alternatifleri</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_alternates">
+      <segment>
+        <source>Aucune annotation hreflang détectée.</source>
+        <target state="translated">Hiçbir hreflang notasyonu tespit edilmedi.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_social_title">
+      <segment>
+        <source>Métadonnées sociales</source>
+        <target state="translated">Sosyal meta veriler</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_social">
+      <segment>
+        <source>Aucune métadonnée Open Graph ou Twitter détectée.</source>
+        <target state="translated">Hiçbir Open Graph veya Twitter meta verisi tespit edilmedi.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_title">
+      <segment>
+        <source>4. Bien interpréter l’audit</source>
+        <target state="translated">4. Denetimi iyi yorumlamak</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search_title">
+      <segment>
+        <source>Signaux, pas garanties</source>
+        <target state="translated">Sinyaller, garantiler değil</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search">
+      <segment>
+        <source>Une canonical reste un signal et un moteur peut reformuler le titre ou l’extrait selon la requête.</source>
+        <target state="translated">Bir canonical, bir sinyal olarak kalır ve bir motor başlığı veya özeti isteğe göre yeniden formüle edebilir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile_title">
+      <segment>
+        <source>Responsive</source>
+        <target state="translated">Duyarlı</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile">
+      <segment>
+        <source>width=device-width permet au navigateur d’adapter la largeur de mise en page à l’appareil.</source>
+        <target state="translated">width=device-width, tarayıcının sayfa genişliğini cihaza uyarlamasını sağlar.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_hreflang">
+      <segment>
+        <source>Chaque variante doit employer une URL absolue et inclure l’URL courante dans son groupe.</source>
+        <target state="translated">Her varyant, mutlak bir URL kullanmalı ve mevcut URL'yi grubuna dahil etmelidir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local_title">
+      <segment>
+        <source>Traitement local</source>
+        <target state="translated">Yerel İşlem</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local">
+      <segment>
+        <source>Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</source>
+        <target state="translated">Parsers, sınırlı metni okur. HTML'i sayfaya eklemez, hiçbir kaynak yüklemez ve hiçbir script başlatmaz.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">İlgili SEO Araçları</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_title">
+      <segment>
+        <source>Poursuivre l’audit SEO</source>
+        <target state="translated">SEO denetimine devam et</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Snippet'i önizle</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">hreflang'i kontrol et</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_structured">
+      <segment>
+        <source>Extraire les données structurées</source>
+        <target state="translated">Yapılandırılmış verileri çıkar</target>
+      </segment>
+    </unit>
+    <unit id="html_head_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">SEO araçlarına geri dön</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">Kaynak 1.000.000 karakteri aşıyor ve kesildi.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty">
+      <segment>
+        <source>Collez un document HTML ou le contenu d’un head avant l’analyse.</source>
+        <target state="translated">Analizden önce bir HTML belgesi veya bir head içeriği yapıştırın.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_tag_limit">
+      <segment>
+        <source>L’analyse est limitée aux 1 000 premières balises.</source>
+        <target state="translated">Analiz, ilk 1.000 etiketle sınırlıdır.</target>
+      </segment>
+    </unit>
+
+    <unit id="html_head_issue_missing_title">
+      <segment>
+        <source>La balise title est absente.</source>
+        <target state="translated">title etiketi eksik.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_title">
+      <segment>
+        <source>Plusieurs balises title sont présentes.</source>
+        <target state="translated">Birden fazla title etiketi mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_title">
+      <segment>
+        <source>La balise title est vide.</source>
+        <target state="translated">title etiketi boş.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_description">
+      <segment>
+        <source>La meta description est absente.</source>
+        <target state="translated">Meta açıklama eksik.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_description">
+      <segment>
+        <source>Plusieurs meta descriptions sont présentes.</source>
+        <target state="translated">Birden fazla meta açıklama mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_description">
+      <segment>
+        <source>La meta description est vide.</source>
+        <target state="translated">Meta açıklama boş.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_canonical">
+      <segment>
+        <source>Le lien canonical est absent.</source>
+        <target state="translated">Canonical bağlantısı eksik.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_canonical">
+      <segment>
+        <source>Plusieurs liens canonical sont présents.</source>
+        <target state="translated">Birden fazla canonical bağlantısı mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_canonical">
+      <segment>
+        <source>L’URL canonical doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Canonical URL, mutlak bir HTTP veya HTTPS URL'si olmalıdır.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_fragment">
+      <segment>
+        <source>L’URL canonical contient un fragment, ignoré dans le rapport.</source>
+        <target state="translated">Canonical URL bir parça içeriyor, raporda göz ardı ediliyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_credentials">
+      <segment>
+        <source>L’URL canonical expose des identifiants.</source>
+        <target state="translated">Canonical URL kimlik bilgilerini açığa çıkarıyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_different">
+      <segment>
+        <source>La canonical diffère de l’URL de page fournie.</source>
+        <target state="translated">Canonical, sağlanan sayfa URL'sinden farklı.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_robots_conflict">
+      <segment>
+        <source>Des directives robots contradictoires sont déclarées.</source>
+        <target state="translated">Çelişkili robot yönergeleri belirtilmiştir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_noindex">
+      <segment>
+        <source>Une directive demande de ne pas indexer cette page.</source>
+        <target state="translated">Bir yönerge, bu sayfanın dizinlenmemesini talep ediyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_robots">
+      <segment>
+        <source>Une directive robots n’est pas reconnue par cet auditeur.</source>
+        <target state="translated">Bir robot yönergesi bu denetleyici tarafından tanınmıyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_refresh">
+      <segment>
+        <source>Une redirection ou actualisation meta refresh est présente.</source>
+        <target state="translated">Bir yönlendirme veya meta refresh mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_viewport">
+      <segment>
+        <source>La meta viewport est absente.</source>
+        <target state="translated">Meta viewport eksik.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_viewport">
+      <segment>
+        <source>Plusieurs meta viewport sont présentes.</source>
+        <target state="translated">Birden fazla meta viewport mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_viewport_responsive">
+      <segment>
+        <source>La meta viewport ne déclare pas width=device-width.</source>
+        <target state="translated">Meta viewport, width=device-width belirtmiyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_charset">
+      <segment>
+        <source>L’encodage du document n’est pas déclaré dans le head.</source>
+        <target state="translated">Belgenin kodlaması head içinde belirtilmemiş.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_charset">
+      <segment>
+        <source>Plusieurs déclarations d’encodage sont présentes.</source>
+        <target state="translated">Birden fazla kodlama bildirimi mevcut.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_non_utf8">
+      <segment>
+        <source>L’encodage déclaré n’est pas UTF-8.</source>
+        <target state="translated">Belirtilen kodlama UTF-8 değil.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_duplicate_hreflang">
+      <segment>
+        <source>Une langue hreflang est déclarée plusieurs fois.</source>
+        <target state="translated">Bir hreflang dili birden fazla kez belirtilmiş.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_url">
+      <segment>
+        <source>Une URL hreflang n’est pas une URL HTTP ou HTTPS absolue sans fragment.</source>
+        <target state="translated">Bir hreflang URL'si, parça olmadan HTTP veya HTTPS mutlak bir URL değildir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_code">
+      <segment>
+        <source>Un code de langue hreflang est invalide.</source>
+        <target state="translated">Bir hreflang dil kodu geçersiz.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_hreflang_self">
+      <segment>
+        <source>Le groupe hreflang ne contient pas d’auto-référence vers l’URL fournie.</source>
+        <target state="translated">Hreflang grubu sağlanan URL'ye kendine referans içermiyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_og">
+      <segment>
+        <source>Une propriété Open Graph de base est absente.</source>
+        <target state="translated">Temel bir Open Graph özelliği eksik.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_og_url">
+      <segment>
+        <source>La propriété og:url n’est pas une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">og:url özelliği, HTTP veya HTTPS mutlak bir URL değildir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_og_mismatch">
+      <segment>
+        <source>La propriété og:url diffère de la canonical.</source>
+        <target state="translated">og:url özelliği canonical'dan farklı.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_twitter_card">
+      <segment>
+        <source>Les métadonnées Twitter sont présentes sans twitter:card.</source>
+        <target state="translated">Twitter meta verileri mevcut ancak twitter:card yok.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_twitter_card">
+      <segment>
+        <source>Le type twitter:card n’est pas reconnu.</source>
+        <target state="translated">twitter:card türü tanınmıyor.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_base">
+      <segment>
+        <source>Une balise base peut modifier la résolution des URL relatives.</source>
+        <target state="translated">Bir base etiketi, göreli URL'lerin çözümünü değiştirebilir.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Liste, ilk 200 tanı ile sınırlıdır.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_comment">
+      <segment>
+        <source>Un commentaire HTML n’est pas terminé.</source>
+        <target state="translated">Bir HTML yorumu tamamlanmamış.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_tag">
+      <segment>
+        <source>Une balise HTML n’est pas terminée.</source>
+        <target state="translated">Bir HTML etiketi tamamlanmamış.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_malformed">
+      <segment>
+        <source>Une balise HTML mal formée a été ignorée.</source>
+        <target state="translated">Yanlış biçimlendirilmiş bir HTML etiketi yoksayıldı.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_title">
+      <segment>
+        <source>La balise title n’est pas terminée.</source>
+        <target state="translated">title etiketi tamamlanmamış.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_script">
+      <segment>
+        <source>Une balise script n’est pas terminée.</source>
+        <target state="translated">Bir script etiketi tamamlanmamış.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_head">
+      <segment>
+        <source>La balise head n’est pas terminée.</source>
+        <target state="translated">head etiketi tamamlanmamış.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_page_url">
+      <segment>
+        <source>L’URL publique doit être une URL HTTP ou HTTPS absolue sans identifiants.</source>
+        <target state="translated">Genel URL, kimlik bilgisi olmadan mutlak bir HTTP veya HTTPS URL'si olmalıdır.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_title">
+      <segment>
+        <source>Guide pratique pour auditer un head HTML</source>
+        <target state="translated">HTML başlığı denetlemek için pratik rehber</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_description">
+      <segment>
+        <source>Un exemple complet pour contrôler les métadonnées essentielles d’une page web.</source>
+        <target state="translated">Bir web sayfasının temel meta verilerini kontrol etmek için kapsamlı bir örnek.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
