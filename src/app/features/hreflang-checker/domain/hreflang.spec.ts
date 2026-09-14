@@ -185,4 +185,17 @@ describe('hreflang domain', () => {
       'canonical-mismatch',
     ]));
   });
+
+  it('keeps global line numbers after empty lines in an audit block', () => {
+    const audit = analyzeHreflangAudit([
+      'PAGE https://example.com/fr | https://example.com/fr',
+      '',
+      'ligne invalide',
+    ].join('\n'));
+
+    expect(audit.issues).toContainEqual(expect.objectContaining({
+      code: 'invalid-line',
+      line: 3,
+    }));
+  });
 });

@@ -51,7 +51,7 @@ Dernière mesure Playwright CI sur l’accueil mobile : LCP 124 ms, CLS 0,0029, 
 - Livraison de `serp-snippet-preview` dans une tranche verticale domaine/application/présentation, avec mesure typographique Unicode, validation d’URL, limites de travail, accessibilité et 19 tests ciblés.
 - Livraison de `robots-txt-builder` dans une tranche verticale complète, avec génération, diagnostic borné, simulation RFC 9309, export local, accessibilité et 26 tests ciblés.
 - Livraison de `sitemap-xml-builder` dans une tranche verticale complète, avec générateur `urlset`/index, parseur XML défensif, validation du protocole, Web Worker pour les gros fichiers, export local, accessibilité et 23 tests ciblés.
-- Livraison de `hreflang-checker` dans une tranche verticale complète, avec sorties HTML/HTTP/sitemap, validation locale des codes et URL, contrôle des canonicals et de la réciprocité à partir des pages fournies, export, accessibilité et 22 tests ciblés.
+- Livraison de `hreflang-checker` dans une tranche verticale complète, avec sorties HTML/HTTP/sitemap, validation locale des codes et URL, contrôle des canonicals et de la réciprocité à partir des pages fournies, export, accessibilité et 23 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
