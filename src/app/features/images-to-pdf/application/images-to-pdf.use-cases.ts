@@ -120,7 +120,15 @@ export class CreateImagesPdfUseCase {
 
     validatePreparedImages(images);
 
-    const output = await this.generator.create(images, settings, onProgress, signal);
+    let output: Blob;
+    try {
+      output = await this.generator.create(images, settings, onProgress, signal);
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'ImagesToPdfOutputBudgetError') {
+        throw new ImagesToPdfValidationError('output-too-large');
+      }
+      throw error;
+    }
     if (output.size > IMAGES_TO_PDF_MAX_OUTPUT_BYTES) {
       throw new ImagesToPdfValidationError('output-too-large');
     }

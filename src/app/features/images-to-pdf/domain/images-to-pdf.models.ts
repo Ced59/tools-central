@@ -5,6 +5,8 @@ export const IMAGES_TO_PDF_MAX_IMAGE_PIXELS = 20_000_000;
 export const IMAGES_TO_PDF_MAX_TOTAL_PIXELS = 60_000_000;
 export const IMAGES_TO_PDF_MAX_SIDE_PIXELS = 8_192;
 export const IMAGES_TO_PDF_MAX_OUTPUT_BYTES = 150 * 1024 * 1024;
+const IMAGES_TO_PDF_OUTPUT_BASE_RESERVE_BYTES = 1024 * 1024;
+const IMAGES_TO_PDF_OUTPUT_PAGE_RESERVE_BYTES = 16 * 1024;
 
 export const IMAGES_TO_PDF_PAGE_FORMATS = [
   'image',
@@ -92,6 +94,12 @@ export function compressionQuality(compression: ImagesToPdfCompression): number 
   if (compression === 'compact') return 0.72;
   if (compression === 'balanced') return 0.86;
   return 0.96;
+}
+
+export function exceedsImagesPdfOutputBudget(encodedBytes: number, pageCount: number): boolean {
+  const reservedBytes = IMAGES_TO_PDF_OUTPUT_BASE_RESERVE_BYTES
+    + Math.max(0, pageCount) * IMAGES_TO_PDF_OUTPUT_PAGE_RESERVE_BYTES;
+  return encodedBytes + reservedBytes > IMAGES_TO_PDF_MAX_OUTPUT_BYTES;
 }
 
 export function reorderById<T extends { id: string }>(

@@ -4,6 +4,7 @@ import {
   buildImagesPdfFileName,
   compressionQuality,
   createImagePageLayout,
+  exceedsImagesPdfOutputBudget,
   inspectRasterImageHeader,
   reorderById,
 } from './images-to-pdf.models';
@@ -93,5 +94,10 @@ describe('image PDF options', () => {
     expect(compressionQuality('quality')).toBe(0.96);
     expect(compressionQuality('compact')).toBe(0.72);
     expect(buildImagesPdfFileName('  Mon scan été.PNG')).toBe('Mon-scan-été-images.pdf');
+  });
+
+  it('reserves PDF structure space before serialization', () => {
+    expect(exceedsImagesPdfOutputBudget(148 * 1024 * 1024, 2)).toBe(false);
+    expect(exceedsImagesPdfOutputBudget(150 * 1024 * 1024, 1)).toBe(true);
   });
 });

@@ -84,6 +84,17 @@ describe('CreateImagesPdfUseCase', () => {
     })).rejects.toMatchObject({ code: 'image-too-large', fileName: 'one.png' });
     expect(generator.create).not.toHaveBeenCalled();
   });
+
+  it('maps a worker preflight budget failure to the public output error', async () => {
+    const budgetError = new Error('budget exceeded');
+    budgetError.name = 'ImagesToPdfOutputBudgetError';
+    const generator: ImagePdfGeneratorPort = { create: vi.fn().mockRejectedValue(budgetError) };
+    const images = await new PrepareImagesForPdfUseCase(readerFake()).execute([source('one')]);
+
+    await expect(new CreateImagesPdfUseCase(generator).execute(images, {
+      pageFormat: 'image', marginMm: 0, compression: 'quality',
+    })).rejects.toMatchObject({ code: 'output-too-large' });
+  });
 });
 
 describe('image PDF ordering and download', () => {
