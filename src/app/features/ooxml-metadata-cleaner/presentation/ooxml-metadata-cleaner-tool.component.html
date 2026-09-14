@@ -1,0 +1,89 @@
+<main class="tool-page">
+  <header class="tool-hero">
+    <div class="tool-hero__inner">
+      <a class="back-link" routerLink="/categories/dev/ooxml"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@ooxml_metadata_back">Retour aux outils Open XML</span></a>
+      <h1 i18n="@@ooxml_metadata_title">Supprimer les métadonnées d’un document Office</h1>
+      <p i18n="@@ooxml_metadata_subtitle">Analysez puis nettoyez les propriétés cachées d’un fichier DOCX, XLSX ou PPTX : auteurs, société, dates, application, champs personnalisés et aperçu intégré.</p>
+      <p class="privacy-note"><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><span i18n="@@ooxml_metadata_privacy">Aucun envoi : le document est contrôlé et reconstruit localement dans votre navigateur.</span></p>
+    </div>
+  </header>
+
+  <div class="tool-content">
+    <section class="tool-card" aria-labelledby="ooxml-metadata-source-title">
+      <div class="card-heading">
+        <div><p class="eyebrow" i18n="@@ooxml_metadata_step_one">Étape 1</p><h2 id="ooxml-metadata-source-title" i18n="@@ooxml_metadata_source_title">Choisir le document</h2></div>
+        @if (file(); as selectedFile) { <span class="status-badge status-badge--ok">{{ fileKindLabel(selectedFile) }}</span> }
+      </div>
+      <label class="file-picker">
+        <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+        <span class="file-picker__title" i18n="@@ooxml_metadata_pick">Sélectionner un fichier Office</span>
+        <span i18n="@@ooxml_metadata_pick_help">DOCX, XLSX ou PPTX · {{ maxFileSizeLabel }} maximum · fichiers avec macros exclus</span>
+        <input type="file" accept=".docx,.xlsx,.pptx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.presentationml.presentation" [disabled]="isBusy()" (change)="selectFile($event)" />
+      </label>
+      @if (file(); as selectedFile) {
+        <dl class="file-summary">
+          <div><dt i18n="@@ooxml_metadata_file_name">Fichier</dt><dd>{{ selectedFile.name }}</dd></div>
+          <div><dt i18n="@@ooxml_metadata_file_size">Taille</dt><dd>{{ formatFileSize(selectedFile.size) }}</dd></div>
+        </dl>
+      }
+      @if (errorMessage()) { <p class="alert alert--error" role="alert"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>{{ errorMessage() }}</p> }
+    </section>
+
+    @if (file()) {
+      <section class="tool-card options-card" aria-labelledby="ooxml-metadata-options-title">
+        <div class="card-heading"><div><p class="eyebrow" i18n="@@ooxml_metadata_step_two">Étape 2</p><h2 id="ooxml-metadata-options-title" i18n="@@ooxml_metadata_options_title">Choisir les traces à retirer</h2></div></div>
+        <div class="option-grid">
+          <label class="option-card"><input type="checkbox" [checked]="options().removeCoreProperties" [disabled]="isBusy()" (change)="updateOption('removeCoreProperties', $event)" /><span><strong i18n="@@ooxml_metadata_option_core">Propriétés principales</strong><small i18n="@@ooxml_metadata_option_core_help">Auteur, titre, sujet, mots-clés, dates, révision et dernier éditeur.</small></span></label>
+          <label class="option-card"><input type="checkbox" [checked]="options().removeApplicationProperties" [disabled]="isBusy()" (change)="updateOption('removeApplicationProperties', $event)" /><span><strong i18n="@@ooxml_metadata_option_app">Application et organisation</strong><small i18n="@@ooxml_metadata_option_app_help">Logiciel, version, société, responsable, modèle et temps d’édition.</small></span></label>
+          <label class="option-card"><input type="checkbox" [checked]="options().removeCustomProperties" [disabled]="isBusy()" (change)="updateOption('removeCustomProperties', $event)" /><span><strong i18n="@@ooxml_metadata_option_custom">Propriétés personnalisées</strong><small i18n="@@ooxml_metadata_option_custom_help">Champs ajoutés par une entreprise, un modèle ou un flux documentaire.</small></span></label>
+          <label class="option-card"><input type="checkbox" [checked]="options().removeThumbnail" [disabled]="isBusy()" (change)="updateOption('removeThumbnail', $event)" /><span><strong i18n="@@ooxml_metadata_option_thumbnail">Aperçu intégré</strong><small i18n="@@ooxml_metadata_option_thumbnail_help">Miniature du document parfois conservée dans le package Office.</small></span></label>
+        </div>
+        <button type="button" class="primary-button" [disabled]="!canClean()" (click)="clean()"><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><span i18n="@@ooxml_metadata_clean">Analyser et nettoyer</span></button>
+        <button type="button" class="reset-button" [disabled]="isBusy()" (click)="reset()" i18n="@@ooxml_metadata_reset">Réinitialiser</button>
+      </section>
+    }
+
+    @if (state() === 'processing') {
+      <section class="tool-card progress-card" aria-live="polite">
+        <div class="progress-copy"><strong id="ooxml-metadata-progress-label" i18n="@@ooxml_metadata_processing">Analyse et reconstruction locales…</strong><span>{{ progress() }} %</span></div>
+        <progress [value]="progress()" max="100" aria-labelledby="ooxml-metadata-progress-label"></progress>
+        <button type="button" class="cancel-button" (click)="cancel()" i18n="@@ooxml_metadata_cancel">Annuler</button>
+      </section>
+    }
+
+    @if (result(); as cleaned) {
+      <section class="tool-card result-card" data-testid="ooxml-metadata-result" role="status" aria-live="polite" aria-atomic="true" aria-labelledby="ooxml-metadata-result-title">
+        <div class="result-heading">
+          <div><p class="eyebrow" i18n="@@ooxml_metadata_step_three">Étape 3</p><h2 id="ooxml-metadata-result-title" i18n="@@ooxml_metadata_result_title">Document nettoyé et rapport prêt</h2></div>
+          <button type="button" class="primary-button" (click)="download()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@ooxml_metadata_download">Télécharger le document nettoyé</span></button>
+        </div>
+        <dl class="report-summary">
+          <div><dt i18n="@@ooxml_metadata_detected">Avant : éléments détectés</dt><dd>{{ cleaned.report.detectedCount }}</dd></div>
+          <div class="report-summary__removed"><dt i18n="@@ooxml_metadata_removed">Retirés ou neutralisés</dt><dd>{{ cleaned.report.removedCount }}</dd></div>
+          <div><dt i18n="@@ooxml_metadata_remaining">Après : éléments conservés</dt><dd>{{ cleaned.report.remainingCount }}</dd></div>
+          <div><dt i18n="@@ooxml_metadata_output_size">Fichier de sortie</dt><dd>{{ formatFileSize(cleaned.blob.size) }}</dd></div>
+        </dl>
+        @if (cleaned.report.detected.length === 0) {
+          <p class="alert alert--info" i18n="@@ooxml_metadata_none_found">Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</p>
+        } @else {
+          <div class="finding-list" aria-label="Métadonnées détectées" i18n-aria-label="@@ooxml_metadata_findings_label">
+            @for (finding of cleaned.report.detected; track $index) {
+              <article class="finding" [class.finding--remaining]="!cleaned.report.removed.includes(finding)">
+                <div><span class="scope-badge">{{ scopeLabel(finding.scope) }}</span><strong>{{ fieldLabel(finding) }}</strong></div>
+                <p>{{ finding.value || '—' }}</p>
+                <small>{{ finding.path }}</small>
+              </article>
+            }
+          </div>
+          @if (cleaned.report.truncatedFindingCount > 0) { <p class="alert alert--info" i18n="@@ooxml_metadata_truncated">{{ cleaned.report.truncatedFindingCount }} élément(s) supplémentaire(s) ne sont pas affichés pour préserver la réactivité.</p> }
+        }
+      </section>
+    }
+
+    <section class="guidance-grid" aria-label="Conseils" i18n-aria-label="@@ooxml_metadata_guidance">
+      <div><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><h3 i18n="@@ooxml_metadata_guide_scope">Ce qui est nettoyé</h3><p i18n="@@ooxml_metadata_guide_scope_text">L’outil agit sur les propriétés standard du package OOXML et sur sa miniature. Le texte, les feuilles, les diapositives, les images et la mise en page sont conservés.</p></div>
+      <div><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i><h3 i18n="@@ooxml_metadata_guide_limits">Ce qui reste à vérifier</h3><p i18n="@@ooxml_metadata_guide_limits_text">Commentaires, auteurs de révisions, feuilles masquées, notes, macros et contenu visible ne sont pas supprimés. Inspectez le fichier final dans son application d’origine.</p></div>
+      <div><i class="tc-icon tc-icon-file-pdf" aria-hidden="true"></i><h3 i18n="@@ooxml_metadata_guide_pdf">Vous avez un PDF ?</h3><p><span i18n="@@ooxml_metadata_guide_pdf_text">Le format PDF utilise une structure différente.</span> <a routerLink="/categories/dev/pdf/pdf-sanitize" i18n="@@ooxml_metadata_pdf_link">Ouvrir le nettoyeur PDF dédié.</a></p></div>
+    </section>
+  </div>
+</main>

@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import JSZip from 'jszip';
 import { PDFDocument, rgb } from 'pdf-lib';
 import { readFile } from 'node:fs/promises';
 
@@ -314,6 +315,50 @@ test('images to PDF preserves order, creates a real document and remains respons
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
   await page.goto('/en/categories/dev/pdf/images-to-pdf');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
+
+test('OOXML metadata cleaner rebuilds a private DOCX locally and remains responsive', async ({ page }) => {
+  const source = new JSZip();
+  source.file('[Content_Types].xml', '<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/docProps/thumbnail.jpeg" ContentType="image/jpeg"/></Types>');
+  source.file('_rels/.rels', '<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/></Relationships>');
+  source.file('word/document.xml', '<document><content>Contenu à conserver</content></document>');
+  source.file('docProps/core.xml', '<cp:coreProperties xmlns:cp="core" xmlns:dc="dc"><dc:creator>Alice</dc:creator><cp:lastModifiedBy>Bob</cp:lastModifiedBy></cp:coreProperties>');
+  source.file('docProps/app.xml', '<Properties><Application>Word</Application><Company>Exemple SA</Company></Properties>');
+  source.file('docProps/custom.xml', '<Properties><property name="Client"><value>Société secrète</value></property></Properties>');
+  source.file('docProps/thumbnail.jpeg', new Uint8Array([0xff, 0xd8, 0xff, 0xd9]));
+  const buffer = Buffer.from(await source.generateAsync({ type: 'uint8array' }));
+
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/ooxml/ooxml-sanitize-metadata');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Supprimer les métadonnées d’un document Office');
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'rapport.docx',
+    mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    buffer,
+  });
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Analyser et nettoyer' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+  const result = page.getByTestId('ooxml-metadata-result');
+  await expect(result).toContainText('Document nettoyé et rapport prêt', { timeout: 20_000 });
+  await expect(result).toContainText('6');
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Télécharger le document nettoyé' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('rapport-sans-metadonnees.docx');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const cleaned = await JSZip.loadAsync(await readFile(path as string));
+  await expect(cleaned.file('word/document.xml')?.async('string')).resolves.toContain('Contenu à conserver');
+  await expect(cleaned.file('docProps/core.xml')?.async('string')).resolves.not.toContain('Alice');
+  await expect(cleaned.file('docProps/app.xml')?.async('string')).resolves.not.toContain('Exemple SA');
+  expect(cleaned.file('docProps/thumbnail.jpeg')).toBeNull();
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/ooxml/ooxml-sanitize-metadata');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });

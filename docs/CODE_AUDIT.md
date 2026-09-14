@@ -7,7 +7,7 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du générateur Schema.org SoftwareApplication.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Onze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images` et `images-to-pdf`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 68 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Douze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf` et `ooxml-metadata-cleaner`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 69 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,12 +16,12 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. O
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 657,61 kB brut, 165,94 kB transféré estimé ; PDF.js reste dans un chunk lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,08 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 127 fichiers, 364 tests verts sous Vitest |
-| Couverture | aucun seuil | 46,18 % statements, 32,90 % branches, 46,10 % fonctions, 49,41 % lignes |
-| E2E | aucun | 12 parcours Playwright verts |
-| Routes statiques | 2 | 82 routes de base + une 404 prérendues par locale, soit 2 490 pages ; 2 402 URL sont indexables après filtrage éditorial par locale |
+| Tests unitaires | suite non compilable | 132 fichiers, 391 tests verts sous Vitest |
+| Couverture | aucun seuil | 47,81 % statements, 34,30 % branches, 47,93 % fonctions, 51,18 % lignes |
+| E2E | aucun | 14 parcours Playwright verts |
+| Routes statiques | 2 | 85 routes de base + une 404 prérendues par locale, soit 2 580 pages ; 2 405 URL sont indexables après filtrage éditorial par locale |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 174 outils, 67 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
 | Traductions secondaires | marqueurs incomplets non bloqués | 175 421 segments, 0 `TODO`, 0 warning technique |

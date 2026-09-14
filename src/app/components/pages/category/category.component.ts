@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, ChangeDetectionStrategy, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgFor, NgIf } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,6 +7,7 @@ import { CATEGORIES, ToolCategory } from '../../../data/categories';
 import { TOOL_GROUPS, ToolGroup } from '../../../data/tool-groups';
 import { ToolCardComponent, ToolCardItem } from '../../shared/tool-card/tool-card.component';
 import { SeoService } from '../../../services/seo/seo.service';
+import { isGroupPublishedForLocale } from '../../../data/atomic-tools';
 
 @Component({
   selector: 'app-category',
@@ -20,6 +21,7 @@ export class CategoryComponent implements OnInit {
   private seo = inject(SeoService);
   private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
+  private readonly locale = inject(LOCALE_ID);
 
   categoryId = '';
   category?: ToolCategory;
@@ -40,17 +42,21 @@ export class CategoryComponent implements OnInit {
 
         const groups: ToolGroup[] = TOOL_GROUPS.filter(g => g.category === this.categoryId);
 
-        const mapGroup = (g: ToolGroup): ToolCardItem => ({
+        const mapGroup = (g: ToolGroup, available: boolean): ToolCardItem => ({
           id: g.id,
           title: g.title,
           description: g.description,
           icon: g.icon ?? 'tc-icon tc-icon-wrench',
           route: g.route,
-          available: g.available,
+          available,
         });
 
-        this.availableTools = groups.filter(g => g.available).map(mapGroup);
-        this.comingSoonTools = groups.filter(g => !g.available).map(mapGroup);
+        this.availableTools = groups
+          .filter(g => g.available && isGroupPublishedForLocale(g.category, g.id, this.locale))
+          .map(g => mapGroup(g, true));
+        this.comingSoonTools = groups
+          .filter(g => !g.available || !isGroupPublishedForLocale(g.category, g.id, this.locale))
+          .map(g => mapGroup(g, false));
 
         if (this.category) {
           this.seo.setPageSeo({

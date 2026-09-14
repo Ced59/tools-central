@@ -57,3 +57,11 @@ export function isToolPublishedForLocale(
       || (!normalizedReviewedLocale.includes('-') && normalizedLocale.startsWith(`${normalizedReviewedLocale}-`));
   });
 }
+
+export function isGroupPublishedForLocale(category: string, group: string, locale: string): boolean {
+  return ATOMIC_TOOL_LIST.some(tool => (
+    tool.category === category
+    && tool.group === group
+    && isToolPublishedForLocale(tool, locale)
+  ));
+}

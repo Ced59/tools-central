@@ -12,6 +12,10 @@ export interface EditorialRegistryEntry {
  * Run: npm run editorials:gen
  */
 export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
+  'dev/ooxml/ooxml-sanitize-metadata': {
+    available: true,
+    load: () => import('./dev/ooxml/ooxml-sanitize-metadata.editorial'),
+  },
   'dev/pdf/images-to-pdf': {
     available: true,
     load: () => import('./dev/pdf/images-to-pdf.editorial'),
