@@ -86,6 +86,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 - **Générateur et validateur sitemap XML** — implémenté en Clean Architecture, traitement local, génération de sitemap ou d’index, validation XML bornée, contrôle des URL, dates, doublons, périmètre et limites du protocole, export XML, tests unitaires et E2E. Route : `/categories/dev/seo/sitemap-xml-builder`.
 - **Générateur et vérificateur hreflang** — implémenté en Clean Architecture, traitement local, sorties HTML/HTTP/sitemap, validation des codes et URL, contrôle des auto-références, canonicals, ensembles et liens retour à partir de blocs fournis, export local, tests unitaires et E2E. Route : `/categories/dev/seo/hreflang-checker`.
 - **Extracteur de données structurées** — implémenté en Clean Architecture, traitement HTML inerte et local, inventaire JSON-LD/Microdata/RDFa, normalisation des entités et relations, limites défensives, diagnostics et export JSON, tests unitaires et E2E. Route : `/categories/dev/seo/structured-data-extractor`.
+- **Auditeur de head HTML** — implémenté en Clean Architecture, parseur textuel inerte et local compatible SSR, contrôle de title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et inventaire JSON-LD, limites défensives, rapport JSON, tests unitaires et E2E mobile. Route : `/categories/dev/seo/html-head-auditor`.
 
 ## Inventaire exhaustif des opportunités
 

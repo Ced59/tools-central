@@ -168,3 +168,36 @@ test('structured data extractor inventories a mixed graph and remains responsive
   await expect(page.getByText('Ce bloc JSON-LD n’est pas un JSON valide.')).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('HTML head auditor reports contradictory metadata and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/seo/html-head-auditor');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Auditeur de head HTML');
+  await expect(page.getByTestId('html-head-summary')).toContainText(/0\s*points à vérifier/u);
+
+  await page.locator('#html-head-page-url').fill('https://example.com/page');
+  await page.locator('#html-head-source').fill([
+    '<head>',
+    '<title>Premier titre</title><title>Second titre</title>',
+    '<meta name="robots" content="index, noindex">',
+    '<link rel="canonical" href="/relative">',
+    '<meta property="og:title" content="Titre social">',
+    '</head>',
+  ].join(''));
+  await page.getByRole('button', { name: 'Auditer le head' }).click();
+
+  await expect(page.getByTestId('html-head-diagnostics')).toContainText('Plusieurs balises title sont présentes.');
+  await expect(page.getByTestId('html-head-diagnostics')).toContainText('L’URL canonical doit être une URL HTTP ou HTTPS absolue.');
+  await expect(page.getByTestId('html-head-diagnostics')).toContainText('Une directive demande de ne pas indexer cette page.');
+  await expect(page.getByTestId('html-head-diagnostics')).toContainText('Une propriété Open Graph de base est absente.');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/seo/html-head-auditor');
+  await expect(page.locator('#html-head-source')).toHaveValue(/Practical Guide to Auditing an HTML Head/u);
+  await expect(page.locator('#html-head-source')).toHaveValue(/<html lang="en">/u);
+
+  await page.goto('/fil/categories/dev/seo/html-head-auditor');
+  await expect(page.locator('#html-head-source')).toHaveValue(/hreflang="tl" href="https:\/\/example\.com\/fil\/guide"/u);
+  await expect(page.locator('.issue')).toHaveCount(0);
+});

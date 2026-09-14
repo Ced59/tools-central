@@ -82456,6 +82456,769 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Η λίστα περιορίζεται στις 200 πρώτες διαγνώσεις.</target>
       </segment>
     </unit>
+    <unit id="tool_html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">Ελεγκτής κεφαλής HTML</target>
+      </segment>
+    </unit>
+    <unit id="tool_html_head_auditor_desc">
+      <segment>
+        <source>Auditer localement title, description, canonical, robots, viewport, charset, hreflang, Open Graph, Twitter et JSON-LD depuis du HTML collé.</source>
+        <target state="translated">Ελέγξτε το title, την περιγραφή, το canonical, τα robots, το viewport, το charset, το hreflang, το Open Graph, το Twitter και το JSON-LD από κολλημένο HTML.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_title">
+      <segment>
+        <source>Auditer les balises essentielles d’un head HTML</source>
+        <target state="translated">Ελέγξτε τις βασικές ετικέτες μιας κεφαλής HTML</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_lead">
+      <segment>
+        <source>Le head rassemble des signaux qui aident navigateurs, moteurs de recherche et plateformes sociales à comprendre une page. Cet auditeur examine localement title, description, canonical, robots, viewport, encodage, hreflang, Open Graph, Twitter et JSON-LD sans crawler le site ni exécuter le code collé.</source>
+        <target state="translated">Η κεφαλή συγκεντρώνει σήματα που βοηθούν τους περιηγητές, τις μηχανές αναζήτησης και τις κοινωνικές πλατφόρμες να κατανοήσουν μια σελίδα. Αυτός ο ελεγκτής εξετάζει το title, την περιγραφή, το canonical, τα robots, το viewport, την κωδικοποίηση, το hreflang, το Open Graph, το Twitter και το JSON-LD τοπικά χωρίς να σκαναρίσει τον ιστότοπο ή να εκτελέσει τον κολλημένο κώδικα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_use_cases">
+      <segment>
+        <source>Quand utiliser cet auditeur</source>
+        <target state="translated">Πότε να χρησιμοποιήσετε αυτόν τον ελεγκτή</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_title">
+      <segment>
+        <source>Relire un template avant publication</source>
+        <target state="translated">Διαβάστε ένα πρότυπο πριν από τη δημοσίευση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc1_text">
+      <segment>
+        <source>Repérez rapidement une balise manquante, vide ou dupliquée avant d’intégrer un nouveau modèle de page dans la chaîne de déploiement.</source>
+        <target state="translated">Εντοπίστε γρήγορα μια ελλιπή, κενή ή διπλή ετικέτα πριν ενσωματώσετε ένα νέο μοντέλο σελίδας στην αλυσίδα ανάπτυξης.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_title">
+      <segment>
+        <source>Comparer le HTML réellement rendu</source>
+        <target state="translated">Συγκρίνετε το HTML που αποδίδεται πραγματικά</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc2_text">
+      <segment>
+        <source>Copiez le head depuis les outils de développement pour vérifier les métadonnées après rendu côté serveur ou hydratation côté client.</source>
+        <target state="translated">Αντιγράψτε την κεφαλή από τα εργαλεία ανάπτυξης για να ελέγξετε τα μεταδεδομένα μετά την απόδοση από τον διακομιστή ή την υδροδότηση από τον πελάτη.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_title">
+      <segment>
+        <source>Documenter une recette SEO</source>
+        <target state="translated">Τεκμηριώστε μια συνταγή SEO</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_uc3_text">
+      <segment>
+        <source>Téléchargez le rapport JSON afin de conserver les valeurs, les alternatives linguistiques et les diagnostics associés à une version donnée.</source>
+        <target state="translated">Κατεβάστε την αναφορά JSON για να διατηρήσετε τις τιμές, τις γλωσσικές εναλλακτικές και τις διαγνώσεις που σχετίζονται με μια συγκεκριμένη έκδοση.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method">
+      <segment>
+        <source>Méthode de vérification</source>
+        <target state="translated">Μέθοδος ελέγχου</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_1">
+      <segment>
+        <source>Renseignez l’URL publique exacte, puis collez le document HTML rendu ou seulement son head. Cette URL sert aux comparaisons locales avec canonical, og:url et les variantes hreflang ; elle n’est jamais ouverte par l’outil.</source>
+        <target state="translated">Εισάγετε την ακριβή δημόσια διεύθυνση URL και στη συνέχεια κολλήστε το HTML που αποδόθηκε ή μόνο την κεφαλή του. Αυτή η διεύθυνση URL χρησιμοποιείται για τοπικές συγκρίσεις με το canonical, το og:url και τις παραλλαγές hreflang; δεν ανοίγεται ποτέ από το εργαλείο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_2">
+      <segment>
+        <source>Traitez d’abord les erreurs structurelles comme plusieurs title, une canonical relative ou un hreflang invalide. Examinez ensuite noindex, les métadonnées absentes et les incohérences informatives selon l’intention de la page.</source>
+        <target state="translated">Αρχικά, αντιμετωπίστε τα δομικά σφάλματα όπως πολλές ετικέτες title, ένα σχετικό canonical ή ένα άκυρο hreflang. Στη συνέχεια, εξετάστε το noindex, τα ελλιπή μεταδεδομένα και τις πληροφοριακές ασυνέπειες σύμφωνα με την πρόθεση της σελίδας.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_method_3">
+      <segment>
+        <source>Après correction, contrôlez la réponse HTTP et le HTML publié. Une directive X-Robots-Tag, une redirection, le rendu JavaScript ou une canonical envoyée par en-tête ne figurent pas nécessairement dans le code collé.</source>
+        <target state="translated">Μετά την διόρθωση, ελέγξτε την απάντηση HTTP και το δημοσιευμένο HTML. Μια οδηγία X-Robots-Tag, μια ανακατεύθυνση, η απόδοση JavaScript ή ένα canonical που αποστέλλεται μέσω κεφαλίδας δεν εμφανίζονται απαραίτητα στον κολλημένο κώδικα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_checks">
+      <segment>
+        <source>Contrôles effectués</source>
+        <target state="translated">Ελέγχοι που πραγματοποιήθηκαν</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_title">
+      <segment>
+        <source>Recherche et indexation</source>
+        <target state="translated">Αναζήτηση και ευρετηρίαση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_search_text">
+      <segment>
+        <source>Présence et unicité de title, description et canonical, validité de la canonical, directives robots contradictoires, noindex et meta refresh.</source>
+        <target state="translated">Παρουσία και μοναδικότητα του title, της περιγραφής και του canonical, εγκυρότητα του canonical, αντιφατικές οδηγίες robots, noindex και meta refresh.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_title">
+      <segment>
+        <source>Document et mobile</source>
+        <target state="translated">Έγγραφο και κινητό</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_technical_text">
+      <segment>
+        <source>Déclaration UTF-8, viewport contenant width=device-width, présence d’une balise base et nombre de blocs JSON-LD.</source>
+        <target state="translated">Δήλωση UTF-8, viewport που περιέχει width=device-width, παρουσία μιας ετικέτας base και αριθμός μπλοκ JSON-LD.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_title">
+      <segment>
+        <source>International et partage social</source>
+        <target state="translated">Διεθνές και κοινωνική κοινοποίηση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_check_social_text">
+      <segment>
+        <source>Codes et URL hreflang, auto-référence, propriétés Open Graph de base, cohérence entre og:url et canonical, puis type de carte Twitter.</source>
+        <target state="translated">Κωδικοί και διευθύνσεις URL hreflang, αυτοαναφορά, βασικά χαρακτηριστικά Open Graph, συνέπεια μεταξύ og:url και canonical, και τύπος κάρτας Twitter.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_interpretation">
+      <segment>
+        <source>Ce que le rapport ne promet pas</source>
+        <target state="translated">Τι δεν υπόσχεται η αναφορά</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_1">
+      <segment>
+        <source>Une URL canonical constitue un signal de regroupement, pas une obligation imposée au moteur. Sa cohérence avec les redirections, liens internes et sitemaps reste importante.</source>
+        <target state="translated">Μια διεύθυνση URL canonical αποτελεί σήμα ομαδοποίησης, όχι υποχρέωση που επιβάλλεται στη μηχανή. Η συνέπεια της με τις ανακατευθύνσεις, τους εσωτερικούς συνδέσμους και τους χάρτες ιστότοπου παραμένει σημαντική.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_2">
+      <segment>
+        <source>La longueur seule ne décide pas du titre ou de la description affichés. Les moteurs peuvent générer ou reformuler un résultat selon le contenu et la requête ; l’outil affiche donc les comptes sans seuil arbitraire.</source>
+        <target state="translated">Η μόνη μήκος δεν αποφασίζει τον τίτλο ή την περιγραφή που εμφανίζονται. Οι μηχανές μπορούν να δημιουργήσουν ή να αναδιατυπώσουν ένα αποτέλεσμα ανάλογα με το περιεχόμενο και το αίτημα; το εργαλείο εμφανίζει επομένως τους μετρητές χωρίς αυθαίρετο όριο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limit_3">
+      <segment>
+        <source>Les aperçus sociaux et résultats enrichis dépendent aussi de l’accessibilité des ressources, du cache des plateformes, du contenu visible et de règles extérieures à ce parseur.</source>
+        <target state="translated">Οι κοινωνικές προεπισκοπήσεις και τα εμπλουτισμένα αποτελέσματα εξαρτώνται επίσης από την προσβασιμότητα των πόρων, την προσωρινή μνήμη των πλατφορμών, το ορατό περιεχόμενο και κανόνες εκτός αυτού του αναλυτή.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits">
+      <segment>
+        <source>Limites et confidentialité</source>
+        <target state="translated">Όρια και ιδιωτικότητα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_1">
+      <segment>
+        <source>La source est limitée à 1 000 000 de caractères, 1 000 balises et 200 diagnostics. Ces bornes réduisent le risque de blocage avec un document volontairement excessif.</source>
+        <target state="translated">Η πηγή περιορίζεται σε 1.000.000 χαρακτήρες, 1.000 ετικέτες και 200 διαγνώσεις. Αυτά τα όρια μειώνουν τον κίνδυνο αποκλεισμού με ένα έγγραφο που είναι σκόπιμα υπερβολικό.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_limits_2">
+      <segment>
+        <source>Le parseur traite une chaîne de texte sans DOM actif. Il n’insère pas le HTML, ne charge ni image ni script, n’exécute aucun gestionnaire et n’envoie aucune donnée à un service distant.</source>
+        <target state="translated">Ο αναλυτής επεξεργάζεται μια αλυσίδα κειμένου χωρίς ενεργό DOM. Δεν εισάγει το HTML, δεν φορτώνει εικόνα ή σενάριο, δεν εκτελεί κανέναν χειριστή και δεν στέλνει δεδομένα σε απομακρυσμένη υπηρεσία.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Συχνές ερωτήσεις</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q1">
+      <segment>
+        <source>Faut-il absolument une meta description ?</source>
+        <target state="translated">Απαιτείται οπωσδήποτε μια meta περιγραφή;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a1">
+      <segment>
+        <source>Elle n’est pas nécessaire à l’indexation, mais une description spécifique peut aider le moteur à composer un extrait utile. Son absence est donc un avertissement, pas une preuve de blocage.</source>
+        <target state="translated">Δεν είναι απαραίτητη για την ευρετηρίαση, αλλά μια συγκεκριμένη περιγραφή μπορεί να βοηθήσει τη μηχανή να συντάξει ένα χρήσιμο απόσπασμα. Η απουσία της είναι επομένως μια προειδοποίηση, όχι απόδειξη αποκλεισμού.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q2">
+      <segment>
+        <source>Pourquoi une canonical différente n’est-elle qu’une information ?</source>
+        <target state="translated">Γιατί μια διαφορετική canonical είναι μόνο μια πληροφορία;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a2">
+      <segment>
+        <source>Une page peut volontairement désigner une autre URL représentative. Le rapport met la différence en évidence sans supposer qu’il s’agit d’une erreur métier.</source>
+        <target state="translated">Μια σελίδα μπορεί σκόπιμα να υποδείξει μια άλλη αντιπροσωπευτική διεύθυνση URL. Η αναφορά επισημαίνει τη διαφορά χωρίς να υποθέτει ότι πρόκειται για επαγγελματικό σφάλμα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_q3">
+      <segment>
+        <source>L’outil peut-il analyser directement une URL ?</source>
+        <target state="translated">Μπορεί το εργαλείο να αναλύσει άμεσα μια διεύθυνση URL;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_a3">
+      <segment>
+        <source>Non. Il ne crawle aucun site. Cette contrainte rend le traitement prévisible et confidentiel ; copiez le HTML rendu pour auditer précisément la version voulue.</source>
+        <target state="translated">Όχι. Δεν ανιχνεύει καμία ιστοσελίδα. Αυτός ο περιορισμός καθιστά την επεξεργασία προβλέψιμη και εμπιστευτική· αντιγράψτε το HTML που αποδόθηκε για να ελέγξετε ακριβώς την επιθυμητή έκδοση.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip_title">
+      <segment>
+        <source>Auditez aussi la réponse HTTP</source>
+        <target state="translated">Ελέγξτε επίσης την απάντηση HTTP</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_html_head_tip">
+      <segment>
+        <source>Le meilleur head ne compense pas une page inaccessible, une chaîne de redirections, une erreur serveur ou un X-Robots-Tag noindex. Utilisez ce rapport comme une étape de contrôle, puis vérifiez la réponse réellement servie.</source>
+        <target state="translated">Ο καλύτερος τίτλος δεν αντισταθμίζει μια μη προσβάσιμη σελίδα, μια αλυσίδα ανακατευθύνσεων, ένα σφάλμα διακομιστή ή ένα X-Robots-Tag noindex. Χρησιμοποιήστε αυτή την αναφορά ως βήμα ελέγχου, στη συνέχεια ελέγξτε την απάντηση που παρέχεται πραγματικά.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_title">
+      <segment>
+        <source>Auditeur de head HTML</source>
+        <target state="translated">Ελεγκτής HTML head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_subtitle">
+      <segment>
+        <source>Contrôlez les métadonnées SEO, sociales, mobiles et multilingues d’un code HTML collé.</source>
+        <target state="translated">Ελέγξτε τα SEO, κοινωνικά, κινητά και πολυγλωσσικά μεταδεδομένα ενός επικολλημένου HTML κώδικα.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_auditor_privacy">
+      <segment>
+        <source>Analyse 100 % locale : aucun site n’est appelé et aucun code collé n’est exécuté.</source>
+        <target state="translated">Ανάλυση 100 % τοπική: καμία ιστοσελίδα δεν καλείται και κανένας επικολλημένος κώδικας δεν εκτελείται.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_title">
+      <segment>
+        <source>1. Coller le head à contrôler</source>
+        <target state="translated">1. Επικολλήστε το head προς έλεγχο</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_subtitle">
+      <segment>
+        <source>Un document HTML complet ou un fragment de head convient. Le parseur reste inerte.</source>
+        <target state="translated">Ένα πλήρες έγγραφο HTML ή ένα τμήμα του head είναι κατάλληλο. Ο αναλυτής παραμένει αδρανής.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_label">
+      <segment>
+        <source>URL publique de la page</source>
+        <target state="translated">Δημόσια URL της σελίδας</target>
+      </segment>
+    </unit>
+    <unit id="html_head_page_url_help">
+      <segment>
+        <source>Facultative, elle permet de comparer canonical, og:url et auto-référence hreflang. Aucune requête n’est envoyée.</source>
+        <target state="translated">Προαιρετικό, επιτρέπει τη σύγκριση canonical, og:url και αυτοαναφοράς hreflang. Καμία αίτηση δεν αποστέλλεται.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_label">
+      <segment>
+        <source>Code HTML</source>
+        <target state="translated">HTML κώδικας</target>
+      </segment>
+    </unit>
+    <unit id="html_head_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 1 000 balises et 200 diagnostics.</source>
+        <target state="translated">Όριο: 1.000.000 χαρακτήρες, 1.000 ετικέτες και 200 διαγνωστικά.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_analyze">
+      <segment>
+        <source>Auditer le head</source>
+        <target state="translated">Ελέγξτε το head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_title">
+      <segment>
+        <source>2. Synthèse</source>
+        <target state="translated">2. Σύνοψη</target>
+      </segment>
+    </unit>
+    <unit id="html_head_summary_subtitle">
+      <segment>
+        <source>Un diagnostic local aide à relire le code, sans prédire l’affichage d’un moteur ou d’un réseau social.</source>
+        <target state="translated">Μια τοπική διάγνωση βοηθά στην αναθεώρηση του κώδικα, χωρίς να προβλέπει την εμφάνιση σε μηχανή αναζήτησης ή κοινωνικό δίκτυο.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_attention_count">
+      <segment>
+        <source>points à vérifier</source>
+        <target state="translated">σημεία προς έλεγχο</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">χαρακτήρες</target>
+      </segment>
+    </unit>
+    <unit id="html_head_characters_2">
+      <segment>
+        <source>caractères</source>
+        <target state="translated">χαρακτήρες</target>
+      </segment>
+    </unit>
+    <unit id="html_head_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">σφάλματα</target>
+      </segment>
+    </unit>
+    <unit id="html_head_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">προειδοποιήσεις</target>
+      </segment>
+    </unit>
+    <unit id="html_head_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">πληροφορίες</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Αναφορά αντιγραμμένη</target>
+      </segment>
+    </unit>
+    <unit id="html_head_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">Αντιγράψτε το JSON</target>
+      </segment>
+    </unit>
+    <unit id="html_head_download">
+      <segment>
+        <source>Télécharger</source>
+        <target state="translated">Λήψη</target>
+      </segment>
+    </unit>
+    <unit id="html_head_diagnostics_title">
+      <segment>
+        <source>3. Diagnostics</source>
+        <target state="translated">3. Διαγνωστικά</target>
+      </segment>
+    </unit>
+    <unit id="html_head_tags_scanned">
+      <segment>
+        <source>Balises parcourues</source>
+        <target state="translated">Ετικέτες που ελέγχθηκαν</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue">
+      <segment>
+        <source>Aucun problème détecté par les règles locales</source>
+        <target state="translated">Κανένα πρόβλημα δεν ανιχνεύθηκε από τους τοπικούς κανόνες</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_issue_help">
+      <segment>
+        <source>Contrôlez encore le HTML publié et son rendu dans les outils officiels.</source>
+        <target state="translated">Ελέγξτε ξανά το δημοσιευμένο HTML και την απόδοσή του στα επίσημα εργαλεία.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_position">
+      <segment>
+        <source>Balise</source>
+        <target state="translated">Ετικέτα</target>
+      </segment>
+    </unit>
+    <unit id="html_head_alternates_title">
+      <segment>
+        <source>Alternatives linguistiques</source>
+        <target state="translated">Γλωσσικές εναλλακτικές</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_alternates">
+      <segment>
+        <source>Aucune annotation hreflang détectée.</source>
+        <target state="translated">Καμία ετικέτα hreflang δεν ανιχνεύθηκε.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_social_title">
+      <segment>
+        <source>Métadonnées sociales</source>
+        <target state="translated">Κοινωνικά μεταδεδομένα</target>
+      </segment>
+    </unit>
+    <unit id="html_head_no_social">
+      <segment>
+        <source>Aucune métadonnée Open Graph ou Twitter détectée.</source>
+        <target state="translated">Καμία μεταδεδομένη Open Graph ή Twitter δεν ανιχνεύθηκε.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_title">
+      <segment>
+        <source>4. Bien interpréter l’audit</source>
+        <target state="translated">4. Καλή ερμηνεία του ελέγχου</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search_title">
+      <segment>
+        <source>Signaux, pas garanties</source>
+        <target state="translated">Σημάδια, όχι εγγυήσεις</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_search">
+      <segment>
+        <source>Une canonical reste un signal et un moteur peut reformuler le titre ou l’extrait selon la requête.</source>
+        <target state="translated">Ένα canonical παραμένει ένα σήμα και μια μηχανή μπορεί να αναδιατυπώσει τον τίτλο ή την περιγραφή σύμφωνα με το αίτημα.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile_title">
+      <segment>
+        <source>Responsive</source>
+        <target state="translated">Ανταγωνιστικό</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_mobile">
+      <segment>
+        <source>width=device-width permet au navigateur d’adapter la largeur de mise en page à l’appareil.</source>
+        <target state="translated">width=device-width επιτρέπει στον περιηγητή να προσαρμόσει το πλάτος της διάταξης στη συσκευή.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_hreflang">
+      <segment>
+        <source>Chaque variante doit employer une URL absolue et inclure l’URL courante dans son groupe.</source>
+        <target state="translated">Κάθε παραλλαγή πρέπει να χρησιμοποιεί μια απόλυτη διεύθυνση URL και να περιλαμβάνει την τρέχουσα διεύθυνση URL στην ομάδα της.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local_title">
+      <segment>
+        <source>Traitement local</source>
+        <target state="translated">Τοπική επεξεργασία</target>
+      </segment>
+    </unit>
+    <unit id="html_head_guidance_local">
+      <segment>
+        <source>Le parseur lit du texte borné. Il n’insère pas le HTML dans la page, ne charge aucune ressource et ne lance aucun script.</source>
+        <target state="translated">Ο αναλυτής διαβάζει κείμενο περιορισμένο. Δεν εισάγει HTML στη σελίδα, δεν φορτώνει πόρους και δεν εκκινεί κανένα σενάριο.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Σχετικά εργαλεία SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_title">
+      <segment>
+        <source>Poursuivre l’audit SEO</source>
+        <target state="translated">Συνέχεια της ανάλυσης SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Προεπισκόπηση του snippet</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">Έλεγχος hreflang</target>
+      </segment>
+    </unit>
+    <unit id="html_head_related_structured">
+      <segment>
+        <source>Extraire les données structurées</source>
+        <target state="translated">Εξαγωγή δομημένων δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="html_head_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Επιστροφή στα εργαλεία SEO</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères et a été tronquée.</source>
+        <target state="translated">Η πηγή υπερβαίνει τους 1.000.000 χαρακτήρες και έχει κοπεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty">
+      <segment>
+        <source>Collez un document HTML ou le contenu d’un head avant l’analyse.</source>
+        <target state="translated">Επικολλήστε ένα έγγραφο HTML ή το περιεχόμενο ενός head πριν την ανάλυση.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_tag_limit">
+      <segment>
+        <source>L’analyse est limitée aux 1 000 premières balises.</source>
+        <target state="translated">Η ανάλυση περιορίζεται στις 1.000 πρώτες ετικέτες.</target>
+      </segment>
+    </unit>
+
+    <unit id="html_head_issue_missing_title">
+      <segment>
+        <source>La balise title est absente.</source>
+        <target state="translated">Η ετικέτα title λείπει.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_title">
+      <segment>
+        <source>Plusieurs balises title sont présentes.</source>
+        <target state="translated">Πολλές ετικέτες title είναι παρούσες.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_title">
+      <segment>
+        <source>La balise title est vide.</source>
+        <target state="translated">Η ετικέτα title είναι κενή.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_description">
+      <segment>
+        <source>La meta description est absente.</source>
+        <target state="translated">Η meta περιγραφή λείπει.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_description">
+      <segment>
+        <source>Plusieurs meta descriptions sont présentes.</source>
+        <target state="translated">Πολλές meta περιγραφές είναι παρούσες.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_empty_description">
+      <segment>
+        <source>La meta description est vide.</source>
+        <target state="translated">Η meta περιγραφή είναι κενή.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_canonical">
+      <segment>
+        <source>Le lien canonical est absent.</source>
+        <target state="translated">Ο σύνδεσμος canonical λείπει.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_canonical">
+      <segment>
+        <source>Plusieurs liens canonical sont présents.</source>
+        <target state="translated">Πολλοί σύνδεσμοι canonical είναι παρόντες.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_canonical">
+      <segment>
+        <source>L’URL canonical doit être une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Η διεύθυνση URL canonical πρέπει να είναι μια απόλυτη διεύθυνση URL HTTP ή HTTPS.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_fragment">
+      <segment>
+        <source>L’URL canonical contient un fragment, ignoré dans le rapport.</source>
+        <target state="translated">Η διεύθυνση URL canonical περιέχει ένα τμήμα, το οποίο αγνοείται στην αναφορά.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_credentials">
+      <segment>
+        <source>L’URL canonical expose des identifiants.</source>
+        <target state="translated">Η διεύθυνση URL canonical εκθέτει διαπιστευτήρια.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_canonical_different">
+      <segment>
+        <source>La canonical diffère de l’URL de page fournie.</source>
+        <target state="translated">Η canonical διαφέρει από τη διεύθυνση URL της σελίδας που παρέχεται.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_robots_conflict">
+      <segment>
+        <source>Des directives robots contradictoires sont déclarées.</source>
+        <target state="translated">Αντίθετες οδηγίες ρομπότ δηλώνονται.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_noindex">
+      <segment>
+        <source>Une directive demande de ne pas indexer cette page.</source>
+        <target state="translated">Μια οδηγία ζητά να μην ευρετηριαστεί αυτή η σελίδα.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_robots">
+      <segment>
+        <source>Une directive robots n’est pas reconnue par cet auditeur.</source>
+        <target state="translated">Μια οδηγία ρομπότ δεν αναγνωρίζεται από αυτόν τον ελεγκτή.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_refresh">
+      <segment>
+        <source>Une redirection ou actualisation meta refresh est présente.</source>
+        <target state="translated">Μια ανακατεύθυνση ή ανανέωση meta refresh είναι παρούσα.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_viewport">
+      <segment>
+        <source>La meta viewport est absente.</source>
+        <target state="translated">Η meta viewport λείπει.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_viewport">
+      <segment>
+        <source>Plusieurs meta viewport sont présentes.</source>
+        <target state="translated">Πολλές meta viewport είναι παρούσες.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_viewport_responsive">
+      <segment>
+        <source>La meta viewport ne déclare pas width=device-width.</source>
+        <target state="translated">Η meta viewport δεν δηλώνει width=device-width.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_charset">
+      <segment>
+        <source>L’encodage du document n’est pas déclaré dans le head.</source>
+        <target state="translated">Η κωδικοποίηση του εγγράφου δεν έχει δηλωθεί στο head.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_multiple_charset">
+      <segment>
+        <source>Plusieurs déclarations d’encodage sont présentes.</source>
+        <target state="translated">Υπάρχουν πολλές δηλώσεις κωδικοποίησης.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_non_utf8">
+      <segment>
+        <source>L’encodage déclaré n’est pas UTF-8.</source>
+        <target state="translated">Η δηλωμένη κωδικοποίηση δεν είναι UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_duplicate_hreflang">
+      <segment>
+        <source>Une langue hreflang est déclarée plusieurs fois.</source>
+        <target state="translated">Μια γλώσσα hreflang έχει δηλωθεί πολλές φορές.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_url">
+      <segment>
+        <source>Une URL hreflang n’est pas une URL HTTP ou HTTPS absolue sans fragment.</source>
+        <target state="translated">Μια URL hreflang δεν είναι μια απόλυτη HTTP ή HTTPS URL χωρίς τμήμα.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_hreflang_code">
+      <segment>
+        <source>Un code de langue hreflang est invalide.</source>
+        <target state="translated">Ένας κωδικός γλώσσας hreflang είναι άκυρος.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_hreflang_self">
+      <segment>
+        <source>Le groupe hreflang ne contient pas d’auto-référence vers l’URL fournie.</source>
+        <target state="translated">Η ομάδα hreflang δεν περιέχει αυτοαναφορά προς την παρεχόμενη URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_og">
+      <segment>
+        <source>Une propriété Open Graph de base est absente.</source>
+        <target state="translated">Μια βασική ιδιότητα Open Graph λείπει.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_og_url">
+      <segment>
+        <source>La propriété og:url n’est pas une URL HTTP ou HTTPS absolue.</source>
+        <target state="translated">Η ιδιότητα og:url δεν είναι μια απόλυτη HTTP ή HTTPS URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_og_mismatch">
+      <segment>
+        <source>La propriété og:url diffère de la canonical.</source>
+        <target state="translated">Η ιδιότητα og:url διαφέρει από την canonical.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_missing_twitter_card">
+      <segment>
+        <source>Les métadonnées Twitter sont présentes sans twitter:card.</source>
+        <target state="translated">Οι μεταδεδομένες Twitter είναι παρούσες χωρίς twitter:card.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_unknown_twitter_card">
+      <segment>
+        <source>Le type twitter:card n’est pas reconnu.</source>
+        <target state="translated">Ο τύπος twitter:card δεν αναγνωρίζεται.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_base">
+      <segment>
+        <source>Une balise base peut modifier la résolution des URL relatives.</source>
+        <target state="translated">Μια ετικέτα base μπορεί να τροποποιήσει την επίλυση των σχετικών URL.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Η λίστα περιορίζεται στους 200 πρώτους διαγνωστικούς.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_comment">
+      <segment>
+        <source>Un commentaire HTML n’est pas terminé.</source>
+        <target state="translated">Ένα σχόλιο HTML δεν έχει ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_tag">
+      <segment>
+        <source>Une balise HTML n’est pas terminée.</source>
+        <target state="translated">Μια ετικέτα HTML δεν έχει ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_malformed">
+      <segment>
+        <source>Une balise HTML mal formée a été ignorée.</source>
+        <target state="translated">Μια κακώς σχηματισμένη ετικέτα HTML έχει αγνοηθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_title">
+      <segment>
+        <source>La balise title n’est pas terminée.</source>
+        <target state="translated">Η ετικέτα title δεν έχει ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_script">
+      <segment>
+        <source>Une balise script n’est pas terminée.</source>
+        <target state="translated">Μια ετικέτα script δεν έχει ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_parser_head">
+      <segment>
+        <source>La balise head n’est pas terminée.</source>
+        <target state="translated">Η ετικέτα head δεν έχει ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_issue_invalid_page_url">
+      <segment>
+        <source>L’URL publique doit être une URL HTTP ou HTTPS absolue sans identifiants.</source>
+        <target state="translated">Η δημόσια διεύθυνση URL πρέπει να είναι μια απόλυτη διεύθυνση URL HTTP ή HTTPS χωρίς ταυτοποίηση.</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_title">
+      <segment>
+        <source>Guide pratique pour auditer un head HTML</source>
+        <target state="translated">Οδηγός για την επιθεώρηση ενός HTML head</target>
+      </segment>
+    </unit>
+    <unit id="html_head_example_description">
+      <segment>
+        <source>Un exemple complet pour contrôler les métadonnées essentielles d’une page web.</source>
+        <target state="translated">Ένα πλήρες παράδειγμα για τον έλεγχο των βασικών μεταδεδομένων μιας ιστοσελίδας.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
