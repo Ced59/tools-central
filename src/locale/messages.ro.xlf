@@ -84371,8 +84371,8 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="pdf_to_images_page_details">
       <segment>
-        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></source>
-        <target state="translated">Pagina <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></target>
+        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></source>
+        <target state="translated">Pagina <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></target>
       </segment>
     </unit>
     <unit id="pdf_to_images_guide_web">
@@ -84511,6 +84511,510 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Télécharger la page <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></source>
         <target state="translated">Descarcă pagina <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_title">
+      <segment>
+        <source>Images vers PDF</source>
+        <target state="translated">Imagini în PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_desc">
+      <segment>
+        <source>Assembler localement des images PNG, JPEG ou WebP dans un PDF ordonné, avec format de page, marges et compression.</source>
+        <target state="translated">Asamblați local imagini PNG, JPEG sau WebP într-un PDF ordonat, cu format de pagină, margini și compresie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_title">
+      <segment>
+        <source>Assembler plusieurs images dans un PDF sans téléversement</source>
+        <target state="translated">Asamblați mai multe imagini într-un PDF fără încărcare</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_lead">
+      <segment>
+        <source>Ce convertisseur crée une page PDF par image directement dans le navigateur. Vous contrôlez l’ordre, le format A4, Lettre US ou adapté à l’image, les marges et le niveau de compression avant de télécharger le document.</source>
+        <target state="translated">Acest convertor creează o pagină PDF pentru fiecare imagine direct în browser. Controlați ordinea, formatul A4, Letter US sau adaptat imaginii, marginile și nivelul de compresie înainte de a descărca documentul.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_use_cases">
+      <segment>
+        <source>Quand regrouper des images dans un PDF ?</source>
+        <target state="translated">Când să grupați imagini într-un PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_title">
+      <segment>
+        <source>Partager un scan multipage</source>
+        <target state="translated">Partajați un scan multipagina</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_text">
+      <segment>
+        <source>Photographiez ou numérisez chaque feuille, placez les fichiers dans l’ordre de lecture et créez un document unique plus simple à envoyer ou archiver.</source>
+        <target state="translated">Fotografiați sau scanați fiecare foaie, plasați fișierele în ordinea de citire și creați un document unic mai ușor de trimis sau arhivat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_title">
+      <segment>
+        <source>Préparer un dossier illustré</source>
+        <target state="translated">Pregătiți un dosar ilustrat</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_text">
+      <segment>
+        <source>Utilisez des pages A4 ou Lettre US et des marges constantes afin d’obtenir une présentation homogène à partir d’images de proportions différentes.</source>
+        <target state="translated">Utilizați pagini A4 sau Letter US și margini constante pentru a obține o prezentare uniformă din imagini cu proporții diferite.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_title">
+      <segment>
+        <source>Conserver la taille propre à chaque image</source>
+        <target state="translated">Păstrați dimensiunea specifică fiecărei imagini</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_text">
+      <segment>
+        <source>Le format adapté crée chaque page selon les dimensions de son image à 96 pixels par pouce, sans forcer toutes les pages dans le même ratio.</source>
+        <target state="translated">Formatul adaptat creează fiecare pagină conform dimensiunilor imaginii sale la 96 de pixeli pe inch, fără a forța toate paginile în același raport.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method">
+      <segment>
+        <source>Choisir format, marges et compression</source>
+        <target state="translated">Alegeți formatul, marginile și compresia</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_1">
+      <segment>
+        <source>Les formats A4 et Lettre US redimensionnent l’image pour la faire tenir entièrement dans la zone imprimable : aucune partie n’est rognée. Les espaces libres dépendent donc du ratio de la photo et de l’orientation choisie.</source>
+        <target state="translated">Formatele A4 și Letter US redimensionează imaginea pentru a se încadra complet în zona imprimabilă: nicio parte nu este decupată. Spațiile libere depind astfel de raportul fotografiei și de orientarea aleasă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_2">
+      <segment>
+        <source>Le mode qualité élevée préserve les PNG en PNG et encode les photos avec une qualité JPEG forte. Les modes équilibré et compact convertissent les pages en JPEG sur fond blanc pour réduire le poids, ce qui supprime la transparence.</source>
+        <target state="translated">Modul de calitate înaltă păstrează PNG-urile în PNG și encodează fotografiile cu o calitate JPEG ridicată. Modurile echilibrat și compact convertesc paginile în JPEG pe fundal alb pentru a reduce greutatea, ceea ce elimină transparența.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_3">
+      <segment>
+        <source>Commencez par le mode équilibré pour un scan ou des photos. Choisissez qualité élevée pour des schémas avec transparence ou du petit texte, puis contrôlez le PDF obtenu à 100 % avant diffusion.</source>
+        <target state="translated">Începeți cu modul echilibrat pentru un scan sau fotografii. Alegeți calitate înaltă pentru scheme cu transparență sau text mic, apoi verificați PDF-ul obținut la 100% înainte de distribuire.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">Procesare locală și limite de securitate</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_1">
+      <segment>
+        <source>Les images sont décodées et le PDF est créé dans un Web Worker du navigateur. Aucun fichier, nom de fichier ou contenu n’est envoyé à Tools Central.</source>
+        <target state="translated">Imaginile sunt decodificate și PDF-ul este creat într-un Web Worker al browserului. Niciun fișier, nume de fișier sau conținut nu este trimis la Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_2">
+      <segment>
+        <source>La sélection est limitée à 50 images, 25 Mio par fichier et 100 Mio au total. Les dimensions, le nombre de pixels et la sortie PDF sont également bornés pour protéger la mémoire.</source>
+        <target state="translated">Selecția este limitată la 50 de imagini, 25 Mio pe fișier și 100 Mio în total. Dimensiunile, numărul de pixeli și ieșirea PDF sunt de asemenea limitate pentru a proteja memoria.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_3">
+      <segment>
+        <source>Le type déclaré par le navigateur n’est pas considéré comme une preuve : l’outil vérifie les signatures et dimensions PNG, JPEG ou WebP avant le décodage complet.</source>
+        <target state="translated">Tipul declarat de browser nu este considerat o dovadă: instrumentul verifică semnăturile și dimensiunile PNG, JPEG sau WebP înainte de decodarea completă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limits">
+      <segment>
+        <source>Ce que cette conversion ne fait pas</source>
+        <target state="translated">Ce nu face această conversie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_1">
+      <segment>
+        <source>Le texte visible dans une image reste composé de pixels : il ne devient pas sélectionnable, recherchable ni accessible à un lecteur d’écran.</source>
+        <target state="translated">Textul vizibil într-o imagine rămâne compus din pixeli: nu devine selectabil, căutabil sau accesibil unui cititor de ecran.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_2">
+      <segment>
+        <source>L’outil ne réalise ni reconnaissance OCR, ni correction automatique de perspective, ni amélioration d’un scan flou ou sous-exposé.</source>
+        <target state="translated">Instrumentul nu efectuează recunoaștere OCR, corectare automată a perspectivei sau îmbunătățire a unui scan neclar sau subexpus.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_3">
+      <segment>
+        <source>Les métadonnées EXIF ne sont pas recopiées comme métadonnées PDF, mais l’image est réencodée. Vérifiez toujours l’orientation et le rendu final avant partage.</source>
+        <target state="translated">Metadatele EXIF nu sunt copiate ca metadate PDF, dar imaginea este reencodată. Verificați întotdeauna orientarea și aspectul final înainte de a partaja.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Întrebări frecvente</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q1">
+      <segment>
+        <source>Pourquoi le PDF compact a-t-il un fond blanc ?</source>
+        <target state="translated">De ce PDF-ul compact are un fundal alb?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a1">
+      <segment>
+        <source>JPEG ne gère pas la transparence. Les modes équilibré et compact composent donc les pixels transparents sur du blanc avant encodage afin d’obtenir un document cohérent et plus léger.</source>
+        <target state="translated">JPEG nu gestionează transparența. Modurile echilibrat și compact compun astfel pixelii transparenți pe alb înainte de encodare pentru a obține un document coerent și mai ușor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q2">
+      <segment>
+        <source>Mes images sont-elles rognées sur une page A4 ?</source>
+        <target state="translated">Imaginile mele sunt decupate pe o pagină A4?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a2">
+      <segment>
+        <source>Non. L’image est réduite ou agrandie proportionnellement pour tenir dans la page et les marges. Des bandes blanches peuvent apparaître si son ratio diffère de celui de la page.</source>
+        <target state="translated">Nu. Imaginea este redusă sau mărită proporțional pentru a se încadra în pagină și margini. Benzi albe pot apărea dacă raportul său diferă de cel al paginii.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q3">
+      <segment>
+        <source>Pourquoi une très grande image est-elle refusée ?</source>
+        <target state="translated">De ce o imagine foarte mare este refuzată?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a3">
+      <segment>
+        <source>Une image compressée de quelques mégaoctets peut occuper beaucoup plus de mémoire une fois décodée. Les limites de dimensions et de pixels évitent qu’un fichier épuise la mémoire, notamment sur mobile.</source>
+        <target state="translated">O imagine comprimată de câțiva megaocteți poate ocupa mult mai multă memorie odată ce este decodată. Limitele de dimensiuni și pixeli împiedică un fișier să epuizeze memoria, în special pe mobil.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Înapoi la instrumentele PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_title">
+      <segment>
+        <source>Convertir des images en PDF</source>
+        <target state="translated">Convertiți imagini în PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_subtitle">
+      <segment>
+        <source>Assemblez des images PNG, JPEG ou WebP dans l’ordre voulu, choisissez le format des pages, les marges et la compression, puis téléchargez un seul PDF.</source>
+        <target state="translated">Asamblați imagini PNG, JPEG sau WebP în ordinea dorită, alegeți formatul paginilor, marginile și compresia, apoi descărcați un singur PDF.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_privacy">
+      <segment>
+        <source>Aucun envoi : les images et le PDF restent dans votre navigateur.</source>
+        <target state="translated">Nicio trimitere: imaginile și PDF-ul rămân în browserul dumneavoastră.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Pasul 1</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_source_title">
+      <segment>
+        <source>Choisir les images</source>
+        <target state="translated">Alegeți imaginile</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_loaded">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> image(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> imagine(e)</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick">
+      <segment>
+        <source>Sélectionner ou déposer des images</source>
+        <target state="translated">Selectați sau trageți imagini</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick_help">
+      <segment>
+        <source>PNG, JPEG ou WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> fichiers · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> par image · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> au total</source>
+        <target state="translated">PNG, JPEG sau WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> fișiere · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> pe imagine · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> în total</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_inspecting">
+      <segment>
+        <source>Vérification des images <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</source>
+        <target state="translated">Verificarea imaginilor <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Pasul 2</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_settings">
+      <segment>
+        <source>Organiser et régler le PDF</source>
+        <target state="translated">Organizați și setați PDF-ul</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_page_format">
+      <segment>
+        <source>Format des pages</source>
+        <target state="translated">Formatul paginilor</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin">
+      <segment>
+        <source>Marges</source>
+        <target state="translated">Margini</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin_none">
+      <segment>
+        <source>Sans marge</source>
+        <target state="translated">Fără margine</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression">
+      <segment>
+        <source>Compression</source>
+        <target state="translated">Compresie</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_help">
+      <segment>
+        <source>Le mode compact convertit les transparences sur fond blanc et réduit davantage la qualité JPEG.</source>
+        <target state="translated">Modul compact convertește transparențele pe fundal alb și reduce și mai mult calitatea JPEG.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_size">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">Intrare</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_pixels">
+      <segment>
+        <source>Pixels</source>
+        <target state="translated">Pixeli</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_order_help">
+      <segment>
+        <source>Glissez les cartes pour changer l’ordre des pages, ou utilisez les boutons monter et descendre.</source>
+        <target state="translated">Trageți cărțile pentru a schimba ordinea paginilor sau folosiți butoanele de sus și jos.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generate">
+      <segment>
+        <source>Créer le PDF</source>
+        <target state="translated">Creează PDF-ul</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Resetare</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generating">
+      <segment>
+        <source>Création locale du PDF…</source>
+        <target state="translated">Crearea locală a PDF-ului…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Pasul 3</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_title">
+      <segment>
+        <source>PDF prêt à télécharger</source>
+        <target state="translated">PDF gata de descărcat</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_summary">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> page(s) · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> pagină(i) · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_download">
+      <segment>
+        <source>Télécharger le PDF</source>
+        <target state="translated">Descarcă PDF-ul</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">Sfaturi</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order">
+      <segment>
+        <source>Ordre des pages</source>
+        <target state="translated">Ordinea paginilor</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order_text">
+      <segment>
+        <source>La première carte devient la première page. Les boutons restent utilisables au clavier et sur mobile quand le glisser-déposer n’est pas pratique.</source>
+        <target state="translated">Prima carte devine prima pagină. Butoanele rămân utilizabile de la tastatură și pe mobil când glisarea nu este practică.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format">
+      <segment>
+        <source>Format et marges</source>
+        <target state="translated">Format și margini</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format_text">
+      <segment>
+        <source>A4 et Lettre US placent chaque image sans la rogner. Le format « taille de l’image » crée une page adaptée à chaque fichier à 96 pixels par pouce.</source>
+        <target state="translated">A4 și Scrisoare US plasează fiecare imagine fără a o decupa. Formatul „dimensiunea imaginii” creează o pagină adaptată fiecărui fișier la 96 de pixeli pe inch.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits">
+      <segment>
+        <source>Limites locales</source>
+        <target state="translated">Limite locale</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits_text">
+      <segment>
+        <source>Le nombre, le poids et les pixels sont bornés avant décodage. La création s’exécute dans un Worker pour préserver la réactivité de la page.</source>
+        <target state="translated">Numărul, greutatea și pixelii sunt limitați înainte de decodare. Crearea se execută într-un Worker pentru a păstra reacția paginii.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_image">
+      <segment>
+        <source>Taille de l’image</source>
+        <target state="translated">Dimensiunea imaginii</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_portrait">
+      <segment>
+        <source>A4 portrait</source>
+        <target state="translated">A4 portret</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_landscape">
+      <segment>
+        <source>A4 paysage</source>
+        <target state="translated">A4 peisaj</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_portrait">
+      <segment>
+        <source>Lettre US portrait</source>
+        <target state="translated">Scrisoare US portret</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_landscape">
+      <segment>
+        <source>Lettre US paysage</source>
+        <target state="translated">Scrisoare US peisaj</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_quality">
+      <segment>
+        <source>Qualité élevée</source>
+        <target state="translated">Calitate înaltă</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_balanced">
+      <segment>
+        <source>Équilibrée</source>
+        <target state="translated">Echilibrată</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_compact">
+      <segment>
+        <source>PDF compact</source>
+        <target state="translated">PDF compact</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_preview_alt">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></source>
+        <target state="translated">Pagina <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_up">
+      <segment>
+        <source>Monter <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Mutați în sus <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_down">
+      <segment>
+        <source>Descendre <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Mutați în jos <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_remove">
+      <segment>
+        <source>Retirer <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Îndepărtați <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_count">
+      <segment>
+        <source>Sélectionnez au maximum <ph id="0" equiv="limit" disp="this.maxFiles"/> images.</source>
+        <target state="translated">Selectați maximum <ph id="0" equiv="limit" disp="this.maxFiles"/> imagini.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_file_size">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> depășește <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_total_size">
+      <segment>
+        <source>La sélection dépasse <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>.</source>
+        <target state="translated">Selecția depășește <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_unsupported">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> n’est pas une image PNG, JPEG ou WebP valide.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> nu este o imagine PNG, JPEG sau WebP validă.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_dimensions">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse les dimensions ou le nombre de pixels autorisés.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> depășește dimensiunile sau numărul de pixeli permis.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_pixels">
+      <segment>
+        <source>La sélection dépasse le budget de pixels sûr. Réduisez le nombre ou les dimensions des images.</source>
+        <target state="translated">Selecția depășește bugetul de pixeli sigur. Reduceți numărul sau dimensiunile imaginilor.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_output">
+      <segment>
+        <source>Le PDF généré dépasse la taille de sortie autorisée.</source>
+        <target state="translated">PDF-ul generat depășește dimensiunea de ieșire permisă.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_generic">
+      <segment>
+        <source>Impossible de créer le PDF. Une image peut être endommagée ou non prise en charge par ce navigateur.</source>
+        <target state="translated">Nu s-a putut crea PDF-ul. O imagine poate fi coruptă sau nu este acceptată de acest browser.</target>
       </segment>
     </unit>
   </file>

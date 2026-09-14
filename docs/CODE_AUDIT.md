@@ -7,7 +7,7 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du générateur Schema.org SoftwareApplication.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Dix features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder` et `pdf-to-images`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 67 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Onze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images` et `images-to-pdf`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 68 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -18,7 +18,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 657,61 kB brut, 165,94 kB transféré estimé ; PDF.js reste dans un chunk lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 123 fichiers, 335 tests verts sous Vitest |
+| Tests unitaires | suite non compilable | 127 fichiers, 356 tests verts sous Vitest |
 | Couverture | aucun seuil | 46,18 % statements, 32,90 % branches, 46,10 % fonctions, 49,41 % lignes |
 | E2E | aucun | 12 parcours Playwright verts |
 | Routes statiques | 2 | 82 routes de base + une 404 prérendues par locale, soit 2 490 pages ; 2 402 URL sont indexables après filtrage éditorial par locale |

@@ -84399,8 +84399,8 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="pdf_to_images_page_details">
       <segment>
-        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></source>
-        <target state="translated">页面 <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> 像素 · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></target>
+        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></source>
+        <target state="translated">页面 <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> 像素 · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></target>
       </segment>
     </unit>
     <unit id="pdf_to_images_guide_web">
@@ -84539,6 +84539,510 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Télécharger la page <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></source>
         <target state="translated">下载PDF的第<ph id="0" equiv="pageNumber" disp="String(pageNumber)"/>页</target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_title">
+      <segment>
+        <source>Images vers PDF</source>
+        <target state="translated">图片转PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_desc">
+      <segment>
+        <source>Assembler localement des images PNG, JPEG ou WebP dans un PDF ordonné, avec format de page, marges et compression.</source>
+        <target state="translated">将本地的PNG、JPEG或WebP图像组合成一个有序的PDF，设置页面格式、边距和压缩。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_title">
+      <segment>
+        <source>Assembler plusieurs images dans un PDF sans téléversement</source>
+        <target state="translated">将多张图片合并为PDF，无需上传</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_lead">
+      <segment>
+        <source>Ce convertisseur crée une page PDF par image directement dans le navigateur. Vous contrôlez l’ordre, le format A4, Lettre US ou adapté à l’image, les marges et le niveau de compression avant de télécharger le document.</source>
+        <target state="translated">此转换器直接在浏览器中为每张图片创建一个PDF页面。您可以控制顺序、A4、美国信纸或适合图像的格式、边距和压缩级别，然后下载文档。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_use_cases">
+      <segment>
+        <source>Quand regrouper des images dans un PDF ?</source>
+        <target state="translated">何时将图像组合成PDF？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_title">
+      <segment>
+        <source>Partager un scan multipage</source>
+        <target state="translated">分享多页扫描件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_text">
+      <segment>
+        <source>Photographiez ou numérisez chaque feuille, placez les fichiers dans l’ordre de lecture et créez un document unique plus simple à envoyer ou archiver.</source>
+        <target state="translated">拍摄或扫描每一页，将文件按阅读顺序排列，创建一个更易于发送或归档的单一文档。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_title">
+      <segment>
+        <source>Préparer un dossier illustré</source>
+        <target state="translated">准备插图文件夹</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_text">
+      <segment>
+        <source>Utilisez des pages A4 ou Lettre US et des marges constantes afin d’obtenir une présentation homogène à partir d’images de proportions différentes.</source>
+        <target state="translated">使用A4或美国信纸页面和固定边距，以便从不同比例的图像中获得一致的展示效果。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_title">
+      <segment>
+        <source>Conserver la taille propre à chaque image</source>
+        <target state="translated">保持每张图片的原始大小</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_text">
+      <segment>
+        <source>Le format adapté crée chaque page selon les dimensions de son image à 96 pixels par pouce, sans forcer toutes les pages dans le même ratio.</source>
+        <target state="translated">适合格式根据每张图片的尺寸以96像素每英寸创建每个页面，而不强制所有页面使用相同的比例。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method">
+      <segment>
+        <source>Choisir format, marges et compression</source>
+        <target state="translated">选择格式、边距和压缩</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_1">
+      <segment>
+        <source>Les formats A4 et Lettre US redimensionnent l’image pour la faire tenir entièrement dans la zone imprimable : aucune partie n’est rognée. Les espaces libres dépendent donc du ratio de la photo et de l’orientation choisie.</source>
+        <target state="translated">A4和美国信纸格式会调整图像大小，以便完全适应可打印区域：没有部分被裁剪。因此，空白区域取决于照片的比例和所选的方向。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_2">
+      <segment>
+        <source>Le mode qualité élevée préserve les PNG en PNG et encode les photos avec une qualité JPEG forte. Les modes équilibré et compact convertissent les pages en JPEG sur fond blanc pour réduire le poids, ce qui supprime la transparence.</source>
+        <target state="translated">高质量模式保留PNG为PNG，并以高质量JPEG编码照片。平衡和紧凑模式将页面转换为白色背景的JPEG，以减小文件大小，从而去除透明度。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_3">
+      <segment>
+        <source>Commencez par le mode équilibré pour un scan ou des photos. Choisissez qualité élevée pour des schémas avec transparence ou du petit texte, puis contrôlez le PDF obtenu à 100 % avant diffusion.</source>
+        <target state="translated">对于扫描或照片，首先选择平衡模式。对于带透明度的图表或小文本，选择高质量，然后在发布之前以100%检查生成的PDF。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">本地处理和安全限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_1">
+      <segment>
+        <source>Les images sont décodées et le PDF est créé dans un Web Worker du navigateur. Aucun fichier, nom de fichier ou contenu n’est envoyé à Tools Central.</source>
+        <target state="translated">图像在浏览器的Web Worker中解码，PDF被创建。没有文件、文件名或内容被发送到Tools Central。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_2">
+      <segment>
+        <source>La sélection est limitée à 50 images, 25 Mio par fichier et 100 Mio au total. Les dimensions, le nombre de pixels et la sortie PDF sont également bornés pour protéger la mémoire.</source>
+        <target state="translated">选择限制为50张图像，每个文件25MB，总共100MB。尺寸、像素数量和PDF输出也有限制，以保护内存。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_3">
+      <segment>
+        <source>Le type déclaré par le navigateur n’est pas considéré comme une preuve : l’outil vérifie les signatures et dimensions PNG, JPEG ou WebP avant le décodage complet.</source>
+        <target state="translated">浏览器声明的类型不被视为证据：工具在完全解码之前检查PNG、JPEG或WebP的签名和尺寸。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limits">
+      <segment>
+        <source>Ce que cette conversion ne fait pas</source>
+        <target state="translated">此转换不执行的操作</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_1">
+      <segment>
+        <source>Le texte visible dans une image reste composé de pixels : il ne devient pas sélectionnable, recherchable ni accessible à un lecteur d’écran.</source>
+        <target state="translated">图像中可见的文本仍然由像素组成：它不会变得可选择、可搜索或可被屏幕阅读器访问。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_2">
+      <segment>
+        <source>L’outil ne réalise ni reconnaissance OCR, ni correction automatique de perspective, ni amélioration d’un scan flou ou sous-exposé.</source>
+        <target state="translated">该工具不进行OCR识别、自动透视校正或模糊或曝光不足扫描的增强。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_3">
+      <segment>
+        <source>Les métadonnées EXIF ne sont pas recopiées comme métadonnées PDF, mais l’image est réencodée. Vérifiez toujours l’orientation et le rendu final avant partage.</source>
+        <target state="translated">EXIF元数据不会作为PDF元数据复制，但图像会被重新编码。在分享之前，请始终检查方向和最终效果。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q1">
+      <segment>
+        <source>Pourquoi le PDF compact a-t-il un fond blanc ?</source>
+        <target state="translated">为什么紧凑PDF有白色背景？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a1">
+      <segment>
+        <source>JPEG ne gère pas la transparence. Les modes équilibré et compact composent donc les pixels transparents sur du blanc avant encodage afin d’obtenir un document cohérent et plus léger.</source>
+        <target state="translated">JPEG不支持透明度。因此，平衡和紧凑模式在编码之前将透明像素合成到白色背景上，以获得一致且更轻的文档。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q2">
+      <segment>
+        <source>Mes images sont-elles rognées sur une page A4 ?</source>
+        <target state="translated">我的图像在A4页面上被裁剪吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a2">
+      <segment>
+        <source>Non. L’image est réduite ou agrandie proportionnellement pour tenir dans la page et les marges. Des bandes blanches peuvent apparaître si son ratio diffère de celui de la page.</source>
+        <target state="translated">不。图像会按比例缩小或放大以适应页面和边距。如果其比例与页面不同，可能会出现白边。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q3">
+      <segment>
+        <source>Pourquoi une très grande image est-elle refusée ?</source>
+        <target state="translated">为什么非常大的图像被拒绝？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a3">
+      <segment>
+        <source>Une image compressée de quelques mégaoctets peut occuper beaucoup plus de mémoire une fois décodée. Les limites de dimensions et de pixels évitent qu’un fichier épuise la mémoire, notamment sur mobile.</source>
+        <target state="translated">几兆字节的压缩图像在解码后可能占用更多内存。尺寸和像素限制防止文件耗尽内存，尤其是在移动设备上。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">返回PDF工具</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_title">
+      <segment>
+        <source>Convertir des images en PDF</source>
+        <target state="translated">将图像转换为PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_subtitle">
+      <segment>
+        <source>Assemblez des images PNG, JPEG ou WebP dans l’ordre voulu, choisissez le format des pages, les marges et la compression, puis téléchargez un seul PDF.</source>
+        <target state="translated">按所需顺序组合PNG、JPEG或WebP图像，选择页面格式、边距和压缩，然后下载一个PDF。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_privacy">
+      <segment>
+        <source>Aucun envoi : les images et le PDF restent dans votre navigateur.</source>
+        <target state="translated">无需发送：图像和PDF保留在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">步骤 1</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_source_title">
+      <segment>
+        <source>Choisir les images</source>
+        <target state="translated">选择图像</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_loaded">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> image(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> 张图像</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick">
+      <segment>
+        <source>Sélectionner ou déposer des images</source>
+        <target state="translated">选择或拖放图像</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick_help">
+      <segment>
+        <source>PNG, JPEG ou WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> fichiers · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> par image · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> au total</source>
+        <target state="translated">PNG、JPEG或WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> 文件 · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> 每张图像 · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> 总共</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_inspecting">
+      <segment>
+        <source>Vérification des images <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</source>
+        <target state="translated">检查图像 <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">步骤 2</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_settings">
+      <segment>
+        <source>Organiser et régler le PDF</source>
+        <target state="translated">组织和设置 PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_page_format">
+      <segment>
+        <source>Format des pages</source>
+        <target state="translated">页面格式</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin">
+      <segment>
+        <source>Marges</source>
+        <target state="translated">边距</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin_none">
+      <segment>
+        <source>Sans marge</source>
+        <target state="translated">无边距</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression">
+      <segment>
+        <source>Compression</source>
+        <target state="translated">压缩</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_help">
+      <segment>
+        <source>Le mode compact convertit les transparences sur fond blanc et réduit davantage la qualité JPEG.</source>
+        <target state="translated">紧凑模式将透明度转换为白色背景，并进一步降低 JPEG 质量。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_size">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">输入</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_pixels">
+      <segment>
+        <source>Pixels</source>
+        <target state="translated">像素</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_order_help">
+      <segment>
+        <source>Glissez les cartes pour changer l’ordre des pages, ou utilisez les boutons monter et descendre.</source>
+        <target state="translated">拖动卡片以更改页面顺序，或使用上移和下移按钮。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generate">
+      <segment>
+        <source>Créer le PDF</source>
+        <target state="translated">创建 PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generating">
+      <segment>
+        <source>Création locale du PDF…</source>
+        <target state="translated">正在本地创建 PDF…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">步骤 3</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_title">
+      <segment>
+        <source>PDF prêt à télécharger</source>
+        <target state="translated">PDF 准备下载</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_summary">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> page(s) · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> 页 · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_download">
+      <segment>
+        <source>Télécharger le PDF</source>
+        <target state="translated">下载 PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">提示</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order">
+      <segment>
+        <source>Ordre des pages</source>
+        <target state="translated">页面顺序</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order_text">
+      <segment>
+        <source>La première carte devient la première page. Les boutons restent utilisables au clavier et sur mobile quand le glisser-déposer n’est pas pratique.</source>
+        <target state="translated">第一张卡片成为第一页。当拖放不方便时，按钮仍可通过键盘和移动设备使用。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format">
+      <segment>
+        <source>Format et marges</source>
+        <target state="translated">格式和边距</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format_text">
+      <segment>
+        <source>A4 et Lettre US placent chaque image sans la rogner. Le format « taille de l’image » crée une page adaptée à chaque fichier à 96 pixels par pouce.</source>
+        <target state="translated">A4 和美国信纸格式将每个图像放置而不裁剪。"图像大小"格式为每个文件创建适合的页面，分辨率为每英寸 96 像素。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits">
+      <segment>
+        <source>Limites locales</source>
+        <target state="translated">本地限制</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits_text">
+      <segment>
+        <source>Le nombre, le poids et les pixels sont bornés avant décodage. La création s’exécute dans un Worker pour préserver la réactivité de la page.</source>
+        <target state="translated">数量、大小和像素在解码前受到限制。创建在 Worker 中执行，以保持页面的响应性。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_image">
+      <segment>
+        <source>Taille de l’image</source>
+        <target state="translated">图像大小</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_portrait">
+      <segment>
+        <source>A4 portrait</source>
+        <target state="translated">A4 纵向</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_landscape">
+      <segment>
+        <source>A4 paysage</source>
+        <target state="translated">A4 横向</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_portrait">
+      <segment>
+        <source>Lettre US portrait</source>
+        <target state="translated">美国信纸纵向</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_landscape">
+      <segment>
+        <source>Lettre US paysage</source>
+        <target state="translated">美国信纸横向</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_quality">
+      <segment>
+        <source>Qualité élevée</source>
+        <target state="translated">高质量</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_balanced">
+      <segment>
+        <source>Équilibrée</source>
+        <target state="translated">平衡</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_compact">
+      <segment>
+        <source>PDF compact</source>
+        <target state="translated">紧凑 PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_preview_alt">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></source>
+        <target state="translated">页面 <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_up">
+      <segment>
+        <source>Monter <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">上移 <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_down">
+      <segment>
+        <source>Descendre <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">下移 <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_remove">
+      <segment>
+        <source>Retirer <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">移除 <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_count">
+      <segment>
+        <source>Sélectionnez au maximum <ph id="0" equiv="limit" disp="this.maxFiles"/> images.</source>
+        <target state="translated">最多选择 <ph id="0" equiv="limit" disp="this.maxFiles"/> 张图像。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_file_size">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> 超过 <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_total_size">
+      <segment>
+        <source>La sélection dépasse <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>.</source>
+        <target state="translated">选择超过 <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_unsupported">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> n’est pas une image PNG, JPEG ou WebP valide.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> 不是有效的 PNG、JPEG 或 WebP 图像。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_dimensions">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse les dimensions ou le nombre de pixels autorisés.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> 超出了允许的尺寸或像素数量。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_pixels">
+      <segment>
+        <source>La sélection dépasse le budget de pixels sûr. Réduisez le nombre ou les dimensions des images.</source>
+        <target state="translated">选择超出了安全像素预算。请减少图像的数量或尺寸。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_output">
+      <segment>
+        <source>Le PDF généré dépasse la taille de sortie autorisée.</source>
+        <target state="translated">生成的 PDF 超出了允许的输出大小。</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_generic">
+      <segment>
+        <source>Impossible de créer le PDF. Une image peut être endommagée ou non prise en charge par ce navigateur.</source>
+        <target state="translated">无法创建 PDF。某个图像可能已损坏或不被该浏览器支持。</target>
       </segment>
     </unit>
   </file>

@@ -84399,8 +84399,8 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="pdf_to_images_page_details">
       <segment>
-        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></source>
-        <target state="translated">Bladsy <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></target>
+        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></source>
+        <target state="translated">Blad <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.blob.size) }}"/></target>
       </segment>
     </unit>
     <unit id="pdf_to_images_guide_web">
@@ -84539,6 +84539,510 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Télécharger la page <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></source>
         <target state="translated">Laai die bladsy <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/> af</target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_title">
+      <segment>
+        <source>Images vers PDF</source>
+        <target state="translated">Beeld na PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_images_to_pdf_desc">
+      <segment>
+        <source>Assembler localement des images PNG, JPEG ou WebP dans un PDF ordonné, avec format de page, marges et compression.</source>
+        <target state="translated">Plaaslik PNG, JPEG of WebP beelde in 'n geordende PDF saam, met bladformaat, marges en kompressie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_title">
+      <segment>
+        <source>Assembler plusieurs images dans un PDF sans téléversement</source>
+        <target state="translated">Versamel verskeie beelde in 'n PDF sonder opgelaai</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_lead">
+      <segment>
+        <source>Ce convertisseur crée une page PDF par image directement dans le navigateur. Vous contrôlez l’ordre, le format A4, Lettre US ou adapté à l’image, les marges et le niveau de compression avant de télécharger le document.</source>
+        <target state="translated">Hierdie omskakelaar skep 'n PDF-bladsy per beeld direk in die blaaier. Jy beheer die volgorde, A4-formaat, Amerikaanse brief of aangepas vir die beeld, die marges en die vlak van kompressie voordat jy die dokument aflaai.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_use_cases">
+      <segment>
+        <source>Quand regrouper des images dans un PDF ?</source>
+        <target state="translated">Wanneer om beelde in 'n PDF te groepeer?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_title">
+      <segment>
+        <source>Partager un scan multipage</source>
+        <target state="translated">Deel 'n meerbladige skandering</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc1_text">
+      <segment>
+        <source>Photographiez ou numérisez chaque feuille, placez les fichiers dans l’ordre de lecture et créez un document unique plus simple à envoyer ou archiver.</source>
+        <target state="translated">Neem foto's of skandeer elke bladsy, plaas die lêers in leesvolgorde en skep 'n enkele dokument wat makliker is om te stuur of te argiveer.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_title">
+      <segment>
+        <source>Préparer un dossier illustré</source>
+        <target state="translated">Bereid 'n geïllustreerde lêer voor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc2_text">
+      <segment>
+        <source>Utilisez des pages A4 ou Lettre US et des marges constantes afin d’obtenir une présentation homogène à partir d’images de proportions différentes.</source>
+        <target state="translated">Gebruik A4 of Amerikaanse briefbladsye en konstante marges om 'n eenvormige aanbieding te verkry uit beelde van verskillende verhoudings.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_title">
+      <segment>
+        <source>Conserver la taille propre à chaque image</source>
+        <target state="translated">Hou die grootte van elke beeld</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_uc3_text">
+      <segment>
+        <source>Le format adapté crée chaque page selon les dimensions de son image à 96 pixels par pouce, sans forcer toutes les pages dans le même ratio.</source>
+        <target state="translated">Die aangepaste formaat skep elke bladsy volgens die afmetings van sy beeld teen 96 pixels per duim, sonder om alle bladsye in dieselfde verhouding te dwing.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method">
+      <segment>
+        <source>Choisir format, marges et compression</source>
+        <target state="translated">Kies formaat, marges en kompressie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_1">
+      <segment>
+        <source>Les formats A4 et Lettre US redimensionnent l’image pour la faire tenir entièrement dans la zone imprimable : aucune partie n’est rognée. Les espaces libres dépendent donc du ratio de la photo et de l’orientation choisie.</source>
+        <target state="translated">Die A4- en Amerikaanse briefformate herformateer die beeld om dit heeltemal in die drukbare area te laat pas: geen deel word afgesny nie. Die vrye spasie hang dus af van die verhouding van die foto en die gekose oriëntasie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_2">
+      <segment>
+        <source>Le mode qualité élevée préserve les PNG en PNG et encode les photos avec une qualité JPEG forte. Les modes équilibré et compact convertissent les pages en JPEG sur fond blanc pour réduire le poids, ce qui supprime la transparence.</source>
+        <target state="translated">Die hoë kwaliteit modus behou PNG's in PNG en kodeer die foto's met 'n hoë JPEG kwaliteit. Die gebalanseerde en kompakte modi omskakel die bladsye in JPEG op 'n wit agtergrond om die gewig te verminder, wat die deursigtigheid verwyder.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_method_3">
+      <segment>
+        <source>Commencez par le mode équilibré pour un scan ou des photos. Choisissez qualité élevée pour des schémas avec transparence ou du petit texte, puis contrôlez le PDF obtenu à 100 % avant diffusion.</source>
+        <target state="translated">Begin met die gebalanseerde modus vir 'n skandering of foto's. Kies hoë kwaliteit vir diagramme met deursigtigheid of klein teks, en kontroleer dan die PDF wat verkry is teen 100% voordat dit versprei word.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">Plaaslike verwerking en sekuriteitsgrense</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_1">
+      <segment>
+        <source>Les images sont décodées et le PDF est créé dans un Web Worker du navigateur. Aucun fichier, nom de fichier ou contenu n’est envoyé à Tools Central.</source>
+        <target state="translated">Die beelde word gedecodeer en die PDF word in 'n Web Worker van die blaaier geskep. Geen lêer, lêernaam of inhoud word na Tools Central gestuur nie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_2">
+      <segment>
+        <source>La sélection est limitée à 50 images, 25 Mio par fichier et 100 Mio au total. Les dimensions, le nombre de pixels et la sortie PDF sont également bornés pour protéger la mémoire.</source>
+        <target state="translated">Die keuse is beperk tot 50 beelde, 25 MB per lêer en 100 MB in totaal. Die afmetings, aantal pixels en die PDF-uitset is ook beperk om die geheue te beskerm.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_privacy_3">
+      <segment>
+        <source>Le type déclaré par le navigateur n’est pas considéré comme une preuve : l’outil vérifie les signatures et dimensions PNG, JPEG ou WebP avant le décodage complet.</source>
+        <target state="translated">Die tipe wat deur die blaaier verklaar word, word nie as 'n bewys beskou nie: die hulpmiddel kontroleer die handtekeninge en afmetings van PNG, JPEG of WebP voordat die volledige dekodering plaasvind.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limits">
+      <segment>
+        <source>Ce que cette conversion ne fait pas</source>
+        <target state="translated">Wat hierdie omskakeling nie doen nie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_1">
+      <segment>
+        <source>Le texte visible dans une image reste composé de pixels : il ne devient pas sélectionnable, recherchable ni accessible à un lecteur d’écran.</source>
+        <target state="translated">Die sigbare teks in 'n beeld bly uit pixels saamgestel: dit word nie selekteerbaar, soekbaar of toeganklik vir 'n skermleser nie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_2">
+      <segment>
+        <source>L’outil ne réalise ni reconnaissance OCR, ni correction automatique de perspective, ni amélioration d’un scan flou ou sous-exposé.</source>
+        <target state="translated">Die hulpmiddel doen nie OCR herkenning, outomatiese perspektiefkorreksie, of verbetering van 'n vae of onderbeligte skandering nie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_limit_3">
+      <segment>
+        <source>Les métadonnées EXIF ne sont pas recopiées comme métadonnées PDF, mais l’image est réencodée. Vérifiez toujours l’orientation et le rendu final avant partage.</source>
+        <target state="translated">Die EXIF-metadata word nie as PDF-metadata gekopieer nie, maar die beeld word herkodeer. Kontroleer altyd die oriëntasie en finale weergawe voordat jy dit deel.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Gereelde vrae</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q1">
+      <segment>
+        <source>Pourquoi le PDF compact a-t-il un fond blanc ?</source>
+        <target state="translated">Waarom het die kompakte PDF 'n wit agtergrond?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a1">
+      <segment>
+        <source>JPEG ne gère pas la transparence. Les modes équilibré et compact composent donc les pixels transparents sur du blanc avant encodage afin d’obtenir un document cohérent et plus léger.</source>
+        <target state="translated">JPEG hanteer nie deursigtigheid nie. Die gebalanseerde en kompakte modi saamstel dus die deursigtige pixels op wit voordat dit gekodeer word om 'n samehangende en ligter dokument te verkry.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q2">
+      <segment>
+        <source>Mes images sont-elles rognées sur une page A4 ?</source>
+        <target state="translated">Word my beelde afgesny op 'n A4-bladsy?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a2">
+      <segment>
+        <source>Non. L’image est réduite ou agrandie proportionnellement pour tenir dans la page et les marges. Des bandes blanches peuvent apparaître si son ratio diffère de celui de la page.</source>
+        <target state="translated">Nee. Die beeld word proporsioneel verklein of vergroot om in die bladsy en die marges te pas. Wit bande kan verskyn as sy verhouding verskil van die bladsy se.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_q3">
+      <segment>
+        <source>Pourquoi une très grande image est-elle refusée ?</source>
+        <target state="translated">Waarom word 'n baie groot beeld geweier?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_images_to_pdf_a3">
+      <segment>
+        <source>Une image compressée de quelques mégaoctets peut occuper beaucoup plus de mémoire une fois décodée. Les limites de dimensions et de pixels évitent qu’un fichier épuise la mémoire, notamment sur mobile.</source>
+        <target state="translated">'n Gecomprimeerde beeld van 'n paar megabyte kan baie meer geheue in beslag neem sodra dit gedecodeer word. Die grense van afmetings en pixels voorkom dat 'n lêer die geheue uitput, veral op mobiele toestelle.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Terug na PDF-hulpmiddels</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_title">
+      <segment>
+        <source>Convertir des images en PDF</source>
+        <target state="translated">Omskakel beelde na PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_subtitle">
+      <segment>
+        <source>Assemblez des images PNG, JPEG ou WebP dans l’ordre voulu, choisissez le format des pages, les marges et la compression, puis téléchargez un seul PDF.</source>
+        <target state="translated">Versamel PNG, JPEG of WebP beelde in die gewenste volgorde, kies die bladformate, marges en kompressie, en laai dan 'n enkele PDF af.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_privacy">
+      <segment>
+        <source>Aucun envoi : les images et le PDF restent dans votre navigateur.</source>
+        <target state="translated">Geen oordrag: die beelde en die PDF bly in jou blaaier.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Stap 1</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_source_title">
+      <segment>
+        <source>Choisir les images</source>
+        <target state="translated">Kies die beelde</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_loaded">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> image(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> beeld(e)</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick">
+      <segment>
+        <source>Sélectionner ou déposer des images</source>
+        <target state="translated">Kies of sleep beelde</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_pick_help">
+      <segment>
+        <source>PNG, JPEG ou WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> fichiers · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> par image · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> au total</source>
+        <target state="translated">PNG, JPEG of WebP · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFiles }}"/> lêers · <ph id="1" equiv="INTERPOLATION_1" disp="{{ maxFileSizeLabel }}"/> per beeld · <ph id="2" equiv="INTERPOLATION_2" disp="{{ maxTotalSizeLabel }}"/> in totaal</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_inspecting">
+      <segment>
+        <source>Vérification des images <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</source>
+        <target state="translated">Bevestiging van die beelde <ph id="0" equiv="INTERPOLATION" disp="{{ progress().completed }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ progress().total }}"/>…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Stap 2</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_settings">
+      <segment>
+        <source>Organiser et régler le PDF</source>
+        <target state="translated">Organiseer en stel die PDF in</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_page_format">
+      <segment>
+        <source>Format des pages</source>
+        <target state="translated">Bladsyformate</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin">
+      <segment>
+        <source>Marges</source>
+        <target state="translated">Marges</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_margin_none">
+      <segment>
+        <source>Sans marge</source>
+        <target state="translated">Geen marge</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression">
+      <segment>
+        <source>Compression</source>
+        <target state="translated">Kompressie</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_help">
+      <segment>
+        <source>Le mode compact convertit les transparences sur fond blanc et réduit davantage la qualité JPEG.</source>
+        <target state="translated">Die kompakte modus omskakel die deurskynendhede op 'n wit agtergrond en verminder verder die JPEG-gehalte.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_size">
+      <segment>
+        <source>Entrée</source>
+        <target state="translated">Invoer</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_summary_pixels">
+      <segment>
+        <source>Pixels</source>
+        <target state="translated">Pixels</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_order_help">
+      <segment>
+        <source>Glissez les cartes pour changer l’ordre des pages, ou utilisez les boutons monter et descendre.</source>
+        <target state="translated">Sleep die kaarte om die volgorde van die bladsye te verander, of gebruik die knoppies om op en af te beweeg.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generate">
+      <segment>
+        <source>Créer le PDF</source>
+        <target state="translated">Skep die PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Herstel</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_generating">
+      <segment>
+        <source>Création locale du PDF…</source>
+        <target state="translated">Plaaslike generering van die PDF…</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Stap 3</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_title">
+      <segment>
+        <source>PDF prêt à télécharger</source>
+        <target state="translated">PDF gereed om af te laai</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_result_summary">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> page(s) · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ images().length }}"/> bladsy(e) · <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(pdf.size) }}"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_download">
+      <segment>
+        <source>Télécharger le PDF</source>
+        <target state="translated">Laai die PDF af</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">Wenke</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order">
+      <segment>
+        <source>Ordre des pages</source>
+        <target state="translated">Volgorde van bladsye</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_order_text">
+      <segment>
+        <source>La première carte devient la première page. Les boutons restent utilisables au clavier et sur mobile quand le glisser-déposer n’est pas pratique.</source>
+        <target state="translated">Die eerste kaart word die eerste bladsy. Die knoppies bly beskikbaar op die sleutelbord en op mobiele toestelle wanneer sleep-en-laat nie prakties is.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format">
+      <segment>
+        <source>Format et marges</source>
+        <target state="translated">Formaat en marges</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_format_text">
+      <segment>
+        <source>A4 et Lettre US placent chaque image sans la rogner. Le format « taille de l’image » crée une page adaptée à chaque fichier à 96 pixels par pouce.</source>
+        <target state="translated">A4 en US Letter plaas elke beeld sonder om dit te sny. Die "beeldgrootte" formaat skep 'n bladsy wat by elke lêer pas teen 96 pixels per duim.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits">
+      <segment>
+        <source>Limites locales</source>
+        <target state="translated">Plaaslike beperkings</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_guide_limits_text">
+      <segment>
+        <source>Le nombre, le poids et les pixels sont bornés avant décodage. La création s’exécute dans un Worker pour préserver la réactivité de la page.</source>
+        <target state="translated">Die aantal, gewig en pixels is beperk voor dekodering. Die generering vind plaas in 'n werker om die responsiwiteit van die bladsy te behou.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_image">
+      <segment>
+        <source>Taille de l’image</source>
+        <target state="translated">Beeldgrootte</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_portrait">
+      <segment>
+        <source>A4 portrait</source>
+        <target state="translated">A4 portret</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_a4_landscape">
+      <segment>
+        <source>A4 paysage</source>
+        <target state="translated">A4 landskap</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_portrait">
+      <segment>
+        <source>Lettre US portrait</source>
+        <target state="translated">US Letter portret</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_format_letter_landscape">
+      <segment>
+        <source>Lettre US paysage</source>
+        <target state="translated">US Letter landskap</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_quality">
+      <segment>
+        <source>Qualité élevée</source>
+        <target state="translated">Hoë kwaliteit</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_balanced">
+      <segment>
+        <source>Équilibrée</source>
+        <target state="translated">Gebalanseerd</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_compression_compact">
+      <segment>
+        <source>PDF compact</source>
+        <target state="translated">Kompakte PDF</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_preview_alt">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></source>
+        <target state="translated">Bladsy <ph id="0" equiv="pageNumber" disp="String(index + 1)"/> : <ph id="1" equiv="fileName" disp="image.fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_up">
+      <segment>
+        <source>Monter <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Styg <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_move_down">
+      <segment>
+        <source>Descendre <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Daal <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_remove">
+      <segment>
+        <source>Retirer <ph id="0" equiv="fileName" disp="fileName"/></source>
+        <target state="translated">Verwyder <ph id="0" equiv="fileName" disp="fileName"/></target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_count">
+      <segment>
+        <source>Sélectionnez au maximum <ph id="0" equiv="limit" disp="this.maxFiles"/> images.</source>
+        <target state="translated">Kies maksimum <ph id="0" equiv="limit" disp="this.maxFiles"/> beelde.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_file_size">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> oorskry <ph id="1" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_total_size">
+      <segment>
+        <source>La sélection dépasse <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>.</source>
+        <target state="translated">Die keuse oorskry <ph id="0" equiv="limit" disp="this.maxTotalSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_unsupported">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> n’est pas une image PNG, JPEG ou WebP valide.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> is nie 'n geldige PNG, JPEG of WebP beeld nie.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_dimensions">
+      <segment>
+        <source><ph id="0" equiv="fileName" disp="fileName"/> dépasse les dimensions ou le nombre de pixels autorisés.</source>
+        <target state="translated"><ph id="0" equiv="fileName" disp="fileName"/> oorskry die toegelate afmetings of aantal pixels.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_pixels">
+      <segment>
+        <source>La sélection dépasse le budget de pixels sûr. Réduisez le nombre ou les dimensions des images.</source>
+        <target state="translated">Die seleksie oorskry die veilige pixelbegroting. Verminder die aantal of afmetings van die beelde.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_output">
+      <segment>
+        <source>Le PDF généré dépasse la taille de sortie autorisée.</source>
+        <target state="translated">Die gegenereerde PDF oorskry die toegelate uitvoergrootte.</target>
+      </segment>
+    </unit>
+    <unit id="images_to_pdf_error_generic">
+      <segment>
+        <source>Impossible de créer le PDF. Une image peut être endommagée ou non prise en charge par ce navigateur.</source>
+        <target state="translated">Dit is nie moontlik om die PDF te skep nie. 'n Beeld mag beskadig wees of nie deur hierdie blaaier ondersteun word nie.</target>
       </segment>
     </unit>
   </file>

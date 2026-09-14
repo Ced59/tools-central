@@ -1,0 +1,101 @@
+<main class="tool-page">
+  <header class="tool-hero">
+    <div class="tool-hero__inner">
+      <a class="back-link" routerLink="/categories/dev/pdf"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@images_to_pdf_back">Retour aux outils PDF</span></a>
+      <h1 i18n="@@images_to_pdf_title">Convertir des images en PDF</h1>
+      <p i18n="@@images_to_pdf_subtitle">Assemblez des images PNG, JPEG ou WebP dans l’ordre voulu, choisissez le format des pages, les marges et la compression, puis téléchargez un seul PDF.</p>
+      <p class="privacy-note"><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><span i18n="@@images_to_pdf_privacy">Aucun envoi : les images et le PDF restent dans votre navigateur.</span></p>
+    </div>
+  </header>
+
+  <div class="tool-content">
+    <section class="tool-card" aria-labelledby="images-to-pdf-source-title">
+      <div class="card-heading">
+        <div><p class="eyebrow" i18n="@@images_to_pdf_step_one">Étape 1</p><h2 id="images-to-pdf-source-title" i18n="@@images_to_pdf_source_title">Choisir les images</h2></div>
+        @if (images().length > 0) { <span class="status-badge status-badge--ok" i18n="@@images_to_pdf_loaded">{{ images().length }} image(s)</span> }
+      </div>
+      <label class="file-picker" (dragover)="allowFileDrop($event)" (drop)="dropFiles($event)">
+        <i class="tc-icon tc-icon-images" aria-hidden="true"></i>
+        <span class="file-picker__title" i18n="@@images_to_pdf_pick">Sélectionner ou déposer des images</span>
+        <span i18n="@@images_to_pdf_pick_help">PNG, JPEG ou WebP · {{ maxFiles }} fichiers · {{ maxFileSizeLabel }} par image · {{ maxTotalSizeLabel }} au total</span>
+        <input type="file" multiple accept=".png,.jpg,.jpeg,.webp,image/png,image/jpeg,image/webp" [disabled]="isBusy()" (change)="selectFiles($event)" />
+      </label>
+      @if (state() === 'inspecting') {
+        <div class="live-state" role="status"><span class="spinner" aria-hidden="true"></span><span i18n="@@images_to_pdf_inspecting">Vérification des images {{ progress().completed }} / {{ progress().total }}…</span></div>
+      }
+      @if (errorMessage()) {
+        <p class="alert alert--error" role="alert"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>{{ errorMessage() }}</p>
+      }
+    </section>
+
+    @if (images().length > 0) {
+      <section class="tool-card settings-card" aria-labelledby="images-to-pdf-settings-title">
+        <div class="card-heading"><div><p class="eyebrow" i18n="@@images_to_pdf_step_two">Étape 2</p><h2 id="images-to-pdf-settings-title" i18n="@@images_to_pdf_settings">Organiser et régler le PDF</h2></div></div>
+        <div class="settings-grid">
+          <div class="field">
+            <label for="images-to-pdf-page-format" i18n="@@images_to_pdf_page_format">Format des pages</label>
+            <select id="images-to-pdf-page-format" [value]="pageFormat()" [disabled]="isBusy()" (change)="updatePageFormat($event)">
+              @for (format of pageFormats; track format) { <option [value]="format">{{ pageFormatLabel(format) }}</option> }
+            </select>
+          </div>
+          <div class="field">
+            <label for="images-to-pdf-margin" i18n="@@images_to_pdf_margin">Marges</label>
+            <select id="images-to-pdf-margin" [value]="marginMm()" [disabled]="isBusy()" (change)="updateMargin($event)">
+              <option value="0" i18n="@@images_to_pdf_margin_none">Sans marge</option>
+              <option value="10">10 mm</option><option value="20">20 mm</option><option value="30">30 mm</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="images-to-pdf-compression" i18n="@@images_to_pdf_compression">Compression</label>
+            <select id="images-to-pdf-compression" [value]="compression()" [disabled]="isBusy()" (change)="updateCompression($event)">
+              @for (option of compressions; track option) { <option [value]="option">{{ compressionLabel(option) }}</option> }
+            </select>
+            <small i18n="@@images_to_pdf_compression_help">Le mode compact convertit les transparences sur fond blanc et réduit davantage la qualité JPEG.</small>
+          </div>
+          <dl class="selection-summary">
+            <div><dt i18n="@@images_to_pdf_summary_size">Entrée</dt><dd>{{ formatFileSize(totalInputBytes()) }}</dd></div>
+            <div><dt i18n="@@images_to_pdf_summary_pixels">Pixels</dt><dd>{{ formatNumber(totalPixels()) }}</dd></div>
+          </dl>
+        </div>
+
+        <p class="order-help" i18n="@@images_to_pdf_order_help">Glissez les cartes pour changer l’ordre des pages, ou utilisez les boutons monter et descendre.</p>
+        <div class="image-grid" data-testid="images-to-pdf-list">
+          @for (image of images(); track image.id; let index = $index; let first = $first; let last = $last) {
+            <article class="image-card" draggable="true" (dragstart)="startImageDrag(image.id, $event)" (dragover)="allowImageDrop($event)" (drop)="dropImage(image.id, $event)">
+              <div class="page-preview" [style.aspect-ratio]="pageAspectRatio(image)"><img [src]="image.objectUrl" [alt]="previewAlt(image, index)" [style.width.%]="previewImageWidth(image)" [style.height.%]="previewImageHeight(image)" /></div>
+              <div class="image-card__copy"><strong><span class="page-number">{{ index + 1 }}</span>{{ image.fileName }}</strong><span>{{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.size) }}</span></div>
+              <div class="image-card__actions">
+                <button type="button" class="icon-button" [disabled]="first || isBusy()" (click)="moveImage(image.id, -1)" [attr.aria-label]="moveUpLabel(image.fileName)"><i class="tc-icon tc-icon-arrow-up" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button" [disabled]="last || isBusy()" (click)="moveImage(image.id, 1)" [attr.aria-label]="moveDownLabel(image.fileName)"><i class="tc-icon tc-icon-arrow-down" aria-hidden="true"></i></button>
+                <button type="button" class="icon-button icon-button--danger" [disabled]="isBusy()" (click)="removeImage(image.id)" [attr.aria-label]="removeLabel(image.fileName)"><i class="tc-icon tc-icon-trash" aria-hidden="true"></i></button>
+              </div>
+            </article>
+          }
+        </div>
+
+        <button type="button" class="primary-button" [disabled]="!canGenerate()" (click)="generate()"><i class="tc-icon tc-icon-file" aria-hidden="true"></i><span i18n="@@images_to_pdf_generate">Créer le PDF</span></button>
+        <button type="button" class="reset-button" [disabled]="isBusy()" (click)="reset()" i18n="@@images_to_pdf_reset">Réinitialiser</button>
+      </section>
+    }
+
+    @if (state() === 'generating') {
+      <section class="tool-card progress-card" aria-live="polite">
+        <div class="progress-copy"><strong i18n="@@images_to_pdf_generating">Création locale du PDF…</strong><span>{{ progress().completed }} / {{ progress().total }}</span></div>
+        <progress [value]="progress().completed" [max]="progress().total"></progress>
+      </section>
+    }
+
+    @if (generatedPdf(); as pdf) {
+      <section class="tool-card result-card" data-testid="images-to-pdf-result" aria-labelledby="images-to-pdf-result-title">
+        <div><p class="eyebrow" i18n="@@images_to_pdf_step_three">Étape 3</p><h2 id="images-to-pdf-result-title" i18n="@@images_to_pdf_result_title">PDF prêt à télécharger</h2><p i18n="@@images_to_pdf_result_summary">{{ images().length }} page(s) · {{ formatFileSize(pdf.size) }}</p></div>
+        <button type="button" class="primary-button" (click)="download()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@images_to_pdf_download">Télécharger le PDF</span></button>
+      </section>
+    }
+
+    <section class="guidance-grid" aria-label="Conseils" i18n-aria-label="@@images_to_pdf_guidance">
+      <div><i class="tc-icon tc-icon-arrows-v" aria-hidden="true"></i><h3 i18n="@@images_to_pdf_guide_order">Ordre des pages</h3><p i18n="@@images_to_pdf_guide_order_text">La première carte devient la première page. Les boutons restent utilisables au clavier et sur mobile quand le glisser-déposer n’est pas pratique.</p></div>
+      <div><i class="tc-icon tc-icon-th-large" aria-hidden="true"></i><h3 i18n="@@images_to_pdf_guide_format">Format et marges</h3><p i18n="@@images_to_pdf_guide_format_text">A4 et Lettre US placent chaque image sans la rogner. Le format « taille de l’image » crée une page adaptée à chaque fichier à 96 pixels par pouce.</p></div>
+      <div><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><h3 i18n="@@images_to_pdf_guide_limits">Limites locales</h3><p i18n="@@images_to_pdf_guide_limits_text">Le nombre, le poids et les pixels sont bornés avant décodage. La création s’exécute dans un Worker pour préserver la réactivité de la page.</p></div>
+    </section>
+  </div>
+</main>
