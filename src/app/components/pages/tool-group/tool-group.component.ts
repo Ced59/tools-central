@@ -64,7 +64,7 @@ export class ToolGroupComponent implements OnInit {
     const tools: AtomicToolItem[] = ATOMIC_TOOL_LIST.filter(t =>
       t.category === this.categoryId
       && t.group === this.groupId
-      && isToolPublishedForLocale(t, this.locale)
+      && (!t.available || isToolPublishedForLocale(t, this.locale))
     );
 
     const mapTool = (t: AtomicToolItem): ToolCardItem => ({

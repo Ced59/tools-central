@@ -18,7 +18,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. N
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 657,05 kB brut, 165,62 kB transféré estimé |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 117 fichiers, 295 tests verts sous Vitest |
+| Tests unitaires | suite non compilable | 117 fichiers, 296 tests verts sous Vitest |
 | Couverture | aucun seuil | 46,07 % statements, 32,52 % branches, 46,03 % fonctions, 49,33 % lignes |
 | E2E | aucun | 11 parcours Playwright verts |
 | Routes statiques | 2 | 81 routes de base + une 404 prérendues par locale, soit 2 460 pages ; 2 401 URL sont indexables après filtrage éditorial par locale |

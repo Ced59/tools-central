@@ -59,7 +59,7 @@ export class ToolRegistryService {
         t =>
           t.category === category
           && t.group === group
-          && isToolPublishedForLocale(t, this.locale)
+          && (!t.available || isToolPublishedForLocale(t, this.locale))
       )
       .sort((a, b) => a.title.localeCompare(b.title));
   }

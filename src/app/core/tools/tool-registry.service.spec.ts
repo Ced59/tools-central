@@ -24,4 +24,12 @@ describe('ToolRegistryService', () => {
 
     expect(component).toBeNull();
   });
+
+  it('masque les variantes disponibles non relues sans retirer les outils planifiés', () => {
+    const seoTools = service.listToolsByGroup('dev', 'seo');
+    const pdfTools = service.listToolsByGroup('dev', 'pdf');
+
+    expect(seoTools.some(tool => tool.id === 'software-application-schema-builder')).toBe(false);
+    expect(pdfTools.some(tool => !tool.available)).toBe(true);
+  });
 });
