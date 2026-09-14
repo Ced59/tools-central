@@ -65,4 +65,14 @@ describe('OOXML metadata domain', () => {
     expect(() => inspectZipDirectory(bytes))
       .toThrow(expect.objectContaining({ code: 'unsafe-entry-path' }));
   });
+
+  it.each([
+    './docProps/core.xml',
+    'docProps//core.xml',
+    './_xmlsignatures/sig1.xml',
+  ])('rejects the non-canonical ZIP path %s before JSZip can normalize it', async path => {
+    const bytes = await createDocx(zip => zip.file(path, '<unsafe/>'));
+    expect(() => inspectZipDirectory(bytes))
+      .toThrow(expect.objectContaining({ code: 'unsafe-entry-path' }));
+  });
 });

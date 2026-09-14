@@ -34,6 +34,42 @@ async function createPackage(kind: OoxmlDocumentKind): Promise<Uint8Array> {
   return zip.generateAsync({ type: 'uint8array' });
 }
 
+function encodeUtf16Le(value: string): Uint8Array {
+  const output = new Uint8Array(value.length * 2 + 2);
+  output.set([0xff, 0xfe]);
+  for (let index = 0; index < value.length; index += 1) {
+    const codeUnit = value.charCodeAt(index);
+    output[index * 2 + 2] = codeUnit & 0xff;
+    output[index * 2 + 3] = codeUnit >>> 8;
+  }
+  return output;
+}
+
+function forgeCentralUncompressedSize(
+  source: Uint8Array,
+  targetName: string,
+  size: number,
+): Uint8Array {
+  const output = source.slice();
+  for (let offset = 0; offset + 46 <= output.byteLength; offset += 1) {
+    if (
+      output[offset] !== 0x50
+      || output[offset + 1] !== 0x4b
+      || output[offset + 2] !== 0x01
+      || output[offset + 3] !== 0x02
+    ) continue;
+    const fileNameLength = output[offset + 28] | (output[offset + 29] << 8);
+    const name = new TextDecoder().decode(output.subarray(offset + 46, offset + 46 + fileNameLength));
+    if (name !== targetName) continue;
+    output[offset + 24] = size & 0xff;
+    output[offset + 25] = (size >>> 8) & 0xff;
+    output[offset + 26] = (size >>> 16) & 0xff;
+    output[offset + 27] = (size >>> 24) & 0xff;
+    return output;
+  }
+  throw new Error(`Central directory entry not found: ${targetName}`);
+}
+
 describe('sanitizeOoxmlBuffer', () => {
   it.each(['docx', 'xlsx', 'pptx'] as const)('cleans %s package properties and preserves content', async kind => {
     const progress: number[] = [];
@@ -92,6 +128,51 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.removed).toHaveLength(500);
     expect(result.report.remaining).toHaveLength(0);
     expect(result.report.truncatedFindingCount).toBe(107);
+  });
+
+  it('bounds bytes actually emitted by DEFLATE when the directory understates the size', async () => {
+    const zip = new JSZip();
+    zip.file('[Content_Types].xml', '<Types/>');
+    zip.file('_rels/.rels', '<Relationships/>');
+    zip.file('word/document.xml', `<document>${'A'.repeat(2 * 1_024 * 1_024)}</document>`);
+    const bytes = await zip.generateAsync({
+      type: 'uint8array',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 9 },
+    });
+    const forged = forgeCentralUncompressedSize(bytes, 'word/document.xml', 16);
+
+    await expect(sanitizeOoxmlBuffer(forged, 'docx', allOptions))
+      .rejects.toEqual(expect.objectContaining({
+        code: 'compression-ratio-exceeded',
+        entryName: 'word/document.xml',
+      }));
+  });
+
+  it('preserves UTF-16 XML encoding while removing thumbnail references', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const relationships = '<?xml version="1.0" encoding="UTF-16"?>'
+      + '<Relationships><Relationship Id="rThumb" '
+      + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" '
+      + 'Target="docProps/thumbnail.jpeg"/></Relationships>';
+    const contentTypes = '<?xml version="1.0" encoding="UTF-16"?>'
+      + '<Types><Override PartName="/docProps/thumbnail.jpeg" ContentType="image/jpeg"/></Types>';
+    source.file('_rels/.rels', encodeUtf16Le(relationships));
+    source.file('[Content_Types].xml', encodeUtf16Le(contentTypes));
+    const bytes = await source.generateAsync({ type: 'uint8array' });
+
+    const result = await sanitizeOoxmlBuffer(bytes, 'docx', allOptions);
+    const output = await JSZip.loadAsync(result.output);
+    const relationshipBytes = await output.file('_rels/.rels')?.async('uint8array');
+    const contentTypeBytes = await output.file('[Content_Types].xml')?.async('uint8array');
+
+    expect(relationshipBytes).toBeDefined();
+    expect(contentTypeBytes).toBeDefined();
+    if (!relationshipBytes || !contentTypeBytes) throw new Error('Expected XML package parts.');
+    expect(relationshipBytes.subarray(0, 2)).toEqual(new Uint8Array([0xff, 0xfe]));
+    expect(contentTypeBytes.subarray(0, 2)).toEqual(new Uint8Array([0xff, 0xfe]));
+    expect(new TextDecoder('utf-16le').decode(relationshipBytes)).not.toContain('thumbnail');
+    expect(new TextDecoder('utf-16le').decode(contentTypeBytes)).not.toContain('thumbnail');
   });
 
   it('rejects a ZIP whose contents do not match the chosen extension', async () => {

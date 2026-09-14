@@ -2,7 +2,10 @@ import { decodeXML } from 'entities';
 import JSZip, { type JSZipObject } from 'jszip';
 
 import {
+  OOXML_METADATA_MAX_COMPRESSION_RATIO,
+  OOXML_METADATA_MAX_ENTRY_BYTES,
   OOXML_METADATA_MAX_OUTPUT_BYTES,
+  OOXML_METADATA_MAX_UNCOMPRESSED_BYTES,
   OOXML_METADATA_MAX_XML_BYTES,
   OoxmlArchiveError,
   hasRequiredOoxmlParts,
@@ -97,14 +100,21 @@ export async function sanitizeOoxmlBuffer(
   validateMetadataPartSizes(inspection.entries);
   onProgress?.(8);
 
+  const actualUncompressedBytes = await validateInflatedArchive(
+    data,
+    inspection.entries,
+    onProgress,
+  );
+  onProgress?.(24);
+
   let zip: JSZip;
   try {
-    zip = await JSZip.loadAsync(data, { checkCRC32: true, createFolders: false });
+    zip = await JSZip.loadAsync(data, { checkCRC32: false, createFolders: false });
   } catch (error: unknown) {
     if (error instanceof OoxmlArchiveError) throw error;
     throw new OoxmlMetadataEngineError('corrupt-document');
   }
-  onProgress?.(24);
+  validateLoadedArchiveNames(zip, inspection.entries);
 
   const entriesByLowerName = new Map(
     inspection.entries.map(entry => [entry.name.toLowerCase(), entry] as const),
@@ -147,7 +157,7 @@ export async function sanitizeOoxmlBuffer(
 
   const removed = detected.filter(finding => removedScopes.has(finding.scope));
   const remaining = detected.filter(finding => !removedScopes.has(finding.scope));
-  const report = createReport(kind, inspection.entries.length, inspection.uncompressedBytes, detected, removed, remaining);
+  const report = createReport(kind, inspection.entries.length, actualUncompressedBytes, detected, removed, remaining);
   onProgress?.(36);
 
   let output: Uint8Array;
@@ -171,6 +181,147 @@ export async function sanitizeOoxmlBuffer(
   onProgress?.(100);
   return { output, report };
 }
+
+function validateLoadedArchiveNames(
+  zip: JSZip,
+  entries: readonly ZipDirectoryEntry[],
+): void {
+  const expectedNames = new Set(entries.map(entry => entry.name));
+  for (const file of Object.values(zip.files)) {
+    if (
+      !expectedNames.delete(file.name)
+      || (file.unsafeOriginalName !== undefined && file.unsafeOriginalName !== file.name)
+    ) {
+      throw new OoxmlArchiveError('unsafe-entry-path', file.unsafeOriginalName ?? file.name);
+    }
+  }
+  if (expectedNames.size > 0) throw new OoxmlArchiveError('invalid-zip');
+}
+
+async function validateInflatedArchive(
+  data: Uint8Array,
+  entries: readonly ZipDirectoryEntry[],
+  onProgress?: (percent: number) => void,
+): Promise<number> {
+  const fileEntries = entries.filter(entry => !entry.directory);
+  let totalBytes = 0;
+
+  for (let index = 0; index < fileEntries.length; index += 1) {
+    const entry = fileEntries[index];
+    const result = await inspectInflatedEntry(data, entry, totalBytes);
+    if (result.size !== entry.uncompressedSize || result.crc32 !== entry.crc32) {
+      throw new OoxmlArchiveError('invalid-zip', entry.name);
+    }
+    totalBytes += result.size;
+    onProgress?.(10 + Math.round(((index + 1) / Math.max(1, fileEntries.length)) * 13));
+  }
+
+  return totalBytes;
+}
+
+function inspectInflatedEntry(
+  data: Uint8Array,
+  entry: ZipDirectoryEntry,
+  previousTotalBytes: number,
+): Promise<{ size: number; crc32: number }> {
+  const compressed = data.subarray(
+    entry.dataOffset,
+    entry.dataOffset + entry.compressedSize,
+  );
+  if (entry.compressionMethod === 0) {
+    const result = inspectInflatedChunk(compressed, entry, previousTotalBytes);
+    return Promise.resolve({
+      size: result.size,
+      crc32: (result.crc32 ^ 0xffffffff) >>> 0,
+    });
+  }
+  return inspectDeflatedEntry(compressed, entry, previousTotalBytes);
+}
+
+async function inspectDeflatedEntry(
+  compressed: Uint8Array,
+  entry: ZipDirectoryEntry,
+  previousTotalBytes: number,
+): Promise<{ size: number; crc32: number }> {
+  let reader: ReadableStreamDefaultReader<Uint8Array>;
+  try {
+    const compressedBuffer = compressed.buffer.slice(
+      compressed.byteOffset,
+      compressed.byteOffset + compressed.byteLength,
+    ) as ArrayBuffer;
+    const input = new ReadableStream<BufferSource>({
+      start(controller) {
+        controller.enqueue(compressedBuffer);
+        controller.close();
+      },
+    });
+    const stream = input
+      .pipeThrough(new DecompressionStream('deflate-raw'));
+    reader = stream.getReader();
+  } catch {
+    throw new OoxmlArchiveError('invalid-zip', entry.name);
+  }
+
+  let result = { size: 0, crc32: 0xffffffff };
+  try {
+    for (;;) {
+      const chunk = await reader.read();
+      if (chunk.done) break;
+      result = inspectInflatedChunk(
+        chunk.value,
+        entry,
+        previousTotalBytes,
+        result,
+      );
+    }
+  } catch (error: unknown) {
+    await reader.cancel().catch(() => undefined);
+    if (error instanceof OoxmlArchiveError) throw error;
+    throw new OoxmlArchiveError('invalid-zip', entry.name);
+  } finally {
+    reader.releaseLock();
+  }
+  return { size: result.size, crc32: (result.crc32 ^ 0xffffffff) >>> 0 };
+}
+
+function inspectInflatedChunk(
+  chunk: Uint8Array,
+  entry: ZipDirectoryEntry,
+  previousTotalBytes: number,
+  previous = { size: 0, crc32: 0xffffffff },
+): { size: number; crc32: number } {
+  const size = previous.size + chunk.byteLength;
+  if (size > OOXML_METADATA_MAX_ENTRY_BYTES) {
+    throw new OoxmlArchiveError('entry-too-large', entry.name);
+  }
+  if (previousTotalBytes + size > OOXML_METADATA_MAX_UNCOMPRESSED_BYTES) {
+    throw new OoxmlArchiveError('archive-too-large', entry.name);
+  }
+  if (
+    size > 1_024 * 1_024
+    && entry.compressedSize > 0
+    && size / entry.compressedSize > OOXML_METADATA_MAX_COMPRESSION_RATIO
+  ) {
+    throw new OoxmlArchiveError('compression-ratio-exceeded', entry.name);
+  }
+  return { size, crc32: updateCrc32(previous.crc32, chunk) };
+}
+
+function updateCrc32(crc32: number, chunk: Uint8Array): number {
+  let value = crc32;
+  for (const byte of chunk) {
+    value = CRC32_TABLE[(value ^ byte) & 0xff] ^ (value >>> 8);
+  }
+  return value;
+}
+
+const CRC32_TABLE = Uint32Array.from({ length: 256 }, (_, index) => {
+  let value = index;
+  for (let bit = 0; bit < 8; bit += 1) {
+    value = (value & 1) !== 0 ? 0xedb88320 ^ (value >>> 1) : value >>> 1;
+  }
+  return value >>> 0;
+});
 
 async function collectPartFindings(
   files: ReadonlyMap<string, JSZipObject>,
@@ -262,14 +413,87 @@ async function removeThumbnails(
   }
   const relationships = files.get('_rels/.rels');
   if (relationships) {
-    const xml = await relationships.async('string');
-    zip.file(relationships.name, stripThumbnailRelationships(xml));
+    await rewriteXmlPart(zip, relationships, stripThumbnailRelationships);
   }
   const contentTypes = files.get('[content_types].xml');
   if (contentTypes) {
-    const xml = await contentTypes.async('string');
-    zip.file(contentTypes.name, stripThumbnailOverrides(xml));
+    await rewriteXmlPart(zip, contentTypes, stripThumbnailOverrides);
   }
+}
+
+type XmlEncoding = 'utf-8' | 'utf-16le' | 'utf-16be';
+
+interface DecodedXmlPart {
+  text: string;
+  encoding: XmlEncoding;
+  hasBom: boolean;
+}
+
+async function rewriteXmlPart(
+  zip: JSZip,
+  file: JSZipObject,
+  transform: (xml: string) => string,
+): Promise<void> {
+  try {
+    const decoded = decodeXmlPart(await file.async('uint8array'));
+    const transformed = transform(decoded.text);
+    if (transformed !== decoded.text) {
+      zip.file(file.name, encodeXmlPart(transformed, decoded.encoding, decoded.hasBom));
+    }
+  } catch (error: unknown) {
+    if (error instanceof OoxmlMetadataEngineError) throw error;
+    throw new OoxmlMetadataEngineError('corrupt-document', file.name);
+  }
+}
+
+function decodeXmlPart(data: Uint8Array): DecodedXmlPart {
+  let encoding: XmlEncoding = 'utf-8';
+  let bomLength = 0;
+  if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) {
+    bomLength = 3;
+  } else if (data[0] === 0xff && data[1] === 0xfe) {
+    encoding = 'utf-16le';
+    bomLength = 2;
+  } else if (data[0] === 0xfe && data[1] === 0xff) {
+    encoding = 'utf-16be';
+    bomLength = 2;
+  } else if (data[0] === 0x3c && data[1] === 0x00) {
+    encoding = 'utf-16le';
+  } else if (data[0] === 0x00 && data[1] === 0x3c) {
+    encoding = 'utf-16be';
+  }
+  const text = new TextDecoder(encoding, { fatal: true }).decode(data.subarray(bomLength));
+  return { text, encoding, hasBom: bomLength > 0 };
+}
+
+function encodeXmlPart(text: string, encoding: XmlEncoding, hasBom: boolean): Uint8Array {
+  if (encoding === 'utf-8') {
+    const payload = new TextEncoder().encode(text);
+    if (!hasBom) return payload;
+    const output = new Uint8Array(payload.byteLength + 3);
+    output.set([0xef, 0xbb, 0xbf]);
+    output.set(payload, 3);
+    return output;
+  }
+
+  const output = new Uint8Array(text.length * 2 + (hasBom ? 2 : 0));
+  let offset = 0;
+  if (hasBom) {
+    output.set(encoding === 'utf-16le' ? [0xff, 0xfe] : [0xfe, 0xff]);
+    offset = 2;
+  }
+  for (let index = 0; index < text.length; index += 1) {
+    const codeUnit = text.charCodeAt(index);
+    if (encoding === 'utf-16le') {
+      output[offset] = codeUnit & 0xff;
+      output[offset + 1] = codeUnit >>> 8;
+    } else {
+      output[offset] = codeUnit >>> 8;
+      output[offset + 1] = codeUnit & 0xff;
+    }
+    offset += 2;
+  }
+  return output;
 }
 
 function stripThumbnailRelationships(xml: string): string {

@@ -16,19 +16,19 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,08 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,15 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 132 fichiers, 391 tests verts sous Vitest |
-| Couverture | aucun seuil | 47,81 % statements, 34,30 % branches, 47,93 % fonctions, 51,18 % lignes |
+| Tests unitaires | suite non compilable | 132 fichiers, 397 tests verts sous Vitest |
+| Couverture | aucun seuil | 48,06 % statements, 34,65 % branches, 48,13 % fonctions, 51,43 % lignes |
 | E2E | aucun | 14 parcours Playwright verts |
 | Routes statiques | 2 | 85 routes de base + une 404 prérendues par locale, soit 2 580 pages ; 2 405 URL sont indexables après filtrage éditorial par locale |
-| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 174 outils, 67 disponibles en français et 65 dans les locales secondaires |
+| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 175 outils, 69 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 175 421 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 181 192 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 028 ms, CLS 0,0043, `DOMContentLoaded` 415 ms et interaction thème 66,4 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 064 ms, CLS 0,0043, `DOMContentLoaded` 507 ms et interaction thème 95,8 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
@@ -73,7 +73,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 028 ms, CLS 0,
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 6 049 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 175 421 segments techniquement complets.
+- 6 248 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 181 192 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -82,14 +82,14 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 - Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
 - Exclusion automatique des outils `available: false`.
 - Publication par locale pilotée par `reviewedLocales` : variantes non relues masquées du catalogue, absentes des sitemaps et `hreflang`, puis rendues en `noindex,follow` en accès direct.
-- 82 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- 85 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
 - Suppression du faux `lastmod` égal à la date de chaque build.
 - Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
 - Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
 - Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
 - Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
 - `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
-- Six outils issus du backlog, le prévisualiseur de snippet Google, le générateur/validateur robots.txt, le générateur/validateur sitemap XML, le vérificateur hreflang, l’extracteur de données structurées et l’auditeur de head HTML, sont publiables dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies. Le générateur SoftwareApplication est publié en français ; ses variantes secondaires restent hors index jusqu’à une relecture linguistique explicite.
+- Dix outils issus du backlog sont désormais livrés. Les six outils SEO initiaux sont publiables dans les 30 langues ; le générateur SoftwareApplication, PDF vers images, Images vers PDF et le nettoyeur de métadonnées OOXML sont publiés en français, leurs variantes secondaires restant hors index jusqu’à une relecture linguistique explicite.
 
 ### CI, GitHub et déploiement
 
@@ -113,7 +113,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 |---|---|---|
 | 29 locales traduites automatiquement sans preuve de revue native | contresens, confiance et qualité SEO variables | relire un cluster prioritaire par langue, tracer qui/quand/quoi et corriger avant extension |
 | SSH utilise encore `VPS_PASSWORD` | secret plus exposé et droits potentiellement larges | clé dédiée au déploiement, compte limité, rotation du mot de passe |
-| 107 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
+| 106 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
 
 ### P1 — migration progressive
 

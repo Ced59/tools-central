@@ -44,6 +44,8 @@ export interface OoxmlCleanedDocument {
 
 export interface ZipDirectoryEntry {
   name: string;
+  crc32: number;
+  dataOffset: number;
   compressedSize: number;
   uncompressedSize: number;
   compressionMethod: number;
@@ -140,11 +142,13 @@ export function inspectZipDirectory(data: Uint8Array): ZipDirectoryInspection {
     }
     const flags = readUint16(data, cursor + 8);
     const compressionMethod = readUint16(data, cursor + 10);
+    const crc32 = readUint32(data, cursor + 16);
     const compressedSize = readUint32(data, cursor + 20);
     const uncompressedSize = readUint32(data, cursor + 24);
     const fileNameLength = readUint16(data, cursor + 28);
     const extraLength = readUint16(data, cursor + 30);
     const commentLength = readUint16(data, cursor + 32);
+    const localHeaderOffset = readUint32(data, cursor + 42);
     const recordLength = 46 + fileNameLength + extraLength + commentLength;
     if (cursor + recordLength > endOffset || fileNameLength === 0) {
       throw new OoxmlArchiveError('invalid-zip');
@@ -155,15 +159,24 @@ export function inspectZipDirectory(data: Uint8Array): ZipDirectoryInspection {
 
     const name = decodeFileName(data.subarray(cursor + 46, cursor + 46 + fileNameLength));
     validateEntryPath(name);
-    const normalizedName = name.toLowerCase();
-    if (names.has(normalizedName)) throw new OoxmlArchiveError('duplicate-entry', name);
-    names.add(normalizedName);
-
     const encrypted = (flags & 0x0001) !== 0;
     if (encrypted) throw new OoxmlArchiveError('encrypted-entry', name);
     if (compressionMethod !== 0 && compressionMethod !== 8) {
       throw new OoxmlArchiveError('unsupported-compression', name);
     }
+    const dataOffset = readLocalDataOffset(
+      data,
+      localHeaderOffset,
+      centralDirectoryOffset,
+      name,
+      flags,
+      compressionMethod,
+      compressedSize,
+    );
+    const normalizedName = name.toLowerCase();
+    if (names.has(normalizedName)) throw new OoxmlArchiveError('duplicate-entry', name);
+    names.add(normalizedName);
+
     if (uncompressedSize > OOXML_METADATA_MAX_ENTRY_BYTES) {
       throw new OoxmlArchiveError('entry-too-large', name);
     }
@@ -182,6 +195,8 @@ export function inspectZipDirectory(data: Uint8Array): ZipDirectoryInspection {
     }
     entries.push({
       name,
+      crc32,
+      dataOffset,
       compressedSize,
       uncompressedSize,
       compressionMethod,
@@ -197,6 +212,42 @@ export function inspectZipDirectory(data: Uint8Array): ZipDirectoryInspection {
   return { entries, compressedBytes, uncompressedBytes };
 }
 
+function readLocalDataOffset(
+  data: Uint8Array,
+  localHeaderOffset: number,
+  centralDirectoryOffset: number,
+  centralName: string,
+  centralFlags: number,
+  centralCompressionMethod: number,
+  compressedSize: number,
+): number {
+  if (
+    localHeaderOffset + 30 > centralDirectoryOffset
+    || readUint32(data, localHeaderOffset) !== 0x04034b50
+  ) {
+    throw new OoxmlArchiveError('invalid-zip', centralName);
+  }
+  const localFlags = readUint16(data, localHeaderOffset + 6);
+  const localCompressionMethod = readUint16(data, localHeaderOffset + 8);
+  const localNameLength = readUint16(data, localHeaderOffset + 26);
+  const localExtraLength = readUint16(data, localHeaderOffset + 28);
+  const dataOffset = localHeaderOffset + 30 + localNameLength + localExtraLength;
+  if (dataOffset + compressedSize > centralDirectoryOffset) {
+    throw new OoxmlArchiveError('invalid-zip', centralName);
+  }
+  const localName = decodeFileName(
+    data.subarray(localHeaderOffset + 30, localHeaderOffset + 30 + localNameLength),
+  );
+  if (
+    localName !== centralName
+    || localFlags !== centralFlags
+    || localCompressionMethod !== centralCompressionMethod
+  ) {
+    throw new OoxmlArchiveError('invalid-zip', centralName);
+  }
+  return dataOffset;
+}
+
 function findEndOfCentralDirectory(data: Uint8Array): number {
   if (data.byteLength < 22) throw new OoxmlArchiveError('invalid-zip');
   const earliest = Math.max(0, data.byteLength - 65_557);
@@ -210,11 +261,12 @@ function findEndOfCentralDirectory(data: Uint8Array): number {
 
 function validateEntryPath(name: string): void {
   const parts = name.split('/');
+  const pathParts = name.endsWith('/') ? parts.slice(0, -1) : parts;
   if (
     name.includes('\\')
     || name.startsWith('/')
     || name.includes('\u0000')
-    || parts.some(part => part === '..')
+    || pathParts.some(part => part === '' || part === '.' || part === '..')
   ) {
     throw new OoxmlArchiveError('unsafe-entry-path', name);
   }
