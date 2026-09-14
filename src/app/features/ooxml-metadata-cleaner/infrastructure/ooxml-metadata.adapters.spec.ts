@@ -58,8 +58,7 @@ describe('OoxmlMetadataWorkerAdapter', () => {
     );
     expect(worker.postMessage).toHaveBeenCalledOnce();
     expect(progress).toHaveBeenCalledWith(42);
-    expect(result.blob.size).toBe(2);
-    expect(result.blob.type).toContain('wordprocessingml');
+    expect(result.bytes).toEqual(new Uint8Array([1, 2]));
     expect(worker.terminate).toHaveBeenCalledOnce();
   });
 

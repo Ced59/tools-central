@@ -27,7 +27,7 @@ function createUseCase(overrides?: {
     { read: overrides?.read ?? vi.fn(() => Promise.resolve(new Uint8Array([1, 2, 3]))) },
     {
       clean: overrides?.clean ?? vi.fn((_data: Uint8Array, kind: OoxmlDocumentKind) => Promise.resolve({
-        blob: new Blob(['clean']),
+        bytes: new TextEncoder().encode('clean'),
         report: {
           kind,
           detected: [],
@@ -55,7 +55,7 @@ describe('CleanOoxmlMetadataUseCase', () => {
     });
     expect(result.fileName).toBe('rapport-sans-metadonnees.docx');
     expect(result.report.kind).toBe('docx');
-    expect(result.blob.size).toBe(5);
+    expect(result.bytes.byteLength).toBe(5);
   });
 
   it.each([
@@ -108,10 +108,10 @@ describe('CleanOoxmlMetadataUseCase', () => {
 });
 
 describe('DownloadCleanedOoxmlUseCase', () => {
-  it('delegates the generated blob and safe file name', () => {
+  it('delegates browser-neutral bytes, document kind and safe file name', () => {
     const download = vi.fn<OoxmlMetadataDownloadPort['download']>();
     const document = {
-      blob: new Blob(['clean']),
+      bytes: new TextEncoder().encode('clean'),
       fileName: 'clean.docx',
       report: {
         kind: 'docx' as const,
@@ -127,6 +127,6 @@ describe('DownloadCleanedOoxmlUseCase', () => {
       },
     };
     new DownloadCleanedOoxmlUseCase({ download }).execute(document);
-    expect(download).toHaveBeenCalledWith(document.blob, 'clean.docx');
+    expect(download).toHaveBeenCalledWith(document.bytes, 'docx', 'clean.docx');
   });
 });

@@ -75,6 +75,25 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.remainingCount).toBe(5);
   });
 
+  it('caps each reported array even when custom properties are duplicated', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const properties = Array.from(
+      { length: 600 },
+      () => '<property name="Client"><vt:lpwstr xmlns:vt="vt">Identique</vt:lpwstr></property>',
+    ).join('');
+    source.file('docProps/custom.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    const bytes = await source.generateAsync({ type: 'uint8array' });
+
+    const result = await sanitizeOoxmlBuffer(bytes, 'docx', allOptions);
+
+    expect(result.report.detectedCount).toBe(607);
+    expect(result.report.removedCount).toBe(607);
+    expect(result.report.detected).toHaveLength(500);
+    expect(result.report.removed).toHaveLength(500);
+    expect(result.report.remaining).toHaveLength(0);
+    expect(result.report.truncatedFindingCount).toBe(107);
+  });
+
   it('rejects a ZIP whose contents do not match the chosen extension', async () => {
     await expect(sanitizeOoxmlBuffer(await createPackage('docx'), 'xlsx', allOptions))
       .rejects.toEqual(expect.objectContaining<OoxmlMetadataEngineError>({

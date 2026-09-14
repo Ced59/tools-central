@@ -327,12 +327,12 @@ function createReport(
   remaining: readonly OoxmlMetadataFinding[],
 ): OoxmlMetadataReport {
   const visibleDetected = detected.slice(0, MAX_REPORTED_FINDINGS);
-  const visibleKeys = new Set(visibleDetected.map(findingKey));
+  const removedFindings = new Set(removed);
   return {
     kind,
     detected: visibleDetected,
-    removed: removed.filter(finding => visibleKeys.has(findingKey(finding))),
-    remaining: remaining.filter(finding => visibleKeys.has(findingKey(finding))),
+    removed: visibleDetected.filter(finding => removedFindings.has(finding)),
+    remaining: visibleDetected.filter(finding => !removedFindings.has(finding)),
     detectedCount: detected.length,
     removedCount: removed.length,
     remainingCount: remaining.length,
@@ -340,8 +340,4 @@ function createReport(
     archiveEntryCount,
     uncompressedBytes,
   };
-}
-
-function findingKey(finding: OoxmlMetadataFinding): string {
-  return `${finding.scope}\u0000${finding.path}\u0000${finding.name}\u0000${finding.value}`;
 }

@@ -21,9 +21,13 @@ export interface OoxmlMetadataCleanerPort {
     options: OoxmlMetadataOptions,
     onProgress?: (percent: number) => void,
     signal?: AbortSignal,
-  ) => Promise<{ blob: Blob; report: OoxmlMetadataReport }>;
+  ) => Promise<{ bytes: Uint8Array; report: OoxmlMetadataReport }>;
 }
 
 export interface OoxmlMetadataDownloadPort {
-  readonly download: (blob: Blob, fileName: string) => void;
+  readonly download: (
+    bytes: Uint8Array,
+    kind: OoxmlDocumentKind,
+    fileName: string,
+  ) => void;
 }

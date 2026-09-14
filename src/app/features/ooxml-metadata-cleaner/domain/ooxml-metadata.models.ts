@@ -37,7 +37,7 @@ export interface OoxmlMetadataReport {
 }
 
 export interface OoxmlCleanedDocument {
-  blob: Blob;
+  bytes: Uint8Array;
   fileName: string;
   report: OoxmlMetadataReport;
 }

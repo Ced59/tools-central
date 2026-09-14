@@ -65,7 +65,7 @@ export class OoxmlMetadataWorkerAdapter implements OoxmlMetadataCleanerPort {
         }
         finish(() => {
           resolve({
-            blob: new Blob([response.output], { type: mimeType(kind) }),
+            bytes: new Uint8Array(response.output),
             report: response.report,
           });
         });
@@ -85,12 +85,6 @@ export class OoxmlMetadataWorkerAdapter implements OoxmlMetadataCleanerPort {
 function createMetadataWorker(): OoxmlMetadataWorkerLike {
   if (typeof Worker === 'undefined') throw new Error('Web Workers are not supported by this browser.');
   return new Worker(new URL('./ooxml-metadata.worker', import.meta.url), { type: 'module' });
-}
-
-function mimeType(kind: OoxmlDocumentKind): string {
-  if (kind === 'docx') return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-  if (kind === 'xlsx') return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
 }
 
 function createAbortError(): Error {

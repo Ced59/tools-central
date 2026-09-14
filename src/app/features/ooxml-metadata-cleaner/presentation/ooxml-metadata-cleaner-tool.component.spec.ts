@@ -43,7 +43,7 @@ describe('OoxmlMetadataCleanerToolComponent', () => {
     Object.defineProperty(input, 'files', { value: [file] });
     component.selectFile({ target: input } as unknown as Event);
     vi.spyOn(component['cleanUseCase'], 'execute').mockResolvedValue({
-      blob: new Blob(['clean']),
+      bytes: new TextEncoder().encode('clean'),
       fileName: 'presentation-sans-metadonnees.pptx',
       report: {
         kind: 'pptx',

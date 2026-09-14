@@ -61,7 +61,7 @@
           <div><dt i18n="@@ooxml_metadata_detected">Avant : éléments détectés</dt><dd>{{ cleaned.report.detectedCount }}</dd></div>
           <div class="report-summary__removed"><dt i18n="@@ooxml_metadata_removed">Retirés ou neutralisés</dt><dd>{{ cleaned.report.removedCount }}</dd></div>
           <div><dt i18n="@@ooxml_metadata_remaining">Après : éléments conservés</dt><dd>{{ cleaned.report.remainingCount }}</dd></div>
-          <div><dt i18n="@@ooxml_metadata_output_size">Fichier de sortie</dt><dd>{{ formatFileSize(cleaned.blob.size) }}</dd></div>
+          <div><dt i18n="@@ooxml_metadata_output_size">Fichier de sortie</dt><dd>{{ formatFileSize(cleaned.bytes.byteLength) }}</dd></div>
         </dl>
         @if (cleaned.report.detected.length === 0) {
           <p class="alert alert--info" i18n="@@ooxml_metadata_none_found">Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</p>

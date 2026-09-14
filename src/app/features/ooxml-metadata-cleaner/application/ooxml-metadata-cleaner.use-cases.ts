@@ -82,7 +82,7 @@ export class CleanOoxmlMetadataUseCase {
         input.onProgress,
         input.signal,
       );
-      if (result.blob.size > OOXML_METADATA_MAX_OUTPUT_BYTES) {
+      if (result.bytes.byteLength > OOXML_METADATA_MAX_OUTPUT_BYTES) {
         throw new OoxmlMetadataValidationError('output-too-large');
       }
       return {
@@ -101,7 +101,7 @@ export class DownloadCleanedOoxmlUseCase {
   constructor(private readonly downloader: OoxmlMetadataDownloadPort) {}
 
   execute(document: OoxmlCleanedDocument): void {
-    this.downloader.download(document.blob, document.fileName);
+    this.downloader.download(document.bytes, document.report.kind, document.fileName);
   }
 }
 
