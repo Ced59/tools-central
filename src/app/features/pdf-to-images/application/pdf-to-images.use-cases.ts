@@ -57,6 +57,7 @@ export interface PdfToImagesConversionInput {
   quality: number;
   background: string;
   onProgress?: (completed: number, total: number) => void;
+  signal?: AbortSignal;
 }
 
 export interface PdfToImagesConversionResult {
@@ -110,6 +111,7 @@ export class ConvertPdfToImagesUseCase {
       input.password?.trim() || undefined,
       plan,
       input.onProgress,
+      input.signal,
     );
     const images = rendered.map(image => ({
       ...image,

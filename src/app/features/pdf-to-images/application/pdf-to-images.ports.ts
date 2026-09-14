@@ -11,6 +11,7 @@ export interface PdfDocumentRendererPort {
     password: string | undefined,
     plan: PdfRenderPlan,
     onProgress?: (completed: number, total: number) => void,
+    signal?: AbortSignal,
   ) => Promise<PdfRenderedImage[]>;
 }
 

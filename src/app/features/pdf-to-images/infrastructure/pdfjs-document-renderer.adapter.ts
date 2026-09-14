@@ -1,6 +1,7 @@
 import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 import type { PdfDocumentRendererPort } from '../application/pdf-to-images.ports';
+import type { PdfImageRenderWorkerResponse } from './pdfjs-image-render.messages';
 import type {
   PdfDocumentSummary,
   PdfRenderedImage,
@@ -9,11 +10,14 @@ import type {
 import { PDF_TO_IMAGES_MAX_DOCUMENT_PAGES } from '../domain/pdf-to-images.models';
 
 const PDFJS_ASSET_ROOT = '/assets/pdfjs/';
-const PDFJS_VERSION = '6.3.289';
 export type PdfJsModuleLoader = () => Promise<typeof import('pdfjs-dist')>;
+export type PdfImageRenderWorkerFactory = () => Worker;
 
 export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
-  constructor(private readonly loadPdfJs: PdfJsModuleLoader = () => import('pdfjs-dist')) {}
+  constructor(
+    private readonly loadPdfJs: PdfJsModuleLoader = () => import('pdfjs-dist'),
+    private readonly createRenderWorker: PdfImageRenderWorkerFactory = createImageRenderWorker,
+  ) {}
 
   async inspect(data: Uint8Array, password?: string): Promise<PdfDocumentSummary> {
     const document = await this.load(data, password);
@@ -45,42 +49,53 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
     password: string | undefined,
     plan: PdfRenderPlan,
     onProgress?: (completed: number, total: number) => void,
+    signal?: AbortSignal,
   ): Promise<PdfRenderedImage[]> {
-    const document = await this.load(data, password);
-    const results: PdfRenderedImage[] = [];
-    try {
-      for (let index = 0; index < plan.pageNumbers.length; index += 1) {
-        const pageNumber = plan.pageNumbers[index];
-        const page = await document.getPage(pageNumber);
-        const viewport = page.getViewport({ scale: plan.dpi / 72 });
-        const canvas = documentOwner().createElement('canvas');
-        canvas.width = Math.ceil(viewport.width);
-        canvas.height = Math.ceil(viewport.height);
-
-        await page.render({
-          canvas,
-          viewport,
-          background: plan.background,
-        }).promise;
-
-        const encoded = await encodeCanvas(canvas, plan.format, plan.quality);
-        results.push({
-          pageNumber,
-          width: canvas.width,
-          height: canvas.height,
-          bytes: new Uint8Array(await encoded.blob.arrayBuffer()),
-          mimeType: encoded.blob.type,
-          extension: encoded.extension,
+    const worker = this.createRenderWorker();
+    const transferableData = data.slice();
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const finish = (callback: () => void): void => {
+        if (settled) return;
+        settled = true;
+        signal?.removeEventListener('abort', abort);
+        worker.terminate();
+        callback();
+      };
+      const abort = (): void => {
+        finish(() => {
+          reject(createAbortError());
         });
-        canvas.width = 1;
-        canvas.height = 1;
-        page.cleanup();
-        onProgress?.(index + 1, plan.pageNumbers.length);
+      };
+
+      if (signal?.aborted) {
+        abort();
+        return;
       }
-      return results;
-    } finally {
-      await destroyPdfDocument(document);
-    }
+      signal?.addEventListener('abort', abort, { once: true });
+      worker.onmessage = ({ data: response }: MessageEvent<PdfImageRenderWorkerResponse>) => {
+        if (response.type === 'progress') {
+          onProgress?.(response.completed, response.total);
+        } else if (response.type === 'success') {
+          finish(() => {
+            resolve(response.images);
+          });
+        } else {
+          const error = new Error(response.message);
+          error.name = response.name;
+          finish(() => {
+            reject(error);
+          });
+        }
+      };
+      worker.onerror = (event: ErrorEvent) => {
+        finish(() => {
+          reject(new Error(event.message || 'The PDF image worker failed.'));
+        });
+      };
+      const assetRoot = new URL(PDFJS_ASSET_ROOT, documentOwner().baseURI).toString();
+      worker.postMessage({ data: transferableData.buffer, password, plan, assetRoot }, [transferableData.buffer]);
+    });
   }
 
   private async load(data: Uint8Array, password?: string): Promise<PDFDocumentProxy> {
@@ -88,7 +103,7 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
     const baseUrl = new URL(PDFJS_ASSET_ROOT, documentOwner().baseURI);
     if (!pdfjs.GlobalWorkerOptions.workerSrc) {
       const workerUrl = new URL('pdf.worker.min.mjs', baseUrl);
-      workerUrl.searchParams.set('v', PDFJS_VERSION);
+      workerUrl.searchParams.set('v', pdfjs.version);
       pdfjs.GlobalWorkerOptions.workerSrc = workerUrl.toString();
     }
     const loadingTask = pdfjs.getDocument({
@@ -114,33 +129,17 @@ function documentOwner(): Document {
   return document;
 }
 
-async function encodeCanvas(
-  canvas: HTMLCanvasElement,
-  format: PdfRenderPlan['format'],
-  quality: number,
-): Promise<{ blob: Blob; extension: string }> {
-  const mimeType = format === 'png' ? 'image/png' : `image/${format}`;
-  const blob = await canvasToBlob(canvas, mimeType, format === 'png' ? undefined : quality);
-  if (blob) return { blob, extension: extensionForMimeType(blob.type, format) };
-
-  const fallback = await canvasToBlob(canvas, 'image/png');
-  if (!fallback) throw new Error('The browser could not encode the rendered page.');
-  return { blob: fallback, extension: 'png' };
-}
-
-function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality?: number): Promise<Blob | null> {
-  return new Promise(resolve => {
-    canvas.toBlob(resolve, mimeType, quality);
-  });
-}
-
-function extensionForMimeType(mimeType: string, requestedFormat: PdfRenderPlan['format']): string {
-  if (mimeType === 'image/jpeg') return 'jpg';
-  if (mimeType === 'image/png') return 'png';
-  if (mimeType === 'image/webp') return 'webp';
-  return requestedFormat;
-}
-
 function destroyPdfDocument(documentProxy: PDFDocumentProxy): Promise<void> {
   return documentProxy.loadingTask.destroy();
+}
+
+function createImageRenderWorker(): Worker {
+  if (typeof Worker === 'undefined') throw new Error('Web Workers are not supported by this browser.');
+  return new Worker(new URL('./pdfjs-image-render.worker', import.meta.url), { type: 'module' });
+}
+
+function createAbortError(): Error {
+  const error = new Error('The PDF image conversion was cancelled.');
+  error.name = 'AbortError';
+  return error;
 }

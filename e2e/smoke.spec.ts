@@ -235,9 +235,9 @@ test('SoftwareApplication schema builder validates real ratings and remains resp
 
 test('PDF to images renders locally, previews output and remains responsive', async ({ page }) => {
   const source = await PDFDocument.create();
-  const first = source.addPage([144, 72]);
-  first.drawRectangle({ x: 0, y: 0, width: 144, height: 72, color: rgb(1, 1, 1) });
-  first.drawText('Tools Central', { x: 18, y: 30, size: 12, color: rgb(0.1, 0.25, 0.7) });
+  const first = source.addPage([720, 360]);
+  first.drawRectangle({ x: 0, y: 0, width: 720, height: 360, color: rgb(1, 1, 1) });
+  first.drawText('Tools Central', { x: 90, y: 150, size: 60, color: rgb(0.1, 0.25, 0.7) });
   source.addPage([72, 144]);
   const bytes = await source.save();
 
@@ -252,10 +252,12 @@ test('PDF to images renders locally, previews output and remains responsive', as
   });
   await expect(page.getByText('PDF chargé')).toBeVisible({ timeout: 10_000 });
   await page.locator('#pdf-to-images-pages').fill('1');
-  await page.locator('#pdf-to-images-dpi').selectOption('72');
-  await expect(page.getByTestId('pdf-to-images-estimate')).toContainText('144 × 72 px');
+  await page.locator('#pdf-to-images-dpi').selectOption('300');
+  await expect(page.getByTestId('pdf-to-images-estimate')).toContainText(/3\s*000 × 1\s*500 px/u);
+  const renderWorkerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
   await page.getByRole('button', { name: 'Convertir les pages' }).click();
-  await expect(page.getByTestId('pdf-to-images-results').locator('img')).toHaveCount(1, { timeout: 15_000 });
+  await expect((await renderWorkerResponse).ok()).toBe(true);
+  await expect(page.getByTestId('pdf-to-images-results').locator('img')).toHaveCount(1, { timeout: 20_000 });
   await expect(page.getByTestId('pdf-to-images-results')).toContainText('test-local-page-01.png');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 

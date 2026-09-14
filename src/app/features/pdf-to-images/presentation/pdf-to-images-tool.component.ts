@@ -44,6 +44,7 @@ export class PdfToImagesToolComponent {
   private readonly locale = inject(LOCALE_ID);
   private readonly numberFormatter = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 0 });
   private taskRevision = 0;
+  private renderAbortController: AbortController | null = null;
 
   readonly dpiValues = PDF_TO_IMAGES_DPI_VALUES;
   readonly formats = PDF_TO_IMAGES_FORMATS;
@@ -88,6 +89,7 @@ export class PdfToImagesToolComponent {
   constructor() {
     inject(DestroyRef).onDestroy(() => {
       this.taskRevision += 1;
+      this.cancelActiveRender();
       this.releasePreviews();
     });
   }
@@ -99,6 +101,7 @@ export class PdfToImagesToolComponent {
     if (!file) return;
 
     this.taskRevision += 1;
+    this.cancelActiveRender();
     const revision = this.taskRevision;
     this.resetDocumentState();
     this.sourceName.set(file.name);
@@ -170,6 +173,9 @@ export class PdfToImagesToolComponent {
     if (!bytes || !document || !this.canConvert()) return;
 
     const revision = ++this.taskRevision;
+    this.cancelActiveRender();
+    const abortController = new AbortController();
+    this.renderAbortController = abortController;
     this.releasePreviews();
     this.errorMessage.set('');
     this.downloadError.set(false);
@@ -190,6 +196,7 @@ export class PdfToImagesToolComponent {
         onProgress: (completed, progressTotal) => {
           if (revision === this.taskRevision) this.progress.set({ completed, total: progressTotal });
         },
+        signal: abortController.signal,
       });
       if (revision !== this.taskRevision) return;
       this.previews.set(result.images.map(image => ({
@@ -198,7 +205,9 @@ export class PdfToImagesToolComponent {
       })));
       this.state.set('done');
     } catch (error: unknown) {
-      if (revision === this.taskRevision) this.fail(this.describeError(error));
+      if (revision === this.taskRevision && !isAbortError(error)) this.fail(this.describeError(error));
+    } finally {
+      if (this.renderAbortController === abortController) this.renderAbortController = null;
     }
   }
 
@@ -224,6 +233,7 @@ export class PdfToImagesToolComponent {
 
   reset(): void {
     this.taskRevision += 1;
+    this.cancelActiveRender();
     this.resetDocumentState();
     this.password.set('');
     this.sourceName.set('');
@@ -288,6 +298,11 @@ export class PdfToImagesToolComponent {
     this.previews.set([]);
   }
 
+  private cancelActiveRender(): void {
+    this.renderAbortController?.abort();
+    this.renderAbortController = null;
+  }
+
   private fail(message: string): void {
     this.state.set('error');
     this.errorMessage.set(message);
@@ -315,6 +330,10 @@ function isPdfFile(file: File): boolean {
 
 function readValue(event: Event): string {
   return (event.target as HTMLInputElement | HTMLSelectElement).value;
+}
+
+function isAbortError(error: unknown): boolean {
+  return error instanceof Error && error.name === 'AbortError';
 }
 
 function copyBuffer(bytes: Uint8Array): ArrayBuffer {

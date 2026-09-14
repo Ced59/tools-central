@@ -79,6 +79,7 @@ describe('ConvertPdfToImagesUseCase', () => {
       undefined,
       expect.objectContaining({ pageNumbers: [2], quality: 1, background: '#ffffff' }),
       undefined,
+      undefined,
     );
   });
 

@@ -35,11 +35,18 @@ describe('PdfToImagesToolComponent', () => {
   it('invalidates in-flight work when the component is destroyed', () => {
     const fixture = TestBed.createComponent(PdfToImagesToolComponent);
     const component = fixture.componentInstance;
-    const internals = component as unknown as { taskRevision: number };
+    const abortController = new AbortController();
+    const internals = component as unknown as {
+      taskRevision: number;
+      renderAbortController: AbortController | null;
+    };
     const initialRevision = internals.taskRevision;
+    internals.renderAbortController = abortController;
 
     fixture.destroy();
 
     expect(internals.taskRevision).toBe(initialRevision + 1);
+    expect(abortController.signal.aborted).toBe(true);
+    expect(internals.renderAbortController).toBeNull();
   });
 });
