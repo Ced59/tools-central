@@ -125,7 +125,7 @@ export class ConvertPdfToImagesUseCase {
 
     return {
       images,
-      totalBytes: images.reduce((total, image) => total + image.bytes.byteLength, 0),
+      totalBytes: images.reduce((total, image) => total + image.blob.size, 0),
     };
   }
 }
@@ -144,16 +144,16 @@ export class DownloadPdfImagesUseCase {
     if (images.length === 0) return;
     if (images.length === 1) {
       const image = images[0];
-      this.download.download(image.bytes, image.mimeType, image.fileName);
+      this.download.download(image.blob, image.fileName);
       return;
     }
 
-    const archiveBytes = await this.archive.create(images.map(image => ({
+    const archiveBlob = await this.archive.create(images.map(image => ({
       fileName: image.fileName,
-      bytes: image.bytes,
+      blob: image.blob,
     })), signal);
     const baseName = buildPdfImageFileName(sourceName, 1, 1, 'zip').replace(/-page-01\.zip$/u, '');
-    this.download.download(archiveBytes, 'application/zip', `${baseName}-images.zip`);
+    this.download.download(archiveBlob, `${baseName}-images.zip`);
   }
 }
 

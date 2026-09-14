@@ -6,11 +6,11 @@ export type JsZipArchiveWorkerFactory = () => Worker;
 export class JsZipPdfImageArchiveAdapter implements PdfImageArchivePort {
   constructor(private readonly createWorker: JsZipArchiveWorkerFactory = createArchiveWorker) {}
 
-  create(entries: readonly PdfImageArchiveEntry[], signal?: AbortSignal): Promise<Uint8Array> {
+  create(entries: readonly PdfImageArchiveEntry[], signal?: AbortSignal): Promise<Blob> {
     const worker = this.createWorker();
-    const transferableEntries = entries.map(entry => ({
+    const workerEntries = entries.map(entry => ({
       fileName: entry.fileName,
-      bytes: entry.bytes.slice().buffer,
+      blob: entry.blob,
     }));
     return new Promise((resolve, reject) => {
       let settled = false;
@@ -35,7 +35,7 @@ export class JsZipPdfImageArchiveAdapter implements PdfImageArchivePort {
       worker.onmessage = ({ data }: MessageEvent<JsZipArchiveWorkerResponse>) => {
         if (data.ok) {
           finish(() => {
-            resolve(new Uint8Array(data.bytes));
+            resolve(data.blob);
           });
         } else {
           finish(() => {
@@ -48,7 +48,7 @@ export class JsZipPdfImageArchiveAdapter implements PdfImageArchivePort {
           reject(new Error(event.message || 'The ZIP worker failed.'));
         });
       };
-      worker.postMessage({ entries: transferableEntries }, transferableEntries.map(entry => entry.bytes));
+      worker.postMessage({ entries: workerEntries });
     });
   }
 }

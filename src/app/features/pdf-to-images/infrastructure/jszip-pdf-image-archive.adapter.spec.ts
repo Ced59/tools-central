@@ -10,8 +10,8 @@ import {
 describe('JsZipPdfImageArchiveAdapter', () => {
   it('archives every rendered image under its safe file name', async () => {
     const bytes = await createPdfImageArchive([
-      { fileName: 'page-01.png', bytes: new Uint8Array([1, 2, 3]) },
-      { fileName: 'page-02.webp', bytes: new Uint8Array([4, 5]) },
+      { fileName: 'page-01.png', blob: new Blob([new Uint8Array([1, 2, 3])]) },
+      { fileName: 'page-02.webp', blob: new Blob([new Uint8Array([4, 5])]) },
     ]);
     const archive = await JSZip.loadAsync(bytes);
 
@@ -30,9 +30,14 @@ describe('JsZipPdfImageArchiveAdapter', () => {
     };
     const createWorker = vi.fn(() => worker as unknown as Worker) as JsZipArchiveWorkerFactory;
     const abortController = new AbortController();
+    const blob = new Blob(['1'], { type: 'image/png' });
     const archive = new JsZipPdfImageArchiveAdapter(createWorker).create([
-      { fileName: 'page.png', bytes: new Uint8Array([1]) },
+      { fileName: 'page.png', blob },
     ], abortController.signal);
+
+    expect(worker.postMessage).toHaveBeenCalledWith({
+      entries: [{ fileName: 'page.png', blob }],
+    });
 
     abortController.abort();
 

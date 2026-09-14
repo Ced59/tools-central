@@ -25,7 +25,7 @@ function rendererFake(): PdfDocumentRendererPort {
   return {
     inspect: vi.fn().mockResolvedValue(document),
     render: vi.fn().mockResolvedValue([
-      { pageNumber: 2, width: 288, height: 144, bytes: new Uint8Array([1, 2]), mimeType: 'image/png', extension: 'png' },
+      { pageNumber: 2, width: 288, height: 144, blob: new Blob(['12'], { type: 'image/png' }), extension: 'png' },
     ]),
   };
 }
@@ -103,25 +103,26 @@ describe('DownloadPdfImagesUseCase', () => {
   it('downloads one image directly', async () => {
     const archive: PdfImageArchivePort = { create: vi.fn() };
     const download: PdfImageDownloadPort = { download: vi.fn() };
-    const image = { pageNumber: 1, width: 10, height: 10, bytes: new Uint8Array([1]), mimeType: 'image/png', extension: 'png', fileName: 'a.png' };
+    const image = { pageNumber: 1, width: 10, height: 10, blob: new Blob(['1'], { type: 'image/png' }), extension: 'png', fileName: 'a.png' };
     await new DownloadPdfImagesUseCase(archive, download).execute('a.pdf', [image]);
     const createMock = vi.mocked(archive.create);
     const downloadMock = vi.mocked(download.download);
     expect(createMock).not.toHaveBeenCalled();
-    expect(downloadMock).toHaveBeenCalledWith(image.bytes, 'image/png', 'a.png');
+    expect(downloadMock).toHaveBeenCalledWith(image.blob, 'a.png');
   });
 
   it('creates a ZIP for multiple images', async () => {
-    const archive: PdfImageArchivePort = { create: vi.fn().mockResolvedValue(new Uint8Array([9])) };
+    const archiveBlob = new Blob(['zip'], { type: 'application/zip' });
+    const archive: PdfImageArchivePort = { create: vi.fn().mockResolvedValue(archiveBlob) };
     const download: PdfImageDownloadPort = { download: vi.fn() };
     const images = [1, 2].map(pageNumber => ({
-      pageNumber, width: 10, height: 10, bytes: new Uint8Array([pageNumber]),
-      mimeType: 'image/webp', extension: 'webp', fileName: `a-${String(pageNumber)}.webp`,
+      pageNumber, width: 10, height: 10, blob: new Blob([String(pageNumber)], { type: 'image/webp' }),
+      extension: 'webp', fileName: `a-${String(pageNumber)}.webp`,
     }));
     await new DownloadPdfImagesUseCase(archive, download).execute('Mon fichier.pdf', images);
     const createMock = vi.mocked(archive.create);
     const downloadMock = vi.mocked(download.download);
     expect(createMock).toHaveBeenCalledOnce();
-    expect(downloadMock).toHaveBeenCalledWith(expect.any(Uint8Array), 'application/zip', 'Mon-fichier-images.zip');
+    expect(downloadMock).toHaveBeenCalledWith(archiveBlob, 'Mon-fichier-images.zip');
   });
 });

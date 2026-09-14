@@ -49,7 +49,7 @@ async function renderDocument(command: PdfImageRenderWorkerCommand): Promise<voi
         send({ type: 'progress', completed: index + 1, total: command.plan.pageNumbers.length });
       }
       const response: PdfImageRenderWorkerResponse = { type: 'success', images };
-      postMessage(response, images.map(image => image.bytes.buffer));
+      postMessage(response);
     } finally {
       await document.loadingTask.destroy();
     }
@@ -80,8 +80,7 @@ async function renderPage(
       pageNumber,
       width: canvas.width,
       height: canvas.height,
-      bytes: new Uint8Array(await encoded.blob.arrayBuffer()),
-      mimeType: encoded.blob.type,
+      blob: encoded.blob,
       extension: encoded.extension,
     };
   } finally {

@@ -1,7 +1,7 @@
 export interface JsZipArchiveWorkerCommand {
-  entries: Array<{ fileName: string; bytes: ArrayBuffer }>;
+  entries: Array<{ fileName: string; blob: Blob }>;
 }
 
 export type JsZipArchiveWorkerResponse =
-  | Readonly<{ ok: true; bytes: ArrayBuffer }>
+  | Readonly<{ ok: true; blob: Blob }>
   | Readonly<{ ok: false; message: string }>;

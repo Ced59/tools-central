@@ -87,7 +87,7 @@ export class PdfToImagesToolComponent {
     && this.estimate()?.allowed
     && !this.isBusy(),
   ));
-  readonly totalOutputBytes = computed(() => this.previews().reduce((sum, image) => sum + image.bytes.byteLength, 0));
+  readonly totalOutputBytes = computed(() => this.previews().reduce((sum, image) => sum + image.blob.size, 0));
 
   constructor() {
     inject(DestroyRef).onDestroy(() => {
@@ -210,7 +210,7 @@ export class PdfToImagesToolComponent {
       if (revision !== this.taskRevision) return;
       this.previews.set(result.images.map(image => ({
         ...image,
-        objectUrl: URL.createObjectURL(new Blob([copyBuffer(image.bytes)], { type: image.mimeType })),
+        objectUrl: URL.createObjectURL(image.blob),
       })));
       this.state.set('done');
     } catch (error: unknown) {
@@ -365,12 +365,6 @@ function readValue(event: Event): string {
 
 function isAbortError(error: unknown): boolean {
   return error instanceof Error && error.name === 'AbortError';
-}
-
-function copyBuffer(bytes: Uint8Array): ArrayBuffer {
-  const copy = new Uint8Array(bytes.byteLength);
-  copy.set(bytes);
-  return copy.buffer;
 }
 
 function formatBytes(value: number, locale: string): string {

@@ -34,8 +34,7 @@ export interface PdfRenderedImage {
   pageNumber: number;
   width: number;
   height: number;
-  bytes: Uint8Array;
-  mimeType: string;
+  blob: Blob;
   extension: string;
 }
 

@@ -10,12 +10,12 @@ addEventListener('message', ({ data }: MessageEvent<JsZipArchiveWorkerCommand>) 
 
 async function createArchive(command: JsZipArchiveWorkerCommand): Promise<void> {
   try {
-    const bytes = await createPdfImageArchive(command.entries.map(entry => ({
-      fileName: entry.fileName,
-      bytes: new Uint8Array(entry.bytes),
-    })));
-    const response: JsZipArchiveWorkerResponse = { ok: true, bytes: bytes.buffer as ArrayBuffer };
-    postMessage(response, [response.bytes]);
+    const bytes = await createPdfImageArchive(command.entries);
+    const response: JsZipArchiveWorkerResponse = {
+      ok: true,
+      blob: new Blob([bytes], { type: 'application/zip' }),
+    };
+    postMessage(response);
   } catch (error: unknown) {
     const response: JsZipArchiveWorkerResponse = {
       ok: false,

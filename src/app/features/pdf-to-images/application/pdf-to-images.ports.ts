@@ -21,16 +21,16 @@ export interface PdfDocumentRendererPort {
 
 export interface PdfImageArchiveEntry {
   fileName: string;
-  bytes: Uint8Array;
+  blob: Blob;
 }
 
 export interface PdfImageArchivePort {
   readonly create: (
     entries: readonly PdfImageArchiveEntry[],
     signal?: AbortSignal,
-  ) => Promise<Uint8Array>;
+  ) => Promise<Blob>;
 }
 
 export interface PdfImageDownloadPort {
-  readonly download: (bytes: Uint8Array, mimeType: string, fileName: string) => void;
+  readonly download: (blob: Blob, fileName: string) => void;
 }

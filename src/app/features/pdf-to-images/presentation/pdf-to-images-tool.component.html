@@ -123,7 +123,7 @@
           @for (image of previews(); track image.pageNumber) {
             <figure class="preview-card">
               <img [src]="image.objectUrl" [alt]="previewAlt(image.pageNumber)" loading="lazy" />
-              <figcaption><div><strong>{{ image.fileName }}</strong><span i18n="@@pdf_to_images_page_details">Page {{ image.pageNumber }} · {{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.bytes.byteLength) }}</span></div><button type="button" class="icon-button" (click)="downloadOne(image)" [attr.aria-label]="downloadPageLabel(image.pageNumber)"><i class="tc-icon tc-icon-download" aria-hidden="true"></i></button></figcaption>
+              <figcaption><div><strong>{{ image.fileName }}</strong><span i18n="@@pdf_to_images_page_details">Page {{ image.pageNumber }} · {{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.blob.size) }}</span></div><button type="button" class="icon-button" (click)="downloadOne(image)" [attr.aria-label]="downloadPageLabel(image.pageNumber)"><i class="tc-icon tc-icon-download" aria-hidden="true"></i></button></figcaption>
             </figure>
           }
         </div>
