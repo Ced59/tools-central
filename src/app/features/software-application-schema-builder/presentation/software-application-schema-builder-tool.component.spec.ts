@@ -95,4 +95,11 @@ describe('SoftwareApplicationSchemaBuilderToolComponent', () => {
     expect(health?.getAttribute('aria-atomic')).toBe('true');
     expect(health?.textContent).not.toContain(component.activeOutput());
   });
+
+  it('décrit la syntaxe décimale réellement acceptée dans le diagnostic de prix', () => {
+    const label = component.issueLabel('invalid-price');
+
+    expect(label).toContain('un point ou une virgule');
+    expect(label).not.toContain('deux décimales');
+  });
 });

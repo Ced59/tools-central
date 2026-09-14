@@ -209,7 +209,7 @@ export class SoftwareApplicationSchemaBuilderToolComponent {
       'url-fragment': $localize`:@@software_schema_issue_url_fragment:L’URL contient un fragment ; vérifiez que la page décrite reste canonique.`,
       'invalid-screenshot-url': $localize`:@@software_schema_issue_screenshot_url:L’URL de capture doit être une adresse HTTP ou HTTPS absolue.`,
       'screenshot-url-credentials': $localize`:@@software_schema_issue_screenshot_credentials:Les identifiants intégrés dans l’URL de capture sont refusés.`,
-      'invalid-price': $localize`:@@software_schema_issue_price:Le prix doit être un nombre positif ou zéro, avec au plus deux décimales.`,
+      'invalid-price': $localize`:@@software_schema_issue_price:Le prix doit être un nombre positif ou zéro, sans séparateur de milliers ; utilisez un point ou une virgule pour les décimales.`,
       'price-too-large': $localize`:@@software_schema_issue_price_large:Le prix dépasse la limite prise en charge par cet outil.`,
       'missing-price-currency': $localize`:@@software_schema_issue_currency_missing:Pour une offre payante, ajoutez une devise ISO 4217 afin d’éviter une interprétation ambiguë.`,
       'invalid-price-currency': $localize`:@@software_schema_issue_currency_invalid:La devise doit contenir exactement trois lettres ISO 4217, par exemple EUR ou USD.`,
