@@ -44,6 +44,7 @@ export class PdfToImagesToolComponent {
   private readonly locale = inject(LOCALE_ID);
   private readonly numberFormatter = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 0 });
   private taskRevision = 0;
+  private inspectionAbortController: AbortController | null = null;
   private renderAbortController: AbortController | null = null;
 
   readonly dpiValues = PDF_TO_IMAGES_DPI_VALUES;
@@ -89,6 +90,7 @@ export class PdfToImagesToolComponent {
   constructor() {
     inject(DestroyRef).onDestroy(() => {
       this.taskRevision += 1;
+      this.cancelActiveInspection();
       this.cancelActiveRender();
       this.releasePreviews();
     });
@@ -101,6 +103,7 @@ export class PdfToImagesToolComponent {
     if (!file) return;
 
     this.taskRevision += 1;
+    this.cancelActiveInspection();
     this.cancelActiveRender();
     const revision = this.taskRevision;
     this.resetDocumentState();
@@ -121,9 +124,11 @@ export class PdfToImagesToolComponent {
     }
 
     this.state.set('inspecting');
+    const abortController = new AbortController();
+    this.inspectionAbortController = abortController;
     try {
       const bytes = new Uint8Array(await file.arrayBuffer());
-      const summary = await this.inspectUseCase.execute(bytes, this.password());
+      const summary = await this.inspectUseCase.execute(bytes, this.password(), abortController.signal);
       if (revision !== this.taskRevision) return;
       this.sourceBytes.set(bytes);
       this.documentSummary.set(summary);
@@ -132,7 +137,9 @@ export class PdfToImagesToolComponent {
         : `1-${String(this.maxSelectedPages)}`);
       this.state.set('ready');
     } catch (error: unknown) {
-      if (revision === this.taskRevision) this.fail(this.describeError(error));
+      if (revision === this.taskRevision && !isAbortError(error)) this.fail(this.describeError(error));
+    } finally {
+      if (this.inspectionAbortController === abortController) this.inspectionAbortController = null;
     }
   }
 
@@ -233,6 +240,7 @@ export class PdfToImagesToolComponent {
 
   reset(): void {
     this.taskRevision += 1;
+    this.cancelActiveInspection();
     this.cancelActiveRender();
     this.resetDocumentState();
     this.password.set('');
@@ -301,6 +309,11 @@ export class PdfToImagesToolComponent {
   private cancelActiveRender(): void {
     this.renderAbortController?.abort();
     this.renderAbortController = null;
+  }
+
+  private cancelActiveInspection(): void {
+    this.inspectionAbortController?.abort();
+    this.inspectionAbortController = null;
   }
 
   private fail(message: string): void {

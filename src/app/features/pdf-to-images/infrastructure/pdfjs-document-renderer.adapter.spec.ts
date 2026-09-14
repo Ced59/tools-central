@@ -24,6 +24,29 @@ describe('PdfJsDocumentRendererAdapter', () => {
     expect(destroy).toHaveBeenCalledOnce();
   });
 
+  it('destroys an in-flight loading task when inspection is aborted', async () => {
+    const destroy = vi.fn().mockResolvedValue(undefined);
+    const loadPdfJs = vi.fn().mockResolvedValue({
+      GlobalWorkerOptions: { workerSrc: '' },
+      version: '6.3.289',
+      getDocument: () => ({
+        promise: new Promise(() => undefined),
+        destroy,
+      }),
+    }) as PdfJsModuleLoader;
+    const abortController = new AbortController();
+    const inspection = new PdfJsDocumentRendererAdapter(loadPdfJs).inspect(
+      new Uint8Array([1]),
+      undefined,
+      abortController.signal,
+    );
+
+    abortController.abort();
+
+    await expect(inspection).rejects.toMatchObject({ name: 'AbortError' });
+    expect(destroy).toHaveBeenCalledOnce();
+  });
+
   it('delegates rasterization to a cancellable module worker', async () => {
     const worker = {
       onmessage: null as ((event: MessageEvent) => void) | null,

@@ -19,15 +19,22 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
     private readonly createRenderWorker: PdfImageRenderWorkerFactory = createImageRenderWorker,
   ) {}
 
-  async inspect(data: Uint8Array, password?: string): Promise<PdfDocumentSummary> {
-    const document = await this.load(data, password);
+  async inspect(data: Uint8Array, password?: string, signal?: AbortSignal): Promise<PdfDocumentSummary> {
+    const document = await this.load(data, password, signal);
+    const destroy = createPdfDestroyer(document);
+    const abort = (): void => {
+      void destroy();
+    };
+    signal?.addEventListener('abort', abort, { once: true });
     try {
+      throwIfAborted(signal);
       if (document.numPages > PDF_TO_IMAGES_MAX_DOCUMENT_PAGES) {
         return { pageCount: document.numPages, pages: [] };
       }
 
       const pages = [];
       for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+        throwIfAborted(signal);
         const page = await document.getPage(pageNumber);
         const viewport = page.getViewport({ scale: 1 });
         pages.push({
@@ -40,7 +47,8 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
       }
       return { pageCount: document.numPages, pages };
     } finally {
-      await destroyPdfDocument(document);
+      signal?.removeEventListener('abort', abort);
+      await destroy();
     }
   }
 
@@ -98,7 +106,11 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
     });
   }
 
-  private async load(data: Uint8Array, password?: string): Promise<PDFDocumentProxy> {
+  private async load(
+    data: Uint8Array,
+    password?: string,
+    signal?: AbortSignal,
+  ): Promise<PDFDocumentProxy> {
     const pdfjs = await this.loadPdfJs();
     const baseUrl = new URL(PDFJS_ASSET_ROOT, documentOwner().baseURI);
     if (!pdfjs.GlobalWorkerOptions.workerSrc) {
@@ -115,11 +127,23 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
       wasmUrl: new URL('wasm/', baseUrl).toString(),
       stopAtErrors: true,
     });
+    let rejectAbort: ((reason: Error) => void) | null = null;
+    const abortPromise = new Promise<never>((_, reject) => {
+      rejectAbort = reject;
+    });
+    const abort = (): void => {
+      rejectAbort?.(createAbortError());
+    };
+    signal?.addEventListener('abort', abort, { once: true });
+    if (signal?.aborted) abort();
     try {
-      return await loadingTask.promise;
+      return await (signal ? Promise.race([loadingTask.promise, abortPromise]) : loadingTask.promise);
     } catch (error: unknown) {
       await loadingTask.destroy().catch(() => undefined);
+      if (signal?.aborted) throw createAbortError();
       throw error;
+    } finally {
+      signal?.removeEventListener('abort', abort);
     }
   }
 }
@@ -129,8 +153,12 @@ function documentOwner(): Document {
   return document;
 }
 
-function destroyPdfDocument(documentProxy: PDFDocumentProxy): Promise<void> {
-  return documentProxy.loadingTask.destroy();
+function createPdfDestroyer(documentProxy: PDFDocumentProxy): () => Promise<void> {
+  let destruction: Promise<void> | null = null;
+  return () => {
+    destruction ??= documentProxy.loadingTask.destroy();
+    return destruction;
+  };
 }
 
 function createImageRenderWorker(): Worker {
@@ -142,4 +170,8 @@ function createAbortError(): Error {
   const error = new Error('The PDF image conversion was cancelled.');
   error.name = 'AbortError';
   return error;
+}
+
+function throwIfAborted(signal?: AbortSignal): void {
+  if (signal?.aborted) throw createAbortError();
 }

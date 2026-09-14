@@ -5,7 +5,11 @@ import type {
 } from '../domain/pdf-to-images.models';
 
 export interface PdfDocumentRendererPort {
-  readonly inspect: (data: Uint8Array, password?: string) => Promise<PdfDocumentSummary>;
+  readonly inspect: (
+    data: Uint8Array,
+    password?: string,
+    signal?: AbortSignal,
+  ) => Promise<PdfDocumentSummary>;
   readonly render: (
     data: Uint8Array,
     password: string | undefined,

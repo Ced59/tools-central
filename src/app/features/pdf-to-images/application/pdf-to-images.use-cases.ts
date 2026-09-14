@@ -68,9 +68,9 @@ export interface PdfToImagesConversionResult {
 export class InspectPdfForImagesUseCase {
   constructor(private readonly renderer: PdfDocumentRendererPort) {}
 
-  async execute(data: Uint8Array, password?: string): Promise<PdfDocumentSummary> {
+  async execute(data: Uint8Array, password?: string, signal?: AbortSignal): Promise<PdfDocumentSummary> {
     validateInputBytes(data);
-    const document = await this.renderer.inspect(data, password?.trim() || undefined);
+    const document = await this.renderer.inspect(data, password?.trim() || undefined, signal);
     if (document.pageCount > PDF_TO_IMAGES_MAX_DOCUMENT_PAGES) {
       throw new PdfToImagesValidationError('document-too-large');
     }
