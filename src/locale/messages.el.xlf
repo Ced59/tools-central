@@ -81910,6 +81910,552 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Δεν έχει παρασχεθεί έγκυρη σελίδα PAGE· δεν μπορεί να συναφθεί καμία αμοιβαιότητα.</target>
       </segment>
     </unit>
+    <unit id="tool_structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">Εξαγωγέας δομημένων δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="tool_structured_data_extractor_desc">
+      <segment>
+        <source>Extraire localement JSON-LD, Microdata et RDFa depuis du HTML, explorer les entités et relations, puis exporter un rapport JSON borné.</source>
+        <target state="translated">Εξαγάγετε τοπικά JSON-LD, Microdata και RDFa από HTML, εξερευνήστε τις οντότητες και τις σχέσεις, και στη συνέχεια εξάγετε μια αναφορά JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_title">
+      <segment>
+        <source>Extraire et comprendre les données structurées d’une page</source>
+        <target state="translated">Εξαγωγή και κατανόηση των δομημένων δεδομένων μιας σελίδας</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_lead">
+      <segment>
+        <source>Le balisage structuré décrit les entités d’une page et leurs relations. Cet extracteur lit localement un document HTML ou JSON-LD, rassemble JSON-LD, Microdata et RDFa dans un graphe commun, puis produit un rapport vérifiable sans charger la page ni exécuter ses scripts.</source>
+        <target state="translated">Η δομημένη σήμανση περιγράφει τις οντότητες μιας σελίδας και τις σχέσεις τους. Αυτός ο εξαγωγέας διαβάζει τοπικά ένα έγγραφο HTML ή JSON-LD, συγκεντρώνει JSON-LD, Microdata και RDFa σε ένα κοινό γράφημα και στη συνέχεια παράγει μια επαληθεύσιμη αναφορά χωρίς να φορτώσει τη σελίδα ή να εκτελέσει τα σενάρια της.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Περίπτωσεις χρήσης</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_title">
+      <segment>
+        <source>Inventorier un modèle de page</source>
+        <target state="translated">Καταγραφή ενός προτύπου σελίδας</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_text">
+      <segment>
+        <source>Collez le HTML rendu pour repérer les types déclarés, les blocs dupliqués et la coexistence éventuelle de plusieurs formats de balisage.</source>
+        <target state="translated">Επικολλήστε το HTML που έχει αποδοθεί για να εντοπίσετε τους δηλωμένους τύπους, τα διπλά μπλοκ και την πιθανή συνύπαρξη πολλών μορφών σήμανσης.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_title">
+      <segment>
+        <source>Comprendre un graphe JSON-LD</source>
+        <target state="translated">Κατανόηση ενός γράφου JSON-LD</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_text">
+      <segment>
+        <source>Développez @graph, les objets imbriqués et les références @id afin de voir comment une page, une organisation, un auteur ou une offre sont reliés.</source>
+        <target state="translated">Αναπτύξτε @graph, τα ενσωματωμένα αντικείμενα και τις αναφορές @id για να δείτε πώς μια σελίδα, μια οργάνωση, ένας συγγραφέας ή μια προσφορά συνδέονται.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_title">
+      <segment>
+        <source>Conserver une preuve de diagnostic</source>
+        <target state="translated">Διατήρηση απόδειξης διάγνωσης</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_text">
+      <segment>
+        <source>Exportez un JSON normalisé contenant les entités, propriétés, relations, formats et diagnostics pour comparer deux versions hors de l’outil.</source>
+        <target state="translated">Εξάγετε ένα κανονικοποιημένο JSON που περιέχει τις οντότητες, τις ιδιότητες, τις σχέσεις, τις μορφές και τις διαγνώσεις για να συγκρίνετε δύο εκδόσεις εκτός του εργαλείου.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Συνιστώμενη μέθοδος</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_1">
+      <segment>
+        <source>Préférez le HTML réellement rendu plutôt qu’un extrait de template lorsque le balisage est injecté côté client. Vous pouvez aussi coller directement un objet ou un tableau JSON-LD pour isoler une erreur de syntaxe.</source>
+        <target state="translated">Προτιμήστε το πραγματικά αποδοθέν HTML αντί για ένα απόσπασμα προτύπου όταν η σήμανση εισάγεται από τον πελάτη. Μπορείτε επίσης να επικολλήσετε απευθείας ένα αντικείμενο ή έναν πίνακα JSON-LD για να απομονώσετε ένα σφάλμα σύνταξης.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_2">
+      <segment>
+        <source>Fournissez l’URL publique comme base seulement si Microdata contient des liens relatifs. Cette valeur sert à leur résolution locale et ne déclenche aucune requête.</source>
+        <target state="translated">Παρέχετε τη δημόσια διεύθυνση URL ως βάση μόνο εάν το Microdata περιέχει σχετικές συνδέσεις. Αυτή η τιμή χρησιμοποιείται για την τοπική τους επίλυση και δεν προκαλεί καμία αίτηση.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_3">
+      <segment>
+        <source>Corrigez d’abord le JSON invalide, les entités sans type et les limites atteintes. Vérifiez ensuite les propriétés obligatoires dans la documentation propre au type, puis testez la page publiée avec un outil officiel.</source>
+        <target state="translated">Διορθώστε πρώτα το μη έγκυρο JSON, τις οντότητες χωρίς τύπο και τα όρια που έχουν επιτευχθεί. Στη συνέχεια, ελέγξτε τις υποχρεωτικές ιδιότητες στην τεκμηρίωση που σχετίζεται με τον τύπο και δοκιμάστε τη δημοσιευμένη σελίδα με ένα επίσημο εργαλείο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_formats">
+      <segment>
+        <source>Formats analysés</source>
+        <target state="translated">Αναλυθέντα μορφές</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_jsonld">
+      <segment>
+        <source>Les scripts application/ld+json, les documents JSON directs, @graph, @id, @type, @value, @list et les objets imbriqués sont normalisés sans exécuter de JavaScript.</source>
+        <target state="translated">Τα σενάρια application/ld+json, τα άμεσα έγγραφα JSON, @graph, @id, @type, @value, @list και τα ενσωματωμένα αντικείμενα κανονικοποιούνται χωρίς να εκτελούνται JavaScript.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_microdata">
+      <segment>
+        <source>Les attributs itemscope, itemtype, itemid et itemprop sont lus avec les règles de valeur usuelles des éléments HTML. itemref est signalé mais n’est pas développé.</source>
+        <target state="translated">Τα attributes itemscope, itemtype, itemid και itemprop διαβάζονται με τους συνήθεις κανόνες τιμής των στοιχείων HTML. Το itemref αναφέρεται αλλά δεν αναπτύσσεται.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_rdfa">
+      <segment>
+        <source>Les ressources typeof et leurs propriétés property, rel ou rev sont inventoriées. Il s’agit d’une vue de diagnostic pratique, pas d’un processeur RDFa 1.1 canonique.</source>
+        <target state="translated">Οι πόροι typeof και οι ιδιότητές τους property, rel ή rev καταγράφονται. Πρόκειται για μια πρακτική διαγνωστική άποψη, όχι για έναν κανονικό επεξεργαστή RDFa 1.1.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limits">
+      <segment>
+        <source>Limites et sécurité</source>
+        <target state="translated">Όρια και ασφάλεια</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_1">
+      <segment>
+        <source>L’analyse est bornée à 1 000 000 de caractères, 500 entités, 5 000 propriétés, 32 niveaux JSON et 200 diagnostics afin d’éviter qu’une source hostile ne bloque durablement l’interface.</source>
+        <target state="translated">Η ανάλυση περιορίζεται σε 1.000.000 χαρακτήρες, 500 οντότητες, 5.000 ιδιότητες, 32 επίπεδα JSON και 200 διαγνώσεις για να αποφευχθεί η μόνιμη μπλοκάρισμα της διεπαφής από μια εχθρική πηγή.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_2">
+      <segment>
+        <source>Le parseur travaille sur un document inerte : il ne télécharge pas les images, scripts ou pixels présents dans le HTML et n’envoie pas le contenu vers un serveur.</source>
+        <target state="translated">Ο αναλυτής εργάζεται σε ένα αδρανές έγγραφο: δεν κατεβάζει τις εικόνες, τα σενάρια ή τα pixels που υπάρχουν στο HTML και δεν στέλνει το περιεχόμενο σε έναν διακομιστή.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_3">
+      <segment>
+        <source>L’outil n’applique pas les exigences détaillées de chaque résultat enrichi et ne garantit ni éligibilité, ni affichage dans les résultats, ni classement.</source>
+        <target state="translated">Το εργαλείο δεν εφαρμόζει τις λεπτομερείς απαιτήσεις κάθε εμπλουτισμένου αποτελέσματος και δεν εγγυάται ούτε επιλεξιμότητα, ούτε εμφάνιση στα αποτελέσματα, ούτε κατάταξη.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Συχνές ερωτήσεις</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q1">
+      <segment>
+        <source>Quel format faut-il privilégier ?</source>
+        <target state="translated">Ποια μορφή πρέπει να προτιμάται;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a1">
+      <segment>
+        <source>Google prend en charge JSON-LD, Microdata et RDFa et recommande généralement JSON-LD, plus simple à maintenir sans mêler le balisage aux éléments visibles. Le format doit néanmoins rester cohérent avec votre chaîne de publication.</source>
+        <target state="translated">Η Google υποστηρίζει JSON-LD, Microdata και RDFa και γενικά προτείνει το JSON-LD, το οποίο είναι πιο εύκολο στη συντήρηση χωρίς να αναμειγνύει τη σήμανση με τα ορατά στοιχεία. Η μορφή πρέπει ωστόσο να παραμένει συνεπής με την αλυσίδα δημοσίευσής σας.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q2">
+      <segment>
+        <source>Un rapport sans erreur garantit-il un résultat enrichi ?</source>
+        <target state="translated">Μια αναφορά χωρίς σφάλματα εγγυάται ένα εμπλουτισμένο αποτέλεσμα;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a2">
+      <segment>
+        <source>Non. Une extraction correcte prouve seulement que la structure a pu être lue. Le contenu doit représenter la page visible, respecter les règles générales et contenir les propriétés exigées pour la fonctionnalité Google visée.</source>
+        <target state="translated">Όχι. Μια σωστή εξαγωγή αποδεικνύει μόνο ότι η δομή έχει διαβαστεί. Το περιεχόμενο πρέπει να αντιπροσωπεύει τη ορατή σελίδα, να τηρεί τους γενικούς κανόνες και να περιέχει τις απαιτούμενες ιδιότητες για τη στοχευόμενη λειτουργικότητα της Google.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q3">
+      <segment>
+        <source>Peut-on analyser une URL directement ?</source>
+        <target state="translated">Μπορούμε να αναλύσουμε μια διεύθυνση URL απευθείας;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a3">
+      <segment>
+        <source>Non. L’outil ne crawle aucun site afin de préserver confidentialité et prévisibilité. Copiez le HTML rendu ou le bloc JSON-LD depuis vos outils de développement.</source>
+        <target state="translated">Όχι. Το εργαλείο δεν ανιχνεύει κανένα ιστότοπο για να διατηρήσει την ιδιωτικότητα και την προβλεψιμότητα. Αντιγράψτε το HTML που έχει αποδοθεί ή το μπλοκ JSON-LD από τα εργαλεία ανάπτυξής σας.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip_title">
+      <segment>
+        <source>Le contenu visible reste la référence</source>
+        <target state="translated">Το ορατό περιεχόμενο παραμένει η αναφορά</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip">
+      <segment>
+        <source>Ne décrivez pas dans les données structurées une information absente ou différente de la page. Un graphe techniquement valide peut rester trompeur et perdre son éligibilité aux fonctionnalités de recherche.</source>
+        <target state="translated">Μην περιγράφετε στα δομημένα δεδομένα μια πληροφορία που απουσιάζει ή διαφέρει από τη σελίδα. Ένα τεχνικά έγκυρο γράφημα μπορεί να παραμείνει παραπλανητικό και να χάσει την επιλεξιμότητά του για τις λειτουργίες αναζήτησης.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">Εξαγωγέας δομημένων δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_subtitle">
+      <segment>
+        <source> Inventoriez JSON-LD, Microdata et RDFa, puis explorez les entités et relations dans un rapport local. </source>
+        <target state="translated">Καταγράψτε JSON-LD, Microdata και RDFa, και στη συνέχεια εξερευνήστε τις οντότητες και τις σχέσεις σε μια τοπική αναφορά.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_privacy">
+      <segment>
+        <source>Traitement 100 % local : le HTML saisi n’est ni envoyé, ni stocké, ni exécuté.</source>
+        <target state="translated">Επεξεργασία 100% τοπικά: το εισαγόμενο HTML δεν αποστέλλεται, δεν αποθηκεύεται και δεν εκτελείται.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_title">
+      <segment>
+        <source>1. Coller le balisage à inspecter</source>
+        <target state="translated">1. Επικολλήστε την ετικέτα που θέλετε να ελέγξετε</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_subtitle">
+      <segment>
+        <source>Utilisez le HTML de la page, un fragment, ou directement un objet ou tableau JSON-LD.</source>
+        <target state="translated">Χρησιμοποιήστε το HTML της σελίδας, ένα τμήμα ή απευθείας ένα αντικείμενο ή πίνακα JSON-LD.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_label">
+      <segment>
+        <source>URL de base facultative</source>
+        <target state="translated">Προαιρετική βασική διεύθυνση URL</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_help">
+      <segment>
+        <source>Elle sert uniquement à résoudre les URL relatives trouvées dans Microdata. Aucune requête réseau n’est effectuée.</source>
+        <target state="translated">Χρησιμοποιείται μόνο για την επίλυση σχετικών διευθύνσεων URL που βρίσκονται σε Microdata. Δεν πραγματοποιείται κανένα δίκτυο αιτήσεων.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_label">
+      <segment>
+        <source>Source HTML ou JSON-LD</source>
+        <target state="translated">Πηγή HTML ή JSON-LD</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 500 entités, 5 000 propriétés et 32 niveaux JSON.</source>
+        <target state="translated">Όριο: 1.000.000 χαρακτήρες, 500 οντότητες, 5.000 ιδιότητες και 32 επίπεδα JSON.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_analyze">
+      <segment>
+        <source>Extraire et analyser</source>
+        <target state="translated">Εξαγωγή και ανάλυση</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_title">
+      <segment>
+        <source>2. Résumé du document</source>
+        <target state="translated">2. Περίληψη εγγράφου</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_subtitle">
+      <segment>
+        <source>Les compteurs décrivent uniquement la source collée, sans vérification auprès de Google.</source>
+        <target state="translated">Οι μετρητές περιγράφουν μόνο την επικολλημένη πηγή, χωρίς έλεγχο από την Google.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_entities">
+      <segment>
+        <source>entités extraites</source>
+        <target state="translated">εξαγόμενες οντότητες</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">ιδιότητες</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relations">
+      <segment>
+        <source>relations</source>
+        <target state="translated">σχέσεις</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">σφάλματα</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">προειδοποιήσεις</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">πληροφορίες</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Αναφορά αντιγραμμένη</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">Αντιγραφή JSON</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_download">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Λήψη αναφοράς</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_diagnostics_title">
+      <segment>
+        <source>Diagnostics d’extraction</source>
+        <target state="translated">Διαγνωστικά εξαγωγής</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_position">
+      <segment>
+        <source>Élément source</source>
+        <target state="translated">Στοιχείο πηγής</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_title">
+      <segment>
+        <source>3. Explorer le graphe extrait</source>
+        <target state="translated">3. Εξερεύνηση του εξαγόμενου γραφήματος</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_subtitle">
+      <segment>
+        <source>Sélectionnez une entité pour examiner ses types, valeurs et relations sortantes.</source>
+        <target state="translated">Επιλέξτε μια οντότητα για να εξετάσετε τους τύπους, τις τιμές και τις εξωτερικές σχέσεις της.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph">
+      <segment>
+        <source>Aucune entité à afficher</source>
+        <target state="translated">Καμία οντότητα προς εμφάνιση</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph_help">
+      <segment>
+        <source>Corrigez la source ou collez un balisage JSON-LD, Microdata ou RDFa.</source>
+        <target state="translated">Διορθώστε την πηγή ή επικολλήστε μια ετικέτα JSON-LD, Microdata ή RDFa.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_node_list_aria">
+      <segment>
+        <source>Entités extraites</source>
+        <target state="translated">Εξαγόμενες οντότητες</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_no_properties">
+      <segment>
+        <source>Cette entité ne contient aucune propriété extraite.</source>
+        <target state="translated">Αυτή η οντότητα δεν περιέχει καμία εξαγόμενη ιδιότητα.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relation_label">
+      <segment>
+        <source>relation vers une entité</source>
+        <target state="translated">σχέση προς μια οντότητα</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_display_limit">
+      <segment>
+        <source>L’interface affiche les 100 premières entités ; le rapport JSON conserve toute l’analyse bornée.</source>
+        <target state="translated">Η διεπαφή εμφανίζει τις 100 πρώτες οντότητες· η αναφορά JSON διατηρεί όλη την περιορισμένη ανάλυση.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_types_title">
+      <segment>
+        <source>Types détectés</source>
+        <target state="translated">Ανιχνευθέντες τύποι</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_title">
+      <segment>
+        <source>4. Interpréter le rapport correctement</source>
+        <target state="translated">4. Ερμηνεύστε σωστά την αναφορά</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_formats">
+      <segment>
+        <source>Les trois formats sont inventoriés. JSON-LD est généralement le plus simple à maintenir, mais l’outil ne convertit pas automatiquement un vocabulaire dans un autre.</source>
+        <target state="translated">Τα τρία φορμά είναι καταγεγραμμένα. Το JSON-LD είναι γενικά το πιο απλό στη συντήρηση, αλλά το εργαλείο δεν μετατρέπει αυτόματα ένα λεξιλόγιο σε άλλο.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph_title">
+      <segment>
+        <source>Graphe, pas simple tableau</source>
+        <target state="translated">Γράφημα, όχι απλός πίνακας</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph">
+      <segment>
+        <source>Les objets imbriqués et les identifiants deviennent des entités reliées, ce qui aide à repérer une organisation, un auteur ou une page décrits plusieurs fois.</source>
+        <target state="translated">Τα ενσωματωμένα αντικείμενα και οι ταυτοποιήσεις γίνονται συνδεδεμένες οντότητες, βοηθώντας στην αναγνώριση μιας οργάνωσης, ενός συγγραφέα ή μιας σελίδας που περιγράφεται πολλές φορές.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation_title">
+      <segment>
+        <source>Extraction ≠ éligibilité</source>
+        <target state="translated">Εξαγωγή ≠ επιλεξιμότητα</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation">
+      <segment>
+        <source>Un JSON valide peut rester incomplet ou trompeur. Consultez les propriétés requises du type concerné et testez ensuite la page publiée avec les outils officiels.</source>
+        <target state="translated">Ένα έγκυρο JSON μπορεί να παραμείνει ελλιπές ή παραπλανητικό. Ελέγξτε τις απαιτούμενες ιδιότητες του σχετικού τύπου και δοκιμάστε στη συνέχεια τη δημοσιευμένη σελίδα με τα επίσημα εργαλεία.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security_title">
+      <segment>
+        <source>Source non exécutée</source>
+        <target state="translated">Η πηγή δεν εκτελέστηκε</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security">
+      <segment>
+        <source>Le HTML est analysé dans un document inerte. Les scripts, pixels, images et liens présents dans la source ne sont pas chargés par l’outil.</source>
+        <target state="translated">Το HTML αναλύεται σε ένα ανενεργό έγγραφο. Τα σενάρια, οι πίξελ, οι εικόνες και οι σύνδεσμοι που υπάρχουν στην πηγή δεν φορτώνονται από το εργαλείο.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Σχετικά εργαλεία SEO</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_title">
+      <segment>
+        <source>Continuer le contrôle de la page</source>
+        <target state="translated">Συνεχίστε τον έλεγχο της σελίδας</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Προεπισκόπηση του snippet</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">Έλεγχος hreflang</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_sitemap">
+      <segment>
+        <source>Contrôler le sitemap</source>
+        <target state="translated">Έλεγχος του sitemap</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Επιστροφή στα εργαλεία SEO</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères. L’analyse est arrêtée sur une copie tronquée.</source>
+        <target state="translated">Η πηγή υπερβαίνει το 1.000.000 χαρακτήρες. Η ανάλυση σταμάτησε σε ένα κομμένο αντίγραφο.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_empty">
+      <segment>
+        <source>Collez du HTML ou un document JSON-LD avant de lancer l’analyse.</source>
+        <target state="translated">Επικολλήστε HTML ή ένα έγγραφο JSON-LD πριν ξεκινήσετε την ανάλυση.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_json">
+      <segment>
+        <source>Ce bloc JSON-LD n’est pas un JSON valide.</source>
+        <target state="translated">Αυτό το μπλοκ JSON-LD δεν είναι έγκυρο JSON.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_root">
+      <segment>
+        <source>La racine JSON-LD doit être un objet ou un tableau d’objets.</source>
+        <target state="translated">Η ρίζα JSON-LD πρέπει να είναι ένα αντικείμενο ή ένας πίνακας αντικειμένων.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_context">
+      <segment>
+        <source>Ce bloc JSON-LD ne déclare aucun @context.</source>
+        <target state="translated">Αυτό το μπλοκ JSON-LD δεν δηλώνει κανένα @context.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_context">
+      <segment>
+        <source>Le contexte ne mentionne pas schema.org. Cela peut être volontaire pour un autre vocabulaire.</source>
+        <target state="translated">Το πλαίσιο δεν αναφέρει το schema.org. Αυτό μπορεί να είναι σκόπιμο για ένα άλλο λεξιλόγιο.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_type">
+      <segment>
+        <source>Aucun type n’est déclaré pour cette entité.</source>
+        <target state="translated">Δεν δηλώνεται κανένας τύπος για αυτήν την οντότητα.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_depth">
+      <segment>
+        <source>Le graphe dépasse 32 niveaux imbriqués et a été borné.</source>
+        <target state="translated">Το γράφημα υπερβαίνει τα 32 επίπεδα εμφωλευμένα και έχει περιοριστεί.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_nodes">
+      <segment>
+        <source>L’analyse est limitée aux 500 premières entités.</source>
+        <target state="translated">Η ανάλυση περιορίζεται στις 500 πρώτες οντότητες.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_properties">
+      <segment>
+        <source>L’analyse est limitée aux 5 000 premières propriétés.</source>
+        <target state="translated">Η ανάλυση περιορίζεται στις 5.000 πρώτες ιδιότητες.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_parser">
+      <segment>
+        <source>Une construction HTML avancée n’est extraite que partiellement.</source>
+        <target state="translated">Μια προηγμένη κατασκευή HTML εξάγεται μόνο μερικώς.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_none">
+      <segment>
+        <source>Aucun JSON-LD, Microdata ou RDFa n’a été trouvé dans la source.</source>
+        <target state="translated">Δεν βρέθηκε κανένα JSON-LD, Microdata ή RDFa στην πηγή.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Η λίστα περιορίζεται στις 200 πρώτες διαγνώσεις.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

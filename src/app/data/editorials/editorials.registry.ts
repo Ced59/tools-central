@@ -108,6 +108,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/pdf/pdf-xref-to-json.editorial'),
   },
+  'dev/seo/hreflang-checker': {
+    available: true,
+    load: () => import('./dev/seo/hreflang-checker.editorial'),
+  },
   'dev/seo/robots-txt-builder': {
     available: true,
     load: () => import('./dev/seo/robots-txt-builder.editorial'),
@@ -120,9 +124,9 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/seo/sitemap-xml-builder.editorial'),
   },
-  'dev/seo/hreflang-checker': {
+  'dev/seo/structured-data-extractor': {
     available: true,
-    load: () => import('./dev/seo/hreflang-checker.editorial'),
+    load: () => import('./dev/seo/structured-data-extractor.editorial'),
   },
   'math/fractions/decimal-to-fraction': {
     available: true,

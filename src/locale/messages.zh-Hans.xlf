@@ -81906,6 +81906,552 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">未提供有效的页面块；无法达成任何互惠。</target>
       </segment>
     </unit>
+    <unit id="tool_structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">结构化数据提取器</target>
+      </segment>
+    </unit>
+    <unit id="tool_structured_data_extractor_desc">
+      <segment>
+        <source>Extraire localement JSON-LD, Microdata et RDFa depuis du HTML, explorer les entités et relations, puis exporter un rapport JSON borné.</source>
+        <target state="translated">从 HTML 中本地提取 JSON-LD、Microdata 和 RDFa，探索实体和关系，然后导出有限的 JSON 报告。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_title">
+      <segment>
+        <source>Extraire et comprendre les données structurées d’une page</source>
+        <target state="translated">提取和理解页面的结构化数据</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_lead">
+      <segment>
+        <source>Le balisage structuré décrit les entités d’une page et leurs relations. Cet extracteur lit localement un document HTML ou JSON-LD, rassemble JSON-LD, Microdata et RDFa dans un graphe commun, puis produit un rapport vérifiable sans charger la page ni exécuter ses scripts.</source>
+        <target state="translated">结构化标记描述页面的实体及其关系。该提取器本地读取 HTML 或 JSON-LD 文档，将 JSON-LD、Microdata 和 RDFa 汇集到一个共同的图中，然后生成可验证的报告，而无需加载页面或执行其脚本。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">使用案例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_title">
+      <segment>
+        <source>Inventorier un modèle de page</source>
+        <target state="translated">清点页面模型</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_text">
+      <segment>
+        <source>Collez le HTML rendu pour repérer les types déclarés, les blocs dupliqués et la coexistence éventuelle de plusieurs formats de balisage.</source>
+        <target state="translated">粘贴渲染的 HTML 以识别声明的类型、重复的块以及多种标记格式的共存。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_title">
+      <segment>
+        <source>Comprendre un graphe JSON-LD</source>
+        <target state="translated">理解 JSON-LD 图</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_text">
+      <segment>
+        <source>Développez @graph, les objets imbriqués et les références @id afin de voir comment une page, une organisation, un auteur ou une offre sont reliés.</source>
+        <target state="translated">展开 @graph、嵌套对象和 @id 引用，以查看页面、组织、作者或产品之间的关系。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_title">
+      <segment>
+        <source>Conserver une preuve de diagnostic</source>
+        <target state="translated">保留诊断证明</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_text">
+      <segment>
+        <source>Exportez un JSON normalisé contenant les entités, propriétés, relations, formats et diagnostics pour comparer deux versions hors de l’outil.</source>
+        <target state="translated">导出包含实体、属性、关系、格式和诊断的标准化 JSON，以便在工具外比较两个版本。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_1">
+      <segment>
+        <source>Préférez le HTML réellement rendu plutôt qu’un extrait de template lorsque le balisage est injecté côté client. Vous pouvez aussi coller directement un objet ou un tableau JSON-LD pour isoler une erreur de syntaxe.</source>
+        <target state="translated">优先使用实际渲染的 HTML，而不是模板片段，当标记在客户端注入时。您也可以直接粘贴 JSON-LD 对象或数组，以隔离语法错误。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_2">
+      <segment>
+        <source>Fournissez l’URL publique comme base seulement si Microdata contient des liens relatifs. Cette valeur sert à leur résolution locale et ne déclenche aucune requête.</source>
+        <target state="translated">仅在 Microdata 包含相对链接时提供公共 URL 作为基础。该值用于本地解析，不会触发任何请求。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_3">
+      <segment>
+        <source>Corrigez d’abord le JSON invalide, les entités sans type et les limites atteintes. Vérifiez ensuite les propriétés obligatoires dans la documentation propre au type, puis testez la page publiée avec un outil officiel.</source>
+        <target state="translated">首先修复无效的 JSON、没有类型的实体和达到的限制。然后检查特定类型文档中的必需属性，最后使用官方工具测试已发布的页面。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_formats">
+      <segment>
+        <source>Formats analysés</source>
+        <target state="translated">解析的格式</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_jsonld">
+      <segment>
+        <source>Les scripts application/ld+json, les documents JSON directs, @graph, @id, @type, @value, @list et les objets imbriqués sont normalisés sans exécuter de JavaScript.</source>
+        <target state="translated">application/ld+json 脚本、直接 JSON 文档、@graph、@id、@type、@value、@list 和嵌套对象在不执行 JavaScript 的情况下被标准化。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_microdata">
+      <segment>
+        <source>Les attributs itemscope, itemtype, itemid et itemprop sont lus avec les règles de valeur usuelles des éléments HTML. itemref est signalé mais n’est pas développé.</source>
+        <target state="translated">itemscope、itemtype、itemid 和 itemprop 属性根据 HTML 元素的常规值规则进行读取。itemref 被标记但未展开。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_rdfa">
+      <segment>
+        <source>Les ressources typeof et leurs propriétés property, rel ou rev sont inventoriées. Il s’agit d’une vue de diagnostic pratique, pas d’un processeur RDFa 1.1 canonique.</source>
+        <target state="translated">typeof 资源及其 property、rel 或 rev 属性被列出。这是一个实用的诊断视图，而不是标准的 RDFa 1.1 处理器。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limits">
+      <segment>
+        <source>Limites et sécurité</source>
+        <target state="translated">限制和安全性</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_1">
+      <segment>
+        <source>L’analyse est bornée à 1 000 000 de caractères, 500 entités, 5 000 propriétés, 32 niveaux JSON et 200 diagnostics afin d’éviter qu’une source hostile ne bloque durablement l’interface.</source>
+        <target state="translated">分析限制为 1,000,000 个字符、500 个实体、5,000 个属性、32 层 JSON 和 200 个诊断，以防止恶意源长期阻塞界面。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_2">
+      <segment>
+        <source>Le parseur travaille sur un document inerte : il ne télécharge pas les images, scripts ou pixels présents dans le HTML et n’envoie pas le contenu vers un serveur.</source>
+        <target state="translated">解析器在一个静态文档上工作：它不会下载 HTML 中的图像、脚本或像素，也不会将内容发送到服务器。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_3">
+      <segment>
+        <source>L’outil n’applique pas les exigences détaillées de chaque résultat enrichi et ne garantit ni éligibilité, ni affichage dans les résultats, ni classement.</source>
+        <target state="translated">该工具不应用于每个丰富结果的详细要求，也不保证资格、显示或排名。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q1">
+      <segment>
+        <source>Quel format faut-il privilégier ?</source>
+        <target state="translated">应该优先考虑哪种格式？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a1">
+      <segment>
+        <source>Google prend en charge JSON-LD, Microdata et RDFa et recommande généralement JSON-LD, plus simple à maintenir sans mêler le balisage aux éléments visibles. Le format doit néanmoins rester cohérent avec votre chaîne de publication.</source>
+        <target state="translated">Google 支持 JSON-LD、Microdata 和 RDFa，并通常推荐 JSON-LD，因为它更易于维护，不会将标记与可见元素混合。然而，格式仍需与您的发布链保持一致。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q2">
+      <segment>
+        <source>Un rapport sans erreur garantit-il un résultat enrichi ?</source>
+        <target state="translated">没有错误的报告是否保证丰富结果？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a2">
+      <segment>
+        <source>Non. Une extraction correcte prouve seulement que la structure a pu être lue. Le contenu doit représenter la page visible, respecter les règles générales et contenir les propriétés exigées pour la fonctionnalité Google visée.</source>
+        <target state="translated">不。正确的提取仅证明结构可以被读取。内容必须代表可见页面，遵循一般规则，并包含所需的属性以实现目标 Google 功能。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q3">
+      <segment>
+        <source>Peut-on analyser une URL directement ?</source>
+        <target state="translated">可以直接分析 URL 吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a3">
+      <segment>
+        <source>Non. L’outil ne crawle aucun site afin de préserver confidentialité et prévisibilité. Copiez le HTML rendu ou le bloc JSON-LD depuis vos outils de développement.</source>
+        <target state="translated">不。该工具不会爬取任何网站，以保护隐私和可预测性。请从您的开发工具中复制渲染的 HTML 或 JSON-LD 块。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip_title">
+      <segment>
+        <source>Le contenu visible reste la référence</source>
+        <target state="translated">可见内容仍然是参考</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip">
+      <segment>
+        <source>Ne décrivez pas dans les données structurées une information absente ou différente de la page. Un graphe techniquement valide peut rester trompeur et perdre son éligibilité aux fonctionnalités de recherche.</source>
+        <target state="translated">在结构化数据中不要描述缺失或与页面不同的信息。一个在技术上有效的图可能会误导并失去搜索功能的资格。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">结构化数据提取器</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_subtitle">
+      <segment>
+        <source> Inventoriez JSON-LD, Microdata et RDFa, puis explorez les entités et relations dans un rapport local. </source>
+        <target state="translated">清点 JSON-LD、Microdata 和 RDFa，然后在本地报告中探索实体和关系。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_privacy">
+      <segment>
+        <source>Traitement 100 % local : le HTML saisi n’est ni envoyé, ni stocké, ni exécuté.</source>
+        <target state="translated">100% 本地处理：输入的 HTML 不会被发送、存储或执行。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_title">
+      <segment>
+        <source>1. Coller le balisage à inspecter</source>
+        <target state="translated">1. 粘贴要检查的标记</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_subtitle">
+      <segment>
+        <source>Utilisez le HTML de la page, un fragment, ou directement un objet ou tableau JSON-LD.</source>
+        <target state="translated">使用页面的 HTML、片段，或直接使用 JSON-LD 对象或数组。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_label">
+      <segment>
+        <source>URL de base facultative</source>
+        <target state="translated">可选基础 URL</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_help">
+      <segment>
+        <source>Elle sert uniquement à résoudre les URL relatives trouvées dans Microdata. Aucune requête réseau n’est effectuée.</source>
+        <target state="translated">它仅用于解析 Microdata 中找到的相对 URL。不会进行任何网络请求。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_label">
+      <segment>
+        <source>Source HTML ou JSON-LD</source>
+        <target state="translated">HTML 或 JSON-LD 源</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 500 entités, 5 000 propriétés et 32 niveaux JSON.</source>
+        <target state="translated">限制：1,000,000 个字符，500 个实体，5,000 个属性和 32 层 JSON。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_analyze">
+      <segment>
+        <source>Extraire et analyser</source>
+        <target state="translated">提取和分析</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_title">
+      <segment>
+        <source>2. Résumé du document</source>
+        <target state="translated">2. 文档摘要</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_subtitle">
+      <segment>
+        <source>Les compteurs décrivent uniquement la source collée, sans vérification auprès de Google.</source>
+        <target state="translated">计数器仅描述粘贴的源，不会向 Google 验证。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_entities">
+      <segment>
+        <source>entités extraites</source>
+        <target state="translated">提取的实体</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">属性</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relations">
+      <segment>
+        <source>relations</source>
+        <target state="translated">关系</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">警告</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">信息</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">报告已复制</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">复制 JSON</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_download">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">下载报告</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_diagnostics_title">
+      <segment>
+        <source>Diagnostics d’extraction</source>
+        <target state="translated">提取诊断</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_position">
+      <segment>
+        <source>Élément source</source>
+        <target state="translated">源元素</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_title">
+      <segment>
+        <source>3. Explorer le graphe extrait</source>
+        <target state="translated">3. 探索提取的图</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_subtitle">
+      <segment>
+        <source>Sélectionnez une entité pour examiner ses types, valeurs et relations sortantes.</source>
+        <target state="translated">选择一个实体以检查其类型、值和外部关系。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph">
+      <segment>
+        <source>Aucune entité à afficher</source>
+        <target state="translated">没有实体可显示</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph_help">
+      <segment>
+        <source>Corrigez la source ou collez un balisage JSON-LD, Microdata ou RDFa.</source>
+        <target state="translated">修正源或粘贴 JSON-LD、Microdata 或 RDFa 标记。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_node_list_aria">
+      <segment>
+        <source>Entités extraites</source>
+        <target state="translated">提取的实体</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_no_properties">
+      <segment>
+        <source>Cette entité ne contient aucune propriété extraite.</source>
+        <target state="translated">该实体不包含任何提取的属性。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relation_label">
+      <segment>
+        <source>relation vers une entité</source>
+        <target state="translated">与实体的关系</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_display_limit">
+      <segment>
+        <source>L’interface affiche les 100 premières entités ; le rapport JSON conserve toute l’analyse bornée.</source>
+        <target state="translated">界面显示前 100 个实体；JSON 报告保留所有有界分析。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_types_title">
+      <segment>
+        <source>Types détectés</source>
+        <target state="translated">检测到的类型</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_title">
+      <segment>
+        <source>4. Interpréter le rapport correctement</source>
+        <target state="translated">4. 正确解读报告</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_formats">
+      <segment>
+        <source>Les trois formats sont inventoriés. JSON-LD est généralement le plus simple à maintenir, mais l’outil ne convertit pas automatiquement un vocabulaire dans un autre.</source>
+        <target state="translated">三种格式已被列出。JSON-LD 通常是最易于维护的，但工具不会自动将一种词汇转换为另一种。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph_title">
+      <segment>
+        <source>Graphe, pas simple tableau</source>
+        <target state="translated">图，不是简单的表格</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph">
+      <segment>
+        <source>Les objets imbriqués et les identifiants deviennent des entités reliées, ce qui aide à repérer une organisation, un auteur ou une page décrits plusieurs fois.</source>
+        <target state="translated">嵌套对象和标识符变成关联的实体，这有助于识别多次描述的组织、作者或页面。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation_title">
+      <segment>
+        <source>Extraction ≠ éligibilité</source>
+        <target state="translated">提取 ≠ 资格</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation">
+      <segment>
+        <source>Un JSON valide peut rester incomplet ou trompeur. Consultez les propriétés requises du type concerné et testez ensuite la page publiée avec les outils officiels.</source>
+        <target state="translated">有效的 JSON 可能仍然不完整或具有误导性。请查看相关类型的必需属性，然后使用官方工具测试已发布的页面。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security_title">
+      <segment>
+        <source>Source non exécutée</source>
+        <target state="translated">源未执行</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security">
+      <segment>
+        <source>Le HTML est analysé dans un document inerte. Les scripts, pixels, images et liens présents dans la source ne sont pas chargés par l’outil.</source>
+        <target state="translated">HTML 被解析为一个惰性文档。源中的脚本、像素、图像和链接不会被工具加载。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">相关的 SEO 工具</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_title">
+      <segment>
+        <source>Continuer le contrôle de la page</source>
+        <target state="translated">继续页面检查</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">预览片段</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">检查 hreflang</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_sitemap">
+      <segment>
+        <source>Contrôler le sitemap</source>
+        <target state="translated">检查网站地图</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">返回 SEO 工具</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères. L’analyse est arrêtée sur une copie tronquée.</source>
+        <target state="translated">源超过 1,000,000 个字符。分析在截断的副本上停止。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_empty">
+      <segment>
+        <source>Collez du HTML ou un document JSON-LD avant de lancer l’analyse.</source>
+        <target state="translated">在启动分析之前，请粘贴 HTML 或 JSON-LD 文档。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_json">
+      <segment>
+        <source>Ce bloc JSON-LD n’est pas un JSON valide.</source>
+        <target state="translated">此 JSON-LD 块不是有效的 JSON。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_root">
+      <segment>
+        <source>La racine JSON-LD doit être un objet ou un tableau d’objets.</source>
+        <target state="translated">JSON-LD 的根必须是一个对象或对象数组。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_context">
+      <segment>
+        <source>Ce bloc JSON-LD ne déclare aucun @context.</source>
+        <target state="translated">此 JSON-LD 块未声明任何 @context。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_context">
+      <segment>
+        <source>Le contexte ne mentionne pas schema.org. Cela peut être volontaire pour un autre vocabulaire.</source>
+        <target state="translated">上下文未提及 schema.org。这可能是为了使用其他词汇。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_type">
+      <segment>
+        <source>Aucun type n’est déclaré pour cette entité.</source>
+        <target state="translated">此实体未声明任何类型。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_depth">
+      <segment>
+        <source>Le graphe dépasse 32 niveaux imbriqués et a été borné.</source>
+        <target state="translated">图形超过 32 层嵌套，已被限制。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_nodes">
+      <segment>
+        <source>L’analyse est limitée aux 500 premières entités.</source>
+        <target state="translated">分析限制在前 500 个实体。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_properties">
+      <segment>
+        <source>L’analyse est limitée aux 5 000 premières propriétés.</source>
+        <target state="translated">分析限制在前 5,000 个属性。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_parser">
+      <segment>
+        <source>Une construction HTML avancée n’est extraite que partiellement.</source>
+        <target state="translated">高级 HTML 构造仅部分提取。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_none">
+      <segment>
+        <source>Aucun JSON-LD, Microdata ou RDFa n’a été trouvé dans la source.</source>
+        <target state="translated">在源中未找到任何 JSON-LD、Microdata 或 RDFa。</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">列表限制在前 200 个诊断。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

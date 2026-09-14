@@ -81878,6 +81878,552 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Es wurde kein gültiger PAGE-Block bereitgestellt; es kann keine Gegenseitigkeit hergestellt werden.</target>
       </segment>
     </unit>
+    <unit id="tool_structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">Strukturierter Datenextraktor</target>
+      </segment>
+    </unit>
+    <unit id="tool_structured_data_extractor_desc">
+      <segment>
+        <source>Extraire localement JSON-LD, Microdata et RDFa depuis du HTML, explorer les entités et relations, puis exporter un rapport JSON borné.</source>
+        <target state="translated">Extrahieren Sie lokal JSON-LD, Microdata und RDFa aus HTML, erkunden Sie die Entitäten und Beziehungen und exportieren Sie dann einen begrenzten JSON-Bericht.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_title">
+      <segment>
+        <source>Extraire et comprendre les données structurées d’une page</source>
+        <target state="translated">Strukturierte Daten einer Seite extrahieren und verstehen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_lead">
+      <segment>
+        <source>Le balisage structuré décrit les entités d’une page et leurs relations. Cet extracteur lit localement un document HTML ou JSON-LD, rassemble JSON-LD, Microdata et RDFa dans un graphe commun, puis produit un rapport vérifiable sans charger la page ni exécuter ses scripts.</source>
+        <target state="translated">Die strukturierte Auszeichnung beschreibt die Entitäten einer Seite und deren Beziehungen. Dieser Extraktor liest lokal ein HTML- oder JSON-LD-Dokument, sammelt JSON-LD, Microdata und RDFa in einem gemeinsamen Graphen und erstellt dann einen überprüfbaren Bericht, ohne die Seite zu laden oder deren Skripte auszuführen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Anwendungsfälle</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_title">
+      <segment>
+        <source>Inventorier un modèle de page</source>
+        <target state="translated">Ein Seitenmodell inventarisieren</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc1_text">
+      <segment>
+        <source>Collez le HTML rendu pour repérer les types déclarés, les blocs dupliqués et la coexistence éventuelle de plusieurs formats de balisage.</source>
+        <target state="translated">Fügen Sie das gerenderte HTML ein, um die deklarierten Typen, doppelte Blöcke und die mögliche Koexistenz mehrerer Auszeichnungsformate zu identifizieren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_title">
+      <segment>
+        <source>Comprendre un graphe JSON-LD</source>
+        <target state="translated">Einen JSON-LD-Graphen verstehen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc2_text">
+      <segment>
+        <source>Développez @graph, les objets imbriqués et les références @id afin de voir comment une page, une organisation, un auteur ou une offre sont reliés.</source>
+        <target state="translated">Entwickeln Sie @graph, die verschachtelten Objekte und die @id-Referenzen, um zu sehen, wie eine Seite, eine Organisation, ein Autor oder ein Angebot miteinander verbunden sind.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_title">
+      <segment>
+        <source>Conserver une preuve de diagnostic</source>
+        <target state="translated">Einen Diagnosebeweis aufbewahren</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_uc3_text">
+      <segment>
+        <source>Exportez un JSON normalisé contenant les entités, propriétés, relations, formats et diagnostics pour comparer deux versions hors de l’outil.</source>
+        <target state="translated">Exportieren Sie ein standardisiertes JSON, das die Entitäten, Eigenschaften, Beziehungen, Formate und Diagnosen enthält, um zwei Versionen außerhalb des Tools zu vergleichen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Empfohlene Methode</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_1">
+      <segment>
+        <source>Préférez le HTML réellement rendu plutôt qu’un extrait de template lorsque le balisage est injecté côté client. Vous pouvez aussi coller directement un objet ou un tableau JSON-LD pour isoler une erreur de syntaxe.</source>
+        <target state="translated">Bevorzugen Sie das tatsächlich gerenderte HTML anstelle eines Template-Ausschnitts, wenn die Auszeichnung clientseitig injiziert wird. Sie können auch direkt ein JSON-LD-Objekt oder -Array einfügen, um einen Syntaxfehler zu isolieren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_2">
+      <segment>
+        <source>Fournissez l’URL publique comme base seulement si Microdata contient des liens relatifs. Cette valeur sert à leur résolution locale et ne déclenche aucune requête.</source>
+        <target state="translated">Geben Sie die öffentliche URL nur als Basis an, wenn Microdata relative Links enthält. Dieser Wert dient der lokalen Auflösung und löst keine Anfragen aus.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_method_3">
+      <segment>
+        <source>Corrigez d’abord le JSON invalide, les entités sans type et les limites atteintes. Vérifiez ensuite les propriétés obligatoires dans la documentation propre au type, puis testez la page publiée avec un outil officiel.</source>
+        <target state="translated">Beheben Sie zuerst ungültiges JSON, Entitäten ohne Typ und erreichte Grenzen. Überprüfen Sie dann die erforderlichen Eigenschaften in der dokumentationsspezifischen Typbeschreibung und testen Sie die veröffentlichte Seite mit einem offiziellen Tool.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_formats">
+      <segment>
+        <source>Formats analysés</source>
+        <target state="translated">Analysierte Formate</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_jsonld">
+      <segment>
+        <source>Les scripts application/ld+json, les documents JSON directs, @graph, @id, @type, @value, @list et les objets imbriqués sont normalisés sans exécuter de JavaScript.</source>
+        <target state="translated">Die Skripte application/ld+json, direkte JSON-Dokumente, @graph, @id, @type, @value, @list und die verschachtelten Objekte werden standardisiert, ohne JavaScript auszuführen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_microdata">
+      <segment>
+        <source>Les attributs itemscope, itemtype, itemid et itemprop sont lus avec les règles de valeur usuelles des éléments HTML. itemref est signalé mais n’est pas développé.</source>
+        <target state="translated">Die Attribute itemscope, itemtype, itemid und itemprop werden mit den üblichen Wertregeln der HTML-Elemente gelesen. itemref wird signalisiert, aber nicht weiterentwickelt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_format_rdfa">
+      <segment>
+        <source>Les ressources typeof et leurs propriétés property, rel ou rev sont inventoriées. Il s’agit d’une vue de diagnostic pratique, pas d’un processeur RDFa 1.1 canonique.</source>
+        <target state="translated">Die Ressourcen typeof und deren Eigenschaften property, rel oder rev werden inventarisiert. Dies ist eine praktische Diagnoseansicht, kein kanonischer RDFa 1.1-Prozessor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limits">
+      <segment>
+        <source>Limites et sécurité</source>
+        <target state="translated">Grenzen und Sicherheit</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_1">
+      <segment>
+        <source>L’analyse est bornée à 1 000 000 de caractères, 500 entités, 5 000 propriétés, 32 niveaux JSON et 200 diagnostics afin d’éviter qu’une source hostile ne bloque durablement l’interface.</source>
+        <target state="translated">Die Analyse ist auf 1.000.000 Zeichen, 500 Entitäten, 5.000 Eigenschaften, 32 JSON-Ebenen und 200 Diagnosen begrenzt, um zu verhindern, dass eine feindliche Quelle die Schnittstelle dauerhaft blockiert.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_2">
+      <segment>
+        <source>Le parseur travaille sur un document inerte : il ne télécharge pas les images, scripts ou pixels présents dans le HTML et n’envoie pas le contenu vers un serveur.</source>
+        <target state="translated">Der Parser arbeitet an einem inerten Dokument: Er lädt keine Bilder, Skripte oder Pixel aus dem HTML herunter und sendet keinen Inhalt an einen Server.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_limit_3">
+      <segment>
+        <source>L’outil n’applique pas les exigences détaillées de chaque résultat enrichi et ne garantit ni éligibilité, ni affichage dans les résultats, ni classement.</source>
+        <target state="translated">Das Tool wendet nicht die detaillierten Anforderungen jedes erweiterten Ergebnisses an und garantiert weder die Berechtigung noch die Anzeige in den Ergebnissen oder das Ranking.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Häufig gestellte Fragen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q1">
+      <segment>
+        <source>Quel format faut-il privilégier ?</source>
+        <target state="translated">Welches Format sollte bevorzugt werden?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a1">
+      <segment>
+        <source>Google prend en charge JSON-LD, Microdata et RDFa et recommande généralement JSON-LD, plus simple à maintenir sans mêler le balisage aux éléments visibles. Le format doit néanmoins rester cohérent avec votre chaîne de publication.</source>
+        <target state="translated">Google unterstützt JSON-LD, Microdata und RDFa und empfiehlt in der Regel JSON-LD, das einfacher zu warten ist, ohne die Auszeichnung mit sichtbaren Elementen zu vermischen. Das Format sollte jedoch konsistent mit Ihrer Veröffentlichungsreihe bleiben.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q2">
+      <segment>
+        <source>Un rapport sans erreur garantit-il un résultat enrichi ?</source>
+        <target state="translated">Garantiert ein fehlerfreier Bericht ein erweitertes Ergebnis?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a2">
+      <segment>
+        <source>Non. Une extraction correcte prouve seulement que la structure a pu être lue. Le contenu doit représenter la page visible, respecter les règles générales et contenir les propriétés exigées pour la fonctionnalité Google visée.</source>
+        <target state="translated">Nein. Eine korrekte Extraktion beweist nur, dass die Struktur gelesen werden konnte. Der Inhalt muss die sichtbare Seite darstellen, die allgemeinen Regeln entsprechen und die erforderlichen Eigenschaften für die angestrebte Google-Funktionalität enthalten.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_q3">
+      <segment>
+        <source>Peut-on analyser une URL directement ?</source>
+        <target state="translated">Kann man eine URL direkt analysieren?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_a3">
+      <segment>
+        <source>Non. L’outil ne crawle aucun site afin de préserver confidentialité et prévisibilité. Copiez le HTML rendu ou le bloc JSON-LD depuis vos outils de développement.</source>
+        <target state="translated">Nein. Das Tool crawlt keine Websites, um Vertraulichkeit und Vorhersehbarkeit zu wahren. Kopieren Sie das gerenderte HTML oder den JSON-LD-Block aus Ihren Entwicklertools.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip_title">
+      <segment>
+        <source>Le contenu visible reste la référence</source>
+        <target state="translated">Der sichtbare Inhalt bleibt der Maßstab</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_seo_structured_data_tip">
+      <segment>
+        <source>Ne décrivez pas dans les données structurées une information absente ou différente de la page. Un graphe techniquement valide peut rester trompeur et perdre son éligibilité aux fonctionnalités de recherche.</source>
+        <target state="translated">Beschreiben Sie in den strukturierten Daten keine Informationen, die auf der Seite fehlen oder anders sind. Ein technisch gültiger Graph kann irreführend sein und seine Berechtigung für Suchfunktionen verlieren.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_title">
+      <segment>
+        <source>Extracteur de données structurées</source>
+        <target state="translated">Strukturierter Datenextraktor</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_subtitle">
+      <segment>
+        <source> Inventoriez JSON-LD, Microdata et RDFa, puis explorez les entités et relations dans un rapport local. </source>
+        <target state="translated">Inventarisieren Sie JSON-LD, Microdata und RDFa und erkunden Sie dann die Entitäten und Beziehungen in einem lokalen Bericht.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_extractor_privacy">
+      <segment>
+        <source>Traitement 100 % local : le HTML saisi n’est ni envoyé, ni stocké, ni exécuté.</source>
+        <target state="translated">100 % lokale Verarbeitung: Das eingegebene HTML wird weder gesendet, noch gespeichert, noch ausgeführt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_title">
+      <segment>
+        <source>1. Coller le balisage à inspecter</source>
+        <target state="translated">1. Fügen Sie das zu inspizierende Markup ein</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_subtitle">
+      <segment>
+        <source>Utilisez le HTML de la page, un fragment, ou directement un objet ou tableau JSON-LD.</source>
+        <target state="translated">Verwenden Sie den HTML-Code der Seite, einen Fragment oder direkt ein JSON-LD-Objekt oder -Array.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_label">
+      <segment>
+        <source>URL de base facultative</source>
+        <target state="translated">Optionale Basis-URL</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_base_help">
+      <segment>
+        <source>Elle sert uniquement à résoudre les URL relatives trouvées dans Microdata. Aucune requête réseau n’est effectuée.</source>
+        <target state="translated">Sie dient nur zur Auflösung relativer URLs, die in Microdata gefunden werden. Es werden keine Netzwerkabfragen durchgeführt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_label">
+      <segment>
+        <source>Source HTML ou JSON-LD</source>
+        <target state="translated">HTML- oder JSON-LD-Quelle</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_help">
+      <segment>
+        <source>Limite : 1 000 000 de caractères, 500 entités, 5 000 propriétés et 32 niveaux JSON.</source>
+        <target state="translated">Limit: 1.000.000 Zeichen, 500 Entitäten, 5.000 Eigenschaften und 32 JSON-Ebenen.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_analyze">
+      <segment>
+        <source>Extraire et analyser</source>
+        <target state="translated">Extrahieren und analysieren</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_title">
+      <segment>
+        <source>2. Résumé du document</source>
+        <target state="translated">2. Dokumentzusammenfassung</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_summary_subtitle">
+      <segment>
+        <source>Les compteurs décrivent uniquement la source collée, sans vérification auprès de Google.</source>
+        <target state="translated">Die Zähler beschreiben nur die eingefügte Quelle, ohne Überprüfung durch Google.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_entities">
+      <segment>
+        <source>entités extraites</source>
+        <target state="translated">extrahierte Entitäten</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">Eigenschaften</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relations">
+      <segment>
+        <source>relations</source>
+        <target state="translated">Beziehungen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">Fehler</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_warnings">
+      <segment>
+        <source>avertissements</source>
+        <target state="translated">Warnungen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_infos">
+      <segment>
+        <source>informations</source>
+        <target state="translated">Informationen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Bericht kopiert</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_copy">
+      <segment>
+        <source>Copier le JSON</source>
+        <target state="translated">JSON kopieren</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_download">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Bericht herunterladen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_diagnostics_title">
+      <segment>
+        <source>Diagnostics d’extraction</source>
+        <target state="translated">Extraktionsdiagnosen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_source_position">
+      <segment>
+        <source>Élément source</source>
+        <target state="translated">Quell-Element</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_title">
+      <segment>
+        <source>3. Explorer le graphe extrait</source>
+        <target state="translated">3. Erkunden Sie den extrahierten Graphen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_graph_subtitle">
+      <segment>
+        <source>Sélectionnez une entité pour examiner ses types, valeurs et relations sortantes.</source>
+        <target state="translated">Wählen Sie eine Entität aus, um ihre Typen, Werte und ausgehenden Beziehungen zu überprüfen.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph">
+      <segment>
+        <source>Aucune entité à afficher</source>
+        <target state="translated">Keine Entität zum Anzeigen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_empty_graph_help">
+      <segment>
+        <source>Corrigez la source ou collez un balisage JSON-LD, Microdata ou RDFa.</source>
+        <target state="translated">Korrigieren Sie die Quelle oder fügen Sie ein JSON-LD-, Microdata- oder RDFa-Markup ein.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_node_list_aria">
+      <segment>
+        <source>Entités extraites</source>
+        <target state="translated">Extrahierte Entitäten</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_no_properties">
+      <segment>
+        <source>Cette entité ne contient aucune propriété extraite.</source>
+        <target state="translated">Diese Entität enthält keine extrahierten Eigenschaften.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_relation_label">
+      <segment>
+        <source>relation vers une entité</source>
+        <target state="translated">Beziehung zu einer Entität</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_display_limit">
+      <segment>
+        <source>L’interface affiche les 100 premières entités ; le rapport JSON conserve toute l’analyse bornée.</source>
+        <target state="translated">Die Benutzeroberfläche zeigt die ersten 100 Entitäten an; der JSON-Bericht behält die gesamte begrenzte Analyse bei.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_types_title">
+      <segment>
+        <source>Types détectés</source>
+        <target state="translated">Erkannte Typen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_title">
+      <segment>
+        <source>4. Interpréter le rapport correctement</source>
+        <target state="translated">4. Den Bericht korrekt interpretieren</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_formats">
+      <segment>
+        <source>Les trois formats sont inventoriés. JSON-LD est généralement le plus simple à maintenir, mais l’outil ne convertit pas automatiquement un vocabulaire dans un autre.</source>
+        <target state="translated">Die drei Formate sind inventarisiert. JSON-LD ist in der Regel am einfachsten zu pflegen, aber das Tool konvertiert nicht automatisch ein Vokabular in ein anderes.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph_title">
+      <segment>
+        <source>Graphe, pas simple tableau</source>
+        <target state="translated">Graph, kein einfaches Table</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_graph">
+      <segment>
+        <source>Les objets imbriqués et les identifiants deviennent des entités reliées, ce qui aide à repérer une organisation, un auteur ou une page décrits plusieurs fois.</source>
+        <target state="translated">Verschachtelte Objekte und Identifikatoren werden zu verbundenen Entitäten, was hilft, eine Organisation, einen Autor oder eine Seite zu erkennen, die mehrfach beschrieben wird.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation_title">
+      <segment>
+        <source>Extraction ≠ éligibilité</source>
+        <target state="translated">Extraktion ≠ Berechtigung</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_validation">
+      <segment>
+        <source>Un JSON valide peut rester incomplet ou trompeur. Consultez les propriétés requises du type concerné et testez ensuite la page publiée avec les outils officiels.</source>
+        <target state="translated">Ein gültiges JSON kann unvollständig oder irreführend bleiben. Überprüfen Sie die erforderlichen Eigenschaften des betreffenden Typs und testen Sie dann die veröffentlichte Seite mit den offiziellen Tools.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security_title">
+      <segment>
+        <source>Source non exécutée</source>
+        <target state="translated">Nicht ausgeführte Quelle</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_guidance_security">
+      <segment>
+        <source>Le HTML est analysé dans un document inerte. Les scripts, pixels, images et liens présents dans la source ne sont pas chargés par l’outil.</source>
+        <target state="translated">HTML wird in einem inaktiven Dokument analysiert. Die in der Quelle enthaltenen Skripte, Pixel, Bilder und Links werden nicht vom Tool geladen.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_aria">
+      <segment>
+        <source>Outils SEO associés</source>
+        <target state="translated">Verwandte SEO-Tools</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_title">
+      <segment>
+        <source>Continuer le contrôle de la page</source>
+        <target state="translated">Seitenkontrolle fortsetzen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_serp">
+      <segment>
+        <source>Prévisualiser le snippet</source>
+        <target state="translated">Snippet-Vorschau</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_hreflang">
+      <segment>
+        <source>Vérifier hreflang</source>
+        <target state="translated">Hreflang überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_related_sitemap">
+      <segment>
+        <source>Contrôler le sitemap</source>
+        <target state="translated">Sitemap überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_back">
+      <segment>
+        <source>Retour aux outils SEO</source>
+        <target state="translated">Zurück zu den SEO-Tools</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_source_large">
+      <segment>
+        <source>La source dépasse 1 000 000 de caractères. L’analyse est arrêtée sur une copie tronquée.</source>
+        <target state="translated">Die Quelle überschreitet 1.000.000 Zeichen. Die Analyse wird auf einer gekürzten Kopie gestoppt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_empty">
+      <segment>
+        <source>Collez du HTML ou un document JSON-LD avant de lancer l’analyse.</source>
+        <target state="translated">Fügen Sie HTML oder ein JSON-LD-Dokument ein, bevor Sie die Analyse starten.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_json">
+      <segment>
+        <source>Ce bloc JSON-LD n’est pas un JSON valide.</source>
+        <target state="translated">Dieser JSON-LD-Block ist kein gültiges JSON.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_invalid_root">
+      <segment>
+        <source>La racine JSON-LD doit être un objet ou un tableau d’objets.</source>
+        <target state="translated">Die JSON-LD-Wurzel muss ein Objekt oder ein Array von Objekten sein.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_context">
+      <segment>
+        <source>Ce bloc JSON-LD ne déclare aucun @context.</source>
+        <target state="translated">Dieser JSON-LD-Block deklariert keinen @context.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_context">
+      <segment>
+        <source>Le contexte ne mentionne pas schema.org. Cela peut être volontaire pour un autre vocabulaire.</source>
+        <target state="translated">Der Kontext erwähnt nicht schema.org. Dies kann absichtlich für ein anderes Vokabular sein.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_missing_type">
+      <segment>
+        <source>Aucun type n’est déclaré pour cette entité.</source>
+        <target state="translated">Es wird kein Typ für dieses Element deklariert.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_depth">
+      <segment>
+        <source>Le graphe dépasse 32 niveaux imbriqués et a été borné.</source>
+        <target state="translated">Der Graph überschreitet 32 verschachtelte Ebenen und wurde begrenzt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_nodes">
+      <segment>
+        <source>L’analyse est limitée aux 500 premières entités.</source>
+        <target state="translated">Die Analyse ist auf die ersten 500 Entitäten beschränkt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_properties">
+      <segment>
+        <source>L’analyse est limitée aux 5 000 premières propriétés.</source>
+        <target state="translated">Die Analyse ist auf die ersten 5.000 Eigenschaften beschränkt.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_parser">
+      <segment>
+        <source>Une construction HTML avancée n’est extraite que partiellement.</source>
+        <target state="translated">Eine komplexe HTML-Struktur wird nur teilweise extrahiert.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_none">
+      <segment>
+        <source>Aucun JSON-LD, Microdata ou RDFa n’a été trouvé dans la source.</source>
+        <target state="translated">Es wurde kein JSON-LD, Microdata oder RDFa in der Quelle gefunden.</target>
+      </segment>
+    </unit>
+    <unit id="structured_data_issue_truncated">
+      <segment>
+        <source>La liste est limitée aux 200 premiers diagnostics.</source>
+        <target state="translated">Die Liste ist auf die ersten 200 Diagnosen beschränkt.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
