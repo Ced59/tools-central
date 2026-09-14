@@ -61,7 +61,7 @@
         <p class="order-help" i18n="@@images_to_pdf_order_help">Glissez les cartes pour changer l’ordre des pages, ou utilisez les boutons monter et descendre.</p>
         <div class="image-grid" data-testid="images-to-pdf-list">
           @for (image of images(); track image.id; let index = $index; let first = $first; let last = $last) {
-            <article class="image-card" draggable="true" (dragstart)="startImageDrag(image.id, $event)" (dragover)="allowImageDrop($event)" (drop)="dropImage(image.id, $event)">
+            <article class="image-card" [draggable]="!isBusy()" (dragstart)="startImageDrag(image.id, $event)" (dragover)="allowImageDrop($event)" (drop)="dropImage(image.id, $event)">
               <div class="page-preview" [style.aspect-ratio]="pageAspectRatio(image)"><img [src]="image.objectUrl" [alt]="previewAlt(image, index)" [style.width.%]="previewImageWidth(image)" [style.height.%]="previewImageHeight(image)" /></div>
               <div class="image-card__copy"><strong><span class="page-number">{{ index + 1 }}</span>{{ image.fileName }}</strong><span>{{ image.width }} × {{ image.height }} px · {{ formatFileSize(image.size) }}</span></div>
               <div class="image-card__actions">

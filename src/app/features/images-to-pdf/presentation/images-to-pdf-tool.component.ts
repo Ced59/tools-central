@@ -93,18 +93,24 @@ export class ImagesToPdfToolComponent {
   }
 
   startImageDrag(imageId: string, event: DragEvent): void {
+    if (this.isBusy()) {
+      event.preventDefault();
+      return;
+    }
     this.draggedImageId = imageId;
     event.dataTransfer?.setData('text/plain', imageId);
     if (event.dataTransfer) event.dataTransfer.effectAllowed = 'move';
   }
 
   allowImageDrop(event: DragEvent): void {
+    if (this.isBusy()) return;
     event.preventDefault();
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
   }
 
   dropImage(targetId: string, event: DragEvent): void {
     event.preventDefault();
+    if (this.isBusy()) return;
     const movedId = event.dataTransfer?.getData('text/plain') || this.draggedImageId;
     this.draggedImageId = null;
     if (!movedId || movedId === targetId) return;

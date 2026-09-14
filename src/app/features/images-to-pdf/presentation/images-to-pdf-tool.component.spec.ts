@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ImagesToPdfToolComponent } from './images-to-pdf-tool.component';
 
@@ -50,5 +50,21 @@ describe('ImagesToPdfToolComponent', () => {
     expect(generation.signal.aborted).toBe(true);
     expect(internals.preparationAbortController).toBeNull();
     expect(internals.generationAbortController).toBeNull();
+  });
+
+  it('blocks drag reordering while a PDF is being generated', () => {
+    const component = TestBed.createComponent(ImagesToPdfToolComponent).componentInstance;
+    const preventDefault = vi.fn();
+    const setData = vi.fn();
+    const event = {
+      preventDefault,
+      dataTransfer: { setData },
+    } as unknown as DragEvent;
+    component.state.set('generating');
+
+    component.startImageDrag('one', event);
+
+    expect(preventDefault).toHaveBeenCalledOnce();
+    expect(setData).not.toHaveBeenCalled();
   });
 });
