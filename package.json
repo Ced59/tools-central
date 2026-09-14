@@ -9,7 +9,7 @@
     "ng": "ng",
     "i18n:locales": "node scripts/generate-locales.mjs",
     "start": "npm run i18n:locales && ng serve",
-    "build": "npm run i18n:locales && ng build",
+    "build": "npm run i18n:locales && ng build && npm run postbuild:assets",
     "watch": "npm run i18n:locales && ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "test:coverage": "ng test --watch=false --coverage",
@@ -32,6 +32,7 @@
     "architecture:validate": "node scripts/validate-architecture.mjs",
     "seo:validate": "node scripts/validate-seo-output.mjs",
     "build:all": "node scripts/generate-prerender-routes.mjs && npm run build && npm run postbuild:seo",
+    "postbuild:assets": "node scripts/stage-pdfjs-assets.mjs",
     "postbuild:seo": "node scripts/generate-sitemaps.mjs && node scripts/generate-robots.mjs && node scripts/generate-ads-txt.mjs"
   },
   "dependencies": {
@@ -48,6 +49,7 @@
     "katex": "^0.18.7",
     "ngx-matomo-client": "^10.0.0",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^6.3.289",
     "qrcode": "^1.5.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

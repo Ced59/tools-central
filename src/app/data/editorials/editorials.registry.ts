@@ -100,6 +100,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/pdf/pdf-text-structure-to-json.editorial'),
   },
+  'dev/pdf/pdf-to-images': {
+    available: true,
+    load: () => import('./dev/pdf/pdf-to-images.editorial'),
+  },
   'dev/pdf/pdf-to-unicode-inspector': {
     available: true,
     load: () => import('./dev/pdf/pdf-to-unicode-inspector.editorial'),
@@ -124,13 +128,13 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/seo/serp-snippet-preview.editorial'),
   },
-  'dev/seo/software-application-schema-builder': {
-    available: true,
-    load: () => import('./dev/seo/software-application-schema-builder.editorial'),
-  },
   'dev/seo/sitemap-xml-builder': {
     available: true,
     load: () => import('./dev/seo/sitemap-xml-builder.editorial'),
+  },
+  'dev/seo/software-application-schema-builder': {
+    available: true,
+    load: () => import('./dev/seo/software-application-schema-builder.editorial'),
   },
   'dev/seo/structured-data-extractor': {
     available: true,

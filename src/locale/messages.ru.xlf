@@ -83973,6 +83973,546 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Не удалось выполнить автоматическое копирование. Выделите код и скопируйте его вручную.</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_to_images_title">
+      <segment>
+        <source>PDF vers images</source>
+        <target state="translated">PDF в изображения</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_to_images_desc">
+      <segment>
+        <source>Convertir localement des pages PDF en PNG, JPEG ou WebP, avec résolution, sélection de pages, aperçu et archive ZIP.</source>
+        <target state="translated">Локально конвертируйте страницы PDF в PNG, JPEG или WebP с разрешением, выбором страниц, предварительным просмотром и архивом ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_title">
+      <segment>
+        <source>Convertir les pages d’un PDF en images sans envoyer le document</source>
+        <target state="translated">Конвертируйте страницы PDF в изображения без отправки документа</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_lead">
+      <segment>
+        <source>Ce convertisseur rend les pages d’un PDF directement dans le navigateur avec PDF.js. Vous choisissez les pages, la résolution et le format, contrôlez les dimensions estimées avant le traitement, puis récupérez une image ou une archive ZIP.</source>
+        <target state="translated">Этот конвертер отображает страницы PDF прямо в браузере с помощью PDF.js. Вы выбираете страницы, разрешение и формат, контролируете предполагаемые размеры перед обработкой, а затем получаете изображение или архив ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_use_cases">
+      <segment>
+        <source>Quand convertir un PDF en PNG, JPEG ou WebP ?</source>
+        <target state="translated">Когда конвертировать PDF в PNG, JPEG или WebP?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc1_title">
+      <segment>
+        <source>Créer un aperçu partageable</source>
+        <target state="translated">Создать общий предварительный просмотр</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc1_text">
+      <segment>
+        <source>Convertissez quelques pages en images pour une messagerie, une documentation ou une vignette sans transmettre le PDF à un service distant.</source>
+        <target state="translated">Конвертируйте несколько страниц в изображения для обмена сообщениями, документации или миниатюры, не передавая PDF удаленному сервису.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc2_title">
+      <segment>
+        <source>Préparer des pages pour le Web</source>
+        <target state="translated">Подготовить страницы для веба</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc2_text">
+      <segment>
+        <source>Choisissez JPEG pour une page photographique, PNG pour les aplats et petits caractères, ou WebP lorsque votre chaîne de publication le prend en charge.</source>
+        <target state="translated">Выберите JPEG для фотографической страницы, PNG для плоских изображений и мелкого текста, или WebP, если ваша цепочка публикации это поддерживает.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc3_title">
+      <segment>
+        <source>Exporter une plage précise</source>
+        <target state="translated">Экспортировать определенный диапазон</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_uc3_text">
+      <segment>
+        <source>La syntaxe 1-3, 7 permet de ne rendre que les pages utiles. Plusieurs résultats sont regroupés dans un ZIP avec des noms de fichiers ordonnés.</source>
+        <target state="translated">Синтаксис 1-3, 7 позволяет рендерить только полезные страницы. Несколько результатов объединяются в ZIP с упорядоченными именами файлов.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_method">
+      <segment>
+        <source>Choisir la résolution et le format</source>
+        <target state="translated">Выберите разрешение и формат</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_method_1">
+      <segment>
+        <source>Le PDF décrit ses pages en points, à raison de 72 points par pouce. À 144 DPI, chaque dimension contient donc environ deux fois plus de pixels qu’à 72 DPI, et le nombre total de pixels est multiplié par quatre.</source>
+        <target state="translated">PDF описывает свои страницы в точках, при 72 точках на дюйм. При 144 DPI каждая размерность содержит примерно в два раза больше пикселей, чем при 72 DPI, и общее количество пикселей увеличивается в четыре раза.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_method_2">
+      <segment>
+        <source>Pour un écran, commencez à 96 ou 144 DPI. Montez à 200 ou 300 DPI uniquement si de petits détails doivent rester lisibles, car la mémoire et le temps de rendu augmentent rapidement.</source>
+        <target state="translated">Для экрана начните с 96 или 144 DPI. Увеличивайте до 200 или 300 DPI только если мелкие детали должны оставаться читаемыми, так как память и время рендеринга быстро увеличиваются.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_method_3">
+      <segment>
+        <source>PNG conserve précisément les aplats mais peut être lourd. JPEG et WebP sont avec perte : réduisez progressivement la qualité et contrôlez visuellement les caractères fins, graphiques et contrastes.</source>
+        <target state="translated">PNG точно сохраняет плоские изображения, но может быть тяжелым. JPEG и WebP имеют потерю: постепенно уменьшайте качество и визуально контролируйте мелкие шрифты, графику и контрасты.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_privacy">
+      <segment>
+        <source>Confidentialité et limites de sécurité</source>
+        <target state="translated">Конфиденциальность и ограничения безопасности</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_privacy_1">
+      <segment>
+        <source>Le fichier, son éventuel mot de passe et les images générées restent dans la mémoire locale du navigateur. Ils ne sont ni téléversés ni enregistrés par l’outil.</source>
+        <target state="translated">Файл, его возможный пароль и сгенерированные изображения остаются в локальной памяти браузера. Они не загружаются и не сохраняются инструментом.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_privacy_2">
+      <segment>
+        <source>La taille d’entrée est limitée à 50 Mio, un document à 1 000 pages et une conversion à 50 pages. Un budget de pixels bloque aussi les demandes susceptibles d’épuiser la mémoire.</source>
+        <target state="translated">Размер входного файла ограничен 50 МБ, документом на 1000 страниц и конвертацией на 50 страниц. Бюджет пикселей также блокирует запросы, которые могут исчерпать память.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_privacy_3">
+      <segment>
+        <source>Le moteur utilise uniquement des ressources embarquées par le site et applique des budgets de taille et de pixels. Un PDF reste toutefois un format complexe : n’ouvrez pas un document provenant d’une source non fiable sur un appareil sensible.</source>
+        <target state="translated">Движок использует только ресурсы, встроенные в сайт, и применяет бюджеты размера и пикселей. Однако PDF остается сложным форматом: не открывайте документ из ненадежного источника на чувствительном устройстве.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_limits">
+      <segment>
+        <source>Ce que l’image ne conserve pas</source>
+        <target state="translated">Что изображение не сохраняет</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_limit_1">
+      <segment>
+        <source>Le texte devient une grille de pixels : il n’est plus sélectionnable, recherchable ni correctement interprété par un lecteur d’écran.</source>
+        <target state="translated">Текст становится сеткой пикселей: его больше нельзя выделить, искать или правильно интерпретировать с помощью экранного считывателя.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_limit_2">
+      <segment>
+        <source>Les liens, champs de formulaire, signatures numériques, pièces jointes, calques et métadonnées du PDF ne sont pas transférés dans l’image.</source>
+        <target state="translated">Ссылки, поля форм, цифровые подписи, вложения, слои и метаданные PDF не передаются в изображение.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_limit_3">
+      <segment>
+        <source>Le rendu suit les capacités de PDF.js et du navigateur. Des polices absentes, profils colorimétriques particuliers ou très grandes images peuvent produire un résultat différent du logiciel d’origine.</source>
+        <target state="translated">Рендеринг зависит от возможностей PDF.js и браузера. Отсутствующие шрифты, особые цветовые профили или очень большие изображения могут дать результат, отличный от оригинального программного обеспечения.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Часто задаваемые вопросы</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_q1">
+      <segment>
+        <source>Quel format donne la meilleure qualité ?</source>
+        <target state="translated">Какой формат дает лучшее качество?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_a1">
+      <segment>
+        <source>PNG est sans perte et convient aux schémas ou au texte net. JPEG et WebP offrent souvent des fichiers plus petits pour les photos, mais leur qualité doit être vérifiée visuellement.</source>
+        <target state="translated">PNG без потерь и подходит для схем или четкого текста. JPEG и WebP часто предлагают меньшие файлы для фотографий, но их качество должно проверяться визуально.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_q2">
+      <segment>
+        <source>Pourquoi 300 DPI est-il parfois bloqué ?</source>
+        <target state="translated">Почему 300 DPI иногда блокируется?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_a2">
+      <segment>
+        <source>Le nombre de pixels croît avec le carré de la résolution. L’outil calcule le coût avant rendu et bloque une combinaison trop lourde afin de protéger l’onglet et les appareils mobiles.</source>
+        <target state="translated">Количество пикселей растет с квадратом разрешения. Инструмент рассчитывает стоимость перед рендерингом и блокирует слишком тяжелую комбинацию, чтобы защитить вкладку и мобильные устройства.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_q3">
+      <segment>
+        <source>Le mot de passe quitte-t-il mon appareil ?</source>
+        <target state="translated">Уходит ли пароль с моего устройства?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_to_images_a3">
+      <segment>
+        <source>Non. Il est fourni uniquement au moteur PDF exécuté dans votre navigateur et est effacé de l’interface lors de la réinitialisation ou du départ de la page.</source>
+        <target state="translated">Нет. Он предоставляется только движку PDF, выполняемому в вашем браузере, и удаляется из интерфейса при сбросе или уходе со страницы.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Назад к инструментам PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_title">
+      <segment>
+        <source>Convertir un PDF en images</source>
+        <target state="translated">Конвертировать PDF в изображения</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_subtitle">
+      <segment>
+        <source>Transformez localement les pages d’un PDF en PNG, JPEG ou WebP, choisissez la résolution et téléchargez une image ou une archive ZIP.</source>
+        <target state="translated">Локально преобразуйте страницы PDF в PNG, JPEG или WebP, выберите разрешение и загрузите изображение или архив ZIP.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_privacy">
+      <segment>
+        <source>Aucun envoi : le PDF et les images restent dans votre navigateur.</source>
+        <target state="translated">Без отправки: PDF и изображения остаются в вашем браузере.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_workspace">
+      <segment>
+        <source>Espace de conversion</source>
+        <target state="translated">Рабочее пространство конвертации</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Шаг 1</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_source_title">
+      <segment>
+        <source>Choisir le PDF</source>
+        <target state="translated">Выбрать PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_loaded">
+      <segment>
+        <source>PDF chargé</source>
+        <target state="translated">PDF загружен</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_pick">
+      <segment>
+        <source>Sélectionner un fichier PDF</source>
+        <target state="translated">Выбрать файл PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_file_limit">
+      <segment>
+        <source>Maximum <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/>. Traitement entièrement local.</source>
+        <target state="translated">Максимум <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/>. Полная локальная обработка.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_password">
+      <segment>
+        <source>Mot de passe, si nécessaire</source>
+        <target state="translated">Пароль, если необходимо</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_password_help">
+      <segment>
+        <source>Le mot de passe sert uniquement au déchiffrement local et n’est jamais conservé.</source>
+        <target state="translated">Пароль используется только для локального расшифрования и никогда не сохраняется.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_file">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Файл</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Размер</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_pages">
+      <segment>
+        <source>Pages</source>
+        <target state="translated">Страницы</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_inspecting">
+      <segment>
+        <source>Analyse du document…</source>
+        <target state="translated">Анализ документа…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Шаг 2</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_settings">
+      <segment>
+        <source>Régler la sortie</source>
+        <target state="translated">Настроить вывод</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_pages_label">
+      <segment>
+        <source>Pages à convertir</source>
+        <target state="translated">Страницы для конвертации</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_pages_help">
+      <segment>
+        <source>Plages et pages séparées par des virgules, dans la limite de <ph id="0" equiv="INTERPOLATION" disp="{{ maxSelectedPages }}"/> pages.</source>
+        <target state="translated">Диапазоны и страницы, разделенные запятыми, в пределах <ph id="0" equiv="INTERPOLATION" disp="{{ maxSelectedPages }}"/> страниц.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_format">
+      <segment>
+        <source>Format</source>
+        <target state="translated">Формат</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_dpi">
+      <segment>
+        <source>Résolution</source>
+        <target state="translated">Разрешение</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_quality">
+      <segment>
+        <source>Qualité : <ph id="0" equiv="INTERPOLATION" disp="{{ qualityPercent() }}"/> %</source>
+        <target state="translated">Качество: <ph id="0" equiv="INTERPOLATION" disp="{{ qualityPercent() }}"/> %</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_quality_help">
+      <segment>
+        <source>Une qualité plus basse réduit généralement le poids, au prix de détails plus visibles.</source>
+        <target state="translated">Низкое качество обычно уменьшает размер файла, но детали становятся более заметными.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_background">
+      <segment>
+        <source>Fond des zones transparentes</source>
+        <target state="translated">Фон прозрачных областей</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_selected">
+      <segment>
+        <source>Pages sélectionnées</source>
+        <target state="translated">Выбранные страницы</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_largest">
+      <segment>
+        <source>Plus grande image</source>
+        <target state="translated">Самое большое изображение</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_pixels">
+      <segment>
+        <source>Pixels à rendre</source>
+        <target state="translated">Пиксели для рендеринга</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_convert">
+      <segment>
+        <source>Convertir les pages</source>
+        <target state="translated">Конвертировать страницы</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Сбросить</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_rendering">
+      <segment>
+        <source>Rendu en cours…</source>
+        <target state="translated">Рендеринг…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Шаг 3</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_results">
+      <segment>
+        <source>Images générées</source>
+        <target state="translated">Сгенерированные изображения</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_results_summary">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ previews().length }}"/> image(s), <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(totalOutputBytes()) }}"/> au total.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ previews().length }}"/> изображений, <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatFileSize(totalOutputBytes()) }}"/> всего.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_download_all">
+      <segment>
+        <source>Télécharger tout</source>
+        <target state="translated">Скачать все</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_download_error">
+      <segment>
+        <source>Le téléchargement n’a pas pu démarrer. Réessayez ou téléchargez les images séparément.</source>
+        <target state="translated">Не удалось начать загрузку. Повторите попытку или скачайте изображения по отдельности.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_page_details">
+      <segment>
+        <source>Page <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> px · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></source>
+        <target state="translated">Страница <ph id="0" equiv="INTERPOLATION" disp="{{ image.pageNumber }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ image.width }}"/> × <ph id="2" equiv="INTERPOLATION_2" disp="{{ image.height }}"/> пикселей · <ph id="3" equiv="INTERPOLATION_3" disp="{{ formatFileSize(image.bytes.byteLength) }}"/></target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_web">
+      <segment>
+        <source>Web et e-mail</source>
+        <target state="translated">Веб и электронная почта</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_web_text">
+      <segment>
+        <source>96 à 144 DPI suffisent souvent. JPEG convient aux photos, PNG aux schémas et WebP réduit généralement le poids.</source>
+        <target state="translated">96 до 144 DPI часто достаточно. JPEG подходит для фотографий, PNG для схем, а WebP обычно уменьшает размер.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_print">
+      <segment>
+        <source>Impression</source>
+        <target state="translated">Печать</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_print_text">
+      <segment>
+        <source>200 à 300 DPI produisent de grandes images. Vérifiez l’estimation mémoire avant une conversion de plusieurs pages.</source>
+        <target state="translated">200 до 300 DPI создают большие изображения. Проверьте оценку памяти перед конвертацией нескольких страниц.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_limits">
+      <segment>
+        <source>Limites</source>
+        <target state="translated">Ограничения</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_guide_limits_text">
+      <segment>
+        <source>La conversion crée des pixels : le texte ne reste pas sélectionnable et les liens ou formulaires ne sont pas conservés.</source>
+        <target state="translated">Конвертация создает пиксели: текст не остается выделяемым, а ссылки или формы не сохраняются.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_type">
+      <segment>
+        <source>Choisissez un fichier PDF valide.</source>
+        <target state="translated">Выберите действительный PDF файл.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_empty">
+      <segment>
+        <source>Le fichier est vide.</source>
+        <target state="translated">Файл пуст.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Файл превышает лимит <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_selection_empty">
+      <segment>
+        <source>Indiquez au moins une page.</source>
+        <target state="translated">Укажите хотя бы одну страницу.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_selection_syntax">
+      <segment>
+        <source>Utilisez des numéros et des plages séparés par des virgules, par exemple 1-3, 7.</source>
+        <target state="translated">Используйте номера и диапазоны, разделенные запятыми, например 1-3, 7.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_selection_range">
+      <segment>
+        <source>Une page ou une plage sort du document.</source>
+        <target state="translated">Одна страница или диапазон выходит за пределы документа.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_selection_limit">
+      <segment>
+        <source>Une conversion est limitée à <ph id="0" equiv="limit" disp="this.maxSelectedPages"/> pages.</source>
+        <target state="translated">Конвертация ограничена <ph id="0" equiv="limit" disp="this.maxSelectedPages"/> страницами.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_estimate_side">
+      <segment>
+        <source>Cette résolution produit une image trop grande pour un navigateur. Réduisez les DPI.</source>
+        <target state="translated">Это разрешение создает изображение, слишком большое для браузера. Уменьшите DPI.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_estimate_pixels">
+      <segment>
+        <source>Le rendu dépasserait le budget mémoire sûr. Réduisez les pages ou les DPI.</source>
+        <target state="translated">Рендеринг превысит безопасный лимит памяти. Уменьшите количество страниц или DPI.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_size_short">
+      <segment>
+        <source>Le PDF dépasse la taille maximale autorisée.</source>
+        <target state="translated">PDF превышает максимально допустимый размер.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_pages">
+      <segment>
+        <source>Ce PDF contient trop de pages pour cet outil.</source>
+        <target state="translated">Этот PDF содержит слишком много страниц для этого инструмента.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_budget">
+      <segment>
+        <source>Le rendu demandé dépasse les limites mémoire sûres.</source>
+        <target state="translated">Запрашиваемый рендеринг превышает безопасные пределы памяти.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_selection">
+      <segment>
+        <source>La sélection de pages est invalide.</source>
+        <target state="translated">Выбор страниц недействителен.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_password">
+      <segment>
+        <source>Le PDF est protégé. Saisissez le bon mot de passe puis sélectionnez de nouveau le fichier.</source>
+        <target state="translated">PDF защищен. Введите правильный пароль, а затем выберите файл снова.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_error_invalid">
+      <segment>
+        <source>Impossible de lire ou de rendre ce PDF. Il peut être endommagé ou utiliser une fonction non prise en charge.</source>
+        <target state="translated">Не удалось прочитать или отрендерить этот PDF. Он может быть поврежден или использовать неподдерживаемую функцию.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_preview_alt">
+      <segment>
+        <source>Aperçu de la page <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/> du PDF</source>
+        <target state="translated">Предварительный просмотр страницы <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/> PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_to_images_download_page">
+      <segment>
+        <source>Télécharger la page <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></source>
+        <target state="translated">Скачать страницу <ph id="0" equiv="pageNumber" disp="String(pageNumber)"/></target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

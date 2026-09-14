@@ -223,3 +223,6 @@ jobs:
         run: |
           curl --fail --silent --show-error --location --retry 5 --retry-delay 5 "${PUBLIC_URL}/fr/" > /dev/null
           curl --fail --silent --show-error --location --retry 5 --retry-delay 5 "${PUBLIC_URL}/fr/categories/math/percentages/percentage-of-number" | grep -q "Pourcentage d’un nombre"
+          worker_headers=$(mktemp)
+          curl --fail --silent --show-error --location --retry 5 --retry-delay 5 --dump-header "$worker_headers" --output /dev/null "${PUBLIC_URL}/assets/pdfjs/pdf.worker.min.mjs"
+          grep -Eiq '^content-type: (application|text)/javascript' "$worker_headers"
