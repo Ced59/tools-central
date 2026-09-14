@@ -40,6 +40,34 @@ export interface OoxmlMetadataEngineResult {
 const MAX_REPORTED_FINDINGS = 500;
 const MAX_REPORTED_VALUE_LENGTH = 240;
 
+interface FindingAccumulator {
+  visible: OoxmlMetadataFinding[];
+  counts: Record<OoxmlMetadataScope, number>;
+  total: number;
+}
+
+function createFindingAccumulator(): FindingAccumulator {
+  return {
+    visible: [],
+    counts: { core: 0, application: 0, custom: 0, thumbnail: 0 },
+    total: 0,
+  };
+}
+
+function recordFinding(
+  accumulator: FindingAccumulator,
+  scope: OoxmlMetadataScope,
+  name: string,
+  value: string,
+  path: string,
+): void {
+  accumulator.counts[scope] += 1;
+  accumulator.total += 1;
+  if (accumulator.visible.length < MAX_REPORTED_FINDINGS) {
+    accumulator.visible.push({ scope, name, value, path });
+  }
+}
+
 const CORE_FIELDS = [
   'title',
   'subject',
@@ -123,19 +151,19 @@ export async function sanitizeOoxmlBuffer(
     Object.values(zip.files).map(file => [file.name.toLowerCase(), file] as const),
   );
   const metadataParts = await resolveMetadataParts(filesByLowerName, entriesByLowerName);
-  const detected: OoxmlMetadataFinding[] = [];
+  const findings = createFindingAccumulator();
 
-  await collectPartFindings(filesByLowerName, entriesByLowerName, metadataParts.core, 'core', CORE_FIELDS, detected);
+  await collectPartFindings(filesByLowerName, entriesByLowerName, metadataParts.core, 'core', CORE_FIELDS, findings);
   await collectPartFindings(
     filesByLowerName,
     entriesByLowerName,
     metadataParts.application,
     'application',
     APPLICATION_FIELDS,
-    detected,
+    findings,
   );
-  await collectCustomFindings(filesByLowerName, entriesByLowerName, metadataParts.custom, detected);
-  collectThumbnailFindings(filesByLowerName, entriesByLowerName, metadataParts.thumbnail, detected);
+  await collectCustomFindings(filesByLowerName, entriesByLowerName, metadataParts.custom, findings);
+  collectThumbnailFindings(filesByLowerName, entriesByLowerName, metadataParts.thumbnail, findings);
   onProgress?.(32);
 
   const removedScopes = new Set<OoxmlMetadataScope>();
@@ -156,9 +184,13 @@ export async function sanitizeOoxmlBuffer(
     removedScopes.add('thumbnail');
   }
 
-  const removed = detected.filter(finding => removedScopes.has(finding.scope));
-  const remaining = detected.filter(finding => !removedScopes.has(finding.scope));
-  const report = createReport(kind, inspection.entries.length, actualUncompressedBytes, detected, removed, remaining);
+  const report = createReport(
+    kind,
+    inspection.entries.length,
+    actualUncompressedBytes,
+    findings,
+    removedScopes,
+  );
   onProgress?.(36);
 
   let output: Uint8Array;
@@ -330,7 +362,7 @@ async function collectPartFindings(
   lowerPaths: readonly string[],
   scope: OoxmlMetadataScope,
   fields: readonly string[],
-  output: OoxmlMetadataFinding[],
+  output: FindingAccumulator,
 ): Promise<void> {
   for (const lowerPath of lowerPaths) {
     const file = files.get(lowerPath);
@@ -339,7 +371,7 @@ async function collectPartFindings(
     const xml = await readXmlPart(file);
     for (const field of fields) {
       for (const value of extractElementValues(xml, field)) {
-        if (value) output.push({ scope, name: field, value, path: file.name });
+        if (value) recordFinding(output, scope, field, value, file.name);
       }
     }
   }
@@ -349,7 +381,7 @@ async function collectCustomFindings(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
   lowerPaths: readonly string[],
-  output: OoxmlMetadataFinding[],
+  output: FindingAccumulator,
 ): Promise<void> {
   for (const lowerPath of lowerPaths) {
     const file = files.get(lowerPath);
@@ -360,7 +392,7 @@ async function collectCustomFindings(
     for (const match of xml.matchAll(propertyPattern)) {
       const name = extractAttribute(match[1], 'name') || 'Propriété personnalisée';
       const value = normalizeXmlValue(match[2]);
-      output.push({ scope: 'custom', name, value, path: file.name });
+      recordFinding(output, 'custom', name, value, file.name);
     }
   }
 }
@@ -369,28 +401,29 @@ function collectThumbnailFindings(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
   lowerPaths: readonly string[],
-  output: OoxmlMetadataFinding[],
+  output: FindingAccumulator,
 ): void {
   for (const lowerPath of lowerPaths) {
     const file = files.get(lowerPath);
     const entry = entries.get(lowerPath);
     if (!file || !entry) continue;
     validateMetadataEntry(entry, file.name);
-    output.push({
-      scope: 'thumbnail',
-      name: 'Aperçu intégré',
-      value: `${String(entry.uncompressedSize)} octets`,
-      path: file.name,
-    });
+    recordFinding(
+      output,
+      'thumbnail',
+      'Aperçu intégré',
+      `${String(entry.uncompressedSize)} octets`,
+      file.name,
+    );
   }
 }
 
-function extractElementValues(xml: string, localName: string): string[] {
+function* extractElementValues(xml: string, localName: string): IterableIterator<string> {
   const pattern = new RegExp(
     `<(?:[\\w.-]+:)?${localName}\\b[^>]*>([\\s\\S]*?)<\\/(?:[\\w.-]+:)?${localName}\\s*>`,
     'giu',
   );
-  return [...xml.matchAll(pattern)].map(match => normalizeXmlValue(match[1]));
+  for (const match of xml.matchAll(pattern)) yield normalizeXmlValue(match[1]);
 }
 
 function normalizeXmlValue(value: string): string {
@@ -455,6 +488,16 @@ interface OoxmlMetadataParts {
   thumbnail: readonly string[];
 }
 
+interface XmlTag {
+  start: number;
+  end: number;
+  name: string;
+  localName: string;
+  closing: boolean;
+  selfClosing: boolean;
+  attributes: ReadonlyMap<string, string>;
+}
+
 async function resolveMetadataParts(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
@@ -472,11 +515,12 @@ async function resolveMetadataParts(
   validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
 
   const xml = await readXmlPart(relationships);
-  const relationshipPattern = /<(?:[\w.-]+:)?Relationship\b[^>]*(?:\/>|>[\s\S]*?<\/(?:[\w.-]+:)?Relationship\s*>)/giu;
-  for (const element of xml.matchAll(relationshipPattern)) {
-    if (extractAttribute(element[0], 'TargetMode').toLowerCase() === 'external') continue;
-    const scope = metadataScopeFromRelationshipType(extractAttribute(element[0], 'Type'));
-    const path = resolvePackageTarget(extractAttribute(element[0], 'Target'));
+  const relationshipTags = parseXmlTags(xml)
+    .filter(tag => !tag.closing && tag.localName === 'Relationship');
+  for (const relationship of relationshipTags) {
+    if ((relationship.attributes.get('TargetMode') ?? '').toLowerCase() === 'external') continue;
+    const scope = metadataScopeFromRelationshipType(relationship.attributes.get('Type') ?? '');
+    const path = resolvePackageTarget(relationship.attributes.get('Target') ?? '');
     if (!scope || !path || !files.has(path)) continue;
     paths[scope].add(path);
   }
@@ -603,21 +647,153 @@ function encodeXmlPart(text: string, encoding: XmlEncoding, hasBom: boolean): Ui
 }
 
 function stripThumbnailRelationships(xml: string): string {
-  return xml.replace(/<(?:[\w.-]+:)?Relationship\b[^>]*(?:\/>|>[\s\S]*?<\/(?:[\w.-]+:)?Relationship\s*>)/giu, element => {
-    const type = extractAttribute(element, 'Type');
-    const target = extractAttribute(element, 'Target');
-    return /\/metadata\/thumbnail$/iu.test(type) || /(?:^|\/)docprops\/thumbnail\.[^/]+$/iu.test(target)
-      ? ''
-      : element;
+  return removeXmlElements(xml, 'Relationship', attributes => {
+    const type = attributes.get('Type') ?? '';
+    const target = attributes.get('Target') ?? '';
+    return /\/metadata\/thumbnail$/iu.test(type)
+      || /(?:^|\/)docprops\/thumbnail\.[^/]+$/iu.test(target);
   });
 }
 
 function stripThumbnailOverrides(xml: string, thumbnailPaths: ReadonlySet<string>): string {
-  return xml.replace(/<(?:[\w.-]+:)?Override\b[^>]*(?:\/>|>[\s\S]*?<\/(?:[\w.-]+:)?Override\s*>)/giu, element => {
-    const partName = extractAttribute(element, 'PartName');
+  return removeXmlElements(xml, 'Override', attributes => {
+    const partName = attributes.get('PartName') ?? '';
     const resolved = resolvePackageTarget(partName);
-    return resolved && thumbnailPaths.has(resolved) ? '' : element;
+    return resolved !== null && thumbnailPaths.has(resolved);
   });
+}
+
+function removeXmlElements(
+  xml: string,
+  localName: string,
+  shouldRemove: (attributes: ReadonlyMap<string, string>) => boolean,
+): string {
+  const tags = parseXmlTags(xml);
+  const ranges: Array<{ start: number; end: number }> = [];
+  for (let index = 0; index < tags.length; index += 1) {
+    const tag = tags[index];
+    if (tag.closing || tag.localName !== localName || !shouldRemove(tag.attributes)) continue;
+    let end = tag.end;
+    if (!tag.selfClosing) {
+      let depth = 1;
+      for (let candidate = index + 1; candidate < tags.length; candidate += 1) {
+        const nested = tags[candidate];
+        if (nested.name !== tag.name) continue;
+        if (!nested.closing && !nested.selfClosing) depth += 1;
+        if (nested.closing) depth -= 1;
+        if (depth === 0) {
+          end = nested.end;
+          break;
+        }
+      }
+      if (depth !== 0) throw new OoxmlMetadataEngineError('corrupt-document');
+    }
+    ranges.push({ start: tag.start, end });
+  }
+  let output = xml;
+  for (const range of ranges.reverse()) {
+    output = output.slice(0, range.start) + output.slice(range.end);
+  }
+  return output;
+}
+
+function parseXmlTags(xml: string): XmlTag[] {
+  const tags: XmlTag[] = [];
+  let cursor = 0;
+  while (cursor < xml.length) {
+    const start = xml.indexOf('<', cursor);
+    if (start < 0) break;
+    if (xml.startsWith('<!--', start)) {
+      cursor = findXmlTerminator(xml, '-->', start + 4);
+      continue;
+    }
+    if (xml.startsWith('<![CDATA[', start)) {
+      cursor = findXmlTerminator(xml, ']]>', start + 9);
+      continue;
+    }
+    if (xml.startsWith('<?', start)) {
+      cursor = findXmlTerminator(xml, '?>', start + 2);
+      continue;
+    }
+    if (xml.startsWith('<!', start)) {
+      throw new OoxmlMetadataEngineError('corrupt-document');
+    }
+
+    const tagEnd = findXmlTagEnd(xml, start + 1);
+    const raw = xml.slice(start + 1, tagEnd).trim();
+    const closing = raw.startsWith('/');
+    const withoutClosing = closing ? raw.slice(1).trimStart() : raw;
+    const selfClosing = !closing && withoutClosing.endsWith('/');
+    const content = selfClosing ? withoutClosing.slice(0, -1).trimEnd() : withoutClosing;
+    const nameMatch = /^[^\s/>=]+/u.exec(content);
+    if (!nameMatch) throw new OoxmlMetadataEngineError('corrupt-document');
+    const name = nameMatch[0];
+    const attributes = closing
+      ? new Map<string, string>()
+      : parseXmlAttributes(content.slice(name.length));
+    tags.push({
+      start,
+      end: tagEnd + 1,
+      name,
+      localName: name.split(':').at(-1) ?? name,
+      closing,
+      selfClosing,
+      attributes,
+    });
+    cursor = tagEnd + 1;
+  }
+  return tags;
+}
+
+function findXmlTerminator(xml: string, terminator: string, from: number): number {
+  const end = xml.indexOf(terminator, from);
+  if (end < 0) throw new OoxmlMetadataEngineError('corrupt-document');
+  return end + terminator.length;
+}
+
+function findXmlTagEnd(xml: string, from: number): number {
+  let quote = '';
+  for (let index = from; index < xml.length; index += 1) {
+    const character = xml[index];
+    if (quote) {
+      if (character === quote) quote = '';
+      continue;
+    }
+    if (character === '"' || character === "'") {
+      quote = character;
+    } else if (character === '>') {
+      return index;
+    } else if (character === '<') {
+      break;
+    }
+  }
+  throw new OoxmlMetadataEngineError('corrupt-document');
+}
+
+function parseXmlAttributes(raw: string): ReadonlyMap<string, string> {
+  const attributes = new Map<string, string>();
+  let cursor = 0;
+  while (cursor < raw.length) {
+    while (/\s/u.test(raw[cursor] ?? '')) cursor += 1;
+    if (cursor >= raw.length) break;
+    const nameMatch = /^[^\s=/>]+/u.exec(raw.slice(cursor));
+    if (!nameMatch) throw new OoxmlMetadataEngineError('corrupt-document');
+    const name = nameMatch[0];
+    cursor += name.length;
+    while (/\s/u.test(raw[cursor] ?? '')) cursor += 1;
+    if (raw[cursor] !== '=') throw new OoxmlMetadataEngineError('corrupt-document');
+    cursor += 1;
+    while (/\s/u.test(raw[cursor] ?? '')) cursor += 1;
+    const quote = raw[cursor];
+    if (quote !== '"' && quote !== "'") throw new OoxmlMetadataEngineError('corrupt-document');
+    const end = raw.indexOf(quote, cursor + 1);
+    if (end < 0 || attributes.has(name)) {
+      throw new OoxmlMetadataEngineError('corrupt-document');
+    }
+    attributes.set(name, decodeXML(raw.slice(cursor + 1, end)));
+    cursor = end + 1;
+  }
+  return attributes;
 }
 
 function validateUnsupportedParts(entries: readonly ZipDirectoryEntry[]): void {
@@ -653,21 +829,20 @@ function createReport(
   kind: OoxmlDocumentKind,
   archiveEntryCount: number,
   uncompressedBytes: number,
-  detected: readonly OoxmlMetadataFinding[],
-  removed: readonly OoxmlMetadataFinding[],
-  remaining: readonly OoxmlMetadataFinding[],
+  findings: FindingAccumulator,
+  removedScopes: ReadonlySet<OoxmlMetadataScope>,
 ): OoxmlMetadataReport {
-  const visibleDetected = detected.slice(0, MAX_REPORTED_FINDINGS);
-  const removedFindings = new Set(removed);
+  const removedCount = [...removedScopes]
+    .reduce((total, scope) => total + findings.counts[scope], 0);
   return {
     kind,
-    detected: visibleDetected,
-    removed: visibleDetected.filter(finding => removedFindings.has(finding)),
-    remaining: visibleDetected.filter(finding => !removedFindings.has(finding)),
-    detectedCount: detected.length,
-    removedCount: removed.length,
-    remainingCount: remaining.length,
-    truncatedFindingCount: Math.max(0, detected.length - visibleDetected.length),
+    detected: findings.visible,
+    removed: findings.visible.filter(finding => removedScopes.has(finding.scope)),
+    remaining: findings.visible.filter(finding => !removedScopes.has(finding.scope)),
+    detectedCount: findings.total,
+    removedCount,
+    remainingCount: findings.total - removedCount,
+    truncatedFindingCount: Math.max(0, findings.total - findings.visible.length),
     archiveEntryCount,
     uncompressedBytes,
   };

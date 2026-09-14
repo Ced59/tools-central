@@ -111,23 +111,30 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.remainingCount).toBe(5);
   });
 
-  it('caps each reported array even when custom properties are duplicated', async () => {
+  it('retains only 500 findings across many relationship-addressed custom parts', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const properties = Array.from(
       { length: 600 },
       () => '<property name="Client"><vt:lpwstr xmlns:vt="vt">Identique</vt:lpwstr></property>',
     ).join('');
     source.file('docProps/custom.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    source.file('metadata/custom-one.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    source.file('metadata/custom-two.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCustomOne" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom-one.xml"/>'
+      + '<Relationship Id="rCustomTwo" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom-two.xml"/>'
+      + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
     const bytes = await source.generateAsync({ type: 'uint8array' });
 
     const result = await sanitizeOoxmlBuffer(bytes, 'docx', allOptions);
 
-    expect(result.report.detectedCount).toBe(607);
-    expect(result.report.removedCount).toBe(607);
+    expect(result.report.detectedCount).toBe(1_807);
+    expect(result.report.removedCount).toBe(1_807);
     expect(result.report.detected).toHaveLength(500);
     expect(result.report.removed).toHaveLength(500);
     expect(result.report.remaining).toHaveLength(0);
-    expect(result.report.truncatedFindingCount).toBe(107);
+    expect(result.report.truncatedFindingCount).toBe(1_307);
   });
 
   it('bounds bytes actually emitted by DEFLATE when the directory understates the size', async () => {
@@ -217,6 +224,26 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.removedCount).toBe(8);
     expect(result.report.remainingCount).toBe(0);
     expect(result.report.detected.map(finding => finding.path)).toContain('metadata/core.xml');
+  });
+
+  it('ignores relationship-shaped text inside XML comments and CDATA sections', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<!-- <Relationship Id="fake-comment" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/> -->'
+      + '<![CDATA[<Relationship Id="fake-cdata" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/>]]>'
+      + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('word/document.xml')?.async('string')).resolves.toContain('Préservé');
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-comment');
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-cdata');
   });
 
   it('decodes UTF-16 metadata parts when reporting values that remain', async () => {
