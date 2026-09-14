@@ -6,6 +6,7 @@ import type {
   PdfRenderedImage,
   PdfRenderPlan,
 } from '../domain/pdf-to-images.models';
+import { PDF_TO_IMAGES_MAX_DOCUMENT_PAGES } from '../domain/pdf-to-images.models';
 
 const PDFJS_ASSET_ROOT = '/assets/pdfjs/';
 const PDFJS_VERSION = '6.3.289';
@@ -14,6 +15,10 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
   async inspect(data: Uint8Array, password?: string): Promise<PdfDocumentSummary> {
     const document = await this.load(data, password);
     try {
+      if (document.numPages > PDF_TO_IMAGES_MAX_DOCUMENT_PAGES) {
+        return { pageCount: document.numPages, pages: [] };
+      }
+
       const pages = [];
       for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
         const page = await document.getPage(pageNumber);

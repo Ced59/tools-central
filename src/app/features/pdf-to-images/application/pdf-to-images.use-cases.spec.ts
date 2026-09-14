@@ -7,7 +7,11 @@ import {
   InspectPdfForImagesUseCase,
   PdfToImagesValidationError,
 } from './pdf-to-images.use-cases';
-import { PDF_TO_IMAGES_MAX_FILE_BYTES, type PdfDocumentSummary } from '../domain/pdf-to-images.models';
+import {
+  PDF_TO_IMAGES_MAX_DOCUMENT_PAGES,
+  PDF_TO_IMAGES_MAX_FILE_BYTES,
+  type PdfDocumentSummary,
+} from '../domain/pdf-to-images.models';
 
 const document: PdfDocumentSummary = {
   pageCount: 2,
@@ -39,6 +43,17 @@ describe('InspectPdfForImagesUseCase', () => {
     await expect(useCase.execute(new Uint8Array())).rejects.toMatchObject({ code: 'empty-file' });
     await expect(useCase.execute(new Uint8Array(PDF_TO_IMAGES_MAX_FILE_BYTES + 1)))
       .rejects.toMatchObject({ code: 'file-too-large' });
+  });
+
+  it('rejects a document whose page count exceeds the inspection limit', async () => {
+    const renderer = rendererFake();
+    vi.mocked(renderer.inspect).mockResolvedValue({
+      pageCount: PDF_TO_IMAGES_MAX_DOCUMENT_PAGES + 1,
+      pages: [],
+    });
+
+    await expect(new InspectPdfForImagesUseCase(renderer).execute(new Uint8Array([1])))
+      .rejects.toMatchObject({ code: 'document-too-large' });
   });
 });
 
