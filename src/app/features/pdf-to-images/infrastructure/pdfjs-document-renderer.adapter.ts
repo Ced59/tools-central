@@ -10,8 +10,11 @@ import { PDF_TO_IMAGES_MAX_DOCUMENT_PAGES } from '../domain/pdf-to-images.models
 
 const PDFJS_ASSET_ROOT = '/assets/pdfjs/';
 const PDFJS_VERSION = '6.3.289';
+export type PdfJsModuleLoader = () => Promise<typeof import('pdfjs-dist')>;
 
 export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
+  constructor(private readonly loadPdfJs: PdfJsModuleLoader = () => import('pdfjs-dist')) {}
+
   async inspect(data: Uint8Array, password?: string): Promise<PdfDocumentSummary> {
     const document = await this.load(data, password);
     try {
@@ -81,7 +84,7 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
   }
 
   private async load(data: Uint8Array, password?: string): Promise<PDFDocumentProxy> {
-    const pdfjs = await import('pdfjs-dist');
+    const pdfjs = await this.loadPdfJs();
     const baseUrl = new URL(PDFJS_ASSET_ROOT, documentOwner().baseURI);
     if (!pdfjs.GlobalWorkerOptions.workerSrc) {
       const workerUrl = new URL('pdf.worker.min.mjs', baseUrl);
@@ -97,7 +100,12 @@ export class PdfJsDocumentRendererAdapter implements PdfDocumentRendererPort {
       wasmUrl: new URL('wasm/', baseUrl).toString(),
       stopAtErrors: true,
     });
-    return loadingTask.promise;
+    try {
+      return await loadingTask.promise;
+    } catch (error: unknown) {
+      await loadingTask.destroy().catch(() => undefined);
+      throw error;
+    }
   }
 }
 
