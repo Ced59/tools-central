@@ -20,6 +20,7 @@ const document: PdfDocumentSummary = {
     { pageNumber: 2, widthPoints: 144, heightPoints: 72, rotation: 90 },
   ],
 };
+const pdfBytes = new TextEncoder().encode('%PDF-1.7');
 
 function rendererFake(): PdfDocumentRendererPort {
   return {
@@ -33,9 +34,17 @@ function rendererFake(): PdfDocumentRendererPort {
 describe('InspectPdfForImagesUseCase', () => {
   it('inspects a valid local PDF', async () => {
     const renderer = rendererFake();
-    await expect(new InspectPdfForImagesUseCase(renderer).execute(new Uint8Array([1]))).resolves.toEqual(document);
+    await expect(new InspectPdfForImagesUseCase(renderer).execute(pdfBytes)).resolves.toEqual(document);
     const inspectMock = vi.mocked(renderer.inspect);
     expect(inspectMock).toHaveBeenCalledOnce();
+  });
+
+  it('rejects a renamed non-PDF before invoking the parser', async () => {
+    const renderer = rendererFake();
+
+    await expect(new InspectPdfForImagesUseCase(renderer).execute(new TextEncoder().encode('not a pdf')))
+      .rejects.toMatchObject({ code: 'invalid-file-signature' });
+    expect(renderer.inspect).not.toHaveBeenCalled();
   });
 
   it('rejects an empty or oversized file before the adapter', async () => {
@@ -52,7 +61,7 @@ describe('InspectPdfForImagesUseCase', () => {
       pages: [],
     });
 
-    await expect(new InspectPdfForImagesUseCase(renderer).execute(new Uint8Array([1])))
+    await expect(new InspectPdfForImagesUseCase(renderer).execute(pdfBytes))
       .rejects.toMatchObject({ code: 'document-too-large' });
   });
 });

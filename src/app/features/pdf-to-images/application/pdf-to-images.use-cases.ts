@@ -34,6 +34,7 @@ export {
 export type PdfToImagesFailureCode =
   | 'empty-file'
   | 'file-too-large'
+  | 'invalid-file-signature'
   | 'document-too-large'
   | 'invalid-page-selection'
   | 'page-out-of-range'
@@ -70,6 +71,7 @@ export class InspectPdfForImagesUseCase {
 
   async execute(data: Uint8Array, password?: string, signal?: AbortSignal): Promise<PdfDocumentSummary> {
     validateInputBytes(data);
+    validatePdfSignature(data);
     const document = await this.renderer.inspect(data, password?.trim() || undefined, signal);
     if (document.pageCount > PDF_TO_IMAGES_MAX_DOCUMENT_PAGES) {
       throw new PdfToImagesValidationError('document-too-large');
@@ -162,6 +164,24 @@ function validateInputBytes(data: Uint8Array): void {
   if (data.byteLength > PDF_TO_IMAGES_MAX_FILE_BYTES) {
     throw new PdfToImagesValidationError('file-too-large');
   }
+}
+
+function validatePdfSignature(data: Uint8Array): void {
+  const scanLength = Math.min(data.byteLength, 1_024);
+  for (let index = 0; index <= scanLength - 8; index += 1) {
+    if (
+      data[index] === 0x25
+      && data[index + 1] === 0x50
+      && data[index + 2] === 0x44
+      && data[index + 3] === 0x46
+      && data[index + 4] === 0x2d
+      && (data[index + 5] === 0x31 || data[index + 5] === 0x32)
+      && data[index + 6] === 0x2e
+      && data[index + 7] >= 0x30
+      && data[index + 7] <= 0x39
+    ) return;
+  }
+  throw new PdfToImagesValidationError('invalid-file-signature');
 }
 
 function mapPageSelectionError(

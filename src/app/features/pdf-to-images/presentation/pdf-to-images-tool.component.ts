@@ -342,6 +342,7 @@ export class PdfToImagesToolComponent {
   private describeError(error: unknown): string {
     if (error instanceof PdfToImagesValidationError) {
       if (error.code === 'file-too-large') return $localize`:@@pdf_to_images_error_size_short:Le PDF dépasse la taille maximale autorisée.`;
+      if (error.code === 'invalid-file-signature') return $localize`:@@pdf_to_images_error_invalid:Impossible de lire ou de rendre ce PDF. Il peut être endommagé ou utiliser une fonction non prise en charge.`;
       if (error.code === 'document-too-large') return $localize`:@@pdf_to_images_error_pages:Ce PDF contient trop de pages pour cet outil.`;
       if (error.code === 'render-budget-exceeded') return $localize`:@@pdf_to_images_error_budget:Le rendu demandé dépasse les limites mémoire sûres.`;
       return $localize`:@@pdf_to_images_error_selection:La sélection de pages est invalide.`;
