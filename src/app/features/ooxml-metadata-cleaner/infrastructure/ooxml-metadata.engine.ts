@@ -40,6 +40,8 @@ export interface OoxmlMetadataEngineResult {
 const MAX_REPORTED_FINDINGS = 500;
 const MAX_REPORTED_VALUE_LENGTH = 240;
 const MAX_REPORTED_PATH_LENGTH = 240;
+const MAX_XML_TAG_COUNT = 100_000;
+const MAX_XML_NESTING_DEPTH = 256;
 
 const METADATA_RELATIONSHIP_SCOPES = new Map<string, OoxmlMetadataScope>([
   ['http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties', 'core'],
@@ -50,6 +52,21 @@ const METADATA_RELATIONSHIP_SCOPES = new Map<string, OoxmlMetadataScope>([
   ['http://purl.oclc.org/ooxml/officeDocument/relationships/custom-properties', 'custom'],
   ['http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail', 'thumbnail'],
   ['http://purl.oclc.org/ooxml/package/relationships/metadata/thumbnail', 'thumbnail'],
+]);
+
+const DIGITAL_SIGNATURE_RELATIONSHIP_TYPES = new Set([
+  'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin',
+  'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature',
+  'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/certificate',
+  'http://purl.oclc.org/ooxml/package/relationships/digital-signature/origin',
+  'http://purl.oclc.org/ooxml/package/relationships/digital-signature/signature',
+  'http://purl.oclc.org/ooxml/package/relationships/digital-signature/certificate',
+]);
+
+const DIGITAL_SIGNATURE_CONTENT_TYPES = new Set([
+  'application/vnd.openxmlformats-package.digital-signature-origin',
+  'application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml',
+  'application/vnd.openxmlformats-package.digital-signature-certificate',
 ]);
 
 interface FindingAccumulator {
@@ -116,21 +133,6 @@ const APPLICATION_FIELDS = [
   'PresentationFormat',
 ] as const;
 
-const EMPTY_CORE_PROPERTIES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-  + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
-  + 'xmlns:dc="http://purl.org/dc/elements/1.1/" '
-  + 'xmlns:dcterms="http://purl.org/dc/terms/" '
-  + 'xmlns:dcmitype="http://purl.org/dc/dcmitype/" '
-  + 'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></cp:coreProperties>';
-
-const EMPTY_APPLICATION_PROPERTIES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-  + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" '
-  + 'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"></Properties>';
-
-const EMPTY_CUSTOM_PROPERTIES = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
-  + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties" '
-  + 'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"></Properties>';
-
 export async function sanitizeOoxmlBuffer(
   data: Uint8Array,
   kind: OoxmlDocumentKind,
@@ -168,6 +170,7 @@ export async function sanitizeOoxmlBuffer(
   const filesByLowerName = new Map(
     Object.values(zip.files).map(file => [file.name.toLowerCase(), file] as const),
   );
+  await validateUnsupportedPackageMarkup(filesByLowerName, entriesByLowerName);
   const resolvedMetadataParts = await resolveMetadataParts(filesByLowerName, entriesByLowerName);
   const metadataParts = await retainRecognizedMetadataParts(
     resolvedMetadataParts,
@@ -191,15 +194,15 @@ export async function sanitizeOoxmlBuffer(
 
   const removedScopes = new Set<OoxmlMetadataScope>();
   if (options.removeCoreProperties) {
-    replaceParts(zip, filesByLowerName, metadataParts.core, EMPTY_CORE_PROPERTIES);
+    await clearMetadataParts(zip, filesByLowerName, entriesByLowerName, metadataParts.core, 'coreProperties');
     removedScopes.add('core');
   }
   if (options.removeApplicationProperties) {
-    replaceParts(zip, filesByLowerName, metadataParts.application, EMPTY_APPLICATION_PROPERTIES);
+    await clearMetadataParts(zip, filesByLowerName, entriesByLowerName, metadataParts.application, 'Properties');
     removedScopes.add('application');
   }
   if (options.removeCustomProperties) {
-    replaceParts(zip, filesByLowerName, metadataParts.custom, EMPTY_CUSTOM_PROPERTIES);
+    await clearMetadataParts(zip, filesByLowerName, entriesByLowerName, metadataParts.custom, 'Properties');
     removedScopes.add('custom');
   }
   if (options.removeThumbnail) {
@@ -410,9 +413,14 @@ async function collectCustomFindings(
     validateMetadataEntry(entries.get(lowerPath), file.name);
     const xml = await readXmlPart(file);
     const tags = parseXmlTags(xml);
+    const rootIndex = tags.findIndex(tag => !tag.closing);
     for (let index = 0; index < tags.length; index += 1) {
       const tag = tags[index];
-      if (tag.closing || tag.localName !== 'property') continue;
+      if (
+        tag.closing
+        || tag.localName !== 'property'
+        || tag.parentIndex !== rootIndex
+      ) continue;
       const closingIndex = findMatchingClosingTag(tags, index);
       const rawValue = closingIndex === null
         ? ''
@@ -450,9 +458,10 @@ function* extractNamedElementValues(
   names: ReadonlySet<string>,
 ): IterableIterator<{ name: string; value: string }> {
   const tags = parseXmlTags(xml);
+  const rootIndex = tags.findIndex(tag => !tag.closing);
   for (let index = 0; index < tags.length; index += 1) {
     const tag = tags[index];
-    if (tag.closing || !names.has(tag.localName)) continue;
+    if (tag.closing || tag.parentIndex !== rootIndex || !names.has(tag.localName)) continue;
     const closingIndex = findMatchingClosingTag(tags, index);
     const value = closingIndex === null
       ? ''
@@ -467,16 +476,30 @@ function normalizeReportedText(value: string): string {
   return `${text.slice(0, MAX_REPORTED_VALUE_LENGTH - 1)}…`;
 }
 
-function replaceParts(
+async function clearMetadataParts(
   zip: JSZip,
   files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
   lowerPaths: readonly string[],
-  xml: string,
-): void {
+  expectedRoot: string,
+): Promise<void> {
   for (const lowerPath of lowerPaths) {
     const file = files.get(lowerPath);
-    if (file) zip.file(file.name, xml);
+    if (!file) continue;
+    validateMetadataEntry(entries.get(lowerPath), file.name);
+    await rewriteXmlPart(zip, file, xml => clearXmlRootContents(xml, expectedRoot));
   }
+}
+
+function clearXmlRootContents(xml: string, expectedRoot: string): string {
+  const tags = parseXmlTags(xml);
+  const rootIndex = tags.findIndex(tag => !tag.closing);
+  if (rootIndex < 0) return xml;
+  const root = tags[rootIndex];
+  if (root.localName !== expectedRoot || root.selfClosing) return xml;
+  const closingIndex = findMatchingClosingTag(tags, rootIndex);
+  if (closingIndex === null) return xml;
+  return xml.slice(0, root.end) + xml.slice(tags[closingIndex].start);
 }
 
 async function removeThumbnails(
@@ -525,6 +548,8 @@ interface XmlTag {
   closing: boolean;
   selfClosing: boolean;
   attributes: ReadonlyMap<string, string>;
+  parentIndex: number | null;
+  matchingIndex: number | null;
 }
 
 async function resolveMetadataParts(
@@ -740,16 +765,8 @@ function removeXmlElements(
 
 function findMatchingClosingTag(tags: readonly XmlTag[], startIndex: number): number | null {
   const start = tags[startIndex];
-  if (start.selfClosing) return null;
-  let depth = 1;
-  for (let candidate = startIndex + 1; candidate < tags.length; candidate += 1) {
-    const nested = tags[candidate];
-    if (nested.name !== start.name) continue;
-    if (!nested.closing && !nested.selfClosing) depth += 1;
-    if (nested.closing) depth -= 1;
-    if (depth === 0) return candidate;
-  }
-  throw new OoxmlMetadataEngineError('corrupt-document');
+  if (start.closing) throw new OoxmlMetadataEngineError('corrupt-document');
+  return start.matchingIndex;
 }
 
 function extractXmlTextContent(xml: string, from: number, to: number): string {
@@ -785,6 +802,7 @@ function extractXmlTextContent(xml: string, from: number, to: number): string {
 
 function parseXmlTags(xml: string): XmlTag[] {
   const tags: XmlTag[] = [];
+  const openTagIndexes: number[] = [];
   let cursor = 0;
   while (cursor < xml.length) {
     const start = xml.indexOf('<', cursor);
@@ -817,7 +835,7 @@ function parseXmlTags(xml: string): XmlTag[] {
     const attributes = closing
       ? new Map<string, string>()
       : parseXmlAttributes(content.slice(name.length));
-    tags.push({
+    const tag: XmlTag = {
       start,
       end: tagEnd + 1,
       name,
@@ -825,9 +843,31 @@ function parseXmlTags(xml: string): XmlTag[] {
       closing,
       selfClosing,
       attributes,
-    });
+      parentIndex: closing
+        ? (openTagIndexes.at(-2) ?? null)
+        : (openTagIndexes.at(-1) ?? null),
+      matchingIndex: null,
+    };
+    const tagIndex = tags.push(tag) - 1;
+    if (closing) {
+      const openingIndex = openTagIndexes.pop();
+      if (openingIndex === undefined || tags[openingIndex].name !== name) {
+        throw new OoxmlMetadataEngineError('corrupt-document');
+      }
+      tags[openingIndex].matchingIndex = tagIndex;
+      tag.matchingIndex = openingIndex;
+    } else if (!selfClosing) {
+      openTagIndexes.push(tagIndex);
+      if (openTagIndexes.length > MAX_XML_NESTING_DEPTH) {
+        throw new OoxmlMetadataEngineError('corrupt-document');
+      }
+    }
+    if (tags.length > MAX_XML_TAG_COUNT) {
+      throw new OoxmlMetadataEngineError('corrupt-document');
+    }
     cursor = tagEnd + 1;
   }
+  if (openTagIndexes.length > 0) throw new OoxmlMetadataEngineError('corrupt-document');
   return tags;
 }
 
@@ -880,6 +920,49 @@ function parseXmlAttributes(raw: string): ReadonlyMap<string, string> {
     cursor = end + 1;
   }
   return attributes;
+}
+
+async function validateUnsupportedPackageMarkup(
+  files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+): Promise<void> {
+  const relationships = files.get('_rels/.rels');
+  if (relationships) {
+    validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
+    const tags = parseXmlTags(await readXmlPart(relationships));
+    const rootIndex = tags.findIndex(tag => !tag.closing);
+    const signatureRelationship = tags.find(tag => (
+      !tag.closing
+      && tag.parentIndex === rootIndex
+      && tag.localName === 'Relationship'
+      && DIGITAL_SIGNATURE_RELATIONSHIP_TYPES.has((tag.attributes.get('Type') ?? '').trim())
+    ));
+    if (signatureRelationship) {
+      throw new OoxmlMetadataEngineError(
+        'signed-package-unsupported',
+        signatureRelationship.attributes.get('Target') ?? relationships.name,
+      );
+    }
+  }
+
+  const contentTypes = files.get('[content_types].xml');
+  if (!contentTypes) return;
+  validateMetadataEntry(entries.get('[content_types].xml'), contentTypes.name);
+  const signatureContentType = parseXmlTags(await readXmlPart(contentTypes)).find(tag => (
+    !tag.closing
+    && (tag.localName === 'Default' || tag.localName === 'Override')
+    && DIGITAL_SIGNATURE_CONTENT_TYPES.has(
+      (tag.attributes.get('ContentType') ?? '').trim().toLowerCase(),
+    )
+  ));
+  if (signatureContentType) {
+    throw new OoxmlMetadataEngineError(
+      'signed-package-unsupported',
+      signatureContentType.attributes.get('PartName')
+        ?? signatureContentType.attributes.get('Extension')
+        ?? contentTypes.name,
+    );
+  }
 }
 
 function validateUnsupportedParts(entries: readonly ZipDirectoryEntry[]): void {

@@ -27,9 +27,17 @@ async function createPackage(kind: OoxmlDocumentKind): Promise<Uint8Array> {
   zip.file('[Content_Types].xml', `<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/docProps/thumbnail.jpeg" ContentType="image/jpeg"/></Types>`);
   zip.file('_rels/.rels', `<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/></Relationships>`);
   zip.file(mainParts[kind], '<document><content>Préservé</content></document>');
-  zip.file('docProps/core.xml', `<?xml version="1.0"?><cp:coreProperties xmlns:cp="core" xmlns:dc="dc"><dc:title>Projet &amp; budget</dc:title><dc:creator>Alice</dc:creator><cp:lastModifiedBy>Bob</cp:lastModifiedBy></cp:coreProperties>`);
-  zip.file('docProps/app.xml', `<?xml version="1.0"?><Properties><Application>Word</Application><AppVersion>16.0</AppVersion><Company>Exemple SA</Company></Properties>`);
-  zip.file('docProps/custom.xml', `<?xml version="1.0"?><Properties><property name="Client"><vt:lpwstr xmlns:vt="vt">Société secrète</vt:lpwstr></property></Properties>`);
+  zip.file('docProps/core.xml', '<?xml version="1.0"?>'
+    + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
+    + 'xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:title>Projet &amp; budget</dc:title>'
+    + '<dc:creator>Alice</dc:creator><cp:lastModifiedBy>Bob</cp:lastModifiedBy></cp:coreProperties>');
+  zip.file('docProps/app.xml', '<?xml version="1.0"?>'
+    + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">'
+    + '<Application>Word</Application><AppVersion>16.0</AppVersion><Company>Exemple SA</Company></Properties>');
+  zip.file('docProps/custom.xml', '<?xml version="1.0"?>'
+    + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
+    + '<property name="Client"><vt:lpwstr xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">'
+    + 'Société secrète</vt:lpwstr></property></Properties>');
   zip.file('docProps/thumbnail.jpeg', new Uint8Array([0xff, 0xd8, 0xff, 0xd9]));
   return zip.generateAsync({ type: 'uint8array' });
 }
@@ -186,6 +194,43 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(new TextDecoder('utf-16le').decode(contentTypeBytes)).not.toContain('thumbnail');
   });
 
+  it('preserves Strict OOXML namespaces while clearing metadata values', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('docProps/core.xml', '<?xml version="1.0"?>'
+      + '<cp:coreProperties xmlns:cp="http://purl.oclc.org/ooxml/package/metadata/core-properties" '
+      + 'xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:creator>Alice Strict</dc:creator>'
+      + '</cp:coreProperties>');
+    source.file('docProps/app.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://purl.oclc.org/ooxml/officeDocument/extendedProperties">'
+      + '<Application>Word Strict</Application></Properties>');
+    source.file('docProps/custom.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://purl.oclc.org/ooxml/officeDocument/customProperties">'
+      + '<property name="Client"><vt:lpwstr xmlns:vt="http://purl.oclc.org/ooxml/officeDocument/docPropsVTypes">'
+      + 'Secret Strict</vt:lpwstr></property></Properties>');
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCore" Type="http://purl.oclc.org/ooxml/package/relationships/metadata/core-properties" Target="docProps/core.xml"/>'
+      + '<Relationship Id="rApp" Type="http://purl.oclc.org/ooxml/officeDocument/relationships/extended-properties" Target="docProps/app.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://purl.oclc.org/ooxml/officeDocument/relationships/custom-properties" Target="docProps/custom.xml"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+    const core = await output.file('docProps/core.xml')?.async('string');
+    const application = await output.file('docProps/app.xml')?.async('string');
+    const custom = await output.file('docProps/custom.xml')?.async('string');
+
+    expect(core).toContain('http://purl.oclc.org/ooxml/package/metadata/core-properties');
+    expect(application).toContain('http://purl.oclc.org/ooxml/officeDocument/extendedProperties');
+    expect(custom).toContain('http://purl.oclc.org/ooxml/officeDocument/customProperties');
+    expect(core).not.toContain('Alice Strict');
+    expect(application).not.toContain('Word Strict');
+    expect(custom).not.toContain('Secret Strict');
+  });
+
   it('resolves and cleans metadata parts declared at nonconventional package paths', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const core = await source.file('docProps/core.xml')?.async('uint8array');
@@ -274,6 +319,43 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(finding?.path.endsWith('/custom.xml')).toBe(true);
   });
 
+  it('only reports schema-level custom properties in linear XML traversal', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const nested = Array.from({ length: 200 }, (_, index) => `<property name="Nested ${String(index)}">`)
+      .join('');
+    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+      + nested
+      + '<vt:lpwstr xmlns:vt="vt">Valeur bornée</vt:lpwstr>'
+      + '</property>'.repeat(200)
+      + '</Properties>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+
+    expect(result.report.detected.filter(finding => finding.scope === 'custom')).toHaveLength(1);
+    expect(result.report.detected.find(finding => finding.scope === 'custom')).toMatchObject({
+      name: 'Nested 0',
+      value: 'Valeur bornée',
+    });
+  });
+
+  it('rejects metadata XML whose nesting exceeds the processing budget', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+      + '<property name="Deep">'.repeat(257)
+      + '</property>'.repeat(257)
+      + '</Properties>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({ code: 'corrupt-document' }));
+  });
+
   it('decodes UTF-16 metadata parts when reporting values that remain', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     source.file('docProps/core.xml', encodeUtf16Le(
@@ -333,5 +415,43 @@ describe('sanitizeOoxmlBuffer', () => {
           : 'signed-package-unsupported',
       }));
     }
+  });
+
+  it.each([
+    'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin',
+    'http://purl.oclc.org/ooxml/package/relationships/digital-signature/origin',
+  ])('rejects a signed OPC package whose signature origin uses a nonconventional path (%s)', async type => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('security/origin.sigs', '<SignatureOrigin/>');
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + `<Relationship Id="rSignature" Type="${type}" Target="security/origin.sigs"/>`
+      + '</Relationships>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'signed-package-unsupported',
+      entryName: 'security/origin.sigs',
+    }));
+  });
+
+  it('rejects signature parts declared only through OPC content types', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('security/signature.data', '<Signature/>');
+    source.file('[Content_Types].xml', '<?xml version="1.0"?><Types>'
+      + '<Override PartName="/security/signature.data" '
+      + 'ContentType="application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml"/>'
+      + '</Types>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'signed-package-unsupported',
+      entryName: '/security/signature.data',
+    }));
   });
 });
