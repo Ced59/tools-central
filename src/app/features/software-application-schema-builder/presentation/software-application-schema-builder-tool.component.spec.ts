@@ -84,4 +84,15 @@ describe('SoftwareApplicationSchemaBuilderToolComponent', () => {
       detail: 'USDT',
     }));
   });
+
+  it('garde le JSON généré hors des zones annoncées automatiquement', () => {
+    const host = fixture.nativeElement as HTMLElement;
+    const output = host.querySelector<HTMLElement>('[data-testid="software-schema-output"]');
+    const health = host.querySelector<HTMLElement>('.health[role="status"]');
+
+    expect(output?.closest('[aria-live]')).toBeNull();
+    expect(health?.getAttribute('aria-live')).toBe('polite');
+    expect(health?.getAttribute('aria-atomic')).toBe('true');
+    expect(health?.textContent).not.toContain(component.activeOutput());
+  });
 });

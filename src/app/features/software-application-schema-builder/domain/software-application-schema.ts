@@ -165,7 +165,7 @@ export function buildSoftwareApplicationSchema(input: SoftwareApplicationSchemaI
 
   const url = validateUrl(input.url, 'url', issues);
   const screenshotUrl = validateUrl(input.screenshotUrl, 'screenshotUrl', issues);
-  const price = parseDecimal(input.price, 2);
+  const price = parseDecimal(input.price);
   if (price === null || price < 0) issues.push(issue('invalid-price', 'error', 'price', input.price.trim()));
   else if (price > SOFTWARE_APPLICATION_MAX_PRICE) {
     issues.push(issue('price-too-large', 'error', 'price', input.price.trim()));
@@ -290,9 +290,12 @@ function validateUrl(
   }
 }
 
-function parseDecimal(source: string, maximumDecimalPlaces: number): number | null {
+function parseDecimal(source: string, maximumDecimalPlaces?: number): number | null {
   const value = source.trim();
-  const pattern = new RegExp(`^(?:0|[1-9]\\d*)(?:[.,]\\d{1,${String(maximumDecimalPlaces)}})?$`, 'u');
+  const decimalPart = maximumDecimalPlaces === undefined
+    ? '\\d+'
+    : `\\d{1,${String(maximumDecimalPlaces)}}`;
+  const pattern = new RegExp(`^(?:0|[1-9]\\d*)(?:[.,]${decimalPart})?$`, 'u');
   if (!pattern.test(value)) return null;
   const parsed = Number(value.replace(',', '.'));
   return Number.isFinite(parsed) ? parsed : null;

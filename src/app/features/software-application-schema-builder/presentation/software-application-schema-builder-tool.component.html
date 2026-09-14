@@ -99,12 +99,12 @@
         </fieldset>
       </section>
 
-      <aside class="tool-card output-card" aria-live="polite" data-testid="software-schema-summary">
+      <aside class="tool-card output-card" data-testid="software-schema-summary">
         <div class="card-header">
           <h2 i18n="@@software_schema_output_title">2. Validation et sortie</h2>
           <p i18n="@@software_schema_output_help">La conformité technique ne garantit jamais l’affichage dans les résultats de recherche.</p>
         </div>
-        <div class="health" [class.health--ok]="result().state === 'google-ready'" [class.health--invalid]="result().state === 'invalid'">
+        <div class="health" role="status" aria-live="polite" aria-atomic="true" [class.health--ok]="result().state === 'google-ready'" [class.health--invalid]="result().state === 'invalid'">
           <i class="tc-icon" [class.tc-icon-check]="result().state === 'google-ready'" [class.tc-icon-info-circle]="result().state === 'schema-valid'" [class.tc-icon-exclamation-triangle]="result().state === 'invalid'" aria-hidden="true"></i>
           <strong>{{ stateLabel() }}</strong>
         </div>
@@ -131,7 +131,7 @@
       </aside>
     </div>
 
-    <section class="tool-card diagnostics-card" data-testid="software-schema-diagnostics" aria-live="polite">
+    <section class="tool-card diagnostics-card" data-testid="software-schema-diagnostics">
       <div class="card-header"><h2 i18n="@@software_schema_diagnostics_title">3. Diagnostics</h2><p i18n="@@software_schema_diagnostics_help">Les erreurs bloquent l’export ; les avertissements signalent une propriété recommandée ou une condition éditoriale.</p></div>
       @if (result().issues.length === 0) {
         <div class="empty-report"><i class="tc-icon tc-icon-check" aria-hidden="true"></i><strong i18n="@@software_schema_no_issue">Aucun problème détecté dans les champs pris en charge</strong></div>

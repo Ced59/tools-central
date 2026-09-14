@@ -86,6 +86,21 @@ describe('buildSoftwareApplicationSchema', () => {
     }
   });
 
+  it('conserve les trois décimales des devises qui les utilisent', () => {
+    const result = buildSoftwareApplicationSchema(validInput({
+      price: '1.234',
+      priceCurrency: 'KWD',
+    }));
+
+    expect(result.state).toBe('schema-valid');
+    expect(result.issues).not.toContainEqual(expect.objectContaining({ code: 'invalid-price' }));
+    expect(result.schema?.['offers']).toEqual({
+      '@type': 'Offer',
+      price: 1.234,
+      priceCurrency: 'KWD',
+    });
+  });
+
   it('refuse une note hors de son échelle et un compteur non entier', () => {
     const result = buildSoftwareApplicationSchema(validInput({
       includeAggregateRating: true,
