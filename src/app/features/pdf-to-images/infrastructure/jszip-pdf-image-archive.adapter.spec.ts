@@ -1,11 +1,15 @@
 import JSZip from 'jszip';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
-import { JsZipPdfImageArchiveAdapter } from './jszip-pdf-image-archive.adapter';
+import { createPdfImageArchive } from './jszip-archive.engine';
+import {
+  JsZipPdfImageArchiveAdapter,
+  type JsZipArchiveWorkerFactory,
+} from './jszip-pdf-image-archive.adapter';
 
 describe('JsZipPdfImageArchiveAdapter', () => {
   it('archives every rendered image under its safe file name', async () => {
-    const bytes = await new JsZipPdfImageArchiveAdapter().create([
+    const bytes = await createPdfImageArchive([
       { fileName: 'page-01.png', bytes: new Uint8Array([1, 2, 3]) },
       { fileName: 'page-02.webp', bytes: new Uint8Array([4, 5]) },
     ]);
@@ -15,5 +19,24 @@ describe('JsZipPdfImageArchiveAdapter', () => {
       .resolves.toEqual(new Uint8Array([1, 2, 3]));
     await expect(archive.file('page-02.webp')?.async('uint8array'))
       .resolves.toEqual(new Uint8Array([4, 5]));
+  });
+
+  it('terminates archive generation when the caller aborts', async () => {
+    const worker = {
+      onmessage: null,
+      onerror: null,
+      postMessage: vi.fn(),
+      terminate: vi.fn(),
+    };
+    const createWorker = vi.fn(() => worker as unknown as Worker) as JsZipArchiveWorkerFactory;
+    const abortController = new AbortController();
+    const archive = new JsZipPdfImageArchiveAdapter(createWorker).create([
+      { fileName: 'page.png', bytes: new Uint8Array([1]) },
+    ], abortController.signal);
+
+    abortController.abort();
+
+    await expect(archive).rejects.toMatchObject({ name: 'AbortError' });
+    expect(worker.terminate).toHaveBeenCalledOnce();
   });
 });

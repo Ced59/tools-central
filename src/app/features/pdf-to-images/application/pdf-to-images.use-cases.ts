@@ -136,7 +136,11 @@ export class DownloadPdfImagesUseCase {
     private readonly download: PdfImageDownloadPort,
   ) {}
 
-  async execute(sourceName: string, images: PdfToImagesConversionResult['images']): Promise<void> {
+  async execute(
+    sourceName: string,
+    images: PdfToImagesConversionResult['images'],
+    signal?: AbortSignal,
+  ): Promise<void> {
     if (images.length === 0) return;
     if (images.length === 1) {
       const image = images[0];
@@ -147,7 +151,7 @@ export class DownloadPdfImagesUseCase {
     const archiveBytes = await this.archive.create(images.map(image => ({
       fileName: image.fileName,
       bytes: image.bytes,
-    })));
+    })), signal);
     const baseName = buildPdfImageFileName(sourceName, 1, 1, 'zip').replace(/-page-01\.zip$/u, '');
     this.download.download(archiveBytes, 'application/zip', `${baseName}-images.zip`);
   }

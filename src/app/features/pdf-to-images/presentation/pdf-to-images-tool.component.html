@@ -116,7 +116,7 @@
       <article class="tool-card results-card" data-testid="pdf-to-images-results">
         <div class="results-heading">
           <div><p class="eyebrow" i18n="@@pdf_to_images_step_three">Étape 3</p><h2 i18n="@@pdf_to_images_results">Images générées</h2><p i18n="@@pdf_to_images_results_summary">{{ previews().length }} image(s), {{ formatFileSize(totalOutputBytes()) }} au total.</p></div>
-          <button type="button" class="primary-button" (click)="downloadAll()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@pdf_to_images_download_all">Télécharger tout</span></button>
+          <button type="button" class="primary-button" [disabled]="isDownloading()" [attr.aria-busy]="isDownloading()" (click)="downloadAll()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@pdf_to_images_download_all">Télécharger tout</span></button>
         </div>
         @if (downloadError()) { <p class="alert alert--error" role="alert" i18n="@@pdf_to_images_download_error">Le téléchargement n’a pas pu démarrer. Réessayez ou téléchargez les images séparément.</p> }
         <div class="preview-grid">

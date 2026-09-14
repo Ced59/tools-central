@@ -4,6 +4,11 @@ import type {
   PdfImageRenderWorkerCommand,
   PdfImageRenderWorkerResponse,
 } from './pdfjs-image-render.messages';
+import {
+  PdfJsOffscreenCanvasFactory,
+  PdfJsRejectingFilterFactory,
+  PdfJsWorkerBinaryDataFactory,
+} from './pdfjs-offscreen.factories';
 import type { PdfRenderedImage, PdfRenderPlan } from '../domain/pdf-to-images.models';
 
 addEventListener('message', ({ data }: MessageEvent<PdfImageRenderWorkerCommand>) => {
@@ -25,9 +30,9 @@ async function renderDocument(command: PdfImageRenderWorkerCommand): Promise<voi
     cMapPacked: true,
     standardFontDataUrl: new URL('standard_fonts/', command.assetRoot).toString(),
     wasmUrl: new URL('wasm/', command.assetRoot).toString(),
-    CanvasFactory: OffscreenCanvasFactory,
-    FilterFactory: WorkerFilterFactory,
-    BinaryDataFactory: WorkerBinaryDataFactory,
+    CanvasFactory: PdfJsOffscreenCanvasFactory,
+    FilterFactory: PdfJsRejectingFilterFactory,
+    BinaryDataFactory: PdfJsWorkerBinaryDataFactory,
     worker: pdfWorker,
     disableFontFace: true,
     useSystemFonts: false,
@@ -122,58 +127,4 @@ function sendFailure(error: unknown): void {
     name: error instanceof Error ? error.name : 'Error',
     message: error instanceof Error ? error.message : 'The PDF image worker failed.',
   });
-}
-
-class OffscreenCanvasFactory {
-  create(width: number, height: number): CanvasAndContext {
-    const canvas = new OffscreenCanvas(width, height);
-    return { canvas, context: canvas.getContext('2d') };
-  }
-
-  reset(target: CanvasAndContext, width: number, height: number): void {
-    target.canvas.width = width;
-    target.canvas.height = height;
-  }
-
-  destroy(target: CanvasAndContext): void {
-    target.canvas.width = 1;
-    target.canvas.height = 1;
-    target.context = null;
-  }
-}
-
-interface CanvasAndContext {
-  canvas: OffscreenCanvas;
-  context: OffscreenCanvasRenderingContext2D | null;
-}
-
-class WorkerFilterFactory {
-  addFilter(): string { return 'none'; }
-  addHCMFilter(): string { return 'none'; }
-  addAlphaFilter(): string { return 'none'; }
-  addLuminosityFilter(): string { return 'none'; }
-  addKnockoutFilter(): string { return 'none'; }
-  addHighlightHCMFilter(): string { return 'none'; }
-  addSelectionHCMFilter(): string { return 'none'; }
-  addSelectionFilter(): string { return 'none'; }
-  createSelectionStyle(): null { return null; }
-  destroy(): void {}
-}
-
-type BinaryDataKind = 'cMapUrl' | 'standardFontDataUrl' | 'wasmUrl';
-
-class WorkerBinaryDataFactory {
-  private readonly roots: Record<BinaryDataKind, string | null>;
-
-  constructor(roots: Record<BinaryDataKind, string | null>) {
-    this.roots = roots;
-  }
-
-  async fetch({ kind, filename }: { kind: BinaryDataKind; filename: string }): Promise<Uint8Array> {
-    const root = this.roots[kind];
-    if (!root) throw new Error(`Missing PDF.js resource root for ${kind}.`);
-    const response = await fetch(new URL(filename, root));
-    if (!response.ok) throw new Error(`Unable to load PDF.js resource: ${filename}.`);
-    return new Uint8Array(await response.arrayBuffer());
-  }
 }

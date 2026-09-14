@@ -251,14 +251,19 @@ test('PDF to images renders locally, previews output and remains responsive', as
     buffer: Buffer.from(bytes),
   });
   await expect(page.getByText('PDF chargé')).toBeVisible({ timeout: 10_000 });
-  await page.locator('#pdf-to-images-pages').fill('1');
+  await page.locator('#pdf-to-images-pages').fill('1-2');
   await page.locator('#pdf-to-images-dpi').selectOption('300');
   await expect(page.getByTestId('pdf-to-images-estimate')).toContainText(/3\s*000 × 1\s*500 px/u);
   const renderWorkerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
   await page.getByRole('button', { name: 'Convertir les pages' }).click();
   await expect((await renderWorkerResponse).ok()).toBe(true);
-  await expect(page.getByTestId('pdf-to-images-results').locator('img')).toHaveCount(1, { timeout: 20_000 });
+  await expect(page.getByTestId('pdf-to-images-results').locator('img')).toHaveCount(2, { timeout: 20_000 });
   await expect(page.getByTestId('pdf-to-images-results')).toContainText('test-local-page-01.png');
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Télécharger tout' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('test-local-images.zip');
+  await expect(page.getByRole('button', { name: 'Télécharger tout' })).toBeEnabled();
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
   await page.goto('/en/categories/dev/pdf/pdf-to-images');

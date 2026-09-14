@@ -25,7 +25,10 @@ export interface PdfImageArchiveEntry {
 }
 
 export interface PdfImageArchivePort {
-  readonly create: (entries: readonly PdfImageArchiveEntry[]) => Promise<Uint8Array>;
+  readonly create: (
+    entries: readonly PdfImageArchiveEntry[],
+    signal?: AbortSignal,
+  ) => Promise<Uint8Array>;
 }
 
 export interface PdfImageDownloadPort {

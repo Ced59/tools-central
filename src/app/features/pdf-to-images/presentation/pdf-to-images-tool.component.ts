@@ -46,6 +46,7 @@ export class PdfToImagesToolComponent {
   private taskRevision = 0;
   private inspectionAbortController: AbortController | null = null;
   private renderAbortController: AbortController | null = null;
+  private downloadAbortController: AbortController | null = null;
 
   readonly dpiValues = PDF_TO_IMAGES_DPI_VALUES;
   readonly formats = PDF_TO_IMAGES_FORMATS;
@@ -66,6 +67,7 @@ export class PdfToImagesToolComponent {
   readonly previews = signal<PreviewImage[]>([]);
   readonly errorMessage = signal('');
   readonly downloadError = signal(false);
+  readonly isDownloading = signal(false);
 
   readonly isBusy = computed(() => this.state() === 'inspecting' || this.state() === 'rendering');
   readonly selection = computed(() => {
@@ -220,12 +222,21 @@ export class PdfToImagesToolComponent {
 
   async downloadAll(): Promise<void> {
     const images = this.previews();
-    if (images.length === 0) return;
+    if (images.length === 0 || this.isDownloading()) return;
+    this.cancelActiveDownload();
+    const abortController = new AbortController();
+    this.downloadAbortController = abortController;
+    this.isDownloading.set(true);
     this.downloadError.set(false);
     try {
-      await this.downloadUseCase.execute(this.sourceName(), images);
-    } catch {
-      this.downloadError.set(true);
+      await this.downloadUseCase.execute(this.sourceName(), images, abortController.signal);
+    } catch (error: unknown) {
+      if (!isAbortError(error)) this.downloadError.set(true);
+    } finally {
+      if (this.downloadAbortController === abortController) {
+        this.downloadAbortController = null;
+        this.isDownloading.set(false);
+      }
     }
   }
 
@@ -302,6 +313,7 @@ export class PdfToImagesToolComponent {
   }
 
   private releasePreviews(): void {
+    this.cancelActiveDownload();
     for (const preview of this.previews()) URL.revokeObjectURL(preview.objectUrl);
     this.previews.set([]);
   }
@@ -314,6 +326,12 @@ export class PdfToImagesToolComponent {
   private cancelActiveInspection(): void {
     this.inspectionAbortController?.abort();
     this.inspectionAbortController = null;
+  }
+
+  private cancelActiveDownload(): void {
+    this.downloadAbortController?.abort();
+    this.downloadAbortController = null;
+    this.isDownloading.set(false);
   }
 
   private fail(message: string): void {

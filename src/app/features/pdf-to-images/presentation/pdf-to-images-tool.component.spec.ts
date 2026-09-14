@@ -37,21 +37,26 @@ describe('PdfToImagesToolComponent', () => {
     const component = fixture.componentInstance;
     const inspectionAbortController = new AbortController();
     const abortController = new AbortController();
+    const downloadAbortController = new AbortController();
     const internals = component as unknown as {
       taskRevision: number;
       inspectionAbortController: AbortController | null;
       renderAbortController: AbortController | null;
+      downloadAbortController: AbortController | null;
     };
     const initialRevision = internals.taskRevision;
     internals.inspectionAbortController = inspectionAbortController;
     internals.renderAbortController = abortController;
+    internals.downloadAbortController = downloadAbortController;
 
     fixture.destroy();
 
     expect(internals.taskRevision).toBe(initialRevision + 1);
     expect(inspectionAbortController.signal.aborted).toBe(true);
     expect(abortController.signal.aborted).toBe(true);
+    expect(downloadAbortController.signal.aborted).toBe(true);
     expect(internals.inspectionAbortController).toBeNull();
     expect(internals.renderAbortController).toBeNull();
+    expect(internals.downloadAbortController).toBeNull();
   });
 });
