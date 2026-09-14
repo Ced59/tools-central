@@ -39,6 +39,18 @@ export interface OoxmlMetadataEngineResult {
 
 const MAX_REPORTED_FINDINGS = 500;
 const MAX_REPORTED_VALUE_LENGTH = 240;
+const MAX_REPORTED_PATH_LENGTH = 240;
+
+const METADATA_RELATIONSHIP_SCOPES = new Map<string, OoxmlMetadataScope>([
+  ['http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties', 'core'],
+  ['http://purl.oclc.org/ooxml/package/relationships/metadata/core-properties', 'core'],
+  ['http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties', 'application'],
+  ['http://purl.oclc.org/ooxml/officeDocument/relationships/extended-properties', 'application'],
+  ['http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties', 'custom'],
+  ['http://purl.oclc.org/ooxml/officeDocument/relationships/custom-properties', 'custom'],
+  ['http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail', 'thumbnail'],
+  ['http://purl.oclc.org/ooxml/package/relationships/metadata/thumbnail', 'thumbnail'],
+]);
 
 interface FindingAccumulator {
   visible: OoxmlMetadataFinding[];
@@ -64,8 +76,14 @@ function recordFinding(
   accumulator.counts[scope] += 1;
   accumulator.total += 1;
   if (accumulator.visible.length < MAX_REPORTED_FINDINGS) {
-    accumulator.visible.push({ scope, name, value, path });
+    accumulator.visible.push({ scope, name, value, path: truncateReportedPath(path) });
   }
+}
+
+function truncateReportedPath(path: string): string {
+  if (path.length <= MAX_REPORTED_PATH_LENGTH) return path;
+  const tailLength = Math.floor(MAX_REPORTED_PATH_LENGTH / 2);
+  return `${path.slice(0, MAX_REPORTED_PATH_LENGTH - tailLength - 1)}…${path.slice(-tailLength)}`;
 }
 
 const CORE_FIELDS = [
@@ -150,7 +168,12 @@ export async function sanitizeOoxmlBuffer(
   const filesByLowerName = new Map(
     Object.values(zip.files).map(file => [file.name.toLowerCase(), file] as const),
   );
-  const metadataParts = await resolveMetadataParts(filesByLowerName, entriesByLowerName);
+  const resolvedMetadataParts = await resolveMetadataParts(filesByLowerName, entriesByLowerName);
+  const metadataParts = await retainRecognizedMetadataParts(
+    resolvedMetadataParts,
+    filesByLowerName,
+    entriesByLowerName,
+  );
   const findings = createFindingAccumulator();
 
   await collectPartFindings(filesByLowerName, entriesByLowerName, metadataParts.core, 'core', CORE_FIELDS, findings);
@@ -369,10 +392,8 @@ async function collectPartFindings(
     if (!file) continue;
     validateMetadataEntry(entries.get(lowerPath), file.name);
     const xml = await readXmlPart(file);
-    for (const field of fields) {
-      for (const value of extractElementValues(xml, field)) {
-        if (value) recordFinding(output, scope, field, value, file.name);
-      }
+    for (const finding of extractNamedElementValues(xml, new Set(fields))) {
+      if (finding.value) recordFinding(output, scope, finding.name, finding.value, file.name);
     }
   }
 }
@@ -388,11 +409,17 @@ async function collectCustomFindings(
     if (!file) continue;
     validateMetadataEntry(entries.get(lowerPath), file.name);
     const xml = await readXmlPart(file);
-    const propertyPattern = /<(?:[\w.-]+:)?property\b([^>]*)>([\s\S]*?)<\/(?:[\w.-]+:)?property\s*>/giu;
-    for (const match of xml.matchAll(propertyPattern)) {
-      const name = extractAttribute(match[1], 'name') || 'Propriété personnalisée';
-      const value = normalizeXmlValue(match[2]);
-      recordFinding(output, 'custom', name, value, file.name);
+    const tags = parseXmlTags(xml);
+    for (let index = 0; index < tags.length; index += 1) {
+      const tag = tags[index];
+      if (tag.closing || tag.localName !== 'property') continue;
+      const closingIndex = findMatchingClosingTag(tags, index);
+      const rawValue = closingIndex === null
+        ? ''
+        : extractXmlTextContent(xml, tag.end, tags[closingIndex].start);
+      const name = normalizeReportedText(tag.attributes.get('name') ?? '')
+        || 'Propriété personnalisée';
+      recordFinding(output, 'custom', name, normalizeReportedText(rawValue), file.name);
     }
   }
 }
@@ -418,24 +445,26 @@ function collectThumbnailFindings(
   }
 }
 
-function* extractElementValues(xml: string, localName: string): IterableIterator<string> {
-  const pattern = new RegExp(
-    `<(?:[\\w.-]+:)?${localName}\\b[^>]*>([\\s\\S]*?)<\\/(?:[\\w.-]+:)?${localName}\\s*>`,
-    'giu',
-  );
-  for (const match of xml.matchAll(pattern)) yield normalizeXmlValue(match[1]);
+function* extractNamedElementValues(
+  xml: string,
+  names: ReadonlySet<string>,
+): IterableIterator<{ name: string; value: string }> {
+  const tags = parseXmlTags(xml);
+  for (let index = 0; index < tags.length; index += 1) {
+    const tag = tags[index];
+    if (tag.closing || !names.has(tag.localName)) continue;
+    const closingIndex = findMatchingClosingTag(tags, index);
+    const value = closingIndex === null
+      ? ''
+      : extractXmlTextContent(xml, tag.end, tags[closingIndex].start);
+    yield { name: tag.localName, value: normalizeReportedText(value) };
+  }
 }
 
-function normalizeXmlValue(value: string): string {
-  const text = decodeXML(value.replace(/<[^>]+>/gu, ' ').replace(/\s+/gu, ' ').trim());
+function normalizeReportedText(value: string): string {
+  const text = decodeXML(value).replace(/\s+/gu, ' ').trim();
   if (text.length <= MAX_REPORTED_VALUE_LENGTH) return text;
   return `${text.slice(0, MAX_REPORTED_VALUE_LENGTH - 1)}…`;
-}
-
-function extractAttribute(attributes: string, name: string): string {
-  const pattern = new RegExp(`\\b${name}\\s*=\\s*(["'])([\\s\\S]*?)\\1`, 'iu');
-  const match = pattern.exec(attributes);
-  return match ? normalizeXmlValue(match[2]) : '';
 }
 
 function replaceParts(
@@ -527,6 +556,36 @@ async function resolveMetadataParts(
   return toMetadataParts(paths);
 }
 
+async function retainRecognizedMetadataParts(
+  parts: OoxmlMetadataParts,
+  files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+): Promise<OoxmlMetadataParts> {
+  const recognized: Record<OoxmlMetadataScope, string[]> = {
+    core: [],
+    application: [],
+    custom: [],
+    thumbnail: [],
+  };
+  for (const scope of ['core', 'application', 'custom'] as const) {
+    for (const path of parts[scope]) {
+      const file = files.get(path);
+      if (!file) continue;
+      validateMetadataEntry(entries.get(path), file.name);
+      const root = parseXmlTags(await readXmlPart(file)).find(tag => !tag.closing);
+      const expectedRoot = scope === 'core' ? 'coreProperties' : 'Properties';
+      if (root?.localName === expectedRoot) recognized[scope].push(path);
+    }
+  }
+  for (const path of parts.thumbnail) {
+    const file = files.get(path);
+    if (!file) continue;
+    validateMetadataEntry(entries.get(path), file.name);
+    recognized.thumbnail.push(path);
+  }
+  return recognized;
+}
+
 function toMetadataParts(
   paths: Readonly<Record<OoxmlMetadataScope, ReadonlySet<string>>>,
 ): OoxmlMetadataParts {
@@ -539,12 +598,7 @@ function toMetadataParts(
 }
 
 function metadataScopeFromRelationshipType(type: string): OoxmlMetadataScope | null {
-  const normalized = type.trim().replace(/\/+$/u, '').toLowerCase();
-  if (normalized.endsWith('/metadata/core-properties')) return 'core';
-  if (normalized.endsWith('/extended-properties')) return 'application';
-  if (normalized.endsWith('/custom-properties')) return 'custom';
-  if (normalized.endsWith('/metadata/thumbnail')) return 'thumbnail';
-  return null;
+  return METADATA_RELATIONSHIP_SCOPES.get(type.trim()) ?? null;
 }
 
 function resolvePackageTarget(target: string): string | null {
@@ -650,7 +704,7 @@ function stripThumbnailRelationships(xml: string): string {
   return removeXmlElements(xml, 'Relationship', attributes => {
     const type = attributes.get('Type') ?? '';
     const target = attributes.get('Target') ?? '';
-    return /\/metadata\/thumbnail$/iu.test(type)
+    return metadataScopeFromRelationshipType(type) === 'thumbnail'
       || /(?:^|\/)docprops\/thumbnail\.[^/]+$/iu.test(target);
   });
 }
@@ -673,21 +727,8 @@ function removeXmlElements(
   for (let index = 0; index < tags.length; index += 1) {
     const tag = tags[index];
     if (tag.closing || tag.localName !== localName || !shouldRemove(tag.attributes)) continue;
-    let end = tag.end;
-    if (!tag.selfClosing) {
-      let depth = 1;
-      for (let candidate = index + 1; candidate < tags.length; candidate += 1) {
-        const nested = tags[candidate];
-        if (nested.name !== tag.name) continue;
-        if (!nested.closing && !nested.selfClosing) depth += 1;
-        if (nested.closing) depth -= 1;
-        if (depth === 0) {
-          end = nested.end;
-          break;
-        }
-      }
-      if (depth !== 0) throw new OoxmlMetadataEngineError('corrupt-document');
-    }
+    const closingIndex = findMatchingClosingTag(tags, index);
+    const end = closingIndex === null ? tag.end : tags[closingIndex].end;
     ranges.push({ start: tag.start, end });
   }
   let output = xml;
@@ -695,6 +736,51 @@ function removeXmlElements(
     output = output.slice(0, range.start) + output.slice(range.end);
   }
   return output;
+}
+
+function findMatchingClosingTag(tags: readonly XmlTag[], startIndex: number): number | null {
+  const start = tags[startIndex];
+  if (start.selfClosing) return null;
+  let depth = 1;
+  for (let candidate = startIndex + 1; candidate < tags.length; candidate += 1) {
+    const nested = tags[candidate];
+    if (nested.name !== start.name) continue;
+    if (!nested.closing && !nested.selfClosing) depth += 1;
+    if (nested.closing) depth -= 1;
+    if (depth === 0) return candidate;
+  }
+  throw new OoxmlMetadataEngineError('corrupt-document');
+}
+
+function extractXmlTextContent(xml: string, from: number, to: number): string {
+  const text: string[] = [];
+  let cursor = from;
+  while (cursor < to) {
+    const start = xml.indexOf('<', cursor);
+    if (start < 0 || start >= to) {
+      text.push(xml.slice(cursor, to));
+      break;
+    }
+    text.push(xml.slice(cursor, start));
+    if (xml.startsWith('<!--', start)) {
+      cursor = findXmlTerminator(xml, '-->', start + 4);
+      continue;
+    }
+    if (xml.startsWith('<![CDATA[', start)) {
+      const end = xml.indexOf(']]>', start + 9);
+      if (end < 0 || end > to) throw new OoxmlMetadataEngineError('corrupt-document');
+      text.push(xml.slice(start + 9, end));
+      cursor = end + 3;
+      continue;
+    }
+    if (xml.startsWith('<?', start)) {
+      cursor = findXmlTerminator(xml, '?>', start + 2);
+      continue;
+    }
+    if (xml.startsWith('<!', start)) throw new OoxmlMetadataEngineError('corrupt-document');
+    cursor = findXmlTagEnd(xml, start + 1) + 1;
+  }
+  return text.join('');
 }
 
 function parseXmlTags(xml: string): XmlTag[] {

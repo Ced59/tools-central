@@ -117,7 +117,11 @@ describe('sanitizeOoxmlBuffer', () => {
       { length: 600 },
       () => '<property name="Client"><vt:lpwstr xmlns:vt="vt">Identique</vt:lpwstr></property>',
     ).join('');
-    source.file('docProps/custom.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+      + '<!-- <property name="Comment"><vt:lpwstr>Faux commentaire</vt:lpwstr></property> -->'
+      + '<![CDATA[<property name="CDATA"><vt:lpwstr>Faux CDATA</vt:lpwstr></property>]]>'
+      + properties
+      + '</Properties>');
     source.file('metadata/custom-one.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
     source.file('metadata/custom-two.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
@@ -195,9 +199,9 @@ describe('sanitizeOoxmlBuffer', () => {
     source.file('metadata/custom.xml', custom);
     source.file('previews/cover.jpeg', thumbnail);
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
-      + '<Relationship Id="rCore" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="metadata/core.xml"/>'
+      + '<Relationship Id="rCore" Type="http://purl.oclc.org/ooxml/package/relationships/metadata/core-properties" Target="metadata/core.xml"/>'
       + '<Relationship Id="rApp" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="metadata/application.xml"/>'
-      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://purl.oclc.org/ooxml/officeDocument/relationships/custom-properties" Target="metadata/custom.xml"/>'
       + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="previews/cover.jpeg"/>'
       + '</Relationships>');
     source.file('[Content_Types].xml', '<?xml version="1.0"?><Types>'
@@ -231,6 +235,7 @@ describe('sanitizeOoxmlBuffer', () => {
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
       + '<!-- <Relationship Id="fake-comment" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/> -->'
       + '<![CDATA[<Relationship Id="fake-cdata" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/>]]>'
+      + '<Relationship Id="vendor" Type="https://vendor.example/metadata/core-properties" Target="word/document.xml"/>'
       + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
       + '</Relationships>');
 
@@ -244,6 +249,29 @@ describe('sanitizeOoxmlBuffer', () => {
     await expect(output.file('word/document.xml')?.async('string')).resolves.toContain('Préservé');
     await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-comment');
     await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-cdata');
+  });
+
+  it('caps relationship-addressed paths before adding them to the visible report', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const longPath = `metadata/${'a'.repeat(60_000)}/custom.xml`;
+    source.file(longPath, '<?xml version="1.0"?><Properties>'
+      + '<property name="Chemin long"><vt:lpwstr xmlns:vt="vt">Valeur</vt:lpwstr></property>'
+      + '</Properties>');
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + `<Relationship Id="rLong" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="${longPath}"/>`
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const finding = result.report.detected.find(item => item.name === 'Chemin long');
+
+    expect(finding).toBeDefined();
+    expect(finding?.path).toHaveLength(240);
+    expect(finding?.path).toContain('…');
+    expect(finding?.path.endsWith('/custom.xml')).toBe(true);
   });
 
   it('decodes UTF-16 metadata parts when reporting values that remain', async () => {
