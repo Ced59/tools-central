@@ -548,7 +548,7 @@ async function findThumbnailPathsWithOtherReferences(
 ): Promise<ReadonlySet<string>> {
   const referenced = new Set<string>();
   for (const [relationshipPath, file] of files) {
-    if (!relationshipPath.endsWith('.rels')) continue;
+    if (!isRelationshipPartPath(relationshipPath)) continue;
     validateMetadataEntry(entries.get(relationshipPath), file.name);
     const tags = parseXmlTags(await readXmlPart(file));
     const rootIndex = tags.findIndex(tag => !tag.closing);
@@ -688,6 +688,10 @@ function resolveRelationshipTarget(relationshipPath: string, target: string): st
   if (!match) return null;
   const base = match[1] ? match[1].split('/') : [];
   return resolveTargetAgainstBase(target, base);
+}
+
+function isRelationshipPartPath(path: string): boolean {
+  return path === '_rels/.rels' || /^(?:.*\/)?_rels\/[^/]+\.rels$/iu.test(path);
 }
 
 function resolveTargetAgainstBase(target: string, base: readonly string[]): string | null {
@@ -1006,7 +1010,7 @@ async function validateUnsupportedPackageMarkup(
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
 ): Promise<void> {
   for (const [lowerPath, relationships] of files) {
-    if (!lowerPath.endsWith('.rels')) continue;
+    if (!isRelationshipPartPath(lowerPath)) continue;
     validateMetadataEntry(entries.get(lowerPath), relationships.name);
     const tags = parseXmlTags(await readXmlPart(relationships));
     const rootIndex = tags.findIndex(tag => !tag.closing);

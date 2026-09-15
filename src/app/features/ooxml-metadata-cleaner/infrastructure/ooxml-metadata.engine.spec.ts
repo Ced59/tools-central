@@ -362,6 +362,21 @@ describe('sanitizeOoxmlBuffer', () => {
     await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('fake-cdata');
   });
 
+  it('ignores a non-XML binary whose ordinary part name merely ends in .rels', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('word/media/payload.rels', new Uint8Array([0xff, 0xff, 0x00, 0x80]));
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('word/media/payload.rels')?.async('uint8array'))
+      .resolves.toEqual(new Uint8Array([0xff, 0xff, 0x00, 0x80]));
+  });
+
   it('preserves an ordinary image that only happens to use the conventional thumbnail path', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     source.file('docProps/thumbnail.jpeg', new Uint8Array(3 * 1_024 * 1_024));
