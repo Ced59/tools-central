@@ -1,9 +1,9 @@
 import { PDFDocument, PDFName, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
-import { inspectPdfActionDictionaries } from './pdf-action-dictionary.engine';
+import { inspectPdfStructuralSignals } from './pdf-action-dictionary.engine';
 
-describe('inspectPdfActionDictionaries', () => {
+describe('inspectPdfStructuralSignals', () => {
   it('lit Launch et SubmitForm dans un vrai PDF avec object streams', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -28,7 +28,7 @@ describe('inspectPdfActionDictionaries', () => {
       })),
     ]));
 
-    const signals = await inspectPdfActionDictionaries(await source.save());
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
 
     expect(signals).toEqual(expect.arrayContaining([
       {
@@ -73,7 +73,7 @@ describe('inspectPdfActionDictionaries', () => {
     outlineRoot.set(PDFName.of('Last'), outlineItemRef);
     source.catalog.set(PDFName.of('Outlines'), outlineRootRef);
 
-    const signals = await inspectPdfActionDictionaries(await source.save());
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
 
     expect(signals).not.toBeNull();
     expect(signals?.filter(signal => signal.actionType === 'Launch')).toEqual([{
@@ -96,7 +96,7 @@ describe('inspectPdfActionDictionaries', () => {
       })),
     ]));
 
-    const signals = await inspectPdfActionDictionaries(await source.save());
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
 
     expect(signals).toEqual([{
       actionType: 'SubmitForm', context: 'annotation-action',
@@ -119,14 +119,48 @@ describe('inspectPdfActionDictionaries', () => {
           Next: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('chained()') },
         },
       })),
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [40, 0, 50, 10],
+        AA: { E: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('additional()') } },
+      })),
     ]));
 
-    const signals = await inspectPdfActionDictionaries(await source.save());
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
 
     expect(signals).toEqual(expect.arrayContaining([
       { actionType: 'JavaScript', context: 'annotation-action', occurrences: 1 },
       { actionType: 'JavaScript', context: 'next-action', occurrences: 1 },
+      { actionType: 'JavaScript', context: 'annotation-additional-action', occurrences: 1 },
     ]));
+  });
+
+  it('inventorie un fichier associé AF absent de la name tree', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const embeddedFile = source.context.register(source.context.flateStream(
+      'associated payload',
+      { Type: 'EmbeddedFile', Subtype: PDFName.of('text#2Fplain') },
+    ));
+    const fileSpec = source.context.register(source.context.obj({
+      Type: 'Filespec',
+      F: PDFString.of('associated.txt'),
+      UF: PDFString.of('associated.txt'),
+      Desc: PDFString.of('Associated only'),
+      EF: { F: embeddedFile },
+    }));
+    source.catalog.set(PDFName.of('AF'), source.context.obj([fileSpec]));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.associatedFiles).toEqual([
+      expect.objectContaining({
+        id: 1,
+        fileName: 'associated.txt',
+        description: 'Associated only',
+        occurrences: 1,
+      }),
+    ]);
+    expect(signals?.associatedFiles[0]?.bytes).toBeGreaterThan(0);
   });
 
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {
@@ -137,16 +171,18 @@ describe('inspectPdfActionDictionaries', () => {
       C: { S: 'Launch', F: PDFString.of('Report.EXE') },
     }));
 
-    await expect(inspectPdfActionDictionaries(await source.save())).resolves.toEqual([
-      {
-        actionType: 'Launch', context: 'additional-action',
-        target: 'Report.EXE', occurrences: 2,
-      },
-    ]);
+    await expect(inspectPdfStructuralSignals(await source.save())).resolves.toMatchObject({
+      actionDictionaries: [
+        {
+          actionType: 'Launch', context: 'page-additional-action',
+          target: 'Report.EXE', occurrences: 2,
+        },
+      ],
+    });
   });
 
   it('laisse PDF.js décider de la validité si le parseur secondaire échoue', async () => {
-    await expect(inspectPdfActionDictionaries(new TextEncoder().encode('not a pdf')))
+    await expect(inspectPdfStructuralSignals(new TextEncoder().encode('not a pdf')))
       .resolves.toBeNull();
   });
 });

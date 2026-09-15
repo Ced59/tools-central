@@ -10,7 +10,7 @@ import {
 import type { PdfPrivacyFailureCode } from '../application/pdf-privacy.use-cases';
 import {
   PdfActionDictionaryInspectionError,
-  inspectPdfActionDictionaries,
+  inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
 import {
   PdfPrivacyEngineError,
@@ -41,7 +41,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     const fileBytes = input.byteLength;
     extractPdfVersion(headerData);
     post({ type: 'progress', percent: 1 });
-    const actionDictionaries = await inspectPdfActionDictionaries(input);
+    const structuralSignals = await inspectPdfStructuralSignals(input);
     loadingTask = getDocument({
       data: input,
       password: command.password,
@@ -64,7 +64,8 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         headerData,
         fileBytes,
         passwordUsed: Boolean(command.password),
-        actionDictionaries,
+        actionDictionaries: structuralSignals?.actionDictionaries ?? null,
+        associatedFiles: structuralSignals?.associatedFiles ?? null,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

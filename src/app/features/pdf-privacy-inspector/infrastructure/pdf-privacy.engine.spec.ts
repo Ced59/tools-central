@@ -278,6 +278,7 @@ describe('inspectPdfPrivacyDocument', () => {
       actionDictionaries: [
         { actionType: 'JavaScript', context: 'annotation-action', occurrences: 1 },
         { actionType: 'JavaScript', context: 'next-action', occurrences: 1 },
+        { actionType: 'JavaScript', context: 'annotation-additional-action', occurrences: 1 },
       ],
     });
 
@@ -290,6 +291,43 @@ describe('inspectPdfPrivacyDocument', () => {
       expect.objectContaining({
         message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'chained-action' },
         occurrences: 1,
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'additional-action' },
+        occurrences: 1,
+      }),
+    ]);
+  });
+
+  it('ajoute les fichiers associés AF sans doubler ceux de la name tree', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getAttachments: vi.fn().mockResolvedValue(new Map([
+        ['associated.txt', {
+          filename: 'associated.txt',
+          contentType: 'text/plain',
+          content: new Uint8Array(18),
+        }],
+      ])),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 64,
+      passwordUsed: false,
+      associatedFiles: [{
+        id: 1,
+        fileName: 'associated.txt',
+        description: 'Associated only',
+        contentType: 'text/plain',
+        bytes: 18,
+        occurrences: 1,
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'embedded-file')).toEqual([
+      expect.objectContaining({
+        id: 'attachment:associated:1',
+        label: 'associated.txt',
+        value: 'text/plain · Associated only',
+        bytes: 18,
       }),
     ]);
   });

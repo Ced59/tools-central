@@ -382,6 +382,18 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     mimeType: 'text/plain',
     description: 'Annexe interne',
   });
+  const associatedStream = source.context.register(source.context.flateStream(
+    'associated-only payload',
+    { Type: 'EmbeddedFile', Subtype: PDFName.of('text#2Fplain') },
+  ));
+  const associatedFile = source.context.register(source.context.obj({
+    Type: 'Filespec',
+    F: PDFString.of('associated-only.txt'),
+    UF: PDFString.of('associated-only.txt'),
+    Desc: PDFString.of('Associated file'),
+    EF: { F: associatedStream },
+  }));
+  source.catalog.set(PDFName.of('AF'), source.context.obj([associatedFile]));
   const pdfPage = source.addPage([600, 800]);
   pdfPage.drawText('Rapport à contrôler', { x: 72, y: 720, size: 24 });
   const form = source.getForm();
@@ -465,10 +477,12 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     Subtype: 'Link',
     Rect: [72, 400, 320, 430],
     Border: [0, 0, 0],
-    A: {
-      Type: 'Action',
-      S: 'JavaScript',
-      JS: PDFString.of('app.alert("annotation-secret");'),
+    AA: {
+      E: {
+        Type: 'Action',
+        S: 'JavaScript',
+        JS: PDFString.of('app.alert("annotation-secret");'),
+      },
     },
   });
   const hiddenJavascriptAnnotationReference = source.context.register(hiddenJavascript);
@@ -508,6 +522,7 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('Attention forte');
   await expect(result).toContainText('JavaScript embarqué');
   await expect(result).toContainText('secret.txt');
+  await expect(result).toContainText('associated-only.txt');
   await expect(result).toContainText('https://tracker.example/click');
   await expect(result).toContainText('calc.exe');
   await expect(result).toContainText('Launch');
@@ -554,8 +569,9 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
       message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
     }),
     expect.objectContaining({
-      message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'other' },
+      message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'additional-action' },
     }),
+    expect.objectContaining({ id: 'attachment:associated:1', label: 'associated-only.txt' }),
   ]));
   expect(JSON.stringify(exported)).not.toContain('secret-script');
   expect(JSON.stringify(exported)).not.toContain('field-secret');

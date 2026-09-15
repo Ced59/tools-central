@@ -7,7 +7,10 @@ import {
   type PdfPrivacyFindingMessage,
   type PdfPrivacyReport,
 } from '../domain/pdf-privacy.models';
-import type { PdfActionDictionarySignal } from './pdf-action-dictionary.engine';
+import type {
+  PdfActionDictionarySignal,
+  PdfAssociatedFileSignal,
+} from './pdf-action-dictionary.engine';
 
 export type PdfPrivacyEngineFailureCode = 'invalid-pdf' | 'too-many-pages' | 'inspection-limit';
 
@@ -100,6 +103,7 @@ export async function inspectPdfPrivacyDocument(
     fileBytes: number;
     passwordUsed: boolean;
     actionDictionaries?: readonly PdfActionDictionarySignal[] | null;
+    associatedFiles?: readonly PdfAssociatedFileSignal[] | null;
     onProgress?: (percent: number) => void;
   },
 ): Promise<PdfPrivacyReport> {
@@ -139,9 +143,14 @@ export async function inspectPdfPrivacyDocument(
     add,
     consumeDiscoveryBudget,
   );
+  const associatedFileNames = collectAssociatedFileSignals(
+    input.associatedFiles,
+    add,
+    consumeDiscoveryBudget,
+  );
 
   collectMetadata(metadata, add, consumeDiscoveryBudget);
-  collectAttachments(attachments, add, consumeDiscoveryBudget);
+  collectAttachments(attachments, associatedFileNames, add, consumeDiscoveryBudget);
   const documentActionCount = collectJavascriptActions(
     documentActions,
     'document',
@@ -180,6 +189,7 @@ export async function inspectPdfPrivacyDocument(
         pageNumber,
         links,
         actionIndex,
+        associatedFileNames,
         add,
         consumeDiscoveryBudget,
       );
@@ -275,6 +285,7 @@ function collectMetadata(
 
 function collectAttachments(
   attachments: Map<string, object> | null,
+  associatedFileNames: ReadonlySet<string>,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -285,6 +296,7 @@ function collectAttachments(
     index += 1;
     const attachment = asRecord(rawAttachment);
     const fileName = readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key);
+    if (fileName && associatedFileNames.has(fileName)) continue;
     const description = readableValue(attachment?.['description']);
     const contentType = readableValue(attachment?.['contentType']);
     const content = attachment?.['content'];
@@ -300,6 +312,39 @@ function collectAttachments(
       bytes,
     });
   }
+}
+
+function collectAssociatedFileSignals(
+  signals: readonly PdfAssociatedFileSignal[] | null | undefined,
+  add: (finding: PdfPrivacyFinding) => void,
+  consume: ConsumeDiscoveryBudget,
+): ReadonlySet<string> {
+  const fileNames = new Set<string>();
+  if (!signals) return fileNames;
+  for (const signal of signals) {
+    const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
+      ? signal.occurrences
+      : 1;
+    consume(occurrences);
+    const fileName = sanitizePdfPrivacyValue(signal.fileName);
+    if (fileName) fileNames.add(fileName);
+    const description = sanitizePdfPrivacyValue(signal.description);
+    const contentType = sanitizePdfPrivacyValue(signal.contentType);
+    add({
+      id: `attachment:associated:${String(signal.id)}`,
+      category: 'attachments',
+      kind: 'embedded-file',
+      severity: 'high',
+      label: fileName,
+      message: fileName ? undefined : { code: 'unnamed-attachment', index: signal.id },
+      value: [contentType, description].filter(Boolean).join(' · ') || undefined,
+      bytes: Number.isSafeInteger(signal.bytes) && (signal.bytes ?? -1) >= 0
+        ? signal.bytes
+        : undefined,
+      occurrences,
+    });
+  }
+  return fileNames;
 }
 
 function collectJavascriptActions(
@@ -475,6 +520,7 @@ function collectPageAnnotations(
   pageNumber: number,
   links: Map<string, LinkAggregate>,
   actionIndex: ActionDictionaryIndex | null,
+  associatedFileNames: ReadonlySet<string>,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -509,6 +555,7 @@ function collectPageAnnotations(
     const file = asRecord(annotation['file']);
     if (file) {
       const fileName = readableValue(file['filename']);
+      if (fileName && associatedFileNames.has(fileName)) continue;
       const content = file['content'];
       add({
         id: `attachment:annotation:${String(pageNumber)}:${fileName ?? 'unknown'}`,
@@ -612,11 +659,13 @@ function collectActionDictionarySignals(
       && (
         signal.context === 'open-action'
         || signal.context === 'additional-action'
+        || signal.context === 'annotation-additional-action'
         || signal.context === 'next-action'
       );
     const rawJavascript = signal.actionType === 'JavaScript'
       && (
         signal.context === 'annotation-action'
+        || signal.context === 'annotation-additional-action'
         || signal.context === 'outline-action'
         || signal.context === 'next-action'
         || signal.context === 'explicit-action'
@@ -671,8 +720,10 @@ function actionDictionaryMessage(signal: PdfActionDictionarySignal): PdfPrivacyF
     actionType: signal.actionType,
     context: signal.context === 'next-action'
       ? 'chained-action'
-      : signal.context === 'open-action' || signal.context === 'additional-action'
-        ? signal.context
+      : signal.context === 'annotation-additional-action'
+        ? 'additional-action'
+        : signal.context === 'open-action' || signal.context === 'additional-action'
+          ? signal.context
         : 'other',
   };
 }
