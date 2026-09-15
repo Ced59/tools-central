@@ -80,6 +80,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         passwordUsed: Boolean(command.password),
         actionDictionaries: structuralSignals.actionDictionaries,
         associatedFiles: structuralSignals.associatedFiles,
+        structuralSignatures: structuralSignals.signatures,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

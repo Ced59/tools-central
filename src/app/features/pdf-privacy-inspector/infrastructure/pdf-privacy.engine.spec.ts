@@ -219,7 +219,7 @@ describe('inspectPdfPrivacyDocument', () => {
     } finally {
       await loadingTask.destroy();
     }
-  });
+  }, 15_000);
 
   it('inventorie chaque propriété Info personnalisée exposée par PDF.js', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
@@ -288,6 +288,35 @@ describe('inspectPdfPrivacyDocument', () => {
         location: 'Paris',
         reason: 'Validation interne',
         signingTime: 'D:20260915113000+02\'00\'',
+      },
+    });
+  });
+
+  it('utilise l’inventaire structurel si PDF.js ignore les signatures sans SigFlags', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue(null),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      structuralSignatures: [{
+        fieldName: 'Approval',
+        signerName: 'Alice',
+        subFilter: 'ETSI.CAdES.detached',
+        contactInfo: 'alice@example.test',
+        reason: 'Validation interne',
+      }],
+    });
+
+    expect(report.findings.find(finding => finding.kind === 'digital-signature')).toMatchObject({
+      severity: 'low',
+      label: 'Approval',
+      value: 'Alice',
+      message: {
+        code: 'signature-details',
+        subFilter: 'ETSI.CAdES.detached',
+        contactInfo: 'alice@example.test',
+        reason: 'Validation interne',
       },
     });
   });

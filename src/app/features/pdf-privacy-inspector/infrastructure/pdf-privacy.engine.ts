@@ -10,6 +10,7 @@ import {
 import type {
   PdfActionDictionarySignal,
   PdfAssociatedFileSignal,
+  PdfStructuralSignatureSignal,
 } from './pdf-action-dictionary.engine';
 
 export type PdfPrivacyEngineFailureCode = 'invalid-pdf' | 'too-many-pages' | 'inspection-limit';
@@ -100,6 +101,7 @@ export async function inspectPdfPrivacyDocument(
     passwordUsed: boolean;
     actionDictionaries?: readonly PdfActionDictionarySignal[] | null;
     associatedFiles?: readonly PdfAssociatedFileSignal[] | null;
+    structuralSignatures?: readonly PdfStructuralSignatureSignal[] | null;
     onProgress?: (percent: number) => void;
   },
 ): Promise<PdfPrivacyReport> {
@@ -175,7 +177,11 @@ export async function inspectPdfPrivacyDocument(
     });
   }
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
-  collectSignatures(signatures, add, consumeDiscoveryBudget);
+  collectSignatures(
+    signatures && signatures.length > 0 ? signatures : input.structuralSignatures,
+    add,
+    consumeDiscoveryBudget,
+  );
   collectOutlineItems(outline ?? [], links, actionIndex, add, consumeDiscoveryBudget);
 
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
@@ -487,7 +493,7 @@ function collectForms(
 }
 
 function collectSignatures(
-  signatures: readonly object[] | null,
+  signatures: readonly object[] | null | undefined,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {

@@ -1,12 +1,14 @@
-import { PDFDocument, PDFName, PDFRef, PDFString } from 'pdf-lib';
+import { PDFDict, PDFDocument, PDFName, PDFRef, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
 import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
+  PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
+  PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
@@ -332,6 +334,23 @@ describe('inspectPdfStructuralSignals', () => {
       .resolves.not.toBeNull();
   });
 
+  it('borne l’expansion agrégée des valeurs du dictionnaire Info', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.setTitle('Document');
+    const info = source.context.lookupMaybe(source.context.trailerInfo.Info, PDFDict);
+    if (!info) throw new Error('Info dictionary fixture creation failed.');
+    const valueBytes = 1 * 1_024 * 1_024;
+    const sharedValue = source.context.register(PDFString.of('A'.repeat(valueBytes)));
+    const entryCount = Math.floor(PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES / valueBytes) + 1;
+    for (let index = 0; index < entryCount; index += 1) {
+      info.set(PDFName.of(`Custom${String(index)}`), sharedValue);
+    }
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('ignore un FileSpec dont EF ne contient aucun flux embarqué', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -559,6 +578,28 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne l’expansion répétée d’une cible partagée par les annotations', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const targetBytes = 1 * 1_024 * 1_024;
+    const target = source.context.register(PDFString.of('A'.repeat(targetBytes)));
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'URI', URI: target,
+    }));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES / targetBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], A: action,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la croissance cumulée des noms qualifiés de champs', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -602,6 +643,36 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
+
+  it('préserve une signature structurelle valide même sans SigFlags', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const signature = source.context.register(source.context.obj({
+      Type: 'Sig',
+      ByteRange: [0, 1, 2, 1],
+      Contents: PDFString.of('signed'),
+      SubFilter: 'ETSI.CAdES.detached',
+      Name: PDFString.of('Alice'),
+      ContactInfo: PDFString.of('alice@example.test'),
+      Reason: PDFString.of('Validation interne'),
+    }));
+    const field = source.context.register(source.context.obj({
+      FT: 'Sig', T: PDFString.of('Approval'), V: signature,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [field] }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.signatures).toEqual([{
+      fieldName: 'Approval',
+      signerName: 'Alice',
+      subFilter: 'ETSI.CAdES.detached',
+      contactInfo: 'alice@example.test',
+      location: undefined,
+      reason: 'Validation interne',
+      signingTime: undefined,
+    }]);
+  });
 
   it('borne le balayage agrégé des queues de signature avant getSignatures', async () => {
     const source = await PDFDocument.create();
