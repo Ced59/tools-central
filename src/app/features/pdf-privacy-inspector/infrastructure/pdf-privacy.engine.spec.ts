@@ -101,7 +101,7 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.categoryCounts.links).toBe(3);
     expect(report.categoryCounts.forms).toBe(1);
     expect(report.categoryCounts.signatures).toBe(1);
-    expect(report.categoryCounts.metadata).toBe(2);
+    expect(report.categoryCounts.metadata).toBe(3);
     expect(report.findings.some(finding => finding.value?.includes('alice@example.test'))).toBe(false);
     expect(report.findings.some(finding => finding.value?.includes('collect()'))).toBe(false);
     expect(report.findings.find(finding => finding.kind === 'external-link' && finding.value?.includes('tracker')))
@@ -124,8 +124,10 @@ describe('inspectPdfPrivacyDocument', () => {
     const xmp = '<?xpacket begin=""?>'
       + '<x:xmpmeta xmlns:x="adobe:ns:meta/">'
       + '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'
-      + '<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">'
+      + '<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/" '
+      + 'xmlns:photoshop="http://ns.adobe.com/photoshop/1.0/">'
       + '<dc:creator><rdf:Seq><rdf:li>Alice</rdf:li></rdf:Seq></dc:creator>'
+      + '<photoshop:City>Paris</photoshop:City>'
       + '</rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end="w"?>';
     const xmpStream = source.context.flateStream(xmp, {
       Type: 'Metadata',
@@ -155,6 +157,11 @@ describe('inspectPdfPrivacyDocument', () => {
           kind: 'xmp-metadata',
           label: 'dc:creator',
           value: 'Alice',
+        }),
+        expect.objectContaining({
+          kind: 'xmp-metadata',
+          label: 'photoshop:city',
+          value: 'Paris',
         }),
       ]));
     } finally {

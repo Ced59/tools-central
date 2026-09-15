@@ -245,7 +245,7 @@ function collectActionDictionary(
   triggerId: string | undefined,
   state: InspectionState,
 ): void {
-  const actionName = dictionary.lookupMaybe(PDFName.of('S'), PDFName);
+  const actionName = readName(dictionary, 'S');
   if (!actionName || actionName.sizeInBytes() > 128) return;
   const actionType = actionName.decodeText();
   if (!actionType || !ACTION_NAMES.has(actionType)) return;
@@ -365,7 +365,7 @@ function inspectActionEntry(
       continue;
     }
 
-    const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
+    const actionType = readName(dictionary, 'S')?.decodeText();
     if (actionType) {
       collectActionDictionary(dictionary, workItem.context, workItem.triggerId, state);
       const next = dictionary.get(PDFName.of('Next'));
@@ -384,17 +384,35 @@ function inspectActionEntry(
 }
 
 function actionContext(parent: PDFDict): PdfActionDictionaryContext {
-  const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
+  const subtype = readName(parent, 'Subtype')?.decodeText();
   if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-action';
   if (parent.has(PDFName.of('Title'))) return 'outline-action';
   return 'explicit-action';
 }
 
+function readName(dictionary: PDFDict, key: string): PDFName | undefined {
+  try {
+    const value = dictionary.lookup(PDFName.of(key));
+    return value instanceof PDFName ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function readDictionary(dictionary: PDFDict, key: string): PDFDict | undefined {
+  try {
+    const value = dictionary.lookup(PDFName.of(key));
+    return value instanceof PDFDict ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function additionalActionContext(parent: PDFDict): PdfActionDictionaryContext {
-  const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
+  const subtype = readName(parent, 'Subtype')?.decodeText();
   if (subtype === 'Widget' || parent.has(PDFName.of('FT'))) return 'field-additional-action';
   if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-additional-action';
-  const type = parent.lookupMaybe(PDFName.of('Type'), PDFName)?.decodeText();
+  const type = readName(parent, 'Type')?.decodeText();
   return type === 'Page' ? 'page-additional-action' : 'additional-action';
 }
 
@@ -461,14 +479,14 @@ function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void 
     description: state.canReadTarget
       ? readDisplayText(fileSpec.lookup(PDFName.of('Desc')))
       : undefined,
-    contentType: embeddedFile?.dict.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText(),
+    contentType: embeddedFile ? readName(embeddedFile.dict, 'Subtype')?.decodeText() : undefined,
     bytes: embeddedFile?.getContentsSize(),
     occurrences: 1,
   });
 }
 
 function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
-  const embeddedFiles = fileSpec.lookupMaybe(PDFName.of('EF'), PDFDict);
+  const embeddedFiles = readDictionary(fileSpec, 'EF');
   if (!embeddedFiles) return undefined;
   for (const key of ['UF', 'F']) {
     const stream = embeddedFiles.lookup(PDFName.of(key));

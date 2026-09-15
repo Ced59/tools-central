@@ -66,12 +66,6 @@ const INFO_METADATA_KEYS = new Set([
   'creationdate', 'moddate', 'trapped',
 ]);
 
-const XMP_PRIVACY_KEY_PARTS = [
-  'title', 'creator', 'author', 'description', 'subject', 'keyword', 'producer',
-  'creatortool', 'createdate', 'modifydate', 'metadatadate', 'documentid',
-  'instanceid', 'history', 'email', 'company', 'manager',
-];
-
 const PDFJS_EXTERNAL_TARGET_ACTIONS = new Set(['Launch', 'GoToR']);
 
 // Stable values from PDF.js' public AnnotationType contract. Keeping the
@@ -280,7 +274,6 @@ function collectMetadata(
   for (const [key, rawValue] of metadata.metadata) {
     consume();
     const normalizedKey = key.toLowerCase();
-    if (!XMP_PRIVACY_KEY_PARTS.some(part => normalizedKey.includes(part))) continue;
     const value = readableValue(rawValue);
     if (!value) continue;
     add({

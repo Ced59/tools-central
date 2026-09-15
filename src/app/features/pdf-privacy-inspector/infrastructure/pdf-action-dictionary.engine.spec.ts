@@ -50,6 +50,34 @@ describe('inspectPdfStructuralSignals', () => {
     ]));
   });
 
+  it('ignore un discriminateur S malformé sans perdre les autres actions du PDF', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10],
+        A: { Type: 'Action', S: PDFString.of('Launch'), F: PDFString.of('broken.exe') },
+      })),
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [20, 0, 30, 10],
+        A: {
+          Type: 'Action', S: 'SubmitForm',
+          F: PDFString.of('https://submit.example/valid'),
+        },
+      })),
+    ]));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals).not.toBeNull();
+    expect(signals?.actionDictionaries).toEqual([
+      {
+        actionType: 'SubmitForm', context: 'annotation-action',
+        target: 'https://submit.example/valid', occurrences: 1,
+      },
+    ]);
+  });
+
   it('ne double pas une annotation atteinte depuis la destination du plan', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
