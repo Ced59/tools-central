@@ -96,6 +96,52 @@ interface StoredActionDictionarySignal {
   triggerIds: Set<string>;
 }
 
+interface StructuralChildrenFrame {
+  kind: 'children-frame';
+  iterator: Iterator<PDFObject>;
+}
+
+type StructuralWorkItem = PDFObject | StructuralChildrenFrame;
+
+interface ActionVisitFrame {
+  kind: 'visit';
+  object: PDFObject;
+  context: PdfActionDictionaryContext;
+  triggerId: string | undefined;
+  allowContainer: boolean;
+}
+
+interface ActionLeaveFrame {
+  kind: 'leave';
+  object: PDFObject;
+}
+
+interface ActionChildrenFrame {
+  kind: 'children';
+  iterator: Iterator<PDFObject>;
+  context: PdfActionDictionaryContext;
+  triggerId: string | undefined;
+}
+
+type ActionWorkItem = ActionVisitFrame | ActionLeaveFrame | ActionChildrenFrame;
+
+interface AssociatedVisitFrame {
+  kind: 'visit';
+  object: PDFObject;
+}
+
+interface AssociatedLeaveFrame {
+  kind: 'leave';
+  object: PDFObject;
+}
+
+interface AssociatedChildrenFrame {
+  kind: 'children';
+  iterator: Iterator<PDFObject>;
+}
+
+type AssociatedWorkItem = AssociatedVisitFrame | AssociatedLeaveFrame | AssociatedChildrenFrame;
+
 /**
  * Reads action dictionaries without executing their contents. This second,
  * bounded parser is necessary because PDF.js intentionally normalizes away
@@ -115,7 +161,7 @@ export async function inspectPdfStructuralSignals(
       throw new PdfActionDictionaryInspectionError();
     }
 
-    const queue: PDFObject[] = [document.catalog];
+    const queue: StructuralWorkItem[] = [document.catalog];
     const visited = new Set<PDFObject>();
     const state: InspectionState = {
       document,
@@ -132,8 +178,16 @@ export async function inspectPdfStructuralSignals(
     };
 
     while (queue.length > 0) {
-      const object = queue.pop();
-      if (!object) continue;
+      const workItem = queue.pop();
+      if (!workItem) continue;
+      if (isStructuralChildrenFrame(workItem)) {
+        const next = workItem.iterator.next();
+        if (next.done) continue;
+        queue.push(workItem);
+        queue.push(next.value);
+        continue;
+      }
+      const object = workItem;
       consumeTraversalStep(state);
 
       if (object instanceof PDFRef) {
@@ -152,7 +206,7 @@ export async function inspectPdfStructuralSignals(
         continue;
       }
       if (object instanceof PDFArray) {
-        for (const child of object.asArray()) queue.push(child);
+        queue.push({ kind: 'children-frame', iterator: object.asArray().values() });
         continue;
       }
       if (!(object instanceof PDFDict)) continue;
@@ -160,10 +214,7 @@ export async function inspectPdfStructuralSignals(
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
       inspectEmbeddedFileSpec(object, state);
-      for (const [key, child] of object.entries()) {
-        if (isHandledTriggerKey(object, key)) continue;
-        queue.push(child);
-      }
+      queue.push({ kind: 'children-frame', iterator: structuralChildren(object) });
     }
 
     return {
@@ -247,37 +298,79 @@ function inspectActionEntry(
   allowContainer: boolean,
   path: Set<PDFObject>,
 ): void {
-  consumeTraversalStep(state);
-  if (path.has(object)) return;
-  path.add(object);
-  try {
-    if (object instanceof PDFRef) {
-      const resolved = state.document.context.lookup(object);
-      if (resolved) inspectActionEntry(resolved, context, triggerId, state, allowContainer, path);
-      return;
+  const stack: ActionWorkItem[] = [{
+    kind: 'visit', object, context, triggerId, allowContainer,
+  }];
+  while (stack.length > 0) {
+    const workItem = stack.pop();
+    if (!workItem) continue;
+    if (workItem.kind === 'leave') {
+      path.delete(workItem.object);
+      continue;
     }
-    if (object instanceof PDFArray) {
-      for (const child of object.asArray()) {
-        inspectActionEntry(child, context, triggerId, state, false, path);
+    if (workItem.kind === 'children') {
+      const next = workItem.iterator.next();
+      if (next.done) continue;
+      stack.push(workItem);
+      stack.push({
+        kind: 'visit',
+        object: next.value,
+        context: workItem.context,
+        triggerId: workItem.triggerId,
+        allowContainer: false,
+      });
+      continue;
+    }
+
+    consumeTraversalStep(state);
+    if (path.has(workItem.object)) continue;
+    path.add(workItem.object);
+    stack.push({ kind: 'leave', object: workItem.object });
+
+    if (workItem.object instanceof PDFRef) {
+      const resolved = state.document.context.lookup(workItem.object);
+      if (resolved) {
+        stack.push({ ...workItem, object: resolved });
       }
-      return;
+      continue;
     }
-    const dictionary = object instanceof PDFStream ? object.dict : object;
-    if (!(dictionary instanceof PDFDict)) return;
+    if (workItem.object instanceof PDFArray) {
+      stack.push({
+        kind: 'children',
+        iterator: workItem.object.asArray().values(),
+        context: workItem.context,
+        triggerId: workItem.triggerId,
+      });
+      continue;
+    }
+    const dictionary = workItem.object instanceof PDFStream
+      ? workItem.object.dict
+      : workItem.object;
+    if (!(dictionary instanceof PDFDict)) continue;
 
     const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
     if (actionType) {
-      collectActionDictionary(dictionary, context, triggerId, state);
+      collectActionDictionary(dictionary, workItem.context, workItem.triggerId, state);
       const next = dictionary.get(PDFName.of('Next'));
-      if (next) inspectActionEntry(next, 'next-action', triggerId, state, false, path);
-      return;
+      if (next) {
+        stack.push({
+          kind: 'visit',
+          object: next,
+          context: 'next-action',
+          triggerId: workItem.triggerId,
+          allowContainer: false,
+        });
+      }
+      continue;
     }
-    if (!allowContainer) return;
-    for (const child of dictionary.values()) {
-      inspectActionEntry(child, context, triggerId, state, false, path);
+    if (workItem.allowContainer) {
+      stack.push({
+        kind: 'children',
+        iterator: dictionary.asMap().values(),
+        context: workItem.context,
+        triggerId: workItem.triggerId,
+      });
     }
-  } finally {
-    path.delete(object);
   }
 }
 
@@ -298,38 +391,48 @@ function additionalActionContext(parent: PDFDict): PdfActionDictionaryContext {
 
 function inspectAssociatedFiles(parent: PDFDict, state: InspectionState): void {
   const associatedFiles = parent.get(PDFName.of('AF'));
-  if (associatedFiles) inspectAssociatedFileEntry(associatedFiles, state, new Set());
+  if (associatedFiles) inspectAssociatedFileEntry(associatedFiles, state);
 }
 
 function inspectEmbeddedFileSpec(dictionary: PDFDict, state: InspectionState): void {
-  const type = dictionary.lookupMaybe(PDFName.of('Type'), PDFName)?.decodeText();
-  if (type === 'Filespec' || dictionary.has(PDFName.of('EF'))) {
-    collectAssociatedFile(dictionary, state);
-  }
+  if (dictionary.has(PDFName.of('EF'))) collectAssociatedFile(dictionary, state);
 }
 
 function inspectAssociatedFileEntry(
   object: PDFObject,
   state: InspectionState,
-  path: Set<PDFObject>,
 ): void {
-  consumeTraversalStep(state);
-  if (path.has(object)) return;
-  path.add(object);
-  try {
-    if (object instanceof PDFRef) {
-      const resolved = state.document.context.lookup(object);
-      if (resolved) inspectAssociatedFileEntry(resolved, state, path);
-      return;
+  const path = new Set<PDFObject>();
+  const stack: AssociatedWorkItem[] = [{ kind: 'visit', object }];
+  while (stack.length > 0) {
+    const workItem = stack.pop();
+    if (!workItem) continue;
+    if (workItem.kind === 'leave') {
+      path.delete(workItem.object);
+      continue;
     }
-    if (object instanceof PDFArray) {
-      for (const child of object.asArray()) inspectAssociatedFileEntry(child, state, path);
-      return;
+    if (workItem.kind === 'children') {
+      const next = workItem.iterator.next();
+      if (next.done) continue;
+      stack.push(workItem);
+      stack.push({ kind: 'visit', object: next.value });
+      continue;
     }
-    if (!(object instanceof PDFDict)) return;
-    collectAssociatedFile(object, state);
-  } finally {
-    path.delete(object);
+
+    consumeTraversalStep(state);
+    if (path.has(workItem.object)) continue;
+    path.add(workItem.object);
+    stack.push({ kind: 'leave', object: workItem.object });
+    if (workItem.object instanceof PDFRef) {
+      const resolved = state.document.context.lookup(workItem.object);
+      if (resolved) stack.push({ kind: 'visit', object: resolved });
+      continue;
+    }
+    if (workItem.object instanceof PDFArray) {
+      stack.push({ kind: 'children', iterator: workItem.object.asArray().values() });
+      continue;
+    }
+    if (workItem.object instanceof PDFDict) collectAssociatedFile(workItem.object, state);
   }
 }
 
@@ -369,6 +472,18 @@ function isHandledTriggerKey(parent: PDFDict, key: PDFName): boolean {
   const name = key.decodeText();
   if (name === 'A' || name === 'AA' || name === 'AF' || name === 'OpenAction') return true;
   return name === 'Next' && parent.has(PDFName.of('S'));
+}
+
+function isStructuralChildrenFrame(
+  workItem: StructuralWorkItem,
+): workItem is StructuralChildrenFrame {
+  return 'kind' in workItem;
+}
+
+function* structuralChildren(parent: PDFDict): IterableIterator<PDFObject> {
+  for (const [key, child] of parent.asMap()) {
+    if (!isHandledTriggerKey(parent, key)) yield child;
+  }
 }
 
 function consumeTraversalStep(state: InspectionState): void {

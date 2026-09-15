@@ -248,6 +248,72 @@ describe('inspectPdfStructuralSignals', () => {
     });
   });
 
+  it('rejette un tableau dépassant le budget sans remplir la file de parcours', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(
+      PDFName.of('OversizedArray'),
+      source.context.obj(Array.from({ length: 250_001 }, () => 0)),
+    );
+
+    await expect(inspectPdfStructuralSignals(
+      await source.save({ useObjectStreams: false }),
+    )).rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('parcourt une chaîne Next profonde sans dépendre de la pile JavaScript', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    let next = source.context.register(source.context.obj({
+      Type: 'Action',
+      S: 'SubmitForm',
+      F: PDFString.of('https://submit.example/deep-chain'),
+    }));
+    for (let index = 0; index < 6_000; index += 1) {
+      next = source.context.register(source.context.obj({
+        Type: 'Action',
+        S: 'GoTo',
+        D: [page.ref, PDFName.of('Fit')],
+        Next: next,
+      }));
+    }
+    source.catalog.set(PDFName.of('OpenAction'), next);
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'SubmitForm',
+      context: 'next-action',
+      target: 'https://submit.example/deep-chain',
+      occurrences: 1,
+    });
+  }, 15_000);
+
+  it('ne confond pas une cible FileSpec externe avec une pièce jointe', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const externalFile = source.context.register(source.context.obj({
+      Type: 'Filespec',
+      F: PDFString.of('remote.pdf'),
+    }));
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10],
+        A: { Type: 'Action', S: 'GoToR', F: externalFile },
+      })),
+    ]));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.associatedFiles).toEqual([]);
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'GoToR',
+      context: 'annotation-action',
+      target: 'remote.pdf',
+      occurrences: 1,
+    });
+  });
+
   it('laisse PDF.js décider de la validité si le parseur secondaire échoue', async () => {
     await expect(inspectPdfStructuralSignals(new TextEncoder().encode('not a pdf')))
       .resolves.toBeNull();
