@@ -141,13 +141,18 @@ describe('sanitizeOoxmlBuffer', () => {
       { length: 600 },
       () => '<property name="Client"><vt:lpwstr xmlns:vt="vt">Identique</vt:lpwstr></property>',
     ).join('');
-    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+    source.file('docProps/custom.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
       + '<!-- <property name="Comment"><vt:lpwstr>Faux commentaire</vt:lpwstr></property> -->'
       + '<![CDATA[<property name="CDATA"><vt:lpwstr>Faux CDATA</vt:lpwstr></property>]]>'
       + properties
       + '</Properties>');
-    source.file('metadata/custom-one.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
-    source.file('metadata/custom-two.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
+    source.file('metadata/custom-one.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
+      + `${properties}</Properties>`);
+    source.file('metadata/custom-two.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
+      + `${properties}</Properties>`);
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
       + standardMetadataRelationships
       + '<Relationship Id="rCustomOne" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom-one.xml"/>'
@@ -466,6 +471,47 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.detected.some(finding => finding.scope === 'application')).toBe(false);
   });
 
+  it('preserves a relationship target whose Properties root uses an unrelated namespace', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file(
+      'extensions/vendor.xml',
+      '<Properties xmlns="urn:vendor:properties"><Secret>À conserver</Secret></Properties>',
+    );
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCore" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>'
+      + '<Relationship Id="rApp" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="extensions/vendor.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="docProps/custom.xml"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('extensions/vendor.xml')?.async('string'))
+      .resolves.toContain('À conserver');
+    expect(result.report.detected.some(finding => finding.scope === 'application')).toBe(false);
+  });
+
+  it('rejects a part assigned to conflicting metadata scopes', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rApp" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="docProps/app.xml"/>'
+      + '</Relationships>');
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'invalid-ooxml',
+      entryName: 'docprops/app.xml',
+    }));
+  });
+
   it('removes thousands of declared thumbnail relationships in one linear reconstruction', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const relationships = Array.from(
@@ -498,7 +544,8 @@ describe('sanitizeOoxmlBuffer', () => {
   it('caps relationship-addressed paths before adding them to the visible report', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const longPath = `metadata/${'a'.repeat(60_000)}/custom.xml`;
-    source.file(longPath, '<?xml version="1.0"?><Properties>'
+    source.file(longPath, '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
       + '<property name="Chemin long"><vt:lpwstr xmlns:vt="vt">Valeur</vt:lpwstr></property>'
       + '</Properties>');
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
@@ -523,7 +570,8 @@ describe('sanitizeOoxmlBuffer', () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const nested = Array.from({ length: 200 }, (_, index) => `<property name="Nested ${String(index)}">`)
       .join('');
-    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+    source.file('docProps/custom.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
       + nested
       + '<vt:lpwstr xmlns:vt="vt">Valeur bornée</vt:lpwstr>'
       + '</property>'.repeat(200)
@@ -544,7 +592,8 @@ describe('sanitizeOoxmlBuffer', () => {
 
   it('rejects metadata XML whose nesting exceeds the processing budget', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
-    source.file('docProps/custom.xml', '<?xml version="1.0"?><Properties>'
+    source.file('docProps/custom.xml', '<?xml version="1.0"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
       + '<property name="Deep">'.repeat(257)
       + '</property>'.repeat(257)
       + '</Properties>');
@@ -559,16 +608,21 @@ describe('sanitizeOoxmlBuffer', () => {
   it('decodes UTF-16 metadata parts when reporting values that remain', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     source.file('docProps/core.xml', encodeUtf16Le(
-      '<?xml version="1.0" encoding="UTF-16"?><cp:coreProperties xmlns:cp="core" xmlns:dc="dc">'
+      '<?xml version="1.0" encoding="UTF-16"?>'
+      + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
+      + 'xmlns:dc="http://purl.org/dc/elements/1.1/">'
       + '<dc:title>Projet confidentiel</dc:title><dc:creator>Alice UTF16</dc:creator>'
       + '<cp:lastModifiedBy>Bob UTF16</cp:lastModifiedBy></cp:coreProperties>',
     ));
     source.file('docProps/app.xml', encodeUtf16Le(
-      '<?xml version="1.0" encoding="UTF-16"?><Properties><Application>Word UTF16</Application>'
+      '<?xml version="1.0" encoding="UTF-16"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">'
+      + '<Application>Word UTF16</Application>'
       + '<AppVersion>16.0</AppVersion><Company>Exemple UTF16</Company></Properties>',
     ));
     source.file('docProps/custom.xml', encodeUtf16Le(
-      '<?xml version="1.0" encoding="UTF-16"?><Properties>'
+      '<?xml version="1.0" encoding="UTF-16"?>'
+      + '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties">'
       + '<property name="Client UTF16"><vt:lpwstr xmlns:vt="vt">Secret UTF16</vt:lpwstr></property>'
       + '</Properties>',
     ));

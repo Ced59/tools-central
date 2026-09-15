@@ -329,9 +329,9 @@ test('OOXML metadata cleaner rebuilds a private DOCX locally and remains respons
     + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
     + '</Relationships>');
   source.file('word/document.xml', '<document><content>Contenu à conserver</content></document>');
-  source.file('docProps/core.xml', '<cp:coreProperties xmlns:cp="core" xmlns:dc="dc"><dc:creator>Alice</dc:creator><cp:lastModifiedBy>Bob</cp:lastModifiedBy></cp:coreProperties>');
-  source.file('docProps/app.xml', '<Properties><Application>Word</Application><Company>Exemple SA</Company></Properties>');
-  source.file('docProps/custom.xml', '<Properties><property name="Client"><value>Société secrète</value></property></Properties>');
+  source.file('docProps/core.xml', '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:creator>Alice</dc:creator><cp:lastModifiedBy>Bob</cp:lastModifiedBy></cp:coreProperties>');
+  source.file('docProps/app.xml', '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties"><Application>Word</Application><Company>Exemple SA</Company></Properties>');
+  source.file('docProps/custom.xml', '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"><property name="Client"><value>Société secrète</value></property></Properties>');
   source.file('docProps/thumbnail.jpeg', new Uint8Array([0xff, 0xd8, 0xff, 0xd9]));
   const buffer = Buffer.from(await source.generateAsync({ type: 'uint8array' }));
 

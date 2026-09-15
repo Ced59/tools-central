@@ -1,5 +1,6 @@
 import { Type } from '@angular/core';
 import { deriveAtomicTools, deriveAtomicToolList, DerivedAtomicTool } from '../catalog/derive';
+import { isToolPublishedForLocale } from '../catalog/publication';
 import type { CategoryId } from '../categories';
 import type { GroupId } from '../tool-groups';
 import type { SubGroupId } from '../tool-subgroups';
@@ -43,20 +44,7 @@ export function getToolById(id: ToolId) {
   return ATOMIC_TOOLS[id];
 }
 
-export function isToolPublishedForLocale(
-  tool: Pick<DerivedAtomicTool, 'available' | 'reviewedLocales'>,
-  locale: string,
-): boolean {
-  if (!tool.available) return false;
-  if (!tool.reviewedLocales) return true;
-
-  const normalizedLocale = locale.replace(/_/gu, '-').toLowerCase();
-  return tool.reviewedLocales.some((reviewedLocale) => {
-    const normalizedReviewedLocale = reviewedLocale.toLowerCase();
-    return normalizedLocale === normalizedReviewedLocale
-      || (!normalizedReviewedLocale.includes('-') && normalizedLocale.startsWith(`${normalizedReviewedLocale}-`));
-  });
-}
+export { isToolPublishedForLocale } from '../catalog/publication';
 
 export function isGroupPublishedForLocale(category: string, group: string, locale: string): boolean {
   return ATOMIC_TOOL_LIST.some(tool => (

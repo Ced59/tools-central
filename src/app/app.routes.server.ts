@@ -1,9 +1,11 @@
+import { inject, LOCALE_ID } from '@angular/core';
 import {
   PrerenderFallback,
   RenderMode,
   ServerRoute,
 } from '@angular/ssr';
 import { CATALOG } from './data/catalog';
+import { isToolPublishedForLocale } from './data/catalog/publication';
 
 function categoryParams(): Array<Record<string, string>> {
   return Object.entries(CATALOG)
@@ -21,7 +23,7 @@ function groupParams(): Array<Record<string, string>> {
   });
 }
 
-function toolParams(): Array<Record<string, string>> {
+export function toolParams(locale: string): Array<Record<string, string>> {
   return Object.entries(CATALOG).flatMap(([idCategory, category]) => {
     if (!category.available) return [];
 
@@ -30,7 +32,7 @@ function toolParams(): Array<Record<string, string>> {
 
       return Object.values(group.subGroups).flatMap((subGroup) =>
         Object.entries(subGroup.tools)
-          .filter(([, tool]) => tool.available && tool.loadComponent)
+          .filter(([, tool]) => isToolPublishedForLocale(tool, locale) && tool.loadComponent)
           .map(([idTool]) => ({ idCategory, idGroup, idTool })),
       );
     });
@@ -48,7 +50,7 @@ export const serverRoutes: ServerRoute[] = [
     path: 'categories/:idCategory/:idGroup/:idTool',
     renderMode: RenderMode.Prerender,
     fallback: PrerenderFallback.Client,
-    getPrerenderParams: async () => toolParams(),
+    getPrerenderParams: async () => toolParams(inject(LOCALE_ID)),
   },
   {
     path: 'categories/:idCategory/:idGroup',

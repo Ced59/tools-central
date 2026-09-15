@@ -55,6 +55,29 @@ const METADATA_RELATIONSHIP_SCOPES = new Map<string, OoxmlMetadataScope>([
   ['http://purl.oclc.org/ooxml/package/relationships/metadata/thumbnail', 'thumbnail'],
 ]);
 
+type XmlMetadataScope = Exclude<OoxmlMetadataScope, 'thumbnail'>;
+
+const METADATA_ROOT_NAMES = new Map<XmlMetadataScope, string>([
+  ['core', 'coreProperties'],
+  ['application', 'Properties'],
+  ['custom', 'Properties'],
+]);
+
+const METADATA_ROOT_NAMESPACES = new Map<XmlMetadataScope, ReadonlySet<string>>([
+  ['core', new Set([
+    'http://schemas.openxmlformats.org/package/2006/metadata/core-properties',
+    'http://purl.oclc.org/ooxml/package/metadata/core-properties',
+  ])],
+  ['application', new Set([
+    'http://schemas.openxmlformats.org/officeDocument/2006/extended-properties',
+    'http://purl.oclc.org/ooxml/officeDocument/extendedProperties',
+  ])],
+  ['custom', new Set([
+    'http://schemas.openxmlformats.org/officeDocument/2006/custom-properties',
+    'http://purl.oclc.org/ooxml/officeDocument/customProperties',
+  ])],
+]);
+
 const DIGITAL_SIGNATURE_RELATIONSHIP_TYPES = new Set([
   'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin',
   'http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/signature',
@@ -638,6 +661,7 @@ async function retainRecognizedMetadataParts(
   files: ReadonlyMap<string, JSZipObject>,
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
 ): Promise<OoxmlMetadataParts> {
+  validateExclusiveMetadataScopes(parts);
   const recognized: Record<OoxmlMetadataScope, string[]> = {
     core: [],
     application: [],
@@ -650,8 +674,13 @@ async function retainRecognizedMetadataParts(
       if (!file) continue;
       validateMetadataEntry(entries.get(path), file.name);
       const root = parseXmlTags(await readXmlPart(file)).find(tag => !tag.closing);
-      const expectedRoot = scope === 'core' ? 'coreProperties' : 'Properties';
-      if (root?.localName === expectedRoot) recognized[scope].push(path);
+      const expectedRoot = METADATA_ROOT_NAMES.get(scope);
+      const acceptedNamespaces = METADATA_ROOT_NAMESPACES.get(scope);
+      if (
+        root
+        && root.localName === expectedRoot
+        && acceptedNamespaces?.has(xmlNamespaceForTag(root))
+      ) recognized[scope].push(path);
     }
   }
   for (const path of parts.thumbnail) {
@@ -661,6 +690,25 @@ async function retainRecognizedMetadataParts(
     recognized.thumbnail.push(path);
   }
   return recognized;
+}
+
+function validateExclusiveMetadataScopes(parts: OoxmlMetadataParts): void {
+  const assignedScopes = new Map<string, OoxmlMetadataScope>();
+  for (const scope of ['core', 'application', 'custom', 'thumbnail'] as const) {
+    for (const path of parts[scope]) {
+      const assigned = assignedScopes.get(path);
+      if (assigned && assigned !== scope) {
+        throw new OoxmlMetadataEngineError('invalid-ooxml', path);
+      }
+      assignedScopes.set(path, scope);
+    }
+  }
+}
+
+function xmlNamespaceForTag(tag: XmlTag): string {
+  const separator = tag.name.indexOf(':');
+  const attribute = separator < 0 ? 'xmlns' : `xmlns:${tag.name.slice(0, separator)}`;
+  return tag.attributes.get(attribute) ?? '';
 }
 
 function toMetadataParts(
