@@ -62,6 +62,13 @@ describe('PdfPrivacyInspectorToolComponent', () => {
     expect(element.querySelector('[data-testid="pdf-privacy-result"]')?.textContent).toContain('Alice');
     expect(element.querySelector('[data-testid="pdf-privacy-result"]')?.textContent).not.toContain('OpenAction');
   });
+
+  it('rend les codes sémantiques du Worker via la couche de présentation', () => {
+    expect(component.findingMessage({ code: 'form-actions' })).toBe('JavaScript embarqué');
+    expect(component.findingMessage({
+      code: 'dictionary-action', actionType: 'URI', context: 'open-action',
+    })).toBe('OpenAction · URI');
+  });
 });
 
 function selectFile(component: PdfPrivacyInspectorToolComponent, file: File): void {

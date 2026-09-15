@@ -4,6 +4,7 @@ import {
   buildPdfPrivacyReport,
   sanitizePdfPrivacyValue,
   type PdfPrivacyFinding,
+  type PdfPrivacyFindingMessage,
   type PdfPrivacyReport,
 } from '../domain/pdf-privacy.models';
 import type { PdfActionDictionarySignal } from './pdf-action-dictionary.engine';
@@ -71,12 +72,18 @@ const XMP_PRIVACY_KEY_PARTS = [
 // Stable values from PDF.js' public AnnotationType contract. Keeping the
 // mapping local avoids loading the full display bundle in the inspection
 // engine and makes the worker-facing data shapes explicit.
-const PDFJS_INTERACTIVE_ANNOTATION_TYPES = new Map<number, string>([
-  [18, 'Annotation sonore'],
-  [19, 'Annotation vidéo'],
-  [21, 'Annotation écran'],
-  [25, 'Annotation 3D'],
-  [27, 'Contenu Rich Media'],
+const PDFJS_INTERACTIVE_ANNOTATION_TYPES = new Map<number,
+  | 'interactive-sound'
+  | 'interactive-video'
+  | 'interactive-screen'
+  | 'interactive-3d'
+  | 'rich-media'
+>([
+  [18, 'interactive-sound'],
+  [19, 'interactive-video'],
+  [21, 'interactive-screen'],
+  [25, 'interactive-3d'],
+  [27, 'rich-media'],
 ]);
 
 export function extractPdfVersion(data: Uint8Array): string {
@@ -153,7 +160,7 @@ export async function inspectPdfPrivacyDocument(
       category: 'active-content',
       kind: 'javascript',
       severity: 'high',
-      label: 'Actions de formulaire non détaillées',
+      message: { code: 'form-actions-undetailed' },
       occurrences: 1,
     });
   }
@@ -196,7 +203,7 @@ export async function inspectPdfPrivacyDocument(
       category: 'links',
       kind: 'external-link',
       severity: 'medium',
-      label: link.source === 'outline' ? 'Plan du document' : 'Annotation de lien',
+      message: { code: link.source === 'outline' ? 'outline-link' : 'annotation-link' },
       value: link.url,
       pageNumber,
       occurrences: link.occurrences,
@@ -210,10 +217,9 @@ export async function inspectPdfPrivacyDocument(
       category: 'encryption',
       kind: 'encryption',
       severity: 'info',
-      label: 'Protection du document',
-      value: permissions
-        ? `${String(permissions.size)} permission(s) annoncée(s)`
-        : 'Document ouvert avec un mot de passe',
+      message: permissions
+        ? { code: 'document-permissions', count: permissions.size }
+        : { code: 'document-password' },
     });
   }
 
@@ -278,17 +284,18 @@ function collectAttachments(
     consume();
     index += 1;
     const attachment = asRecord(rawAttachment);
-    const fileName = readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key) ?? `Fichier ${String(index)}`;
+    const fileName = readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key);
     const description = readableValue(attachment?.['description']);
     const contentType = readableValue(attachment?.['contentType']);
     const content = attachment?.['content'];
     const bytes = ArrayBuffer.isView(content) ? content.byteLength : undefined;
     add({
-      id: `attachment:${String(index)}:${fileName}`,
+      id: `attachment:${String(index)}:${fileName ?? ''}`,
       category: 'attachments',
       kind: 'embedded-file',
       severity: 'high',
       label: fileName,
+      message: fileName ? undefined : { code: 'unnamed-attachment', index },
       value: [contentType, description].filter(Boolean).join(' · ') || undefined,
       bytes,
     });
@@ -330,13 +337,13 @@ function collectOpenAction(
   if (!action) return;
   consume(Math.max(1, action.size));
   if (!action.has('action')) return;
-  const actionName = sanitizePdfPrivacyValue(action.get('action')) ?? 'Action nommée';
+  const actionName = sanitizePdfPrivacyValue(action.get('action'));
   add({
-    id: `automatic:open:${actionName}`,
+    id: `automatic:open:${actionName ?? 'unknown'}`,
     category: 'active-content',
     kind: 'automatic-action',
     severity: 'high',
-    label: 'À l’ouverture du document',
+    message: { code: 'open-action' },
     value: actionName,
   });
 }
@@ -355,16 +362,18 @@ function collectForms(
       consume(Math.max(1, controls.length));
       fieldCount += 1;
       let populated = false;
+      const actionEvents = new Set<string>();
+      let hasUndetailedActions = false;
       for (const rawControl of controls) {
         const control = asRecord(rawControl);
         if (!control) continue;
-        if (hasMeaningfulValue(control['value']) || hasMeaningfulValue(control['defaultValue'])) {
+        if (hasStoredFieldValue(control)) {
           populated = true;
         }
-        if (hasActionEntries(control['actions']) || control['hasJSActions'] === true) {
-          actionCount += 1;
-        }
+        for (const event of actionEventNames(control['actions'])) actionEvents.add(event);
+        if (control['hasJSActions'] === true && actionEvents.size === 0) hasUndetailedActions = true;
       }
+      actionCount += actionEvents.size || (hasUndetailedActions ? 1 : 0);
       if (populated) populatedCount += 1;
     }
   }
@@ -374,8 +383,7 @@ function collectForms(
       category: 'forms',
       kind: 'form-fields',
       severity: populatedCount > 0 ? 'medium' : 'low',
-      label: 'Formulaire AcroForm',
-      value: `${String(fieldCount)} champ(s), ${String(populatedCount)} avec une valeur`,
+      message: { code: 'acroform-summary', fieldCount, populatedCount },
       occurrences: fieldCount,
     });
   }
@@ -385,7 +393,7 @@ function collectForms(
       category: 'active-content',
       kind: 'javascript',
       severity: 'high',
-      label: 'Actions de formulaire',
+      message: { code: 'form-actions' },
       occurrences: actionCount,
     });
   }
@@ -395,7 +403,7 @@ function collectForms(
       category: 'forms',
       kind: 'xfa-form',
       severity: 'medium',
-      label: 'Formulaire XFA dynamique',
+      message: { code: 'xfa-form' },
     });
   }
   return actionCount;
@@ -415,19 +423,22 @@ function collectSignatures(
     const subFilter = readableValue(signature?.['subFilter']);
     const coversWholeDocument = signature?.['coversWholeDocument'];
     const modifications = finiteNumber(signature?.['modificationsAfterSignature']);
-    const details = [
-      subFilter,
-      coversWholeDocument === true ? 'couvre tout le document' : undefined,
-      coversWholeDocument === false ? 'ne couvre pas tout le document' : undefined,
-      modifications && modifications > 0 ? `${String(modifications)} modification(s) ultérieure(s)` : undefined,
-    ].filter(Boolean).join(' · ');
     add({
       id: `signature:${String(index + 1)}:${fieldName ?? ''}`,
       category: 'signatures',
       kind: 'digital-signature',
       severity: signer ? 'low' : 'info',
-      label: fieldName ?? `Signature ${String(index + 1)}`,
-      value: [signer, details].filter(Boolean).join(' · ') || undefined,
+      label: fieldName,
+      value: signer,
+      message: {
+        code: 'signature-details',
+        index: index + 1,
+        subFilter,
+        coversWholeDocument: typeof coversWholeDocument === 'boolean'
+          ? coversWholeDocument
+          : undefined,
+        modifications: modifications && modifications > 0 ? modifications : undefined,
+      },
     });
   });
 }
@@ -471,7 +482,7 @@ function collectPageAnnotations(
     consume();
     const annotation = asRecord(rawAnnotation);
     if (!annotation) continue;
-    const annotationId = readableValue(annotation['id']) ?? 'sans-id';
+    const annotationId = readableValue(annotation['id']) ?? 'unknown';
     collectPdfJsActionShape(
       annotation,
       `annotation:${String(pageNumber)}:${annotationId}`,
@@ -482,13 +493,13 @@ function collectPageAnnotations(
     );
 
     const annotationType = finiteNumber(annotation['annotationType']);
-    const interactiveLabel = annotationType === undefined
+    const interactiveCode = annotationType === undefined
       ? undefined
       : PDFJS_INTERACTIVE_ANNOTATION_TYPES.get(annotationType);
-    if (interactiveLabel && !asRecord(annotation['richMedia'])) {
+    if (interactiveCode && !asRecord(annotation['richMedia'])) {
       addAutomaticAction(
         `interactive:${String(pageNumber)}:${annotationId}`,
-        interactiveLabel,
+        { code: interactiveCode },
         undefined,
         pageNumber,
         add,
@@ -497,14 +508,15 @@ function collectPageAnnotations(
 
     const file = asRecord(annotation['file']);
     if (file) {
-      const fileName = readableValue(file['filename']) ?? 'Pièce jointe annotée';
+      const fileName = readableValue(file['filename']);
       const content = file['content'];
       add({
-        id: `attachment:annotation:${String(pageNumber)}:${fileName}`,
+        id: `attachment:annotation:${String(pageNumber)}:${fileName ?? 'unknown'}`,
         category: 'attachments',
         kind: 'embedded-file',
         severity: 'high',
         label: fileName,
+        message: fileName ? undefined : { code: 'annotated-attachment' },
         pageNumber,
         bytes: ArrayBuffer.isView(content) ? content.byteLength : undefined,
       });
@@ -530,7 +542,7 @@ function collectPdfJsActionShape(
     if (!target || !consumeMatchingDictionaryAction(actionIndex, target, source)) {
       addAutomaticAction(
         `external-target:${contextId}`,
-        'Cible externe non sûre',
+        { code: 'unsafe-external-target' },
         redactUnsafeTarget(unsafeUrl),
         pageNumber,
         add,
@@ -544,7 +556,7 @@ function collectPdfJsActionShape(
   if (namedAction) {
     addAutomaticAction(
       `named:${contextId}:${namedAction}`,
-      'Action PDF nommée',
+      { code: 'named-action' },
       namedAction,
       pageNumber,
       add,
@@ -554,11 +566,10 @@ function collectPdfJsActionShape(
   const attachment = asRecord(item['attachment']);
   if (attachment) {
     const fileName = readableValue(attachment['filename'])
-      ?? readableValue(attachment['name'])
-      ?? 'Pièce jointe ciblée';
+      ?? readableValue(attachment['name']);
     addAutomaticAction(
-      `attachment-target:${contextId}:${fileName}`,
-      'Ouverture d’une pièce jointe',
+      `attachment-target:${contextId}:${fileName ?? 'unknown'}`,
+      { code: 'attachment-opening' },
       fileName,
       pageNumber,
       add,
@@ -571,7 +582,7 @@ function collectPdfJsActionShape(
     const contentType = readableValue(richMedia['contentType']);
     addAutomaticAction(
       `rich-media:${contextId}:${fileName ?? ''}`,
-      'Contenu Rich Media',
+      { code: 'rich-media' },
       [fileName, contentType].filter(Boolean).join(' · ') || undefined,
       pageNumber,
       add,
@@ -617,7 +628,7 @@ function collectActionDictionarySignals(
       category: 'active-content',
       kind: 'automatic-action',
       severity: 'high',
-      label: actionDictionaryLabel(signal),
+      message: actionDictionaryMessage(signal),
       value: sanitizeActionTarget(signal.target),
       occurrences,
     });
@@ -643,10 +654,14 @@ function consumeMatchingDictionaryAction(
   return false;
 }
 
-function actionDictionaryLabel(signal: PdfActionDictionarySignal): string {
-  if (signal.context === 'open-action') return `Action ${signal.actionType} à l’ouverture`;
-  if (signal.context === 'additional-action') return `Action ${signal.actionType} additionnelle`;
-  return `Action ${signal.actionType}`;
+function actionDictionaryMessage(signal: PdfActionDictionarySignal): PdfPrivacyFindingMessage {
+  return {
+    code: 'dictionary-action',
+    actionType: signal.actionType,
+    context: signal.context === 'open-action' || signal.context === 'additional-action'
+      ? signal.context
+      : 'other',
+  };
 }
 
 function isHighRiskAction(actionType: string): boolean {
@@ -666,7 +681,7 @@ function isSafeExternalUrl(value: string): boolean {
 
 function addAutomaticAction(
   id: string,
-  label: string,
+  message: PdfPrivacyFindingMessage,
   value: string | undefined,
   pageNumber: number | undefined,
   add: (finding: PdfPrivacyFinding) => void,
@@ -676,7 +691,7 @@ function addAutomaticAction(
     category: 'active-content',
     kind: 'automatic-action',
     severity: 'high',
-    label,
+    message,
     value,
     pageNumber,
   });
@@ -746,10 +761,25 @@ function hasMeaningfulValue(value: unknown): boolean {
   return readableValue(value) !== undefined;
 }
 
-function hasActionEntries(value: unknown): boolean {
-  if (value instanceof Map) return value.size > 0;
+function hasStoredFieldValue(control: Record<string, unknown>): boolean {
+  const fieldType = readableValue(control['type'])?.toLowerCase();
+  const values = [control['value'], control['defaultValue']];
+  if (fieldType === 'checkbox' || fieldType === 'radiobutton') {
+    return values.some(value => hasMeaningfulValue(value) && !isOffFieldValue(value));
+  }
+  return values.some(hasMeaningfulValue);
+}
+
+function isOffFieldValue(value: unknown): boolean {
+  return typeof value === 'string' && value.trim().toLowerCase() === 'off';
+}
+
+function actionEventNames(value: unknown): readonly string[] {
+  if (value instanceof Map) {
+    return [...value.keys()].map(key => sanitizePdfPrivacyValue(key) ?? 'unknown');
+  }
   const actions = asRecord(value);
-  return actions !== null && Object.keys(actions).length > 0;
+  return actions ? Object.keys(actions) : [];
 }
 
 function finiteNumber(value: unknown): number | undefined {

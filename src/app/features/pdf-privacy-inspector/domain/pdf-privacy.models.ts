@@ -29,12 +29,48 @@ export type PdfPrivacyFindingKind =
   | 'digital-signature'
   | 'encryption';
 
+export type PdfPrivacyFindingMessage =
+  | { code: 'form-actions-undetailed' }
+  | { code: 'outline-link' }
+  | { code: 'annotation-link' }
+  | { code: 'document-permissions'; count: number }
+  | { code: 'document-password' }
+  | { code: 'unnamed-attachment'; index: number }
+  | { code: 'open-action' }
+  | { code: 'acroform-summary'; fieldCount: number; populatedCount: number }
+  | { code: 'form-actions' }
+  | { code: 'xfa-form' }
+  | {
+      code: 'signature-details';
+      index: number;
+      subFilter?: string;
+      coversWholeDocument?: boolean;
+      modifications?: number;
+    }
+  | { code: 'interactive-sound' }
+  | { code: 'interactive-video' }
+  | { code: 'interactive-screen' }
+  | { code: 'interactive-3d' }
+  | { code: 'rich-media' }
+  | { code: 'annotated-attachment' }
+  | { code: 'unsafe-external-target' }
+  | { code: 'named-action' }
+  | { code: 'attachment-opening' }
+  | {
+      code: 'dictionary-action';
+      actionType: string;
+      context: 'open-action' | 'additional-action' | 'other';
+    };
+
 export interface PdfPrivacyFinding {
   id: string;
   category: PdfPrivacyCategory;
   kind: PdfPrivacyFindingKind;
   severity: PdfPrivacySeverity;
+  message?: PdfPrivacyFindingMessage;
+  /** Raw, document-provided label. Never use this field for UI copy. */
   label?: string;
+  /** Raw, document-provided value. Never use this field for UI copy. */
   value?: string;
   pageNumber?: number;
   occurrences?: number;

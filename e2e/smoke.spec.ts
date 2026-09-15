@@ -477,13 +477,13 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('secret.txt');
   await expect(result).toContainText('https://tracker.example/click');
   await expect(result).toContainText('calc.exe');
-  await expect(result).toContainText('Action Launch');
+  await expect(result).toContainText('Launch');
   await expect(result).toContainText('https://launch.example/run');
-  await expect(result).toContainText('Action SubmitForm');
+  await expect(result).toContainText('SubmitForm');
   await expect(result).toContainText('https://submit.example/collect');
-  await expect(result).toContainText('Action URI à l’ouverture');
+  await expect(result).toContainText('OpenAction · URI');
   await expect(result).toContainText('https://open.example/start');
-  await expect(result).toContainText('Actions de formulaire');
+  await expect(result).toContainText('JavaScript embarqué');
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
   await expect(result).toContainText('Alice');
@@ -506,6 +506,12 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   expect(exported.report.categoryCounts['attachments']).toBeGreaterThan(0);
   expect(exported.report.categoryCounts['links']).toBeGreaterThan(0);
   expect(exported.report.categoryCounts['forms']).toBeGreaterThan(0);
+  expect(exported.report.findings).toEqual(expect.arrayContaining([
+    expect.objectContaining({ message: { code: 'form-actions' } }),
+    expect.objectContaining({
+      message: { code: 'dictionary-action', actionType: 'URI', context: 'open-action' },
+    }),
+  ]));
   expect(JSON.stringify(exported)).not.toContain('secret-script');
   expect(JSON.stringify(exported)).not.toContain('field-secret');
   expect(JSON.stringify(exported)).not.toContain('alice@example.test');

@@ -18,6 +18,7 @@ import {
   type PdfPrivacyCategory,
   type PdfPrivacyFinding,
   type PdfPrivacyFindingKind,
+  type PdfPrivacyFindingMessage,
   type PdfPrivacyReport,
   type PdfPrivacySeverity,
 } from '../application/pdf-privacy.use-cases';
@@ -229,12 +230,62 @@ export class PdfPrivacyInspectorToolComponent {
   findingContext(finding: PdfPrivacyFinding): string {
     const parts: string[] = [];
     if (finding.label) parts.push(finding.label);
+    const message = this.findingMessage(finding.message);
+    if (message) parts.push(message);
     if (finding.pageNumber) parts.push($localize`:@@pdf_privacy_page_context:Page ${finding.pageNumber}:pageNumber:`);
     if ((finding.occurrences ?? 0) > 1) {
       parts.push($localize`:@@pdf_privacy_occurrences_context:${finding.occurrences}:count: occurrence(s)`);
     }
     if (finding.bytes !== undefined) parts.push(formatBytes(finding.bytes, this.locale));
     return parts.join(' · ');
+  }
+
+  findingMessage(message: PdfPrivacyFindingMessage | undefined): string {
+    if (!message) return '';
+    switch (message.code) {
+      case 'form-actions-undetailed':
+      case 'form-actions':
+        return this.findingTitle('javascript');
+      case 'outline-link':
+      case 'annotation-link':
+        return this.findingTitle('external-link');
+      case 'document-permissions':
+        return `${this.findingTitle('encryption')} · ${new Intl.NumberFormat(this.locale).format(message.count)}`;
+      case 'document-password':
+        return this.findingTitle('encryption');
+      case 'unnamed-attachment':
+        return `${this.findingTitle('embedded-file')} ${new Intl.NumberFormat(this.locale).format(message.index)}`;
+      case 'open-action':
+        return `OpenAction`;
+      case 'acroform-summary':
+        return `${this.findingTitle('form-fields')} · ${new Intl.NumberFormat(this.locale).format(message.populatedCount)}/${new Intl.NumberFormat(this.locale).format(message.fieldCount)}`;
+      case 'xfa-form':
+        return this.findingTitle('xfa-form');
+      case 'signature-details':
+        return this.signatureMessage(message);
+      case 'interactive-sound':
+        return `${this.findingTitle('automatic-action')} · Sound`;
+      case 'interactive-video':
+        return `${this.findingTitle('automatic-action')} · Video`;
+      case 'interactive-screen':
+        return `${this.findingTitle('automatic-action')} · Screen`;
+      case 'interactive-3d':
+        return `${this.findingTitle('automatic-action')} · 3D`;
+      case 'rich-media':
+        return `${this.findingTitle('automatic-action')} · RichMedia`;
+      case 'annotated-attachment':
+        return this.findingTitle('embedded-file');
+      case 'unsafe-external-target':
+        return this.findingTitle('automatic-action');
+      case 'named-action':
+        return this.findingTitle('automatic-action');
+      case 'attachment-opening':
+        return this.findingTitle('embedded-file');
+      case 'dictionary-action':
+        if (message.context === 'open-action') return `OpenAction · ${message.actionType}`;
+        if (message.context === 'additional-action') return `AA · ${message.actionType}`;
+        return message.actionType;
+    }
   }
 
   formatFileSize(value: number): string {
@@ -251,6 +302,19 @@ export class PdfPrivacyInspectorToolComponent {
   private cancelCurrentTask(): void {
     this.abortController?.abort();
     this.abortController = null;
+  }
+
+  private signatureMessage(message: Extract<PdfPrivacyFindingMessage, { code: 'signature-details' }>): string {
+    const parts = [
+      `${this.findingTitle('digital-signature')} ${new Intl.NumberFormat(this.locale).format(message.index)}`,
+    ];
+    if (message.subFilter) parts.push(message.subFilter);
+    if (message.coversWholeDocument === true) parts.push('100 %');
+    else if (message.coversWholeDocument === false) parts.push('< 100 %');
+    if (message.modifications) {
+      parts.push(`Δ ${new Intl.NumberFormat(this.locale).format(message.modifications)}`);
+    }
+    return parts.join(' · ');
   }
 
   private describeError(error: unknown): string {

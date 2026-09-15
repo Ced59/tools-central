@@ -19,6 +19,7 @@ export {
   type PdfPrivacyCategory,
   type PdfPrivacyFinding,
   type PdfPrivacyFindingKind,
+  type PdfPrivacyFindingMessage,
   type PdfPrivacyReport,
   type PdfPrivacySeverity,
 } from '../domain/pdf-privacy.models';

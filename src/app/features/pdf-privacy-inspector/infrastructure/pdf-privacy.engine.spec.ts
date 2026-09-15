@@ -103,12 +103,12 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.find(finding => finding.kind === 'external-link' && finding.value?.includes('tracker')))
       .toMatchObject({ occurrences: 2, pageNumber: 1 });
     expect(report.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ kind: 'automatic-action', label: 'Action PDF nommée', value: 'Print' }),
-      expect.objectContaining({ kind: 'automatic-action', label: 'Cible externe non sûre', value: 'calc.exe' }),
+      expect.objectContaining({ kind: 'automatic-action', message: { code: 'named-action' }, value: 'Print' }),
+      expect.objectContaining({ kind: 'automatic-action', message: { code: 'unsafe-external-target' }, value: 'calc.exe' }),
     ]));
     expect(report.findings.some(finding => (
       finding.kind === 'automatic-action'
-      && finding.label === 'Contenu Rich Media'
+      && finding.message?.code === 'rich-media'
       && finding.value?.includes('demo.swf') === true
     ))).toBe(true);
     expect(cleanup).toHaveBeenCalledOnce();
@@ -124,7 +124,7 @@ describe('inspectPdfPrivacyDocument', () => {
       expect.objectContaining({
         kind: 'javascript',
         severity: 'high',
-        label: 'Actions de formulaire non détaillées',
+        message: { code: 'form-actions-undetailed' },
       }),
       expect.objectContaining({ kind: 'xfa-form', severity: 'medium' }),
     ]));
@@ -133,17 +133,25 @@ describe('inspectPdfPrivacyDocument', () => {
     ]));
   });
 
-  it('ne double pas les actions JavaScript de champs déjà détaillées', async () => {
+  it('ne double pas les actions héritées et ignore la sentinelle Off des contrôles vierges', async () => {
+    const inheritedActions = new Map([['Keystroke', ['app.alert("secret")']]]);
     const report = await inspectPdfPrivacyDocument(documentFixture({
       hasJSActions: vi.fn().mockResolvedValue(true),
       getFieldObjects: vi.fn().mockResolvedValue(new Map([
-        ['consent', [{ actions: new Map([['Action', ['app.alert("secret")']]]) }]],
+        ['consent', [
+          { type: 'checkbox', value: 'Off', defaultValue: 'Off', actions: inheritedActions },
+          { type: 'checkbox', value: 'Off', defaultValue: 'Off', actions: inheritedActions },
+        ]],
       ])),
     }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
 
     expect(report.findings.filter(finding => finding.kind === 'javascript')).toEqual([
-      expect.objectContaining({ label: 'Actions de formulaire', occurrences: 1 }),
+      expect.objectContaining({ message: { code: 'form-actions' }, occurrences: 1 }),
     ]);
+    expect(report.findings.find(finding => finding.kind === 'form-fields')).toMatchObject({
+      severity: 'low',
+      message: { code: 'acroform-summary', fieldCount: 1, populatedCount: 0 },
+    });
   });
 
   it('détecte aussi les formulaires XFA hybrides annoncés dans les métadonnées PDF.js', async () => {
@@ -170,9 +178,9 @@ describe('inspectPdfPrivacyDocument', () => {
     }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
 
     expect(report.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ label: 'Cible externe non sûre', value: 'viewer.exe' }),
-      expect.objectContaining({ label: 'Ouverture d’une pièce jointe', value: 'annexe.pdf' }),
-      expect.objectContaining({ label: 'Action PDF nommée', value: 'Print' }),
+      expect.objectContaining({ message: { code: 'unsafe-external-target' }, value: 'viewer.exe' }),
+      expect.objectContaining({ message: { code: 'attachment-opening' }, value: 'annexe.pdf' }),
+      expect.objectContaining({ message: { code: 'named-action' }, value: 'Print' }),
     ]));
   });
 
@@ -203,8 +211,14 @@ describe('inspectPdfPrivacyDocument', () => {
     });
 
     expect(report.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ label: 'Action Launch', value: 'https://launch.example/run' }),
-      expect.objectContaining({ label: 'Action SubmitForm', value: 'https://submit.example/collect' }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'Launch', context: 'other' },
+        value: 'https://launch.example/run',
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'SubmitForm', context: 'other' },
+        value: 'https://submit.example/collect',
+      }),
       expect.objectContaining({ kind: 'external-link', value: 'https://launch.example/run' }),
     ]));
   });
@@ -248,7 +262,10 @@ describe('inspectPdfPrivacyDocument', () => {
     });
 
     expect(report.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ label: 'Action URI', value: 'javascript:…' }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'other' },
+        value: 'javascript:…',
+      }),
     ]));
     expect(JSON.stringify(report)).not.toContain('private-value');
   });
@@ -272,10 +289,12 @@ describe('inspectPdfPrivacyDocument', () => {
 
     expect(report.findings).toEqual(expect.arrayContaining([
       expect.objectContaining({
-        label: 'Action URI à l’ouverture', value: 'https://open.example/start',
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'open-action' },
+        value: 'https://open.example/start',
       }),
       expect.objectContaining({
-        label: 'Action URI additionnelle', value: 'https://additional.example/ping',
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'additional-action' },
+        value: 'https://additional.example/ping',
       }),
     ]));
   });
@@ -298,7 +317,10 @@ describe('inspectPdfPrivacyDocument', () => {
     });
 
     expect(report.findings.filter(finding => finding.kind === 'automatic-action')).toEqual([
-      expect.objectContaining({ label: 'Action Launch', occurrences: 1 }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'Launch', context: 'other' },
+        occurrences: 1,
+      }),
     ]);
   });
 
