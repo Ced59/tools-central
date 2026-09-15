@@ -404,7 +404,7 @@ function collectForms(
       consume(Math.max(1, controls.length));
       fieldCount += 1;
       let populated = false;
-      const actionEvents = new Set<string>();
+      const actionIdentities = new Map<string, Set<string>>();
       let hasUndetailedActions = false;
       for (const rawControl of controls) {
         const control = asRecord(rawControl);
@@ -412,10 +412,18 @@ function collectForms(
         if (hasStoredFieldValue(control)) {
           populated = true;
         }
-        for (const event of actionEventNames(control['actions'])) actionEvents.add(event);
-        if (control['hasJSActions'] === true && actionEvents.size === 0) hasUndetailedActions = true;
+        const hasDetailedActions = collectActionIdentities(
+          control['actions'],
+          actionIdentities,
+          consume,
+        );
+        if (control['hasJSActions'] === true && !hasDetailedActions) {
+          hasUndetailedActions = true;
+        }
       }
-      actionCount += actionEvents.size || (hasUndetailedActions ? 1 : 0);
+      const detailedActionCount = [...actionIdentities.values()]
+        .reduce((count, payloads) => count + payloads.size, 0);
+      actionCount += detailedActionCount + (hasUndetailedActions ? 1 : 0);
       if (populated) populatedCount += 1;
     }
   }
@@ -493,9 +501,14 @@ function collectOutlineItems(
   consume: ConsumeDiscoveryBudget,
 ): void {
   const queue = [...nodes];
+  if (queue.length > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+    throw new PdfPrivacyEngineError('inspection-limit');
+  }
+  let cursor = 0;
   let index = 0;
-  while (queue.length > 0) {
-    const node = asRecord(queue.shift());
+  while (cursor < queue.length) {
+    const node = asRecord(queue[cursor]);
+    cursor += 1;
     if (!node) continue;
     index += 1;
     consume();
@@ -508,7 +521,15 @@ function collectOutlineItems(
       add,
     );
     const children = node['items'];
-    if (Array.isArray(children)) queue.push(...children.filter(isObject));
+    if (Array.isArray(children)) {
+      for (const child of children) {
+        if (!isObject(child)) continue;
+        if (queue.length >= PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+          throw new PdfPrivacyEngineError('inspection-limit');
+        }
+        queue.push(child);
+      }
+    }
   }
 }
 
@@ -844,12 +865,31 @@ function isOffFieldValue(value: unknown): boolean {
   return typeof value === 'string' && value.trim().toLowerCase() === 'off';
 }
 
-function actionEventNames(value: unknown): readonly string[] {
-  if (value instanceof Map) {
-    return [...value.keys()].map(key => sanitizePdfPrivacyValue(key) ?? 'unknown');
+function collectActionIdentities(
+  value: unknown,
+  identities: Map<string, Set<string>>,
+  consume: ConsumeDiscoveryBudget,
+): boolean {
+  const entries: Iterable<[unknown, unknown]> = value instanceof Map
+    ? value.entries()
+    : Object.entries(asRecord(value) ?? {});
+  let hasDetailedActions = false;
+  for (const [rawEvent, rawPayloads] of entries) {
+    hasDetailedActions = true;
+    const event = sanitizePdfPrivacyValue(rawEvent) ?? 'unknown';
+    const payloads = Array.isArray(rawPayloads) ? rawPayloads : [rawPayloads];
+    const eventPayloads = identities.get(event) ?? new Set<string>();
+    if (payloads.length === 0) {
+      consume();
+      eventPayloads.add('');
+    }
+    for (const payload of payloads) {
+      consume();
+      eventPayloads.add(typeof payload === 'string' ? payload : `unknown:${typeof payload}`);
+    }
+    identities.set(event, eventPayloads);
   }
-  const actions = asRecord(value);
-  return actions ? Object.keys(actions) : [];
+  return hasDetailedActions;
 }
 
 function finiteNumber(value: unknown): number | undefined {

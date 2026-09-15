@@ -157,6 +157,40 @@ describe('inspectPdfPrivacyDocument', () => {
     });
   });
 
+  it('compte deux scripts distincts liés au même événement de champ', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      hasJSActions: vi.fn().mockResolvedValue(true),
+      getFieldObjects: vi.fn().mockResolvedValue(new Map([
+        ['approval', [
+          { actions: new Map([['Mouse Up', ['approve()']]]) },
+          { actions: new Map([['Mouse Up', ['reject()']]]) },
+        ]],
+      ])),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.find(finding => finding.id === 'javascript:forms')).toMatchObject({
+      message: { code: 'form-actions' },
+      occurrences: 2,
+    });
+  });
+
+  it('conserve un signal sans détail à côté des actions de champ détaillées', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      hasJSActions: vi.fn().mockResolvedValue(true),
+      getFieldObjects: vi.fn().mockResolvedValue(new Map([
+        ['approval', [
+          { actions: new Map([['Mouse Up', ['approve()']]]) },
+          { hasJSActions: true },
+        ]],
+      ])),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.find(finding => finding.id === 'javascript:forms')).toMatchObject({
+      message: { code: 'form-actions' },
+      occurrences: 2,
+    });
+  });
+
   it('détecte aussi les formulaires XFA hybrides annoncés dans les métadonnées PDF.js', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       isPureXfa: false,
@@ -490,6 +524,19 @@ describe('inspectPdfPrivacyDocument', () => {
 
     await expect(inspectPdfPrivacyDocument(documentFixture({
       getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(), fileBytes: 16, passwordUsed: false,
+    })).rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('borne les enfants du plan avant de les ajouter à la file', async () => {
+    const children = Array.from(
+      { length: PDF_PRIVACY_MAX_DISCOVERED_ITEMS + 1 },
+      () => ({ items: [] }),
+    );
+
+    await expect(inspectPdfPrivacyDocument(documentFixture({
+      getOutline: vi.fn().mockResolvedValue([{ items: children }]),
     }), {
       headerData: pdfBytes(), fileBytes: 16, passwordUsed: false,
     })).rejects.toMatchObject({ code: 'inspection-limit' });
