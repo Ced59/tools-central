@@ -284,6 +284,7 @@ export class PdfPrivacyInspectorToolComponent {
       case 'dictionary-action':
         if (message.context === 'open-action') return `OpenAction · ${message.actionType}`;
         if (message.context === 'additional-action') return `AA · ${message.actionType}`;
+        if (message.context === 'chained-action') return `Next · ${message.actionType}`;
         return message.actionType;
     }
   }

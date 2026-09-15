@@ -19,6 +19,13 @@ describe('inspectPdfActionDictionaries', () => {
         Type: 'Annot', Subtype: 'Link', Rect: [20, 0, 30, 10],
         A: { Type: 'Action', S: 'SubmitForm', F: PDFString.of('https://submit.example/collect') },
       })),
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [40, 0, 50, 10],
+        A: {
+          Type: 'Action', S: 'GoTo', D: [page.ref, PDFName.of('Fit')],
+          Next: { Type: 'Action', S: 'URI', URI: PDFString.of('https://next.example/continue') },
+        },
+      })),
     ]));
 
     const signals = await inspectPdfActionDictionaries(await source.save());
@@ -36,7 +43,42 @@ describe('inspectPdfActionDictionaries', () => {
         actionType: 'URI', context: 'open-action',
         target: 'https://open.example/start', occurrences: 1,
       },
+      {
+        actionType: 'URI', context: 'next-action',
+        target: 'https://next.example/continue', occurrences: 1,
+      },
     ]));
+  });
+
+  it('ne double pas une annotation atteinte depuis la destination du plan', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'Launch', F: PDFString.of('viewer.exe'),
+    }));
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], A: action,
+      })),
+    ]));
+    const outlineRoot = source.context.obj({ Type: 'Outlines' });
+    const outlineRootRef = source.context.register(outlineRoot);
+    const outlineItem = source.context.obj({
+      Title: PDFString.of('Page'),
+      Parent: outlineRootRef,
+      Dest: [page.ref, PDFName.of('Fit')],
+    });
+    const outlineItemRef = source.context.register(outlineItem);
+    outlineRoot.set(PDFName.of('First'), outlineItemRef);
+    outlineRoot.set(PDFName.of('Last'), outlineItemRef);
+    source.catalog.set(PDFName.of('Outlines'), outlineRootRef);
+
+    const signals = await inspectPdfActionDictionaries(await source.save());
+
+    expect(signals).not.toBeNull();
+    expect(signals?.filter(signal => signal.actionType === 'Launch')).toEqual([{
+      actionType: 'Launch', context: 'annotation-action', target: 'viewer.exe', occurrences: 1,
+    }]);
   });
 
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {

@@ -284,6 +284,10 @@ describe('inspectPdfPrivacyDocument', () => {
           actionType: 'URI', context: 'additional-action',
           target: 'https://additional.example/ping', occurrences: 1,
         },
+        {
+          actionType: 'URI', context: 'next-action',
+          target: 'https://next.example/continue', occurrences: 1,
+        },
       ],
     });
 
@@ -295,6 +299,10 @@ describe('inspectPdfPrivacyDocument', () => {
       expect.objectContaining({
         message: { code: 'dictionary-action', actionType: 'URI', context: 'additional-action' },
         value: 'https://additional.example/ping',
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
+        value: 'https://next.example/continue',
       }),
     ]));
   });

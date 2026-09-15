@@ -59,7 +59,7 @@ export type PdfPrivacyFindingMessage =
   | {
       code: 'dictionary-action';
       actionType: string;
-      context: 'open-action' | 'additional-action' | 'other';
+      context: 'open-action' | 'additional-action' | 'chained-action' | 'other';
     };
 
 export interface PdfPrivacyFinding {

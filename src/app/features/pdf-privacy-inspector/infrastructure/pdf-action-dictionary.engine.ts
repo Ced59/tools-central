@@ -24,6 +24,7 @@ export type PdfActionDictionaryContext =
   | 'additional-action'
   | 'annotation-action'
   | 'outline-action'
+  | 'next-action'
   | 'explicit-action'
   | 'unknown';
 
@@ -164,14 +165,22 @@ function childContext(
   if (name === 'OpenAction') return 'open-action';
   if (name === 'AA') return 'additional-action';
   if (name === 'Outlines') return 'outline-action';
+  if (name === 'Next' && isActionDictionary(parent)) return 'next-action';
   if (name === 'A') {
-    if (parentContext === 'outline-action') return parentContext;
     const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
-    return subtype && ANNOTATION_SUBTYPES.has(subtype)
-      ? 'annotation-action'
-      : 'explicit-action';
+    if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-action';
+    if (parent.has(PDFName.of('Title'))) return 'outline-action';
+    return 'explicit-action';
   }
   return parentContext;
+}
+
+function isActionDictionary(dictionary: PDFDict): boolean {
+  const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
+  const type = dictionary.lookupMaybe(PDFName.of('Type'), PDFName)?.decodeText();
+  return type === 'Action'
+    || actionType === 'GoTo'
+    || (actionType !== undefined && ACTION_NAMES.has(actionType));
 }
 
 function readTarget(dictionary: PDFDict): string | undefined {

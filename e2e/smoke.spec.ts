@@ -443,18 +443,37 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     },
   });
   const submitFormAnnotationReference = source.context.register(submitForm);
+  const chainedUri = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 440, 320, 470],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'GoTo',
+      D: [pdfPage.ref, PDFName.of('Fit')],
+      Next: {
+        Type: 'Action',
+        S: 'URI',
+        URI: PDFString.of('https://next.example/continue'),
+      },
+    },
+  });
+  const chainedUriAnnotationReference = source.context.register(chainedUri);
   const annotations = pdfPage.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
   if (annotations) {
     annotations.push(annotationReference);
     annotations.push(launchAnnotationReference);
     annotations.push(httpLaunchAnnotationReference);
     annotations.push(submitFormAnnotationReference);
+    annotations.push(chainedUriAnnotationReference);
   } else {
     pdfPage.node.set(PDFName.of('Annots'), source.context.obj([
       annotationReference,
       launchAnnotationReference,
       httpLaunchAnnotationReference,
       submitFormAnnotationReference,
+      chainedUriAnnotationReference,
     ]));
   }
   const bytes = await source.save({ useObjectStreams: false });
@@ -483,6 +502,8 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('https://submit.example/collect');
   await expect(result).toContainText('OpenAction · URI');
   await expect(result).toContainText('https://open.example/start');
+  await expect(result).toContainText('Next · URI');
+  await expect(result).toContainText('https://next.example/continue');
   await expect(result).toContainText('JavaScript embarqué');
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
@@ -498,7 +519,11 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   expect(path).not.toBeNull();
   const exported = JSON.parse(await readFile(path as string, 'utf8')) as {
     schema: string;
-    report: { attentionLevel: string; categoryCounts: Record<string, number> };
+    report: {
+      attentionLevel: string;
+      categoryCounts: Record<string, number>;
+      findings: unknown[];
+    };
   };
   expect(exported.schema).toBe('tools-central/pdf-privacy-report/v1');
   expect(exported.report.attentionLevel).toBe('high');
@@ -510,6 +535,9 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     expect.objectContaining({ message: { code: 'form-actions' } }),
     expect.objectContaining({
       message: { code: 'dictionary-action', actionType: 'URI', context: 'open-action' },
+    }),
+    expect.objectContaining({
+      message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
     }),
   ]));
   expect(JSON.stringify(exported)).not.toContain('secret-script');

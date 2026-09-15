@@ -609,7 +609,11 @@ function collectActionDictionarySignals(
       && target !== undefined
       && !isSafeExternalUrl(target);
     const contextualUri = signal.actionType === 'URI'
-      && (signal.context === 'open-action' || signal.context === 'additional-action');
+      && (
+        signal.context === 'open-action'
+        || signal.context === 'additional-action'
+        || signal.context === 'next-action'
+      );
     const highRisk = isHighRiskAction(signal.actionType);
     if (!highRisk && !unsafeUri && !contextualUri) continue;
     const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
@@ -658,9 +662,11 @@ function actionDictionaryMessage(signal: PdfActionDictionarySignal): PdfPrivacyF
   return {
     code: 'dictionary-action',
     actionType: signal.actionType,
-    context: signal.context === 'open-action' || signal.context === 'additional-action'
-      ? signal.context
-      : 'other',
+    context: signal.context === 'next-action'
+      ? 'chained-action'
+      : signal.context === 'open-action' || signal.context === 'additional-action'
+        ? signal.context
+        : 'other',
   };
 }
 
