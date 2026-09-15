@@ -3,11 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
+  PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES,
@@ -622,6 +624,28 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne la normalisation répétée d’une géométrie partagée par les annotations', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const coordinatesPerAnnotation = 4_096;
+    const quadPoints = source.context.register(source.context.obj(
+      Array.from({ length: coordinatesPerAnnotation }, () => 0),
+    ));
+    const geometryBytes = coordinatesPerAnnotation * 8 + 32;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES / geometryBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Highlight', Rect: [0, 0, 10, 10], QuadPoints: quadPoints,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la croissance cumulée des noms qualifiés de champs', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -680,6 +704,31 @@ describe('inspectPdfStructuralSignals', () => {
     );
     const parent = source.context.register(source.context.obj({
       FT: 'Tx', T: PDFString.of('Shared'), V: value, Kids: widgets,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne la matérialisation répétée des options héritées par les widgets', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const optionBytes = 1 * 1_024 * 1_024;
+    const option = source.context.register(PDFString.of('A'.repeat(optionBytes)));
+    const options = source.context.register(source.context.obj([option]));
+    const normalizedOptionBytes = optionBytes + 64;
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES / normalizedOptionBytes,
+    ) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Choice'),
+      })),
+    );
+    const parent = source.context.register(source.context.obj({
+      FT: 'Ch', T: PDFString.of('Shared'), Opt: options, Kids: widgets,
     }));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
 
