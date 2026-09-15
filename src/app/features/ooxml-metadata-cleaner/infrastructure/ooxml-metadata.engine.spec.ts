@@ -294,6 +294,52 @@ describe('sanitizeOoxmlBuffer', () => {
     expect(result.report.detected.map(finding => finding.path)).toContain('metadata/core.xml');
   });
 
+  it('preserves percent encoding while resolving an OPC metadata part name', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    const core = await source.file('docProps/core.xml')?.async('uint8array');
+    if (!core) throw new Error('Expected fixture core properties.');
+    source.remove('docProps/core.xml');
+    source.file('metadata/core%20props.xml', core);
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCore" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="metadata/core%20props.xml"/>'
+      + '<Relationship Id="rApp" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="docProps/custom.xml"/>'
+      + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('metadata/core%20props.xml')?.async('string'))
+      .resolves.not.toContain('Alice');
+    expect(result.report.detected.map(finding => finding.path))
+      .toContain('metadata/core%20props.xml');
+  });
+
+  it('includes the standard core contentType property in the before-after report', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('docProps/core.xml', '<?xml version="1.0"?>'
+      + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties">'
+      + '<cp:contentType>Contrat interne</cp:contentType></cp:coreProperties>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+
+    expect(result.report.detected).toContainEqual(expect.objectContaining({
+      scope: 'core',
+      name: 'contentType',
+      value: 'Contrat interne',
+    }));
+    expect(result.report.removed).toContainEqual(expect.objectContaining({ name: 'contentType' }));
+  });
+
   it('ignores relationship-shaped text inside XML comments and CDATA sections', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'

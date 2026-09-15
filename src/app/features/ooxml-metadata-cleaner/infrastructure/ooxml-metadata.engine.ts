@@ -127,6 +127,7 @@ const CORE_FIELDS = [
   'identifier',
   'language',
   'version',
+  'contentType',
 ] as const;
 
 const APPLICATION_FIELDS = [
@@ -694,20 +695,24 @@ function resolveTargetAgainstBase(target: string, base: readonly string[]): stri
   if (!path || path.includes('\\')) return null;
   const resolved: string[] = path.startsWith('/') ? [] : [...base];
   for (const encodedPart of path.replace(/^\/+|\/+$/gu, '').split('/')) {
-    let part: string;
+    let decodedPart: string;
     try {
-      part = decodeURIComponent(encodedPart);
+      decodedPart = decodeURIComponent(encodedPart);
     } catch {
       return null;
     }
-    if (!part || part === '.') continue;
-    if (part === '..') {
+    if (!decodedPart || decodedPart === '.') continue;
+    if (decodedPart === '..') {
       if (resolved.length === 0) return null;
       resolved.pop();
       continue;
     }
-    if (part.includes('/') || part.includes('\\') || part.includes('\u0000')) return null;
-    resolved.push(part);
+    if (
+      decodedPart.includes('/')
+      || decodedPart.includes('\\')
+      || decodedPart.includes('\u0000')
+    ) return null;
+    resolved.push(encodedPart);
   }
   return resolved.length > 0 ? resolved.join('/').toLowerCase() : null;
 }

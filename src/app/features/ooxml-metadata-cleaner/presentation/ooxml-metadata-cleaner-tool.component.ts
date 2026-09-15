@@ -177,6 +177,7 @@ export class OoxmlMetadataCleanerToolComponent {
       identifier: $localize`:@@ooxml_metadata_field_identifier:Identifiant`,
       language: $localize`:@@ooxml_metadata_field_language:Langue`,
       version: $localize`:@@ooxml_metadata_field_version:Version`,
+      contentType: $localize`:@@ooxml_metadata_field_content_type:Type de contenu`,
       Application: $localize`:@@ooxml_metadata_field_application:Application`,
       AppVersion: $localize`:@@ooxml_metadata_field_app_version:Version de l’application`,
       Company: $localize`:@@ooxml_metadata_field_company:Société`,
