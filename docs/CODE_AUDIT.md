@@ -16,10 +16,10 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,12 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,07 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 133 fichiers, 420 tests verts sous Vitest |
-| Couverture | aucun seuil | 48,94 % statements, 36,01 % branches, 48,63 % fonctions, 52,41 % lignes |
+| Tests unitaires | suite non compilable | 133 fichiers, 423 tests verts sous Vitest |
+| Couverture | aucun seuil | 49,01 % statements, 36,10 % branches, 48,67 % fonctions, 52,47 % lignes |
 | E2E | aucun | 14 parcours Playwright verts |
 | Routes statiques | 2 | 2 464 pages prérendues ; 2 405 URL sont indexables et 116 variantes d’outils non relues sont désormais omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 175 outils, 69 disponibles en français et 65 dans les locales secondaires |

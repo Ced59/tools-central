@@ -1,5 +1,6 @@
 import { decodeXML } from 'entities';
 import JSZip, { type JSZipObject } from 'jszip';
+import { Inflate } from 'pako';
 
 import {
   OOXML_METADATA_MAX_COMPRESSION_RATIO,
@@ -43,6 +44,8 @@ const MAX_REPORTED_VALUE_LENGTH = 240;
 const MAX_REPORTED_PATH_LENGTH = 240;
 const MAX_XML_TAG_COUNT = 100_000;
 const MAX_XML_NESTING_DEPTH = 256;
+const INFLATE_FALLBACK_CHUNK_BYTES = 64 * 1_024;
+const OPC_RELATIONSHIPS_NAMESPACE = 'http://schemas.openxmlformats.org/package/2006/relationships';
 
 const METADATA_RELATIONSHIP_SCOPES = new Map<string, OoxmlMetadataScope>([
   ['http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties', 'core'],
@@ -349,7 +352,7 @@ async function inspectDeflatedEntry(
       .pipeThrough(new DecompressionStream('deflate-raw'));
     reader = stream.getReader();
   } catch {
-    throw new OoxmlArchiveError('invalid-zip', entry.name);
+    return inspectDeflatedEntryWithPako(compressed, entry, previousTotalBytes);
   }
 
   let result = { size: 0, crc32: 0xffffffff };
@@ -370,6 +373,30 @@ async function inspectDeflatedEntry(
     throw new OoxmlArchiveError('invalid-zip', entry.name);
   } finally {
     reader.releaseLock();
+  }
+  return { size: result.size, crc32: (result.crc32 ^ 0xffffffff) >>> 0 };
+}
+
+function inspectDeflatedEntryWithPako(
+  compressed: Uint8Array,
+  entry: ZipDirectoryEntry,
+  previousTotalBytes: number,
+): { size: number; crc32: number } {
+  let result = { size: 0, crc32: 0xffffffff };
+  try {
+    const inflater = new Inflate({
+      raw: true,
+      chunkSize: INFLATE_FALLBACK_CHUNK_BYTES,
+    });
+    inflater.onData = chunk => {
+      result = inspectInflatedChunk(chunk, entry, previousTotalBytes, result);
+    };
+    if (!inflater.push(compressed, true) || inflater.err !== 0) {
+      throw new OoxmlArchiveError('invalid-zip', entry.name);
+    }
+  } catch (error: unknown) {
+    if (error instanceof OoxmlArchiveError) throw error;
+    throw new OoxmlArchiveError('invalid-zip', entry.name);
   }
   return { size: result.size, crc32: (result.crc32 ^ 0xffffffff) >>> 0 };
 }
@@ -574,12 +601,11 @@ async function findThumbnailPathsWithOtherReferences(
     if (!isRelationshipPartPath(relationshipPath)) continue;
     validateMetadataEntry(entries.get(relationshipPath), file.name);
     const tags = parseXmlTags(await readXmlPart(file));
-    const rootIndex = tags.findIndex(tag => !tag.closing);
+    const rootIndex = opcRelationshipsRootIndex(tags);
+    if (rootIndex === null) continue;
     for (const tag of tags) {
       if (
-        tag.closing
-        || tag.parentIndex !== rootIndex
-        || tag.localName !== 'Relationship'
+        !isOpcRelationshipTag(tag, tags, rootIndex)
         || (tag.attributes.get('TargetMode') ?? '').toLowerCase() === 'external'
       ) continue;
       const type = (tag.attributes.get('Type') ?? '').trim();
@@ -640,12 +666,9 @@ async function resolveMetadataParts(
 
   const xml = await readXmlPart(relationships);
   const tags = parseXmlTags(xml);
-  const rootIndex = tags.findIndex(tag => !tag.closing);
-  const relationshipTags = tags.filter(tag => (
-    !tag.closing
-    && tag.parentIndex === rootIndex
-    && tag.localName === 'Relationship'
-  ));
+  const rootIndex = opcRelationshipsRootIndex(tags);
+  if (rootIndex === null) return toMetadataParts(paths);
+  const relationshipTags = tags.filter(tag => isOpcRelationshipTag(tag, tags, rootIndex));
   for (const relationship of relationshipTags) {
     if ((relationship.attributes.get('TargetMode') ?? '').toLowerCase() === 'external') continue;
     const scope = metadataScopeFromRelationshipType(relationship.attributes.get('Type') ?? '');
@@ -679,7 +702,7 @@ async function retainRecognizedMetadataParts(
       if (
         root
         && root.localName === expectedRoot
-        && acceptedNamespaces?.has(xmlNamespaceForTag(root))
+        && acceptedNamespaces?.has(xmlNamespaceForTag(root, [root]))
       ) recognized[scope].push(path);
     }
   }
@@ -705,10 +728,37 @@ function validateExclusiveMetadataScopes(parts: OoxmlMetadataParts): void {
   }
 }
 
-function xmlNamespaceForTag(tag: XmlTag): string {
+function xmlNamespaceForTag(tag: XmlTag, tags: readonly XmlTag[]): string {
   const separator = tag.name.indexOf(':');
   const attribute = separator < 0 ? 'xmlns' : `xmlns:${tag.name.slice(0, separator)}`;
-  return tag.attributes.get(attribute) ?? '';
+  let current: XmlTag | undefined = tag;
+  while (current) {
+    const namespace = current.attributes.get(attribute);
+    if (namespace !== undefined) return namespace;
+    current = current.parentIndex === null ? undefined : tags[current.parentIndex];
+  }
+  return '';
+}
+
+function opcRelationshipsRootIndex(tags: readonly XmlTag[]): number | null {
+  const rootIndex = tags.findIndex(tag => !tag.closing);
+  if (rootIndex < 0) return null;
+  const root = tags[rootIndex];
+  return root.localName === 'Relationships'
+    && xmlNamespaceForTag(root, tags) === OPC_RELATIONSHIPS_NAMESPACE
+    ? rootIndex
+    : null;
+}
+
+function isOpcRelationshipTag(
+  tag: XmlTag,
+  tags: readonly XmlTag[],
+  rootIndex: number,
+): boolean {
+  return !tag.closing
+    && tag.parentIndex === rootIndex
+    && tag.localName === 'Relationship'
+    && xmlNamespaceForTag(tag, tags) === OPC_RELATIONSHIPS_NAMESPACE;
 }
 
 function toMetadataParts(
@@ -846,15 +896,20 @@ function encodeXmlPart(text: string, encoding: XmlEncoding, hasBom: boolean): Ui
 }
 
 function stripThumbnailRelationships(xml: string): string {
-  return removeXmlElements(xml, 'Relationship', attributes => {
-    const type = attributes.get('Type') ?? '';
-    return metadataScopeFromRelationshipType(type) === 'thumbnail';
-  });
+  const tags = parseXmlTags(xml);
+  const rootIndex = opcRelationshipsRootIndex(tags);
+  if (rootIndex === null) return xml;
+  return removeXmlElements(xml, tags, tag => (
+    isOpcRelationshipTag(tag, tags, rootIndex)
+    && metadataScopeFromRelationshipType(tag.attributes.get('Type') ?? '') === 'thumbnail'
+  ));
 }
 
 function stripThumbnailOverrides(xml: string, thumbnailPaths: ReadonlySet<string>): string {
-  return removeXmlElements(xml, 'Override', attributes => {
-    const partName = attributes.get('PartName') ?? '';
+  const tags = parseXmlTags(xml);
+  return removeXmlElements(xml, tags, tag => {
+    if (tag.localName !== 'Override') return false;
+    const partName = tag.attributes.get('PartName') ?? '';
     const resolved = resolvePackageTarget(partName);
     return resolved !== null && thumbnailPaths.has(resolved);
   });
@@ -862,14 +917,13 @@ function stripThumbnailOverrides(xml: string, thumbnailPaths: ReadonlySet<string
 
 function removeXmlElements(
   xml: string,
-  localName: string,
-  shouldRemove: (attributes: ReadonlyMap<string, string>) => boolean,
+  tags: readonly XmlTag[],
+  shouldRemove: (tag: XmlTag) => boolean,
 ): string {
-  const tags = parseXmlTags(xml);
   const ranges: Array<{ start: number; end: number }> = [];
   for (let index = 0; index < tags.length; index += 1) {
     const tag = tags[index];
-    if (tag.closing || tag.localName !== localName || !shouldRemove(tag.attributes)) continue;
+    if (tag.closing || !shouldRemove(tag)) continue;
     const closingIndex = findMatchingClosingTag(tags, index);
     const end = closingIndex === null ? tag.end : tags[closingIndex].end;
     ranges.push({ start: tag.start, end });
@@ -1061,13 +1115,10 @@ async function validateUnsupportedPackageMarkup(
     if (!isRelationshipPartPath(lowerPath)) continue;
     validateMetadataEntry(entries.get(lowerPath), relationships.name);
     const tags = parseXmlTags(await readXmlPart(relationships));
-    const rootIndex = tags.findIndex(tag => !tag.closing);
+    const rootIndex = opcRelationshipsRootIndex(tags);
+    if (rootIndex === null) continue;
     for (const tag of tags) {
-      if (
-        tag.closing
-        || tag.parentIndex !== rootIndex
-        || tag.localName !== 'Relationship'
-      ) continue;
+      if (!isOpcRelationshipTag(tag, tags, rootIndex)) continue;
       const type = (tag.attributes.get('Type') ?? '').trim();
       const target = tag.attributes.get('Target') ?? relationships.name;
       if (DIGITAL_SIGNATURE_RELATIONSHIP_TYPES.has(type)) {
