@@ -350,6 +350,17 @@ describe('inspectPdfPrivacyDocument', () => {
           actionType: 'URI', context: 'next-action',
           target: 'https://next.example/continue', occurrences: 1,
         },
+        {
+          actionType: 'URI', context: 'page-additional-action',
+          target: 'https://page-open.example/ping', occurrences: 1,
+        },
+        {
+          actionType: 'URI', context: 'field-additional-action',
+          target: 'https://field-focus.example/ping', occurrences: 1,
+        },
+        {
+          actionType: 'Sound', context: 'open-action', occurrences: 1,
+        },
       ],
     });
 
@@ -365,6 +376,17 @@ describe('inspectPdfPrivacyDocument', () => {
       expect.objectContaining({
         message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
         value: 'https://next.example/continue',
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'additional-action' },
+        value: 'https://page-open.example/ping',
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'URI', context: 'additional-action' },
+        value: 'https://field-focus.example/ping',
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'Sound', context: 'open-action' },
       }),
     ]));
   });

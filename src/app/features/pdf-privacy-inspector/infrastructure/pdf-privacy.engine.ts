@@ -660,6 +660,8 @@ function collectActionDictionarySignals(
         signal.context === 'open-action'
         || signal.context === 'additional-action'
         || signal.context === 'annotation-additional-action'
+        || signal.context === 'field-additional-action'
+        || signal.context === 'page-additional-action'
         || signal.context === 'next-action'
       );
     const rawJavascript = signal.actionType === 'JavaScript'
@@ -715,21 +717,28 @@ function consumeMatchingDictionaryAction(
 }
 
 function actionDictionaryMessage(signal: PdfActionDictionarySignal): PdfPrivacyFindingMessage {
+  let context: 'open-action' | 'additional-action' | 'chained-action' | 'other' = 'other';
+  if (signal.context === 'next-action') {
+    context = 'chained-action';
+  } else if (signal.context === 'open-action') {
+    context = 'open-action';
+  } else if (
+    signal.context === 'additional-action'
+    || signal.context === 'annotation-additional-action'
+    || signal.context === 'field-additional-action'
+    || signal.context === 'page-additional-action'
+  ) {
+    context = 'additional-action';
+  }
   return {
     code: 'dictionary-action',
     actionType: signal.actionType,
-    context: signal.context === 'next-action'
-      ? 'chained-action'
-      : signal.context === 'annotation-additional-action'
-        ? 'additional-action'
-        : signal.context === 'open-action' || signal.context === 'additional-action'
-          ? signal.context
-        : 'other',
+    context,
   };
 }
 
 function isHighRiskAction(actionType: string): boolean {
-  return /^(?:GoToE|GoToR|ImportData|Launch|Rendition|RichMediaExecute|SubmitForm)$/u.test(actionType);
+  return /^(?:GoTo3DView|GoToE|GoToR|ImportData|Launch|Movie|Rendition|RichMediaExecute|Sound|SubmitForm)$/u.test(actionType);
 }
 
 function sanitizeActionTarget(rawTarget: string | undefined): string | undefined {

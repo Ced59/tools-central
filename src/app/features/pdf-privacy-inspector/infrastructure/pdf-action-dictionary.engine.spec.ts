@@ -181,6 +181,49 @@ describe('inspectPdfStructuralSignals', () => {
     });
   });
 
+  it('détecte une action Sound lancée automatiquement dans un vrai PDF', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const sound = source.context.register(source.context.stream(
+      Uint8Array.of(0, 1, 2, 3),
+      { R: 8_000, C: 1, B: 8, E: PDFName.of('Signed') },
+    ));
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action',
+      S: 'Sound',
+      Sound: sound,
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'Sound', context: 'open-action', occurrences: 1,
+    });
+  });
+
+  it('parcourt les grands tableaux sous la limite sans dépendre de la pile V8', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(
+      PDFName.of('LargeArray'),
+      source.context.obj(Array.from({ length: 130_000 }, () => 0)),
+    );
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action',
+      S: 'SubmitForm',
+      F: PDFString.of('https://submit.example/large-array'),
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'SubmitForm',
+      context: 'open-action',
+      target: 'https://submit.example/large-array',
+      occurrences: 1,
+    });
+  });
+
   it('laisse PDF.js décider de la validité si le parseur secondaire échoue', async () => {
     await expect(inspectPdfStructuralSignals(new TextEncoder().encode('not a pdf')))
       .resolves.toBeNull();

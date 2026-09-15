@@ -395,6 +395,13 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   }));
   source.catalog.set(PDFName.of('AF'), source.context.obj([associatedFile]));
   const pdfPage = source.addPage([600, 800]);
+  pdfPage.node.set(PDFName.of('AA'), source.context.obj({
+    O: {
+      Type: 'Action',
+      S: 'URI',
+      URI: PDFString.of('https://page-open.example/ping'),
+    },
+  }));
   pdfPage.drawText('Rapport à contrôler', { x: 72, y: 720, size: 24 });
   const form = source.getForm();
   const field = form.createTextField('contact-email');
@@ -531,6 +538,8 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('https://submit.example/collect');
   await expect(result).toContainText('OpenAction · URI');
   await expect(result).toContainText('https://open.example/start');
+  await expect(result).toContainText('AA · URI');
+  await expect(result).toContainText('https://page-open.example/ping');
   await expect(result).toContainText('Next · URI');
   await expect(result).toContainText('https://next.example/continue');
   await expect(result).toContainText('JavaScript embarqué');
@@ -567,6 +576,10 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     }),
     expect.objectContaining({
       message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
+    }),
+    expect.objectContaining({
+      message: { code: 'dictionary-action', actionType: 'URI', context: 'additional-action' },
+      value: 'https://page-open.example/ping',
     }),
     expect.objectContaining({
       message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'additional-action' },

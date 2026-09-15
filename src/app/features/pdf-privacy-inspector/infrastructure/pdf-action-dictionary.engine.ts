@@ -52,14 +52,17 @@ export class PdfActionDictionaryInspectionError extends Error {
 const ACTION_NAMES = new Set([
   'GoToE',
   'GoToR',
+  'GoTo3DView',
   'ImportData',
   'JavaScript',
   'Launch',
+  'Movie',
   'Named',
   'Rendition',
   'ResetForm',
   'RichMediaExecute',
   'SetOCGState',
+  'Sound',
   'SubmitForm',
   'URI',
 ]);
@@ -130,7 +133,7 @@ export async function inspectPdfStructuralSignals(
         continue;
       }
       if (object instanceof PDFArray) {
-        queue.push(...object.asArray());
+        for (const child of object.asArray()) queue.push(child);
         continue;
       }
       if (!(object instanceof PDFDict)) continue;
