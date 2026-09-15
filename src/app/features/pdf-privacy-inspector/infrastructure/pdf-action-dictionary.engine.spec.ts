@@ -291,6 +291,30 @@ describe('inspectPdfStructuralSignals', () => {
     ]);
   });
 
+  it('omet la taille chiffrée d’une pièce jointe non compressée', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const embeddedFile = source.context.register(source.context.stream(
+      'ciphertext with encryption overhead',
+      { Type: 'EmbeddedFile' },
+    ));
+    source.catalog.set(PDFName.of('AF'), source.context.obj([{
+      Type: 'Filespec',
+      F: PDFString.of('encrypted.txt'),
+      EF: { F: embeddedFile },
+    }]));
+    source.context.trailerInfo.Encrypt = source.context.register(
+      source.context.obj({ Filter: 'Standard' }),
+    );
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals).toMatchObject({
+      encrypted: true,
+      associatedFiles: [expect.objectContaining({ bytes: undefined })],
+    });
+  });
+
   it('ignore un FileSpec dont EF ne contient aucun flux embarqué', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -474,6 +498,31 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });
   });
+
+  it('borne le nombre de signets avant leur normalisation par PDF.js', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const outlineRoot = source.context.obj({ Type: 'Outlines' });
+    const outlineRootRef = source.context.register(outlineRoot);
+    let first: PDFRef | undefined;
+    let last: PDFRef | undefined;
+    for (let index = 0; index <= PDF_PRIVACY_MAX_DISCOVERED_ITEMS; index += 1) {
+      const item = source.context.register(source.context.obj({
+        Title: PDFString.of(`Section ${String(index)}`),
+        Parent: outlineRootRef,
+        ...(first ? { Next: first } : {}),
+      }));
+      last ??= item;
+      first = item;
+    }
+    if (!first || !last) throw new Error('Outline fixture creation failed.');
+    outlineRoot.set(PDFName.of('First'), first);
+    outlineRoot.set(PDFName.of('Last'), last);
+    source.catalog.set(PDFName.of('Outlines'), outlineRootRef);
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
 
   it('borne la croissance cumulée des noms qualifiés de champs', async () => {
     const source = await PDFDocument.create();

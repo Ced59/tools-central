@@ -53,7 +53,7 @@ export class PdfPrivacyInspectorToolComponent {
   private taskRevision = 0;
   private abortController: AbortController | null = null;
 
-  readonly maxFileSizeLabel = formatBytes(PDF_PRIVACY_MAX_FILE_BYTES, this.locale);
+  readonly maxFileSizeLabel = formatPdfPrivacyBytes(PDF_PRIVACY_MAX_FILE_BYTES, this.locale);
   readonly state = signal<ToolState>('idle');
   readonly file = signal<File | null>(null);
   readonly password = signal('');
@@ -236,7 +236,7 @@ export class PdfPrivacyInspectorToolComponent {
     if ((finding.occurrences ?? 0) > 1) {
       parts.push($localize`:@@pdf_privacy_occurrences_context:${finding.occurrences}:count: occurrence(s)`);
     }
-    if (finding.bytes !== undefined) parts.push(formatBytes(finding.bytes, this.locale));
+    if (finding.bytes !== undefined) parts.push(formatPdfPrivacyBytes(finding.bytes, this.locale));
     return parts.join(' · ');
   }
 
@@ -287,7 +287,7 @@ export class PdfPrivacyInspectorToolComponent {
   }
 
   formatFileSize(value: number): string {
-    return formatBytes(value, this.locale);
+    return formatPdfPrivacyBytes(value, this.locale);
   }
 
   private invalidateResult(): void {
@@ -358,14 +358,18 @@ function isAbortError(error: unknown): boolean {
   return error instanceof Error && error.name === 'AbortError';
 }
 
-function formatBytes(value: number, locale: string): string {
-  if (value < 1_024) return `${String(value)} o`;
-  const units = ['Kio', 'Mio', 'Gio'];
-  let current = value / 1_024;
-  let index = 0;
-  while (current >= 1_024 && index < units.length - 1) {
-    current /= 1_024;
-    index += 1;
-  }
-  return `${new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(current)} ${units[index]}`;
+export function formatPdfPrivacyBytes(value: number, locale: string): string {
+  const units: readonly { divisor: number; unit: Intl.NumberFormatOptions['unit'] }[] = [
+    { divisor: 1_000_000_000, unit: 'gigabyte' },
+    { divisor: 1_000_000, unit: 'megabyte' },
+    { divisor: 1_000, unit: 'kilobyte' },
+    { divisor: 1, unit: 'byte' },
+  ];
+  const selected = units.find(candidate => value >= candidate.divisor) ?? units[units.length - 1];
+  return new Intl.NumberFormat(locale, {
+    style: 'unit',
+    unit: selected.unit,
+    unitDisplay: 'short',
+    maximumFractionDigits: selected.divisor === 1 ? 0 : 1,
+  }).format(value / selected.divisor);
 }

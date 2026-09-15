@@ -222,6 +222,7 @@ export async function inspectPdfStructuralSignals(
     };
     validateAcroFormFieldBudgets(document, state);
     validateXmpMetadataBudget(document, state);
+    validateOutlineBudget(document, state);
 
     while (queue.length > 0) {
       const workItem = queue.pop();
@@ -573,7 +574,7 @@ function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void 
       ? readDisplayText(readObject(fileSpec, 'Desc'))
       : undefined,
     contentType: readName(embeddedFile.dict, 'Subtype')?.decodeText(),
-    bytes: readEmbeddedFileBytes(embeddedFile),
+    bytes: state.canReadTarget ? readEmbeddedFileBytes(embeddedFile) : undefined,
     occurrences: 1,
   });
 }
@@ -808,6 +809,35 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       const child = kids.get(index);
       stack.push({ object: child, parentNameBytes: qualifiedNameBytes });
     }
+  }
+}
+
+function validateOutlineBudget(document: PDFDocument, state: InspectionState): void {
+  const outlines = readDictionary(document.catalog, 'Outlines');
+  const first = outlines?.get(PDFName.of('First'));
+  if (!first) return;
+
+  const stack = [first];
+  const visitedReferences = new Set<PDFRef>();
+  const visitedItems = new Set<PDFDict>();
+  while (stack.length > 0) {
+    const rawItem = stack.pop();
+    if (!rawItem) continue;
+    consumeTraversalStep(state);
+
+    if (rawItem instanceof PDFRef) {
+      if (visitedReferences.has(rawItem)) continue;
+      visitedReferences.add(rawItem);
+    }
+    const item = resolvePdfObject(rawItem, document);
+    if (!(item instanceof PDFDict) || visitedItems.has(item)) continue;
+    visitedItems.add(item);
+    consumeDiscoveredSignal(state);
+
+    const next = item.get(PDFName.of('Next'));
+    const child = item.get(PDFName.of('First'));
+    if (next) stack.push(next);
+    if (child) stack.push(child);
   }
 }
 

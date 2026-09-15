@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PdfPrivacyInspectorToolComponent } from './pdf-privacy-inspector-tool.component';
+import {
+  PdfPrivacyInspectorToolComponent,
+  formatPdfPrivacyBytes,
+} from './pdf-privacy-inspector-tool.component';
 import { PdfPrivacyValidationError } from '../application/pdf-privacy.use-cases';
 import { buildPdfPrivacyReport } from '../domain/pdf-privacy.models';
 
@@ -79,6 +82,12 @@ describe('PdfPrivacyInspectorToolComponent', () => {
       reason: 'Validation interne',
       signingTime: 'D:20260915113000+02\'00\'',
     })).toContain('Contact: signer@example.test · Lieu: Paris · Motif: Validation interne · M: D:20260915113000+02\'00\'');
+  });
+
+  it('formate les tailles avec les unités de la locale active', () => {
+    expect(formatPdfPrivacyBytes(1_500, 'fr')).toContain('ko');
+    expect(formatPdfPrivacyBytes(1_500, 'en-US')).toBe('1.5 kB');
+    expect(formatPdfPrivacyBytes(1_500_000, 'en-US')).toBe('1.5 MB');
   });
 });
 
