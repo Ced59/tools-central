@@ -115,10 +115,12 @@ export async function inspectPdfPrivacyDocument(
     throw new PdfPrivacyEngineError('too-many-pages');
   }
 
+  const structuralAttachmentsAvailable = input.associatedFiles !== null
+    && input.associatedFiles !== undefined;
   input.onProgress?.(8);
   const [metadata, attachments, documentActions, hasJavascript, fields, signatures, permissions, openAction, outline] = await Promise.all([
     document.getMetadata(),
-    document.getAttachments(),
+    structuralAttachmentsAvailable ? Promise.resolve(null) : document.getAttachments(),
     document.getJSActions(),
     document.hasJSActions(),
     document.getFieldObjects(),
@@ -143,7 +145,7 @@ export async function inspectPdfPrivacyDocument(
     add,
     consumeDiscoveryBudget,
   );
-  const structuralAttachmentsAvailable = collectAssociatedFileSignals(
+  collectAssociatedFileSignals(
     input.associatedFiles,
     add,
     consumeDiscoveryBudget,
@@ -797,6 +799,7 @@ function actionDictionaryMessage(signal: PdfActionDictionarySignal): PdfPrivacyF
     code: 'dictionary-action',
     actionType: signal.actionType,
     context,
+    targetStatus: signal.targetStatus,
   };
 }
 
@@ -866,17 +869,23 @@ function addLink(
   });
 }
 
-function objectEntries(value: object): [string, unknown][] {
+function* objectEntries(value: object): IterableIterator<[string, unknown]> {
   if (value instanceof Map) {
-    return [...value.entries()].map(([key, entry]) => [String(key), entry]);
+    for (const [key, entry] of value) yield [String(key), entry];
+    return;
   }
-  return Object.entries(value);
+  for (const key in value) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      yield [key, (value as Record<string, unknown>)[key]];
+    }
+  }
 }
 
 function hasXfaMetadata(info: object): boolean {
-  return objectEntries(info).some(([key, value]) => (
-    key.toLowerCase() === 'isxfapresent' && value === true
-  ));
+  for (const [key, value] of objectEntries(info)) {
+    if (key.toLowerCase() === 'isxfapresent' && value === true) return true;
+  }
+  return false;
 }
 
 function readableValue(value: unknown): string | undefined {

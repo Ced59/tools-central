@@ -16,15 +16,15 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,16 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,17 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 139 fichiers, 476 tests verts sous Vitest |
-| Couverture | aucun seuil | 50,86 % statements, 38,74 % branches, 50,32 % fonctions, 54,40 % lignes |
+| Tests unitaires | suite non compilable | 139 fichiers, 480 tests verts sous Vitest |
+| Couverture | aucun seuil | 50,89 % statements, 38,86 % branches, 50,32 % fonctions, 54,40 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 184 382 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 184 411 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
@@ -55,7 +55,7 @@ Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : 
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
 - Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, décimaux exacts, sortie HTML sûre, diagnostics reliés aux champs, export, accessibilité et 28 tests ciblés.
-- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, itératifs, paresseux et bornés, prise en charge des grands tableaux, plans massifs, chaînes `/Next` profondes, références partagées, JavaScript d’annotation, actions multimédias et fichiers associés `/AF` sans boucle ni doublon structurel, codes de rapport indépendants de la langue, limites de taille/pages/éléments, mot de passe local, inspection des métadonnées standards/personnalisées, scripts, actions, pièces jointes, liens, formulaires, métadonnées privées de signatures et chiffrement, sans exécuter ni exposer les contenus actifs, avec rapport JSON et 53 tests ciblés.
+- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, itératifs, paresseux et bornés, prise en charge des grands tableaux, plans massifs, chaînes `/Next` profondes, références partagées, conteneurs `/AA` ambigus, JavaScript d’annotation, actions multimédias et fichiers associés `/AF` sans boucle, doublon structurel ni décompression inutile, codes de rapport indépendants de la langue, limites de taille/pages/éléments/cibles, mot de passe local, inspection des métadonnées standards/personnalisées, scripts, actions, pièces jointes, liens, formulaires, métadonnées privées de signatures et chiffrement, sans exécuter ni exposer les contenus actifs, avec rapport JSON et 57 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -74,7 +74,7 @@ Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : 
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 6 358 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 184 382 segments techniquement complets.
+- 6 359 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 184 411 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -133,7 +133,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 
 - Angular replie `pt-BR` vers les données de locale `pt` et émet deux avertissements de build.
 - JSZip, QRCode et `pako` via PDF-Lib restent CommonJS ; ils sont chargés dans des chunks fonctionnels mais provoquent des avertissements d’optimisation.
-- Les Workers PDF.js restent paresseux : celui de l’inspecteur pèse 975,39 kB brut (281,56 kB transféré estimé) et ne charge son moteur de parsing qu’à l’usage ; mémoire et temps doivent rester surveillés sur de gros documents.
+- Les Workers PDF.js restent paresseux : celui de l’inspecteur pèse 975,75 kB brut (281,71 kB transféré estimé) et ne charge son moteur de parsing qu’à l’usage ; mémoire et temps doivent rester surveillés sur de gros documents.
 - L’image Open Graph générique mérite un visuel social dédié et testé.
 - Les limites de taille/complexité ne sont pas encore uniformes pour chaque famille de fichiers.
 - La télémétrie et la conformité vie privée nécessitent une revue dédiée avant toute extension de mesure.

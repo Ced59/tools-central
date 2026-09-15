@@ -282,10 +282,7 @@ export class PdfPrivacyInspectorToolComponent {
       case 'attachment-opening':
         return this.findingTitle('embedded-file');
       case 'dictionary-action':
-        if (message.context === 'open-action') return `OpenAction · ${message.actionType}`;
-        if (message.context === 'additional-action') return `AA · ${message.actionType}`;
-        if (message.context === 'chained-action') return `Next · ${message.actionType}`;
-        return message.actionType;
+        return this.dictionaryActionMessage(message);
     }
   }
 
@@ -320,6 +317,19 @@ export class PdfPrivacyInspectorToolComponent {
       parts.push(`Δ ${new Intl.NumberFormat(this.locale).format(message.modifications)}`);
     }
     return parts.join(' · ');
+  }
+
+  private dictionaryActionMessage(
+    message: Extract<PdfPrivacyFindingMessage, { code: 'dictionary-action' }>,
+  ): string {
+    let label = message.actionType;
+    if (message.context === 'open-action') label = `OpenAction · ${message.actionType}`;
+    else if (message.context === 'additional-action') label = `AA · ${message.actionType}`;
+    else if (message.context === 'chained-action') label = `Next · ${message.actionType}`;
+    if (message.targetStatus === 'too-long') {
+      label += ` · ${$localize`:@@pdf_privacy_target_too_long:Cible trop longue pour être affichée`}`;
+    }
+    return label;
   }
 
   private describeError(error: unknown): string {

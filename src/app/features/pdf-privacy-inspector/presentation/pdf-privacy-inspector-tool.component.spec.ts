@@ -69,6 +69,9 @@ describe('PdfPrivacyInspectorToolComponent', () => {
       code: 'dictionary-action', actionType: 'URI', context: 'open-action',
     })).toBe('OpenAction · URI');
     expect(component.findingMessage({
+      code: 'dictionary-action', actionType: 'Launch', context: 'other', targetStatus: 'too-long',
+    })).toBe('Launch · Cible trop longue pour être affichée');
+    expect(component.findingMessage({
       code: 'signature-details',
       index: 1,
       contactInfo: 'signer@example.test',

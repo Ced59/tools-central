@@ -134,6 +134,32 @@ describe('inspectPdfPrivacyDocument', () => {
     ]);
   });
 
+  it('borne une grande Map de métadonnées personnalisées pendant son itération', async () => {
+    const custom = new Map<string, string>();
+    for (let index = 0; index <= PDF_PRIVACY_MAX_DISCOVERED_ITEMS; index += 1) {
+      custom.set(`Key${String(index)}`, `Value${String(index)}`);
+    }
+
+    await expect(inspectPdfPrivacyDocument(documentFixture({
+      getMetadata: vi.fn().mockResolvedValue({ info: { Custom: custom }, metadata: null }),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false }))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('ne demande pas à PDF.js de décoder les pièces jointes déjà inventoriées', async () => {
+    const document = documentFixture();
+    const getAttachments = vi.spyOn(document, 'getAttachments');
+
+    await inspectPdfPrivacyDocument(document, {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      associatedFiles: [],
+    });
+
+    expect(getAttachments).not.toHaveBeenCalled();
+  });
+
   it('préserve les métadonnées privées renvoyées pour une signature', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{

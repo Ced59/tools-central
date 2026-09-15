@@ -153,6 +153,50 @@ describe('inspectPdfStructuralSignals', () => {
     ]));
   });
 
+  it('parcourt un conteneur AA même s’il contient une clé S incidente', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot',
+        Subtype: 'Link',
+        Rect: [0, 0, 10, 10],
+        AA: {
+          S: 'NotAnActionContainer',
+          E: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('hidden()') },
+        },
+      })),
+    ]));
+
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
+
+    expect(signals).toContainEqual({
+      actionType: 'JavaScript',
+      context: 'annotation-additional-action',
+      occurrences: 1,
+    });
+  });
+
+  it('renvoie un état sémantique pour une cible trop longue', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action',
+      S: 'Launch',
+      F: PDFString.of('x'.repeat(4_097)),
+    }));
+
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
+
+    expect(signals).toContainEqual(expect.objectContaining({
+      actionType: 'Launch',
+      context: 'open-action',
+      targetStatus: 'too-long',
+      occurrences: 1,
+    }));
+    expect(JSON.stringify(signals)).not.toContain('cible trop longue');
+  });
+
   it('inventorie une seule fois un FileSpec partagé par AF et la name tree', async () => {
     const source = await PDFDocument.create();
     source.addPage();

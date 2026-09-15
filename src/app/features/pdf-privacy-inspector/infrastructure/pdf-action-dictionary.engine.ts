@@ -16,6 +16,7 @@ export interface PdfActionDictionarySignal {
   actionType: string;
   context: PdfActionDictionaryContext;
   target?: string;
+  targetStatus?: 'too-long';
   occurrences: number;
   triggerIds?: readonly string[];
 }
@@ -73,6 +74,7 @@ const TARGET_BEARING_ACTION_NAMES = new Set([
 const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
+const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
   'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
 ]);
@@ -92,6 +94,7 @@ interface StoredActionDictionarySignal {
   actionType: string;
   context: PdfActionDictionaryContext;
   target?: string;
+  targetStatus?: 'too-long';
   occurrences: number;
   triggerIds: Set<string>;
 }
@@ -222,6 +225,7 @@ export async function inspectPdfStructuralSignals(
         actionType: signal.actionType,
         context: signal.context,
         target: signal.target,
+        targetStatus: signal.targetStatus,
         occurrences: signal.occurrences,
         ...(signal.triggerIds.size > 0 ? { triggerIds: [...signal.triggerIds] } : {}),
       })),
@@ -248,9 +252,11 @@ function collectActionDictionary(
 
   consumeDiscoveredSignal(state);
 
-  const target = state.canReadTarget ? readTarget(dictionary) : undefined;
+  const rawTarget = state.canReadTarget ? readTarget(dictionary) : undefined;
+  const target = typeof rawTarget === 'string' ? rawTarget : undefined;
+  const targetStatus = rawTarget === TARGET_TOO_LONG ? 'too-long' : undefined;
   const shouldIdentifyTrigger = target === undefined && TARGET_BEARING_ACTION_NAMES.has(actionType);
-  const key = `${context}\u0000${actionType}\u0000${target ?? ''}`;
+  const key = `${context}\u0000${actionType}\u0000${target ?? ''}\u0000${targetStatus ?? ''}`;
   const current = state.signals.get(key);
   if (current) {
     current.occurrences += 1;
@@ -261,6 +267,7 @@ function collectActionDictionary(
     actionType,
     context,
     target,
+    targetStatus,
     occurrences: 1,
     triggerIds: new Set(shouldIdentifyTrigger && triggerId ? [triggerId] : []),
   });
@@ -348,6 +355,16 @@ function inspectActionEntry(
       : workItem.object;
     if (!(dictionary instanceof PDFDict)) continue;
 
+    if (workItem.allowContainer) {
+      stack.push({
+        kind: 'children',
+        iterator: dictionary.asMap().values(),
+        context: workItem.context,
+        triggerId: workItem.triggerId,
+      });
+      continue;
+    }
+
     const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
     if (actionType) {
       collectActionDictionary(dictionary, workItem.context, workItem.triggerId, state);
@@ -362,14 +379,6 @@ function inspectActionEntry(
         });
       }
       continue;
-    }
-    if (workItem.allowContainer) {
-      stack.push({
-        kind: 'children',
-        iterator: dictionary.asMap().values(),
-        context: workItem.context,
-        triggerId: workItem.triggerId,
-      });
     }
   }
 }
@@ -446,11 +455,11 @@ function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void 
   state.associatedFiles.set(id, {
     id,
     fileName: state.canReadTarget
-      ? readText(fileSpec.lookup(PDFName.of('UF')))
-        ?? readText(fileSpec.lookup(PDFName.of('F')))
+      ? readDisplayText(fileSpec.lookup(PDFName.of('UF')))
+        ?? readDisplayText(fileSpec.lookup(PDFName.of('F')))
       : undefined,
     description: state.canReadTarget
-      ? readText(fileSpec.lookup(PDFName.of('Desc')))
+      ? readDisplayText(fileSpec.lookup(PDFName.of('Desc')))
       : undefined,
     contentType: embeddedFile?.dict.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText(),
     bytes: embeddedFile?.getContentsSize(),
@@ -506,19 +515,22 @@ function pdfJsReferenceId(reference: PDFRef): string {
     : String(reference.generationNumber)}`;
 }
 
-function readTarget(dictionary: PDFDict): string | undefined {
+function readTarget(dictionary: PDFDict): string | typeof TARGET_TOO_LONG | undefined {
   return readText(dictionary.lookup(PDFName.of('F')))
     ?? readText(dictionary.lookup(PDFName.of('URI')));
 }
 
-function readText(object: PDFObject | undefined, depth = 0): string | undefined {
+function readText(
+  object: PDFObject | undefined,
+  depth = 0,
+): string | typeof TARGET_TOO_LONG | undefined {
   if (depth > 4) return undefined;
   if (object instanceof PDFString || object instanceof PDFHexString) {
-    if (object.asBytes().byteLength > MAX_TARGET_BYTES) return '[cible trop longue]';
+    if (object.asBytes().byteLength > MAX_TARGET_BYTES) return TARGET_TOO_LONG;
     return object.decodeText();
   }
   if (object instanceof PDFName) {
-    return object.sizeInBytes() <= MAX_TARGET_BYTES ? object.decodeText() : '[cible trop longue]';
+    return object.sizeInBytes() <= MAX_TARGET_BYTES ? object.decodeText() : TARGET_TOO_LONG;
   }
   if (!(object instanceof PDFDict)) return undefined;
 
@@ -528,4 +540,9 @@ function readText(object: PDFObject | undefined, depth = 0): string | undefined 
     if (text) return text;
   }
   return undefined;
+}
+
+function readDisplayText(object: PDFObject | undefined): string | undefined {
+  const value = readText(object);
+  return typeof value === 'string' ? value : undefined;
 }
