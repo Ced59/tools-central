@@ -515,9 +515,18 @@ async function removeThumbnails(
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
   lowerPaths: readonly string[],
 ): Promise<void> {
+  const referencedByDocumentContent = await findThumbnailPathsWithOtherReferences(
+    files,
+    entries,
+    new Set(lowerPaths),
+  );
+  const removedPaths = new Set<string>();
   for (const lowerPath of lowerPaths) {
     const file = files.get(lowerPath);
-    if (file) zip.remove(file.name);
+    if (file && !referencedByDocumentContent.has(lowerPath)) {
+      zip.remove(file.name);
+      removedPaths.add(lowerPath);
+    }
   }
   const relationships = files.get('_rels/.rels');
   if (relationships) {
@@ -527,9 +536,41 @@ async function removeThumbnails(
   const contentTypes = files.get('[content_types].xml');
   if (contentTypes) {
     validateMetadataEntry(entries.get('[content_types].xml'), contentTypes.name);
-    const thumbnailPaths = new Set(lowerPaths);
-    await rewriteXmlPart(zip, contentTypes, xml => stripThumbnailOverrides(xml, thumbnailPaths));
+    await rewriteXmlPart(zip, contentTypes, xml => stripThumbnailOverrides(xml, removedPaths));
   }
+}
+
+async function findThumbnailPathsWithOtherReferences(
+  files: ReadonlyMap<string, JSZipObject>,
+  entries: ReadonlyMap<string, ZipDirectoryEntry>,
+  thumbnailPaths: ReadonlySet<string>,
+): Promise<ReadonlySet<string>> {
+  const referenced = new Set<string>();
+  for (const [relationshipPath, file] of files) {
+    if (!relationshipPath.endsWith('.rels')) continue;
+    validateMetadataEntry(entries.get(relationshipPath), file.name);
+    const tags = parseXmlTags(await readXmlPart(file));
+    const rootIndex = tags.findIndex(tag => !tag.closing);
+    for (const tag of tags) {
+      if (
+        tag.closing
+        || tag.parentIndex !== rootIndex
+        || tag.localName !== 'Relationship'
+        || (tag.attributes.get('TargetMode') ?? '').toLowerCase() === 'external'
+      ) continue;
+      const type = (tag.attributes.get('Type') ?? '').trim();
+      if (
+        relationshipPath === '_rels/.rels'
+        && metadataScopeFromRelationshipType(type) === 'thumbnail'
+      ) continue;
+      const target = resolveRelationshipTarget(
+        relationshipPath,
+        tag.attributes.get('Target') ?? '',
+      );
+      if (target && thumbnailPaths.has(target)) referenced.add(target);
+    }
+  }
+  return referenced;
 }
 
 type XmlEncoding = 'utf-8' | 'utf-16le' | 'utf-16be';
@@ -564,9 +605,9 @@ async function resolveMetadataParts(
   entries: ReadonlyMap<string, ZipDirectoryEntry>,
 ): Promise<OoxmlMetadataParts> {
   const paths: Record<OoxmlMetadataScope, Set<string>> = {
-    core: new Set(files.has('docprops/core.xml') ? ['docprops/core.xml'] : []),
-    application: new Set(files.has('docprops/app.xml') ? ['docprops/app.xml'] : []),
-    custom: new Set(files.has('docprops/custom.xml') ? ['docprops/custom.xml'] : []),
+    core: new Set(),
+    application: new Set(),
+    custom: new Set(),
     thumbnail: new Set(),
   };
   const relationships = files.get('_rels/.rels');
@@ -574,8 +615,13 @@ async function resolveMetadataParts(
   validateMetadataEntry(entries.get('_rels/.rels'), relationships.name);
 
   const xml = await readXmlPart(relationships);
-  const relationshipTags = parseXmlTags(xml)
-    .filter(tag => !tag.closing && tag.localName === 'Relationship');
+  const tags = parseXmlTags(xml);
+  const rootIndex = tags.findIndex(tag => !tag.closing);
+  const relationshipTags = tags.filter(tag => (
+    !tag.closing
+    && tag.parentIndex === rootIndex
+    && tag.localName === 'Relationship'
+  ));
   for (const relationship of relationshipTags) {
     if ((relationship.attributes.get('TargetMode') ?? '').toLowerCase() === 'external') continue;
     const scope = metadataScopeFromRelationshipType(relationship.attributes.get('Type') ?? '');
@@ -632,9 +678,21 @@ function metadataScopeFromRelationshipType(type: string): OoxmlMetadataScope | n
 }
 
 function resolvePackageTarget(target: string): string | null {
+  return resolveTargetAgainstBase(target, []);
+}
+
+function resolveRelationshipTarget(relationshipPath: string, target: string): string | null {
+  if (relationshipPath === '_rels/.rels') return resolvePackageTarget(target);
+  const match = /^(?:(.*)\/)?_rels\/([^/]+)\.rels$/u.exec(relationshipPath);
+  if (!match) return null;
+  const base = match[1] ? match[1].split('/') : [];
+  return resolveTargetAgainstBase(target, base);
+}
+
+function resolveTargetAgainstBase(target: string, base: readonly string[]): string | null {
   const path = target.trim().split(/[?#]/u, 1)[0];
   if (!path || path.includes('\\')) return null;
-  const resolved: string[] = [];
+  const resolved: string[] = path.startsWith('/') ? [] : [...base];
   for (const encodedPart of path.replace(/^\/+|\/+$/gu, '').split('/')) {
     let part: string;
     try {

@@ -17,6 +17,16 @@ const allOptions: OoxmlMetadataOptions = {
   removeThumbnail: true,
 };
 
+const standardMetadataRelationships = '<Relationship Id="rCore" '
+  + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" '
+  + 'Target="docProps/core.xml"/>'
+  + '<Relationship Id="rApp" '
+  + 'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" '
+  + 'Target="docProps/app.xml"/>'
+  + '<Relationship Id="rCustom" '
+  + 'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" '
+  + 'Target="docProps/custom.xml"/>';
+
 async function createPackage(kind: OoxmlDocumentKind): Promise<Uint8Array> {
   const mainParts: Record<OoxmlDocumentKind, string> = {
     docx: 'word/document.xml',
@@ -25,7 +35,12 @@ async function createPackage(kind: OoxmlDocumentKind): Promise<Uint8Array> {
   };
   const zip = new JSZip();
   zip.file('[Content_Types].xml', `<?xml version="1.0"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Override PartName="/docProps/thumbnail.jpeg" ContentType="image/jpeg"/></Types>`);
-  zip.file('_rels/.rels', `<?xml version="1.0"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/></Relationships>`);
+  zip.file('_rels/.rels', '<?xml version="1.0"?>'
+    + '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
+    + standardMetadataRelationships
+    + '<Relationship Id="rThumb" '
+    + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" '
+    + 'Target="docProps/thumbnail.jpeg"/></Relationships>');
   zip.file(mainParts[kind], '<document><content>Préservé</content></document>');
   zip.file('docProps/core.xml', '<?xml version="1.0"?>'
     + '<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" '
@@ -133,6 +148,7 @@ describe('sanitizeOoxmlBuffer', () => {
     source.file('metadata/custom-one.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
     source.file('metadata/custom-two.xml', `<?xml version="1.0"?><Properties>${properties}</Properties>`);
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + standardMetadataRelationships
       + '<Relationship Id="rCustomOne" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom-one.xml"/>'
       + '<Relationship Id="rCustomTwo" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="metadata/custom-two.xml"/>'
       + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
@@ -171,7 +187,9 @@ describe('sanitizeOoxmlBuffer', () => {
   it('preserves UTF-16 XML encoding while removing thumbnail references', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     const relationships = '<?xml version="1.0" encoding="UTF-16"?>'
-      + '<Relationships><Relationship Id="rThumb" '
+      + '<Relationships>'
+      + standardMetadataRelationships
+      + '<Relationship Id="rThumb" '
       + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" '
       + 'Target="docProps/thumbnail.jpeg"/></Relationships>';
     const contentTypes = '<?xml version="1.0" encoding="UTF-16"?>'
@@ -278,6 +296,7 @@ describe('sanitizeOoxmlBuffer', () => {
   it('ignores relationship-shaped text inside XML comments and CDATA sections', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + standardMetadataRelationships
       + '<!-- <Relationship Id="fake-comment" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/> -->'
       + '<![CDATA[<Relationship Id="fake-cdata" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="word/document.xml"/>]]>'
       + '<Relationship Id="vendor" Type="https://vendor.example/metadata/core-properties" Target="word/document.xml"/>'
@@ -298,11 +317,11 @@ describe('sanitizeOoxmlBuffer', () => {
 
   it('preserves an ordinary image that only happens to use the conventional thumbnail path', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
-    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships/>');
+    source.file('_rels/.rels', `<?xml version="1.0"?><Relationships>${standardMetadataRelationships}</Relationships>`);
     source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
       + '<Relationship Id="rImage" '
       + 'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
-      + 'Target="../../docProps/thumbnail.jpeg"/>'
+      + 'Target="../docProps/thumbnail.jpeg"/>'
       + '</Relationships>');
 
     const result = await sanitizeOoxmlBuffer(
@@ -314,8 +333,56 @@ describe('sanitizeOoxmlBuffer', () => {
 
     expect(output.file('docProps/thumbnail.jpeg')).not.toBeNull();
     await expect(output.file('word/_rels/document.xml.rels')?.async('string'))
-      .resolves.toContain('../../docProps/thumbnail.jpeg');
+      .resolves.toContain('../docProps/thumbnail.jpeg');
     expect(result.report.detected.some(finding => finding.scope === 'thumbnail')).toBe(false);
+  });
+
+  it('removes the package thumbnail relation but preserves bytes shared with document content', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rSharedImage" '
+      + 'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" '
+      + 'Target="../docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    expect(output.file('docProps/thumbnail.jpeg')).not.toBeNull();
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.not.toContain('rThumb');
+    await expect(output.file('word/_rels/document.xml.rels')?.async('string'))
+      .resolves.toContain('rSharedImage');
+    await expect(output.file('[Content_Types].xml')?.async('string'))
+      .resolves.toContain('/docProps/thumbnail.jpeg');
+  });
+
+  it('preserves conventional metadata paths that lack a package metadata relationship', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rCore" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>'
+      + '<Relationship Id="rCustom" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="docProps/custom.xml"/>'
+      + '<Relationship Id="rThumb" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" Target="docProps/thumbnail.jpeg"/>'
+      + '</Relationships>');
+    source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
+      + '<Relationship Id="rVendor" Type="https://vendor.example/relationships/properties" '
+      + 'Target="../docProps/app.xml"/>'
+      + '</Relationships>');
+
+    const result = await sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    );
+    const output = await JSZip.loadAsync(result.output);
+
+    await expect(output.file('docProps/app.xml')?.async('string')).resolves.toContain('Exemple SA');
+    await expect(output.file('word/_rels/document.xml.rels')?.async('string'))
+      .resolves.toContain('rVendor');
+    expect(result.report.detected.some(finding => finding.scope === 'application')).toBe(false);
   });
 
   it('removes thousands of declared thumbnail relationships in one linear reconstruction', async () => {
@@ -326,7 +393,10 @@ describe('sanitizeOoxmlBuffer', () => {
         + 'Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/thumbnail" '
         + 'Target="docProps/thumbnail.jpeg"/>',
     ).join('');
-    source.file('_rels/.rels', `<?xml version="1.0"?><Relationships>${relationships}</Relationships>`);
+    source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + standardMetadataRelationships
+      + relationships
+      + '</Relationships>');
 
     const result = await sanitizeOoxmlBuffer(
       await source.generateAsync({
@@ -339,9 +409,8 @@ describe('sanitizeOoxmlBuffer', () => {
     );
     const output = await JSZip.loadAsync(result.output);
 
-    await expect(output.file('_rels/.rels')?.async('string')).resolves.toBe(
-      '<?xml version="1.0"?><Relationships></Relationships>',
-    );
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.not.toContain('rThumb');
+    await expect(output.file('_rels/.rels')?.async('string')).resolves.toContain('rCore');
     expect(output.file('docProps/thumbnail.jpeg')).toBeNull();
   });
 
@@ -352,6 +421,7 @@ describe('sanitizeOoxmlBuffer', () => {
       + '<property name="Chemin long"><vt:lpwstr xmlns:vt="vt">Valeur</vt:lpwstr></property>'
       + '</Properties>');
     source.file('_rels/.rels', '<?xml version="1.0"?><Relationships>'
+      + standardMetadataRelationships
       + `<Relationship Id="rLong" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties" Target="${longPath}"/>`
       + '</Relationships>');
 
