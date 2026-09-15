@@ -51,6 +51,17 @@ describe('extractPdfVersion', () => {
 });
 
 describe('inspectPdfPrivacyDocument', () => {
+  it('utilise la version PDF effective exposée par le catalogue', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getMetadata: vi.fn().mockResolvedValue({
+        info: { PDFFormatVersion: '2.0' },
+        metadata: null,
+      }),
+    }), { headerData: pdfBytes('1.7'), fileBytes: 16, passwordUsed: false });
+
+    expect(report.pdfVersion).toBe('2.0');
+  });
+
   it('agrège toutes les familles sans exposer le code JavaScript ni les valeurs de formulaire', async () => {
     const cleanup = vi.fn();
     const page: PdfJsPrivacyPage = {
@@ -236,6 +247,20 @@ describe('inspectPdfPrivacyDocument', () => {
         signingTime: 'D:20260915113000+02\'00\'',
       },
     });
+  });
+
+  it('classe le nom privé d’un champ de signature comme une métadonnée à vérifier', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue([{
+        fieldName: 'alice@example.test',
+      }]),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.find(finding => finding.kind === 'digital-signature')).toMatchObject({
+      severity: 'low',
+      label: 'alice@example.test',
+    });
+    expect(report.attentionLevel).not.toBe('clear');
   });
 
   it('signale un formulaire XFA pur et un JavaScript de champ sans détail disponible', async () => {

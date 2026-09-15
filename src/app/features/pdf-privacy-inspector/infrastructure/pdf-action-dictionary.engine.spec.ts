@@ -259,6 +259,20 @@ describe('inspectPdfStructuralSignals', () => {
     expect(signals?.associatedFiles[0]?.bytes).toBeGreaterThan(0);
   });
 
+  it('ignore un FileSpec dont EF ne contient aucun flux embarqué', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('FakeFileSpec'), source.context.obj({
+      Type: 'Filespec',
+      F: PDFString.of('invented.txt'),
+      EF: PDFString.of('not-an-embedded-file-dictionary'),
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.associatedFiles).toEqual([]);
+  });
+
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();

@@ -18,8 +18,8 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,18 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 139 fichiers, 484 tests verts sous Vitest |
-| Couverture | aucun seuil | 50,98 % statements, 38,99 % branches, 50,35 % fonctions, 54,52 % lignes |
+| Tests unitaires | suite non compilable | 139 fichiers, 487 tests verts sous Vitest |
+| Couverture | aucun seuil | 51,01 % statements, 39,06 % branches, 50,39 % fonctions, 54,55 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |
@@ -55,7 +55,7 @@ Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : 
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
 - Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, décimaux exacts, sortie HTML sûre, diagnostics reliés aux champs, export, accessibilité et 28 tests ciblés.
-- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, itératifs, paresseux et bornés, tolérance locale des discriminateurs PDF malformés, prise en charge des grands tableaux, plans massifs, chaînes `/Next` profondes, références partagées, conteneurs `/AA` ambigus, JavaScript d’annotation, actions multimédias et fichiers associés `/AF` sans boucle, doublon structurel ni décompression inutile, codes de rapport indépendants de la langue, limites de taille/pages/éléments/cibles, mot de passe local, inspection des métadonnées standards/personnalisées et de toutes les propriétés XMP scalaires itérables, scripts, actions, pièces jointes, liens, formulaires, métadonnées privées de signatures et chiffrement, sans exécuter ni exposer les contenus actifs, avec rapport JSON et 61 tests ciblés.
+- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, itératifs, paresseux et bornés, tolérance locale des discriminateurs PDF malformés, prise en charge des grands tableaux, plans massifs, chaînes `/Next` profondes, références partagées, conteneurs `/AA` ambigus, JavaScript d’annotation, actions multimédias et fichiers associés `/AF` uniquement lorsqu’un flux embarqué valide est présent, sans boucle, faux positif, doublon structurel ni décompression inutile, codes de rapport indépendants de la langue, limites de taille/pages/éléments/cibles, mot de passe local, version PDF effective du catalogue, inspection des métadonnées standards/personnalisées et de toutes les propriétés XMP scalaires itérables, scripts, actions, pièces jointes, liens, formulaires, noms et métadonnées privées de signatures et chiffrement, sans exécuter ni exposer les contenus actifs, avec rapport JSON et 64 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -133,7 +133,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 
 - Angular replie `pt-BR` vers les données de locale `pt` et émet deux avertissements de build.
 - JSZip, QRCode et `pako` via PDF-Lib restent CommonJS ; ils sont chargés dans des chunks fonctionnels mais provoquent des avertissements d’optimisation.
-- Les Workers PDF.js restent paresseux : celui de l’inspecteur pèse 975,91 kB brut (281,98 kB transféré estimé) et ne charge son moteur de parsing qu’à l’usage ; mémoire et temps doivent rester surveillés sur de gros documents.
+- Les Workers PDF.js restent paresseux : celui de l’inspecteur pèse 976,00 kB brut (281,66 kB transféré estimé) et ne charge son moteur de parsing qu’à l’usage ; mémoire et temps doivent rester surveillés sur de gros documents.
 - L’image Open Graph générique mérite un visuel social dédié et testé.
 - Les limites de taille/complexité ne sont pas encore uniformes pour chaque famille de fichiers.
 - La télémétrie et la conformité vie privée nécessitent une revue dédiée avant toute extension de mesure.

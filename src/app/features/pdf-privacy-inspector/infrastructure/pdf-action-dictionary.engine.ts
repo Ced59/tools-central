@@ -391,18 +391,18 @@ function actionContext(parent: PDFDict): PdfActionDictionaryContext {
 }
 
 function readName(dictionary: PDFDict, key: string): PDFName | undefined {
-  try {
-    const value = dictionary.lookup(PDFName.of(key));
-    return value instanceof PDFName ? value : undefined;
-  } catch {
-    return undefined;
-  }
+  const value = readObject(dictionary, key);
+  return value instanceof PDFName ? value : undefined;
 }
 
 function readDictionary(dictionary: PDFDict, key: string): PDFDict | undefined {
+  const value = readObject(dictionary, key);
+  return value instanceof PDFDict ? value : undefined;
+}
+
+function readObject(dictionary: PDFDict, key: string): PDFObject | undefined {
   try {
-    const value = dictionary.lookup(PDFName.of(key));
-    return value instanceof PDFDict ? value : undefined;
+    return dictionary.lookup(PDFName.of(key));
   } catch {
     return undefined;
   }
@@ -464,23 +464,24 @@ function inspectAssociatedFileEntry(
 }
 
 function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void {
+  const embeddedFile = findEmbeddedFileStream(fileSpec);
+  if (!embeddedFile) return;
   const currentId = state.associatedFileIds.get(fileSpec);
   if (currentId !== undefined) return;
   consumeDiscoveredSignal(state);
   const id = state.associatedFileIds.size + 1;
   state.associatedFileIds.set(fileSpec, id);
-  const embeddedFile = findEmbeddedFileStream(fileSpec);
   state.associatedFiles.set(id, {
     id,
     fileName: state.canReadTarget
-      ? readDisplayText(fileSpec.lookup(PDFName.of('UF')))
-        ?? readDisplayText(fileSpec.lookup(PDFName.of('F')))
+      ? readDisplayText(readObject(fileSpec, 'UF'))
+        ?? readDisplayText(readObject(fileSpec, 'F'))
       : undefined,
     description: state.canReadTarget
-      ? readDisplayText(fileSpec.lookup(PDFName.of('Desc')))
+      ? readDisplayText(readObject(fileSpec, 'Desc'))
       : undefined,
-    contentType: embeddedFile ? readName(embeddedFile.dict, 'Subtype')?.decodeText() : undefined,
-    bytes: embeddedFile?.getContentsSize(),
+    contentType: readName(embeddedFile.dict, 'Subtype')?.decodeText(),
+    bytes: embeddedFile.getContentsSize(),
     occurrences: 1,
   });
 }
@@ -489,7 +490,7 @@ function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
   const embeddedFiles = readDictionary(fileSpec, 'EF');
   if (!embeddedFiles) return undefined;
   for (const key of ['UF', 'F']) {
-    const stream = embeddedFiles.lookup(PDFName.of(key));
+    const stream = readObject(embeddedFiles, key);
     if (stream instanceof PDFStream) return stream;
   }
   return undefined;
@@ -534,8 +535,8 @@ function pdfJsReferenceId(reference: PDFRef): string {
 }
 
 function readTarget(dictionary: PDFDict): string | typeof TARGET_TOO_LONG | undefined {
-  return readText(dictionary.lookup(PDFName.of('F')))
-    ?? readText(dictionary.lookup(PDFName.of('URI')));
+  return readText(readObject(dictionary, 'F'))
+    ?? readText(readObject(dictionary, 'URI'));
 }
 
 function readText(
@@ -553,7 +554,7 @@ function readText(
   if (!(object instanceof PDFDict)) return undefined;
 
   for (const key of ['UF', 'F', 'Unix', 'DOS', 'Mac']) {
-    const value = object.lookup(PDFName.of(key));
+    const value = readObject(object, key);
     const text = readText(value, depth + 1);
     if (text) return text;
   }

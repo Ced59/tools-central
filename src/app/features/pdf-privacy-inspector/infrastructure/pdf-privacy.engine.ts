@@ -103,7 +103,7 @@ export async function inspectPdfPrivacyDocument(
     onProgress?: (percent: number) => void;
   },
 ): Promise<PdfPrivacyReport> {
-  const pdfVersion = extractPdfVersion(input.headerData);
+  const headerPdfVersion = extractPdfVersion(input.headerData);
   if (!Number.isSafeInteger(document.numPages) || document.numPages <= 0) {
     throw new PdfPrivacyEngineError('invalid-pdf');
   }
@@ -125,6 +125,7 @@ export async function inspectPdfPrivacyDocument(
     document.getOpenAction(),
     document.getOutline(),
   ]);
+  const pdfVersion = effectivePdfVersion(metadata.info) ?? headerPdfVersion;
   input.onProgress?.(20);
 
   const findings: PdfPrivacyFinding[] = [];
@@ -502,7 +503,7 @@ function collectSignatures(
     const signingTime = readableValue(signature?.['signingTime']);
     const coversWholeDocument = signature?.['coversWholeDocument'];
     const modifications = finiteNumber(signature?.['modificationsAfterSignature']);
-    const containsPrivateMetadata = [signer, contactInfo, location, reason, signingTime]
+    const containsPrivateMetadata = [fieldName, signer, contactInfo, location, reason, signingTime]
       .some(value => value !== undefined);
     add({
       id: `signature:${String(index + 1)}:${fieldName ?? ''}`,
@@ -906,6 +907,15 @@ function hasXfaMetadata(info: object): boolean {
     if (key.toLowerCase() === 'isxfapresent' && value === true) return true;
   }
   return false;
+}
+
+function effectivePdfVersion(info: object): string | undefined {
+  for (const [key, value] of objectEntries(info)) {
+    if (key.toLowerCase() !== 'pdfformatversion') continue;
+    const version = readableValue(value);
+    return version && /^(?:1\.[0-7]|2\.0)$/u.test(version) ? version : undefined;
+  }
+  return undefined;
 }
 
 function readableValue(value: unknown): string | undefined {
