@@ -74781,14 +74781,14 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <segment>
-        <source>Nettoyer les métadonnées OOXML</source>
-        <target state="translated">Bersihkan metadata OOXML</target>
+        <source>Supprimer les métadonnées DOCX, XLSX et PPTX</source>
+        <target state="translated">Hapus metadata DOCX, XLSX, dan PPTX</target>
       </segment>
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <segment>
-        <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
-        <target state="translated">Hapus/normalisasi docProps (penulis, perusahaan, jalur, riwayat) untuk membagikan file yang lebih &quot;ramah privasi&quot;.</target>
+        <source>Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.</source>
+        <target state="translated">Menganalisis dan kemudian membersihkan penulis, perusahaan, tanggal, aplikasi, properti kustom, dan pratinjau terintegrasi dari dokumen Office secara lokal.</target>
       </segment>
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
@@ -85049,6 +85049,696 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Annuler</source>
         <target state="translated">Batal</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_title">
+      <segment>
+        <source>Retirer les informations personnelles cachées d’un document Office</source>
+        <target state="translated">Menghapus informasi pribadi yang tersembunyi dari dokumen Office</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_lead">
+      <segment>
+        <source>Un fichier Word, Excel ou PowerPoint peut conserver le nom de ses auteurs, une société, des dates, le logiciel utilisé, des champs personnalisés ou une miniature. Cet outil inventorie ces traces, crée une copie nettoyée et affiche un rapport avant/après, sans téléversement.</source>
+        <target state="translated">Sebuah file Word, Excel, atau PowerPoint dapat menyimpan nama penulis, perusahaan, tanggal, perangkat lunak yang digunakan, bidang kustom, atau thumbnail. Alat ini menginventarisasi jejak ini, membuat salinan yang telah dibersihkan, dan menampilkan laporan sebelum/setelah, tanpa mengunggah.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_use_cases">
+      <segment>
+        <source>Quand nettoyer les métadonnées d’un DOCX, XLSX ou PPTX ?</source>
+        <target state="translated">Kapan membersihkan metadata dari DOCX, XLSX, atau PPTX?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_title">
+      <segment>
+        <source>Partager un document avec un client</source>
+        <target state="translated">Membagikan dokumen dengan klien</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_text">
+      <segment>
+        <source>Retirez le nom du créateur, du dernier éditeur et de l’organisation avant d’envoyer un livrable produit depuis un poste ou un modèle interne.</source>
+        <target state="translated">Hapus nama pembuat, editor terakhir, dan organisasi sebelum mengirimkan produk yang dihasilkan dari pos atau template internal.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_title">
+      <segment>
+        <source>Publier un fichier téléchargeable</source>
+        <target state="translated">Menerbitkan file yang dapat diunduh</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_text">
+      <segment>
+        <source>Contrôlez les propriétés exposées par un document destiné à un site public, une candidature, un appel d’offres ou une base documentaire.</source>
+        <target state="translated">Kontrol properti yang diekspos oleh dokumen yang ditujukan untuk situs publik, aplikasi, tawaran, atau basis dokumentasi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_title">
+      <segment>
+        <source>Vérifier un modèle réutilisé</source>
+        <target state="translated">Memeriksa template yang digunakan kembali</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_text">
+      <segment>
+        <source>Repérez les champs personnalisés, chemins ou noms d’entreprise qui peuvent survivre lorsqu’un ancien fichier sert de point de départ.</source>
+        <target state="translated">Identifikasi bidang kustom, jalur, atau nama perusahaan yang mungkin bertahan ketika file lama digunakan sebagai titik awal.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method">
+      <segment>
+        <source>Comment fonctionne le nettoyage OOXML ?</source>
+        <target state="translated">Bagaimana cara kerja pembersihan OOXML?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_1">
+      <segment>
+        <source>DOCX, XLSX et PPTX sont des archives ZIP contenant des fichiers XML. L’outil vérifie d’abord la table centrale, les chemins, les méthodes de compression, le nombre d’entrées et le volume décompressé avant de lire les propriétés.</source>
+        <target state="translated">DOCX, XLSX, dan PPTX adalah arsip ZIP yang berisi file XML. Alat ini pertama-tama memeriksa tabel pusat, jalur, metode kompresi, jumlah entri, dan volume yang tidak terkompresi sebelum membaca properti.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_2">
+      <segment>
+        <source>Les parties qualifiées par les relations OPC officielles sont vidées de leurs valeurs tout en conservant leur racine, leur espace de noms et leur encodage. La relation de miniature est supprimée ; ses octets restent présents lorsqu’un autre contenu du document les utilise.</source>
+        <target state="translated">Bagian yang memenuhi syarat oleh hubungan OPC resmi dikosongkan nilainya sambil mempertahankan akar, ruang nama, dan pengkodeannya. Hubungan miniatur dihapus; byte-nya tetap ada ketika konten lain dari dokumen menggunakannya.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_3">
+      <segment>
+        <source>Le package est ensuite recompressé dans un Web Worker. Téléchargez la copie, ouvrez-la dans Word, Excel ou PowerPoint et enregistrez-la seulement après avoir vérifié le contenu important.</source>
+        <target state="translated">Paket kemudian dikompresi ulang dalam Web Worker. Unduh salinan, buka di Word, Excel, atau PowerPoint, dan simpan hanya setelah memeriksa konten penting.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report">
+      <segment>
+        <source>Comprendre le rapport avant/après</source>
+        <target state="translated">Memahami laporan sebelum/setelah</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_1">
+      <segment>
+        <source>« Détectés » compte les valeurs prises en charge trouvées avant modification : auteurs, dates, société, application, modèle, temps d’édition, propriétés personnalisées et aperçu.</source>
+        <target state="translated">"Terdeteksi" menghitung nilai yang didukung yang ditemukan sebelum modifikasi: penulis, tanggal, perusahaan, aplikasi, template, waktu pengeditan, properti kustom, dan pratinjau.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_2">
+      <segment>
+        <source>« Retirés ou neutralisés » correspond aux catégories cochées. Une catégorie laissée décochée apparaît dans les éléments conservés après traitement.</source>
+        <target state="translated">"Dihapus atau dinetralkan" sesuai dengan kategori yang dicentang. Kategori yang tidak dicentang muncul dalam elemen yang dipertahankan setelah pemrosesan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_3">
+      <segment>
+        <source>Une absence de résultat ne prouve pas qu’un document ne contient aucune donnée sensible : du texte visible, des commentaires ou des objets intégrés peuvent encore en révéler.</source>
+        <target state="translated">Ketiadaan hasil tidak membuktikan bahwa dokumen tidak mengandung data sensitif: teks yang terlihat, komentar, atau objek terintegrasi masih dapat mengungkapkannya.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limits">
+      <segment>
+        <source>Formats, sécurité et limites</source>
+        <target state="translated">Format, keamanan, dan batasan</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_1">
+      <segment>
+        <source>Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Chaque partie XML inspectée est limitée à 2 Mio et une miniature officiellement déclarée à 25 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.</source>
+        <target state="translated">Hanya format DOCX, XLSX, dan PPTX tanpa makro yang diterima, hingga 50 Mio. Setiap bagian XML yang diperiksa dibatasi hingga 2 Mio dan miniatur yang secara resmi dinyatakan dibatasi hingga 25 Mio. Arsip ZIP64, multi-disk, terenkripsi, ambigu, atau yang memiliki rasio kompresi berbahaya ditolak sebelum ekstraksi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_2">
+      <segment>
+        <source>L’outil ne retire pas les commentaires, auteurs de révisions, notes de présentation, feuilles masquées, contenu visible, liens, objets incorporés, signatures numériques ni protections.</source>
+        <target state="translated">Alat ini tidak menghapus komentar, penulis revisi, catatan presentasi, lembar tersembunyi, konten yang terlihat, tautan, objek terintegrasi, tanda tangan digital, atau perlindungan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_3">
+      <segment>
+        <source>La reconstruction modifie les octets et invalide une éventuelle signature du package. Conservez toujours l’original et vérifiez la copie dans l’application Office utilisée par vos destinataires.</source>
+        <target state="translated">Rekonstruksi mengubah byte dan membatalkan kemungkinan tanda tangan paket. Selalu simpan yang asli dan periksa salinan di aplikasi Office yang digunakan oleh penerima Anda.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_faq">
+      <segment>
+        <source>Questions fréquentes sur les métadonnées Office</source>
+        <target state="translated">Pertanyaan yang Sering Diajukan tentang Metadata Office</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q1">
+      <segment>
+        <source>Le contenu de mon document est-il envoyé au serveur ?</source>
+        <target state="translated">Apakah konten dokumen saya dikirim ke server?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a1">
+      <segment>
+        <source>Non. La lecture, l’inventaire, le nettoyage et la recompression s’exécutent dans le navigateur. Le fichier, son nom et les valeurs détectées ne sont pas transmis à Tools Central.</source>
+        <target state="translated">Tidak. Pembacaan, inventarisasi, pembersihan, dan kompresi ulang dilakukan di browser. File, namanya, dan nilai yang terdeteksi tidak dikirim ke Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q2">
+      <segment>
+        <source>Pourquoi les fichiers DOCM, XLSM et PPTM sont-ils refusés ?</source>
+        <target state="translated">Mengapa file DOCM, XLSM, dan PPTM ditolak?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a2">
+      <segment>
+        <source>Ils peuvent contenir des macros et relations supplémentaires dont la conservation sûre demande un audit spécifique. L’outil limite volontairement sa promesse aux packages DOCX, XLSX et PPTX sans macros.</source>
+        <target state="translated">Mereka dapat berisi makro dan relasi tambahan yang memerlukan audit khusus untuk penyimpanan yang aman. Alat ini secara sukarela membatasi janjinya pada paket DOCX, XLSX, dan PPTX tanpa makro.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q3">
+      <segment>
+        <source>Le document nettoyé est-il forcément anonyme ?</source>
+        <target state="translated">Apakah dokumen yang dibersihkan pasti anonim?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a3">
+      <segment>
+        <source>Non. Un nom peut rester dans le texte, les commentaires, les révisions, les notes, les images ou des objets intégrés. Le rapport couvre les propriétés standard annoncées, pas une anonymisation exhaustive du contenu.</source>
+        <target state="translated">Tidak. Sebuah nama dapat tetap ada dalam teks, komentar, revisi, catatan, gambar, atau objek terintegrasi. Laporan mencakup properti standar yang diumumkan, bukan anonimisasi menyeluruh dari konten.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_back">
+      <segment>
+        <source>Retour aux outils Open XML</source>
+        <target state="translated">Kembali ke alat Open XML</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_title">
+      <segment>
+        <source>Supprimer les métadonnées d’un document Office</source>
+        <target state="translated">Hapus metadata dari dokumen Office</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_subtitle">
+      <segment>
+        <source>Analysez puis nettoyez les propriétés cachées d’un fichier DOCX, XLSX ou PPTX : auteurs, société, dates, application, champs personnalisés et aperçu intégré.</source>
+        <target state="translated">Analisis dan bersihkan properti tersembunyi dari file DOCX, XLSX, atau PPTX: penulis, perusahaan, tanggal, aplikasi, bidang kustom, dan pratinjau terintegrasi.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_privacy">
+      <segment>
+        <source>Aucun envoi : le document est contrôlé et reconstruit localement dans votre navigateur.</source>
+        <target state="translated">Tidak ada pengiriman: dokumen diperiksa dan dibangun kembali secara lokal di browser Anda.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Langkah 1</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_source_title">
+      <segment>
+        <source>Choisir le document</source>
+        <target state="translated">Pilih dokumen</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick">
+      <segment>
+        <source>Sélectionner un fichier Office</source>
+        <target state="translated">Pilih file Office</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick_help">
+      <segment>
+        <source>DOCX, XLSX ou PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · fichiers avec macros exclus</source>
+        <target state="translated">DOCX, XLSX, atau PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maksimum · file dengan makro dikecualikan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">File</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Ukuran</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Langkah 2</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_options_title">
+      <segment>
+        <source>Choisir les traces à retirer</source>
+        <target state="translated">Pilih jejak yang akan dihapus</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core">
+      <segment>
+        <source>Propriétés principales</source>
+        <target state="translated">Properti utama</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core_help">
+      <segment>
+        <source>Auteur, titre, sujet, mots-clés, dates, révision et dernier éditeur.</source>
+        <target state="translated">Penulis, judul, subjek, kata kunci, tanggal, revisi, dan editor terakhir.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Aplikasi dan organisasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app_help">
+      <segment>
+        <source>Logiciel, version, société, responsable, modèle et temps d’édition.</source>
+        <target state="translated">Perangkat lunak, versi, perusahaan, penanggung jawab, model, dan waktu pengeditan.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom">
+      <segment>
+        <source>Propriétés personnalisées</source>
+        <target state="translated">Properti kustom</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom_help">
+      <segment>
+        <source>Champs ajoutés par une entreprise, un modèle ou un flux documentaire.</source>
+        <target state="translated">Bidang yang ditambahkan oleh perusahaan, model, atau alur dokumen.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Prabentuk terintegrasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail_help">
+      <segment>
+        <source>Miniature du document parfois conservée dans le package Office.</source>
+        <target state="translated">Miniatur dokumen yang kadang-kadang disimpan dalam paket Office.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_clean">
+      <segment>
+        <source>Analyser et nettoyer</source>
+        <target state="translated">Analisis dan bersihkan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Atur ulang</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_processing">
+      <segment>
+        <source>Analyse et reconstruction locales…</source>
+        <target state="translated">Analisis dan rekonstruksi lokal…</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Batalkan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Langkah 3</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_result_title">
+      <segment>
+        <source>Document nettoyé et rapport prêt</source>
+        <target state="translated">Dokumen yang dibersihkan dan laporan siap</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_download">
+      <segment>
+        <source>Télécharger le document nettoyé</source>
+        <target state="translated">Unduh dokumen yang dibersihkan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_detected">
+      <segment>
+        <source>Avant : éléments détectés</source>
+        <target state="translated">Sebelum: elemen yang terdeteksi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_removed">
+      <segment>
+        <source>Retirés ou neutralisés</source>
+        <target state="translated">Dihapus atau dinetralkan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_remaining">
+      <segment>
+        <source>Après : éléments conservés</source>
+        <target state="translated">Setelah: elemen yang dipertahankan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_output_size">
+      <segment>
+        <source>Fichier de sortie</source>
+        <target state="translated">File keluaran</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_none_found">
+      <segment>
+        <source>Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</source>
+        <target state="translated">Tidak ada nilai metadata yang didukung ditemukan. Paket telah diperiksa dan direkonstruksi sesuai dengan opsi yang dipilih.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_findings_label">
+      <segment>
+        <source>Métadonnées détectées</source>
+        <target state="translated">Metadata yang terdeteksi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> élément(s) supplémentaire(s) ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> elemen tambahan tidak ditampilkan untuk menjaga responsivitas.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">Panduan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope">
+      <segment>
+        <source>Ce qui est nettoyé</source>
+        <target state="translated">Apa yang dibersihkan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope_text">
+      <segment>
+        <source>L’outil agit sur les propriétés standard du package OOXML et sur sa miniature. Le texte, les feuilles, les diapositives, les images et la mise en page sont conservés.</source>
+        <target state="translated">Alat ini bekerja pada properti standar paket OOXML dan miniaturanya. Teks, lembar, slide, gambar, dan tata letak dipertahankan.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits">
+      <segment>
+        <source>Ce qui reste à vérifier</source>
+        <target state="translated">Apa yang masih perlu diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits_text">
+      <segment>
+        <source>Commentaires, auteurs de révisions, feuilles masquées, notes, macros et contenu visible ne sont pas supprimés. Inspectez le fichier final dans son application d’origine.</source>
+        <target state="translated">Komentar, penulis revisi, lembar tersembunyi, catatan, makro, dan konten yang terlihat tidak dihapus. Periksa file akhir di aplikasi aslinya.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf">
+      <segment>
+        <source>Vous avez un PDF ?</source>
+        <target state="translated">Anda memiliki PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf_text">
+      <segment>
+        <source>Le format PDF utilise une structure différente.</source>
+        <target state="translated">Format PDF menggunakan struktur yang berbeda.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pdf_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF dédié.</source>
+        <target state="translated">Buka pembersih PDF khusus.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_unknown_format">
+      <segment>
+        <source>Format inconnu</source>
+        <target state="translated">Format tidak dikenal</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_core">
+      <segment>
+        <source>Propriétés du document</source>
+        <target state="translated">Properti dokumen</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_application">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Aplikasi dan organisasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_custom">
+      <segment>
+        <source>Propriété personnalisée</source>
+        <target state="translated">Properti kustom</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Prabentuk terintegrasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_title">
+      <segment>
+        <source>Titre</source>
+        <target state="translated">Judul</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_subject">
+      <segment>
+        <source>Sujet</source>
+        <target state="translated">Subjek</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_creator">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">Penulis</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_keywords">
+      <segment>
+        <source>Mots-clés</source>
+        <target state="translated">Kata kunci</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Deskripsi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_modified_by">
+      <segment>
+        <source>Dernière modification par</source>
+        <target state="translated">Terakhir diubah oleh</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_revision">
+      <segment>
+        <source>Révision</source>
+        <target state="translated">Revisi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_created">
+      <segment>
+        <source>Création</source>
+        <target state="translated">Dibuat</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_modified">
+      <segment>
+        <source>Modification</source>
+        <target state="translated">Diubah</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_printed">
+      <segment>
+        <source>Dernière impression</source>
+        <target state="translated">Terakhir dicetak</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">Kategori</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_status">
+      <segment>
+        <source>État du contenu</source>
+        <target state="translated">Status konten</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_identifier">
+      <segment>
+        <source>Identifiant</source>
+        <target state="translated">Pengidentifikasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_language">
+      <segment>
+        <source>Langue</source>
+        <target state="translated">Bahasa</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Versi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_application">
+      <segment>
+        <source>Application</source>
+        <target state="translated">Aplikasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_app_version">
+      <segment>
+        <source>Version de l’application</source>
+        <target state="translated">Versi aplikasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_company">
+      <segment>
+        <source>Société</source>
+        <target state="translated">Perusahaan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_manager">
+      <segment>
+        <source>Responsable</source>
+        <target state="translated">Manajer</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_template">
+      <segment>
+        <source>Modèle</source>
+        <target state="translated">Template</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_hyperlink_base">
+      <segment>
+        <source>Base des liens</source>
+        <target state="translated">Dasar hyperlink</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_doc_security">
+      <segment>
+        <source>Indicateur de sécurité</source>
+        <target state="translated">Indikator keamanan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_total_time">
+      <segment>
+        <source>Temps d’édition</source>
+        <target state="translated">Waktu pengeditan</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_presentation_format">
+      <segment>
+        <source>Format de présentation</source>
+        <target state="translated">Format presentasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Prabaca terintegrasi</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">File yang dipilih kosong.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_file_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">File melebihi batas <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_format">
+      <segment>
+        <source>Sélectionnez un fichier DOCX, XLSX ou PPTX sans macros.</source>
+        <target state="translated">Pilih file DOCX, XLSX, atau PPTX tanpa makro.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_options">
+      <segment>
+        <source>Sélectionnez au moins une catégorie à nettoyer.</source>
+        <target state="translated">Pilih setidaknya satu kategori untuk dibersihkan.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_encrypted">
+      <segment>
+        <source>Le package contient une entrée chiffrée et ne peut pas être traité en sécurité.</source>
+        <target state="translated">Paket berisi entri terenkripsi dan tidak dapat diproses dengan aman.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_zip_variant">
+      <segment>
+        <source>Cette variante d’archive ZIP n’est pas prise en charge.</source>
+        <target state="translated">Varian arsip ZIP ini tidak didukung.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_archive_budget">
+      <segment>
+        <source>Le document dépasse les limites de décompression sûre.</source>
+        <target state="translated">Dokumen melebihi batas dekompresi yang aman.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_metadata_budget">
+      <segment>
+        <source>Une partie de métadonnées est anormalement volumineuse.</source>
+        <target state="translated">Sebagian metadata terlalu besar.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_output">
+      <segment>
+        <source>Le document nettoyé dépasse la taille de sortie autorisée.</source>
+        <target state="translated">Dokumen yang dibersihkan melebihi ukuran output yang diizinkan.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_unsafe">
+      <segment>
+        <source>La structure interne du document est ambiguë ou non sûre.</source>
+        <target state="translated">Struktur internal dokumen tidak jelas atau tidak aman.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_invalid">
+      <segment>
+        <source>Le fichier ne correspond pas à un document Office Open XML valide pour cette extension.</source>
+        <target state="translated">File tidak sesuai dengan dokumen Office Open XML yang valid untuk ekstensi ini.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_generic">
+      <segment>
+        <source>Impossible de nettoyer ce document. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Tidak dapat membersihkan dokumen ini. Dokumen mungkin rusak atau menggunakan fitur yang tidak didukung.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_macro">
+      <segment>
+        <source>Le package contient réellement un projet de macros. Utilisez une copie sans macros avant le nettoyage.</source>
+        <target state="translated">Paket ini benar-benar berisi proyek makro. Gunakan salinan tanpa makro sebelum pembersihan.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_signature">
+      <segment>
+        <source>Le package contient une signature numérique qui serait invalidée par la reconstruction.</source>
+        <target state="translated">Paket ini mengandung tanda tangan digital yang akan menjadi tidak valid jika dibangun kembali.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_type">
+      <segment>
+        <source>Type de contenu</source>
+        <target state="translated">Tipe konten</target>
       </segment>
     </unit>
   </file>

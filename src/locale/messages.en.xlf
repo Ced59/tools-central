@@ -74753,14 +74753,14 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <segment>
-        <source>Nettoyer les métadonnées OOXML</source>
-        <target state="translated">Clean OOXML metadata</target>
+        <source>Supprimer les métadonnées DOCX, XLSX et PPTX</source>
+        <target state="translated">Remove DOCX, XLSX, and PPTX metadata</target>
       </segment>
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <segment>
-        <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
-        <target state="translated">Remove/normalize docProps (author, company, paths, histories) to share a more "privacy-friendly" file.</target>
+        <source>Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.</source>
+        <target state="translated">Analyze and then locally clean authors, company, dates, application, custom properties, and embedded preview from an Office document.</target>
       </segment>
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
@@ -85021,6 +85021,696 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Annuler</source>
         <target state="translated">Cancel</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_title">
+      <segment>
+        <source>Retirer les informations personnelles cachées d’un document Office</source>
+        <target state="translated">Remove hidden personal information from an Office document</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_lead">
+      <segment>
+        <source>Un fichier Word, Excel ou PowerPoint peut conserver le nom de ses auteurs, une société, des dates, le logiciel utilisé, des champs personnalisés ou une miniature. Cet outil inventorie ces traces, crée une copie nettoyée et affiche un rapport avant/après, sans téléversement.</source>
+        <target state="translated">A Word, Excel, or PowerPoint file may retain the names of its authors, a company, dates, the software used, custom fields, or a thumbnail. This tool inventories these traces, creates a cleaned copy, and displays a before/after report, without uploading.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_use_cases">
+      <segment>
+        <source>Quand nettoyer les métadonnées d’un DOCX, XLSX ou PPTX ?</source>
+        <target state="translated">When to clean the metadata of a DOCX, XLSX, or PPTX?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_title">
+      <segment>
+        <source>Partager un document avec un client</source>
+        <target state="translated">Share a document with a client</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_text">
+      <segment>
+        <source>Retirez le nom du créateur, du dernier éditeur et de l’organisation avant d’envoyer un livrable produit depuis un poste ou un modèle interne.</source>
+        <target state="translated">Remove the creator's name, last editor, and organization before sending a deliverable produced from an internal workstation or template.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_title">
+      <segment>
+        <source>Publier un fichier téléchargeable</source>
+        <target state="translated">Publish a downloadable file</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_text">
+      <segment>
+        <source>Contrôlez les propriétés exposées par un document destiné à un site public, une candidature, un appel d’offres ou une base documentaire.</source>
+        <target state="translated">Control the properties exposed by a document intended for a public site, an application, a tender, or a documentation base.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_title">
+      <segment>
+        <source>Vérifier un modèle réutilisé</source>
+        <target state="translated">Check a reused template</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_text">
+      <segment>
+        <source>Repérez les champs personnalisés, chemins ou noms d’entreprise qui peuvent survivre lorsqu’un ancien fichier sert de point de départ.</source>
+        <target state="translated">Identify custom fields, paths, or company names that may survive when an old file is used as a starting point.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method">
+      <segment>
+        <source>Comment fonctionne le nettoyage OOXML ?</source>
+        <target state="translated">How does OOXML cleaning work?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_1">
+      <segment>
+        <source>DOCX, XLSX et PPTX sont des archives ZIP contenant des fichiers XML. L’outil vérifie d’abord la table centrale, les chemins, les méthodes de compression, le nombre d’entrées et le volume décompressé avant de lire les propriétés.</source>
+        <target state="translated">DOCX, XLSX, and PPTX are ZIP archives containing XML files. The tool first checks the central table, paths, compression methods, number of entries, and uncompressed size before reading the properties.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_2">
+      <segment>
+        <source>Les parties qualifiées par les relations OPC officielles sont vidées de leurs valeurs tout en conservant leur racine, leur espace de noms et leur encodage. La relation de miniature est supprimée ; ses octets restent présents lorsqu’un autre contenu du document les utilise.</source>
+        <target state="translated">The parts qualified by the official OPC relationships are emptied of their values while retaining their root, namespace, and encoding. The thumbnail relationship is removed; its bytes remain present when another content of the document uses them.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_3">
+      <segment>
+        <source>Le package est ensuite recompressé dans un Web Worker. Téléchargez la copie, ouvrez-la dans Word, Excel ou PowerPoint et enregistrez-la seulement après avoir vérifié le contenu important.</source>
+        <target state="translated">The package is then recompressed in a Web Worker. Download the copy, open it in Word, Excel, or PowerPoint, and save it only after verifying the important content.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report">
+      <segment>
+        <source>Comprendre le rapport avant/après</source>
+        <target state="translated">Understanding the before/after report</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_1">
+      <segment>
+        <source>« Détectés » compte les valeurs prises en charge trouvées avant modification : auteurs, dates, société, application, modèle, temps d’édition, propriétés personnalisées et aperçu.</source>
+        <target state="translated">"Detected" counts the supported values found before modification: authors, dates, company, application, template, editing time, custom properties, and preview.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_2">
+      <segment>
+        <source>« Retirés ou neutralisés » correspond aux catégories cochées. Une catégorie laissée décochée apparaît dans les éléments conservés après traitement.</source>
+        <target state="translated">"Removed or neutralized" corresponds to the checked categories. A category left unchecked appears in the retained items after processing.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_3">
+      <segment>
+        <source>Une absence de résultat ne prouve pas qu’un document ne contient aucune donnée sensible : du texte visible, des commentaires ou des objets intégrés peuvent encore en révéler.</source>
+        <target state="translated">A lack of results does not prove that a document contains no sensitive data: visible text, comments, or embedded objects may still reveal it.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limits">
+      <segment>
+        <source>Formats, sécurité et limites</source>
+        <target state="translated">Formats, security, and limits</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_1">
+      <segment>
+        <source>Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Chaque partie XML inspectée est limitée à 2 Mio et une miniature officiellement déclarée à 25 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.</source>
+        <target state="translated">Only DOCX, XLSX, and PPTX formats without macros are accepted, up to 50 MB. Each inspected XML part is limited to 2 MB and an officially declared thumbnail to 25 MB. ZIP64 archives, multi-disk, encrypted, ambiguous, or those with a dangerous compression ratio are rejected before extraction.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_2">
+      <segment>
+        <source>L’outil ne retire pas les commentaires, auteurs de révisions, notes de présentation, feuilles masquées, contenu visible, liens, objets incorporés, signatures numériques ni protections.</source>
+        <target state="translated">The tool does not remove comments, revision authors, presentation notes, hidden sheets, visible content, links, embedded objects, digital signatures, or protections.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_3">
+      <segment>
+        <source>La reconstruction modifie les octets et invalide une éventuelle signature du package. Conservez toujours l’original et vérifiez la copie dans l’application Office utilisée par vos destinataires.</source>
+        <target state="translated">Reconstruction modifies the bytes and invalidates any potential package signature. Always keep the original and check the copy in the Office application used by your recipients.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_faq">
+      <segment>
+        <source>Questions fréquentes sur les métadonnées Office</source>
+        <target state="translated">Frequently asked questions about Office metadata</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q1">
+      <segment>
+        <source>Le contenu de mon document est-il envoyé au serveur ?</source>
+        <target state="translated">Is the content of my document sent to the server?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a1">
+      <segment>
+        <source>Non. La lecture, l’inventaire, le nettoyage et la recompression s’exécutent dans le navigateur. Le fichier, son nom et les valeurs détectées ne sont pas transmis à Tools Central.</source>
+        <target state="translated">No. Reading, inventorying, cleaning, and recompressing are performed in the browser. The file, its name, and detected values are not transmitted to Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q2">
+      <segment>
+        <source>Pourquoi les fichiers DOCM, XLSM et PPTM sont-ils refusés ?</source>
+        <target state="translated">Why are DOCM, XLSM, and PPTM files rejected?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a2">
+      <segment>
+        <source>Ils peuvent contenir des macros et relations supplémentaires dont la conservation sûre demande un audit spécifique. L’outil limite volontairement sa promesse aux packages DOCX, XLSX et PPTX sans macros.</source>
+        <target state="translated">They may contain macros and additional relationships whose safe preservation requires specific auditing. The tool deliberately limits its promise to macro-free DOCX, XLSX, and PPTX packages.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q3">
+      <segment>
+        <source>Le document nettoyé est-il forcément anonyme ?</source>
+        <target state="translated">Is the cleaned document necessarily anonymous?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a3">
+      <segment>
+        <source>Non. Un nom peut rester dans le texte, les commentaires, les révisions, les notes, les images ou des objets intégrés. Le rapport couvre les propriétés standard annoncées, pas une anonymisation exhaustive du contenu.</source>
+        <target state="translated">No. A name may remain in the text, comments, revisions, notes, images, or embedded objects. The report covers the announced standard properties, not an exhaustive anonymization of the content.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_back">
+      <segment>
+        <source>Retour aux outils Open XML</source>
+        <target state="translated">Back to Open XML tools</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_title">
+      <segment>
+        <source>Supprimer les métadonnées d’un document Office</source>
+        <target state="translated">Remove metadata from an Office document</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_subtitle">
+      <segment>
+        <source>Analysez puis nettoyez les propriétés cachées d’un fichier DOCX, XLSX ou PPTX : auteurs, société, dates, application, champs personnalisés et aperçu intégré.</source>
+        <target state="translated">Analyze and then clean the hidden properties of a DOCX, XLSX, or PPTX file: authors, company, dates, application, custom fields, and embedded preview.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_privacy">
+      <segment>
+        <source>Aucun envoi : le document est contrôlé et reconstruit localement dans votre navigateur.</source>
+        <target state="translated">No sending: the document is checked and rebuilt locally in your browser.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Step 1</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_source_title">
+      <segment>
+        <source>Choisir le document</source>
+        <target state="translated">Choose the document</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick">
+      <segment>
+        <source>Sélectionner un fichier Office</source>
+        <target state="translated">Select an Office file</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick_help">
+      <segment>
+        <source>DOCX, XLSX ou PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · fichiers avec macros exclus</source>
+        <target state="translated">DOCX, XLSX, or PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · files with macros excluded</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">File</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Size</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Step 2</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_options_title">
+      <segment>
+        <source>Choisir les traces à retirer</source>
+        <target state="translated">Choose the traces to remove</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core">
+      <segment>
+        <source>Propriétés principales</source>
+        <target state="translated">Core properties</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core_help">
+      <segment>
+        <source>Auteur, titre, sujet, mots-clés, dates, révision et dernier éditeur.</source>
+        <target state="translated">Author, title, subject, keywords, dates, revision, and last editor.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Application and organization</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app_help">
+      <segment>
+        <source>Logiciel, version, société, responsable, modèle et temps d’édition.</source>
+        <target state="translated">Software, version, company, responsible, template, and editing time.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom">
+      <segment>
+        <source>Propriétés personnalisées</source>
+        <target state="translated">Custom properties</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom_help">
+      <segment>
+        <source>Champs ajoutés par une entreprise, un modèle ou un flux documentaire.</source>
+        <target state="translated">Fields added by a company, template, or document flow.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Embedded preview</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail_help">
+      <segment>
+        <source>Miniature du document parfois conservée dans le package Office.</source>
+        <target state="translated">Thumbnail of the document sometimes retained in the Office package.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_clean">
+      <segment>
+        <source>Analyser et nettoyer</source>
+        <target state="translated">Analyze and clean</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Reset</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_processing">
+      <segment>
+        <source>Analyse et reconstruction locales…</source>
+        <target state="translated">Local analysis and reconstruction…</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Cancel</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Step 3</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_result_title">
+      <segment>
+        <source>Document nettoyé et rapport prêt</source>
+        <target state="translated">Cleaned document and report ready</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_download">
+      <segment>
+        <source>Télécharger le document nettoyé</source>
+        <target state="translated">Download the cleaned document</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_detected">
+      <segment>
+        <source>Avant : éléments détectés</source>
+        <target state="translated">Before: detected items</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_removed">
+      <segment>
+        <source>Retirés ou neutralisés</source>
+        <target state="translated">Removed or neutralized</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_remaining">
+      <segment>
+        <source>Après : éléments conservés</source>
+        <target state="translated">After: retained items</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_output_size">
+      <segment>
+        <source>Fichier de sortie</source>
+        <target state="translated">Output file</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_none_found">
+      <segment>
+        <source>Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</source>
+        <target state="translated">No supported metadata value was found. The package has nonetheless been checked and rebuilt according to the chosen options.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_findings_label">
+      <segment>
+        <source>Métadonnées détectées</source>
+        <target state="translated">Detected metadata</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> élément(s) supplémentaire(s) ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> additional item(s) not displayed to preserve responsiveness.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">Guidance</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope">
+      <segment>
+        <source>Ce qui est nettoyé</source>
+        <target state="translated">What is cleaned</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope_text">
+      <segment>
+        <source>L’outil agit sur les propriétés standard du package OOXML et sur sa miniature. Le texte, les feuilles, les diapositives, les images et la mise en page sont conservés.</source>
+        <target state="translated">The tool acts on the standard properties of the OOXML package and its thumbnail. The text, sheets, slides, images, and layout are preserved.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits">
+      <segment>
+        <source>Ce qui reste à vérifier</source>
+        <target state="translated">What remains to be checked</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits_text">
+      <segment>
+        <source>Commentaires, auteurs de révisions, feuilles masquées, notes, macros et contenu visible ne sont pas supprimés. Inspectez le fichier final dans son application d’origine.</source>
+        <target state="translated">Comments, revision authors, hidden sheets, notes, macros, and visible content are not removed. Inspect the final file in its original application.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf">
+      <segment>
+        <source>Vous avez un PDF ?</source>
+        <target state="translated">Do you have a PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf_text">
+      <segment>
+        <source>Le format PDF utilise une structure différente.</source>
+        <target state="translated">The PDF format uses a different structure.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pdf_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF dédié.</source>
+        <target state="translated">Open the dedicated PDF cleaner.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_unknown_format">
+      <segment>
+        <source>Format inconnu</source>
+        <target state="translated">Unknown format</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_core">
+      <segment>
+        <source>Propriétés du document</source>
+        <target state="translated">Document properties</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_application">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Application and organization</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_custom">
+      <segment>
+        <source>Propriété personnalisée</source>
+        <target state="translated">Custom property</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Embedded preview</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_title">
+      <segment>
+        <source>Titre</source>
+        <target state="translated">Title</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_subject">
+      <segment>
+        <source>Sujet</source>
+        <target state="translated">Subject</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_creator">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">Author</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_keywords">
+      <segment>
+        <source>Mots-clés</source>
+        <target state="translated">Keywords</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Description</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_modified_by">
+      <segment>
+        <source>Dernière modification par</source>
+        <target state="translated">Last modified by</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_revision">
+      <segment>
+        <source>Révision</source>
+        <target state="translated">Revision</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_created">
+      <segment>
+        <source>Création</source>
+        <target state="translated">Created</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_modified">
+      <segment>
+        <source>Modification</source>
+        <target state="translated">Modified</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_printed">
+      <segment>
+        <source>Dernière impression</source>
+        <target state="translated">Last printed</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">Category</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_status">
+      <segment>
+        <source>État du contenu</source>
+        <target state="translated">Content status</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_identifier">
+      <segment>
+        <source>Identifiant</source>
+        <target state="translated">Identifier</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_language">
+      <segment>
+        <source>Langue</source>
+        <target state="translated">Language</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Version</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_application">
+      <segment>
+        <source>Application</source>
+        <target state="translated">Application</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_app_version">
+      <segment>
+        <source>Version de l’application</source>
+        <target state="translated">Application version</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_company">
+      <segment>
+        <source>Société</source>
+        <target state="translated">Company</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_manager">
+      <segment>
+        <source>Responsable</source>
+        <target state="translated">Manager</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_template">
+      <segment>
+        <source>Modèle</source>
+        <target state="translated">Template</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_hyperlink_base">
+      <segment>
+        <source>Base des liens</source>
+        <target state="translated">Hyperlink base</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_doc_security">
+      <segment>
+        <source>Indicateur de sécurité</source>
+        <target state="translated">Security indicator</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_total_time">
+      <segment>
+        <source>Temps d’édition</source>
+        <target state="translated">Editing time</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_presentation_format">
+      <segment>
+        <source>Format de présentation</source>
+        <target state="translated">Presentation format</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Embedded preview</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">The selected file is empty.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_file_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">The file exceeds the limit of <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_format">
+      <segment>
+        <source>Sélectionnez un fichier DOCX, XLSX ou PPTX sans macros.</source>
+        <target state="translated">Select a DOCX, XLSX, or PPTX file without macros.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_options">
+      <segment>
+        <source>Sélectionnez au moins une catégorie à nettoyer.</source>
+        <target state="translated">Select at least one category to clean.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_encrypted">
+      <segment>
+        <source>Le package contient une entrée chiffrée et ne peut pas être traité en sécurité.</source>
+        <target state="translated">The package contains an encrypted entry and cannot be processed safely.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_zip_variant">
+      <segment>
+        <source>Cette variante d’archive ZIP n’est pas prise en charge.</source>
+        <target state="translated">This ZIP archive variant is not supported.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_archive_budget">
+      <segment>
+        <source>Le document dépasse les limites de décompression sûre.</source>
+        <target state="translated">The document exceeds safe decompression limits.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_metadata_budget">
+      <segment>
+        <source>Une partie de métadonnées est anormalement volumineuse.</source>
+        <target state="translated">A portion of metadata is abnormally large.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_output">
+      <segment>
+        <source>Le document nettoyé dépasse la taille de sortie autorisée.</source>
+        <target state="translated">The cleaned document exceeds the allowed output size.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_unsafe">
+      <segment>
+        <source>La structure interne du document est ambiguë ou non sûre.</source>
+        <target state="translated">The internal structure of the document is ambiguous or unsafe.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_invalid">
+      <segment>
+        <source>Le fichier ne correspond pas à un document Office Open XML valide pour cette extension.</source>
+        <target state="translated">The file does not match a valid Office Open XML document for this extension.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_generic">
+      <segment>
+        <source>Impossible de nettoyer ce document. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Unable to clean this document. It may be damaged or use an unsupported feature.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_macro">
+      <segment>
+        <source>Le package contient réellement un projet de macros. Utilisez une copie sans macros avant le nettoyage.</source>
+        <target state="translated">The package actually contains a macro project. Use a copy without macros before cleaning.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_signature">
+      <segment>
+        <source>Le package contient une signature numérique qui serait invalidée par la reconstruction.</source>
+        <target state="translated">The package contains a digital signature that would be invalidated by reconstruction.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_type">
+      <segment>
+        <source>Type de contenu</source>
+        <target state="translated">Content type</target>
       </segment>
     </unit>
   </file>

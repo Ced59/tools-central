@@ -74781,14 +74781,14 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <segment>
-        <source>Nettoyer les métadonnées OOXML</source>
-        <target state="translated">清理OOXML元数据</target>
+        <source>Supprimer les métadonnées DOCX, XLSX et PPTX</source>
+        <target state="translated">删除 DOCX、XLSX 和 PPTX 元数据</target>
       </segment>
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <segment>
-        <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
-        <target state="translated">删除/标准化docProps（作者、公司、路径、历史）以共享更“隐私友好”的文件。</target>
+        <source>Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.</source>
+        <target state="translated">分析并本地清理 Office 文档中的作者、公司、日期、应用程序、自定义属性和嵌入预览.</target>
       </segment>
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
@@ -85049,6 +85049,696 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Annuler</source>
         <target state="translated">取消</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_title">
+      <segment>
+        <source>Retirer les informations personnelles cachées d’un document Office</source>
+        <target state="translated">从 Office 文档中删除隐藏的个人信息</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_lead">
+      <segment>
+        <source>Un fichier Word, Excel ou PowerPoint peut conserver le nom de ses auteurs, une société, des dates, le logiciel utilisé, des champs personnalisés ou une miniature. Cet outil inventorie ces traces, crée une copie nettoyée et affiche un rapport avant/après, sans téléversement.</source>
+        <target state="translated">Word、Excel 或 PowerPoint 文件可能保留其作者姓名、公司、日期、使用的软件、自定义字段或缩略图。此工具列出这些痕迹，创建一个清理后的副本，并在不上传的情况下显示前后报告.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_use_cases">
+      <segment>
+        <source>Quand nettoyer les métadonnées d’un DOCX, XLSX ou PPTX ?</source>
+        <target state="translated">何时清理 DOCX、XLSX 或 PPTX 的元数据？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_title">
+      <segment>
+        <source>Partager un document avec un client</source>
+        <target state="translated">与客户共享文档</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_text">
+      <segment>
+        <source>Retirez le nom du créateur, du dernier éditeur et de l’organisation avant d’envoyer un livrable produit depuis un poste ou un modèle interne.</source>
+        <target state="translated">在从内部工作站或模板发送交付物之前，删除创建者、最后编辑者和组织的名称.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_title">
+      <segment>
+        <source>Publier un fichier téléchargeable</source>
+        <target state="translated">发布可下载文件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_text">
+      <segment>
+        <source>Contrôlez les propriétés exposées par un document destiné à un site public, une candidature, un appel d’offres ou une base documentaire.</source>
+        <target state="translated">控制面向公共网站、申请、招标或文档库的文档所暴露的属性.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_title">
+      <segment>
+        <source>Vérifier un modèle réutilisé</source>
+        <target state="translated">检查重用的模板</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_text">
+      <segment>
+        <source>Repérez les champs personnalisés, chemins ou noms d’entreprise qui peuvent survivre lorsqu’un ancien fichier sert de point de départ.</source>
+        <target state="translated">识别可能在旧文件作为起点时保留的自定义字段、路径或公司名称.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method">
+      <segment>
+        <source>Comment fonctionne le nettoyage OOXML ?</source>
+        <target state="translated">OOXML 清理是如何工作的？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_1">
+      <segment>
+        <source>DOCX, XLSX et PPTX sont des archives ZIP contenant des fichiers XML. L’outil vérifie d’abord la table centrale, les chemins, les méthodes de compression, le nombre d’entrées et le volume décompressé avant de lire les propriétés.</source>
+        <target state="translated">DOCX、XLSX 和 PPTX 是包含 XML 文件的 ZIP 存档。该工具首先检查中央表、路径、压缩方法、条目数量和解压缩体积，然后读取属性.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_2">
+      <segment>
+        <source>Les parties qualifiées par les relations OPC officielles sont vidées de leurs valeurs tout en conservant leur racine, leur espace de noms et leur encodage. La relation de miniature est supprimée ; ses octets restent présents lorsqu’un autre contenu du document les utilise.</source>
+        <target state="translated">官方OPC关系所标识的部分在保留其根、命名空间和编码的同时被清空其值。缩略图关系被删除；当文档的其他内容使用它们时，其字节仍然存在。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_3">
+      <segment>
+        <source>Le package est ensuite recompressé dans un Web Worker. Téléchargez la copie, ouvrez-la dans Word, Excel ou PowerPoint et enregistrez-la seulement après avoir vérifié le contenu important.</source>
+        <target state="translated">然后在 Web Worker 中重新压缩包。下载副本，在 Word、Excel 或 PowerPoint 中打开，并在检查重要内容后再保存.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report">
+      <segment>
+        <source>Comprendre le rapport avant/après</source>
+        <target state="translated">理解前后报告</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_1">
+      <segment>
+        <source>« Détectés » compte les valeurs prises en charge trouvées avant modification : auteurs, dates, société, application, modèle, temps d’édition, propriétés personnalisées et aperçu.</source>
+        <target state="translated">“检测到”计数在修改前找到的支持值：作者、日期、公司、应用程序、模板、编辑时间、自定义属性和预览.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_2">
+      <segment>
+        <source>« Retirés ou neutralisés » correspond aux catégories cochées. Une catégorie laissée décochée apparaît dans les éléments conservés après traitement.</source>
+        <target state="translated">“已移除或中和”对应于选中的类别。未选中的类别在处理后出现在保留的项目中.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_3">
+      <segment>
+        <source>Une absence de résultat ne prouve pas qu’un document ne contient aucune donnée sensible : du texte visible, des commentaires ou des objets intégrés peuvent encore en révéler.</source>
+        <target state="translated">没有结果并不证明文档不包含任何敏感数据：可见文本、评论或嵌入对象仍可能揭示.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limits">
+      <segment>
+        <source>Formats, sécurité et limites</source>
+        <target state="translated">格式、安全性和限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_1">
+      <segment>
+        <source>Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Chaque partie XML inspectée est limitée à 2 Mio et une miniature officiellement déclarée à 25 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.</source>
+        <target state="translated">仅接受不带宏的DOCX、XLSX和PPTX格式，最大为50兆字节。每个检查的XML部分限制为2兆字节，官方声明的缩略图限制为25兆字节。ZIP64、跨盘、加密、模糊或具有危险压缩比的档案在提取前将被拒绝。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_2">
+      <segment>
+        <source>L’outil ne retire pas les commentaires, auteurs de révisions, notes de présentation, feuilles masquées, contenu visible, liens, objets incorporés, signatures numériques ni protections.</source>
+        <target state="translated">该工具不删除评论、修订作者、演示注释、隐藏工作表、可见内容、链接、嵌入对象、数字签名或保护.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_3">
+      <segment>
+        <source>La reconstruction modifie les octets et invalide une éventuelle signature du package. Conservez toujours l’original et vérifiez la copie dans l’application Office utilisée par vos destinataires.</source>
+        <target state="translated">重建会修改字节并使包的任何签名无效。始终保留原件，并在您的收件人使用的 Office 应用程序中检查副本.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_faq">
+      <segment>
+        <source>Questions fréquentes sur les métadonnées Office</source>
+        <target state="translated">关于 Office 元数据的常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q1">
+      <segment>
+        <source>Le contenu de mon document est-il envoyé au serveur ?</source>
+        <target state="translated">我的文档内容会发送到服务器吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a1">
+      <segment>
+        <source>Non. La lecture, l’inventaire, le nettoyage et la recompression s’exécutent dans le navigateur. Le fichier, son nom et les valeurs détectées ne sont pas transmis à Tools Central.</source>
+        <target state="translated">不。读取、清点、清理和重新压缩在浏览器中执行。文件、其名称和检测到的值不会传输到 Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q2">
+      <segment>
+        <source>Pourquoi les fichiers DOCM, XLSM et PPTM sont-ils refusés ?</source>
+        <target state="translated">为什么 DOCM、XLSM 和 PPTM 文件被拒绝？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a2">
+      <segment>
+        <source>Ils peuvent contenir des macros et relations supplémentaires dont la conservation sûre demande un audit spécifique. L’outil limite volontairement sa promesse aux packages DOCX, XLSX et PPTX sans macros.</source>
+        <target state="translated">它们可能包含宏和额外的关系，安全保留需要特定审计。该工具故意将其承诺限制在无宏的 DOCX、XLSX 和 PPTX 包中.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q3">
+      <segment>
+        <source>Le document nettoyé est-il forcément anonyme ?</source>
+        <target state="translated">清理后的文档一定是匿名的吗？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a3">
+      <segment>
+        <source>Non. Un nom peut rester dans le texte, les commentaires, les révisions, les notes, les images ou des objets intégrés. Le rapport couvre les propriétés standard annoncées, pas une anonymisation exhaustive du contenu.</source>
+        <target state="translated">不。名称可能仍然出现在文本、评论、修订、注释、图像或嵌入对象中。报告涵盖公告的标准属性，而不是内容的全面匿名化.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_back">
+      <segment>
+        <source>Retour aux outils Open XML</source>
+        <target state="translated">返回 Open XML 工具</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_title">
+      <segment>
+        <source>Supprimer les métadonnées d’un document Office</source>
+        <target state="translated">删除 Office 文档的元数据</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_subtitle">
+      <segment>
+        <source>Analysez puis nettoyez les propriétés cachées d’un fichier DOCX, XLSX ou PPTX : auteurs, société, dates, application, champs personnalisés et aperçu intégré.</source>
+        <target state="translated">分析并清理 DOCX、XLSX 或 PPTX 文件的隐藏属性：作者、公司、日期、应用程序、自定义字段和嵌入预览.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_privacy">
+      <segment>
+        <source>Aucun envoi : le document est contrôlé et reconstruit localement dans votre navigateur.</source>
+        <target state="translated">无发送：文档在您的浏览器中本地检查和重建.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">步骤 1</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_source_title">
+      <segment>
+        <source>Choisir le document</source>
+        <target state="translated">选择文档</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick">
+      <segment>
+        <source>Sélectionner un fichier Office</source>
+        <target state="translated">选择 Office 文件</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick_help">
+      <segment>
+        <source>DOCX, XLSX ou PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · fichiers avec macros exclus</source>
+        <target state="translated">DOCX、XLSX 或 PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> 最大 · 排除带宏的文件</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">文件</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">大小</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">步骤 2</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_options_title">
+      <segment>
+        <source>Choisir les traces à retirer</source>
+        <target state="translated">选择要删除的痕迹</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core">
+      <segment>
+        <source>Propriétés principales</source>
+        <target state="translated">主要属性</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core_help">
+      <segment>
+        <source>Auteur, titre, sujet, mots-clés, dates, révision et dernier éditeur.</source>
+        <target state="translated">作者、标题、主题、关键词、日期、修订和最后编辑者。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">应用程序和组织</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app_help">
+      <segment>
+        <source>Logiciel, version, société, responsable, modèle et temps d’édition.</source>
+        <target state="translated">软件、版本、公司、负责人、模板和编辑时间。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom">
+      <segment>
+        <source>Propriétés personnalisées</source>
+        <target state="translated">自定义属性</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom_help">
+      <segment>
+        <source>Champs ajoutés par une entreprise, un modèle ou un flux documentaire.</source>
+        <target state="translated">由公司、模板或文档流添加的字段。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">嵌入预览</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail_help">
+      <segment>
+        <source>Miniature du document parfois conservée dans le package Office.</source>
+        <target state="translated">文档的缩略图，有时保留在 Office 包中。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_clean">
+      <segment>
+        <source>Analyser et nettoyer</source>
+        <target state="translated">分析和清理</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_processing">
+      <segment>
+        <source>Analyse et reconstruction locales…</source>
+        <target state="translated">本地分析和重建…</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">取消</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">步骤 3</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_result_title">
+      <segment>
+        <source>Document nettoyé et rapport prêt</source>
+        <target state="translated">已清理文档和报告准备就绪</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_download">
+      <segment>
+        <source>Télécharger le document nettoyé</source>
+        <target state="translated">下载已清理的文档</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_detected">
+      <segment>
+        <source>Avant : éléments détectés</source>
+        <target state="translated">之前：检测到的元素</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_removed">
+      <segment>
+        <source>Retirés ou neutralisés</source>
+        <target state="translated">已移除或中和</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_remaining">
+      <segment>
+        <source>Après : éléments conservés</source>
+        <target state="translated">之后：保留的元素</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_output_size">
+      <segment>
+        <source>Fichier de sortie</source>
+        <target state="translated">输出文件</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_none_found">
+      <segment>
+        <source>Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</source>
+        <target state="translated">未找到任何受支持的元数据值。尽管如此，包仍已根据所选选项进行了检查和重建。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_findings_label">
+      <segment>
+        <source>Métadonnées détectées</source>
+        <target state="translated">检测到的元数据</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> élément(s) supplémentaire(s) ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> 个额外元素未显示以保持响应性。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">指导</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope">
+      <segment>
+        <source>Ce qui est nettoyé</source>
+        <target state="translated">清理的内容</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope_text">
+      <segment>
+        <source>L’outil agit sur les propriétés standard du package OOXML et sur sa miniature. Le texte, les feuilles, les diapositives, les images et la mise en page sont conservés.</source>
+        <target state="translated">该工具作用于 OOXML 包的标准属性及其缩略图。文本、工作表、幻灯片、图像和布局将被保留。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits">
+      <segment>
+        <source>Ce qui reste à vérifier</source>
+        <target state="translated">待检查的内容</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits_text">
+      <segment>
+        <source>Commentaires, auteurs de révisions, feuilles masquées, notes, macros et contenu visible ne sont pas supprimés. Inspectez le fichier final dans son application d’origine.</source>
+        <target state="translated">评论、修订作者、隐藏工作表、注释、宏和可见内容不会被删除。请在其原始应用程序中检查最终文件。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf">
+      <segment>
+        <source>Vous avez un PDF ?</source>
+        <target state="translated">您有 PDF 吗？</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf_text">
+      <segment>
+        <source>Le format PDF utilise une structure différente.</source>
+        <target state="translated">PDF 格式使用不同的结构。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pdf_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF dédié.</source>
+        <target state="translated">打开专用 PDF 清理工具。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_unknown_format">
+      <segment>
+        <source>Format inconnu</source>
+        <target state="translated">未知格式</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_core">
+      <segment>
+        <source>Propriétés du document</source>
+        <target state="translated">文档属性</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_application">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">应用程序和组织</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_custom">
+      <segment>
+        <source>Propriété personnalisée</source>
+        <target state="translated">自定义属性</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">嵌入预览</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_title">
+      <segment>
+        <source>Titre</source>
+        <target state="translated">标题</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_subject">
+      <segment>
+        <source>Sujet</source>
+        <target state="translated">主题</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_creator">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">作者</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_keywords">
+      <segment>
+        <source>Mots-clés</source>
+        <target state="translated">关键词</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">描述</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_modified_by">
+      <segment>
+        <source>Dernière modification par</source>
+        <target state="translated">最后修改者</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_revision">
+      <segment>
+        <source>Révision</source>
+        <target state="translated">修订版</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_created">
+      <segment>
+        <source>Création</source>
+        <target state="translated">创建时间</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_modified">
+      <segment>
+        <source>Modification</source>
+        <target state="translated">修改时间</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_printed">
+      <segment>
+        <source>Dernière impression</source>
+        <target state="translated">最后打印时间</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">类别</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_status">
+      <segment>
+        <source>État du contenu</source>
+        <target state="translated">内容状态</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_identifier">
+      <segment>
+        <source>Identifiant</source>
+        <target state="translated">标识符</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_language">
+      <segment>
+        <source>Langue</source>
+        <target state="translated">语言</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">版本</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_application">
+      <segment>
+        <source>Application</source>
+        <target state="translated">应用程序</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_app_version">
+      <segment>
+        <source>Version de l’application</source>
+        <target state="translated">应用程序版本</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_company">
+      <segment>
+        <source>Société</source>
+        <target state="translated">公司</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_manager">
+      <segment>
+        <source>Responsable</source>
+        <target state="translated">负责人</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_template">
+      <segment>
+        <source>Modèle</source>
+        <target state="translated">模板</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_hyperlink_base">
+      <segment>
+        <source>Base des liens</source>
+        <target state="translated">链接基础</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_doc_security">
+      <segment>
+        <source>Indicateur de sécurité</source>
+        <target state="translated">安全指示</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_total_time">
+      <segment>
+        <source>Temps d’édition</source>
+        <target state="translated">编辑时间</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_presentation_format">
+      <segment>
+        <source>Format de présentation</source>
+        <target state="translated">演示格式</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">缩略图</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">所选文件为空。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_file_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">文件超过限制 <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_format">
+      <segment>
+        <source>Sélectionnez un fichier DOCX, XLSX ou PPTX sans macros.</source>
+        <target state="translated">请选择一个不带宏的 DOCX、XLSX 或 PPTX 文件。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_options">
+      <segment>
+        <source>Sélectionnez au moins une catégorie à nettoyer.</source>
+        <target state="translated">请至少选择一个要清理的类别。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_encrypted">
+      <segment>
+        <source>Le package contient une entrée chiffrée et ne peut pas être traité en sécurité.</source>
+        <target state="translated">该包包含加密条目，无法安全处理。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_zip_variant">
+      <segment>
+        <source>Cette variante d’archive ZIP n’est pas prise en charge.</source>
+        <target state="translated">此 ZIP 存档变体不受支持。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_archive_budget">
+      <segment>
+        <source>Le document dépasse les limites de décompression sûre.</source>
+        <target state="translated">文档超出了安全解压缩的限制。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_metadata_budget">
+      <segment>
+        <source>Une partie de métadonnées est anormalement volumineuse.</source>
+        <target state="translated">部分元数据异常庞大。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_output">
+      <segment>
+        <source>Le document nettoyé dépasse la taille de sortie autorisée.</source>
+        <target state="translated">清理后的文档超出了允许的输出大小。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_unsafe">
+      <segment>
+        <source>La structure interne du document est ambiguë ou non sûre.</source>
+        <target state="translated">文档的内部结构模糊或不安全。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_invalid">
+      <segment>
+        <source>Le fichier ne correspond pas à un document Office Open XML valide pour cette extension.</source>
+        <target state="translated">该文件不符合此扩展名的有效 Office Open XML 文档。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_generic">
+      <segment>
+        <source>Impossible de nettoyer ce document. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">无法清理此文档。它可能已损坏或使用了不受支持的功能。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_macro">
+      <segment>
+        <source>Le package contient réellement un projet de macros. Utilisez une copie sans macros avant le nettoyage.</source>
+        <target state="translated">该包确实包含一个宏项目。在清理之前，请使用一个不带宏的副本。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_signature">
+      <segment>
+        <source>Le package contient une signature numérique qui serait invalidée par la reconstruction.</source>
+        <target state="translated">该包包含一个数字签名，重建将使其失效。</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_type">
+      <segment>
+        <source>Type de contenu</source>
+        <target state="translated">内容类型</target>
       </segment>
     </unit>
   </file>

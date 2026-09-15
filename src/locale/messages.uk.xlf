@@ -74753,14 +74753,14 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <segment>
-        <source>Nettoyer les métadonnées OOXML</source>
-        <target state="translated">Очищення метаданих OOXML</target>
+        <source>Supprimer les métadonnées DOCX, XLSX et PPTX</source>
+        <target state="translated">Видалити метадані DOCX, XLSX та PPTX</target>
       </segment>
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <segment>
-        <source>Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus &quot;privacy-friendly&quot;.</source>
-        <target state="translated">Видалення/нормалізація docProps (автор, компанія, шляхи, історії), щоб поділитися файлом, більш "дружнім до конфіденційності".</target>
+        <source>Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.</source>
+        <target state="translated">Проаналізувати та очистити локально авторів, компанію, дати, програму, користувацькі властивості та вбудований ескіз документа Office.</target>
       </segment>
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
@@ -85021,6 +85021,696 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Annuler</source>
         <target state="translated">Скасувати</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_title">
+      <segment>
+        <source>Retirer les informations personnelles cachées d’un document Office</source>
+        <target state="translated">Видалити приховану особисту інформацію з документа Office</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_lead">
+      <segment>
+        <source>Un fichier Word, Excel ou PowerPoint peut conserver le nom de ses auteurs, une société, des dates, le logiciel utilisé, des champs personnalisés ou une miniature. Cet outil inventorie ces traces, crée une copie nettoyée et affiche un rapport avant/après, sans téléversement.</source>
+        <target state="translated">Файл Word, Excel або PowerPoint може зберігати ім'я своїх авторів, компанію, дати, використане програмне забезпечення, користувацькі поля або ескіз. Цей інструмент інвентаризує ці сліди, створює очищену копію та відображає звіт до/після, без завантаження.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_use_cases">
+      <segment>
+        <source>Quand nettoyer les métadonnées d’un DOCX, XLSX ou PPTX ?</source>
+        <target state="translated">Коли очищати метадані DOCX, XLSX або PPTX?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_title">
+      <segment>
+        <source>Partager un document avec un client</source>
+        <target state="translated">Поділитися документом з клієнтом</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc1_text">
+      <segment>
+        <source>Retirez le nom du créateur, du dernier éditeur et de l’organisation avant d’envoyer un livrable produit depuis un poste ou un modèle interne.</source>
+        <target state="translated">Видаліть ім'я автора, останнього редактора та організації перед відправленням готового продукту з робочого місця або внутрішнього шаблону.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_title">
+      <segment>
+        <source>Publier un fichier téléchargeable</source>
+        <target state="translated">Опублікувати завантажуваний файл</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc2_text">
+      <segment>
+        <source>Contrôlez les propriétés exposées par un document destiné à un site public, une candidature, un appel d’offres ou une base documentaire.</source>
+        <target state="translated">Контролюйте властивості, які відкриває документ, призначений для публічного сайту, заявки, тендеру або документальної бази.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_title">
+      <segment>
+        <source>Vérifier un modèle réutilisé</source>
+        <target state="translated">Перевірити повторно використаний шаблон</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_uc3_text">
+      <segment>
+        <source>Repérez les champs personnalisés, chemins ou noms d’entreprise qui peuvent survivre lorsqu’un ancien fichier sert de point de départ.</source>
+        <target state="translated">Знайдіть користувацькі поля, шляхи або назви компаній, які можуть зберігатися, коли старий файл використовується як відправна точка.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method">
+      <segment>
+        <source>Comment fonctionne le nettoyage OOXML ?</source>
+        <target state="translated">Як працює очищення OOXML?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_1">
+      <segment>
+        <source>DOCX, XLSX et PPTX sont des archives ZIP contenant des fichiers XML. L’outil vérifie d’abord la table centrale, les chemins, les méthodes de compression, le nombre d’entrées et le volume décompressé avant de lire les propriétés.</source>
+        <target state="translated">DOCX, XLSX та PPTX є ZIP-архівами, що містять XML-файли. Інструмент спочатку перевіряє центральну таблицю, шляхи, методи стиснення, кількість записів та обсяг після розпакування перед читанням властивостей.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_2">
+      <segment>
+        <source>Les parties qualifiées par les relations OPC officielles sont vidées de leurs valeurs tout en conservant leur racine, leur espace de noms et leur encodage. La relation de miniature est supprimée ; ses octets restent présents lorsqu’un autre contenu du document les utilise.</source>
+        <target state="translated">Офіційно кваліфіковані частини за відносинами OPC очищаються від своїх значень, зберігаючи при цьому їх корінь, простір імен та кодування. Відношення мініатюри видаляється; її байти залишаються присутніми, коли інший вміст документа їх використовує.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_method_3">
+      <segment>
+        <source>Le package est ensuite recompressé dans un Web Worker. Téléchargez la copie, ouvrez-la dans Word, Excel ou PowerPoint et enregistrez-la seulement après avoir vérifié le contenu important.</source>
+        <target state="translated">Пакет потім повторно стискається в Web Worker. Завантажте копію, відкрийте її в Word, Excel або PowerPoint і збережіть лише після перевірки важливого вмісту.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report">
+      <segment>
+        <source>Comprendre le rapport avant/après</source>
+        <target state="translated">Зрозуміти звіт до/після</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_1">
+      <segment>
+        <source>« Détectés » compte les valeurs prises en charge trouvées avant modification : auteurs, dates, société, application, modèle, temps d’édition, propriétés personnalisées et aperçu.</source>
+        <target state="translated">« Виявлено » підраховує знайдені підтримувані значення до зміни: автори, дати, компанія, програма, шаблон, час редагування, користувацькі властивості та ескіз.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_2">
+      <segment>
+        <source>« Retirés ou neutralisés » correspond aux catégories cochées. Une catégorie laissée décochée apparaît dans les éléments conservés après traitement.</source>
+        <target state="translated">« Видалено або нейтралізовано » відповідає вибраним категоріям. Категорія, залишена без позначки, з'являється в збережених елементах після обробки.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_report_3">
+      <segment>
+        <source>Une absence de résultat ne prouve pas qu’un document ne contient aucune donnée sensible : du texte visible, des commentaires ou des objets intégrés peuvent encore en révéler.</source>
+        <target state="translated">Відсутність результату не доводить, що документ не містить чутливих даних: видимий текст, коментарі або вбудовані об'єкти все ще можуть їх розкрити.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limits">
+      <segment>
+        <source>Formats, sécurité et limites</source>
+        <target state="translated">Формати, безпека та обмеження</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_1">
+      <segment>
+        <source>Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Chaque partie XML inspectée est limitée à 2 Mio et une miniature officiellement déclarée à 25 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.</source>
+        <target state="translated">Приймаються лише формати без макросів DOCX, XLSX та PPTX, до 50 Міо. Кожна перевірена частина XML обмежена 2 Міо, а офіційно заявлена мініатюра — 25 Міо. Архіви ZIP64, багатодискові, зашифровані, неоднозначні або з небезпечним коефіцієнтом стиснення відхиляються до витягання.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_2">
+      <segment>
+        <source>L’outil ne retire pas les commentaires, auteurs de révisions, notes de présentation, feuilles masquées, contenu visible, liens, objets incorporés, signatures numériques ni protections.</source>
+        <target state="translated">Інструмент не видаляє коментарі, авторів рецензій, нотатки, приховані аркуші, видимий вміст, посилання, вбудовані об'єкти, цифрові підписи або захист.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_limit_3">
+      <segment>
+        <source>La reconstruction modifie les octets et invalide une éventuelle signature du package. Conservez toujours l’original et vérifiez la copie dans l’application Office utilisée par vos destinataires.</source>
+        <target state="translated">Відновлення змінює байти та робить недійсним можливий підпис пакета. Завжди зберігайте оригінал і перевіряйте копію в програмі Office, яку використовують ваші отримувачі.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_faq">
+      <segment>
+        <source>Questions fréquentes sur les métadonnées Office</source>
+        <target state="translated">Поширені запитання про метадані Office</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q1">
+      <segment>
+        <source>Le contenu de mon document est-il envoyé au serveur ?</source>
+        <target state="translated">Чи надсилається вміст мого документа на сервер?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a1">
+      <segment>
+        <source>Non. La lecture, l’inventaire, le nettoyage et la recompression s’exécutent dans le navigateur. Le fichier, son nom et les valeurs détectées ne sont pas transmis à Tools Central.</source>
+        <target state="translated">Ні. Читання, інвентаризація, очищення та повторне стиснення виконуються в браузері. Файл, його ім'я та виявлені значення не передаються в Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q2">
+      <segment>
+        <source>Pourquoi les fichiers DOCM, XLSM et PPTM sont-ils refusés ?</source>
+        <target state="translated">Чому файли DOCM, XLSM та PPTM відхиляються?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a2">
+      <segment>
+        <source>Ils peuvent contenir des macros et relations supplémentaires dont la conservation sûre demande un audit spécifique. L’outil limite volontairement sa promesse aux packages DOCX, XLSX et PPTX sans macros.</source>
+        <target state="translated">Вони можуть містити макроси та додаткові зв'язки, збереження яких вимагає специфічного аудиту. Інструмент свідомо обмежує свою обіцянку пакетами DOCX, XLSX та PPTX без макросів.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_q3">
+      <segment>
+        <source>Le document nettoyé est-il forcément anonyme ?</source>
+        <target state="translated">Чи обов'язково очищений документ анонімний?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_ooxml_metadata_a3">
+      <segment>
+        <source>Non. Un nom peut rester dans le texte, les commentaires, les révisions, les notes, les images ou des objets intégrés. Le rapport couvre les propriétés standard annoncées, pas une anonymisation exhaustive du contenu.</source>
+        <target state="translated">Ні. Ім'я може залишитися в тексті, коментарях, рецензіях, нотатках, зображеннях або вбудованих об'єктах. Звіт охоплює стандартні оголошені властивості, а не повну анонімізацію вмісту.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_back">
+      <segment>
+        <source>Retour aux outils Open XML</source>
+        <target state="translated">Повернутися до інструментів Open XML</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_title">
+      <segment>
+        <source>Supprimer les métadonnées d’un document Office</source>
+        <target state="translated">Видалити метадані з документа Office</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_subtitle">
+      <segment>
+        <source>Analysez puis nettoyez les propriétés cachées d’un fichier DOCX, XLSX ou PPTX : auteurs, société, dates, application, champs personnalisés et aperçu intégré.</source>
+        <target state="translated">Проаналізуйте та очистіть приховані властивості файлу DOCX, XLSX або PPTX: автори, компанія, дати, програма, користувацькі поля та вбудований ескіз.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_privacy">
+      <segment>
+        <source>Aucun envoi : le document est contrôlé et reconstruit localement dans votre navigateur.</source>
+        <target state="translated">Без відправки: документ перевіряється та відновлюється локально у вашому браузері.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Крок 1</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_source_title">
+      <segment>
+        <source>Choisir le document</source>
+        <target state="translated">Вибрати документ</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick">
+      <segment>
+        <source>Sélectionner un fichier Office</source>
+        <target state="translated">Вибрати файл Office</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pick_help">
+      <segment>
+        <source>DOCX, XLSX ou PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · fichiers avec macros exclus</source>
+        <target state="translated">DOCX, XLSX або PPTX · <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> максимум · файли з макросами виключені</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Файл</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Розмір</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Крок 2</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_options_title">
+      <segment>
+        <source>Choisir les traces à retirer</source>
+        <target state="translated">Вибрати сліди для видалення</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core">
+      <segment>
+        <source>Propriétés principales</source>
+        <target state="translated">Основні властивості</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_core_help">
+      <segment>
+        <source>Auteur, titre, sujet, mots-clés, dates, révision et dernier éditeur.</source>
+        <target state="translated">Автор, заголовок, тема, ключові слова, дати, ревізія та останній редактор.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Додаток та організація</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_app_help">
+      <segment>
+        <source>Logiciel, version, société, responsable, modèle et temps d’édition.</source>
+        <target state="translated">Програмне забезпечення, версія, компанія, відповідальний, шаблон та час редагування.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom">
+      <segment>
+        <source>Propriétés personnalisées</source>
+        <target state="translated">Користувацькі властивості</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_custom_help">
+      <segment>
+        <source>Champs ajoutés par une entreprise, un modèle ou un flux documentaire.</source>
+        <target state="translated">Поля, додані компанією, шаблоном або документальним потоком.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Вбудоване ескіз</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_option_thumbnail_help">
+      <segment>
+        <source>Miniature du document parfois conservée dans le package Office.</source>
+        <target state="translated">Мініатюра документа, яка іноді зберігається в пакеті Office.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_clean">
+      <segment>
+        <source>Analyser et nettoyer</source>
+        <target state="translated">Аналізувати та очищати</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Скинути</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_processing">
+      <segment>
+        <source>Analyse et reconstruction locales…</source>
+        <target state="translated">Аналіз та локальна реконструкція…</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Скасувати</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_step_three">
+      <segment>
+        <source>Étape 3</source>
+        <target state="translated">Крок 3</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_result_title">
+      <segment>
+        <source>Document nettoyé et rapport prêt</source>
+        <target state="translated">Очищений документ та готовий звіт</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_download">
+      <segment>
+        <source>Télécharger le document nettoyé</source>
+        <target state="translated">Завантажити очищений документ</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_detected">
+      <segment>
+        <source>Avant : éléments détectés</source>
+        <target state="translated">Перед: виявлені елементи</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_removed">
+      <segment>
+        <source>Retirés ou neutralisés</source>
+        <target state="translated">Видалені або нейтралізовані</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_remaining">
+      <segment>
+        <source>Après : éléments conservés</source>
+        <target state="translated">Після: збережені елементи</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_output_size">
+      <segment>
+        <source>Fichier de sortie</source>
+        <target state="translated">Файл виходу</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_none_found">
+      <segment>
+        <source>Aucune valeur de métadonnée prise en charge n’a été trouvée. Le package a néanmoins été vérifié et reconstruit selon les options choisies.</source>
+        <target state="translated">Не знайдено жодного підтримуваного значення метаданих. Пакет все ж був перевірений та реконструйований відповідно до вибраних параметрів.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_findings_label">
+      <segment>
+        <source>Métadonnées détectées</source>
+        <target state="translated">Виявлені метадані</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> élément(s) supplémentaire(s) ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ cleaned.report.truncatedFindingCount }}"/> додатковий(і) елемент(и) не відображаються для збереження чутливості.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guidance">
+      <segment>
+        <source>Conseils</source>
+        <target state="translated">Поради</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope">
+      <segment>
+        <source>Ce qui est nettoyé</source>
+        <target state="translated">Що очищається</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_scope_text">
+      <segment>
+        <source>L’outil agit sur les propriétés standard du package OOXML et sur sa miniature. Le texte, les feuilles, les diapositives, les images et la mise en page sont conservés.</source>
+        <target state="translated">Інструмент діє на стандартні властивості пакету OOXML та його ескіз. Текст, аркуші, слайди, зображення та макет зберігаються.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits">
+      <segment>
+        <source>Ce qui reste à vérifier</source>
+        <target state="translated">Що ще потрібно перевірити</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_limits_text">
+      <segment>
+        <source>Commentaires, auteurs de révisions, feuilles masquées, notes, macros et contenu visible ne sont pas supprimés. Inspectez le fichier final dans son application d’origine.</source>
+        <target state="translated">Коментарі, автори ревізій, приховані аркуші, примітки, макроси та видимий вміст не видаляються. Перевірте фінальний файл у його оригінальному додатку.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf">
+      <segment>
+        <source>Vous avez un PDF ?</source>
+        <target state="translated">У вас є PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_guide_pdf_text">
+      <segment>
+        <source>Le format PDF utilise une structure différente.</source>
+        <target state="translated">Формат PDF використовує іншу структуру.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_pdf_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF dédié.</source>
+        <target state="translated">Відкрити спеціалізований PDF-очищувач.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_unknown_format">
+      <segment>
+        <source>Format inconnu</source>
+        <target state="translated">Невідомий формат</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_core">
+      <segment>
+        <source>Propriétés du document</source>
+        <target state="translated">Властивості документа</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_application">
+      <segment>
+        <source>Application et organisation</source>
+        <target state="translated">Додаток та організація</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_custom">
+      <segment>
+        <source>Propriété personnalisée</source>
+        <target state="translated">Користувацька властивість</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_scope_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Вбудоване ескіз</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_title">
+      <segment>
+        <source>Titre</source>
+        <target state="translated">Заголовок</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_subject">
+      <segment>
+        <source>Sujet</source>
+        <target state="translated">Тема</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_creator">
+      <segment>
+        <source>Auteur</source>
+        <target state="translated">Автор</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_keywords">
+      <segment>
+        <source>Mots-clés</source>
+        <target state="translated">Ключові слова</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_description">
+      <segment>
+        <source>Description</source>
+        <target state="translated">Опис</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_modified_by">
+      <segment>
+        <source>Dernière modification par</source>
+        <target state="translated">Останнє редагування</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_revision">
+      <segment>
+        <source>Révision</source>
+        <target state="translated">Ревізія</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_created">
+      <segment>
+        <source>Création</source>
+        <target state="translated">Створення</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_modified">
+      <segment>
+        <source>Modification</source>
+        <target state="translated">Редагування</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_last_printed">
+      <segment>
+        <source>Dernière impression</source>
+        <target state="translated">Останнє друкування</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_category">
+      <segment>
+        <source>Catégorie</source>
+        <target state="translated">Категорія</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_status">
+      <segment>
+        <source>État du contenu</source>
+        <target state="translated">Статус вмісту</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_identifier">
+      <segment>
+        <source>Identifiant</source>
+        <target state="translated">Ідентифікатор</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_language">
+      <segment>
+        <source>Langue</source>
+        <target state="translated">Мова</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_version">
+      <segment>
+        <source>Version</source>
+        <target state="translated">Версія</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_application">
+      <segment>
+        <source>Application</source>
+        <target state="translated">Застосунок</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_app_version">
+      <segment>
+        <source>Version de l’application</source>
+        <target state="translated">Версія застосунку</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_company">
+      <segment>
+        <source>Société</source>
+        <target state="translated">Компанія</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_manager">
+      <segment>
+        <source>Responsable</source>
+        <target state="translated">Менеджер</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_template">
+      <segment>
+        <source>Modèle</source>
+        <target state="translated">Шаблон</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_hyperlink_base">
+      <segment>
+        <source>Base des liens</source>
+        <target state="translated">База гіперпосилань</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_doc_security">
+      <segment>
+        <source>Indicateur de sécurité</source>
+        <target state="translated">Індикатор безпеки</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_total_time">
+      <segment>
+        <source>Temps d’édition</source>
+        <target state="translated">Час редагування</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_presentation_format">
+      <segment>
+        <source>Format de présentation</source>
+        <target state="translated">Формат презентації</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_thumbnail">
+      <segment>
+        <source>Aperçu intégré</source>
+        <target state="translated">Вбудоване ескізне зображення</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Вибраний файл порожній.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_file_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Файл перевищує ліміт <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_format">
+      <segment>
+        <source>Sélectionnez un fichier DOCX, XLSX ou PPTX sans macros.</source>
+        <target state="translated">Виберіть файл DOCX, XLSX або PPTX без макросів.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_options">
+      <segment>
+        <source>Sélectionnez au moins une catégorie à nettoyer.</source>
+        <target state="translated">Виберіть принаймні одну категорію для очищення.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_encrypted">
+      <segment>
+        <source>Le package contient une entrée chiffrée et ne peut pas être traité en sécurité.</source>
+        <target state="translated">Пакет містить зашифровану вхідну інформацію і не може бути оброблений безпечно.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_zip_variant">
+      <segment>
+        <source>Cette variante d’archive ZIP n’est pas prise en charge.</source>
+        <target state="translated">Цей варіант ZIP-архіву не підтримується.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_archive_budget">
+      <segment>
+        <source>Le document dépasse les limites de décompression sûre.</source>
+        <target state="translated">Документ перевищує межі безпечного розпакування.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_metadata_budget">
+      <segment>
+        <source>Une partie de métadonnées est anormalement volumineuse.</source>
+        <target state="translated">Частина метаданих є аномально великою.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_output">
+      <segment>
+        <source>Le document nettoyé dépasse la taille de sortie autorisée.</source>
+        <target state="translated">Очищений документ перевищує дозволений розмір виходу.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_unsafe">
+      <segment>
+        <source>La structure interne du document est ambiguë ou non sûre.</source>
+        <target state="translated">Внутрішня структура документа є неоднозначною або небезпечною.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_invalid">
+      <segment>
+        <source>Le fichier ne correspond pas à un document Office Open XML valide pour cette extension.</source>
+        <target state="translated">Файл не відповідає дійсному документу Office Open XML для цього розширення.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_generic">
+      <segment>
+        <source>Impossible de nettoyer ce document. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Не вдалося очистити цей документ. Він може бути пошкоджений або використовувати непідтримувану функцію.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_macro">
+      <segment>
+        <source>Le package contient réellement un projet de macros. Utilisez une copie sans macros avant le nettoyage.</source>
+        <target state="translated">Пакет насправді містить проект макросів. Використовуйте копію без макросів перед очищенням.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_error_signature">
+      <segment>
+        <source>Le package contient une signature numérique qui serait invalidée par la reconstruction.</source>
+        <target state="translated">Пакет містить цифровий підпис, який буде недійсним після реконструкції.</target>
+      </segment>
+    </unit>
+    <unit id="ooxml_metadata_field_content_type">
+      <segment>
+        <source>Type de contenu</source>
+        <target state="translated">Тип вмісту</target>
       </segment>
     </unit>
   </file>

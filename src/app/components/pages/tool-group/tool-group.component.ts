@@ -139,6 +139,9 @@ export class ToolGroupComponent implements OnInit {
         title: `${this.group.title} – Tools Central`,
         description: this.group.description,
       });
+      if (!this.sections.some(section => section.availableCount > 0)) {
+        this.seo.setRobots('noindex,follow');
+      }
     }
   }
 }

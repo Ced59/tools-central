@@ -122,8 +122,8 @@ export function extractAvailableCatalogRoutes(locale = null) {
       const group = asObject(groupExpression, `${categoryId}.${groupId}`);
       if (!isAvailable(group)) continue;
 
-      routes.add(`/categories/${categoryId}/${groupId}`);
       const subGroups = asObject(getProperty(group, 'subGroups'), `${categoryId}.${groupId}.subGroups`);
+      let groupHasPublishedTool = false;
 
       for (const [subGroupId, subGroupExpression] of entries(subGroups)) {
         const subGroup = asObject(subGroupExpression, `${categoryId}.${groupId}.${subGroupId}`);
@@ -135,9 +135,11 @@ export function extractAvailableCatalogRoutes(locale = null) {
         for (const [toolId, toolExpression] of entries(tools)) {
           const tool = asObject(toolExpression, `${categoryId}.${groupId}.${subGroupId}.${toolId}`);
           if (!isAvailable(tool) || !isPublishedForLocale(tool, locale)) continue;
+          groupHasPublishedTool = true;
           routes.add(`/categories/${categoryId}/${groupId}/${toolId}`);
         }
       }
+      if (groupHasPublishedTool) routes.add(`/categories/${categoryId}/${groupId}`);
     }
   }
 

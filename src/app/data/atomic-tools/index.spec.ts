@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { isToolPublishedForLocale } from './index';
+import { isGroupPublishedForLocale, isToolPublishedForLocale } from './index';
 
 describe('isToolPublishedForLocale', () => {
   it('conserve le comportement historique sans restriction de locale', () => {
@@ -22,5 +22,10 @@ describe('isToolPublishedForLocale', () => {
 
   it('accepte une variante régionale du langage relu sans région', () => {
     expect(isToolPublishedForLocale({ available: true, reviewedLocales: ['fr'] }, 'fr-FR')).toBe(true);
+  });
+
+  it('publie un groupe uniquement si au moins un outil est relu dans la locale', () => {
+    expect(isGroupPublishedForLocale('dev', 'ooxml', 'fr')).toBe(true);
+    expect(isGroupPublishedForLocale('dev', 'ooxml', 'en')).toBe(false);
   });
 });

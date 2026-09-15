@@ -7,7 +7,11 @@ import { filter } from 'rxjs/operators';
 
 import { SeoLinksService, type HreflangEntry } from './seo-links.service';
 import { LOCALES } from '../../i18n/locales.generated';
-import { ATOMIC_TOOL_LIST, isToolPublishedForLocale } from '../../data/atomic-tools';
+import {
+  ATOMIC_TOOL_LIST,
+  isGroupPublishedForLocale,
+  isToolPublishedForLocale,
+} from '../../data/atomic-tools';
 
 export type SeoConfig = {
   title: string;
@@ -188,9 +192,18 @@ export class SeoService {
   private alternateLocalesForPath(restPath: string): typeof LOCALES {
     const route = restPath ? `/${restPath}` : '/';
     const tool = ATOMIC_TOOL_LIST.find(candidate => candidate.route === route);
-    return tool?.reviewedLocales
-      ? LOCALES.filter(locale => isToolPublishedForLocale(tool, String(locale.locale)))
-      : LOCALES;
+    if (tool?.reviewedLocales) {
+      return LOCALES.filter(locale => isToolPublishedForLocale(tool, String(locale.locale)));
+    }
+    const groupRoute = /^categories\/([^/]+)\/([^/]+)$/u.exec(restPath);
+    if (groupRoute) {
+      return LOCALES.filter(locale => isGroupPublishedForLocale(
+        groupRoute[1],
+        groupRoute[2],
+        String(locale.locale),
+      ));
+    }
+    return LOCALES;
   }
 
   private buildXDefaultPath(restPath: string): string {

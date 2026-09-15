@@ -339,7 +339,7 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
       title: $localize`:@@group_dev_ooxml_title:Open XML (OOXML)`,
       description: $localize`:@@group_dev_ooxml_desc:Inspecter les conteneurs OOXML (ZIP/XML) : relations, content types, métadonnées…`,
       icon: 'tc-icon tc-icon-box',
-      available: false,
+      available: true,
       subGroups: {
         inspect: {
           title: $localize`:@@dev_ooxml_sg_inspect_title:Inspection & extraction`,
@@ -366,7 +366,16 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
           description: $localize`:@@dev_ooxml_sg_transform_desc:Nettoyer les métadonnées, supprimer des parties, regénérer un package OOXML minimal.`,
           order: 3,
           tools: {
-            'ooxml-sanitize-metadata': { title: $localize`:@@tool_ooxml_sanitize_metadata_title:Nettoyer les métadonnées OOXML`, description: $localize`:@@tool_ooxml_sanitize_metadata_desc:Supprimer/normaliser docProps (auteur, société, chemins, historiques) pour partager un fichier plus "privacy-friendly".`, icon: 'tc-icon tc-icon-shield', available: false },
+            'ooxml-sanitize-metadata': {
+              title: $localize`:@@tool_ooxml_sanitize_metadata_title:Supprimer les métadonnées DOCX, XLSX et PPTX`,
+              description: $localize`:@@tool_ooxml_sanitize_metadata_desc:Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.` ,
+              icon: 'tc-icon tc-icon-shield',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/ooxml-metadata-cleaner/presentation/ooxml-metadata-cleaner-tool.component')
+                  .then(m => m.OoxmlMetadataCleanerToolComponent),
+            },
           },
         },
         debug: {

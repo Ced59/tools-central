@@ -7,7 +7,7 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du générateur Schema.org SoftwareApplication.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Onze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images` et `images-to-pdf`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 107 outils encore indisponibles : elle est d’améliorer les 68 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Douze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf` et `ooxml-metadata-cleaner`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 69 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,19 +16,19 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. O
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 657,61 kB brut, 165,94 kB transféré estimé ; PDF.js reste dans un chunk lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,07 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 127 fichiers, 364 tests verts sous Vitest |
-| Couverture | aucun seuil | 46,18 % statements, 32,90 % branches, 46,10 % fonctions, 49,41 % lignes |
-| E2E | aucun | 12 parcours Playwright verts |
-| Routes statiques | 2 | 82 routes de base + une 404 prérendues par locale, soit 2 490 pages ; 2 402 URL sont indexables après filtrage éditorial par locale |
-| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 174 outils, 67 disponibles en français et 65 dans les locales secondaires |
+| Tests unitaires | suite non compilable | 133 fichiers, 423 tests verts sous Vitest |
+| Couverture | aucun seuil | 49,01 % statements, 36,10 % branches, 48,67 % fonctions, 52,47 % lignes |
+| E2E | aucun | 14 parcours Playwright verts |
+| Routes statiques | 2 | 2 464 pages prérendues ; 2 405 URL sont indexables et 116 variantes d’outils non relues sont désormais omises des locales secondaires |
+| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 175 outils, 69 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 175 421 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 181 221 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 028 ms, CLS 0,0043, `DOMContentLoaded` 415 ms et interaction thème 66,4 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 144 ms, CLS 0,0043, `DOMContentLoaded` 444 ms et interaction thème 65,8 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
@@ -73,7 +73,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 028 ms, CLS 0,
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 6 049 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 175 421 segments techniquement complets.
+- 6 249 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 181 221 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -82,14 +82,14 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 - Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
 - Exclusion automatique des outils `available: false`.
 - Publication par locale pilotée par `reviewedLocales` : variantes non relues masquées du catalogue, absentes des sitemaps et `hreflang`, puis rendues en `noindex,follow` en accès direct.
-- 82 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- 85 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
 - Suppression du faux `lastmod` égal à la date de chaque build.
 - Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
 - Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
 - Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
 - Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
 - `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
-- Six outils issus du backlog, le prévisualiseur de snippet Google, le générateur/validateur robots.txt, le générateur/validateur sitemap XML, le vérificateur hreflang, l’extracteur de données structurées et l’auditeur de head HTML, sont publiables dans les 30 langues avec un éditorial spécifique et sans traitement serveur des données saisies. Le générateur SoftwareApplication est publié en français ; ses variantes secondaires restent hors index jusqu’à une relecture linguistique explicite.
+- Dix outils issus du backlog sont désormais livrés. Les six outils SEO initiaux sont publiables dans les 30 langues ; le générateur SoftwareApplication, PDF vers images, Images vers PDF et le nettoyeur de métadonnées OOXML sont publiés en français, leurs variantes secondaires restant hors index jusqu’à une relecture linguistique explicite.
 
 ### CI, GitHub et déploiement
 
@@ -113,7 +113,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 |---|---|---|
 | 29 locales traduites automatiquement sans preuve de revue native | contresens, confiance et qualité SEO variables | relire un cluster prioritaire par langue, tracer qui/quand/quoi et corriger avant extension |
 | SSH utilise encore `VPS_PASSWORD` | secret plus exposé et droits potentiellement larges | clé dédiée au déploiement, compte limité, rotation du mot de passe |
-| 107 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
+| 106 outils sont indisponibles | tentation de créer des pages minces en masse | ne publier qu’un moteur réel avec tests, contenu propre et demande validée |
 
 ### P1 — migration progressive
 
