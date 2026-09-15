@@ -1,4 +1,4 @@
-import { PDFDocument, PDFName } from 'pdf-lib';
+import { PDFDict, PDFDocument, PDFName } from 'pdf-lib';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -145,6 +145,8 @@ describe('inspectPdfPrivacyDocument', () => {
       Subtype: 'XML',
     });
     source.catalog.set(PDFName.of('Metadata'), source.context.register(xmpStream));
+    const info = source.context.lookup(source.context.trailerInfo.Info, PDFDict);
+    info.set(PDFName.of('Classification'), PDFName.of('Secret'));
     const bytes = await source.save();
     const headerData = bytes.slice(0, 1_024);
     const fileBytes = bytes.byteLength;
@@ -174,6 +176,11 @@ describe('inspectPdfPrivacyDocument', () => {
           label: 'photoshop:city',
           value: 'Paris',
         }),
+        expect.objectContaining({
+          kind: 'document-metadata',
+          label: 'Classification',
+          value: 'Secret',
+        }),
       ]));
     } finally {
       await loadingTask.destroy();
@@ -187,6 +194,7 @@ describe('inspectPdfPrivacyDocument', () => {
           Custom: new Map<string, unknown>([
             ['ClientEmail', ' client@example.test '],
             ['InternalId', 42],
+            ['Classification', { name: 'Secret' }],
             ['IgnoredObject', { secret: 'not-a-scalar' }],
           ]),
         },
@@ -197,6 +205,7 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.filter(finding => finding.kind === 'document-metadata')).toEqual([
       expect.objectContaining({ label: 'ClientEmail', value: 'client@example.test' }),
       expect.objectContaining({ label: 'InternalId', value: '42' }),
+      expect.objectContaining({ label: 'Classification', value: 'Secret' }),
     ]);
   });
 
@@ -303,6 +312,25 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.find(finding => finding.kind === 'form-fields')).toMatchObject({
       severity: 'low',
       message: { code: 'acroform-summary', fieldCount: 2, populatedCount: 0 },
+    });
+  });
+
+  it('distingue les champs homonymes tout en regroupant leurs widgets enfants', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getFieldObjects: vi.fn().mockResolvedValue(new Map([
+        ['', [
+          { id: '10R', kidIds: ['11R', '12R'] },
+          { id: '11R', type: 'text', value: '' },
+          { id: '12R', type: 'text', value: '' },
+          { id: '20R', kidIds: ['21R'] },
+          { id: '21R', type: 'text', value: 'private' },
+        ]],
+      ])),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.find(finding => finding.kind === 'form-fields')).toMatchObject({
+      occurrences: 2,
+      message: { code: 'acroform-summary', fieldCount: 2, populatedCount: 1 },
     });
   });
 

@@ -40,7 +40,17 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     const fileBytes = input.byteLength;
     extractPdfVersion(headerData);
     post({ type: 'progress', percent: 1 });
-    const structuralSignals = await inspectPdfStructuralSignals(input);
+    let structuralSignals: Awaited<ReturnType<typeof inspectPdfStructuralSignals>> = null;
+    let structuralFailure: Error | undefined;
+    try {
+      structuralSignals = await inspectPdfStructuralSignals(input);
+    } catch (error: unknown) {
+      // Let PDF.js report a missing/incorrect password before surfacing a
+      // structural safety limit on encrypted metadata.
+      structuralFailure = error instanceof Error
+        ? error
+        : new PdfActionDictionaryInspectionError();
+    }
     loadingTask = getDocument({
       data: input,
       password: command.password,
@@ -57,14 +67,16 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     });
     post({ type: 'progress', percent: 2 });
     const document = await loadingTask.promise;
+    if (structuralFailure) throw structuralFailure;
+    if (!structuralSignals) throw new PdfActionDictionaryInspectionError();
     const report = await inspectPdfPrivacyDocument(
       document,
       {
         headerData,
         fileBytes,
         passwordUsed: Boolean(command.password),
-        actionDictionaries: structuralSignals?.actionDictionaries ?? null,
-        associatedFiles: structuralSignals?.associatedFiles ?? null,
+        actionDictionaries: structuralSignals.actionDictionaries,
+        associatedFiles: structuralSignals.associatedFiles,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

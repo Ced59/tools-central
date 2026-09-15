@@ -4,11 +4,13 @@ import {
   PDFDocument,
   PDFHexString,
   PDFName,
+  PDFRawStream,
   PDFRef,
   PDFStream,
   PDFString,
   type PDFObject,
 } from 'pdf-lib';
+import { Inflate } from 'pako';
 
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 
@@ -74,6 +76,8 @@ const TARGET_BEARING_ACTION_NAMES = new Set([
 const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
+export const PDF_PRIVACY_MAX_XMP_BYTES = 2 * 1_024 * 1_024;
+const XMP_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
   'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
@@ -159,6 +163,7 @@ export async function inspectPdfStructuralSignals(
       throwOnInvalidObject: false,
       updateMetadata: false,
     });
+    validateXmpMetadataBudget(document);
     const indirectObjects = document.context.enumerateIndirectObjects();
     if (indirectObjects.length > MAX_INDIRECT_OBJECTS) {
       throw new PdfActionDictionaryInspectionError();
@@ -489,11 +494,61 @@ function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void 
 function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
   const embeddedFiles = readDictionary(fileSpec, 'EF');
   if (!embeddedFiles) return undefined;
-  for (const key of ['UF', 'F']) {
+  for (const key of ['UF', 'F', 'Unix', 'Mac', 'DOS']) {
     const stream = readObject(embeddedFiles, key);
     if (stream instanceof PDFStream) return stream;
   }
   return undefined;
+}
+
+function validateXmpMetadataBudget(document: PDFDocument): void {
+  const metadata = readObject(document.catalog, 'Metadata');
+  if (!metadata) return;
+  if (!(metadata instanceof PDFRawStream)) throw new PdfActionDictionaryInspectionError();
+  const contents = metadata.getContents();
+  const filters = readFilterNames(metadata.dict);
+  if (filters.length === 0) {
+    if (contents.byteLength > PDF_PRIVACY_MAX_XMP_BYTES) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    return;
+  }
+  if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0])) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  validateInflatedXmpSize(contents);
+}
+
+function readFilterNames(dictionary: PDFDict): readonly string[] {
+  const filter = readObject(dictionary, 'Filter');
+  if (!filter) return [];
+  if (filter instanceof PDFName) return [filter.decodeText()];
+  if (!(filter instanceof PDFArray)) throw new PdfActionDictionaryInspectionError();
+  const names: string[] = [];
+  for (let index = 0; index < filter.size(); index += 1) {
+    const value = filter.lookup(index);
+    if (!(value instanceof PDFName)) throw new PdfActionDictionaryInspectionError();
+    names.push(value.decodeText());
+  }
+  return names;
+}
+
+function validateInflatedXmpSize(contents: Uint8Array): void {
+  const inflater = new Inflate({ chunkSize: XMP_INFLATE_CHUNK_BYTES });
+  let decodedBytes = 0;
+  inflater.onData = chunk => {
+    decodedBytes += chunk.byteLength;
+    if (decodedBytes > PDF_PRIVACY_MAX_XMP_BYTES) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+  };
+  try {
+    const succeeded = inflater.push(contents, true);
+    if (!succeeded || inflater.err !== 0) throw new PdfActionDictionaryInspectionError();
+  } catch (error: unknown) {
+    if (error instanceof PdfActionDictionaryInspectionError) throw error;
+    throw new PdfActionDictionaryInspectionError();
+  }
 }
 
 function isHandledTriggerKey(parent: PDFDict, key: PDFName): boolean {

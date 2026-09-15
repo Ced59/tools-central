@@ -1,7 +1,11 @@
 import { PDFDocument, PDFName, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
-import { inspectPdfStructuralSignals } from './pdf-action-dictionary.engine';
+import {
+  PDF_PRIVACY_MAX_XMP_BYTES,
+  PdfActionDictionaryInspectionError,
+  inspectPdfStructuralSignals,
+} from './pdf-action-dictionary.engine';
 
 describe('inspectPdfStructuralSignals', () => {
   it('lit Launch et SubmitForm dans un vrai PDF avec object streams', async () => {
@@ -271,6 +275,50 @@ describe('inspectPdfStructuralSignals', () => {
     const signals = await inspectPdfStructuralSignals(await source.save());
 
     expect(signals?.associatedFiles).toEqual([]);
+  });
+
+  it.each(['Unix', 'Mac', 'DOS'])('inventorie un flux embarqué référencé par /%s', async platformKey => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const embeddedFile = source.context.register(source.context.flateStream(
+      'platform payload',
+      { Type: 'EmbeddedFile' },
+    ));
+    source.catalog.set(PDFName.of('PlatformFileSpec'), source.context.obj({
+      Type: 'Filespec',
+      F: PDFString.of(`${platformKey.toLowerCase()}.txt`),
+      EF: { [platformKey]: embeddedFile },
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.associatedFiles).toEqual([
+      expect.objectContaining({ fileName: `${platformKey.toLowerCase()}.txt` }),
+    ]);
+  });
+
+  it('refuse un flux XMP dont la taille décompressée dépasse la limite', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const oversizedXmp = `<x:xmpmeta>${'A'.repeat(PDF_PRIVACY_MAX_XMP_BYTES)}</x:xmpmeta>`;
+    source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.flateStream(
+      oversizedXmp,
+      { Type: 'Metadata', Subtype: 'XML' },
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save()))
+      .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
+  });
+
+  it('accepte un flux XMP compressé sous la limite', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.flateStream(
+      '<x:xmpmeta>safe</x:xmpmeta>',
+      { Type: 'Metadata', Subtype: 'XML' },
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save())).resolves.not.toBeNull();
   });
 
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {

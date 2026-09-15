@@ -428,29 +428,30 @@ function collectForms(
   if (fields) {
     for (const controls of fields.values()) {
       consume(Math.max(1, controls.length));
-      fieldCount += 1;
-      let populated = false;
-      const actionIdentities = new Map<string, Set<string>>();
-      let hasUndetailedActions = false;
-      for (const rawControl of controls) {
-        const control = asRecord(rawControl);
-        if (!control) continue;
-        if (hasStoredFieldValue(control)) {
-          populated = true;
+      const logicalFields = groupLogicalFieldControls(controls);
+      fieldCount += logicalFields.length;
+      for (const logicalField of logicalFields) {
+        let populated = false;
+        const actionIdentities = new Map<string, Set<string>>();
+        let hasUndetailedActions = false;
+        for (const control of logicalField) {
+          if (hasStoredFieldValue(control)) {
+            populated = true;
+          }
+          const hasDetailedActions = collectActionIdentities(
+            control['actions'],
+            actionIdentities,
+            consume,
+          );
+          if (control['hasJSActions'] === true && !hasDetailedActions) {
+            hasUndetailedActions = true;
+          }
         }
-        const hasDetailedActions = collectActionIdentities(
-          control['actions'],
-          actionIdentities,
-          consume,
-        );
-        if (control['hasJSActions'] === true && !hasDetailedActions) {
-          hasUndetailedActions = true;
-        }
+        const detailedActionCount = [...actionIdentities.values()]
+          .reduce((count, payloads) => count + payloads.size, 0);
+        actionCount += detailedActionCount + (hasUndetailedActions ? 1 : 0);
+        if (populated) populatedCount += 1;
       }
-      const detailedActionCount = [...actionIdentities.values()]
-        .reduce((count, payloads) => count + payloads.size, 0);
-      actionCount += detailedActionCount + (hasUndetailedActions ? 1 : 0);
-      if (populated) populatedCount += 1;
     }
   }
   if (fieldCount > 0) {
@@ -928,7 +929,59 @@ function readableValue(value: unknown): string | undefined {
   if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
     return sanitizePdfPrivacyValue(value);
   }
+  const namedValue = asRecord(value);
+  if (namedValue && typeof namedValue['name'] === 'string') {
+    return sanitizePdfPrivacyValue(namedValue['name']);
+  }
   return undefined;
+}
+
+function groupLogicalFieldControls(controls: readonly object[]): readonly (readonly Record<string, unknown>[])[] {
+  const records = controls.map(asRecord).filter(record => record !== null);
+  if (records.length === 0) return [[]];
+
+  const recordsById = new Map<string, Record<string, unknown>>();
+  const childIds = new Set<string>();
+  for (const record of records) {
+    const id = readableValue(record['id']);
+    if (id) recordsById.set(id, record);
+    const kids = Array.isArray(record['kidIds']) ? record['kidIds'] : [];
+    for (const kid of kids) {
+      const kidId = readableValue(kid);
+      if (kidId) childIds.add(kidId);
+    }
+  }
+  if (recordsById.size === 0) return [records];
+
+  const groups: Record<string, unknown>[][] = [];
+  const assigned = new Set<Record<string, unknown>>();
+  const collectGroup = (root: Record<string, unknown>): void => {
+    const group: Record<string, unknown>[] = [];
+    const stack = [root];
+    while (stack.length > 0) {
+      const current = stack.pop();
+      if (!current || assigned.has(current)) continue;
+      assigned.add(current);
+      group.push(current);
+      const kids = Array.isArray(current['kidIds']) ? current['kidIds'] : [];
+      for (const kid of kids) {
+        const child = recordsById.get(readableValue(kid) ?? '');
+        if (child) stack.push(child);
+      }
+    }
+    if (group.length > 0) groups.push(group);
+  };
+
+  for (const [id, record] of recordsById) {
+    if (!childIds.has(id)) collectGroup(record);
+  }
+  for (const record of recordsById.values()) collectGroup(record);
+  const unidentified = records.filter(record => !assigned.has(record));
+  if (unidentified.length > 0) {
+    if (groups.length === 0) groups.push(unidentified);
+    else groups[0].push(...unidentified);
+  }
+  return groups;
 }
 
 function hasMeaningfulValue(value: unknown): boolean {
