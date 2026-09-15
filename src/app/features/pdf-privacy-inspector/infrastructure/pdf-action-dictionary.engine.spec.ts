@@ -7,6 +7,9 @@ describe('inspectPdfActionDictionaries', () => {
   it('lit Launch et SubmitForm dans un vrai PDF avec object streams', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action', S: 'URI', URI: PDFString.of('https://open.example/start'),
+    }));
     page.node.set(PDFName.of('Annots'), source.context.obj([
       source.context.register(source.context.obj({
         Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10],
@@ -21,8 +24,18 @@ describe('inspectPdfActionDictionaries', () => {
     const signals = await inspectPdfActionDictionaries(await source.save());
 
     expect(signals).toEqual(expect.arrayContaining([
-      { actionType: 'Launch', target: 'https://launch.example/run', occurrences: 1 },
-      { actionType: 'SubmitForm', target: 'https://submit.example/collect', occurrences: 1 },
+      {
+        actionType: 'Launch', context: 'annotation-action',
+        target: 'https://launch.example/run', occurrences: 1,
+      },
+      {
+        actionType: 'SubmitForm', context: 'annotation-action',
+        target: 'https://submit.example/collect', occurrences: 1,
+      },
+      {
+        actionType: 'URI', context: 'open-action',
+        target: 'https://open.example/start', occurrences: 1,
+      },
     ]));
   });
 
@@ -35,7 +48,10 @@ describe('inspectPdfActionDictionaries', () => {
     }));
 
     await expect(inspectPdfActionDictionaries(await source.save())).resolves.toEqual([
-      { actionType: 'Launch', target: 'Report.EXE', occurrences: 2 },
+      {
+        actionType: 'Launch', context: 'additional-action',
+        target: 'Report.EXE', occurrences: 2,
+      },
     ]);
   });
 

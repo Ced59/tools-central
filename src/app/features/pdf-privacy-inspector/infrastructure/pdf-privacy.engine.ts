@@ -49,6 +49,12 @@ interface LinkAggregate {
   source: 'annotation' | 'outline';
 }
 
+interface ActionDictionaryIndex {
+  targets: Set<string>;
+  targetlessAnnotationActions: number;
+  targetlessOutlineActions: number;
+}
+
 type ConsumeDiscoveryBudget = (count?: number) => void;
 
 const INFO_METADATA_KEYS = new Set([
@@ -121,7 +127,7 @@ export async function inspectPdfPrivacyDocument(
       throw new PdfPrivacyEngineError('inspection-limit');
     }
   };
-  const actionTargets = collectActionDictionarySignals(
+  const actionIndex = collectActionDictionarySignals(
     input.actionDictionaries,
     add,
     consumeDiscoveryBudget,
@@ -153,7 +159,7 @@ export async function inspectPdfPrivacyDocument(
   }
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
   collectSignatures(signatures, add, consumeDiscoveryBudget);
-  collectOutlineItems(outline ?? [], links, actionTargets, add, consumeDiscoveryBudget);
+  collectOutlineItems(outline ?? [], links, actionIndex, add, consumeDiscoveryBudget);
 
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
     const page = await document.getPage(pageNumber);
@@ -166,7 +172,7 @@ export async function inspectPdfPrivacyDocument(
         annotations,
         pageNumber,
         links,
-        actionTargets,
+        actionIndex,
         add,
         consumeDiscoveryBudget,
       );
@@ -355,8 +361,7 @@ function collectForms(
         if (hasMeaningfulValue(control['value']) || hasMeaningfulValue(control['defaultValue'])) {
           populated = true;
         }
-        const actions = asRecord(control['actions']);
-        if ((actions && Object.keys(actions).length > 0) || control['hasJSActions'] === true) {
+        if (hasActionEntries(control['actions']) || control['hasJSActions'] === true) {
           actionCount += 1;
         }
       }
@@ -430,7 +435,7 @@ function collectSignatures(
 function collectOutlineItems(
   nodes: readonly object[],
   links: Map<string, LinkAggregate>,
-  actionTargets: ReadonlySet<string> | null,
+  actionIndex: ActionDictionaryIndex | null,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -446,7 +451,7 @@ function collectOutlineItems(
       `outline:${String(index)}`,
       undefined,
       links,
-      actionTargets,
+      actionIndex,
       add,
     );
     const children = node['items'];
@@ -458,7 +463,7 @@ function collectPageAnnotations(
   annotations: readonly object[],
   pageNumber: number,
   links: Map<string, LinkAggregate>,
-  actionTargets: ReadonlySet<string> | null,
+  actionIndex: ActionDictionaryIndex | null,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -472,7 +477,7 @@ function collectPageAnnotations(
       `annotation:${String(pageNumber)}:${annotationId}`,
       pageNumber,
       links,
-      actionTargets,
+      actionIndex,
       add,
     );
 
@@ -512,7 +517,7 @@ function collectPdfJsActionShape(
   contextId: string,
   pageNumber: number | undefined,
   links: Map<string, LinkAggregate>,
-  actionTargets: ReadonlySet<string> | null,
+  actionIndex: ActionDictionaryIndex | null,
   add: (finding: PdfPrivacyFinding) => void,
 ): void {
   const source = contextId.startsWith('outline:') ? 'outline' : 'annotation';
@@ -522,7 +527,7 @@ function collectPdfJsActionShape(
     addLink(links, url, pageNumber, source);
   } else if (unsafeUrl) {
     const target = sanitizePdfPrivacyValue(unsafeUrl);
-    if (!target || actionTargets === null || !actionTargets.has(target)) {
+    if (!target || !consumeMatchingDictionaryAction(actionIndex, target, source)) {
       addAutomaticAction(
         `external-target:${contextId}`,
         'Cible externe non sûre',
@@ -578,33 +583,70 @@ function collectActionDictionarySignals(
   signals: readonly PdfActionDictionarySignal[] | null | undefined,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
-): ReadonlySet<string> | null {
+): ActionDictionaryIndex | null {
   if (signals === null || signals === undefined) return null;
-  const targets = new Set<string>();
-  let index = 0;
+  const actionIndex: ActionDictionaryIndex = {
+    targets: new Set<string>(),
+    targetlessAnnotationActions: 0,
+    targetlessOutlineActions: 0,
+  };
+  let findingIndex = 0;
   for (const signal of signals) {
     const target = sanitizePdfPrivacyValue(signal.target);
-    if (target) targets.add(target);
+    if (target) actionIndex.targets.add(target);
     const unsafeUri = signal.actionType === 'URI'
       && target !== undefined
       && !isSafeExternalUrl(target);
-    if (!isHighRiskAction(signal.actionType) && !unsafeUri) continue;
+    const contextualUri = signal.actionType === 'URI'
+      && (signal.context === 'open-action' || signal.context === 'additional-action');
+    const highRisk = isHighRiskAction(signal.actionType);
+    if (!highRisk && !unsafeUri && !contextualUri) continue;
     const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
       ? signal.occurrences
       : 1;
+    if (highRisk && !target && signal.context === 'annotation-action') {
+      actionIndex.targetlessAnnotationActions += occurrences;
+    }
+    if (highRisk && !target && signal.context === 'outline-action') {
+      actionIndex.targetlessOutlineActions += occurrences;
+    }
     consume(occurrences);
-    index += 1;
+    findingIndex += 1;
     add({
-      id: `automatic:dictionary:${String(index)}:${signal.actionType}`,
+      id: `automatic:dictionary:${String(findingIndex)}:${signal.actionType}`,
       category: 'active-content',
       kind: 'automatic-action',
       severity: 'high',
-      label: `Action ${signal.actionType}`,
+      label: actionDictionaryLabel(signal),
       value: sanitizeActionTarget(signal.target),
       occurrences,
     });
   }
-  return targets;
+  return actionIndex;
+}
+
+function consumeMatchingDictionaryAction(
+  actionIndex: ActionDictionaryIndex | null,
+  target: string,
+  source: LinkAggregate['source'],
+): boolean {
+  if (!actionIndex) return false;
+  if (actionIndex.targets.has(target)) return true;
+  if (source === 'annotation' && actionIndex.targetlessAnnotationActions > 0) {
+    actionIndex.targetlessAnnotationActions -= 1;
+    return true;
+  }
+  if (source === 'outline' && actionIndex.targetlessOutlineActions > 0) {
+    actionIndex.targetlessOutlineActions -= 1;
+    return true;
+  }
+  return false;
+}
+
+function actionDictionaryLabel(signal: PdfActionDictionarySignal): string {
+  if (signal.context === 'open-action') return `Action ${signal.actionType} à l’ouverture`;
+  if (signal.context === 'additional-action') return `Action ${signal.actionType} additionnelle`;
+  return `Action ${signal.actionType}`;
 }
 
 function isHighRiskAction(actionType: string): boolean {
@@ -702,6 +744,12 @@ function readableValue(value: unknown): string | undefined {
 function hasMeaningfulValue(value: unknown): boolean {
   if (Array.isArray(value)) return value.some(hasMeaningfulValue);
   return readableValue(value) !== undefined;
+}
+
+function hasActionEntries(value: unknown): boolean {
+  if (value instanceof Map) return value.size > 0;
+  const actions = asRecord(value);
+  return actions !== null && Object.keys(actions).length > 0;
 }
 
 function finiteNumber(value: unknown): number | undefined {

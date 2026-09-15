@@ -14,9 +14,18 @@ import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 
 export interface PdfActionDictionarySignal {
   actionType: string;
+  context: PdfActionDictionaryContext;
   target?: string;
   occurrences: number;
 }
+
+export type PdfActionDictionaryContext =
+  | 'open-action'
+  | 'additional-action'
+  | 'annotation-action'
+  | 'outline-action'
+  | 'explicit-action'
+  | 'unknown';
 
 export class PdfActionDictionaryInspectionError extends Error {
   readonly code = 'inspection-limit' as const;
@@ -39,6 +48,14 @@ const ACTION_NAMES = new Set([
 const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
+const ANNOTATION_SUBTYPES = new Set([
+  'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
+]);
+
+interface PendingObject {
+  object: PDFObject;
+  context: PdfActionDictionaryContext;
+}
 
 /**
  * Reads action dictionaries without executing their contents. This second,
@@ -54,31 +71,55 @@ export async function inspectPdfActionDictionaries(
       throwOnInvalidObject: false,
       updateMetadata: false,
     });
-    const roots = document.context.enumerateIndirectObjects();
-    if (roots.length > MAX_INDIRECT_OBJECTS) throw new PdfActionDictionaryInspectionError();
+    const indirectObjectCount = document.context.enumerateIndirectObjects().length;
+    if (indirectObjectCount > MAX_INDIRECT_OBJECTS) throw new PdfActionDictionaryInspectionError();
 
-    const queue: PDFObject[] = roots.map(([, object]) => object);
-    const visited = new Set<PDFObject>();
+    const queue: PendingObject[] = [{ object: document.catalog, context: 'unknown' }];
+    const visited = new Map<PDFObject, Set<PdfActionDictionaryContext>>();
     const signals = new Map<string, PdfActionDictionarySignal>();
+    let traversalSteps = 0;
 
     while (queue.length > 0) {
-      const object = queue.pop();
-      if (!object || object instanceof PDFRef || visited.has(object)) continue;
-      visited.add(object);
-      if (visited.size > MAX_TRAVERSED_OBJECTS) throw new PdfActionDictionaryInspectionError();
+      const pending = queue.pop();
+      if (!pending) continue;
+      traversalSteps += 1;
+      if (traversalSteps > MAX_TRAVERSED_OBJECTS) throw new PdfActionDictionaryInspectionError();
 
-      if (object instanceof PDFStream) {
-        queue.push(object.dict);
+      if (pending.object instanceof PDFRef) {
+        const resolved = document.context.lookup(pending.object);
+        if (resolved) queue.push({ object: resolved, context: pending.context });
         continue;
       }
-      if (object instanceof PDFArray) {
-        for (const child of object.asArray()) queue.push(child);
+
+      const contexts = visited.get(pending.object) ?? new Set<PdfActionDictionaryContext>();
+      if (contexts.has(pending.context)) continue;
+      contexts.add(pending.context);
+      visited.set(pending.object, contexts);
+
+      if (pending.object instanceof PDFStream) {
+        queue.push({ object: pending.object.dict, context: pending.context });
         continue;
       }
-      if (!(object instanceof PDFDict)) continue;
+      if (pending.object instanceof PDFArray) {
+        for (const child of pending.object.asArray()) {
+          queue.push({ object: child, context: pending.context });
+        }
+        continue;
+      }
+      if (!(pending.object instanceof PDFDict)) continue;
 
-      collectActionDictionary(object, signals, !document.isEncrypted);
-      for (const child of object.values()) queue.push(child);
+      collectActionDictionary(
+        pending.object,
+        pending.context,
+        signals,
+        !document.isEncrypted,
+      );
+      for (const [key, child] of pending.object.entries()) {
+        queue.push({
+          object: child,
+          context: childContext(pending.object, pending.context, key),
+        });
+      }
     }
 
     return [...signals.values()];
@@ -92,6 +133,7 @@ export async function inspectPdfActionDictionaries(
 
 function collectActionDictionary(
   dictionary: PDFDict,
+  context: PdfActionDictionaryContext,
   signals: Map<string, PdfActionDictionarySignal>,
   canReadTarget: boolean,
 ): void {
@@ -101,7 +143,7 @@ function collectActionDictionary(
   if (!actionType || !ACTION_NAMES.has(actionType)) return;
 
   const target = canReadTarget ? readTarget(dictionary) : undefined;
-  const key = `${actionType}\u0000${target ?? ''}`;
+  const key = `${context}\u0000${actionType}\u0000${target ?? ''}`;
   const current = signals.get(key);
   if (current) {
     current.occurrences += 1;
@@ -110,7 +152,26 @@ function collectActionDictionary(
   if (signals.size >= PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
     throw new PdfActionDictionaryInspectionError();
   }
-  signals.set(key, { actionType, target, occurrences: 1 });
+  signals.set(key, { actionType, context, target, occurrences: 1 });
+}
+
+function childContext(
+  parent: PDFDict,
+  parentContext: PdfActionDictionaryContext,
+  key: PDFName,
+): PdfActionDictionaryContext {
+  const name = key.decodeText();
+  if (name === 'OpenAction') return 'open-action';
+  if (name === 'AA') return 'additional-action';
+  if (name === 'Outlines') return 'outline-action';
+  if (name === 'A') {
+    if (parentContext === 'outline-action') return parentContext;
+    const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
+    return subtype && ANNOTATION_SUBTYPES.has(subtype)
+      ? 'annotation-action'
+      : 'explicit-action';
+  }
+  return parentContext;
 }
 
 function readTarget(dictionary: PDFDict): string | undefined {

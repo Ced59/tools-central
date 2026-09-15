@@ -137,7 +137,7 @@ describe('inspectPdfPrivacyDocument', () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       hasJSActions: vi.fn().mockResolvedValue(true),
       getFieldObjects: vi.fn().mockResolvedValue(new Map([
-        ['consent', [{ actions: { Action: ['app.alert("secret")'] } }]],
+        ['consent', [{ actions: new Map([['Action', ['app.alert("secret")']]]) }]],
       ])),
     }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
 
@@ -191,8 +191,14 @@ describe('inspectPdfPrivacyDocument', () => {
       fileBytes: 16,
       passwordUsed: false,
       actionDictionaries: [
-        { actionType: 'Launch', target: 'https://launch.example/run', occurrences: 1 },
-        { actionType: 'SubmitForm', target: 'https://submit.example/collect', occurrences: 1 },
+        {
+          actionType: 'Launch', context: 'annotation-action',
+          target: 'https://launch.example/run', occurrences: 1,
+        },
+        {
+          actionType: 'SubmitForm', context: 'annotation-action',
+          target: 'https://submit.example/collect', occurrences: 1,
+        },
       ],
     });
 
@@ -235,6 +241,7 @@ describe('inspectPdfPrivacyDocument', () => {
       passwordUsed: false,
       actionDictionaries: [{
         actionType: 'URI',
+        context: 'annotation-action',
         target: 'javascript:alert("private-value")',
         occurrences: 1,
       }],
@@ -244,6 +251,55 @@ describe('inspectPdfPrivacyDocument', () => {
       expect.objectContaining({ label: 'Action URI', value: 'javascript:…' }),
     ]));
     expect(JSON.stringify(report)).not.toContain('private-value');
+  });
+
+  it('conserve les URI sûres déclenchées à l’ouverture ou comme action additionnelle', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture(), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [
+        {
+          actionType: 'URI', context: 'open-action',
+          target: 'https://open.example/start', occurrences: 1,
+        },
+        {
+          actionType: 'URI', context: 'additional-action',
+          target: 'https://additional.example/ping', occurrences: 1,
+        },
+      ],
+    });
+
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        label: 'Action URI à l’ouverture', value: 'https://open.example/start',
+      }),
+      expect.objectContaining({
+        label: 'Action URI additionnelle', value: 'https://additional.example/ping',
+      }),
+    ]));
+  });
+
+  it('ne double pas une action chiffrée dont le parseur brut masque la cible', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([{ id: 'encrypted', unsafeUrl: 'calc.exe' }]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      actionDictionaries: [{
+        actionType: 'Launch', context: 'annotation-action', occurrences: 1,
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'automatic-action')).toEqual([
+      expect.objectContaining({ label: 'Action Launch', occurrences: 1 }),
+    ]);
   });
 
   it('refuse les documents vides ou dépassant la limite de pages', async () => {

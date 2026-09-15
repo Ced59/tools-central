@@ -373,6 +373,11 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   source.setTitle('Rapport confidentiel');
   source.setAuthor('Alice');
   source.addJavaScript('OpenAction', 'app.alert("secret-script");');
+  source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+    Type: 'Action',
+    S: 'URI',
+    URI: PDFString.of('https://open.example/start'),
+  }));
   await source.attach(new TextEncoder().encode('pièce jointe confidentielle'), 'secret.txt', {
     mimeType: 'text/plain',
     description: 'Annexe interne',
@@ -383,6 +388,13 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   const field = form.createTextField('contact-email');
   field.setText('alice@example.test');
   field.addToPage(pdfPage, { x: 72, y: 650, width: 250, height: 28 });
+  field.acroField.dict.set(PDFName.of('AA'), source.context.obj({
+    K: {
+      Type: 'Action',
+      S: 'JavaScript',
+      JS: PDFString.of('app.alert("field-secret");'),
+    },
+  }));
   const link = source.context.obj({
     Type: 'Annot',
     Subtype: 'Link',
@@ -469,6 +481,9 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('https://launch.example/run');
   await expect(result).toContainText('Action SubmitForm');
   await expect(result).toContainText('https://submit.example/collect');
+  await expect(result).toContainText('Action URI à l’ouverture');
+  await expect(result).toContainText('https://open.example/start');
+  await expect(result).toContainText('Actions de formulaire');
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
   await expect(result).toContainText('Alice');
@@ -492,6 +507,7 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   expect(exported.report.categoryCounts['links']).toBeGreaterThan(0);
   expect(exported.report.categoryCounts['forms']).toBeGreaterThan(0);
   expect(JSON.stringify(exported)).not.toContain('secret-script');
+  expect(JSON.stringify(exported)).not.toContain('field-secret');
   expect(JSON.stringify(exported)).not.toContain('alice@example.test');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 

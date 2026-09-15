@@ -14,6 +14,7 @@ import {
 } from './pdf-action-dictionary.engine';
 import {
   PdfPrivacyEngineError,
+  extractPdfVersion,
   inspectPdfPrivacyDocument,
   type PdfJsPrivacyDocument,
 } from './pdf-privacy.engine';
@@ -38,6 +39,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     const input = new Uint8Array(command.data);
     const headerData = input.slice(0, 1_024);
     const fileBytes = input.byteLength;
+    extractPdfVersion(headerData);
     post({ type: 'progress', percent: 1 });
     const actionDictionaries = await inspectPdfActionDictionaries(input);
     loadingTask = getDocument({
