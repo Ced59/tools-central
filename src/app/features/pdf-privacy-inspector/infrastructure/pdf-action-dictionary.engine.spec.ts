@@ -1,9 +1,11 @@
-import { PDFDocument, PDFName, PDFString } from 'pdf-lib';
+import { PDFDocument, PDFName, PDFRef, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
 import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
+  PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
@@ -361,6 +363,29 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
   });
 
+  it('borne la somme décompressée des scripts documentaires avant PDF.js', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const scriptBytes = PDF_PRIVACY_MAX_JAVASCRIPT_BYTES;
+    const scriptCount = Math.floor(
+      PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES / scriptBytes,
+    ) + 1;
+    const names: (PDFString | PDFRef)[] = [];
+    for (let index = 0; index < scriptCount; index += 1) {
+      const script = source.context.register(source.context.flateStream('A'.repeat(scriptBytes)));
+      const action = source.context.register(source.context.obj({
+        Type: 'Action', S: 'JavaScript', JS: script,
+      }));
+      names.push(PDFString.of(`script-${String(index)}`), action);
+    }
+    source.catalog.set(PDFName.of('Names'), source.context.obj({
+      JavaScript: { Names: names },
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('refuse chaque paquet XFA dont la taille décompressée dépasse la limite', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -445,6 +470,27 @@ describe('inspectPdfStructuralSignals', () => {
         (_, index) => source.context.obj({ FT: 'Tx', T: PDFString.of(`field-${String(index)}`) }),
       ),
     }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('borne la croissance cumulée des noms qualifiés de champs', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const partBytes = 1_024;
+    const fieldDepth = Math.ceil(Math.sqrt(
+      2 * PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES / partBytes,
+    )) + 1;
+    let child = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('A'.repeat(partBytes)),
+    }));
+    for (let index = 1; index < fieldDepth; index += 1) {
+      child = source.context.register(source.context.obj({
+        FT: 'Tx', T: PDFString.of('A'.repeat(partBytes)), Kids: [child],
+      }));
+    }
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [child] }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });
@@ -610,6 +656,21 @@ describe('inspectPdfStructuralSignals', () => {
       target: 'https://submit.example/after-malformed',
       occurrences: 1,
     });
+  });
+
+  it('borne les tableaux d’actions imbriqués avant la normalisation récursive', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    let nested = source.context.register(source.context.obj({
+      Type: 'Action', S: 'JavaScript', JS: PDFString.of('safe()'),
+    }));
+    for (let index = 0; index <= PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH; index += 1) {
+      nested = source.context.register(source.context.obj([nested]));
+    }
+    source.catalog.set(PDFName.of('OpenAction'), nested);
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
   });
 
   it('rejette une chaîne Next avant la limite de récursion de PDF.js', async () => {
