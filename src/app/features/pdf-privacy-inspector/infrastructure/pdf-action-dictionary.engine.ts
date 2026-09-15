@@ -76,8 +76,10 @@ const TARGET_BEARING_ACTION_NAMES = new Set([
 const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
+export const PDF_PRIVACY_MAX_JAVASCRIPT_BYTES = 1 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_XMP_BYTES = 2 * 1_024 * 1_024;
-const XMP_INFLATE_CHUNK_BYTES = 64 * 1_024;
+export const PDF_PRIVACY_MAX_XFA_BYTES = 8 * 1_024 * 1_024;
+const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
   'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
@@ -92,6 +94,7 @@ interface InspectionState {
   canReadTarget: boolean;
   traversalSteps: number;
   discoveredSignals: number;
+  validatedTextLimits: Map<PDFObject, number>;
 }
 
 interface StoredActionDictionarySignal {
@@ -163,7 +166,6 @@ export async function inspectPdfStructuralSignals(
       throwOnInvalidObject: false,
       updateMetadata: false,
     });
-    validateXmpMetadataBudget(document);
     const indirectObjects = document.context.enumerateIndirectObjects();
     if (indirectObjects.length > MAX_INDIRECT_OBJECTS) {
       throw new PdfActionDictionaryInspectionError();
@@ -183,7 +185,9 @@ export async function inspectPdfStructuralSignals(
       canReadTarget: !document.isEncrypted,
       traversalSteps: 0,
       discoveredSignals: 0,
+      validatedTextLimits: new Map<PDFObject, number>(),
     };
+    validateXmpMetadataBudget(document, state);
 
     while (queue.length > 0) {
       const workItem = queue.pop();
@@ -219,6 +223,7 @@ export async function inspectPdfStructuralSignals(
       }
       if (!(object instanceof PDFDict)) continue;
 
+      validateDecodedTextBudgets(object, state);
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
       inspectEmbeddedFileSpec(object, state);
@@ -359,6 +364,7 @@ function inspectActionEntry(
       ? workItem.object.dict
       : workItem.object;
     if (!(dictionary instanceof PDFDict)) continue;
+    validateDecodedTextBudgets(dictionary, state);
 
     if (workItem.allowContainer) {
       stack.push({
@@ -501,14 +507,65 @@ function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
   return undefined;
 }
 
-function validateXmpMetadataBudget(document: PDFDocument): void {
+function validateXmpMetadataBudget(document: PDFDocument, state: InspectionState): void {
   const metadata = readObject(document.catalog, 'Metadata');
   if (!metadata) return;
-  if (!(metadata instanceof PDFRawStream)) throw new PdfActionDictionaryInspectionError();
-  const contents = metadata.getContents();
-  const filters = readFilterNames(metadata.dict);
+  validatePdfTextObjects(metadata, PDF_PRIVACY_MAX_XMP_BYTES, state);
+}
+
+function validateDecodedTextBudgets(dictionary: PDFDict, state: InspectionState): void {
+  const javascript = readObject(dictionary, 'JS');
+  if (javascript) {
+    validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
+  }
+  const xfa = readObject(dictionary, 'XFA');
+  if (xfa) validatePdfTextObjects(xfa, PDF_PRIVACY_MAX_XFA_BYTES, state);
+}
+
+function validatePdfTextObjects(
+  root: PDFObject,
+  maxDecodedBytes: number,
+  state: InspectionState,
+): void {
+  const stack = [root];
+  while (stack.length > 0) {
+    const rawObject = stack.pop();
+    if (!rawObject) continue;
+    const object = resolvePdfObject(rawObject, state.document);
+    if (!object) continue;
+    const validatedLimit = state.validatedTextLimits.get(object);
+    if (validatedLimit !== undefined && validatedLimit <= maxDecodedBytes) continue;
+    state.validatedTextLimits.set(object, maxDecodedBytes);
+
+    if (object instanceof PDFString || object instanceof PDFHexString) {
+      if (object.asBytes().byteLength > maxDecodedBytes) {
+        throw new PdfActionDictionaryInspectionError();
+      }
+      continue;
+    }
+    if (object instanceof PDFRawStream) {
+      validateDecodedStreamSize(object, maxDecodedBytes);
+      continue;
+    }
+    if (object instanceof PDFStream) throw new PdfActionDictionaryInspectionError();
+    if (object instanceof PDFArray) stack.push(...object.asArray());
+  }
+}
+
+function resolvePdfObject(object: PDFObject, document: PDFDocument): PDFObject | undefined {
+  if (!(object instanceof PDFRef)) return object;
+  try {
+    return document.context.lookup(object);
+  } catch {
+    return undefined;
+  }
+}
+
+function validateDecodedStreamSize(stream: PDFRawStream, maxDecodedBytes: number): void {
+  const contents = stream.getContents();
+  const filters = readFilterNames(stream.dict);
   if (filters.length === 0) {
-    if (contents.byteLength > PDF_PRIVACY_MAX_XMP_BYTES) {
+    if (contents.byteLength > maxDecodedBytes) {
       throw new PdfActionDictionaryInspectionError();
     }
     return;
@@ -516,7 +573,7 @@ function validateXmpMetadataBudget(document: PDFDocument): void {
   if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0])) {
     throw new PdfActionDictionaryInspectionError();
   }
-  validateInflatedXmpSize(contents);
+  validateInflatedSize(contents, maxDecodedBytes);
 }
 
 function readFilterNames(dictionary: PDFDict): readonly string[] {
@@ -533,12 +590,12 @@ function readFilterNames(dictionary: PDFDict): readonly string[] {
   return names;
 }
 
-function validateInflatedXmpSize(contents: Uint8Array): void {
-  const inflater = new Inflate({ chunkSize: XMP_INFLATE_CHUNK_BYTES });
+function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): void {
+  const inflater = new Inflate({ chunkSize: TEXT_INFLATE_CHUNK_BYTES });
   let decodedBytes = 0;
   inflater.onData = chunk => {
     decodedBytes += chunk.byteLength;
-    if (decodedBytes > PDF_PRIVACY_MAX_XMP_BYTES) {
+    if (decodedBytes > maxDecodedBytes) {
       throw new PdfActionDictionaryInspectionError();
     }
   };

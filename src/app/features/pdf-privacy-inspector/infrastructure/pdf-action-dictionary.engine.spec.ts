@@ -2,7 +2,9 @@ import { PDFDocument, PDFName, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
 import {
+  PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
+  PDF_PRIVACY_MAX_XFA_BYTES,
   PdfActionDictionaryInspectionError,
   inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
@@ -319,6 +321,35 @@ describe('inspectPdfStructuralSignals', () => {
     )));
 
     await expect(inspectPdfStructuralSignals(await source.save())).resolves.not.toBeNull();
+  });
+
+  it('refuse un flux JavaScript dont la taille décompressée dépasse la limite', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const javascript = source.context.register(source.context.flateStream(
+      'A'.repeat(PDF_PRIVACY_MAX_JAVASCRIPT_BYTES + 1),
+    ));
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action', S: 'JavaScript', JS: javascript,
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save()))
+      .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
+  });
+
+  it('refuse chaque paquet XFA dont la taille décompressée dépasse la limite', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const datasets = source.context.register(source.context.flateStream(
+      'A'.repeat(PDF_PRIVACY_MAX_XFA_BYTES + 1),
+    ));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: [],
+      XFA: [PDFString.of('datasets'), datasets],
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save()))
+      .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
   });
 
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {
