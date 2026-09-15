@@ -114,6 +114,49 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(cleanup).toHaveBeenCalledOnce();
   });
 
+  it('inventorie chaque propriété Info personnalisée exposée par PDF.js', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getMetadata: vi.fn().mockResolvedValue({
+        info: {
+          Custom: new Map<string, unknown>([
+            ['ClientEmail', ' client@example.test '],
+            ['InternalId', 42],
+            ['IgnoredObject', { secret: 'not-a-scalar' }],
+          ]),
+        },
+        metadata: null,
+      }),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.filter(finding => finding.kind === 'document-metadata')).toEqual([
+      expect.objectContaining({ label: 'ClientEmail', value: 'client@example.test' }),
+      expect.objectContaining({ label: 'InternalId', value: '42' }),
+    ]);
+  });
+
+  it('préserve les métadonnées privées renvoyées pour une signature', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue([{
+        fieldName: 'Approval',
+        contactInfo: 'signer@example.test',
+        location: 'Paris',
+        reason: 'Validation interne',
+        signingTime: 'D:20260915113000+02\'00\'',
+      }]),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.find(finding => finding.kind === 'digital-signature')).toMatchObject({
+      severity: 'low',
+      message: {
+        code: 'signature-details',
+        contactInfo: 'signer@example.test',
+        location: 'Paris',
+        reason: 'Validation interne',
+        signingTime: 'D:20260915113000+02\'00\'',
+      },
+    });
+  });
+
   it('signale un formulaire XFA pur et un JavaScript de champ sans détail disponible', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       isPureXfa: true,
@@ -457,6 +500,28 @@ describe('inspectPdfPrivacyDocument', () => {
       actionDictionaries: [{
         actionType: 'Launch', context: 'annotation-action', occurrences: 1,
         triggerIds: ['encrypted'],
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'automatic-action')).toEqual([
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'Launch', context: 'other' },
+        occurrences: 1,
+      }),
+    ]);
+  });
+
+  it('ne double pas une action de plan chiffrée dont la cible brute est masquée', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getOutline: vi.fn().mockResolvedValue([{
+        title: 'Programme', unsafeUrl: 'viewer.exe', items: [],
+      }]),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      actionDictionaries: [{
+        actionType: 'Launch', context: 'outline-action', occurrences: 1,
       }],
     });
 

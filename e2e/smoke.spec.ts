@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import JSZip from 'jszip';
-import { PDFArray, PDFDocument, PDFName, PDFString, rgb } from 'pdf-lib';
+import { PDFArray, PDFDict, PDFDocument, PDFName, PDFString, rgb } from 'pdf-lib';
 import { readFile } from 'node:fs/promises';
 
 test('home, locale and theme remain usable', async ({ page }) => {
@@ -372,6 +372,9 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   const source = await PDFDocument.create();
   source.setTitle('Rapport confidentiel');
   source.setAuthor('Alice');
+  const infoDictionary = source.context.lookupMaybe(source.context.trailerInfo.Info, PDFDict);
+  if (!infoDictionary) throw new Error('PDF Info dictionary unavailable');
+  infoDictionary.set(PDFName.of('ClientEmail'), PDFString.of('client@example.test'));
   source.addJavaScript('OpenAction', 'app.alert("secret-script");');
   source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
     Type: 'Action',
@@ -546,6 +549,8 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
   await expect(result).toContainText('Alice');
+  await expect(result).toContainText('ClientEmail');
+  await expect(result).toContainText('client@example.test');
   await expect(result).not.toContainText('secret.txt');
   await result.getByRole('button', { name: /Tout/u }).click();
 

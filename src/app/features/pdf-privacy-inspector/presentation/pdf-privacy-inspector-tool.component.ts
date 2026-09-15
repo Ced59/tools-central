@@ -310,6 +310,10 @@ export class PdfPrivacyInspectorToolComponent {
       `${this.findingTitle('digital-signature')} ${new Intl.NumberFormat(this.locale).format(message.index)}`,
     ];
     if (message.subFilter) parts.push(message.subFilter);
+    if (message.contactInfo) parts.push(`ContactInfo: ${message.contactInfo}`);
+    if (message.location) parts.push(`Location: ${message.location}`);
+    if (message.reason) parts.push(`Reason: ${message.reason}`);
+    if (message.signingTime) parts.push(`M: ${message.signingTime}`);
     if (message.coversWholeDocument === true) parts.push('100 %');
     else if (message.coversWholeDocument === false) parts.push('< 100 %');
     if (message.modifications) {

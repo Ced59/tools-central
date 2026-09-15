@@ -56,6 +56,7 @@ interface LinkAggregate {
 interface ActionDictionaryIndex {
   targets: Set<string>;
   targetlessAnnotationTriggerIds: Set<string>;
+  targetlessOutlineActions: number;
 }
 
 type ConsumeDiscoveryBudget = (count?: number) => void;
@@ -253,11 +254,16 @@ function collectMetadata(
 ): void {
   for (const [key, rawValue] of objectEntries(metadata.info)) {
     consume();
-    if (!INFO_METADATA_KEYS.has(key.toLowerCase())) continue;
+    const normalizedKey = key.toLowerCase();
+    if (normalizedKey === 'custom' && isObject(rawValue)) {
+      collectCustomInfoMetadata(rawValue, add, consume);
+      continue;
+    }
+    if (!INFO_METADATA_KEYS.has(normalizedKey)) continue;
     const value = readableValue(rawValue);
     if (!value) continue;
     add({
-      id: `metadata:info:${key.toLowerCase()}`,
+      id: `metadata:info:${normalizedKey}`,
       category: 'metadata',
       kind: 'document-metadata',
       severity: 'low',
@@ -279,6 +285,28 @@ function collectMetadata(
       kind: 'xmp-metadata',
       severity: 'low',
       label: key,
+      value,
+    });
+  }
+}
+
+function collectCustomInfoMetadata(
+  custom: object,
+  add: (finding: PdfPrivacyFinding) => void,
+  consume: ConsumeDiscoveryBudget,
+): void {
+  let index = 0;
+  for (const [key, rawValue] of objectEntries(custom)) {
+    consume();
+    const value = readableValue(rawValue);
+    if (!value) continue;
+    index += 1;
+    add({
+      id: `metadata:info:custom:${String(index)}`,
+      category: 'metadata',
+      kind: 'document-metadata',
+      severity: 'low',
+      label: sanitizePdfPrivacyValue(key) ?? 'Custom',
       value,
     });
   }
@@ -471,19 +499,29 @@ function collectSignatures(
     const signer = readableValue(signature?.['signerName']);
     const fieldName = readableValue(signature?.['fieldName']);
     const subFilter = readableValue(signature?.['subFilter']);
+    const contactInfo = readableValue(signature?.['contactInfo']);
+    const location = readableValue(signature?.['location']);
+    const reason = readableValue(signature?.['reason']);
+    const signingTime = readableValue(signature?.['signingTime']);
     const coversWholeDocument = signature?.['coversWholeDocument'];
     const modifications = finiteNumber(signature?.['modificationsAfterSignature']);
+    const containsPrivateMetadata = [signer, contactInfo, location, reason, signingTime]
+      .some(value => value !== undefined);
     add({
       id: `signature:${String(index + 1)}:${fieldName ?? ''}`,
       category: 'signatures',
       kind: 'digital-signature',
-      severity: signer ? 'low' : 'info',
+      severity: containsPrivateMetadata ? 'low' : 'info',
       label: fieldName,
       value: signer,
       message: {
         code: 'signature-details',
         index: index + 1,
         subFilter,
+        contactInfo,
+        location,
+        reason,
+        signingTime,
         coversWholeDocument: typeof coversWholeDocument === 'boolean'
           ? coversWholeDocument
           : undefined,
@@ -664,6 +702,7 @@ function collectActionDictionarySignals(
   const actionIndex: ActionDictionaryIndex = {
     targets: new Set<string>(),
     targetlessAnnotationTriggerIds: new Set<string>(),
+    targetlessOutlineActions: 0,
   };
   let findingIndex = 0;
   for (const signal of signals) {
@@ -699,6 +738,9 @@ function collectActionDictionarySignals(
         actionIndex.targetlessAnnotationTriggerIds.add(triggerId);
       }
     }
+    if (highRisk && !target && signal.context === 'outline-action') {
+      actionIndex.targetlessOutlineActions += occurrences;
+    }
     consume(occurrences);
     findingIndex += 1;
     add({
@@ -722,6 +764,10 @@ function consumeMatchingDictionaryAction(
 ): boolean {
   if (!actionIndex) return false;
   if (actionIndex.targets.has(target)) return true;
+  if (source === 'outline' && actionIndex.targetlessOutlineActions > 0) {
+    actionIndex.targetlessOutlineActions -= 1;
+    return true;
+  }
   if (
     source === 'annotation'
     && triggerId !== undefined

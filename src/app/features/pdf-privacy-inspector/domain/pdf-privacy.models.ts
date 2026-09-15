@@ -44,6 +44,10 @@ export type PdfPrivacyFindingMessage =
       code: 'signature-details';
       index: number;
       subFilter?: string;
+      contactInfo?: string;
+      location?: string;
+      reason?: string;
+      signingTime?: string;
       coversWholeDocument?: boolean;
       modifications?: number;
     }
