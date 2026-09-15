@@ -1,13 +1,13 @@
 # Audit technique de Tools Central
 
-Date de référence : 14 septembre 2026
+Date de référence : 15 septembre 2026
 Périmètre : application Angular, architecture, dépendances, sécurité, tests, i18n, SEO technique, performance, catalogue et chaîne de déploiement.
 
 ## Conclusion
 
-Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du générateur Schema.org SoftwareApplication.
+Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du nettoyeur de métadonnées OOXML.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Douze features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf` et `ooxml-metadata-cleaner`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 69 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Treize features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf`, `ooxml-metadata-cleaner` et `pdf-privacy-inspector`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 70 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,19 +16,19 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. D
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,36 kB brut, 166,07 kB transféré estimé ; PDF.js et le moteur OOXML restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,19 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,02 MB brut, 289,22 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 133 fichiers, 423 tests verts sous Vitest |
-| Couverture | aucun seuil | 49,01 % statements, 36,10 % branches, 48,67 % fonctions, 52,47 % lignes |
-| E2E | aucun | 14 parcours Playwright verts |
-| Routes statiques | 2 | 2 464 pages prérendues ; 2 405 URL sont indexables et 116 variantes d’outils non relues sont désormais omises des locales secondaires |
-| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 175 outils, 69 disponibles en français et 65 dans les locales secondaires |
+| Tests unitaires | suite non compilable | 139 fichiers, 528 tests verts sous Vitest |
+| Couverture | aucun seuil | 52,18 % statements, 40,77 % branches, 50,96 % fonctions, 55,81 % lignes |
+| E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
+| Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
+| Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 181 221 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 184 585 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 144 ms, CLS 0,0043, `DOMContentLoaded` 444 ms et interaction thème 65,8 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : LCP 2 252 ms, CLS 0,0043, `DOMContentLoaded` 815,7 ms et interaction thème 71,9 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
@@ -55,6 +55,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 144 ms, CLS 0,
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
 - Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, décimaux exacts, sortie HTML sûre, diagnostics reliés aux champs, export, accessibilité et 28 tests ciblés.
+- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, itératifs, paresseux et bornés, tolérance locale des discriminateurs PDF malformés, suivi de `/Next` même après un discriminateur invalide et depuis les entrées de l’arbre de noms JavaScript, prise en charge des grands tableaux, plans limités à 10 000 signets et annotations découvertes par l’arbre de pages — même lorsqu’une feuille omet ou malforme `/Type` — limitées à 10 000 entrées avant leur normalisation, chaînes `/Next` et tableaux d’actions imbriqués limités à 256 avant les API récursives de PDF.js, références partagées, conteneurs `/AA` ambigus, actions `Named`, JavaScript d’annotation, actions multimédias localisées et fichiers associés `/AF` uniquement lorsqu’un flux `/EF` standard ou propre à une plateforme contient un fichier embarqué valide, sans boucle, faux positif, doublon structurel ni décompression inutile ; la taille d’une pièce jointe filtrée ou chiffrée est omise plutôt que confondue avec sa taille stockée. Les limites couvrent taille/pages/éléments/cibles, 10 000 champs, mot de passe local, préflight décompressé limité à 1 MiB par script, 2 MiB pour XMP et 8 MiB par paquet XFA, ainsi que des plafonds agrégés de 32 MiB sur le JavaScript documentaire, les scripts et apparences par défaut hérités de formulaires, les noms qualifiés, valeurs et options héritées de champs, les contenus de signatures, le balayage de leurs queues, l’expansion des valeurs `/Info`, les cibles, textes, géométries — y compris bordures et tirets — et scripts répétés d’annotations, ainsi que les titres et destinations du plan avant PDF.js. Les clés `/JS` et `/XFA` ne sont contrôlées que dans leurs conteneurs sémantiques afin de ne pas rejeter les extensions applicatives homonymes. Le parcours structurel n’inflate jamais le ciphertext : après validation du mot de passe, un flux chiffré filtré ciblé dont l’expansion reste non bornable est refusé, tandis que les documents bornables reçoivent l’inspection PDF.js complète. L’outil détecte la version PDF effective du catalogue et inspecte métadonnées standards/personnalisées y compris les valeurs `PDFName`, propriétés XMP scalaires itérables, scripts, actions, pièces jointes, liens, champs homonymes, formulaires, noms et métadonnées privées de signatures et chiffrement, sans exécuter ni exposer les contenus actifs. Un champ `/FT /Sig` structurellement valide reste inventorié même si `/SigFlags` est absent ou obsolète. Les unités de taille sont adaptées à la locale, les codes de rapport restent indépendants de la langue, et le rapport JSON est couvert par 105 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.
@@ -66,14 +67,14 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 144 ms, CLS 0,
 - Seuils de couverture bloquants relevés à 41 % statements, 26 % branches, 40 % fonctions et 44 % lignes pour empêcher une baisse silencieuse.
 - Tests métier du calcul de pourcentage, du cas d’usage et du moteur PDF.
 - Remplacement des tests superficiels des composants PDF modifiés par des scénarios valides et rejetés.
-- Playwright couvre accueil/langue/thème, calcul réel/réinitialisation, vraie 404/noindex et budgets performance mobile.
+- Playwright couvre accueil/langue/thème, calcul réel/réinitialisation, vraie 404/noindex, outils documentaires réels et budgets performance/mobile ; l’inspecteur est testé avec un PDF contenant JavaScript, pièce jointe, formulaire et URL.
 
 ### Internationalisation
 
 - Synchronisation XLF corrigée : unités obsolètes, doublons d’ID, taux supérieur à 100 % et verrous Windows.
 - Mode strict qui échoue sur segment absent, à revoir, obsolète ou contenant `TODO`.
 - Traduction automatisée durcie : réponse structurée de cardinalité exacte, rejet des lots tronqués, taille maximale suffisante, filtrage par locale/préfixe et cache contournable pour une reprise ciblée.
-- 6 249 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 181 221 segments techniquement complets.
+- 6 365 unités sont présentes dans chacune des 30 locales ; les 29 cibles secondaires totalisent 184 585 segments techniquement complets.
 
 La mention « 100 % » signifie uniquement « aucun segment technique manquant ». Les traductions automatiques ne sont pas certifiées par un locuteur natif et doivent conserver un statut éditorial distinct.
 
@@ -82,14 +83,14 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 - Catalogue unifié utilisé comme source de vérité pour navigation, routes, prérendu et sitemaps.
 - Exclusion automatique des outils `available: false`.
 - Publication par locale pilotée par `reviewedLocales` : variantes non relues masquées du catalogue, absentes des sitemaps et `hreflang`, puis rendues en `noindex,follow` en accès direct.
-- 85 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
+- 86 URL indexables en français, 80 dans chaque locale secondaire et 30 sitemaps, avec canonical, `hreflang` et `x-default` cohérents.
 - Suppression du faux `lastmod` égal à la date de chaque build.
 - Ajout d’une vraie page 404 localisée en `noindex,follow` avec statut HTTP 404 dans le serveur de test et Nginx, au lieu d’un retour `200` silencieux vers l’accueil.
 - Validation du HTML produit : fichier de chaque route, langue, titre, description, canonical, 31 alternates, robots, liens internes et cohérence des sitemaps.
 - Réécriture des cinq éditoriaux incomplets et suppression de tous les marqueurs source.
 - Retrait de 254 drapeaux inutilisés et de leur duplication dans chaque sortie locale.
 - `docs/SEO_TOOL_BACKLOG.md` contient une méthode de qualification, 30 priorités et 297 opportunités classées par cluster, valeur et complexité.
-- Dix outils issus du backlog sont désormais livrés. Les six outils SEO initiaux sont publiables dans les 30 langues ; le générateur SoftwareApplication, PDF vers images, Images vers PDF et le nettoyeur de métadonnées OOXML sont publiés en français, leurs variantes secondaires restant hors index jusqu’à une relecture linguistique explicite.
+- Onze outils issus du backlog sont désormais livrés. Les six outils SEO initiaux sont publiables dans les 30 langues ; le générateur SoftwareApplication, PDF vers images, Images vers PDF, le nettoyeur de métadonnées OOXML et l’inspecteur de confidentialité PDF sont publiés en français, leurs variantes secondaires restant hors index jusqu’à une relecture linguistique explicite.
 
 ### CI, GitHub et déploiement
 
@@ -101,7 +102,7 @@ La mention « 100 % » signifie uniquement « aucun segment technique manquant �
 - Protection de `master` appliquée et relue via l’API GitHub : PR requise, `Verify` requis et strict, administrateurs inclus, conversations résolues, historique linéaire, force-push/suppression interdits.
 - Fusion squash uniquement, titre de PR repris dans l’historique, et suppression automatique de la branche source après merge.
 - Environnement GitHub `production` créé avec une politique de déploiement limitée aux branches protégées.
-- Déploiement post-merge prouvé jusqu’au commit `4258bec` : jobs `Verify` et `Deploy production` verts, artifact téléchargé, release VPS activée, conteneur sain et smoke HTTP public réussi. Dernière exécution vérifiée : <https://github.com/Ced59/tools-central/actions/runs/34853588533>.
+- Déploiement post-merge prouvé jusqu’au commit `7828caa` : jobs `Verify` et `Deploy production` verts, artifact téléchargé, release VPS activée, conteneur sain et smoke HTTP public réussi. Dernière exécution vérifiée : <https://github.com/Ced59/tools-central/actions/runs/34917900091>.
 
 Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent donc temporairement à zéro ; elles devront passer à une dès qu’un second reviewer peut approuver. Cette exception évite de rendre le dépôt impossible à fusionner et ne permet pas de contourner `Verify`.
 
@@ -132,7 +133,7 @@ Le dépôt n’a qu’un seul mainteneur. Les approbations obligatoires restent 
 
 - Angular replie `pt-BR` vers les données de locale `pt` et émet deux avertissements de build.
 - JSZip, QRCode et `pako` via PDF-Lib restent CommonJS ; ils sont chargés dans des chunks fonctionnels mais provoquent des avertissements d’optimisation.
-- Le Worker de nettoyage PDF pèse 432,59 kB brut ; c’est un chunk paresseux et non le bundle initial, mais sa mémoire et son temps doivent être testés sur de gros documents.
+- Les Workers PDF.js restent paresseux : celui de l’inspecteur pèse 1,02 MB brut (289,09 kB transféré estimé) et ne charge son moteur de parsing qu’à l’usage ; mémoire et temps doivent rester surveillés sur de gros documents.
 - L’image Open Graph générique mérite un visuel social dédié et testé.
 - Les limites de taille/complexité ne sont pas encore uniformes pour chaque famille de fichiers.
 - La télémétrie et la conformité vie privée nécessitent une revue dédiée avant toute extension de mesure.

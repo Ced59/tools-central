@@ -24,6 +24,16 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
           description: $localize`:@@dev_pdf_sg_inspect_desc:Analyser et exporter la structure interne d'un PDF (métadonnées, pages, liens, polices, images, annotations, pièces jointes…).`,
           order: 1,
           tools: {
+            'pdf-privacy-inspector': {
+              title: $localize`:@@tool_pdf_privacy_inspector_title:Inspecteur de confidentialité PDF`,
+              description: $localize`:@@tool_pdf_privacy_inspector_desc:Repérer localement métadonnées, pièces jointes, JavaScript, liens, formulaires, signatures et chiffrement avant partage.`,
+              icon: 'tc-icon tc-icon-shield',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/pdf-privacy-inspector/presentation/pdf-privacy-inspector-tool.component')
+                  .then(m => m.PdfPrivacyInspectorToolComponent),
+            },
             'pdf-form-fields-to-json': {
               title: $localize`:@@tool_pdf_form_fields_to_json_title:Champs PDF → JSON`,
               description: $localize`:@@tool_pdf_form_fields_to_json_desc:Exporter la liste des champs d'un formulaire PDF (AcroForm) au format JSON.`,

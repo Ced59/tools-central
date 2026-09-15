@@ -85741,6 +85741,702 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">콘텐츠 유형</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_privacy_inspector_title">
+      <segment>
+        <source>Inspecteur de confidentialité PDF</source>
+        <target state="translated">PDF 개인정보 검사기</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_privacy_inspector_desc">
+      <segment>
+        <source>Repérer localement métadonnées, pièces jointes, JavaScript, liens, formulaires, signatures et chiffrement avant partage.</source>
+        <target state="translated">공유하기 전에 메타데이터, 첨부파일, JavaScript, 링크, 양식, 서명 및 암호화를 로컬에서 식별합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_title">
+      <segment>
+        <source>Contrôler les traces cachées d’un PDF avant de le partager</source>
+        <target state="translated">공유하기 전에 PDF의 숨겨진 흔적을 확인하세요</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_lead">
+      <segment>
+        <source>Un PDF peut conserver le nom de son auteur, une pièce jointe, un formulaire rempli, une URL de suivi ou du code déclenché par certains lecteurs. Cet inspecteur rassemble ces signaux dans un rapport local, lisible et exportable, sans ouvrir les fichiers embarqués ni contacter les liens détectés.</source>
+        <target state="translated">PDF는 작성자의 이름, 첨부파일, 작성된 양식, 추적 URL 또는 특정 리더에 의해 트리거되는 코드를 보존할 수 있습니다. 이 검사기는 이러한 신호를 로컬에서 읽을 수 있고 내보낼 수 있는 보고서로 수집합니다. 내장된 파일을 열거나 감지된 링크에 연락하지 않고도 가능합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_use_cases">
+      <segment>
+        <source>Quand inspecter la confidentialité d’un PDF ?</source>
+        <target state="translated">PDF의 개인정보를 언제 검사해야 하나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_title">
+      <segment>
+        <source>Avant un envoi externe</source>
+        <target state="translated">외부 전송 전</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_text">
+      <segment>
+        <source>Contrôlez un contrat, un rapport ou une présentation convertie en PDF avant de l’envoyer à un client, un candidat, une administration ou un partenaire.</source>
+        <target state="translated">고객, 후보자, 행정 기관 또는 파트너에게 보내기 전에 계약서, 보고서 또는 PDF로 변환된 프레젠테이션을 확인하세요.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_title">
+      <segment>
+        <source>À la réception d’un document complexe</source>
+        <target state="translated">복잡한 문서를 수신할 때</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_text">
+      <segment>
+        <source>Repérez les pièces jointes, scripts et actions automatiques avant d’ouvrir le fichier dans un lecteur riche. L’inspecteur n’exécute jamais ces éléments.</source>
+        <target state="translated">파일을 풍부한 리더에서 열기 전에 첨부파일, 스크립트 및 자동 작업을 식별하세요. 검사기는 이러한 요소를 실행하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_title">
+      <segment>
+        <source>Pour documenter une revue</source>
+        <target state="translated">검토를 문서화하기 위해</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_text">
+      <segment>
+        <source>Téléchargez le JSON afin de conserver la version PDF, le nombre de pages, les catégories trouvées, leur sévérité et les limites explicites de l’analyse.</source>
+        <target state="translated">PDF 버전, 페이지 수, 발견된 범주, 심각도 및 분석의 명시적 한계를 보존하기 위해 JSON을 다운로드하세요.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage">
+      <segment>
+        <source>Ce que le rapport examine réellement</source>
+        <target state="translated">보고서가 실제로 검사하는 내용</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_1">
+      <segment>
+        <source>Les dictionnaires d’information et les propriétés XMP peuvent révéler auteur, logiciel, dates, mots-clés ou identifiants documentaires. Le rapport affiche uniquement les valeurs pertinentes et les borne pour préserver la réactivité.</source>
+        <target state="translated">정보 사전 및 XMP 속성은 작성자, 소프트웨어, 날짜, 키워드 또는 문서 식별자를 드러낼 수 있습니다. 보고서는 관련 값만 표시하고 반응성을 유지하기 위해 한계를 설정합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_2">
+      <segment>
+        <source>Les fichiers embarqués, URL externes, champs AcroForm ou XFA et signatures sont inventoriés sans extraire leurs données sensibles. Une valeur de formulaire est comptée comme présente, mais n’est jamais recopiée dans le rapport.</source>
+        <target state="translated">내장 파일, 외부 URL, AcroForm 또는 XFA 필드 및 서명은 민감한 데이터를 추출하지 않고 목록화됩니다. 양식 값은 존재하는 것으로 간주되지만 보고서에 복사되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_3">
+      <segment>
+        <source>PDF.js détecte les actions JavaScript au niveau du document, des pages et des formulaires. Leur code n’est ni affiché, ni évalué, ni transmis. Les actions d’ouverture ou de lancement connues sont signalées séparément.</source>
+        <target state="translated">PDF.js는 문서, 페이지 및 양식 수준에서 JavaScript 작업을 감지합니다. 그 코드가 표시되거나 평가되거나 전송되지 않습니다. 알려진 열기 또는 시작 작업은 별도로 보고됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_interpretation">
+      <segment>
+        <source>Interpréter les niveaux d’attention</source>
+        <target state="translated">주의 수준 해석하기</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_title">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">높은 주의</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_text">
+      <segment>
+        <source>JavaScript, action automatique sensible ou fichier embarqué demande une revue avant diffusion. Leur présence n’établit pas à elle seule une intention malveillante.</source>
+        <target state="translated">JavaScript, 민감한 자동 작업 또는 내장 파일은 배포 전에 검토가 필요합니다. 그 존재만으로 악의적인 의도를 확립하지는 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_title">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">확인 필요</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_text">
+      <segment>
+        <source>Les liens externes, formulaires remplis et structures XFA peuvent transmettre ou conserver des informations selon le lecteur et l’usage du document.</source>
+        <target state="translated">외부 링크, 작성된 양식 및 XFA 구조는 리더 및 문서 사용에 따라 정보를 전송하거나 보존할 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_title">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">흔적 발견</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_text">
+      <segment>
+        <source>Une métadonnée ou l’identité associée à une signature peut être légitime, mais mérite une décision consciente avant publication.</source>
+        <target state="translated">메타데이터 또는 서명과 관련된 신원은 합법적일 수 있지만, 게시 전에 신중한 결정을 내릴 필요가 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">로컬 처리 및 보안 한계</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_1">
+      <segment>
+        <source>Le fichier et son éventuel mot de passe restent dans la mémoire du navigateur. L’analyse s’exécute dans un Worker et les ressources PDF.js sont servies par Tools Central.</source>
+        <target state="translated">파일과 그 잠재적 비밀번호는 브라우저 메모리에 남아 있습니다. 분석은 Worker에서 실행되며 PDF.js 리소스는 Tools Central에서 제공됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_2">
+      <segment>
+        <source>La taille est limitée à 50 Mio, le document à 1 000 pages et le nombre d’éléments distincts à 10 000. L’affichage est borné à 200 lignes tandis que les totaux complets restent dans le rapport.</source>
+        <target state="translated">크기는 50MB로 제한되며, 문서는 1,000페이지, 고유 항목 수는 10,000개로 제한됩니다. 표시되는 내용은 200줄로 제한되며 전체 합계는 보고서에 남아 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_3">
+      <segment>
+        <source>Ce contrôle structurel n’est ni un antivirus, ni une analyse du texte ou des images visibles, ni une preuve cryptographique de validité des signatures. Un résultat vide n’est donc pas un certificat d’innocuité.</source>
+        <target state="translated">이 구조적 검사는 바이러스 백신도 아니고, 텍스트나 보이는 이미지 분석도 아니며, 서명의 유효성을 증명하는 암호학적 증거도 아닙니다. 따라서 빈 결과는 안전성 인증이 아닙니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_faq">
+      <segment>
+        <source>Questions fréquentes sur la confidentialité des PDF</source>
+        <target state="translated">PDF 개인정보에 대한 자주 묻는 질문</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q1">
+      <segment>
+        <source>Le mot de passe de mon PDF est-il enregistré ?</source>
+        <target state="translated">내 PDF의 비밀번호가 저장되나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a1">
+      <segment>
+        <source>Non. Il est transmis uniquement au Worker local pour déchiffrer la structure, puis disparaît avec l’état de la page, une réinitialisation ou la fermeture de l’onglet. Il n’est jamais inclus dans le JSON.</source>
+        <target state="translated">아니요. 비밀번호는 구조를 해독하기 위해 로컬 Worker에만 전송되며, 페이지 상태, 재설정 또는 탭 닫기와 함께 사라집니다. JSON에 포함되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q2">
+      <segment>
+        <source>Un JavaScript détecté signifie-t-il que le PDF est dangereux ?</source>
+        <target state="translated">감지된 JavaScript는 PDF가 위험하다는 것을 의미하나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a2">
+      <segment>
+        <source>Pas nécessairement. Des formulaires légitimes utilisent JavaScript pour calculer ou valider des champs. Sa présence justifie toutefois une revue et l’ouverture dans un environnement adapté à la provenance du fichier.</source>
+        <target state="translated">반드시 그렇지는 않습니다. 합법적인 양식은 필드를 계산하거나 검증하기 위해 JavaScript를 사용합니다. 그러나 그 존재는 검토와 파일 출처에 적합한 환경에서 열기를 정당화합니다.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q3">
+      <segment>
+        <source>Pourquoi une signature n’est-elle pas marquée comme valide ou invalide ?</source>
+        <target state="translated">왜 서명이 유효하거나 무효로 표시되지 않나요?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a3">
+      <segment>
+        <source>Une validation fiable doit vérifier la chaîne de certificats, la révocation, l’horodatage et les octets signés. L’outil décrit seulement la présence, l’identité déclarée et la couverture exposées par le PDF.</source>
+        <target state="translated">신뢰할 수 있는 검증은 인증서 체인, 폐기, 타임스탬프 및 서명된 바이트를 확인해야 합니다. 이 도구는 PDF에 의해 노출된 존재, 선언된 신원 및 범위만 설명합니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">PDF 도구로 돌아가기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_title">
+      <segment>
+        <source>Inspecter la confidentialité d’un PDF</source>
+        <target state="translated">PDF의 개인정보 검사하기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_subtitle">
+      <segment>
+        <source>Repérez métadonnées, pièces jointes, JavaScript, actions automatiques, liens, formulaires, signatures et protection avant de partager un document.</source>
+        <target state="translated">문서를 공유하기 전에 메타데이터, 첨부파일, JavaScript, 자동 작업, 링크, 양식, 서명 및 보호를 식별하세요.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_local">
+      <segment>
+        <source>Aucun envoi et aucun lien suivi : l’analyse s’exécute localement dans un Worker.</source>
+        <target state="translated">전송 및 추적 링크 없음: 분석은 Worker에서 로컬로 실행됩니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">1단계</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_source_title">
+      <segment>
+        <source>Choisir le PDF à contrôler</source>
+        <target state="translated">검사할 PDF 선택하기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick">
+      <segment>
+        <source>Sélectionner un fichier PDF</source>
+        <target state="translated">PDF 파일 선택하기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick_help">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · 1 000 pages · traitement local</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> 최대 · 1,000 페이지 · 로컬 처리</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">파일</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">크기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_label">
+      <segment>
+        <source>Mot de passe du PDF</source>
+        <target state="translated">PDF 비밀번호</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_help">
+      <segment>
+        <source>Le mot de passe reste en mémoire le temps de l’analyse et n’est ni enregistré ni inclus dans le rapport.</source>
+        <target state="translated">비밀번호는 분석하는 동안 메모리에 유지되며 저장되거나 보고서에 포함되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_inspect">
+      <segment>
+        <source>Inspecter le PDF</source>
+        <target state="translated">PDF 검사</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">재설정</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_processing">
+      <segment>
+        <source>Inspection structurelle locale…</source>
+        <target state="translated">로컬 구조 검사 중…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">취소</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">2단계</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_result_title">
+      <segment>
+        <source>Rapport de confidentialité</source>
+        <target state="translated">개인정보 보호 보고서</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_download">
+      <segment>
+        <source>Télécharger le rapport JSON</source>
+        <target state="translated">JSON 보고서 다운로드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pages">
+      <segment>
+        <source>Pages inspectées</source>
+        <target state="translated">검사된 페이지</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_total">
+      <segment>
+        <source>Occurrences détectées</source>
+        <target state="translated">감지된 항목</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_high_count">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">높은 주의</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_medium_count">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">확인 필요</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_report_scope">
+      <segment>
+        <source>PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · détection structurelle sans exécution du contenu actif.</source>
+        <target state="translated">PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · 활성 콘텐츠 실행 없이 구조적 감지.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_clear_state">
+      <segment>
+        <source>Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</source>
+        <target state="translated">지원되는 흔적이 감지되지 않았습니다. 이 결과는 안전성 인증이 아니므로 공유 전에 보이는 내용도 확인하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_label">
+      <segment>
+        <source>Filtrer le rapport</source>
+        <target state="translated">보고서 필터링</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_all">
+      <segment>
+        <source>Tout</source>
+        <target state="translated">모두</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_empty">
+      <segment>
+        <source>Aucun élément affichable dans cette catégorie.</source>
+        <target state="translated">이 카테고리에서 표시할 항목이 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> résultat(s) supplémentaire(s) restent comptés dans le rapport, mais ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> 개의 추가 결과가 보고서에 포함되지만 반응성을 유지하기 위해 표시되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guidance">
+      <segment>
+        <source>Portée du contrôle</source>
+        <target state="translated">검사 범위</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active">
+      <segment>
+        <source>Le code n’est jamais exécuté</source>
+        <target state="translated">코드는 절대 실행되지 않음</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active_text">
+      <segment>
+        <source>Le moteur inventorie JavaScript et actions automatiques sans lancer le script, ouvrir une pièce jointe ni visiter une URL.</source>
+        <target state="translated">엔진은 스크립트를 실행하거나 첨부 파일을 열거나 URL을 방문하지 않고 JavaScript 및 자동 작업을 인벤토리합니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature">
+      <segment>
+        <source>Présence, pas validation</source>
+        <target state="translated">존재, 검증 아님</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature_text">
+      <segment>
+        <source>Une signature est décrite par ses métadonnées et sa couverture. Son certificat et son intégrité cryptographique ne sont pas vérifiés.</source>
+        <target state="translated">서명은 메타데이터와 범위로 설명됩니다. 인증서와 암호적 무결성은 검증되지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next">
+      <segment>
+        <source>Nettoyer ensuite</source>
+        <target state="translated">다음에 정리하기</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next_text">
+      <segment>
+        <source>L’inspecteur ne modifie jamais le document.</source>
+        <target state="translated">검사자는 문서를 수정하지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_sanitize_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF.</source>
+        <target state="translated">PDF 클리너 열기.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_metadata">
+      <segment>
+        <source>Métadonnées</source>
+        <target state="translated">메타데이터</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_active">
+      <segment>
+        <source>Contenu actif</source>
+        <target state="translated">활성 콘텐츠</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_attachments">
+      <segment>
+        <source>Pièces jointes</source>
+        <target state="translated">첨부 파일</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_links">
+      <segment>
+        <source>Liens externes</source>
+        <target state="translated">외부 링크</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_forms">
+      <segment>
+        <source>Formulaires</source>
+        <target state="translated">양식</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_signatures">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">서명</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_encryption">
+      <segment>
+        <source>Chiffrement</source>
+        <target state="translated">암호화</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_document_metadata">
+      <segment>
+        <source>Métadonnée du document</source>
+        <target state="translated">문서 메타데이터</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xmp_metadata">
+      <segment>
+        <source>Métadonnée XMP</source>
+        <target state="translated">XMP 메타데이터</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_javascript">
+      <segment>
+        <source>JavaScript embarqué</source>
+        <target state="translated">임베디드 JavaScript</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_automatic_action">
+      <segment>
+        <source>Action automatique</source>
+        <target state="translated">자동 작업</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_embedded_file">
+      <segment>
+        <source>Fichier embarqué</source>
+        <target state="translated">임베디드 파일</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_external_link">
+      <segment>
+        <source>Lien externe</source>
+        <target state="translated">외부 링크</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_form_fields">
+      <segment>
+        <source>Champs de formulaire</source>
+        <target state="translated">양식 필드</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xfa_form">
+      <segment>
+        <source>Formulaire XFA dynamique</source>
+        <target state="translated">동적 XFA 양식</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_signature">
+      <segment>
+        <source>Signature numérique</source>
+        <target state="translated">디지털 서명</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_encryption">
+      <segment>
+        <source>Protection du PDF</source>
+        <target state="translated">PDF 보호</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">높은 주의</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_medium">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">확인 필요</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_low">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">추적 발견됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_info">
+      <segment>
+        <source>Information</source>
+        <target state="translated">정보</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">높은 주의</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_medium">
+      <segment>
+        <source>Vérifications nécessaires</source>
+        <target state="translated">검토 필요</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_low">
+      <segment>
+        <source>Traces de confidentialité détectées</source>
+        <target state="translated">개인정보 추적 발견됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_clear">
+      <segment>
+        <source>Aucune trace prise en charge détectée</source>
+        <target state="translated">지원되는 추적 없음 발견됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_encrypted_label">
+      <segment>
+        <source>protégé et déchiffré localement</source>
+        <target state="translated">로컬에서 보호 및 해독됨</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_unencrypted_label">
+      <segment>
+        <source>non chiffré</source>
+        <target state="translated">암호화되지 않음</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_page_context">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></source>
+        <target state="translated">페이지 <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_occurrences_context">
+      <segment>
+        <source><ph id="0" equiv="count" disp="finding.occurrences"/> occurrence(s)</source>
+        <target state="translated"><ph id="0" equiv="count" disp="finding.occurrences"/> 발생</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">선택한 파일이 비어 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">파일이 <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>의 한계를 초과합니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_format">
+      <segment>
+        <source>Sélectionnez un fichier portant l’extension PDF.</source>
+        <target state="translated">PDF 확장자를 가진 파일을 선택하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_length">
+      <segment>
+        <source>Le mot de passe dépasse la limite de sécurité de 128 caractères.</source>
+        <target state="translated">비밀번호가 128자 보안 한계를 초과합니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_required">
+      <segment>
+        <source>Ce PDF est protégé. Saisissez son mot de passe pour poursuivre l’inspection locale.</source>
+        <target state="translated">이 PDF는 보호되어 있습니다. 로컬 검사를 계속하려면 비밀번호를 입력하십시오.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_incorrect">
+      <segment>
+        <source>Le mot de passe ne permet pas d’ouvrir ce PDF.</source>
+        <target state="translated">비밀번호로 이 PDF를 열 수 없습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_pages">
+      <segment>
+        <source>Le document dépasse la limite de 1 000 pages inspectables.</source>
+        <target state="translated">문서가 검사 가능한 1,000페이지 한계를 초과합니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_limit">
+      <segment>
+        <source>Le document contient trop d’éléments distincts pour produire un rapport fiable dans les limites locales.</source>
+        <target state="translated">문서에 로컬 한계 내에서 신뢰할 수 있는 보고서를 생성하기에 너무 많은 고유 항목이 포함되어 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_invalid">
+      <segment>
+        <source>Le fichier ne contient pas une structure PDF valide.</source>
+        <target state="translated">파일에 유효한 PDF 구조가 포함되어 있지 않습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_generic">
+      <segment>
+        <source>Impossible d’inspecter ce PDF. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">이 PDF를 검사할 수 없습니다. 손상되었거나 지원되지 않는 기능을 사용할 수 있습니다.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_target_too_long">
+      <segment>
+        <source>Cible trop longue pour être affichée</source>
+        <target state="translated">표시할 수 있는 대상이 너무 깁니다</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_contact">
+      <segment>
+        <source>Contact</source>
+        <target state="translated">연락처</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_location">
+      <segment>
+        <source>Lieu</source>
+        <target state="translated">위치</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_reason">
+      <segment>
+        <source>Motif</source>
+        <target state="translated">사유</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_sound">
+      <segment>
+        <source>Son</source>
+        <target state="translated">소리</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_video">
+      <segment>
+        <source>Vidéo</source>
+        <target state="translated">비디오</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_screen">
+      <segment>
+        <source>Écran</source>
+        <target state="translated">화면</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
