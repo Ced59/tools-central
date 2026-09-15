@@ -104,6 +104,25 @@ describe('inspectPdfStructuralSignals', () => {
     }]);
   });
 
+  it('expose l’identifiant PDF.js du déclencheur quand une cible est chiffrée ou absente', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const annotation = source.context.register(source.context.obj({
+      Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10],
+      A: { Type: 'Action', S: 'SubmitForm' },
+    }));
+    page.node.set(PDFName.of('Annots'), source.context.obj([annotation]));
+
+    const signals = (await inspectPdfStructuralSignals(await source.save()))?.actionDictionaries;
+
+    expect(signals).toContainEqual({
+      actionType: 'SubmitForm',
+      context: 'annotation-action',
+      occurrences: 1,
+      triggerIds: [`${String(annotation.objectNumber)}R`],
+    });
+  });
+
   it('préserve le JavaScript masqué dans une annotation et une chaîne Next', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -134,7 +153,7 @@ describe('inspectPdfStructuralSignals', () => {
     ]));
   });
 
-  it('inventorie un fichier associé AF absent de la name tree', async () => {
+  it('inventorie une seule fois un FileSpec partagé par AF et la name tree', async () => {
     const source = await PDFDocument.create();
     source.addPage();
     const embeddedFile = source.context.register(source.context.flateStream(
@@ -143,19 +162,24 @@ describe('inspectPdfStructuralSignals', () => {
     ));
     const fileSpec = source.context.register(source.context.obj({
       Type: 'Filespec',
-      F: PDFString.of('associated.txt'),
-      UF: PDFString.of('associated.txt'),
+      F: PDFString.of('folder/associated.txt'),
+      UF: PDFString.of('folder/associated.txt'),
       Desc: PDFString.of('Associated only'),
       EF: { F: embeddedFile },
     }));
     source.catalog.set(PDFName.of('AF'), source.context.obj([fileSpec]));
+    source.catalog.set(PDFName.of('Names'), source.context.obj({
+      EmbeddedFiles: {
+        Names: [PDFString.of('associated.txt'), fileSpec],
+      },
+    }));
 
     const signals = await inspectPdfStructuralSignals(await source.save());
 
     expect(signals?.associatedFiles).toEqual([
       expect.objectContaining({
         id: 1,
-        fileName: 'associated.txt',
+        fileName: 'folder/associated.txt',
         description: 'Associated only',
         occurrences: 1,
       }),

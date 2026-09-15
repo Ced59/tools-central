@@ -133,7 +133,7 @@ describe('inspectPdfPrivacyDocument', () => {
     ]));
   });
 
-  it('ne double pas les actions héritées et ignore la sentinelle Off des contrôles vierges', async () => {
+  it('ne double pas les actions héritées et ignore les contrôles vierges sans valeur', async () => {
     const inheritedActions = new Map([['Keystroke', ['app.alert("secret")']]]);
     const report = await inspectPdfPrivacyDocument(documentFixture({
       hasJSActions: vi.fn().mockResolvedValue(true),
@@ -141,6 +141,9 @@ describe('inspectPdfPrivacyDocument', () => {
         ['consent', [
           { type: 'checkbox', value: 'Off', defaultValue: 'Off', actions: inheritedActions },
           { type: 'checkbox', value: 'Off', defaultValue: 'Off', actions: inheritedActions },
+        ]],
+        ['submit', [
+          { type: 'button', value: 'Off', defaultValue: 'Off' },
         ]],
       ])),
     }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
@@ -150,7 +153,7 @@ describe('inspectPdfPrivacyDocument', () => {
     ]);
     expect(report.findings.find(finding => finding.kind === 'form-fields')).toMatchObject({
       severity: 'low',
-      message: { code: 'acroform-summary', fieldCount: 1, populatedCount: 0 },
+      message: { code: 'acroform-summary', fieldCount: 2, populatedCount: 0 },
     });
   });
 
@@ -299,13 +302,18 @@ describe('inspectPdfPrivacyDocument', () => {
     ]);
   });
 
-  it('ajoute les fichiers associés AF sans doubler ceux de la name tree', async () => {
+  it('utilise l’inventaire structurel sans doublon de nom normalisé ou chiffré', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getAttachments: vi.fn().mockResolvedValue(new Map([
         ['associated.txt', {
           filename: 'associated.txt',
           contentType: 'text/plain',
           content: new Uint8Array(18),
+        }],
+        ['encrypted.txt', {
+          filename: 'encrypted.txt',
+          contentType: 'text/plain',
+          content: new Uint8Array(12),
         }],
       ])),
     }), {
@@ -314,10 +322,14 @@ describe('inspectPdfPrivacyDocument', () => {
       passwordUsed: false,
       associatedFiles: [{
         id: 1,
-        fileName: 'associated.txt',
+        fileName: 'folder/associated.txt',
         description: 'Associated only',
         contentType: 'text/plain',
         bytes: 18,
+        occurrences: 1,
+      }, {
+        id: 2,
+        bytes: 12,
         occurrences: 1,
       }],
     });
@@ -325,9 +337,14 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.filter(finding => finding.kind === 'embedded-file')).toEqual([
       expect.objectContaining({
         id: 'attachment:associated:1',
-        label: 'associated.txt',
+        label: 'folder/associated.txt',
         value: 'text/plain · Associated only',
         bytes: 18,
+      }),
+      expect.objectContaining({
+        id: 'attachment:associated:2',
+        message: { code: 'unnamed-attachment', index: 2 },
+        bytes: 12,
       }),
     ]);
   });
@@ -405,6 +422,7 @@ describe('inspectPdfPrivacyDocument', () => {
       passwordUsed: true,
       actionDictionaries: [{
         actionType: 'Launch', context: 'annotation-action', occurrences: 1,
+        triggerIds: ['encrypted'],
       }],
     });
 
@@ -414,6 +432,40 @@ describe('inspectPdfPrivacyDocument', () => {
         occurrences: 1,
       }),
     ]);
+  });
+
+  it('ne masque pas une URI portée par une autre annotation chiffrée', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([
+        { id: 'uri', unsafeUrl: 'javascript:alert("private-value")' },
+      ]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      actionDictionaries: [{
+        actionType: 'SubmitForm',
+        context: 'annotation-action',
+        occurrences: 1,
+        triggerIds: ['submit'],
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'automatic-action')).toEqual([
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'SubmitForm', context: 'other' },
+      }),
+      expect.objectContaining({
+        message: { code: 'unsafe-external-target' },
+        value: 'javascript:…',
+      }),
+    ]);
+    expect(JSON.stringify(report)).not.toContain('private-value');
   });
 
   it('refuse les documents vides ou dépassant la limite de pages', async () => {

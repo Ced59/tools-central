@@ -17,6 +17,7 @@ export interface PdfActionDictionarySignal {
   context: PdfActionDictionaryContext;
   target?: string;
   occurrences: number;
+  triggerIds?: readonly string[];
 }
 
 export type PdfActionDictionaryContext =
@@ -66,6 +67,9 @@ const ACTION_NAMES = new Set([
   'SubmitForm',
   'URI',
 ]);
+const TARGET_BEARING_ACTION_NAMES = new Set([
+  'GoToE', 'GoToR', 'ImportData', 'Launch', 'SubmitForm',
+]);
 const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
@@ -75,12 +79,21 @@ const ANNOTATION_SUBTYPES = new Set([
 
 interface InspectionState {
   document: PDFDocument;
-  signals: Map<string, PdfActionDictionarySignal>;
+  signals: Map<string, StoredActionDictionarySignal>;
   associatedFiles: Map<number, PdfAssociatedFileSignal>;
   associatedFileIds: Map<PDFDict, number>;
+  objectIds: Map<PDFObject, string>;
   canReadTarget: boolean;
   traversalSteps: number;
   discoveredSignals: number;
+}
+
+interface StoredActionDictionarySignal {
+  actionType: string;
+  context: PdfActionDictionaryContext;
+  target?: string;
+  occurrences: number;
+  triggerIds: Set<string>;
 }
 
 /**
@@ -97,16 +110,22 @@ export async function inspectPdfStructuralSignals(
       throwOnInvalidObject: false,
       updateMetadata: false,
     });
-    const indirectObjectCount = document.context.enumerateIndirectObjects().length;
-    if (indirectObjectCount > MAX_INDIRECT_OBJECTS) throw new PdfActionDictionaryInspectionError();
+    const indirectObjects = document.context.enumerateIndirectObjects();
+    if (indirectObjects.length > MAX_INDIRECT_OBJECTS) {
+      throw new PdfActionDictionaryInspectionError();
+    }
 
     const queue: PDFObject[] = [document.catalog];
     const visited = new Set<PDFObject>();
     const state: InspectionState = {
       document,
-      signals: new Map<string, PdfActionDictionarySignal>(),
+      signals: new Map<string, StoredActionDictionarySignal>(),
       associatedFiles: new Map<number, PdfAssociatedFileSignal>(),
       associatedFileIds: new Map<PDFDict, number>(),
+      objectIds: new Map(indirectObjects.map(([reference, object]) => [
+        object,
+        pdfJsReferenceId(reference),
+      ])),
       canReadTarget: !document.isEncrypted,
       traversalSteps: 0,
       discoveredSignals: 0,
@@ -140,6 +159,7 @@ export async function inspectPdfStructuralSignals(
 
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
+      inspectEmbeddedFileSpec(object, state);
       for (const [key, child] of object.entries()) {
         if (isHandledTriggerKey(object, key)) continue;
         queue.push(child);
@@ -147,7 +167,13 @@ export async function inspectPdfStructuralSignals(
     }
 
     return {
-      actionDictionaries: [...state.signals.values()],
+      actionDictionaries: [...state.signals.values()].map(signal => ({
+        actionType: signal.actionType,
+        context: signal.context,
+        target: signal.target,
+        occurrences: signal.occurrences,
+        ...(signal.triggerIds.size > 0 ? { triggerIds: [...signal.triggerIds] } : {}),
+      })),
       associatedFiles: [...state.associatedFiles.values()],
     };
   } catch (error: unknown) {
@@ -161,6 +187,7 @@ export async function inspectPdfStructuralSignals(
 function collectActionDictionary(
   dictionary: PDFDict,
   context: PdfActionDictionaryContext,
+  triggerId: string | undefined,
   state: InspectionState,
 ): void {
   const actionName = dictionary.lookupMaybe(PDFName.of('S'), PDFName);
@@ -171,24 +198,36 @@ function collectActionDictionary(
   consumeDiscoveredSignal(state);
 
   const target = state.canReadTarget ? readTarget(dictionary) : undefined;
+  const shouldIdentifyTrigger = target === undefined && TARGET_BEARING_ACTION_NAMES.has(actionType);
   const key = `${context}\u0000${actionType}\u0000${target ?? ''}`;
   const current = state.signals.get(key);
   if (current) {
     current.occurrences += 1;
+    if (shouldIdentifyTrigger && triggerId) current.triggerIds.add(triggerId);
     return;
   }
-  state.signals.set(key, { actionType, context, target, occurrences: 1 });
+  state.signals.set(key, {
+    actionType,
+    context,
+    target,
+    occurrences: 1,
+    triggerIds: new Set(shouldIdentifyTrigger && triggerId ? [triggerId] : []),
+  });
 }
 
 function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): void {
+  const triggerId = state.objectIds.get(dictionary);
   const openAction = dictionary.get(PDFName.of('OpenAction'));
-  if (openAction) inspectActionEntry(openAction, 'open-action', state, false, new Set());
+  if (openAction) {
+    inspectActionEntry(openAction, 'open-action', triggerId, state, false, new Set());
+  }
 
   const additionalActions = dictionary.get(PDFName.of('AA'));
   if (additionalActions) {
     inspectActionEntry(
       additionalActions,
       additionalActionContext(dictionary),
+      triggerId,
       state,
       true,
       new Set(),
@@ -197,12 +236,13 @@ function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): voi
 
   const action = dictionary.get(PDFName.of('A'));
   if (!action) return;
-  inspectActionEntry(action, actionContext(dictionary), state, false, new Set());
+  inspectActionEntry(action, actionContext(dictionary), triggerId, state, false, new Set());
 }
 
 function inspectActionEntry(
   object: PDFObject,
   context: PdfActionDictionaryContext,
+  triggerId: string | undefined,
   state: InspectionState,
   allowContainer: boolean,
   path: Set<PDFObject>,
@@ -213,12 +253,12 @@ function inspectActionEntry(
   try {
     if (object instanceof PDFRef) {
       const resolved = state.document.context.lookup(object);
-      if (resolved) inspectActionEntry(resolved, context, state, allowContainer, path);
+      if (resolved) inspectActionEntry(resolved, context, triggerId, state, allowContainer, path);
       return;
     }
     if (object instanceof PDFArray) {
       for (const child of object.asArray()) {
-        inspectActionEntry(child, context, state, false, path);
+        inspectActionEntry(child, context, triggerId, state, false, path);
       }
       return;
     }
@@ -227,14 +267,14 @@ function inspectActionEntry(
 
     const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
     if (actionType) {
-      collectActionDictionary(dictionary, context, state);
+      collectActionDictionary(dictionary, context, triggerId, state);
       const next = dictionary.get(PDFName.of('Next'));
-      if (next) inspectActionEntry(next, 'next-action', state, false, path);
+      if (next) inspectActionEntry(next, 'next-action', triggerId, state, false, path);
       return;
     }
     if (!allowContainer) return;
     for (const child of dictionary.values()) {
-      inspectActionEntry(child, context, state, false, path);
+      inspectActionEntry(child, context, triggerId, state, false, path);
     }
   } finally {
     path.delete(object);
@@ -259,6 +299,13 @@ function additionalActionContext(parent: PDFDict): PdfActionDictionaryContext {
 function inspectAssociatedFiles(parent: PDFDict, state: InspectionState): void {
   const associatedFiles = parent.get(PDFName.of('AF'));
   if (associatedFiles) inspectAssociatedFileEntry(associatedFiles, state, new Set());
+}
+
+function inspectEmbeddedFileSpec(dictionary: PDFDict, state: InspectionState): void {
+  const type = dictionary.lookupMaybe(PDFName.of('Type'), PDFName)?.decodeText();
+  if (type === 'Filespec' || dictionary.has(PDFName.of('EF'))) {
+    collectAssociatedFile(dictionary, state);
+  }
 }
 
 function inspectAssociatedFileEntry(
@@ -288,11 +335,7 @@ function inspectAssociatedFileEntry(
 
 function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void {
   const currentId = state.associatedFileIds.get(fileSpec);
-  if (currentId !== undefined) {
-    const current = state.associatedFiles.get(currentId);
-    if (current) current.occurrences += 1;
-    return;
-  }
+  if (currentId !== undefined) return;
   consumeDiscoveredSignal(state);
   const id = state.associatedFileIds.size + 1;
   state.associatedFileIds.set(fileSpec, id);
@@ -340,6 +383,12 @@ function consumeDiscoveredSignal(state: InspectionState): void {
   if (state.discoveredSignals > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
     throw new PdfActionDictionaryInspectionError();
   }
+}
+
+function pdfJsReferenceId(reference: PDFRef): string {
+  return `${String(reference.objectNumber)}R${reference.generationNumber === 0
+    ? ''
+    : String(reference.generationNumber)}`;
 }
 
 function readTarget(dictionary: PDFDict): string | undefined {

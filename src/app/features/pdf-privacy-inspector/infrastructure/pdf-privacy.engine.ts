@@ -55,8 +55,7 @@ interface LinkAggregate {
 
 interface ActionDictionaryIndex {
   targets: Set<string>;
-  targetlessAnnotationActions: number;
-  targetlessOutlineActions: number;
+  targetlessAnnotationTriggerIds: Set<string>;
 }
 
 type ConsumeDiscoveryBudget = (count?: number) => void;
@@ -143,14 +142,16 @@ export async function inspectPdfPrivacyDocument(
     add,
     consumeDiscoveryBudget,
   );
-  const associatedFileNames = collectAssociatedFileSignals(
+  const structuralAttachmentsAvailable = collectAssociatedFileSignals(
     input.associatedFiles,
     add,
     consumeDiscoveryBudget,
   );
 
   collectMetadata(metadata, add, consumeDiscoveryBudget);
-  collectAttachments(attachments, associatedFileNames, add, consumeDiscoveryBudget);
+  if (!structuralAttachmentsAvailable) {
+    collectAttachments(attachments, add, consumeDiscoveryBudget);
+  }
   const documentActionCount = collectJavascriptActions(
     documentActions,
     'document',
@@ -189,7 +190,7 @@ export async function inspectPdfPrivacyDocument(
         pageNumber,
         links,
         actionIndex,
-        associatedFileNames,
+        structuralAttachmentsAvailable,
         add,
         consumeDiscoveryBudget,
       );
@@ -285,7 +286,6 @@ function collectMetadata(
 
 function collectAttachments(
   attachments: Map<string, object> | null,
-  associatedFileNames: ReadonlySet<string>,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -296,7 +296,6 @@ function collectAttachments(
     index += 1;
     const attachment = asRecord(rawAttachment);
     const fileName = readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key);
-    if (fileName && associatedFileNames.has(fileName)) continue;
     const description = readableValue(attachment?.['description']);
     const contentType = readableValue(attachment?.['contentType']);
     const content = attachment?.['content'];
@@ -318,16 +317,14 @@ function collectAssociatedFileSignals(
   signals: readonly PdfAssociatedFileSignal[] | null | undefined,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
-): ReadonlySet<string> {
-  const fileNames = new Set<string>();
-  if (!signals) return fileNames;
+): boolean {
+  if (signals === null || signals === undefined) return false;
   for (const signal of signals) {
     const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
       ? signal.occurrences
       : 1;
     consume(occurrences);
     const fileName = sanitizePdfPrivacyValue(signal.fileName);
-    if (fileName) fileNames.add(fileName);
     const description = sanitizePdfPrivacyValue(signal.description);
     const contentType = sanitizePdfPrivacyValue(signal.contentType);
     add({
@@ -344,7 +341,7 @@ function collectAssociatedFileSignals(
       occurrences,
     });
   }
-  return fileNames;
+  return true;
 }
 
 function collectJavascriptActions(
@@ -520,7 +517,7 @@ function collectPageAnnotations(
   pageNumber: number,
   links: Map<string, LinkAggregate>,
   actionIndex: ActionDictionaryIndex | null,
-  associatedFileNames: ReadonlySet<string>,
+  structuralAttachmentsAvailable: boolean,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -553,9 +550,8 @@ function collectPageAnnotations(
     }
 
     const file = asRecord(annotation['file']);
-    if (file) {
+    if (file && !structuralAttachmentsAvailable) {
       const fileName = readableValue(file['filename']);
-      if (fileName && associatedFileNames.has(fileName)) continue;
       const content = file['content'];
       add({
         id: `attachment:annotation:${String(pageNumber)}:${fileName ?? 'unknown'}`,
@@ -580,13 +576,14 @@ function collectPdfJsActionShape(
   add: (finding: PdfPrivacyFinding) => void,
 ): void {
   const source = contextId.startsWith('outline:') ? 'outline' : 'annotation';
+  const triggerId = readableValue(item['id']);
   const url = readableValue(item['url']);
   const unsafeUrl = readableValue(item['unsafeUrl']);
   if (url) {
     addLink(links, url, pageNumber, source);
   } else if (unsafeUrl) {
     const target = sanitizePdfPrivacyValue(unsafeUrl);
-    if (!target || !consumeMatchingDictionaryAction(actionIndex, target, source)) {
+    if (!target || !consumeMatchingDictionaryAction(actionIndex, target, source, triggerId)) {
       addAutomaticAction(
         `external-target:${contextId}`,
         { code: 'unsafe-external-target' },
@@ -645,8 +642,7 @@ function collectActionDictionarySignals(
   if (signals === null || signals === undefined) return null;
   const actionIndex: ActionDictionaryIndex = {
     targets: new Set<string>(),
-    targetlessAnnotationActions: 0,
-    targetlessOutlineActions: 0,
+    targetlessAnnotationTriggerIds: new Set<string>(),
   };
   let findingIndex = 0;
   for (const signal of signals) {
@@ -678,10 +674,9 @@ function collectActionDictionarySignals(
       ? signal.occurrences
       : 1;
     if (highRisk && !target && signal.context === 'annotation-action') {
-      actionIndex.targetlessAnnotationActions += occurrences;
-    }
-    if (highRisk && !target && signal.context === 'outline-action') {
-      actionIndex.targetlessOutlineActions += occurrences;
+      for (const triggerId of signal.triggerIds ?? []) {
+        actionIndex.targetlessAnnotationTriggerIds.add(triggerId);
+      }
     }
     consume(occurrences);
     findingIndex += 1;
@@ -702,15 +697,16 @@ function consumeMatchingDictionaryAction(
   actionIndex: ActionDictionaryIndex | null,
   target: string,
   source: LinkAggregate['source'],
+  triggerId: string | undefined,
 ): boolean {
   if (!actionIndex) return false;
   if (actionIndex.targets.has(target)) return true;
-  if (source === 'annotation' && actionIndex.targetlessAnnotationActions > 0) {
-    actionIndex.targetlessAnnotationActions -= 1;
-    return true;
-  }
-  if (source === 'outline' && actionIndex.targetlessOutlineActions > 0) {
-    actionIndex.targetlessOutlineActions -= 1;
+  if (
+    source === 'annotation'
+    && triggerId !== undefined
+    && actionIndex.targetlessAnnotationTriggerIds.has(triggerId)
+  ) {
+    actionIndex.targetlessAnnotationTriggerIds.delete(triggerId);
     return true;
   }
   return false;
@@ -836,6 +832,7 @@ function hasMeaningfulValue(value: unknown): boolean {
 
 function hasStoredFieldValue(control: Record<string, unknown>): boolean {
   const fieldType = readableValue(control['type'])?.toLowerCase();
+  if (fieldType === 'button') return false;
   const values = [control['value'], control['defaultValue']];
   if (fieldType === 'checkbox' || fieldType === 'radiobutton') {
     return values.some(value => hasMeaningfulValue(value) && !isOffFieldValue(value));
