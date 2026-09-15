@@ -2,6 +2,8 @@ import { PDFDocument, PDFName, PDFString } from 'pdf-lib';
 import { describe, expect, it } from 'vitest';
 
 import {
+  PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
+  PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
   PDF_PRIVACY_MAX_XFA_BYTES,
@@ -352,6 +354,77 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
   });
 
+  it('ne tente pas de décompresser les flux encore chiffrés du parseur structurel', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('Metadata'), source.context.flateStream(
+      'A'.repeat(PDF_PRIVACY_MAX_XMP_BYTES + 1),
+      { Type: 'Metadata', Subtype: 'XML' },
+    ));
+    source.context.trailerInfo.Encrypt = source.context.register(
+      source.context.obj({ Filter: 'Standard' }),
+    );
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .resolves.toMatchObject({ encrypted: true });
+  });
+
+  it('identifie le JavaScript de formulaire avant toute expansion PDF.js', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.set(PDFName.of('Annots'), source.context.obj([{
+      Type: 'Annot', Subtype: 'Widget', FT: 'Tx', Rect: [0, 0, 10, 10],
+      AA: { K: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('validate()') } },
+    }]));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'JavaScript', context: 'field-additional-action', occurrences: 1,
+    });
+  });
+
+  it('borne l’expansion agrégée d’un script hérité par les widgets', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const javascript = source.context.register(source.context.flateStream(
+      'A'.repeat(PDF_PRIVACY_MAX_JAVASCRIPT_BYTES),
+    ));
+    const field = source.context.obj({
+      FT: 'Tx', T: PDFString.of('shared'), Kids: [],
+      AA: { K: { Type: 'Action', S: 'JavaScript', JS: javascript } },
+    });
+    const fieldRef = source.context.register(field);
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES / PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
+    ) + 1;
+    const widgets = Array.from({ length: widgetCount }, () => source.context.register(
+      source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', Rect: [0, 0, 10, 10], Parent: fieldRef,
+      }),
+    ));
+    field.set(PDFName.of('Kids'), source.context.obj(widgets));
+    page.node.set(PDFName.of('Annots'), source.context.obj(widgets));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [fieldRef] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('conserve le nom d’une action additionnelle automatique', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.set(PDFName.of('AA'), source.context.obj({
+      O: { Type: 'Action', S: 'Named', N: 'Print' },
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'Named', context: 'page-additional-action', target: 'Print', occurrences: 1,
+    });
+  });
+
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -426,7 +499,7 @@ describe('inspectPdfStructuralSignals', () => {
     )).rejects.toMatchObject({ code: 'inspection-limit' });
   });
 
-  it('parcourt une chaîne Next profonde sans dépendre de la pile JavaScript', async () => {
+  it('parcourt une chaîne Next bornée sans dépendre de la pile JavaScript', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
     let next = source.context.register(source.context.obj({
@@ -434,7 +507,7 @@ describe('inspectPdfStructuralSignals', () => {
       S: 'SubmitForm',
       F: PDFString.of('https://submit.example/deep-chain'),
     }));
-    for (let index = 0; index < 6_000; index += 1) {
+    for (let index = 0; index < PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH; index += 1) {
       next = source.context.register(source.context.obj({
         Type: 'Action',
         S: 'GoTo',
@@ -452,7 +525,22 @@ describe('inspectPdfStructuralSignals', () => {
       target: 'https://submit.example/deep-chain',
       occurrences: 1,
     });
-  }, 15_000);
+  });
+
+  it('rejette une chaîne Next avant la limite de récursion de PDF.js', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    let next = source.context.register(source.context.obj({ Type: 'Action', S: 'GoTo' }));
+    for (let index = 0; index <= PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH; index += 1) {
+      next = source.context.register(source.context.obj({
+        Type: 'Action', S: 'GoTo', Next: next,
+      }));
+    }
+    source.catalog.set(PDFName.of('OpenAction'), next);
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
 
   it('ne confond pas une cible FileSpec externe avec une pièce jointe', async () => {
     const source = await PDFDocument.create();

@@ -77,6 +77,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         passwordUsed: Boolean(command.password),
         actionDictionaries: structuralSignals.actionDictionaries,
         associatedFiles: structuralSignals.associatedFiles,
+        allowPdfJsDecodedContent: !structuralSignals.encrypted,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

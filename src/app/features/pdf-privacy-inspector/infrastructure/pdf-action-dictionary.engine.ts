@@ -47,6 +47,7 @@ export interface PdfAssociatedFileSignal {
 export interface PdfStructuralSignals {
   actionDictionaries: readonly PdfActionDictionarySignal[];
   associatedFiles: readonly PdfAssociatedFileSignal[];
+  encrypted: boolean;
 }
 
 export class PdfActionDictionaryInspectionError extends Error {
@@ -79,6 +80,8 @@ const MAX_TARGET_BYTES = 4_096;
 export const PDF_PRIVACY_MAX_JAVASCRIPT_BYTES = 1 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_XMP_BYTES = 2 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_XFA_BYTES = 8 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH = 256;
+export const PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
@@ -95,6 +98,10 @@ interface InspectionState {
   traversalSteps: number;
   discoveredSignals: number;
   validatedTextLimits: Map<PDFObject, number>;
+  decodedTextBytes: Map<PDFObject, number>;
+  fieldObjectCount: number;
+  fieldJavascriptBytes: number;
+  fieldJavascriptObjects: Set<PDFObject>;
 }
 
 interface StoredActionDictionarySignal {
@@ -119,6 +126,8 @@ interface ActionVisitFrame {
   context: PdfActionDictionaryContext;
   triggerId: string | undefined;
   allowContainer: boolean;
+  fieldContext: boolean;
+  chainDepth: number;
 }
 
 interface ActionLeaveFrame {
@@ -131,6 +140,8 @@ interface ActionChildrenFrame {
   iterator: Iterator<PDFObject>;
   context: PdfActionDictionaryContext;
   triggerId: string | undefined;
+  fieldContext: boolean;
+  chainDepth: number;
 }
 
 type ActionWorkItem = ActionVisitFrame | ActionLeaveFrame | ActionChildrenFrame;
@@ -186,6 +197,10 @@ export async function inspectPdfStructuralSignals(
       traversalSteps: 0,
       discoveredSignals: 0,
       validatedTextLimits: new Map<PDFObject, number>(),
+      decodedTextBytes: new Map<PDFObject, number>(),
+      fieldObjectCount: 0,
+      fieldJavascriptBytes: 0,
+      fieldJavascriptObjects: new Set<PDFObject>(),
     };
     validateXmpMetadataBudget(document, state);
 
@@ -223,12 +238,14 @@ export async function inspectPdfStructuralSignals(
       }
       if (!(object instanceof PDFDict)) continue;
 
+      if (isFieldActionParent(object)) state.fieldObjectCount += 1;
       validateDecodedTextBudgets(object, state);
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
       inspectEmbeddedFileSpec(object, state);
       queue.push({ kind: 'children-frame', iterator: structuralChildren(object) });
     }
+    validateFieldActionExpansionBudget(state);
 
     return {
       actionDictionaries: [...state.signals.values()].map(signal => ({
@@ -240,6 +257,7 @@ export async function inspectPdfStructuralSignals(
         ...(signal.triggerIds.size > 0 ? { triggerIds: [...signal.triggerIds] } : {}),
       })),
       associatedFiles: [...state.associatedFiles.values()],
+      encrypted: document.isEncrypted,
     };
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
@@ -253,12 +271,23 @@ function collectActionDictionary(
   dictionary: PDFDict,
   context: PdfActionDictionaryContext,
   triggerId: string | undefined,
+  fieldContext: boolean,
   state: InspectionState,
 ): void {
   const actionName = readName(dictionary, 'S');
   if (!actionName || actionName.sizeInBytes() > 128) return;
   const actionType = actionName.decodeText();
   if (!actionType || !ACTION_NAMES.has(actionType)) return;
+  if (fieldContext && actionType === 'JavaScript') {
+    const javascript = readObject(dictionary, 'JS');
+    const resolvedJavascript = javascript
+      ? resolvePdfObject(javascript, state.document)
+      : undefined;
+    if (javascript && resolvedJavascript && !state.fieldJavascriptObjects.has(resolvedJavascript)) {
+      state.fieldJavascriptObjects.add(resolvedJavascript);
+      state.fieldJavascriptBytes += measurePdfTextBytes(javascript, state);
+    }
+  }
 
   consumeDiscoveredSignal(state);
 
@@ -285,9 +314,10 @@ function collectActionDictionary(
 
 function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): void {
   const triggerId = state.objectIds.get(dictionary);
+  const fieldContext = isFieldActionParent(dictionary);
   const openAction = dictionary.get(PDFName.of('OpenAction'));
   if (openAction) {
-    inspectActionEntry(openAction, 'open-action', triggerId, state, false, new Set());
+    inspectActionEntry(openAction, 'open-action', triggerId, state, false, fieldContext, new Set());
   }
 
   const additionalActions = dictionary.get(PDFName.of('AA'));
@@ -298,13 +328,22 @@ function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): voi
       triggerId,
       state,
       true,
+      fieldContext,
       new Set(),
     );
   }
 
   const action = dictionary.get(PDFName.of('A'));
   if (!action) return;
-  inspectActionEntry(action, actionContext(dictionary), triggerId, state, false, new Set());
+  inspectActionEntry(
+    action,
+    actionContext(dictionary),
+    triggerId,
+    state,
+    false,
+    fieldContext,
+    new Set(),
+  );
 }
 
 function inspectActionEntry(
@@ -313,10 +352,11 @@ function inspectActionEntry(
   triggerId: string | undefined,
   state: InspectionState,
   allowContainer: boolean,
+  fieldContext: boolean,
   path: Set<PDFObject>,
 ): void {
   const stack: ActionWorkItem[] = [{
-    kind: 'visit', object, context, triggerId, allowContainer,
+    kind: 'visit', object, context, triggerId, allowContainer, fieldContext, chainDepth: 0,
   }];
   while (stack.length > 0) {
     const workItem = stack.pop();
@@ -335,11 +375,16 @@ function inspectActionEntry(
         context: workItem.context,
         triggerId: workItem.triggerId,
         allowContainer: false,
+        fieldContext: workItem.fieldContext,
+        chainDepth: workItem.chainDepth,
       });
       continue;
     }
 
     consumeTraversalStep(state);
+    if (workItem.chainDepth > PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     if (path.has(workItem.object)) continue;
     path.add(workItem.object);
     stack.push({ kind: 'leave', object: workItem.object });
@@ -357,6 +402,8 @@ function inspectActionEntry(
         iterator: workItem.object.asArray().values(),
         context: workItem.context,
         triggerId: workItem.triggerId,
+        fieldContext: workItem.fieldContext,
+        chainDepth: workItem.chainDepth,
       });
       continue;
     }
@@ -372,13 +419,21 @@ function inspectActionEntry(
         iterator: dictionary.asMap().values(),
         context: workItem.context,
         triggerId: workItem.triggerId,
+        fieldContext: workItem.fieldContext,
+        chainDepth: workItem.chainDepth,
       });
       continue;
     }
 
     const actionType = readName(dictionary, 'S')?.decodeText();
     if (actionType) {
-      collectActionDictionary(dictionary, workItem.context, workItem.triggerId, state);
+      collectActionDictionary(
+        dictionary,
+        workItem.context,
+        workItem.triggerId,
+        workItem.fieldContext,
+        state,
+      );
       const next = dictionary.get(PDFName.of('Next'));
       if (next) {
         stack.push({
@@ -387,6 +442,8 @@ function inspectActionEntry(
           context: 'next-action',
           triggerId: workItem.triggerId,
           allowContainer: false,
+          fieldContext: workItem.fieldContext,
+          chainDepth: workItem.chainDepth + 1,
         });
       }
       continue;
@@ -425,6 +482,11 @@ function additionalActionContext(parent: PDFDict): PdfActionDictionaryContext {
   if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-additional-action';
   const type = readName(parent, 'Type')?.decodeText();
   return type === 'Page' ? 'page-additional-action' : 'additional-action';
+}
+
+function isFieldActionParent(parent: PDFDict): boolean {
+  return readName(parent, 'Subtype')?.decodeText() === 'Widget'
+    || parent.has(PDFName.of('FT'));
 }
 
 function inspectAssociatedFiles(parent: PDFDict, state: InspectionState): void {
@@ -508,12 +570,14 @@ function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
 }
 
 function validateXmpMetadataBudget(document: PDFDocument, state: InspectionState): void {
+  if (document.isEncrypted) return;
   const metadata = readObject(document.catalog, 'Metadata');
   if (!metadata) return;
   validatePdfTextObjects(metadata, PDF_PRIVACY_MAX_XMP_BYTES, state);
 }
 
 function validateDecodedTextBudgets(dictionary: PDFDict, state: InspectionState): void {
+  if (state.document.isEncrypted) return;
   const javascript = readObject(dictionary, 'JS');
   if (javascript) {
     validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
@@ -538,18 +602,41 @@ function validatePdfTextObjects(
     state.validatedTextLimits.set(object, maxDecodedBytes);
 
     if (object instanceof PDFString || object instanceof PDFHexString) {
-      if (object.asBytes().byteLength > maxDecodedBytes) {
+      const decodedBytes = object.asBytes().byteLength;
+      state.decodedTextBytes.set(object, decodedBytes);
+      if (decodedBytes > maxDecodedBytes) {
         throw new PdfActionDictionaryInspectionError();
       }
       continue;
     }
     if (object instanceof PDFRawStream) {
-      validateDecodedStreamSize(object, maxDecodedBytes);
+      state.decodedTextBytes.set(object, validateDecodedStreamSize(object, maxDecodedBytes));
       continue;
     }
     if (object instanceof PDFStream) throw new PdfActionDictionaryInspectionError();
     if (object instanceof PDFArray) stack.push(...object.asArray());
   }
+}
+
+function measurePdfTextBytes(root: PDFObject, state: InspectionState): number {
+  const stack = [root];
+  const visited = new Set<PDFObject>();
+  let total = 0;
+  while (stack.length > 0) {
+    const rawObject = stack.pop();
+    if (!rawObject) continue;
+    const object = resolvePdfObject(rawObject, state.document);
+    if (!object || visited.has(object)) continue;
+    visited.add(object);
+    const decodedBytes = state.decodedTextBytes.get(object);
+    if (decodedBytes !== undefined) {
+      total += decodedBytes;
+    } else if (object instanceof PDFArray) {
+      stack.push(...object.asArray());
+    }
+    if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  }
+  return total;
 }
 
 function resolvePdfObject(object: PDFObject, document: PDFDocument): PDFObject | undefined {
@@ -561,19 +648,19 @@ function resolvePdfObject(object: PDFObject, document: PDFDocument): PDFObject |
   }
 }
 
-function validateDecodedStreamSize(stream: PDFRawStream, maxDecodedBytes: number): void {
+function validateDecodedStreamSize(stream: PDFRawStream, maxDecodedBytes: number): number {
   const contents = stream.getContents();
   const filters = readFilterNames(stream.dict);
   if (filters.length === 0) {
     if (contents.byteLength > maxDecodedBytes) {
       throw new PdfActionDictionaryInspectionError();
     }
-    return;
+    return contents.byteLength;
   }
   if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0])) {
     throw new PdfActionDictionaryInspectionError();
   }
-  validateInflatedSize(contents, maxDecodedBytes);
+  return validateInflatedSize(contents, maxDecodedBytes);
 }
 
 function readFilterNames(dictionary: PDFDict): readonly string[] {
@@ -590,7 +677,7 @@ function readFilterNames(dictionary: PDFDict): readonly string[] {
   return names;
 }
 
-function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): void {
+function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): number {
   const inflater = new Inflate({ chunkSize: TEXT_INFLATE_CHUNK_BYTES });
   let decodedBytes = 0;
   inflater.onData = chunk => {
@@ -602,8 +689,19 @@ function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): vo
   try {
     const succeeded = inflater.push(contents, true);
     if (!succeeded || inflater.err !== 0) throw new PdfActionDictionaryInspectionError();
+    return decodedBytes;
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
+    throw new PdfActionDictionaryInspectionError();
+  }
+}
+
+function validateFieldActionExpansionBudget(state: InspectionState): void {
+  const expandedBytes = state.fieldJavascriptBytes * Math.max(1, state.fieldObjectCount);
+  if (
+    !Number.isSafeInteger(expandedBytes)
+    || expandedBytes > PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES
+  ) {
     throw new PdfActionDictionaryInspectionError();
   }
 }
@@ -648,7 +746,8 @@ function pdfJsReferenceId(reference: PDFRef): string {
 
 function readTarget(dictionary: PDFDict): string | typeof TARGET_TOO_LONG | undefined {
   return readText(readObject(dictionary, 'F'))
-    ?? readText(readObject(dictionary, 'URI'));
+    ?? readText(readObject(dictionary, 'URI'))
+    ?? readText(readObject(dictionary, 'N'));
 }
 
 function readText(

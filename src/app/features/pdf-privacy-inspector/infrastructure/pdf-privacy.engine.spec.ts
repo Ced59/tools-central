@@ -62,6 +62,49 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.pdfVersion).toBe('2.0');
   });
 
+  it('évite les API PDF.js qui matérialisent le contenu actif d’un PDF chiffré', async () => {
+    const getMetadata = vi.fn().mockResolvedValue({ info: {}, metadata: null });
+    const getJSActions = vi.fn().mockResolvedValue(null);
+    const hasJSActions = vi.fn().mockResolvedValue(false);
+    const getFieldObjects = vi.fn().mockResolvedValue(null);
+    const getOpenAction = vi.fn().mockResolvedValue(null);
+    const getOutline = vi.fn().mockResolvedValue(null);
+    const getPage = vi.fn();
+    const document = documentFixture({
+      getMetadata,
+      getJSActions,
+      hasJSActions,
+      getFieldObjects,
+      getOpenAction,
+      getOutline,
+      getPage,
+    });
+
+    const report = await inspectPdfPrivacyDocument(document, {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      actionDictionaries: [{
+        actionType: 'Named', context: 'page-additional-action', target: 'Print', occurrences: 1,
+      }],
+      associatedFiles: [],
+      allowPdfJsDecodedContent: false,
+    });
+
+    expect(report.encrypted).toBe(true);
+    expect(report.findings).toContainEqual(expect.objectContaining({
+      message: { code: 'dictionary-action', actionType: 'Named', context: 'additional-action' },
+      value: 'Print',
+    }));
+    expect(getMetadata).not.toHaveBeenCalled();
+    expect(getJSActions).not.toHaveBeenCalled();
+    expect(hasJSActions).not.toHaveBeenCalled();
+    expect(getFieldObjects).not.toHaveBeenCalled();
+    expect(getOpenAction).not.toHaveBeenCalled();
+    expect(getOutline).not.toHaveBeenCalled();
+    expect(getPage).not.toHaveBeenCalled();
+  });
+
   it('agrège toutes les familles sans exposer le code JavaScript ni les valeurs de formulaire', async () => {
     const cleanup = vi.fn();
     const page: PdfJsPrivacyPage = {
