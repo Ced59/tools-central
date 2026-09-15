@@ -407,14 +407,42 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     },
   });
   const launchAnnotationReference = source.context.register(launch);
+  const httpLaunch = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 520, 320, 550],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'Launch',
+      F: PDFString.of('https://launch.example/run'),
+    },
+  });
+  const httpLaunchAnnotationReference = source.context.register(httpLaunch);
+  const submitForm = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 480, 320, 510],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'SubmitForm',
+      F: PDFString.of('https://submit.example/collect'),
+    },
+  });
+  const submitFormAnnotationReference = source.context.register(submitForm);
   const annotations = pdfPage.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
   if (annotations) {
     annotations.push(annotationReference);
     annotations.push(launchAnnotationReference);
+    annotations.push(httpLaunchAnnotationReference);
+    annotations.push(submitFormAnnotationReference);
   } else {
     pdfPage.node.set(PDFName.of('Annots'), source.context.obj([
       annotationReference,
       launchAnnotationReference,
+      httpLaunchAnnotationReference,
+      submitFormAnnotationReference,
     ]));
   }
   const bytes = await source.save({ useObjectStreams: false });
@@ -437,6 +465,10 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('secret.txt');
   await expect(result).toContainText('https://tracker.example/click');
   await expect(result).toContainText('calc.exe');
+  await expect(result).toContainText('Action Launch');
+  await expect(result).toContainText('https://launch.example/run');
+  await expect(result).toContainText('Action SubmitForm');
+  await expect(result).toContainText('https://submit.example/collect');
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
   await expect(result).toContainText('Alice');

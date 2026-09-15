@@ -6,6 +6,7 @@ import {
   type PdfPrivacyFinding,
   type PdfPrivacyReport,
 } from '../domain/pdf-privacy.models';
+import type { PdfActionDictionarySignal } from './pdf-action-dictionary.engine';
 
 export type PdfPrivacyEngineFailureCode = 'invalid-pdf' | 'too-many-pages' | 'inspection-limit';
 
@@ -85,6 +86,7 @@ export async function inspectPdfPrivacyDocument(
     headerData: Uint8Array;
     fileBytes: number;
     passwordUsed: boolean;
+    actionDictionaries?: readonly PdfActionDictionarySignal[] | null;
     onProgress?: (percent: number) => void;
   },
 ): Promise<PdfPrivacyReport> {
@@ -119,6 +121,11 @@ export async function inspectPdfPrivacyDocument(
       throw new PdfPrivacyEngineError('inspection-limit');
     }
   };
+  const actionTargets = collectActionDictionarySignals(
+    input.actionDictionaries,
+    add,
+    consumeDiscoveryBudget,
+  );
 
   collectMetadata(metadata, add, consumeDiscoveryBudget);
   collectAttachments(attachments, add, consumeDiscoveryBudget);
@@ -146,7 +153,7 @@ export async function inspectPdfPrivacyDocument(
   }
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
   collectSignatures(signatures, add, consumeDiscoveryBudget);
-  collectOutlineItems(outline ?? [], links, add, consumeDiscoveryBudget);
+  collectOutlineItems(outline ?? [], links, actionTargets, add, consumeDiscoveryBudget);
 
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
     const page = await document.getPage(pageNumber);
@@ -155,7 +162,14 @@ export async function inspectPdfPrivacyDocument(
         page.getAnnotations({ intent: 'any' }),
         page.getJSActions(),
       ]);
-      collectPageAnnotations(annotations, pageNumber, links, add, consumeDiscoveryBudget);
+      collectPageAnnotations(
+        annotations,
+        pageNumber,
+        links,
+        actionTargets,
+        add,
+        consumeDiscoveryBudget,
+      );
       collectJavascriptActions(
         pageActions,
         `page:${String(pageNumber)}`,
@@ -341,7 +355,10 @@ function collectForms(
         if (hasMeaningfulValue(control['value']) || hasMeaningfulValue(control['defaultValue'])) {
           populated = true;
         }
-        if (control['actions'] || control['hasJSActions'] === true) actionCount += 1;
+        const actions = asRecord(control['actions']);
+        if ((actions && Object.keys(actions).length > 0) || control['hasJSActions'] === true) {
+          actionCount += 1;
+        }
       }
       if (populated) populatedCount += 1;
     }
@@ -413,6 +430,7 @@ function collectSignatures(
 function collectOutlineItems(
   nodes: readonly object[],
   links: Map<string, LinkAggregate>,
+  actionTargets: ReadonlySet<string> | null,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -423,7 +441,14 @@ function collectOutlineItems(
     if (!node) continue;
     index += 1;
     consume();
-    collectPdfJsActionShape(node, `outline:${String(index)}`, undefined, links, add);
+    collectPdfJsActionShape(
+      node,
+      `outline:${String(index)}`,
+      undefined,
+      links,
+      actionTargets,
+      add,
+    );
     const children = node['items'];
     if (Array.isArray(children)) queue.push(...children.filter(isObject));
   }
@@ -433,6 +458,7 @@ function collectPageAnnotations(
   annotations: readonly object[],
   pageNumber: number,
   links: Map<string, LinkAggregate>,
+  actionTargets: ReadonlySet<string> | null,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): void {
@@ -446,6 +472,7 @@ function collectPageAnnotations(
       `annotation:${String(pageNumber)}:${annotationId}`,
       pageNumber,
       links,
+      actionTargets,
       add,
     );
 
@@ -485,6 +512,7 @@ function collectPdfJsActionShape(
   contextId: string,
   pageNumber: number | undefined,
   links: Map<string, LinkAggregate>,
+  actionTargets: ReadonlySet<string> | null,
   add: (finding: PdfPrivacyFinding) => void,
 ): void {
   const source = contextId.startsWith('outline:') ? 'outline' : 'annotation';
@@ -493,13 +521,16 @@ function collectPdfJsActionShape(
   if (url) {
     addLink(links, url, pageNumber, source);
   } else if (unsafeUrl) {
-    addAutomaticAction(
-      `external-target:${contextId}`,
-      'Cible externe non sûre',
-      redactUnsafeTarget(unsafeUrl),
-      pageNumber,
-      add,
-    );
+    const target = sanitizePdfPrivacyValue(unsafeUrl);
+    if (!target || actionTargets === null || !actionTargets.has(target)) {
+      addAutomaticAction(
+        `external-target:${contextId}`,
+        'Cible externe non sûre',
+        redactUnsafeTarget(unsafeUrl),
+        pageNumber,
+        add,
+      );
+    }
   }
 
   // PDF.js exposes Named actions through `action`; Launch and GoToR targets
@@ -543,6 +574,54 @@ function collectPdfJsActionShape(
   }
 }
 
+function collectActionDictionarySignals(
+  signals: readonly PdfActionDictionarySignal[] | null | undefined,
+  add: (finding: PdfPrivacyFinding) => void,
+  consume: ConsumeDiscoveryBudget,
+): ReadonlySet<string> | null {
+  if (signals === null || signals === undefined) return null;
+  const targets = new Set<string>();
+  let index = 0;
+  for (const signal of signals) {
+    const target = sanitizePdfPrivacyValue(signal.target);
+    if (target) targets.add(target);
+    const unsafeUri = signal.actionType === 'URI'
+      && target !== undefined
+      && !isSafeExternalUrl(target);
+    if (!isHighRiskAction(signal.actionType) && !unsafeUri) continue;
+    const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
+      ? signal.occurrences
+      : 1;
+    consume(occurrences);
+    index += 1;
+    add({
+      id: `automatic:dictionary:${String(index)}:${signal.actionType}`,
+      category: 'active-content',
+      kind: 'automatic-action',
+      severity: 'high',
+      label: `Action ${signal.actionType}`,
+      value: sanitizeActionTarget(signal.target),
+      occurrences,
+    });
+  }
+  return targets;
+}
+
+function isHighRiskAction(actionType: string): boolean {
+  return /^(?:GoToE|GoToR|ImportData|Launch|Rendition|RichMediaExecute|SubmitForm)$/u.test(actionType);
+}
+
+function sanitizeActionTarget(rawTarget: string | undefined): string | undefined {
+  const target = sanitizePdfPrivacyValue(rawTarget);
+  if (!target) return undefined;
+  if (isSafeExternalUrl(target)) return target;
+  return redactUnsafeTarget(target);
+}
+
+function isSafeExternalUrl(value: string): boolean {
+  return /^(?:https?|mailto|tel|ftp):/iu.test(value);
+}
+
 function addAutomaticAction(
   id: string,
   label: string,
@@ -575,8 +654,8 @@ function addLink(
   source: LinkAggregate['source'],
 ): void {
   const url = sanitizePdfPrivacyValue(rawUrl);
-  if (!url || !/^(?:https?|mailto|tel|ftp):/iu.test(url)) return;
-  const key = url.toLowerCase();
+  if (!url || !isSafeExternalUrl(url)) return;
+  const key = url;
   const current = links.get(key);
   if (current) {
     current.occurrences += 1;

@@ -9,6 +9,10 @@ import {
 
 import type { PdfPrivacyFailureCode } from '../application/pdf-privacy.use-cases';
 import {
+  PdfActionDictionaryInspectionError,
+  inspectPdfActionDictionaries,
+} from './pdf-action-dictionary.engine';
+import {
   PdfPrivacyEngineError,
   inspectPdfPrivacyDocument,
   type PdfJsPrivacyDocument,
@@ -34,6 +38,8 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     const input = new Uint8Array(command.data);
     const headerData = input.slice(0, 1_024);
     const fileBytes = input.byteLength;
+    post({ type: 'progress', percent: 1 });
+    const actionDictionaries = await inspectPdfActionDictionaries(input);
     loadingTask = getDocument({
       data: input,
       password: command.password,
@@ -56,6 +62,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         headerData,
         fileBytes,
         passwordUsed: Boolean(command.password),
+        actionDictionaries,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },
@@ -82,6 +89,7 @@ function versionedWorkerUrl(assetRoot: string): string {
 
 function failureCode(error: unknown): PdfPrivacyFailureCode {
   if (error instanceof PdfPrivacyEngineError) return error.code;
+  if (error instanceof PdfActionDictionaryInspectionError) return error.code;
   const code = error && typeof error === 'object' && 'code' in error
     ? (error as { code?: unknown }).code
     : undefined;

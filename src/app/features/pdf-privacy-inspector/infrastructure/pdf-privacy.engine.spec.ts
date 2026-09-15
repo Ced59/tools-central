@@ -176,6 +176,76 @@ describe('inspectPdfPrivacyDocument', () => {
     ]));
   });
 
+  it('signale Launch et SubmitForm même après la normalisation de PDF.js', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([
+        { id: 'launch', url: 'https://launch.example/run', unsafeUrl: 'https://launch.example/run' },
+      ]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [
+        { actionType: 'Launch', target: 'https://launch.example/run', occurrences: 1 },
+        { actionType: 'SubmitForm', target: 'https://submit.example/collect', occurrences: 1 },
+      ],
+    });
+
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: 'Action Launch', value: 'https://launch.example/run' }),
+      expect.objectContaining({ label: 'Action SubmitForm', value: 'https://submit.example/collect' }),
+      expect.objectContaining({ kind: 'external-link', value: 'https://launch.example/run' }),
+    ]));
+  });
+
+  it('préserve les chemins URL sensibles à la casse pendant leur agrégation', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([
+        { id: 'upper', url: 'https://example.test/Report' },
+        { id: 'lower', url: 'https://example.test/report' },
+      ]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.filter(finding => finding.kind === 'external-link')).toHaveLength(2);
+  });
+
+  it('signale une action URI non sûre sans exposer son payload', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([
+        { id: 'unsafe', unsafeUrl: 'javascript:alert("private-value")' },
+      ]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [{
+        actionType: 'URI',
+        target: 'javascript:alert("private-value")',
+        occurrences: 1,
+      }],
+    });
+
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: 'Action URI', value: 'javascript:…' }),
+    ]));
+    expect(JSON.stringify(report)).not.toContain('private-value');
+  });
+
   it('refuse les documents vides ou dépassant la limite de pages', async () => {
     await expect(inspectPdfPrivacyDocument(documentFixture({ numPages: 0 }), {
       headerData: pdfBytes(), fileBytes: 16, passwordUsed: false,
