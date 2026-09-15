@@ -1,0 +1,104 @@
+<main class="tool-page">
+  <header class="tool-hero">
+    <div class="tool-hero__inner">
+      <a class="back-link" routerLink="/categories/dev/pdf"><i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i><span i18n="@@pdf_privacy_back">Retour aux outils PDF</span></a>
+      <h1 i18n="@@pdf_privacy_title">Inspecter la confidentialité d’un PDF</h1>
+      <p i18n="@@pdf_privacy_subtitle">Repérez métadonnées, pièces jointes, JavaScript, actions automatiques, liens, formulaires, signatures et protection avant de partager un document.</p>
+      <p class="privacy-note"><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><span i18n="@@pdf_privacy_local">Aucun envoi et aucun lien suivi : l’analyse s’exécute localement dans un Worker.</span></p>
+    </div>
+  </header>
+
+  <div class="tool-content">
+    <section class="tool-card" aria-labelledby="pdf-privacy-source-title">
+      <div class="card-heading">
+        <div><p class="eyebrow" i18n="@@pdf_privacy_step_one">Étape 1</p><h2 id="pdf-privacy-source-title" i18n="@@pdf_privacy_source_title">Choisir le PDF à contrôler</h2></div>
+        @if (file()) { <span class="status-badge status-badge--ok">PDF</span> }
+      </div>
+      <label class="file-picker">
+        <i class="tc-icon tc-icon-file-pdf" aria-hidden="true"></i>
+        <span class="file-picker__title" i18n="@@pdf_privacy_pick">Sélectionner un fichier PDF</span>
+        <span i18n="@@pdf_privacy_pick_help">{{ maxFileSizeLabel }} maximum · 1 000 pages · traitement local</span>
+        <input type="file" accept=".pdf,application/pdf" [disabled]="isBusy()" (change)="selectFile($event)" />
+      </label>
+      @if (file(); as selectedFile) {
+        <dl class="file-summary">
+          <div><dt i18n="@@pdf_privacy_file_name">Fichier</dt><dd>{{ selectedFile.name }}</dd></div>
+          <div><dt i18n="@@pdf_privacy_file_size">Taille</dt><dd>{{ formatFileSize(selectedFile.size) }}</dd></div>
+        </dl>
+      }
+      @if (passwordRequired()) {
+        <div class="password-field">
+          <label for="pdf-privacy-password" i18n="@@pdf_privacy_password_label">Mot de passe du PDF</label>
+          <input id="pdf-privacy-password" type="password" maxlength="128" autocomplete="current-password" [value]="password()" [disabled]="isBusy()" (input)="updatePassword($event)" />
+          <small i18n="@@pdf_privacy_password_help">Le mot de passe reste en mémoire le temps de l’analyse et n’est ni enregistré ni inclus dans le rapport.</small>
+        </div>
+      }
+      @if (errorMessage()) { <p class="alert alert--error" role="alert"><i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>{{ errorMessage() }}</p> }
+      @if (file()) {
+        <div class="actions">
+          <button type="button" class="primary-button" [disabled]="!canInspect()" (click)="inspect()"><i class="tc-icon tc-icon-search" aria-hidden="true"></i><span i18n="@@pdf_privacy_inspect">Inspecter le PDF</span></button>
+          <button type="button" class="secondary-button" [disabled]="isBusy()" (click)="reset()" i18n="@@pdf_privacy_reset">Réinitialiser</button>
+        </div>
+      }
+    </section>
+
+    @if (state() === 'processing') {
+      <section class="tool-card progress-card" aria-live="polite">
+        <div class="progress-copy"><strong id="pdf-privacy-progress-label" i18n="@@pdf_privacy_processing">Inspection structurelle locale…</strong><span>{{ progress() }} %</span></div>
+        <progress [value]="progress()" max="100" aria-labelledby="pdf-privacy-progress-label"></progress>
+        <button type="button" class="cancel-button" (click)="cancel()" i18n="@@pdf_privacy_cancel">Annuler</button>
+      </section>
+    }
+
+    @if (result(); as report) {
+      <section class="tool-card result-card" data-testid="pdf-privacy-result" aria-labelledby="pdf-privacy-result-title">
+        <div class="result-heading">
+          <div>
+            <p class="eyebrow" i18n="@@pdf_privacy_step_two">Étape 2</p>
+            <h2 id="pdf-privacy-result-title" i18n="@@pdf_privacy_result_title">Rapport de confidentialité</h2>
+            <span class="attention-badge" [class.attention-badge--high]="report.attentionLevel === 'high'" [class.attention-badge--medium]="report.attentionLevel === 'medium'" [class.attention-badge--low]="report.attentionLevel === 'low'" [class.attention-badge--clear]="report.attentionLevel === 'clear'">{{ attentionLabel(report.attentionLevel) }}</span>
+          </div>
+          <button type="button" class="primary-button" (click)="downloadReport()"><i class="tc-icon tc-icon-download" aria-hidden="true"></i><span i18n="@@pdf_privacy_download">Télécharger le rapport JSON</span></button>
+        </div>
+        <dl class="report-summary">
+          <div><dt i18n="@@pdf_privacy_pages">Pages inspectées</dt><dd>{{ report.inspectedPages }} / {{ report.pageCount }}</dd></div>
+          <div><dt i18n="@@pdf_privacy_total">Occurrences détectées</dt><dd>{{ report.severityCounts.high + report.severityCounts.medium + report.severityCounts.low + report.severityCounts.info }}</dd></div>
+          <div class="summary-high"><dt i18n="@@pdf_privacy_high_count">Attention forte</dt><dd>{{ report.severityCounts.high }}</dd></div>
+          <div class="summary-medium"><dt i18n="@@pdf_privacy_medium_count">À vérifier</dt><dd>{{ report.severityCounts.medium }}</dd></div>
+        </dl>
+
+        <p class="alert alert--info"><i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i><span i18n="@@pdf_privacy_report_scope">PDF {{ report.pdfVersion }} · {{ encryptionLabel(report) }} · détection structurelle sans exécution du contenu actif.</span></p>
+
+        @if (report.findingCount === 0) {
+          <p class="clear-state" role="status"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i><span i18n="@@pdf_privacy_clear_state">Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</span></p>
+        } @else {
+          <div class="category-filters" aria-label="Filtrer le rapport" i18n-aria-label="@@pdf_privacy_filter_label">
+            <button type="button" [class.is-active]="selectedCategory() === 'all'" [attr.aria-pressed]="selectedCategory() === 'all'" (click)="selectCategory('all')"><span i18n="@@pdf_privacy_filter_all">Tout</span> <strong>{{ report.findingCount }}</strong></button>
+            @for (category of availableCategories(); track category) {
+              <button type="button" [class.is-active]="selectedCategory() === category" [attr.aria-pressed]="selectedCategory() === category" (click)="selectCategory(category)">{{ categoryLabel(category) }} <strong>{{ report.categoryCounts[category] }}</strong></button>
+            }
+          </div>
+          <div class="finding-list" aria-live="polite">
+            @for (finding of visibleFindings(); track finding.id) {
+              <article class="finding" [class.finding--high]="finding.severity === 'high'" [class.finding--medium]="finding.severity === 'medium'" [class.finding--low]="finding.severity === 'low'">
+                <div class="finding-heading"><span class="severity-badge">{{ severityLabel(finding.severity) }}</span><span class="category-label">{{ categoryLabel(finding.category) }}</span></div>
+                <h3>{{ findingTitle(finding.kind) }}</h3>
+                @if (findingContext(finding)) { <p class="finding-context">{{ findingContext(finding) }}</p> }
+                @if (finding.value) { <p class="finding-value">{{ finding.value }}</p> }
+              </article>
+            } @empty {
+              <p class="alert alert--info" i18n="@@pdf_privacy_filter_empty">Aucun élément affichable dans cette catégorie.</p>
+            }
+          </div>
+          @if (report.truncatedFindingCount > 0) { <p class="alert alert--info" i18n="@@pdf_privacy_truncated">{{ report.truncatedFindingCount }} résultat(s) supplémentaire(s) restent comptés dans le rapport, mais ne sont pas affichés pour préserver la réactivité.</p> }
+        }
+      </section>
+    }
+
+    <section class="guidance-grid" aria-label="Portée du contrôle" i18n-aria-label="@@pdf_privacy_guidance">
+      <div><i class="tc-icon tc-icon-code" aria-hidden="true"></i><h3 i18n="@@pdf_privacy_guide_active">Le code n’est jamais exécuté</h3><p i18n="@@pdf_privacy_guide_active_text">Le moteur inventorie JavaScript et actions automatiques sans lancer le script, ouvrir une pièce jointe ni visiter une URL.</p></div>
+      <div><i class="tc-icon tc-icon-verified" aria-hidden="true"></i><h3 i18n="@@pdf_privacy_guide_signature">Présence, pas validation</h3><p i18n="@@pdf_privacy_guide_signature_text">Une signature est décrite par ses métadonnées et sa couverture. Son certificat et son intégrité cryptographique ne sont pas vérifiés.</p></div>
+      <div><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><h3 i18n="@@pdf_privacy_guide_next">Nettoyer ensuite</h3><p><span i18n="@@pdf_privacy_guide_next_text">L’inspecteur ne modifie jamais le document.</span> <a routerLink="/categories/dev/pdf/pdf-sanitize" i18n="@@pdf_privacy_sanitize_link">Ouvrir le nettoyeur PDF.</a></p></div>
+    </section>
+  </div>
+</main>

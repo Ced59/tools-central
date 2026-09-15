@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import JSZip from 'jszip';
-import { PDFDocument, rgb } from 'pdf-lib';
+import { PDFArray, PDFDocument, PDFName, PDFString, rgb } from 'pdf-lib';
 import { readFile } from 'node:fs/promises';
 
 test('home, locale and theme remain usable', async ({ page }) => {
@@ -364,6 +364,86 @@ test('OOXML metadata cleaner rebuilds a private DOCX locally and remains respons
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 
   await page.goto('/en/categories/dev/ooxml/ooxml-sanitize-metadata');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
+
+test('PDF privacy inspector inventories hidden signals locally and remains responsive', async ({ page }) => {
+  const source = await PDFDocument.create();
+  source.setTitle('Rapport confidentiel');
+  source.setAuthor('Alice');
+  source.addJavaScript('OpenAction', 'app.alert("secret-script");');
+  await source.attach(new TextEncoder().encode('pièce jointe confidentielle'), 'secret.txt', {
+    mimeType: 'text/plain',
+    description: 'Annexe interne',
+  });
+  const pdfPage = source.addPage([600, 800]);
+  pdfPage.drawText('Rapport à contrôler', { x: 72, y: 720, size: 24 });
+  const form = source.getForm();
+  const field = form.createTextField('contact-email');
+  field.setText('alice@example.test');
+  field.addToPage(pdfPage, { x: 72, y: 650, width: 250, height: 28 });
+  const link = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 600, 320, 630],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'URI',
+      URI: PDFString.of('https://tracker.example/click'),
+    },
+  });
+  const annotationReference = source.context.register(link);
+  const annotations = pdfPage.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
+  if (annotations) annotations.push(annotationReference);
+  else pdfPage.node.set(PDFName.of('Annots'), source.context.obj([annotationReference]));
+  const bytes = await source.save({ useObjectStreams: false });
+
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/pdf/pdf-privacy-inspector');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Inspecter la confidentialité d’un PDF');
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'audit.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from(bytes),
+  });
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Inspecter le PDF' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+  const result = page.getByTestId('pdf-privacy-result');
+  await expect(result).toContainText('Rapport de confidentialité', { timeout: 20_000 });
+  await expect(result).toContainText('Attention forte');
+  await expect(result).toContainText('JavaScript embarqué');
+  await expect(result).toContainText('secret.txt');
+  await expect(result).toContainText('https://tracker.example/click');
+
+  await result.getByRole('button', { name: /Métadonnées/u }).click();
+  await expect(result).toContainText('Alice');
+  await expect(result).not.toContainText('secret.txt');
+  await result.getByRole('button', { name: /Tout/u }).click();
+
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Télécharger le rapport JSON' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('audit-rapport-confidentialite.json');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const exported = JSON.parse(await readFile(path as string, 'utf8')) as {
+    schema: string;
+    report: { attentionLevel: string; categoryCounts: Record<string, number> };
+  };
+  expect(exported.schema).toBe('tools-central/pdf-privacy-report/v1');
+  expect(exported.report.attentionLevel).toBe('high');
+  expect(exported.report.categoryCounts['active-content']).toBeGreaterThan(0);
+  expect(exported.report.categoryCounts['attachments']).toBeGreaterThan(0);
+  expect(exported.report.categoryCounts['links']).toBeGreaterThan(0);
+  expect(exported.report.categoryCounts['forms']).toBeGreaterThan(0);
+  expect(JSON.stringify(exported)).not.toContain('secret-script');
+  expect(JSON.stringify(exported)).not.toContain('alice@example.test');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/pdf/pdf-privacy-inspector');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
