@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
   PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
@@ -639,6 +640,30 @@ describe('inspectPdfStructuralSignals', () => {
       { length: annotationCount },
       () => source.context.register(source.context.obj({
         Type: 'Annot', Subtype: 'Highlight', Rect: [0, 0, 10, 10], QuadPoints: quadPoints,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le décodage répété d’un JavaScript partagé par les annotations', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const javascriptBytes = 1 * 1_024 * 1_024;
+    const javascript = source.context.register(source.context.flateStream(
+      'A'.repeat(javascriptBytes),
+    ));
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'JavaScript', JS: javascript,
+    }));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES / javascriptBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], A: action,
       })),
     )));
 

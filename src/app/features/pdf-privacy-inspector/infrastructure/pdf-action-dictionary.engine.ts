@@ -105,6 +105,7 @@ export const PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const NORMALIZED_CHOICE_OPTION_OVERHEAD_BYTES = 64;
 const NORMALIZED_GEOMETRY_NUMBER_BYTES = 8;
@@ -144,6 +145,7 @@ interface InspectionState {
   fieldOptionExpansionBytes: number;
   annotationTextExpansionBytes: number;
   annotationGeometryExpansionBytes: number;
+  annotationJavascriptExpansionBytes: number;
   outlineValueExpansionBytes: number;
   geometryExpansionSizes: Map<PDFObject, number>;
   hasUnboundedEncryptedTextStreams: boolean;
@@ -261,6 +263,7 @@ export async function inspectPdfStructuralSignals(
       fieldOptionExpansionBytes: 0,
       annotationTextExpansionBytes: 0,
       annotationGeometryExpansionBytes: 0,
+      annotationJavascriptExpansionBytes: 0,
       outlineValueExpansionBytes: 0,
       geometryExpansionSizes: new Map(),
       hasUnboundedEncryptedTextStreams: false,
@@ -1023,6 +1026,14 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
+    state.annotationJavascriptExpansionBytes += measureAnnotationJavascriptBytes(annotation, state);
+    if (
+      !Number.isSafeInteger(state.annotationJavascriptExpansionBytes)
+      || state.annotationJavascriptExpansionBytes
+        > PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     const action = readDictionary(annotation, 'A');
     if (!action) continue;
     state.annotationTargetExpansionBytes += measureTargetBytes(action, state.document);
@@ -1033,6 +1044,61 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
       throw new PdfActionDictionaryInspectionError();
     }
   }
+}
+
+function measureAnnotationJavascriptBytes(
+  annotation: PDFDict,
+  state: InspectionState,
+): number {
+  let total = 0;
+  const action = annotation.get(PDFName.of('A'));
+  if (action) total += measureActionJavascriptChainBytes(action, state);
+  const additionalActions = readDictionary(annotation, 'AA');
+  if (additionalActions) {
+    for (const rawAction of additionalActions.asMap().values()) {
+      total += measureActionJavascriptChainBytes(rawAction, state);
+    }
+  }
+  if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  return total;
+}
+
+function measureActionJavascriptChainBytes(
+  root: PDFObject,
+  state: InspectionState,
+): number {
+  const stack: { object: PDFObject; depth: number }[] = [{ object: root, depth: 0 }];
+  const visited = new Set<PDFObject>();
+  let total = 0;
+  while (stack.length > 0) {
+    const item = stack.pop();
+    if (!item) continue;
+    if (item.depth > PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    consumeTraversalStep(state);
+    const object = resolvePdfObject(item.object, state.document);
+    if (!object || visited.has(object)) continue;
+    visited.add(object);
+    if (object instanceof PDFArray) {
+      for (let index = 0; index < object.size(); index += 1) {
+        stack.push({ object: object.get(index), depth: item.depth + 1 });
+      }
+      continue;
+    }
+    if (!(object instanceof PDFDict)) continue;
+    if (readName(object, 'S')?.decodeText() === 'JavaScript') {
+      const javascript = readObject(object, 'JS');
+      if (javascript) {
+        validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
+        total += measurePdfTextBytes(javascript, state);
+      }
+    }
+    const next = object.get(PDFName.of('Next'));
+    if (next) stack.push({ object: next, depth: item.depth + 1 });
+    if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  }
+  return total;
 }
 
 function measureTargetBytes(
