@@ -48,6 +48,7 @@ export interface PdfStructuralSignals {
   actionDictionaries: readonly PdfActionDictionarySignal[];
   associatedFiles: readonly PdfAssociatedFileSignal[];
   encrypted: boolean;
+  hasUnboundedEncryptedTextStreams: boolean;
 }
 
 export class PdfActionDictionaryInspectionError extends Error {
@@ -82,6 +83,7 @@ export const PDF_PRIVACY_MAX_XMP_BYTES = 2 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_XFA_BYTES = 8 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH = 256;
 export const PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
@@ -102,6 +104,9 @@ interface InspectionState {
   fieldObjectCount: number;
   fieldJavascriptBytes: number;
   fieldJavascriptObjects: Set<PDFObject>;
+  signatureObjectCount: number;
+  signaturePayloadBytes: number;
+  hasUnboundedEncryptedTextStreams: boolean;
 }
 
 interface StoredActionDictionarySignal {
@@ -201,6 +206,9 @@ export async function inspectPdfStructuralSignals(
       fieldObjectCount: 0,
       fieldJavascriptBytes: 0,
       fieldJavascriptObjects: new Set<PDFObject>(),
+      signatureObjectCount: 0,
+      signaturePayloadBytes: 0,
+      hasUnboundedEncryptedTextStreams: false,
     };
     validateXmpMetadataBudget(document, state);
 
@@ -238,7 +246,7 @@ export async function inspectPdfStructuralSignals(
       }
       if (!(object instanceof PDFDict)) continue;
 
-      if (isFieldActionParent(object)) state.fieldObjectCount += 1;
+      if (isFieldActionParent(object)) validateFieldObjectBudget(object, state);
       validateDecodedTextBudgets(object, state);
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
@@ -258,6 +266,7 @@ export async function inspectPdfStructuralSignals(
       })),
       associatedFiles: [...state.associatedFiles.values()],
       encrypted: document.isEncrypted,
+      hasUnboundedEncryptedTextStreams: state.hasUnboundedEncryptedTextStreams,
     };
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
@@ -434,19 +443,18 @@ function inspectActionEntry(
         workItem.fieldContext,
         state,
       );
-      const next = dictionary.get(PDFName.of('Next'));
-      if (next) {
-        stack.push({
-          kind: 'visit',
-          object: next,
-          context: 'next-action',
-          triggerId: workItem.triggerId,
-          allowContainer: false,
-          fieldContext: workItem.fieldContext,
-          chainDepth: workItem.chainDepth + 1,
-        });
-      }
-      continue;
+    }
+    const next = dictionary.get(PDFName.of('Next'));
+    if (next) {
+      stack.push({
+        kind: 'visit',
+        object: next,
+        context: 'next-action',
+        triggerId: workItem.triggerId,
+        allowContainer: false,
+        fieldContext: workItem.fieldContext,
+        chainDepth: workItem.chainDepth + 1,
+      });
     }
   }
 }
@@ -554,7 +562,7 @@ function collectAssociatedFile(fileSpec: PDFDict, state: InspectionState): void 
       ? readDisplayText(readObject(fileSpec, 'Desc'))
       : undefined,
     contentType: readName(embeddedFile.dict, 'Subtype')?.decodeText(),
-    bytes: embeddedFile.getContentsSize(),
+    bytes: readEmbeddedFileBytes(embeddedFile),
     occurrences: 1,
   });
 }
@@ -570,14 +578,12 @@ function findEmbeddedFileStream(fileSpec: PDFDict): PDFStream | undefined {
 }
 
 function validateXmpMetadataBudget(document: PDFDocument, state: InspectionState): void {
-  if (document.isEncrypted) return;
   const metadata = readObject(document.catalog, 'Metadata');
   if (!metadata) return;
   validatePdfTextObjects(metadata, PDF_PRIVACY_MAX_XMP_BYTES, state);
 }
 
 function validateDecodedTextBudgets(dictionary: PDFDict, state: InspectionState): void {
-  if (state.document.isEncrypted) return;
   const javascript = readObject(dictionary, 'JS');
   if (javascript) {
     validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
@@ -610,7 +616,8 @@ function validatePdfTextObjects(
       continue;
     }
     if (object instanceof PDFRawStream) {
-      state.decodedTextBytes.set(object, validateDecodedStreamSize(object, maxDecodedBytes));
+      const decodedBytes = validateDecodedStreamSize(object, maxDecodedBytes, state);
+      if (decodedBytes !== undefined) state.decodedTextBytes.set(object, decodedBytes);
       continue;
     }
     if (object instanceof PDFStream) throw new PdfActionDictionaryInspectionError();
@@ -648,7 +655,11 @@ function resolvePdfObject(object: PDFObject, document: PDFDocument): PDFObject |
   }
 }
 
-function validateDecodedStreamSize(stream: PDFRawStream, maxDecodedBytes: number): number {
+function validateDecodedStreamSize(
+  stream: PDFRawStream,
+  maxDecodedBytes: number,
+  state: InspectionState,
+): number | undefined {
   const contents = stream.getContents();
   const filters = readFilterNames(stream.dict);
   if (filters.length === 0) {
@@ -657,10 +668,41 @@ function validateDecodedStreamSize(stream: PDFRawStream, maxDecodedBytes: number
     }
     return contents.byteLength;
   }
+  if (state.document.isEncrypted) {
+    state.hasUnboundedEncryptedTextStreams = true;
+    return undefined;
+  }
   if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0])) {
     throw new PdfActionDictionaryInspectionError();
   }
   return validateInflatedSize(contents, maxDecodedBytes);
+}
+
+function validateFieldObjectBudget(field: PDFDict, state: InspectionState): void {
+  state.fieldObjectCount += 1;
+  if (state.fieldObjectCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  if (readName(field, 'FT')?.decodeText() !== 'Sig') return;
+
+  state.signatureObjectCount += 1;
+  if (state.signatureObjectCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  const signature = readDictionary(field, 'V');
+  const contents = signature ? readObject(signature, 'Contents') : undefined;
+  if (!(contents instanceof PDFString) && !(contents instanceof PDFHexString)) return;
+  state.signaturePayloadBytes += contents.asBytes().byteLength;
+  if (
+    !Number.isSafeInteger(state.signaturePayloadBytes)
+    || state.signaturePayloadBytes > PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES
+  ) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+}
+
+function readEmbeddedFileBytes(stream: PDFStream): number | undefined {
+  return stream.dict.has(PDFName.of('Filter')) ? undefined : stream.getContentsSize();
 }
 
 function readFilterNames(dictionary: PDFDict): readonly string[] {

@@ -264,11 +264,11 @@ export class PdfPrivacyInspectorToolComponent {
       case 'signature-details':
         return this.signatureMessage(message);
       case 'interactive-sound':
-        return `${this.findingTitle('automatic-action')} · Sound`;
+        return `${this.findingTitle('automatic-action')} · ${$localize`:@@pdf_privacy_media_sound:Son`}`;
       case 'interactive-video':
-        return `${this.findingTitle('automatic-action')} · Video`;
+        return `${this.findingTitle('automatic-action')} · ${$localize`:@@pdf_privacy_media_video:Vidéo`}`;
       case 'interactive-screen':
-        return `${this.findingTitle('automatic-action')} · Screen`;
+        return `${this.findingTitle('automatic-action')} · ${$localize`:@@pdf_privacy_media_screen:Écran`}`;
       case 'interactive-3d':
         return `${this.findingTitle('automatic-action')} · 3D`;
       case 'rich-media':

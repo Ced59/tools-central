@@ -5,11 +5,13 @@ import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
+  PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
   PDF_PRIVACY_MAX_XFA_BYTES,
   PdfActionDictionaryInspectionError,
   inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
+import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 
 describe('inspectPdfStructuralSignals', () => {
   it('lit Launch et SubmitForm dans un vrai PDF avec object streams', async () => {
@@ -236,7 +238,7 @@ describe('inspectPdfStructuralSignals', () => {
   it('inventorie une seule fois un FileSpec partagé par AF et la name tree', async () => {
     const source = await PDFDocument.create();
     source.addPage();
-    const embeddedFile = source.context.register(source.context.flateStream(
+    const embeddedFile = source.context.register(source.context.stream(
       'associated payload',
       { Type: 'EmbeddedFile', Subtype: PDFName.of('text#2Fplain') },
     ));
@@ -264,7 +266,27 @@ describe('inspectPdfStructuralSignals', () => {
         occurrences: 1,
       }),
     ]);
-    expect(signals?.associatedFiles[0]?.bytes).toBeGreaterThan(0);
+    expect(signals?.associatedFiles[0]?.bytes).toBe(18);
+  });
+
+  it('omet la taille trompeuse d’une pièce jointe compressée', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const embeddedFile = source.context.register(source.context.flateStream(
+      'payload highly compressible '.repeat(100),
+      { Type: 'EmbeddedFile' },
+    ));
+    source.catalog.set(PDFName.of('AF'), source.context.obj([{
+      Type: 'Filespec',
+      F: PDFString.of('compressed.txt'),
+      EF: { F: embeddedFile },
+    }]));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.associatedFiles).toEqual([
+      expect.objectContaining({ fileName: 'compressed.txt', bytes: undefined }),
+    ]);
   });
 
   it('ignore un FileSpec dont EF ne contient aucun flux embarqué', async () => {
@@ -366,7 +388,10 @@ describe('inspectPdfStructuralSignals', () => {
     );
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
-      .resolves.toMatchObject({ encrypted: true });
+      .resolves.toMatchObject({
+        encrypted: true,
+        hasUnboundedEncryptedTextStreams: true,
+      });
   });
 
   it('identifie le JavaScript de formulaire avant toute expansion PDF.js', async () => {
@@ -410,6 +435,43 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });
   });
+
+  it('borne le nombre de champs avant leur normalisation par PDF.js', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: Array.from(
+        { length: PDF_PRIVACY_MAX_DISCOVERED_ITEMS + 1 },
+        (_, index) => source.context.obj({ FT: 'Tx', T: PDFString.of(`field-${String(index)}`) }),
+      ),
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
+  it('borne l’expansion agrégée des signatures avant getSignatures', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const payloadBytes = 1 * 1_024 * 1_024;
+    const signature = source.context.register(source.context.obj({
+      Type: 'Sig',
+      ByteRange: [0, 1, 2, 1],
+      Contents: PDFString.of('A'.repeat(payloadBytes)),
+    }));
+    const signatureCount = Math.floor(
+      PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES / payloadBytes,
+    ) + 1;
+    const fields = Array.from({ length: signatureCount }, (_, index) => (
+      source.context.register(source.context.obj({
+        FT: 'Sig', T: PDFString.of(`signature-${String(index)}`), V: signature,
+      }))
+    ));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
 
   it('conserve le nom d’une action additionnelle automatique', async () => {
     const source = await PDFDocument.create();
@@ -523,6 +585,29 @@ describe('inspectPdfStructuralSignals', () => {
       actionType: 'SubmitForm',
       context: 'next-action',
       target: 'https://submit.example/deep-chain',
+      occurrences: 1,
+    });
+  });
+
+  it('suit Next même si le discriminateur de l’action courante est malformé', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action',
+      S: PDFString.of('invalid-name-object'),
+      Next: {
+        Type: 'Action',
+        S: 'SubmitForm',
+        F: PDFString.of('https://submit.example/after-malformed'),
+      },
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'SubmitForm',
+      context: 'next-action',
+      target: 'https://submit.example/after-malformed',
       occurrences: 1,
     });
   });

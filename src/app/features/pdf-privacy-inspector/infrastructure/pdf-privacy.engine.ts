@@ -100,7 +100,6 @@ export async function inspectPdfPrivacyDocument(
     passwordUsed: boolean;
     actionDictionaries?: readonly PdfActionDictionarySignal[] | null;
     associatedFiles?: readonly PdfAssociatedFileSignal[] | null;
-    allowPdfJsDecodedContent?: boolean;
     onProgress?: (percent: number) => void;
   },
 ): Promise<PdfPrivacyReport> {
@@ -114,19 +113,17 @@ export async function inspectPdfPrivacyDocument(
 
   const structuralAttachmentsAvailable = input.associatedFiles !== null
     && input.associatedFiles !== undefined;
-  const allowPdfJsDecodedContent = input.allowPdfJsDecodedContent !== false;
-  const emptyMetadata: PdfJsPrivacyMetadata = { info: {}, metadata: null };
   input.onProgress?.(8);
   const [metadata, attachments, documentActions, hasJavascript, fields, signatures, permissions, openAction, outline] = await Promise.all([
-    allowPdfJsDecodedContent ? document.getMetadata() : Promise.resolve(emptyMetadata),
+    document.getMetadata(),
     structuralAttachmentsAvailable ? Promise.resolve(null) : document.getAttachments(),
-    allowPdfJsDecodedContent ? document.getJSActions() : Promise.resolve(null),
-    allowPdfJsDecodedContent ? document.hasJSActions() : Promise.resolve(false),
-    allowPdfJsDecodedContent ? document.getFieldObjects() : Promise.resolve(null),
+    document.getJSActions(),
+    document.hasJSActions(),
+    document.getFieldObjects(),
     document.getSignatures(),
     document.getPermissions(),
-    allowPdfJsDecodedContent ? document.getOpenAction() : Promise.resolve(null),
-    allowPdfJsDecodedContent ? document.getOutline() : Promise.resolve(null),
+    document.getOpenAction(),
+    document.getOutline(),
   ]);
   const pdfVersion = effectivePdfVersion(metadata.info) ?? headerPdfVersion;
   input.onProgress?.(20);
@@ -142,7 +139,6 @@ export async function inspectPdfPrivacyDocument(
   };
   const actionIndex = collectActionDictionarySignals(
     input.actionDictionaries,
-    !allowPdfJsDecodedContent,
     add,
     consumeDiscoveryBudget,
   );
@@ -182,37 +178,33 @@ export async function inspectPdfPrivacyDocument(
   collectSignatures(signatures, add, consumeDiscoveryBudget);
   collectOutlineItems(outline ?? [], links, actionIndex, add, consumeDiscoveryBudget);
 
-  if (allowPdfJsDecodedContent) {
-    for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
-      const page = await document.getPage(pageNumber);
-      try {
-        const [annotations, pageActions] = await Promise.all([
-          page.getAnnotations({ intent: 'any' }),
-          page.getJSActions(),
-        ]);
-        collectPageAnnotations(
-          annotations,
-          pageNumber,
-          links,
-          actionIndex,
-          structuralAttachmentsAvailable,
-          add,
-          consumeDiscoveryBudget,
-        );
-        collectJavascriptActions(
-          pageActions,
-          `page:${String(pageNumber)}`,
-          add,
-          consumeDiscoveryBudget,
-          pageNumber,
-        );
-      } finally {
-        page.cleanup();
-      }
-      input.onProgress?.(20 + Math.round(pageNumber / document.numPages * 72));
+  for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
+    const page = await document.getPage(pageNumber);
+    try {
+      const [annotations, pageActions] = await Promise.all([
+        page.getAnnotations({ intent: 'any' }),
+        page.getJSActions(),
+      ]);
+      collectPageAnnotations(
+        annotations,
+        pageNumber,
+        links,
+        actionIndex,
+        structuralAttachmentsAvailable,
+        add,
+        consumeDiscoveryBudget,
+      );
+      collectJavascriptActions(
+        pageActions,
+        `page:${String(pageNumber)}`,
+        add,
+        consumeDiscoveryBudget,
+        pageNumber,
+      );
+    } finally {
+      page.cleanup();
     }
-  } else {
-    input.onProgress?.(92);
+    input.onProgress?.(20 + Math.round(pageNumber / document.numPages * 72));
   }
 
   for (const [key, link] of links) {
@@ -702,7 +694,6 @@ function collectPdfJsActionShape(
 
 function collectActionDictionarySignals(
   signals: readonly PdfActionDictionarySignal[] | null | undefined,
-  preserveNormalizedJavascript: boolean,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): ActionDictionaryIndex | null {
@@ -734,8 +725,7 @@ function collectActionDictionarySignals(
       );
     const rawJavascript = signal.actionType === 'JavaScript'
       && (
-        preserveNormalizedJavascript
-        || signal.context === 'annotation-action'
+        signal.context === 'annotation-action'
         || signal.context === 'annotation-additional-action'
         || signal.context === 'field-additional-action'
         || signal.context === 'outline-action'

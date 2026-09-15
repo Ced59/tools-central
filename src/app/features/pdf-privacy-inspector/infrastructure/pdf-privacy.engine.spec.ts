@@ -62,23 +62,15 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.pdfVersion).toBe('2.0');
   });
 
-  it('évite les API PDF.js qui matérialisent le contenu actif d’un PDF chiffré', async () => {
-    const getMetadata = vi.fn().mockResolvedValue({ info: {}, metadata: null });
-    const getJSActions = vi.fn().mockResolvedValue(null);
-    const hasJSActions = vi.fn().mockResolvedValue(false);
-    const getFieldObjects = vi.fn().mockResolvedValue(null);
-    const getOpenAction = vi.fn().mockResolvedValue(null);
-    const getOutline = vi.fn().mockResolvedValue(null);
-    const getPage = vi.fn();
-    const document = documentFixture({
-      getMetadata,
-      getJSActions,
-      hasJSActions,
-      getFieldObjects,
-      getOpenAction,
-      getOutline,
-      getPage,
-    });
+  it('inspecte aussi tout le contenu PDF.js après déchiffrement', async () => {
+    const document = documentFixture();
+    const getMetadata = vi.spyOn(document, 'getMetadata');
+    const getJSActions = vi.spyOn(document, 'getJSActions');
+    const hasJSActions = vi.spyOn(document, 'hasJSActions');
+    const getFieldObjects = vi.spyOn(document, 'getFieldObjects');
+    const getOpenAction = vi.spyOn(document, 'getOpenAction');
+    const getOutline = vi.spyOn(document, 'getOutline');
+    const getPage = vi.spyOn(document, 'getPage');
 
     const report = await inspectPdfPrivacyDocument(document, {
       headerData: pdfBytes(),
@@ -88,7 +80,6 @@ describe('inspectPdfPrivacyDocument', () => {
         actionType: 'Named', context: 'page-additional-action', target: 'Print', occurrences: 1,
       }],
       associatedFiles: [],
-      allowPdfJsDecodedContent: false,
     });
 
     expect(report.encrypted).toBe(true);
@@ -96,13 +87,13 @@ describe('inspectPdfPrivacyDocument', () => {
       message: { code: 'dictionary-action', actionType: 'Named', context: 'additional-action' },
       value: 'Print',
     }));
-    expect(getMetadata).not.toHaveBeenCalled();
-    expect(getJSActions).not.toHaveBeenCalled();
-    expect(hasJSActions).not.toHaveBeenCalled();
-    expect(getFieldObjects).not.toHaveBeenCalled();
-    expect(getOpenAction).not.toHaveBeenCalled();
-    expect(getOutline).not.toHaveBeenCalled();
-    expect(getPage).not.toHaveBeenCalled();
+    expect(getMetadata).toHaveBeenCalledOnce();
+    expect(getJSActions).toHaveBeenCalledOnce();
+    expect(hasJSActions).toHaveBeenCalledOnce();
+    expect(getFieldObjects).toHaveBeenCalledOnce();
+    expect(getOpenAction).toHaveBeenCalledOnce();
+    expect(getOutline).toHaveBeenCalledOnce();
+    expect(getPage).toHaveBeenCalledOnce();
   });
 
   it('agrège toutes les familles sans exposer le code JavaScript ni les valeurs de formulaire', async () => {
