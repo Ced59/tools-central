@@ -18,7 +18,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,17 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 138 fichiers, 445 tests verts sous Vitest |
+| Tests unitaires | suite non compilable | 138 fichiers, 448 tests verts sous Vitest |
 | Couverture | aucun seuil | 49,91 % statements, 37,10 % branches, 49,56 % fonctions, 53,44 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
@@ -55,7 +55,7 @@ Dernière mesure Playwright locale sur l’accueil mobile : LCP 1 780 ms, CLS 0,
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
 - Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, décimaux exacts, sortie HTML sûre, diagnostics reliés aux champs, export, accessibilité et 28 tests ciblés.
-- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, limites de taille/pages/éléments, mot de passe local, inspection des métadonnées, scripts, actions, pièces jointes, liens, formulaires, signatures et chiffrement, sans exécuter ni exposer les contenus sensibles, avec rapport JSON et 22 tests ciblés.
+- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, limites de taille/pages/éléments, mot de passe local, inspection des métadonnées, scripts, actions, pièces jointes, liens, formulaires, signatures et chiffrement, sans exécuter ni exposer les contenus sensibles, avec rapport JSON et 25 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.

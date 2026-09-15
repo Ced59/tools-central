@@ -56,7 +56,9 @@ describe('inspectPdfPrivacyDocument', () => {
       getAnnotations: vi.fn().mockResolvedValue([
         { id: 'l1', url: 'https://tracker.example/click' },
         { id: 'l2', url: 'https://tracker.example/click' },
-        { id: 'a1', action: 'Launch' },
+        { id: 'a1', action: 'Print' },
+        { id: 'a2', unsafeUrl: 'calc.exe' },
+        { id: 'a3', annotationType: 27, richMedia: { filename: 'demo.swf', contentType: 'application/x-shockwave-flash' } },
       ]),
       getJSActions: vi.fn().mockResolvedValue(new Map([['PageOpen', ['app.alert("secret")']]])),
       cleanup,
@@ -100,18 +102,77 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.some(finding => finding.value?.includes('collect()'))).toBe(false);
     expect(report.findings.find(finding => finding.kind === 'external-link' && finding.value?.includes('tracker')))
       .toMatchObject({ occurrences: 2, pageNumber: 1 });
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: 'automatic-action', label: 'Action PDF nommée', value: 'Print' }),
+      expect.objectContaining({ kind: 'automatic-action', label: 'Cible externe non sûre', value: 'calc.exe' }),
+    ]));
+    expect(report.findings.some(finding => (
+      finding.kind === 'automatic-action'
+      && finding.label === 'Contenu Rich Media'
+      && finding.value?.includes('demo.swf') === true
+    ))).toBe(true);
     expect(cleanup).toHaveBeenCalledOnce();
   });
 
-  it('signale un formulaire XFA et un JavaScript sans détail disponible', async () => {
+  it('signale un formulaire XFA pur et un JavaScript de champ sans détail disponible', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       isPureXfa: true,
       hasJSActions: vi.fn().mockResolvedValue(true),
     }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
 
     expect(report.findings).toEqual(expect.arrayContaining([
-      expect.objectContaining({ kind: 'javascript', severity: 'high' }),
+      expect.objectContaining({
+        kind: 'javascript',
+        severity: 'high',
+        label: 'Actions de formulaire non détaillées',
+      }),
       expect.objectContaining({ kind: 'xfa-form', severity: 'medium' }),
+    ]));
+    expect(report.findings).not.toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: 'javascript', label: 'Document' }),
+    ]));
+  });
+
+  it('ne double pas les actions JavaScript de champs déjà détaillées', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      hasJSActions: vi.fn().mockResolvedValue(true),
+      getFieldObjects: vi.fn().mockResolvedValue(new Map([
+        ['consent', [{ actions: { Action: ['app.alert("secret")'] } }]],
+      ])),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings.filter(finding => finding.kind === 'javascript')).toEqual([
+      expect.objectContaining({ label: 'Actions de formulaire', occurrences: 1 }),
+    ]);
+  });
+
+  it('détecte aussi les formulaires XFA hybrides annoncés dans les métadonnées PDF.js', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      isPureXfa: false,
+      getMetadata: vi.fn().mockResolvedValue({
+        info: { IsXFAPresent: true },
+        metadata: null,
+      }),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ kind: 'xfa-form', severity: 'medium' }),
+    ]));
+  });
+
+  it('inspecte les formes d’action réellement exposées par PDF.js dans le plan', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getOutline: vi.fn().mockResolvedValue([
+        { title: 'Programme', unsafeUrl: 'viewer.exe', items: [] },
+        { title: 'Annexe', attachment: { filename: 'annexe.pdf' }, items: [] },
+        { title: 'Navigation', action: 'Print', items: [] },
+      ]),
+    }), { headerData: pdfBytes(), fileBytes: 16, passwordUsed: false });
+
+    expect(report.findings).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: 'Cible externe non sûre', value: 'viewer.exe' }),
+      expect.objectContaining({ label: 'Ouverture d’une pièce jointe', value: 'annexe.pdf' }),
+      expect.objectContaining({ label: 'Action PDF nommée', value: 'Print' }),
     ]));
   });
 

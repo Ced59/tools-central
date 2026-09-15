@@ -395,9 +395,28 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     },
   });
   const annotationReference = source.context.register(link);
+  const launch = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 560, 320, 590],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'Launch',
+      F: PDFString.of('calc.exe'),
+    },
+  });
+  const launchAnnotationReference = source.context.register(launch);
   const annotations = pdfPage.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
-  if (annotations) annotations.push(annotationReference);
-  else pdfPage.node.set(PDFName.of('Annots'), source.context.obj([annotationReference]));
+  if (annotations) {
+    annotations.push(annotationReference);
+    annotations.push(launchAnnotationReference);
+  } else {
+    pdfPage.node.set(PDFName.of('Annots'), source.context.obj([
+      annotationReference,
+      launchAnnotationReference,
+    ]));
+  }
   const bytes = await source.save({ useObjectStreams: false });
 
   await page.setViewportSize({ width: 320, height: 844 });
@@ -417,6 +436,7 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(result).toContainText('JavaScript embarqué');
   await expect(result).toContainText('secret.txt');
   await expect(result).toContainText('https://tracker.example/click');
+  await expect(result).toContainText('calc.exe');
 
   await result.getByRole('button', { name: /Métadonnées/u }).click();
   await expect(result).toContainText('Alice');
