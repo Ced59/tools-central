@@ -9,6 +9,7 @@ import {
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
@@ -97,6 +98,33 @@ describe('inspectPdfStructuralSignals', () => {
         target: 'https://submit.example/valid', occurrences: 1,
       },
     ]);
+  });
+
+  it('suit Next depuis une action stockée dans la name tree JavaScript', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const entry = source.context.register(source.context.obj({
+      Type: 'Action',
+      S: 'JavaScript',
+      JS: PDFString.of(''),
+      Next: {
+        Type: 'Action',
+        S: 'SubmitForm',
+        F: PDFString.of('https://submit.example/hidden'),
+      },
+    }));
+    source.catalog.set(PDFName.of('Names'), source.context.obj({
+      JavaScript: { Names: [PDFString.of('entry'), entry] },
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save());
+
+    expect(signals?.actionDictionaries).toContainEqual({
+      actionType: 'SubmitForm',
+      context: 'next-action',
+      target: 'https://submit.example/hidden',
+      occurrences: 1,
+    });
   });
 
   it('ne double pas une annotation atteinte depuis la destination du plan', async () => {
@@ -647,6 +675,44 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les tableaux de bordure et tirets partagés par les annotations', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const dashCoordinates = 4_096;
+    const dashArray = source.context.register(source.context.obj(
+      Array.from({ length: dashCoordinates }, () => 1),
+    ));
+    const borderStyle = source.context.register(source.context.obj({ W: 1, D: dashArray }));
+    const geometryBytes = dashCoordinates * 8 + 32;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES / geometryBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], BS: borderStyle,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne les annotations des feuilles de page sans Type explicite', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.delete(PDFName.of('Type'));
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: PDF_PRIVACY_MAX_DISCOVERED_ITEMS + 1 },
+      () => source.context.register(source.context.obj({
+        Subtype: 'Text', Rect: [0, 0, 10, 10], Contents: PDFString.of('note'),
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne le décodage répété d’un JavaScript partagé par les annotations', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -754,6 +820,29 @@ describe('inspectPdfStructuralSignals', () => {
     );
     const parent = source.context.register(source.context.obj({
       FT: 'Ch', T: PDFString.of('Shared'), Opt: options, Kids: widgets,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le parsing répété de l’apparence par défaut héritée', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const appearanceBytes = 1 * 1_024 * 1_024;
+    const appearance = source.context.register(PDFString.of('A'.repeat(appearanceBytes)));
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES / appearanceBytes,
+    ) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Entry'),
+      })),
+    );
+    const parent = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Shared'), DA: appearance, Kids: widgets,
     }));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
 
