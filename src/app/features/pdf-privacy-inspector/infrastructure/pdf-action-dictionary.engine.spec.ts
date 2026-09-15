@@ -8,6 +8,7 @@ import {
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
   PDF_PRIVACY_MAX_XFA_BYTES,
   PdfActionDictionaryInspectionError,
@@ -315,6 +316,22 @@ describe('inspectPdfStructuralSignals', () => {
     });
   });
 
+  it('ignore les clés JS et XFA d’un dictionnaire applicatif non sémantique', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const unsupportedStream = source.context.register(source.context.stream(
+      'application payload',
+      { Filter: 'LZWDecode' },
+    ));
+    source.catalog.set(PDFName.of('ExtensionData'), source.context.obj({
+      JS: unsupportedStream,
+      XFA: unsupportedStream,
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .resolves.not.toBeNull();
+  });
+
   it('ignore un FileSpec dont EF ne contient aucun flux embarqué', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -524,6 +541,24 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne le nombre d’annotations avant leur normalisation par PDF.js', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const annotations = Array.from(
+      { length: PDF_PRIVACY_MAX_DISCOVERED_ITEMS + 1 },
+      (_, index) => source.context.register(source.context.obj({
+        Type: 'Annot',
+        Subtype: 'Text',
+        Rect: [0, 0, 10, 10],
+        Contents: PDFString.of(`Note ${String(index)}`),
+      })),
+    );
+    page.node.set(PDFName.of('Annots'), source.context.obj(annotations));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la croissance cumulée des noms qualifiés de champs', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -565,6 +600,38 @@ describe('inspectPdfStructuralSignals', () => {
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le balayage agrégé des queues de signature avant getSignatures', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const signature = source.context.register(source.context.obj({
+      Type: 'Sig',
+      ByteRange: [0, 1, 2, 9_999_999],
+      Contents: PDFString.of('signed'),
+    }));
+    const tailBytes = 1 * 1_024 * 1_024;
+    const signatureCount = Math.floor(PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES / tailBytes) + 1;
+    const fields = Array.from({ length: signatureCount }, (_, index) => (
+      source.context.register(source.context.obj({
+        FT: 'Sig', T: PDFString.of(`signature-tail-${String(index)}`), V: signature,
+      }))
+    ));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
+    const base = await source.save({ useObjectStreams: false });
+    const marker = new TextEncoder().encode('9999999');
+    const markerIndex = findByteSequence(base, marker);
+    const signedLength = String(base.byteLength - 2).padStart(marker.byteLength, '0');
+    if (markerIndex < 0 || signedLength.length !== marker.byteLength) {
+      throw new Error('Signature ByteRange fixture creation failed.');
+    }
+    base.set(new TextEncoder().encode(signedLength), markerIndex);
+    const withWhitespaceTail = new Uint8Array(base.byteLength + tailBytes);
+    withWhitespaceTail.set(base);
+    withWhitespaceTail.fill(0x20, base.byteLength);
+
+    await expect(inspectPdfStructuralSignals(withWhitespaceTail))
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
@@ -767,3 +834,17 @@ describe('inspectPdfStructuralSignals', () => {
       .resolves.toBeNull();
   });
 });
+
+function findByteSequence(haystack: Uint8Array, needle: Uint8Array): number {
+  for (let start = 0; start <= haystack.byteLength - needle.byteLength; start += 1) {
+    let matches = true;
+    for (let index = 0; index < needle.byteLength; index += 1) {
+      if (haystack[start + index] !== needle[index]) {
+        matches = false;
+        break;
+      }
+    }
+    if (matches) return start;
+  }
+  return -1;
+}

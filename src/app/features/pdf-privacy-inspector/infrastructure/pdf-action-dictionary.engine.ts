@@ -4,6 +4,7 @@ import {
   PDFDocument,
   PDFHexString,
   PDFName,
+  PDFNumber,
   PDFRawStream,
   PDFRef,
   PDFStream,
@@ -84,6 +85,7 @@ export const PDF_PRIVACY_MAX_XFA_BYTES = 8 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH = 256;
 export const PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
@@ -94,6 +96,7 @@ const ANNOTATION_SUBTYPES = new Set([
 
 interface InspectionState {
   document: PDFDocument;
+  fileData: Uint8Array;
   signals: Map<string, StoredActionDictionarySignal>;
   associatedFiles: Map<number, PdfAssociatedFileSignal>;
   associatedFileIds: Map<PDFDict, number>;
@@ -112,6 +115,7 @@ interface InspectionState {
   fieldJavascriptObjects: Set<PDFObject>;
   signatureObjectCount: number;
   signaturePayloadBytes: number;
+  signatureTailBytes: number;
   hasUnboundedEncryptedTextStreams: boolean;
 }
 
@@ -197,6 +201,7 @@ export async function inspectPdfStructuralSignals(
     const visited = new Set<PDFObject>();
     const state: InspectionState = {
       document,
+      fileData: data,
       signals: new Map<string, StoredActionDictionarySignal>(),
       associatedFiles: new Map<number, PdfAssociatedFileSignal>(),
       associatedFileIds: new Map<PDFDict, number>(),
@@ -218,6 +223,7 @@ export async function inspectPdfStructuralSignals(
       fieldJavascriptObjects: new Set<PDFObject>(),
       signatureObjectCount: 0,
       signaturePayloadBytes: 0,
+      signatureTailBytes: 0,
       hasUnboundedEncryptedTextStreams: false,
     };
     validateAcroFormFieldBudgets(document, state);
@@ -259,7 +265,8 @@ export async function inspectPdfStructuralSignals(
       if (!(object instanceof PDFDict)) continue;
 
       if (isFieldActionParent(object)) validateFieldObjectBudget(object, state);
-      validateDecodedTextBudgets(object, state);
+      validateActionJavascriptBudget(object, state);
+      validatePageAnnotationBudget(object, state);
       inspectActionTriggers(object, state);
       inspectAssociatedFiles(object, state);
       inspectEmbeddedFileSpec(object, state);
@@ -432,7 +439,7 @@ function inspectActionEntry(
       ? workItem.object.dict
       : workItem.object;
     if (!(dictionary instanceof PDFDict)) continue;
-    validateDecodedTextBudgets(dictionary, state);
+    validateActionJavascriptBudget(dictionary, state);
 
     if (workItem.allowContainer) {
       stack.push({
@@ -595,7 +602,8 @@ function validateXmpMetadataBudget(document: PDFDocument, state: InspectionState
   validatePdfTextObjects(metadata, PDF_PRIVACY_MAX_XMP_BYTES, state);
 }
 
-function validateDecodedTextBudgets(dictionary: PDFDict, state: InspectionState): void {
+function validateActionJavascriptBudget(dictionary: PDFDict, state: InspectionState): void {
+  if (readName(dictionary, 'S')?.decodeText() !== 'JavaScript') return;
   const javascript = readObject(dictionary, 'JS');
   if (javascript) {
     validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
@@ -611,8 +619,6 @@ function validateDecodedTextBudgets(dictionary: PDFDict, state: InspectionState)
       throw new PdfActionDictionaryInspectionError();
     }
   }
-  const xfa = readObject(dictionary, 'XFA');
-  if (xfa) validatePdfTextObjects(xfa, PDF_PRIVACY_MAX_XFA_BYTES, state);
 }
 
 function validatePdfTextObjects(
@@ -751,10 +757,15 @@ function validateFieldObjectBudget(field: PDFDict, state: InspectionState): void
   ) {
     throw new PdfActionDictionaryInspectionError();
   }
+  if (contents.asBytes().byteLength > 0 && signature) {
+    validateSignatureTailBudget(signature, state);
+  }
 }
 
 function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionState): void {
   const acroForm = readDictionary(document.catalog, 'AcroForm');
+  const xfa = acroForm ? readObject(acroForm, 'XFA') : undefined;
+  if (xfa) validatePdfTextObjects(xfa, PDF_PRIVACY_MAX_XFA_BYTES, state);
   const rawFields = acroForm ? readObject(acroForm, 'Fields') : undefined;
   if (!(rawFields instanceof PDFArray)) return;
 
@@ -810,6 +821,51 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       stack.push({ object: child, parentNameBytes: qualifiedNameBytes });
     }
   }
+}
+
+function validateSignatureTailBudget(signature: PDFDict, state: InspectionState): void {
+  const byteRange = readObject(signature, 'ByteRange');
+  if (!(byteRange instanceof PDFArray) || byteRange.size() !== 4) return;
+  const values: number[] = [];
+  for (let index = 0; index < byteRange.size(); index += 1) {
+    const value = resolvePdfObject(byteRange.get(index), state.document);
+    if (!(value instanceof PDFNumber)) return;
+    const number = value.asNumber();
+    if (!Number.isSafeInteger(number) || number < 0) return;
+    values.push(number);
+  }
+  const [start, firstLength, secondStart, secondLength] = values;
+  if (
+    start !== 0
+    || firstLength <= 0
+    || start + firstLength > secondStart
+  ) return;
+  const signedEnd = secondStart + secondLength;
+  if (!Number.isSafeInteger(signedEnd) || signedEnd > state.fileData.byteLength) return;
+
+  for (let index = signedEnd; index < state.fileData.byteLength; index += 1) {
+    state.signatureTailBytes += 1;
+    if (state.signatureTailBytes > PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    if (!isPdfWhitespace(state.fileData[index])) break;
+  }
+}
+
+function isPdfWhitespace(value: number | undefined): boolean {
+  return value === 0x00
+    || value === 0x09
+    || value === 0x0a
+    || value === 0x0c
+    || value === 0x0d
+    || value === 0x20;
+}
+
+function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): void {
+  if (readName(page, 'Type')?.decodeText() !== 'Page') return;
+  const annotations = readObject(page, 'Annots');
+  if (!(annotations instanceof PDFArray)) return;
+  consumeDiscoveredSignal(state, annotations.size());
 }
 
 function validateOutlineBudget(document: PDFDocument, state: InspectionState): void {
@@ -913,9 +969,15 @@ function consumeTraversalStep(state: InspectionState): void {
   }
 }
 
-function consumeDiscoveredSignal(state: InspectionState): void {
-  state.discoveredSignals += 1;
-  if (state.discoveredSignals > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+function consumeDiscoveredSignal(state: InspectionState, count = 1): void {
+  if (!Number.isSafeInteger(count) || count < 0) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  state.discoveredSignals += count;
+  if (
+    !Number.isSafeInteger(state.discoveredSignals)
+    || state.discoveredSignals > PDF_PRIVACY_MAX_DISCOVERED_ITEMS
+  ) {
     throw new PdfActionDictionaryInspectionError();
   }
 }
