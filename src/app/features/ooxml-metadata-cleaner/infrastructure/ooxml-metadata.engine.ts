@@ -5,6 +5,7 @@ import {
   OOXML_METADATA_MAX_COMPRESSION_RATIO,
   OOXML_METADATA_MAX_ENTRY_BYTES,
   OOXML_METADATA_MAX_OUTPUT_BYTES,
+  OOXML_METADATA_MAX_THUMBNAIL_BYTES,
   OOXML_METADATA_MAX_UNCOMPRESSED_BYTES,
   OOXML_METADATA_MAX_XML_BYTES,
   OoxmlArchiveError,
@@ -152,7 +153,6 @@ export async function sanitizeOoxmlBuffer(
     throw new OoxmlMetadataEngineError('invalid-ooxml');
   }
   validateUnsupportedParts(inspection.entries);
-  validateMetadataPartSizes(inspection.entries);
   onProgress?.(8);
 
   const actualUncompressedBytes = await validateInflatedArchive(
@@ -449,7 +449,7 @@ function collectThumbnailFindings(
     const file = files.get(lowerPath);
     const entry = entries.get(lowerPath);
     if (!file || !entry) continue;
-    validateMetadataEntry(entry, file.name);
+    validateThumbnailEntry(entry, file.name);
     recordFinding(
       output,
       'thumbnail',
@@ -656,7 +656,7 @@ async function retainRecognizedMetadataParts(
   for (const path of parts.thumbnail) {
     const file = files.get(path);
     if (!file) continue;
-    validateMetadataEntry(entries.get(path), file.name);
+    validateThumbnailEntry(entries.get(path), file.name);
     recognized.thumbnail.push(path);
   }
   return recognized;
@@ -1062,20 +1062,14 @@ function validateUnsupportedParts(entries: readonly ZipDirectoryEntry[]): void {
   }
 }
 
-function validateMetadataPartSizes(entries: readonly ZipDirectoryEntry[]): void {
-  for (const entry of entries) {
-    if (
-      (/^docprops\/(?:core|app|custom)\.xml$/iu.test(entry.name)
-        || /^docprops\/thumbnail\.[^/]+$/iu.test(entry.name))
-      && entry.uncompressedSize > OOXML_METADATA_MAX_XML_BYTES
-    ) {
-      throw new OoxmlMetadataEngineError('metadata-part-too-large', entry.name);
-    }
+function validateMetadataEntry(entry: ZipDirectoryEntry | undefined, name: string): void {
+  if (!entry || entry.uncompressedSize > OOXML_METADATA_MAX_XML_BYTES) {
+    throw new OoxmlMetadataEngineError('metadata-part-too-large', name);
   }
 }
 
-function validateMetadataEntry(entry: ZipDirectoryEntry | undefined, name: string): void {
-  if (!entry || entry.uncompressedSize > OOXML_METADATA_MAX_XML_BYTES) {
+function validateThumbnailEntry(entry: ZipDirectoryEntry | undefined, name: string): void {
+  if (!entry || entry.uncompressedSize > OOXML_METADATA_MAX_THUMBNAIL_BYTES) {
     throw new OoxmlMetadataEngineError('metadata-part-too-large', name);
   }
 }

@@ -4,6 +4,7 @@ export const OOXML_METADATA_MAX_ENTRIES = 5_000;
 export const OOXML_METADATA_MAX_UNCOMPRESSED_BYTES = 200 * 1_024 * 1_024;
 export const OOXML_METADATA_MAX_ENTRY_BYTES = 100 * 1_024 * 1_024;
 export const OOXML_METADATA_MAX_XML_BYTES = 2 * 1_024 * 1_024;
+export const OOXML_METADATA_MAX_THUMBNAIL_BYTES = 25 * 1_024 * 1_024;
 export const OOXML_METADATA_MAX_COMPRESSION_RATIO = 100;
 
 export type OoxmlDocumentKind = 'docx' | 'xlsx' | 'pptx';

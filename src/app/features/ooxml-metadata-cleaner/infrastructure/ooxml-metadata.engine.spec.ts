@@ -5,6 +5,7 @@ import {
   OoxmlMetadataEngineError,
   sanitizeOoxmlBuffer,
 } from './ooxml-metadata.engine';
+import { OOXML_METADATA_MAX_THUMBNAIL_BYTES } from '../domain/ooxml-metadata.models';
 import type {
   OoxmlDocumentKind,
   OoxmlMetadataOptions,
@@ -317,6 +318,7 @@ describe('sanitizeOoxmlBuffer', () => {
 
   it('preserves an ordinary image that only happens to use the conventional thumbnail path', async () => {
     const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file('docProps/thumbnail.jpeg', new Uint8Array(3 * 1_024 * 1_024));
     source.file('_rels/.rels', `<?xml version="1.0"?><Relationships>${standardMetadataRelationships}</Relationships>`);
     source.file('word/_rels/document.xml.rels', '<?xml version="1.0"?><Relationships>'
       + '<Relationship Id="rImage" '
@@ -331,10 +333,28 @@ describe('sanitizeOoxmlBuffer', () => {
     );
     const output = await JSZip.loadAsync(result.output);
 
-    expect(output.file('docProps/thumbnail.jpeg')).not.toBeNull();
+    await expect(output.file('docProps/thumbnail.jpeg')?.async('uint8array'))
+      .resolves.toHaveLength(3 * 1_024 * 1_024);
     await expect(output.file('word/_rels/document.xml.rels')?.async('string'))
       .resolves.toContain('../docProps/thumbnail.jpeg');
     expect(result.report.detected.some(finding => finding.scope === 'thumbnail')).toBe(false);
+  });
+
+  it('applies the binary budget only to a relationship-qualified thumbnail', async () => {
+    const source = await JSZip.loadAsync(await createPackage('docx'));
+    source.file(
+      'docProps/thumbnail.jpeg',
+      new Uint8Array(OOXML_METADATA_MAX_THUMBNAIL_BYTES + 1),
+    );
+
+    await expect(sanitizeOoxmlBuffer(
+      await source.generateAsync({ type: 'uint8array' }),
+      'docx',
+      allOptions,
+    )).rejects.toEqual(expect.objectContaining({
+      code: 'metadata-part-too-large',
+      entryName: 'docProps/thumbnail.jpeg',
+    }));
   });
 
   it('removes the package thumbnail relation but preserves bytes shared with document content', async () => {

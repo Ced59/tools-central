@@ -34,7 +34,7 @@ export const editorial: ToolEditorialModel = {
       icon: 'tc-icon tc-icon-cogs',
       paragraphs: [
         $localize`:@@ed_dev_ooxml_metadata_method_1:DOCX, XLSX et PPTX sont des archives ZIP contenant des fichiers XML. L’outil vérifie d’abord la table centrale, les chemins, les méthodes de compression, le nombre d’entrées et le volume décompressé avant de lire les propriétés.` ,
-        $localize`:@@ed_dev_ooxml_metadata_method_2:Les fichiers docProps/core.xml, docProps/app.xml et docProps/custom.xml sont remplacés par des conteneurs valides sans valeurs lorsque leur catégorie est sélectionnée. La miniature est supprimée avec ses relations et sa déclaration de type.` ,
+        $localize`:@@ed_dev_ooxml_metadata_method_2:Les parties qualifiées par les relations OPC officielles sont vidées de leurs valeurs tout en conservant leur racine, leur espace de noms et leur encodage. La relation de miniature est supprimée ; ses octets restent présents lorsqu’un autre contenu du document les utilise.` ,
         $localize`:@@ed_dev_ooxml_metadata_method_3:Le package est ensuite recompressé dans un Web Worker. Téléchargez la copie, ouvrez-la dans Word, Excel ou PowerPoint et enregistrez-la seulement après avoir vérifié le contenu important.` ,
       ],
     },
@@ -55,7 +55,7 @@ export const editorial: ToolEditorialModel = {
       heading: $localize`:@@ed_dev_ooxml_metadata_limits:Formats, sécurité et limites` ,
       icon: 'tc-icon tc-icon-exclamation-triangle',
       items: [
-        { text: $localize`:@@ed_dev_ooxml_metadata_limit_1:Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.` },
+        { text: $localize`:@@ed_dev_ooxml_metadata_limit_1:Seuls les formats sans macros DOCX, XLSX et PPTX sont acceptés, jusqu’à 50 Mio. Chaque partie XML inspectée est limitée à 2 Mio et une miniature officiellement déclarée à 25 Mio. Les archives ZIP64, multidisque, chiffrées, ambiguës ou présentant un ratio de compression dangereux sont refusées avant extraction.` },
         { text: $localize`:@@ed_dev_ooxml_metadata_limit_2:L’outil ne retire pas les commentaires, auteurs de révisions, notes de présentation, feuilles masquées, contenu visible, liens, objets incorporés, signatures numériques ni protections.` },
         { text: $localize`:@@ed_dev_ooxml_metadata_limit_3:La reconstruction modifie les octets et invalide une éventuelle signature du package. Conservez toujours l’original et vérifiez la copie dans l’application Office utilisée par vos destinataires.` },
       ],
