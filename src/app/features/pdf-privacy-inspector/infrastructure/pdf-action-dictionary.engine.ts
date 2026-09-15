@@ -101,6 +101,9 @@ export const PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
@@ -132,6 +135,9 @@ interface InspectionState {
   signatureTailBytes: number;
   infoExpansionBytes: number;
   annotationTargetExpansionBytes: number;
+  fieldValueExpansionBytes: number;
+  annotationTextExpansionBytes: number;
+  outlineValueExpansionBytes: number;
   hasUnboundedEncryptedTextStreams: boolean;
 }
 
@@ -243,6 +249,9 @@ export async function inspectPdfStructuralSignals(
       signatureTailBytes: 0,
       infoExpansionBytes: 0,
       annotationTargetExpansionBytes: 0,
+      fieldValueExpansionBytes: 0,
+      annotationTextExpansionBytes: 0,
+      outlineValueExpansionBytes: 0,
       hasUnboundedEncryptedTextStreams: false,
     };
     validateInfoBudget(document, state);
@@ -825,10 +834,20 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
   const rawFields = acroForm ? readObject(acroForm, 'Fields') : undefined;
   if (!(rawFields instanceof PDFArray)) return;
 
-  const stack: { object: PDFObject; parentNameBytes: number }[] = [];
+  const stack: {
+    object: PDFObject;
+    parentNameBytes: number;
+    inheritedValueBytes: number;
+    inheritedDefaultValueBytes: number;
+  }[] = [];
   for (let index = 0; index < rawFields.size(); index += 1) {
     const field = rawFields.get(index);
-    stack.push({ object: field, parentNameBytes: 0 });
+    stack.push({
+      object: field,
+      parentNameBytes: 0,
+      inheritedValueBytes: 0,
+      inheritedDefaultValueBytes: 0,
+    });
   }
   const visitedReferences = new Set<PDFRef>();
   const visitedDirectObjects = new Set<PDFObject>();
@@ -849,6 +868,19 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     }
 
     validateFieldObjectBudget(field, state);
+    const valueBytes = field.has(PDFName.of('V'))
+      ? measureNormalizedValueBytes(readObject(field, 'V'), state)
+      : item.inheritedValueBytes;
+    const defaultValueBytes = field.has(PDFName.of('DV'))
+      ? measureNormalizedValueBytes(readObject(field, 'DV'), state)
+      : item.inheritedDefaultValueBytes;
+    state.fieldValueExpansionBytes += valueBytes + defaultValueBytes;
+    if (
+      !Number.isSafeInteger(state.fieldValueExpansionBytes)
+      || state.fieldValueExpansionBytes > PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     let qualifiedNameBytes = item.parentNameBytes;
     if (field.has(PDFName.of('T'))) {
       const partialName = readObject(field, 'T');
@@ -874,7 +906,12 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     if (!(kids instanceof PDFArray)) continue;
     for (let index = 0; index < kids.size(); index += 1) {
       const child = kids.get(index);
-      stack.push({ object: child, parentNameBytes: qualifiedNameBytes });
+      stack.push({
+        object: child,
+        parentNameBytes: qualifiedNameBytes,
+        inheritedValueBytes: valueBytes,
+        inheritedDefaultValueBytes: defaultValueBytes,
+      });
     }
   }
 }
@@ -938,6 +975,18 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
   for (let index = 0; index < annotations.size(); index += 1) {
     const annotation = resolvePdfObject(annotations.get(index), state.document);
     if (!(annotation instanceof PDFDict)) continue;
+    for (const key of ['Contents', 'T', 'Subj', 'RC', 'NM', 'M', 'CreationDate']) {
+      state.annotationTextExpansionBytes += measureNormalizedValueBytes(
+        readObject(annotation, key),
+        state,
+      );
+    }
+    if (
+      !Number.isSafeInteger(state.annotationTextExpansionBytes)
+      || state.annotationTextExpansionBytes > PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     const action = readDictionary(annotation, 'A');
     if (!action) continue;
     state.annotationTargetExpansionBytes += measureTargetBytes(action, state.document);
@@ -956,7 +1005,7 @@ function measureTargetBytes(
   depth = 0,
 ): number {
   if (depth > 4) return 0;
-  for (const key of ['F', 'URI', 'N']) {
+  for (const key of ['F', 'UF', 'URI', 'N', 'D']) {
     const rawValue = dictionary.get(PDFName.of(key));
     if (!rawValue) continue;
     const value = resolvePdfObject(rawValue, document);
@@ -994,11 +1043,58 @@ function validateOutlineBudget(document: PDFDocument, state: InspectionState): v
     visitedItems.add(item);
     consumeDiscoveredSignal(state);
 
+    state.outlineValueExpansionBytes += measureNormalizedValueBytes(
+      readObject(item, 'Title'),
+      state,
+    );
+    state.outlineValueExpansionBytes += measureNormalizedValueBytes(
+      readObject(item, 'Dest'),
+      state,
+    );
+    const action = readDictionary(item, 'A');
+    if (action) {
+      state.outlineValueExpansionBytes += measureTargetBytes(action, state.document);
+    }
+    if (
+      !Number.isSafeInteger(state.outlineValueExpansionBytes)
+      || state.outlineValueExpansionBytes > PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+
     const next = item.get(PDFName.of('Next'));
     const child = item.get(PDFName.of('First'));
     if (next) stack.push(next);
     if (child) stack.push(child);
   }
+}
+
+function measureNormalizedValueBytes(
+  root: PDFObject | undefined,
+  state: InspectionState,
+): number {
+  if (!root) return 0;
+  const stack = [root];
+  const visitedContainers = new Set<PDFObject>();
+  let total = 0;
+  while (stack.length > 0) {
+    const rawValue = stack.pop();
+    if (!rawValue) continue;
+    consumeTraversalStep(state);
+    const value = resolvePdfObject(rawValue, state.document);
+    if (value instanceof PDFString || value instanceof PDFHexString) {
+      total += value.asBytes().byteLength;
+    } else if (value instanceof PDFName) {
+      total += value.sizeInBytes();
+    } else if (value instanceof PDFArray && !visitedContainers.has(value)) {
+      visitedContainers.add(value);
+      for (let index = 0; index < value.size(); index += 1) {
+        stack.push(value.get(index));
+      }
+    }
+    if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  }
+  return total;
 }
 
 function readEmbeddedFileBytes(stream: PDFStream): number | undefined {

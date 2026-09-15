@@ -3,12 +3,15 @@ import { describe, expect, it } from 'vitest';
 
 import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
+  PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
@@ -600,6 +603,25 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne la normalisation répétée du texte partagé par les annotations', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const textBytes = 1 * 1_024 * 1_024;
+    const contents = source.context.register(PDFString.of('A'.repeat(textBytes)));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES / textBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Text', Rect: [0, 0, 10, 10], Contents: contents,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la croissance cumulée des noms qualifiés de champs', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -639,6 +661,45 @@ describe('inspectPdfStructuralSignals', () => {
       }))
     ));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne l’expansion répétée d’une valeur héritée par les widgets', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const valueBytes = 1 * 1_024 * 1_024;
+    const value = source.context.register(PDFString.of('A'.repeat(valueBytes)));
+    const widgetCount = Math.floor(PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES / valueBytes) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Entry'),
+      })),
+    );
+    const parent = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Shared'), V: value, Kids: widgets,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne l’expansion répétée des valeurs partagées du plan', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const titleBytes = 1 * 1_024 * 1_024;
+    const title = source.context.register(PDFString.of('A'.repeat(titleBytes)));
+    const outlineCount = Math.floor(PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES / titleBytes) + 1;
+    let next: PDFRef | undefined;
+    for (let index = outlineCount - 1; index >= 0; index -= 1) {
+      const item = source.context.obj({ Title: title });
+      if (next) item.set(PDFName.of('Next'), next);
+      next = source.context.register(item);
+    }
+    source.catalog.set(PDFName.of('Outlines'), source.context.obj({ First: next }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });
