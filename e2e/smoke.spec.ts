@@ -460,6 +460,18 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     },
   });
   const chainedUriAnnotationReference = source.context.register(chainedUri);
+  const hiddenJavascript = source.context.obj({
+    Type: 'Annot',
+    Subtype: 'Link',
+    Rect: [72, 400, 320, 430],
+    Border: [0, 0, 0],
+    A: {
+      Type: 'Action',
+      S: 'JavaScript',
+      JS: PDFString.of('app.alert("annotation-secret");'),
+    },
+  });
+  const hiddenJavascriptAnnotationReference = source.context.register(hiddenJavascript);
   const annotations = pdfPage.node.lookupMaybe(PDFName.of('Annots'), PDFArray);
   if (annotations) {
     annotations.push(annotationReference);
@@ -467,6 +479,7 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     annotations.push(httpLaunchAnnotationReference);
     annotations.push(submitFormAnnotationReference);
     annotations.push(chainedUriAnnotationReference);
+    annotations.push(hiddenJavascriptAnnotationReference);
   } else {
     pdfPage.node.set(PDFName.of('Annots'), source.context.obj([
       annotationReference,
@@ -474,6 +487,7 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
       httpLaunchAnnotationReference,
       submitFormAnnotationReference,
       chainedUriAnnotationReference,
+      hiddenJavascriptAnnotationReference,
     ]));
   }
   const bytes = await source.save({ useObjectStreams: false });
@@ -539,9 +553,13 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
     expect.objectContaining({
       message: { code: 'dictionary-action', actionType: 'URI', context: 'chained-action' },
     }),
+    expect.objectContaining({
+      message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'other' },
+    }),
   ]));
   expect(JSON.stringify(exported)).not.toContain('secret-script');
   expect(JSON.stringify(exported)).not.toContain('field-secret');
+  expect(JSON.stringify(exported)).not.toContain('annotation-secret');
   expect(JSON.stringify(exported)).not.toContain('alice@example.test');
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 

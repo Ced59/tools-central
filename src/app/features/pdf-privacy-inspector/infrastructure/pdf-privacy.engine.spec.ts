@@ -270,6 +270,30 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(JSON.stringify(report)).not.toContain('private-value');
   });
 
+  it('conserve un JavaScript brut omis des formes publiques de PDF.js', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture(), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [
+        { actionType: 'JavaScript', context: 'annotation-action', occurrences: 1 },
+        { actionType: 'JavaScript', context: 'next-action', occurrences: 1 },
+      ],
+    });
+
+    expect(report.attentionLevel).toBe('high');
+    expect(report.findings.filter(finding => finding.kind === 'javascript')).toEqual([
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'other' },
+        occurrences: 1,
+      }),
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'chained-action' },
+        occurrences: 1,
+      }),
+    ]);
+  });
+
   it('conserve les URI sûres déclenchées à l’ouverture ou comme action additionnelle', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture(), {
       headerData: pdfBytes(),

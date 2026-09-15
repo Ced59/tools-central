@@ -53,9 +53,12 @@ const ANNOTATION_SUBTYPES = new Set([
   'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
 ]);
 
-interface PendingObject {
-  object: PDFObject;
-  context: PdfActionDictionaryContext;
+interface InspectionState {
+  document: PDFDocument;
+  signals: Map<string, PdfActionDictionarySignal>;
+  canReadTarget: boolean;
+  traversalSteps: number;
+  discoveredActions: number;
 }
 
 /**
@@ -75,55 +78,50 @@ export async function inspectPdfActionDictionaries(
     const indirectObjectCount = document.context.enumerateIndirectObjects().length;
     if (indirectObjectCount > MAX_INDIRECT_OBJECTS) throw new PdfActionDictionaryInspectionError();
 
-    const queue: PendingObject[] = [{ object: document.catalog, context: 'unknown' }];
-    const visited = new Map<PDFObject, Set<PdfActionDictionaryContext>>();
-    const signals = new Map<string, PdfActionDictionarySignal>();
-    let traversalSteps = 0;
+    const queue: PDFObject[] = [document.catalog];
+    const visited = new Set<PDFObject>();
+    const state: InspectionState = {
+      document,
+      signals: new Map<string, PdfActionDictionarySignal>(),
+      canReadTarget: !document.isEncrypted,
+      traversalSteps: 0,
+      discoveredActions: 0,
+    };
 
     while (queue.length > 0) {
-      const pending = queue.pop();
-      if (!pending) continue;
-      traversalSteps += 1;
-      if (traversalSteps > MAX_TRAVERSED_OBJECTS) throw new PdfActionDictionaryInspectionError();
+      const object = queue.pop();
+      if (!object) continue;
+      consumeTraversalStep(state);
 
-      if (pending.object instanceof PDFRef) {
-        const resolved = document.context.lookup(pending.object);
-        if (resolved) queue.push({ object: resolved, context: pending.context });
+      if (object instanceof PDFRef) {
+        if (visited.has(object)) continue;
+        visited.add(object);
+        const resolved = document.context.lookup(object);
+        if (resolved) queue.push(resolved);
         continue;
       }
 
-      const contexts = visited.get(pending.object) ?? new Set<PdfActionDictionaryContext>();
-      if (contexts.has(pending.context)) continue;
-      contexts.add(pending.context);
-      visited.set(pending.object, contexts);
+      if (visited.has(object)) continue;
+      visited.add(object);
 
-      if (pending.object instanceof PDFStream) {
-        queue.push({ object: pending.object.dict, context: pending.context });
+      if (object instanceof PDFStream) {
+        queue.push(object.dict);
         continue;
       }
-      if (pending.object instanceof PDFArray) {
-        for (const child of pending.object.asArray()) {
-          queue.push({ object: child, context: pending.context });
-        }
+      if (object instanceof PDFArray) {
+        queue.push(...object.asArray());
         continue;
       }
-      if (!(pending.object instanceof PDFDict)) continue;
+      if (!(object instanceof PDFDict)) continue;
 
-      collectActionDictionary(
-        pending.object,
-        pending.context,
-        signals,
-        !document.isEncrypted,
-      );
-      for (const [key, child] of pending.object.entries()) {
-        queue.push({
-          object: child,
-          context: childContext(pending.object, pending.context, key),
-        });
+      inspectActionTriggers(object, state);
+      for (const [key, child] of object.entries()) {
+        if (isActionTriggerKey(object, key)) continue;
+        queue.push(child);
       }
     }
 
-    return [...signals.values()];
+    return [...state.signals.values()];
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
     // PDF.js remains the source of truth for validity/password handling. Some
@@ -135,52 +133,101 @@ export async function inspectPdfActionDictionaries(
 function collectActionDictionary(
   dictionary: PDFDict,
   context: PdfActionDictionaryContext,
-  signals: Map<string, PdfActionDictionarySignal>,
-  canReadTarget: boolean,
+  state: InspectionState,
 ): void {
   const actionName = dictionary.lookupMaybe(PDFName.of('S'), PDFName);
   if (!actionName || actionName.sizeInBytes() > 128) return;
   const actionType = actionName.decodeText();
   if (!actionType || !ACTION_NAMES.has(actionType)) return;
 
-  const target = canReadTarget ? readTarget(dictionary) : undefined;
+  state.discoveredActions += 1;
+  if (state.discoveredActions > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+
+  const target = state.canReadTarget ? readTarget(dictionary) : undefined;
   const key = `${context}\u0000${actionType}\u0000${target ?? ''}`;
-  const current = signals.get(key);
+  const current = state.signals.get(key);
   if (current) {
     current.occurrences += 1;
     return;
   }
-  if (signals.size >= PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+  state.signals.set(key, { actionType, context, target, occurrences: 1 });
+}
+
+function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): void {
+  const openAction = dictionary.get(PDFName.of('OpenAction'));
+  if (openAction) inspectActionEntry(openAction, 'open-action', state, false, new Set());
+
+  const additionalActions = dictionary.get(PDFName.of('AA'));
+  if (additionalActions) {
+    inspectActionEntry(additionalActions, 'additional-action', state, true, new Set());
+  }
+
+  const action = dictionary.get(PDFName.of('A'));
+  if (!action) return;
+  inspectActionEntry(action, actionContext(dictionary), state, false, new Set());
+}
+
+function inspectActionEntry(
+  object: PDFObject,
+  context: PdfActionDictionaryContext,
+  state: InspectionState,
+  allowContainer: boolean,
+  path: Set<PDFObject>,
+): void {
+  consumeTraversalStep(state);
+  if (path.has(object)) return;
+  path.add(object);
+  try {
+    if (object instanceof PDFRef) {
+      const resolved = state.document.context.lookup(object);
+      if (resolved) inspectActionEntry(resolved, context, state, allowContainer, path);
+      return;
+    }
+    if (object instanceof PDFArray) {
+      for (const child of object.asArray()) {
+        inspectActionEntry(child, context, state, false, path);
+      }
+      return;
+    }
+    const dictionary = object instanceof PDFStream ? object.dict : object;
+    if (!(dictionary instanceof PDFDict)) return;
+
+    const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
+    if (actionType) {
+      collectActionDictionary(dictionary, context, state);
+      const next = dictionary.get(PDFName.of('Next'));
+      if (next) inspectActionEntry(next, 'next-action', state, false, path);
+      return;
+    }
+    if (!allowContainer) return;
+    for (const child of dictionary.values()) {
+      inspectActionEntry(child, context, state, false, path);
+    }
+  } finally {
+    path.delete(object);
+  }
+}
+
+function actionContext(parent: PDFDict): PdfActionDictionaryContext {
+  const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
+  if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-action';
+  if (parent.has(PDFName.of('Title'))) return 'outline-action';
+  return 'explicit-action';
+}
+
+function isActionTriggerKey(parent: PDFDict, key: PDFName): boolean {
+  const name = key.decodeText();
+  if (name === 'A' || name === 'AA' || name === 'OpenAction') return true;
+  return name === 'Next' && parent.has(PDFName.of('S'));
+}
+
+function consumeTraversalStep(state: InspectionState): void {
+  state.traversalSteps += 1;
+  if (state.traversalSteps > MAX_TRAVERSED_OBJECTS) {
     throw new PdfActionDictionaryInspectionError();
   }
-  signals.set(key, { actionType, context, target, occurrences: 1 });
-}
-
-function childContext(
-  parent: PDFDict,
-  parentContext: PdfActionDictionaryContext,
-  key: PDFName,
-): PdfActionDictionaryContext {
-  const name = key.decodeText();
-  if (name === 'OpenAction') return 'open-action';
-  if (name === 'AA') return 'additional-action';
-  if (name === 'Outlines') return 'outline-action';
-  if (name === 'Next' && isActionDictionary(parent)) return 'next-action';
-  if (name === 'A') {
-    const subtype = parent.lookupMaybe(PDFName.of('Subtype'), PDFName)?.decodeText();
-    if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-action';
-    if (parent.has(PDFName.of('Title'))) return 'outline-action';
-    return 'explicit-action';
-  }
-  return parentContext;
-}
-
-function isActionDictionary(dictionary: PDFDict): boolean {
-  const actionType = dictionary.lookupMaybe(PDFName.of('S'), PDFName)?.decodeText();
-  const type = dictionary.lookupMaybe(PDFName.of('Type'), PDFName)?.decodeText();
-  return type === 'Action'
-    || actionType === 'GoTo'
-    || (actionType !== undefined && ACTION_NAMES.has(actionType));
 }
 
 function readTarget(dictionary: PDFDict): string | undefined {

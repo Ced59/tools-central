@@ -614,8 +614,15 @@ function collectActionDictionarySignals(
         || signal.context === 'additional-action'
         || signal.context === 'next-action'
       );
+    const rawJavascript = signal.actionType === 'JavaScript'
+      && (
+        signal.context === 'annotation-action'
+        || signal.context === 'outline-action'
+        || signal.context === 'next-action'
+        || signal.context === 'explicit-action'
+      );
     const highRisk = isHighRiskAction(signal.actionType);
-    if (!highRisk && !unsafeUri && !contextualUri) continue;
+    if (!highRisk && !unsafeUri && !contextualUri && !rawJavascript) continue;
     const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
       ? signal.occurrences
       : 1;
@@ -630,7 +637,7 @@ function collectActionDictionarySignals(
     add({
       id: `automatic:dictionary:${String(findingIndex)}:${signal.actionType}`,
       category: 'active-content',
-      kind: 'automatic-action',
+      kind: signal.actionType === 'JavaScript' ? 'javascript' : 'automatic-action',
       severity: 'high',
       message: actionDictionaryMessage(signal),
       value: sanitizeActionTarget(signal.target),

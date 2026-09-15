@@ -16,10 +16,10 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,20 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,82 kB brut, 166,16 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 139 fichiers, 458 tests verts sous Vitest |
-| Couverture | aucun seuil | 50,10 % statements, 37,77 % branches, 49,77 % fonctions, 53,61 % lignes |
+| Tests unitaires | suite non compilable | 139 fichiers, 461 tests verts sous Vitest |
+| Couverture | aucun seuil | 50,30 % statements, 37,94 % branches, 50,00 % fonctions, 53,83 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |
@@ -28,7 +28,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : LCP 2 160 ms, CLS 0,0043, `DOMContentLoaded` 250,9 ms et interaction thème 89,3 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : LCP 2 156 ms, CLS 0,0043, `DOMContentLoaded` 310,9 ms et interaction thème 113,4 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
@@ -55,7 +55,7 @@ Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : 
 - Livraison de `structured-data-extractor` dans une tranche verticale complète, avec extraction HTML inerte de JSON-LD, Microdata et RDFa, graphe normalisé, résolution locale des URL relatives, limites de complexité, export JSON, accessibilité et 22 tests ciblés.
 - Livraison de `html-head-auditor` dans une tranche verticale complète, avec parseur textuel inerte compatible SSR, contrôles title/description/canonical/robots/viewport/charset/hreflang/Open Graph/Twitter, limites défensives, décodage HTML5, export JSON, accessibilité et 37 tests ciblés.
 - Livraison de `software-application-schema-builder` dans une tranche verticale complète, avec génération JSON-LD locale, contrôles Schema.org et Google, notes réelles facultatives, décimaux exacts, sortie HTML sûre, diagnostics reliés aux champs, export, accessibilité et 28 tests ciblés.
-- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, lecture inerte et bornée des dictionnaires d’actions et de leur contexte, prise en charge des chaînes `/Next` sans doublon par destination, codes de rapport indépendants de la langue, limites de taille/pages/éléments, mot de passe local, inspection des métadonnées, scripts, actions, pièces jointes, liens, formulaires, signatures et chiffrement, sans exécuter ni exposer les contenus sensibles, avec rapport JSON et 35 tests ciblés.
+- Livraison de `pdf-privacy-inspector` dans une tranche verticale complète, avec PDF.js isolé dans un Worker, parcours structurel et parcours d’actions inertes, bornés et séparés, prise en charge des références partagées et chaînes `/Next` sans boucle ni doublon par destination, codes de rapport indépendants de la langue, limites de taille/pages/éléments, mot de passe local, inspection des métadonnées, scripts, actions, pièces jointes, liens, formulaires, signatures et chiffrement, sans exécuter ni exposer les contenus sensibles, avec rapport JSON et 38 tests ciblés.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.
 - Suppression du doublon statistique « amplitude/range » pour éviter code dupliqué et cannibalisation SEO.

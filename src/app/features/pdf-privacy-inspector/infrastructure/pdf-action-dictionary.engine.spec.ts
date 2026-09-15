@@ -81,6 +81,54 @@ describe('inspectPdfActionDictionaries', () => {
     }]);
   });
 
+  it('compte une référence partagée pour chacun de ses déclencheurs', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'SubmitForm', F: PDFString.of('https://submit.example/shared'),
+    }));
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], A: action,
+      })),
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [20, 0, 30, 10], A: action,
+      })),
+    ]));
+
+    const signals = await inspectPdfActionDictionaries(await source.save());
+
+    expect(signals).toEqual([{
+      actionType: 'SubmitForm', context: 'annotation-action',
+      target: 'https://submit.example/shared', occurrences: 2,
+    }]);
+  });
+
+  it('préserve le JavaScript masqué dans une annotation et une chaîne Next', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    page.node.set(PDFName.of('Annots'), source.context.obj([
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10],
+        A: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('hidden()') },
+      })),
+      source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [20, 0, 30, 10],
+        A: {
+          Type: 'Action', S: 'GoTo', D: [page.ref, PDFName.of('Fit')],
+          Next: { Type: 'Action', S: 'JavaScript', JS: PDFString.of('chained()') },
+        },
+      })),
+    ]));
+
+    const signals = await inspectPdfActionDictionaries(await source.save());
+
+    expect(signals).toEqual(expect.arrayContaining([
+      { actionType: 'JavaScript', context: 'annotation-action', occurrences: 1 },
+      { actionType: 'JavaScript', context: 'next-action', occurrences: 1 },
+    ]));
+  });
+
   it('agrège les dictionnaires identiques sans modifier la casse des cibles', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
