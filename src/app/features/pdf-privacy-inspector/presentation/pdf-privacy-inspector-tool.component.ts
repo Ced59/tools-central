@@ -307,9 +307,15 @@ export class PdfPrivacyInspectorToolComponent {
       `${this.findingTitle('digital-signature')} ${new Intl.NumberFormat(this.locale).format(message.index)}`,
     ];
     if (message.subFilter) parts.push(message.subFilter);
-    if (message.contactInfo) parts.push(`ContactInfo: ${message.contactInfo}`);
-    if (message.location) parts.push(`Location: ${message.location}`);
-    if (message.reason) parts.push(`Reason: ${message.reason}`);
+    if (message.contactInfo) {
+      parts.push(`${$localize`:@@pdf_privacy_signature_contact:Contact`}: ${message.contactInfo}`);
+    }
+    if (message.location) {
+      parts.push(`${$localize`:@@pdf_privacy_signature_location:Lieu`}: ${message.location}`);
+    }
+    if (message.reason) {
+      parts.push(`${$localize`:@@pdf_privacy_signature_reason:Motif`}: ${message.reason}`);
+    }
     if (message.signingTime) parts.push(`M: ${message.signingTime}`);
     if (message.coversWholeDocument === true) parts.push('100 %');
     else if (message.coversWholeDocument === false) parts.push('< 100 %');

@@ -16,7 +16,6 @@ import {
   PdfPrivacyEngineError,
   extractPdfVersion,
   inspectPdfPrivacyDocument,
-  type PdfJsPrivacyDocument,
 } from './pdf-privacy.engine';
 import type {
   PdfPrivacyWorkerRequest,
@@ -59,7 +58,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     post({ type: 'progress', percent: 2 });
     const document = await loadingTask.promise;
     const report = await inspectPdfPrivacyDocument(
-      document as unknown as PdfJsPrivacyDocument,
+      document,
       {
         headerData,
         fileBytes,

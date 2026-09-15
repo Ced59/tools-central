@@ -22,7 +22,7 @@ export class PdfPrivacyEngineError extends Error {
 
 export interface PdfJsPrivacyMetadata {
   info: object;
-  metadata: { getAll(): object } | null;
+  metadata: Iterable<readonly [string, unknown]> | null;
 }
 
 export interface PdfJsPrivacyPage {
@@ -56,7 +56,7 @@ interface LinkAggregate {
 interface ActionDictionaryIndex {
   targets: Set<string>;
   targetlessAnnotationTriggerIds: Set<string>;
-  targetlessOutlineActions: number;
+  targetlessOutlineExternalActions: number;
 }
 
 type ConsumeDiscoveryBudget = (count?: number) => void;
@@ -71,6 +71,8 @@ const XMP_PRIVACY_KEY_PARTS = [
   'creatortool', 'createdate', 'modifydate', 'metadatadate', 'documentid',
   'instanceid', 'history', 'email', 'company', 'manager',
 ];
+
+const PDFJS_EXTERNAL_TARGET_ACTIONS = new Set(['Launch', 'GoToR']);
 
 // Stable values from PDF.js' public AnnotationType contract. Keeping the
 // mapping local avoids loading the full display bundle in the inspection
@@ -275,7 +277,7 @@ function collectMetadata(
   }
 
   if (!metadata.metadata) return;
-  for (const [key, rawValue] of objectEntries(metadata.metadata.getAll())) {
+  for (const [key, rawValue] of metadata.metadata) {
     consume();
     const normalizedKey = key.toLowerCase();
     if (!XMP_PRIVACY_KEY_PARTS.some(part => normalizedKey.includes(part))) continue;
@@ -704,15 +706,19 @@ function collectActionDictionarySignals(
   const actionIndex: ActionDictionaryIndex = {
     targets: new Set<string>(),
     targetlessAnnotationTriggerIds: new Set<string>(),
-    targetlessOutlineActions: 0,
+    targetlessOutlineExternalActions: 0,
   };
   let findingIndex = 0;
   for (const signal of signals) {
     const target = sanitizePdfPrivacyValue(signal.target);
-    if (target) actionIndex.targets.add(target);
+    if (target) {
+      actionIndex.targets.add(target);
+      const normalizedTarget = normalizeSafeExternalUrl(target);
+      if (normalizedTarget) actionIndex.targets.add(normalizedTarget);
+    }
     const unsafeUri = signal.actionType === 'URI'
       && target !== undefined
-      && !isSafeExternalUrl(target);
+      && normalizeSafeExternalUrl(target) === undefined;
     const contextualUri = signal.actionType === 'URI'
       && (
         signal.context === 'open-action'
@@ -740,8 +746,12 @@ function collectActionDictionarySignals(
         actionIndex.targetlessAnnotationTriggerIds.add(triggerId);
       }
     }
-    if (highRisk && !target && signal.context === 'outline-action') {
-      actionIndex.targetlessOutlineActions += occurrences;
+    if (
+      !target
+      && signal.context === 'outline-action'
+      && PDFJS_EXTERNAL_TARGET_ACTIONS.has(signal.actionType)
+    ) {
+      actionIndex.targetlessOutlineExternalActions += occurrences;
     }
     consume(occurrences);
     findingIndex += 1;
@@ -766,8 +776,10 @@ function consumeMatchingDictionaryAction(
 ): boolean {
   if (!actionIndex) return false;
   if (actionIndex.targets.has(target)) return true;
-  if (source === 'outline' && actionIndex.targetlessOutlineActions > 0) {
-    actionIndex.targetlessOutlineActions -= 1;
+  const normalizedTarget = normalizeSafeExternalUrl(target);
+  if (normalizedTarget && actionIndex.targets.has(normalizedTarget)) return true;
+  if (source === 'outline' && actionIndex.targetlessOutlineExternalActions > 0) {
+    actionIndex.targetlessOutlineExternalActions -= 1;
     return true;
   }
   if (
@@ -816,6 +828,21 @@ function sanitizeActionTarget(rawTarget: string | undefined): string | undefined
 
 function isSafeExternalUrl(value: string): boolean {
   return /^(?:https?|mailto|tel|ftp):/iu.test(value);
+}
+
+function normalizeSafeExternalUrl(rawValue: string): string | undefined {
+  const value = sanitizePdfPrivacyValue(rawValue);
+  if (!value) return undefined;
+  const dotCount = value.match(/\./gu)?.length ?? 0;
+  const candidate = /^www\./iu.test(value) && dotCount >= 2
+    ? `http://${value}`
+    : value;
+  if (!isSafeExternalUrl(candidate)) return undefined;
+  try {
+    return new URL(candidate).href;
+  } catch {
+    return undefined;
+  }
 }
 
 function addAutomaticAction(

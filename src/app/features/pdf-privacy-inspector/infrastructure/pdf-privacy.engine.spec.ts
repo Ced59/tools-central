@@ -1,3 +1,4 @@
+import { PDFDocument, PDFName } from 'pdf-lib';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
@@ -67,7 +68,10 @@ describe('inspectPdfPrivacyDocument', () => {
       numPages: 1,
       getMetadata: vi.fn().mockResolvedValue({
         info: { Author: ' Alice ', PDFFormatVersion: '1.7' },
-        metadata: { getAll: () => ({ 'dc:creator': ['Alice'], 'dc:format': 'application/pdf' }) },
+        metadata: new Map<string, unknown>([
+          ['dc:creator', ['Alice']],
+          ['dc:format', 'application/pdf'],
+        ]),
       }),
       getAttachments: vi.fn().mockResolvedValue(new Map([
         ['secret.txt', { filename: 'secret.txt', contentType: 'text/plain', content: new Uint8Array(12) }],
@@ -112,6 +116,50 @@ describe('inspectPdfPrivacyDocument', () => {
       && finding.value?.includes('demo.swf') === true
     ))).toBe(true);
     expect(cleanup).toHaveBeenCalledOnce();
+  });
+
+  it('inspecte le Metadata itérable exposé par PDF.js pour un vrai PDF XMP', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const xmp = '<?xpacket begin=""?>'
+      + '<x:xmpmeta xmlns:x="adobe:ns:meta/">'
+      + '<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">'
+      + '<rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">'
+      + '<dc:creator><rdf:Seq><rdf:li>Alice</rdf:li></rdf:Seq></dc:creator>'
+      + '</rdf:Description></rdf:RDF></x:xmpmeta><?xpacket end="w"?>';
+    const xmpStream = source.context.flateStream(xmp, {
+      Type: 'Metadata',
+      Subtype: 'XML',
+    });
+    source.catalog.set(PDFName.of('Metadata'), source.context.register(xmpStream));
+    const bytes = await source.save();
+    const headerData = bytes.slice(0, 1_024);
+    const fileBytes = bytes.byteLength;
+    const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const loadingTask = getDocument({ data: bytes });
+
+    try {
+      const document = await loadingTask.promise;
+      const report = await inspectPdfPrivacyDocument(
+        document,
+        {
+          headerData,
+          fileBytes,
+          passwordUsed: false,
+          associatedFiles: [],
+        },
+      );
+
+      expect(report.findings).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          kind: 'xmp-metadata',
+          label: 'dc:creator',
+          value: 'Alice',
+        }),
+      ]));
+    } finally {
+      await loadingTask.destroy();
+    }
   });
 
   it('inventorie chaque propriété Info personnalisée exposée par PDF.js', async () => {
@@ -345,6 +393,40 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(report.findings.filter(finding => finding.kind === 'external-link')).toHaveLength(2);
   });
 
+  it('classe une URI sans schéma normalisée par PDF.js comme un lien unique', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([{
+        id: 'schemeless',
+        url: 'http://www.example.com/',
+        unsafeUrl: 'www.example.com',
+      }]),
+      getJSActions: vi.fn().mockResolvedValue(null),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [{
+        actionType: 'URI',
+        context: 'annotation-action',
+        target: 'www.example.com',
+        occurrences: 1,
+      }],
+    });
+
+    expect(report.attentionLevel).toBe('medium');
+    expect(report.findings).toEqual([
+      expect.objectContaining({
+        kind: 'external-link',
+        value: 'http://www.example.com/',
+        occurrences: 1,
+      }),
+    ]);
+  });
+
   it('signale une action URI non sûre sans exposer son payload', async () => {
     const page: PdfJsPrivacyPage = {
       getAnnotations: vi.fn().mockResolvedValue([
@@ -557,6 +639,32 @@ describe('inspectPdfPrivacyDocument', () => {
         occurrences: 1,
       }),
     ]);
+  });
+
+  it('ne consomme pas une URI de plan avec une action cible incompatible', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getOutline: vi.fn().mockResolvedValue([{
+        title: 'Lien actif', unsafeUrl: 'javascript:alert("private-value")', items: [],
+      }]),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      actionDictionaries: [{
+        actionType: 'SubmitForm', context: 'outline-action', occurrences: 1,
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'automatic-action')).toEqual([
+      expect.objectContaining({
+        message: { code: 'dictionary-action', actionType: 'SubmitForm', context: 'other' },
+      }),
+      expect.objectContaining({
+        message: { code: 'unsafe-external-target' },
+        value: 'javascript:…',
+      }),
+    ]);
+    expect(JSON.stringify(report)).not.toContain('private-value');
   });
 
   it('ne masque pas une URI portée par une autre annotation chiffrée', async () => {

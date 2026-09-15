@@ -78,7 +78,7 @@ describe('PdfPrivacyInspectorToolComponent', () => {
       location: 'Paris',
       reason: 'Validation interne',
       signingTime: 'D:20260915113000+02\'00\'',
-    })).toContain('ContactInfo: signer@example.test · Location: Paris · Reason: Validation interne · M: D:20260915113000+02\'00\'');
+    })).toContain('Contact: signer@example.test · Lieu: Paris · Motif: Validation interne · M: D:20260915113000+02\'00\'');
   });
 });
 
