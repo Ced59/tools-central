@@ -621,6 +621,28 @@ describe('inspectPdfStructuralSignals', () => {
       .toThrow('PDF object stream expansion limit');
   }, 30_000);
 
+  it('saute la valeur complète des clés d’extension avant les clés de flux critiques', () => {
+    const payload = new TextEncoder().encode('2 0 3');
+    const extensions = [
+      '/Vendor /Filter',
+      '/Vendor [/Filter /Length << /DecodeParms /N >>]',
+      '/Vendor << /Filter /Length /Nested [/Size /W] >>',
+      '/Vendor 8 0 R',
+    ];
+
+    for (const extension of extensions) {
+      const pdf = joinBytes(
+        '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 ',
+        extension,
+        ` /Length ${String(payload.byteLength)} >>\nstream\n`,
+        payload,
+        '\nendstream\nendobj\n8 0 obj\n/Filter\nendobj\n%%EOF\n',
+      );
+
+      expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+    }
+  });
+
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
     const objectDeclarations = Array.from(
       { length: PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1 },

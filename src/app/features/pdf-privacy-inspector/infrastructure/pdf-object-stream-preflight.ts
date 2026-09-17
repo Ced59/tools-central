@@ -2173,8 +2173,9 @@ function parseCriticalDictionary(
         supplementalXrefOffset = value.value;
       }
       offset = value.end;
-    } else if (key.value === 'Encrypt') {
-      hasEncryptionDictionary = true;
+    } else {
+      if (key.value === 'Encrypt') hasEncryptionDictionary = true;
+      offset = skipPdfValue(data, valueStart, dictionaryEnd);
     }
   }
   return {
@@ -2191,6 +2192,85 @@ function parseCriticalDictionary(
     supplementalXrefOffset,
     hasEncryptionDictionary,
   };
+}
+
+function skipPdfValue(data: Uint8Array, start: number, end: number): number {
+  let offset = skipWhitespaceAndComments(data, start);
+  if (offset >= end) throw new Error('Missing PDF dictionary value');
+
+  if (data[offset] === LEFT_PARENTHESIS) {
+    const valueEnd = skipLiteralString(data, offset);
+    if (valueEnd > end) throw new Error('PDF dictionary value limit');
+    return valueEnd;
+  }
+  if (data[offset] === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+    const valueEnd = skipHexString(data, offset);
+    if (valueEnd > end) throw new Error('PDF dictionary value limit');
+    return valueEnd;
+  }
+  if (data[offset] === PDF_NAME) {
+    const name = readPdfName(data, offset);
+    if (!name || name.end > end) throw new Error('Invalid PDF dictionary value');
+    return name.end;
+  }
+
+  const reference = readRawPdfReference(data, offset);
+  if (reference && reference.end <= end) return reference.end;
+
+  const containers: ('array' | 'dictionary')[] = [];
+  if (data[offset] === LEFT_BRACKET) {
+    containers.push('array');
+    offset += 1;
+  } else if (data[offset] === LESS_THAN && data[offset + 1] === LESS_THAN) {
+    containers.push('dictionary');
+    offset += 2;
+  } else {
+    return skipPdfAtomicValue(data, offset, end);
+  }
+
+  while (containers.length > 0) {
+    offset = skipWhitespaceAndComments(data, offset);
+    if (offset >= end) throw new Error('Unterminated PDF dictionary value');
+    const byte = data[offset];
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+    } else if (byte === LESS_THAN && data[offset + 1] === LESS_THAN) {
+      containers.push('dictionary');
+      offset += 2;
+    } else if (byte === GREATER_THAN && data[offset + 1] === GREATER_THAN) {
+      if (containers.pop() !== 'dictionary') throw new Error('Invalid PDF dictionary value');
+      offset += 2;
+    } else if (byte === LESS_THAN) {
+      offset = skipHexString(data, offset);
+    } else if (byte === LEFT_BRACKET) {
+      containers.push('array');
+      offset += 1;
+    } else if (byte === RIGHT_BRACKET) {
+      if (containers.pop() !== 'array') throw new Error('Invalid PDF array value');
+      offset += 1;
+    } else if (byte === PDF_NAME) {
+      const name = readPdfName(data, offset);
+      if (!name) throw new Error('Invalid PDF dictionary value');
+      offset = name.end;
+    } else {
+      const nestedReference = readRawPdfReference(data, offset);
+      offset = nestedReference?.end ?? skipPdfAtomicValue(data, offset, end);
+    }
+    if (containers.length > PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH || offset > end) {
+      throw new Error('PDF dictionary value limit');
+    }
+  }
+  return offset;
+}
+
+function skipPdfAtomicValue(data: Uint8Array, start: number, end: number): number {
+  if (isDelimiter(data[start])) throw new Error('Invalid PDF dictionary value');
+  let offset = start;
+  while (offset < end && !isWhitespace(data[offset]) && !isDelimiter(data[offset])) {
+    offset += 1;
+  }
+  if (offset === start) throw new Error('Invalid PDF dictionary value');
+  return offset;
 }
 
 function readUnsignedIntegerArray(
