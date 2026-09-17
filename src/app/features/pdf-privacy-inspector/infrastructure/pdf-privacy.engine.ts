@@ -199,6 +199,7 @@ export async function inspectPdfPrivacyDocument(
     passwordUsed: boolean;
     actionDictionaries?: readonly PdfActionDictionarySignal[] | null;
     associatedFiles?: readonly PdfAssociatedFileSignal[] | null;
+    structuralEncrypted?: boolean;
     structuralSignatures?: readonly PdfStructuralSignatureSignal[] | null;
     onProgress?: (percent: number) => void;
   },
@@ -217,7 +218,9 @@ export async function inspectPdfPrivacyDocument(
   input.onProgress?.(8);
   const metadata = await document.getMetadata();
   decryptedOutputBudget.consume(metadata);
-  const attachments = structuralAttachmentsAvailable ? null : await document.getAttachments();
+  const attachments = !structuralAttachmentsAvailable || input.structuralEncrypted === true
+    ? await document.getAttachments()
+    : null;
   decryptedOutputBudget.consume(attachments);
   const documentActions = await document.getJSActions();
   decryptedOutputBudget.consume(documentActions);
@@ -250,8 +253,11 @@ export async function inspectPdfPrivacyDocument(
     add,
     consumeDiscoveryBudget,
   );
+  const associatedFiles = structuralAttachmentsAvailable && input.structuralEncrypted === true
+    ? mergeDecryptedAttachmentMetadata(input.associatedFiles ?? [], attachments)
+    : input.associatedFiles;
   collectAssociatedFileSignals(
-    input.associatedFiles,
+    associatedFiles,
     add,
     consumeDiscoveryBudget,
   );
@@ -462,6 +468,61 @@ function collectAttachments(
       bytes,
     });
   }
+}
+
+interface DecryptedAttachmentMetadata {
+  fileName?: string;
+  description?: string;
+  contentType?: string;
+}
+
+function mergeDecryptedAttachmentMetadata(
+  signals: readonly PdfAssociatedFileSignal[],
+  attachments: Map<string, object> | null,
+): readonly PdfAssociatedFileSignal[] {
+  if (!attachments || attachments.size === 0) return signals;
+  const metadata = [...attachments].map(([key, rawAttachment]): DecryptedAttachmentMetadata => {
+    const attachment = asRecord(rawAttachment);
+    return {
+      fileName: readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key),
+      description: readableValue(attachment?.['description']),
+      contentType: readableValue(attachment?.['contentType']),
+    };
+  });
+  const usedMetadata = new Set<number>();
+  const merged = signals.map(signal => {
+    const signalFileName = sanitizePdfPrivacyValue(signal.fileName);
+    let metadataIndex = signalFileName
+      ? metadata.findIndex((item, index) => (
+        !usedMetadata.has(index) && item.fileName === signalFileName
+      ))
+      : -1;
+    if (metadataIndex < 0 && !signalFileName) {
+      const signalContentType = sanitizePdfPrivacyValue(signal.contentType);
+      metadataIndex = metadata.findIndex((item, index) => (
+        !usedMetadata.has(index)
+        && (!signalContentType || item.contentType === signalContentType)
+      ));
+    }
+    if (metadataIndex < 0) return signal;
+    usedMetadata.add(metadataIndex);
+    const decrypted = metadata[metadataIndex];
+    return {
+      ...signal,
+      fileName: signalFileName ?? decrypted.fileName,
+      description: sanitizePdfPrivacyValue(signal.description) ?? decrypted.description,
+      contentType: sanitizePdfPrivacyValue(signal.contentType) ?? decrypted.contentType,
+    };
+  });
+  let nextId = signals.reduce((maximum, signal) => (
+    Number.isSafeInteger(signal.id) ? Math.max(maximum, signal.id) : maximum
+  ), 0);
+  for (const [index, decrypted] of metadata.entries()) {
+    if (usedMetadata.has(index)) continue;
+    nextId += 1;
+    merged.push({ id: nextId, ...decrypted, occurrences: 1 });
+  }
+  return merged;
 }
 
 function collectAssociatedFileSignals(

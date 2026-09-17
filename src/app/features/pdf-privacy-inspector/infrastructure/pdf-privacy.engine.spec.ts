@@ -285,6 +285,39 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(getAttachments).not.toHaveBeenCalled();
   });
 
+  it('fusionne les métadonnées déchiffrées sans dupliquer ni exposer la pièce jointe', async () => {
+    const getAttachments = vi.fn().mockResolvedValue(new Map([
+      ['decrypted.txt', {
+        filename: 'decrypted.txt',
+        description: 'Document confidentiel',
+        contentType: 'text/plain',
+        content: 'contenu-secret',
+      }],
+    ]));
+    const report = await inspectPdfPrivacyDocument(documentFixture({ getAttachments }), {
+      headerData: pdfBytes(),
+      fileBytes: 64,
+      passwordUsed: true,
+      structuralEncrypted: true,
+      associatedFiles: [{
+        id: 7,
+        contentType: 'text/plain',
+        occurrences: 1,
+      }],
+    });
+
+    expect(getAttachments).toHaveBeenCalledOnce();
+    expect(report.findings.filter(finding => finding.kind === 'embedded-file')).toEqual([
+      expect.objectContaining({
+        id: 'attachment:associated:7',
+        label: 'decrypted.txt',
+        value: 'text/plain · Document confidentiel',
+        bytes: undefined,
+      }),
+    ]);
+    expect(JSON.stringify(report)).not.toContain('contenu-secret');
+  });
+
   it('préserve les métadonnées privées renvoyées pour une signature', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{

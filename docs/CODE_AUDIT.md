@@ -16,10 +16,10 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,18 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,07 MB brut, 300,37 kB transféré) |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,17 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,07 MB brut, 300,48 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 140 fichiers, 567 tests verts sous Vitest, plus 3 tests Node du Worker PDF.js généré |
-| Couverture | aucun seuil | 56,04 % statements, 46,40 % branches, 52,82 % fonctions, 59,99 % lignes |
+| Tests unitaires | suite non compilable | 140 fichiers, 568 tests verts sous Vitest, plus 3 tests Node du Worker PDF.js généré |
+| Couverture | aucun seuil | 56,07 % statements, 46,49 % branches, 52,88 % fonctions, 60,03 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |

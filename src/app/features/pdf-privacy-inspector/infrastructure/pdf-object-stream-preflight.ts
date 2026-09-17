@@ -2320,7 +2320,9 @@ function parseCriticalDictionary(
       }
       offset = value.end;
     } else {
-      if (key.value === 'Encrypt') hasEncryptionDictionary = true;
+      if (key.value === 'Encrypt' && !matchesKeyword(data, valueStart, 'null')) {
+        hasEncryptionDictionary = true;
+      }
       offset = skipPdfValue(data, valueStart, dictionaryEnd);
     }
   }

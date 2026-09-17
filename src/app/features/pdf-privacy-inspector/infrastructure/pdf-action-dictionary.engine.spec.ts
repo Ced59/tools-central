@@ -458,6 +458,15 @@ describe('inspectPdfStructuralSignals', () => {
       skippedEncryptedObjectStreams: 1,
     });
 
+    const nullEncryptionFixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 0 >>\n',
+      'stream\n\nendstream\nendobj\ntrailer\n<< /Encrypt null >>\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(nullEncryptionFixture)).toEqual({
+      encrypted: false,
+      skippedEncryptedObjectStreams: 0,
+    });
+
     const encryptedLengthCandidate = `2 0 ${String(fakeBoundary)}`;
     const compressedEncryptedCandidate = deflate(new TextEncoder().encode(encryptedLengthCandidate));
     const encryptedCandidateFixture = joinBytes(
