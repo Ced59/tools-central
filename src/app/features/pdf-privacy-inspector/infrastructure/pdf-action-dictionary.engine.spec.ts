@@ -28,6 +28,7 @@ import {
   inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
 import {
+  PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS,
   PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
   validatePdfObjectStreamBudgets,
 } from './pdf-object-stream-preflight';
@@ -122,6 +123,68 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(fixture))
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
+
+  it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
+    const objectDeclarations = Array.from(
+      { length: PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1 },
+      (_, index) => `${String(index + 1)} 0 obj\nnull\nendobj\n`,
+    ).join('');
+    expect(() => {
+      validatePdfObjectStreamBudgets(joinBytes('%PDF-1.7\n', objectDeclarations, '%%EOF\n'));
+    }).toThrow('PDF classic indirect object limit');
+
+    const streamPayload = '1 0 obj\n'.repeat(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1);
+    const headersInsideStream = joinBytes(
+      `%PDF-1.7\n1 0 obj\n<< /Length ${String(streamPayload.length)} >>\nstream\n`,
+      streamPayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(headersInsideStream);
+    }).not.toThrow();
+
+    const oversizedCompressedCount = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N ',
+      String(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
+      ' /First 0 /Length 0 >>\nstream\n\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(oversizedCompressedCount);
+    }).toThrow('PDF compressed indirect object limit');
+
+    const oversizedXref = joinBytes(
+      '%PDF-1.7\ntrailer\n<< /Size ',
+      String(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 2),
+      ' >>\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(oversizedXref);
+    }).toThrow('PDF xref size limit');
+  }, 30_000);
+
+  it('inventorie un fichier embarqué uniquement atteignable depuis une action', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const embeddedFile = source.context.register(source.context.stream(
+      Uint8Array.of(1, 2, 3, 4),
+      { Type: 'EmbeddedFile', Subtype: 'application#2Foctet-stream' },
+    ));
+    const fileSpec = source.context.register(source.context.obj({
+      Type: 'Filespec', F: PDFString.of('action.bin'), EF: { F: embeddedFile },
+    }));
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action', S: 'Launch', F: fileSpec,
+    }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.associatedFiles).toEqual([expect.objectContaining({
+      fileName: 'action.bin', bytes: 4, occurrences: 1,
+    })]);
+    expect(signals?.actionDictionaries).toContainEqual(expect.objectContaining({
+      actionType: 'Launch', target: 'action.bin', occurrences: 1,
+    }));
+  });
 
   it('ignore un discriminateur S malformé sans perdre les autres actions du PDF', async () => {
     const source = await PDFDocument.create();

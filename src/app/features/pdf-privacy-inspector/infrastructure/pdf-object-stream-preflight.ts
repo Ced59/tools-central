@@ -1,6 +1,7 @@
 import { Inflate } from 'pako';
 
 export const PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS = 100_000;
 
 const DICTIONARY_SEARCH_WINDOW_BYTES = 1 * 1_024 * 1_024;
 const INFLATE_CHUNK_BYTES = 64 * 1_024;
@@ -32,6 +33,8 @@ interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
   filters?: readonly string[];
+  objectCount?: number;
+  xrefSize?: number;
   hasEncryptionDictionary: boolean;
 }
 
@@ -56,6 +59,8 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
   let encrypted = false;
   let expectTrailerDictionary = false;
   let validatedStreams = 0;
+  let classicIndirectObjects = 0;
+  let compressedIndirectObjects = 0;
   let offset = 0;
 
   while (offset < data.byteLength) {
@@ -77,6 +82,18 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       offset = skipHexString(data, offset);
       continue;
     }
+    const objectHeaderEnd = readIndirectObjectHeaderEnd(data, offset);
+    if (objectHeaderEnd !== undefined) {
+      classicIndirectObjects += 1;
+      if (
+        classicIndirectObjects + compressedIndirectObjects
+          > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
+      ) {
+        throw new Error('PDF classic indirect object limit');
+      }
+      offset = objectHeaderEnd;
+      continue;
+    }
     if (byte !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
       offset += 1;
       continue;
@@ -88,6 +105,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
     if (expectTrailerDictionary) {
       encrypted ||= dictionary.hasEncryptionDictionary;
+      validateXrefSize(dictionary.xrefSize);
       expectTrailerDictionary = false;
     }
     const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
@@ -110,7 +128,20 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     offset = endstream + 'endstream'.length;
 
     if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
-    if (dictionary.type === 'XRef') encrypted ||= dictionary.hasEncryptionDictionary;
+    if (dictionary.type === 'XRef') {
+      encrypted ||= dictionary.hasEncryptionDictionary;
+      validateXrefSize(dictionary.xrefSize);
+    } else {
+      if (dictionary.objectCount === undefined) throw new Error('Missing PDF object count');
+      compressedIndirectObjects += dictionary.objectCount;
+      if (
+        !Number.isSafeInteger(compressedIndirectObjects)
+        || classicIndirectObjects + compressedIndirectObjects
+          > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
+      ) {
+        throw new Error('PDF compressed indirect object limit');
+      }
+    }
     validatedStreams += 1;
     if (validatedStreams > MAX_CRITICAL_STREAMS) throw new Error('PDF stream limit');
     criticalStreams.push({
@@ -152,6 +183,28 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
   }
   return { encrypted, skippedEncryptedObjectStreams };
+}
+
+function validateXrefSize(size: number | undefined): void {
+  if (size !== undefined && size > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1) {
+    throw new Error('PDF xref size limit');
+  }
+}
+
+function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | undefined {
+  const previous = start === 0 ? undefined : data[start - 1];
+  if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) return undefined;
+  const objectNumber = tryReadUnsignedInteger(data, start);
+  if (!objectNumber) return undefined;
+  const generationStart = skipWhitespaceAndComments(data, objectNumber.end);
+  if (generationStart === objectNumber.end) return undefined;
+  const generation = tryReadUnsignedInteger(data, generationStart);
+  if (!generation) return undefined;
+  const objectKeyword = skipWhitespaceAndComments(data, generation.end);
+  if (objectKeyword === generation.end || !matchesKeyword(data, objectKeyword, 'obj')) {
+    return undefined;
+  }
+  return objectKeyword + 'obj'.length;
 }
 
 function collectIndirectLengths(data: Uint8Array): Map<string, number | undefined> {
@@ -211,6 +264,8 @@ function parseCriticalDictionary(
   let type: string | undefined;
   let length: number | RawPdfReference | undefined;
   let filters: readonly string[] | undefined = [];
+  let objectCount: number | undefined;
+  let xrefSize: number | undefined;
   let hasFilter = false;
   let hasEncryptionDictionary = false;
   let dictionaryDepth = 0;
@@ -296,11 +351,22 @@ function parseCriticalDictionary(
         filters = undefined;
         offset = valueStart + 1;
       }
+    } else if (key.value === 'N' || key.value === 'Size') {
+      const value = readUnsignedInteger(data, valueStart);
+      if (!value) throw new Error('Invalid PDF object count');
+      if (key.value === 'N') {
+        if (objectCount !== undefined) throw new Error('Duplicate PDF object count');
+        objectCount = value.value;
+      } else {
+        if (xrefSize !== undefined) throw new Error('Duplicate PDF xref size');
+        xrefSize = value.value;
+      }
+      offset = value.end;
     } else if (key.value === 'Encrypt') {
       hasEncryptionDictionary = true;
     }
   }
-  return { type, length, filters, hasEncryptionDictionary };
+  return { type, length, filters, objectCount, xrefSize, hasEncryptionDictionary };
 }
 
 function findDictionaryEnd(data: Uint8Array, start: number): number | undefined {

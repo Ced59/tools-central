@@ -15,6 +15,7 @@ import { Inflate } from 'pako';
 
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 import {
+  PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS,
   type PdfObjectStreamPreflightResult,
   validatePdfObjectStreamBudgets,
 } from './pdf-object-stream-preflight';
@@ -91,7 +92,6 @@ const ACTION_NAMES = new Set([
 const TARGET_BEARING_ACTION_NAMES = new Set([
   'GoToE', 'GoToR', 'ImportData', 'Launch', 'SubmitForm',
 ]);
-const MAX_INDIRECT_OBJECTS = 100_000;
 const MAX_TRAVERSED_OBJECTS = 250_000;
 const MAX_TARGET_BYTES = 4_096;
 export const PDF_PRIVACY_MAX_JAVASCRIPT_BYTES = 1 * 1_024 * 1_024;
@@ -245,7 +245,7 @@ export async function inspectPdfStructuralSignals(
       updateMetadata: false,
     });
     const indirectObjects = document.context.enumerateIndirectObjects();
-    if (indirectObjects.length > MAX_INDIRECT_OBJECTS) {
+    if (indirectObjects.length > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS) {
       throw new PdfActionDictionaryInspectionError();
     }
 
@@ -512,6 +512,8 @@ function inspectActionEntry(
 
     const actionType = readName(dictionary, 'S')?.decodeText();
     if (actionType) {
+      const fileSpec = dictionary.get(PDFName.of('F'));
+      if (fileSpec) inspectAssociatedFileEntry(fileSpec, state);
       collectActionDictionary(
         dictionary,
         workItem.context,
