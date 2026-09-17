@@ -16,7 +16,6 @@ import {
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 import {
   PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS,
-  PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
   decodePdfStreamContentsBounded,
   type PdfFilterDecodeParameters,
   type PdfObjectStreamPreflightResult,
@@ -2048,15 +2047,6 @@ function readFilterDecodeParameterDictionary(
   const bitsPerComponent = longBitsPerComponent ?? shortBitsPerComponent ?? 8;
   const columns = readDecodeParameterInteger(dictionary, 'Columns') ?? 1;
   const earlyChange = readDecodeParameterInteger(dictionary, 'EarlyChange') ?? 1;
-  if (
-    ![1, 2, 10, 11, 12, 13, 14, 15].includes(predictor)
-    || colors < 1
-    || colors > 32
-    || ![1, 2, 4, 8, 16].includes(bitsPerComponent)
-    || columns < 1
-    || columns > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES
-    || (earlyChange !== 0 && earlyChange !== 1)
-  ) throw new PdfActionDictionaryInspectionError();
   return {
     predictor,
     colors,

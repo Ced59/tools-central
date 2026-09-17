@@ -470,6 +470,14 @@ describe('inspectPdfStructuralSignals', () => {
         payload: encodeLzwLiteral(plain),
       },
       {
+        filterDictionary: '/Filter /FlateDecode /DecodeParms << /EarlyChange 2 >>',
+        payload: deflate(plain),
+      },
+      {
+        filterDictionary: '/Filter /ASCIIHexDecode /DecodeParms << /Predictor 99 >>',
+        payload: encodeAsciiHex(plain),
+      },
+      {
         filterDictionary: [
           '/Filter [/ASCII85Decode /FlateDecode]',
           `/DecodeParms [null << /Predictor 12 /Columns ${String(plain.byteLength)} >>]`,
@@ -503,6 +511,15 @@ describe('inspectPdfStructuralSignals', () => {
       );
       expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
     }
+
+    const invalidLzwParameters = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(encodeLzwLiteral(plain).byteLength),
+      ' /Filter /LZWDecode /DecodeParms << /EarlyChange 2 >> >>\nstream\n',
+      encodeLzwLiteral(plain),
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(invalidLzwParameters)).toThrow();
 
     const xrefBody = '%PDF-1.7\n1 0 obj\nnull\nendobj\n';
     const xrefOffset = xrefBody.length;
@@ -1141,7 +1158,7 @@ describe('inspectPdfStructuralSignals', () => {
     const fixtures: readonly {
       filters: string | readonly string[];
       contents: Uint8Array;
-      decodeParameters?: Readonly<{ Predictor: number; Columns: number }>;
+      decodeParameters?: Readonly<Record<string, number>>;
     }[] = [
       { filters: 'FlateDecode', contents: deflate(plain) },
       {
@@ -1149,9 +1166,19 @@ describe('inspectPdfStructuralSignals', () => {
         contents: deflate(Uint8Array.of(0, ...plain)),
         decodeParameters: { Predictor: 12, Columns: plain.byteLength },
       },
+      {
+        filters: 'FlateDecode',
+        contents: deflate(plain),
+        decodeParameters: { EarlyChange: 2 },
+      },
       { filters: 'LZWDecode', contents: encodeLzwLiteral(plain) },
       { filters: 'ASCII85Decode', contents: encodeAscii85(plain) },
       { filters: 'ASCIIHexDecode', contents: encodeAsciiHex(plain) },
+      {
+        filters: 'ASCIIHexDecode',
+        contents: encodeAsciiHex(plain),
+        decodeParameters: { Predictor: 99 },
+      },
       { filters: 'RunLengthDecode', contents: encodeRunLengthLiteral(plain) },
       {
         filters: ['ASCII85Decode', 'FlateDecode'],
@@ -1175,6 +1202,23 @@ describe('inspectPdfStructuralSignals', () => {
       await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
         .resolves.not.toBeNull();
     }
+  });
+
+  it('refuse EarlyChange hors plage uniquement lorsque le filtre actif est LZW', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.stream(
+      encodeLzwLiteral(new TextEncoder().encode('<x:xmpmeta>safe</x:xmpmeta>')),
+      {
+        Type: 'Metadata',
+        Subtype: 'XML',
+        Filter: 'LZWDecode',
+        DecodeParms: { EarlyChange: 2 },
+      },
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
   });
 
   it('traite /Filter null comme un flux texte non filtré pour XMP, JavaScript et XFA', async () => {

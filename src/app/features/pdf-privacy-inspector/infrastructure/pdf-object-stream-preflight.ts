@@ -89,7 +89,7 @@ export interface PdfFilterDecodeParameters {
   colors: number;
   bitsPerComponent: number;
   columns: number;
-  earlyChange: 0 | 1;
+  earlyChange: number;
 }
 
 interface RawSyntaxBudget {
@@ -1427,14 +1427,21 @@ function decodeObjectStreamContents(
   for (let index = 0; index < filters.length; index += 1) {
     const filter = filters[index];
     const parameters = decodeParameters?.[index];
+    const usesPredictor = filter === 'FlateDecode'
+      || filter === 'Fl'
+      || filter === 'LZWDecode'
+      || filter === 'LZW';
+    if (usesPredictor && !hasValidPredictorParameters(parameters)) return undefined;
     let stage: Uint8Array;
     if (filter === 'FlateDecode' || filter === 'Fl') {
       stage = boundedInflatedContents(decoded, remainingExpansionBytes(expansionBudget));
     } else if (filter === 'LZWDecode' || filter === 'LZW') {
+      const earlyChange = parameters?.earlyChange ?? 1;
+      if (earlyChange !== 0 && earlyChange !== 1) return undefined;
       stage = decodeLzwContents(
         decoded,
         remainingExpansionBytes(expansionBudget),
-        parameters?.earlyChange ?? 1,
+        earlyChange,
       );
     } else if (filter === 'ASCII85Decode' || filter === 'A85') {
       stage = decodeAscii85Contents(decoded, remainingExpansionBytes(expansionBudget));
@@ -1459,6 +1466,18 @@ function decodeObjectStreamContents(
     }
   }
   return decoded;
+}
+
+function hasValidPredictorParameters(
+  parameters: PdfFilterDecodeParameters | undefined,
+): boolean {
+  if (!parameters) return true;
+  return [1, 2, 10, 11, 12, 13, 14, 15].includes(parameters.predictor)
+    && parameters.colors >= 1
+    && parameters.colors <= 32
+    && [1, 2, 4, 8, 16].includes(parameters.bitsPerComponent)
+    && parameters.columns >= 1
+    && parameters.columns <= PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES;
 }
 
 export function decodePdfStreamContentsBounded(
@@ -2490,15 +2509,6 @@ function readDecodeParameterDictionary(
   const bitsPerComponent = values.get('BitsPerComponent') ?? values.get('BPC') ?? 8;
   const columns = values.get('Columns') ?? 1;
   const earlyChange = values.get('EarlyChange') ?? 1;
-  if (
-    ![1, 2, 10, 11, 12, 13, 14, 15].includes(predictor)
-    || colors < 1
-    || colors > 32
-    || ![1, 2, 4, 8, 16].includes(bitsPerComponent)
-    || columns < 1
-    || columns > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES
-    || (earlyChange !== 0 && earlyChange !== 1)
-  ) throw new Error('Invalid PDF decode parameters');
   return {
     predictor,
     colors,
