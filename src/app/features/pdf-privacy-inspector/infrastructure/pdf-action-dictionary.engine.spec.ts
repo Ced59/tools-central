@@ -1,4 +1,5 @@
 import { PDFDict, PDFDocument, PDFName, PDFRef, PDFString } from 'pdf-lib';
+import { deflate } from 'pako';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -24,6 +25,10 @@ import {
   PdfActionDictionaryInspectionError,
   inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
+import {
+  PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  validatePdfObjectStreamBudgets,
+} from './pdf-object-stream-preflight';
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 
 describe('inspectPdfStructuralSignals', () => {
@@ -73,6 +78,39 @@ describe('inspectPdfStructuralSignals', () => {
     ]));
   });
 
+  it('résout les longueurs indirectes et borne les object streams avant pdf-lib', async () => {
+    const indirectLengthFixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 2 0 R >>\n',
+      'stream\nabc\nendstream\nendobj\n2 0 obj\n3\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(indirectLengthFixture);
+    }).not.toThrow();
+
+    const ordinaryPayload = '<< /Type /ObjStm /Length 999999 >>\nstream\n';
+    const ordinaryStreamFixture = joinBytes(
+      `%PDF-1.7\n1 0 obj\n<< /Length ${String(ordinaryPayload.length)} >>\nstream\n`,
+      ordinaryPayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(ordinaryStreamFixture);
+    }).not.toThrow();
+
+    const expanded = new Uint8Array(PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES + 1);
+    const compressed = deflate(expanded);
+    const fixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length ',
+      String(compressed.byteLength),
+      ' /Filter /FlateDecode >>\nstream\n',
+      compressed,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+
+    await expect(inspectPdfStructuralSignals(fixture))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('ignore un discriminateur S malformé sans perdre les autres actions du PDF', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -118,7 +156,11 @@ describe('inspectPdfStructuralSignals', () => {
       JavaScript: { Names: [PDFString.of('entry'), entry] },
     }));
 
-    const signals = await inspectPdfStructuralSignals(await source.save());
+    const data = await source.save();
+    expect(() => {
+      validatePdfObjectStreamBudgets(data);
+    }).not.toThrow();
+    const signals = await inspectPdfStructuralSignals(data);
 
     expect(signals?.actionDictionaries).toContainEqual({
       actionType: 'SubmitForm',
@@ -579,6 +621,38 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   });
 
+  it('borne un script porté par un champ intermédiaire dont FT est hérité', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const javascriptBytes = 1 * 1_024 * 1_024;
+    const javascript = source.context.register(source.context.flateStream(
+      'A'.repeat(javascriptBytes),
+    ));
+    const intermediate = source.context.obj({
+      T: PDFString.of('Intermediate'),
+      AA: { K: { Type: 'Action', S: 'JavaScript', JS: javascript } },
+      Kids: [],
+    });
+    const intermediateRef = source.context.register(intermediate);
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES / javascriptBytes,
+    ) + 1;
+    const widgets = Array.from({ length: widgetCount }, () => source.context.register(
+      source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', Rect: [0, 0, 10, 10], Parent: intermediateRef,
+      }),
+    ));
+    intermediate.set(PDFName.of('Kids'), source.context.obj(widgets));
+    const parent = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Parent'), Kids: [intermediateRef],
+    }));
+    page.node.set(PDFName.of('Annots'), source.context.obj(widgets));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne le nombre de champs avant leur normalisation par PDF.js', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -969,6 +1043,31 @@ describe('inspectPdfStructuralSignals', () => {
     }]);
   });
 
+  it('préserve une signature dont le type de champ est hérité', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const signature = source.context.register(source.context.obj({
+      Type: 'Sig',
+      ByteRange: [0, 1, 2, 1],
+      Contents: PDFString.of('signed'),
+      Name: PDFString.of('Alice'),
+    }));
+    const child = source.context.register(source.context.obj({
+      T: PDFString.of('Approval'), V: signature,
+    }));
+    const parent = source.context.register(source.context.obj({
+      FT: 'Sig', T: PDFString.of('Signatures'), Kids: [child],
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.signatures).toContainEqual(expect.objectContaining({
+      fieldName: 'Approval',
+      signerName: 'Alice',
+    }));
+  });
+
   it('borne le balayage agrégé des queues de signature avant getSignatures', async () => {
     const source = await PDFDocument.create();
     source.addPage();
@@ -1213,4 +1312,18 @@ function findByteSequence(haystack: Uint8Array, needle: Uint8Array): number {
     if (matches) return start;
   }
   return -1;
+}
+
+function joinBytes(...parts: readonly (Uint8Array | string)[]): Uint8Array {
+  const encoder = new TextEncoder();
+  const chunks = parts.map(part => typeof part === 'string' ? encoder.encode(part) : part);
+  let byteLength = 0;
+  for (const chunk of chunks) byteLength += chunk.byteLength;
+  const result = new Uint8Array(byteLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return result;
 }

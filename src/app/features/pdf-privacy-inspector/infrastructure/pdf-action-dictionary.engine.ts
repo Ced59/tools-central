@@ -14,6 +14,7 @@ import {
 import { Inflate } from 'pako';
 
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
+import { validatePdfObjectStreamBudgets } from './pdf-object-stream-preflight';
 
 export interface PdfActionDictionarySignal {
   actionType: string;
@@ -136,6 +137,7 @@ interface InspectionState {
   nameTreeJavascriptExpansionBytes: number;
   fieldObjectCount: number;
   fieldObjects: Set<PDFObject>;
+  acroFormFieldObjects: Set<PDFObject>;
   fieldOccurrenceCount: number;
   fieldOccurrenceSignatureBytes: number;
   fieldQualifiedNameBytes: number;
@@ -225,6 +227,11 @@ export async function inspectPdfStructuralSignals(
   data: Uint8Array,
 ): Promise<PdfStructuralSignals | null> {
   try {
+    try {
+      validatePdfObjectStreamBudgets(data);
+    } catch {
+      throw new PdfActionDictionaryInspectionError();
+    }
     const document = await PDFDocument.load(data, {
       ignoreEncryption: true,
       throwOnInvalidObject: false,
@@ -258,6 +265,7 @@ export async function inspectPdfStructuralSignals(
       nameTreeJavascriptExpansionBytes: 0,
       fieldObjectCount: 0,
       fieldObjects: new Set<PDFObject>(),
+      acroFormFieldObjects: new Set<PDFObject>(),
       fieldOccurrenceCount: 0,
       fieldOccurrenceSignatureBytes: 0,
       fieldQualifiedNameBytes: 0,
@@ -397,7 +405,7 @@ function collectActionDictionary(
 
 function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): void {
   const triggerId = state.objectIds.get(dictionary);
-  const fieldContext = isFieldActionParent(dictionary);
+  const fieldContext = state.acroFormFieldObjects.has(dictionary) || isFieldActionParent(dictionary);
   const openAction = dictionary.get(PDFName.of('OpenAction'));
   if (openAction) {
     inspectActionEntry(openAction, 'open-action', triggerId, state, false, fieldContext, new Set());
@@ -407,7 +415,7 @@ function inspectActionTriggers(dictionary: PDFDict, state: InspectionState): voi
   if (additionalActions) {
     inspectActionEntry(
       additionalActions,
-      additionalActionContext(dictionary),
+      additionalActionContext(dictionary, fieldContext),
       triggerId,
       state,
       true,
@@ -558,9 +566,14 @@ function readObject(dictionary: PDFDict, key: string): PDFObject | undefined {
   }
 }
 
-function additionalActionContext(parent: PDFDict): PdfActionDictionaryContext {
+function additionalActionContext(
+  parent: PDFDict,
+  fieldContext = false,
+): PdfActionDictionaryContext {
   const subtype = readName(parent, 'Subtype')?.decodeText();
-  if (subtype === 'Widget' || parent.has(PDFName.of('FT'))) return 'field-additional-action';
+  if (fieldContext || subtype === 'Widget' || parent.has(PDFName.of('FT'))) {
+    return 'field-additional-action';
+  }
   if (subtype && ANNOTATION_SUBTYPES.has(subtype)) return 'annotation-additional-action';
   const type = readName(parent, 'Type')?.decodeText();
   return type === 'Page' ? 'page-additional-action' : 'additional-action';
@@ -813,14 +826,19 @@ function validateDecodedStreamSize(
   return validateInflatedSize(contents, maxDecodedBytes);
 }
 
-function validateFieldObjectBudget(field: PDFDict, state: InspectionState): void {
+function validateFieldObjectBudget(
+  field: PDFDict,
+  state: InspectionState,
+  inheritedFieldType?: string,
+): void {
   if (state.fieldObjects.has(field)) return;
   state.fieldObjects.add(field);
   state.fieldObjectCount += 1;
   if (state.fieldObjectCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
     throw new PdfActionDictionaryInspectionError();
   }
-  if (readName(field, 'FT')?.decodeText() !== 'Sig') return;
+  const fieldType = readName(field, 'FT')?.decodeText() ?? inheritedFieldType;
+  if (fieldType !== 'Sig') return;
 
   state.signatureObjectCount += 1;
   if (state.signatureObjectCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
@@ -869,6 +887,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: number;
       inheritedOptionBytes: number;
       inheritedDefaultAppearanceBytes: number;
+      inheritedFieldType: string | undefined;
     }
   )[] = [];
   const acroFormDefaultAppearanceBytes = measureNormalizedValueBytes(
@@ -885,6 +904,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: 0,
       inheritedOptionBytes: 0,
       inheritedDefaultAppearanceBytes: acroFormDefaultAppearanceBytes,
+      inheritedFieldType: undefined,
     });
   }
   const path = new Set<PDFObject>();
@@ -904,14 +924,16 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     }
     path.add(field);
     stack.push({ kind: 'leave', object: field });
+    state.acroFormFieldObjects.add(field);
+    const fieldType = readName(field, 'FT')?.decodeText() ?? item.inheritedFieldType;
 
     state.fieldOccurrenceCount += 1;
     if (state.fieldOccurrenceCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
       throw new PdfActionDictionaryInspectionError();
     }
-    validateFieldOccurrenceSignatureBudget(field, state);
+    validateFieldOccurrenceSignatureBudget(field, fieldType, state);
 
-    validateFieldObjectBudget(field, state);
+    validateFieldObjectBudget(field, state, fieldType);
     const valueBytes = field.has(PDFName.of('V'))
       ? measureNormalizedValueBytes(readObject(field, 'V'), state)
       : item.inheritedValueBytes;
@@ -978,6 +1000,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
         inheritedDefaultValueBytes: defaultValueBytes,
         inheritedOptionBytes: optionBytes,
         inheritedDefaultAppearanceBytes: defaultAppearanceBytes,
+        inheritedFieldType: fieldType,
       });
     }
   }
@@ -985,9 +1008,10 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
 
 function validateFieldOccurrenceSignatureBudget(
   field: PDFDict,
+  fieldType: string | undefined,
   state: InspectionState,
 ): void {
-  if (readName(field, 'FT')?.decodeText() !== 'Sig') return;
+  if (fieldType !== 'Sig') return;
   const signature = readDictionary(field, 'V');
   const contents = signature ? readObject(signature, 'Contents') : undefined;
   if (!(contents instanceof PDFString) && !(contents instanceof PDFHexString)) return;
