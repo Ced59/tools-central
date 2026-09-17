@@ -921,6 +921,32 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les tableaux de couleur partagés avant leur clonage par annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const coordinatesPerColor = 4_096;
+    const color = source.context.register(source.context.obj(
+      Array.from({ length: coordinatesPerColor }, () => 0.5),
+    ));
+    const appearanceCharacteristics = source.context.register(source.context.obj({
+      BC: color, BG: color,
+    }));
+    const geometryBytes = coordinatesPerColor * 8 + 32;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES / (geometryBytes * 3),
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', Rect: [0, 0, 10, 10],
+        C: color, MK: appearanceCharacteristics,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne les annotations des feuilles de page sans Type explicite', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();

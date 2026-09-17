@@ -1194,7 +1194,9 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
-    for (const key of ['Rect', 'QuadPoints', 'Vertices', 'InkList', 'L', 'CL', 'RD', 'Path']) {
+    for (const key of [
+      'Rect', 'QuadPoints', 'Vertices', 'InkList', 'L', 'CL', 'RD', 'Path', 'C',
+    ]) {
       state.annotationGeometryExpansionBytes += measureGeometryBytes(
         readObject(annotation, key),
         state,
@@ -1210,6 +1212,15 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
         readObject(borderStyle, 'D'),
         state,
       );
+    }
+    const appearanceCharacteristics = readDictionary(annotation, 'MK');
+    if (appearanceCharacteristics) {
+      for (const key of ['BC', 'BG']) {
+        state.annotationGeometryExpansionBytes += measureGeometryBytes(
+          readObject(appearanceCharacteristics, key),
+          state,
+        );
+      }
     }
     if (
       !Number.isSafeInteger(state.annotationGeometryExpansionBytes)
