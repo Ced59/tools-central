@@ -31,7 +31,11 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
-type IndirectLengthCandidates = ReadonlyMap<string, ReadonlySet<number>>;
+interface IndirectLengthCandidateIndex {
+  values: Map<string, Set<number>>;
+  declarationOffsets: Map<string, Map<number, Set<number>>>;
+  compressedValues: Map<string, Set<number>>;
+}
 
 interface ParsedDictionary {
   type?: string;
@@ -54,6 +58,11 @@ interface RawSyntaxBudget {
   containerDepth: number;
 }
 
+interface ByteRange {
+  start: number;
+  end: number;
+}
+
 export interface PdfObjectStreamPreflightResult {
   encrypted: boolean;
   skippedEncryptedObjectStreams: number;
@@ -64,10 +73,13 @@ export interface PdfObjectStreamPreflightResult {
  * them. The scan never decodes arbitrary document strings or ordinary streams.
  */
 export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStreamPreflightResult {
-  const indirectLengths = collectIndirectLengths(data);
+  const {
+    lengths: indirectLengths,
+    encryptedBeforeObjectStreamDiscovery,
+  } = collectIndirectLengths(data);
   const criticalStreams: CriticalStreamDescriptor[] = [];
   const rawSyntaxBudget: RawSyntaxBudget = { tokens: 0, containerDepth: 0 };
-  let encrypted = false;
+  let encrypted = encryptedBeforeObjectStreamDiscovery;
   let expectTrailerDictionary = false;
   let validatedStreams = 0;
   let classicIndirectObjects = 0;
@@ -309,9 +321,18 @@ function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | 
   return objectKeyword + 'obj'.length;
 }
 
-function collectIndirectLengths(data: Uint8Array): Map<string, number | undefined> {
+function collectIndirectLengths(data: Uint8Array): {
+  lengths: Map<string, number | undefined>;
+  encryptedBeforeObjectStreamDiscovery: boolean;
+} {
   const candidates = collectIndirectLengthCandidates(data);
-  const compressedCandidates = collectCompressedIndirectLengthCandidates(data, candidates);
+  const encryptedBeforeObjectStreamDiscovery = detectEncryptionBeforeObjectStreamDiscovery(
+    data,
+    candidates,
+  );
+  const compressedCandidates = encryptedBeforeObjectStreamDiscovery
+    ? new Map<string, Set<number>>()
+    : collectCompressedIndirectLengthCandidates(data, candidates);
   const lengths = new Map<string, number | undefined>();
   for (const [key, values] of compressedCandidates) {
     lengths.set(key, values.size === 1 ? values.values().next().value : undefined);
@@ -411,11 +432,15 @@ function collectIndirectLengths(data: Uint8Array): Map<string, number | undefine
     }
     offset = objectEnd + 'endobj'.length;
   }
-  return lengths;
+  return { lengths, encryptedBeforeObjectStreamDiscovery };
 }
 
-function collectIndirectLengthCandidates(data: Uint8Array): Map<string, Set<number>> {
-  const candidates = new Map<string, Set<number>>();
+function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandidateIndex {
+  const candidates: IndirectLengthCandidateIndex = {
+    values: new Map<string, Set<number>>(),
+    declarationOffsets: new Map<string, Map<number, Set<number>>>(),
+    compressedValues: new Map<string, Set<number>>(),
+  };
   let candidateValues = 0;
   for (let offset = 0; offset < data.byteLength; offset += 1) {
     const previous = offset === 0 ? undefined : data[offset - 1];
@@ -435,10 +460,10 @@ function collectIndirectLengthCandidates(data: Uint8Array): Map<string, Set<numb
     if (!matchesKeyword(data, objectEnd, 'endobj')) continue;
 
     const key = referenceKey(objectNumber.value, generation.value);
-    let values = candidates.get(key);
+    let values = candidates.values.get(key);
     if (!values) {
       values = new Set<number>();
-      candidates.set(key, values);
+      candidates.values.set(key, values);
     }
     if (!values.has(value.value)) {
       candidateValues += 1;
@@ -447,18 +472,228 @@ function collectIndirectLengthCandidates(data: Uint8Array): Map<string, Set<numb
       }
       values.add(value.value);
     }
+    let offsetsByValue = candidates.declarationOffsets.get(key);
+    if (!offsetsByValue) {
+      offsetsByValue = new Map<number, Set<number>>();
+      candidates.declarationOffsets.set(key, offsetsByValue);
+    }
+    let declarationOffsets = offsetsByValue.get(value.value);
+    if (!declarationOffsets) {
+      declarationOffsets = new Set<number>();
+      offsetsByValue.set(value.value, declarationOffsets);
+    }
+    declarationOffsets.add(offset);
     offset = objectEnd + 'endobj'.length - 1;
   }
+  removeCandidatesDeclaredInsideStreams(data, candidates);
   return candidates;
+}
+
+function removeCandidatesDeclaredInsideStreams(
+  data: Uint8Array,
+  candidates: IndirectLengthCandidateIndex,
+): void {
+  const streamRanges = collectKnownStreamRanges(data, candidates);
+  for (const [key, offsetsByValue] of candidates.declarationOffsets) {
+    const values = candidates.values.get(key);
+    for (const [value, offsets] of offsetsByValue) {
+      for (const offset of offsets) {
+        if (isOffsetInsideRanges(offset, streamRanges)) offsets.delete(offset);
+      }
+      if (offsets.size === 0) {
+        offsetsByValue.delete(value);
+        values?.delete(value);
+      }
+    }
+    if (offsetsByValue.size === 0) candidates.declarationOffsets.delete(key);
+    if (values?.size === 0) candidates.values.delete(key);
+  }
+}
+
+function collectKnownStreamRanges(
+  data: Uint8Array,
+  candidates: IndirectLengthCandidateIndex,
+): ByteRange[] {
+  const ranges: ByteRange[] = [];
+  let offset = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset];
+    if (byte === PERCENT) {
+      offset = skipComment(data, offset);
+      continue;
+    }
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      offset = skipHexString(data, offset);
+      continue;
+    }
+    if (byte !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
+      offset += 1;
+      continue;
+    }
+
+    const dictionaryEnd = findDictionaryEnd(data, offset);
+    if (dictionaryEnd === undefined) {
+      offset += 2;
+      continue;
+    }
+    let dictionary: ParsedDictionary;
+    try {
+      dictionary = parseCriticalDictionary(data, offset, dictionaryEnd);
+    } catch {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+    if (!matchesKeyword(data, streamKeyword, 'stream')) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    let streamStart: number;
+    try {
+      streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+    } catch {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const length = resolveCandidateStreamLength(
+      dictionary.length,
+      candidates,
+      data,
+      streamStart,
+    );
+    if (length === undefined) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const streamEnd = streamStart + length;
+    if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const endstream = skipWhitespace(data, streamEnd);
+    if (!matchesKeyword(data, endstream, 'endstream')) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    ranges.push({ start: streamStart, end: streamEnd });
+    if (ranges.length > MAX_CRITICAL_STREAMS) throw new Error('PDF stream limit');
+    offset = endstream + 'endstream'.length;
+  }
+  return ranges;
+}
+
+function isOffsetInsideRanges(offset: number, ranges: readonly ByteRange[]): boolean {
+  let lower = 0;
+  let upper = ranges.length - 1;
+  while (lower <= upper) {
+    const middle = lower + Math.floor((upper - lower) / 2);
+    const range = ranges[middle];
+    if (offset < range.start) {
+      upper = middle - 1;
+    } else if (offset >= range.end) {
+      lower = middle + 1;
+    } else {
+      return true;
+    }
+  }
+  return false;
+}
+
+function detectEncryptionBeforeObjectStreamDiscovery(
+  data: Uint8Array,
+  candidates: IndirectLengthCandidateIndex,
+): boolean {
+  let expectTrailerDictionary = false;
+  let offset = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset];
+    if (byte === PERCENT) {
+      offset = skipComment(data, offset);
+      continue;
+    }
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      offset = skipHexString(data, offset);
+      continue;
+    }
+    if (matchesBareKeyword(data, offset, 'trailer')) {
+      expectTrailerDictionary = true;
+      offset += 'trailer'.length;
+      continue;
+    }
+    if (byte !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
+      offset += 1;
+      continue;
+    }
+
+    const dictionaryEnd = findDictionaryEnd(data, offset);
+    if (dictionaryEnd === undefined) {
+      offset += 2;
+      continue;
+    }
+    let dictionary: ParsedDictionary;
+    try {
+      dictionary = parseCriticalDictionary(data, offset, dictionaryEnd);
+    } catch {
+      offset = dictionaryEnd;
+      continue;
+    }
+    if (
+      dictionary.hasEncryptionDictionary
+      && (expectTrailerDictionary || dictionary.type === 'XRef')
+    ) return true;
+    expectTrailerDictionary = false;
+
+    const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+    if (!matchesKeyword(data, streamKeyword, 'stream')) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    let streamStart: number;
+    try {
+      streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+    } catch {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const length = resolveCandidateStreamLength(
+      dictionary.length,
+      candidates,
+      data,
+      streamStart,
+    );
+    if (length === undefined) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    const streamEnd = streamStart + length;
+    if (
+      !Number.isSafeInteger(streamEnd)
+      || streamEnd > data.byteLength
+      || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
+    ) {
+      offset = dictionaryEnd;
+      continue;
+    }
+    offset = skipWhitespace(data, streamEnd) + 'endstream'.length;
+  }
+  return false;
 }
 
 function collectCompressedIndirectLengthCandidates(
   data: Uint8Array,
-  candidates: Map<string, Set<number>>,
+  candidates: IndirectLengthCandidateIndex,
 ): Map<string, Set<number>> {
   const compressedCandidates = new Map<string, Set<number>>();
   const processedStreams = new Set<number>();
-  let candidateValues = countCandidateValues(candidates);
+  let candidateValues = countCandidateValues(candidates.values);
   let expandedBytes = 0;
   let changed = true;
   while (changed) {
@@ -530,10 +765,10 @@ function collectCompressedIndirectLengthCandidates(
       );
       for (const value of values) {
         const key = referenceKey(value.objectNumber, 0);
-        let allValues = candidates.get(key);
+        let allValues = candidates.values.get(key);
         if (!allValues) {
           allValues = new Set<number>();
-          candidates.set(key, allValues);
+          candidates.values.set(key, allValues);
         }
         if (!allValues.has(value.value)) {
           candidateValues += 1;
@@ -543,6 +778,12 @@ function collectCompressedIndirectLengthCandidates(
           allValues.add(value.value);
           changed = true;
         }
+        let trustedValues = candidates.compressedValues.get(key);
+        if (!trustedValues) {
+          trustedValues = new Set<number>();
+          candidates.compressedValues.set(key, trustedValues);
+        }
+        trustedValues.add(value.value);
         let compressedValues = compressedCandidates.get(key);
         if (!compressedValues) {
           compressedValues = new Set<number>();
@@ -555,7 +796,7 @@ function collectCompressedIndirectLengthCandidates(
   return compressedCandidates;
 }
 
-function countCandidateValues(candidates: IndirectLengthCandidates): number {
+function countCandidateValues(candidates: ReadonlyMap<string, ReadonlySet<number>>): number {
   let count = 0;
   for (const values of candidates.values()) count += values.size;
   return count;
@@ -655,19 +896,28 @@ function containsOnlyWhitespaceAndComments(
 
 function resolveCandidateStreamLength(
   length: number | RawPdfReference | undefined,
-  candidates: IndirectLengthCandidates,
+  candidates: IndirectLengthCandidateIndex,
   data: Uint8Array,
   streamStart: number,
 ): number | undefined {
   if (typeof length === 'number') return length;
   if (!length) return undefined;
-  const values = candidates.get(referenceKey(length.objectNumber, length.generationNumber));
+  const key = referenceKey(length.objectNumber, length.generationNumber);
+  const values = candidates.values.get(key);
   if (!values) return undefined;
   let resolved: number | undefined;
   for (const value of values) {
     const streamEnd = streamStart + value;
     if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) continue;
     if (!matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')) continue;
+    const isCompressedValue = candidates.compressedValues.get(key)?.has(value) ?? false;
+    const declarations = candidates.declarationOffsets.get(key)?.get(value);
+    if (
+      !isCompressedValue
+      && declarations
+      && declarations.size > 0
+      && [...declarations].every(offset => offset >= streamStart && offset < streamEnd)
+    ) continue;
     if (resolved !== undefined && resolved !== value) return undefined;
     resolved = value;
   }

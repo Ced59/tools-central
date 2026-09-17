@@ -109,6 +109,26 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(indirectLengthWithFakePayloadObject);
     }).not.toThrow();
 
+    let fakeBoundary = 0;
+    let fakeObjectPrefix: string;
+    for (;;) {
+      fakeObjectPrefix = `2 0 obj\n${String(fakeBoundary)}\nendobj\npadding\n`;
+      const nextBoundary = fakeObjectPrefix.length;
+      if (nextBoundary === fakeBoundary) break;
+      fakeBoundary = nextBoundary;
+    }
+    const payloadWithFakeBoundary = `${fakeObjectPrefix}endstream\nstill-payload`;
+    const indirectLengthWithTwoApparentBoundaries = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      payloadWithFakeBoundary,
+      '\nendstream\nendobj\n2 0 obj\n',
+      String(payloadWithFakeBoundary.length),
+      '\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(indirectLengthWithTwoApparentBoundaries);
+    }).not.toThrow();
+
     const compressedLengthPayload = '2 0 3';
     const compressedLengthFixture = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
@@ -138,6 +158,24 @@ describe('inspectPdfStructuralSignals', () => {
       'trailer\n<< /Encrypt 9 0 R >>\n%%EOF\n',
     );
     expect(validatePdfObjectStreamBudgets(encryptedFixture)).toEqual({
+      encrypted: true,
+      skippedEncryptedObjectStreams: 1,
+    });
+
+    const encryptedLengthCandidate = `2 0 ${String(fakeBoundary)}`;
+    const compressedEncryptedCandidate = deflate(new TextEncoder().encode(encryptedLengthCandidate));
+    const encryptedCandidateFixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      payloadWithFakeBoundary,
+      '\nendstream\nendobj\n2 0 obj\n',
+      String(payloadWithFakeBoundary.length),
+      '\nendobj\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter /FlateDecode /Length ',
+      String(compressedEncryptedCandidate.byteLength),
+      ' >>\nstream\n',
+      compressedEncryptedCandidate,
+      '\nendstream\nendobj\ntrailer\n<< /Encrypt 9 0 R >>\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(encryptedCandidateFixture)).toEqual({
       encrypted: true,
       skippedEncryptedObjectStreams: 1,
     });
