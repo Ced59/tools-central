@@ -960,6 +960,37 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les métadonnées de signature partagées avant leur décodage répété', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const metadataBytes = 4_000;
+    const sharedMetadata = source.context.register(PDFString.of('A'.repeat(metadataBytes)));
+    const signature = source.context.register(source.context.obj({
+      Type: 'Sig',
+      ByteRange: [0, 1, 2, 1],
+      Contents: PDFString.of('x'),
+      Name: sharedMetadata,
+      SubFilter: sharedMetadata,
+      ContactInfo: sharedMetadata,
+      Location: sharedMetadata,
+      Reason: sharedMetadata,
+      M: sharedMetadata,
+    }));
+    const bytesPerOccurrence = 1 + (7 * metadataBytes);
+    const signatureCount = Math.floor(
+      PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES / bytesPerOccurrence,
+    ) + 1;
+    const fields = Array.from({ length: signatureCount }, () => (
+      source.context.register(source.context.obj({
+        FT: 'Sig', T: sharedMetadata, V: signature,
+      }))
+    ));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne l’expansion répétée d’une valeur héritée par les widgets', async () => {
     const source = await PDFDocument.create();
     source.addPage();

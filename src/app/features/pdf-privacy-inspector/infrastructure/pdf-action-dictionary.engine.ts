@@ -1017,9 +1017,25 @@ function validateFieldOccurrenceSignatureBudget(
 ): void {
   if (fieldType !== 'Sig') return;
   const signature = readDictionary(field, 'V');
-  const contents = signature ? readObject(signature, 'Contents') : undefined;
+  if (!signature) return;
+  const contents = readObject(signature, 'Contents');
   if (!(contents instanceof PDFString) && !(contents instanceof PDFHexString)) return;
-  state.fieldOccurrenceSignatureBytes += contents.asBytes().byteLength;
+  let occurrenceBytes = contents.asBytes().byteLength;
+  for (const value of [
+    readObject(field, 'T'),
+    readObject(signature, 'Name'),
+    readObject(signature, 'SubFilter'),
+    readObject(signature, 'ContactInfo'),
+    readObject(signature, 'Location'),
+    readObject(signature, 'Reason'),
+    readObject(signature, 'M'),
+  ]) {
+    occurrenceBytes += measureNormalizedValueBytes(value, state);
+    if (!Number.isSafeInteger(occurrenceBytes)) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+  }
+  state.fieldOccurrenceSignatureBytes += occurrenceBytes;
   if (
     !Number.isSafeInteger(state.fieldOccurrenceSignatureBytes)
     || state.fieldOccurrenceSignatureBytes > PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES
