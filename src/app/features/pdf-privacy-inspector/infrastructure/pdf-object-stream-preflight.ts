@@ -73,7 +73,7 @@ interface CompressedCrossReferenceEntry {
 }
 
 interface ParsedDictionary {
-  type?: string;
+  type?: string | RawPdfReference;
   length?: number | RawPdfReference;
   filters?: PdfFilters;
   decodeParameters?: PdfDecodeParameters;
@@ -263,13 +263,15 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     currentObjectHeader = undefined;
 
     if (knownInactiveStream) continue;
-    if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
+    const streamType = resolveCriticalStreamType(data, dictionary.type, objectStreamSelection);
+    if (streamType === null) throw new Error('Invalid PDF stream type');
+    if (streamType !== 'ObjStm' && streamType !== 'XRef') continue;
     if (
-      dictionary.type === 'ObjStm'
+      streamType === 'ObjStm'
       && streamObjectHeader
       && shouldSkipInactiveObjectStream(objectStreamSelection, streamObjectHeader)
     ) continue;
-    if (dictionary.type === 'XRef') {
+    if (streamType === 'XRef') {
       encrypted ||= dictionaryDeclaresEncryption(
         data,
         dictionary,
@@ -290,7 +292,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     validatedStreams += 1;
     if (validatedStreams > MAX_CRITICAL_STREAMS) throw new Error('PDF stream limit');
     criticalStreams.push({
-      type: dictionary.type,
+      type: streamType,
       contents: data.subarray(streamStart, streamEnd),
       filters: dictionary.filters,
       decodeParameters: dictionary.decodeParameters,
@@ -825,7 +827,10 @@ function detectEncryptionBeforeObjectStreamDiscovery(
     }
     if (
       dictionaryDeclaresEncryption(data, dictionary, candidates)
-      && (expectTrailerDictionary || dictionary.type === 'XRef')
+      && (
+        expectTrailerDictionary
+        || resolveCriticalStreamType(data, dictionary.type, candidates) === 'XRef'
+      )
     ) return true;
     expectTrailerDictionary = false;
 
@@ -1567,7 +1572,7 @@ function collectCompressedIndirectLengthCandidates(
         continue;
       }
       if (
-        dictionary.type !== 'ObjStm'
+        resolveCriticalStreamType(data, dictionary.type, candidates) !== 'ObjStm'
         || dictionary.objectCount === undefined
         || dictionary.firstObjectOffset === undefined
       ) continue;
@@ -2372,7 +2377,11 @@ function isAuthoritativeCompressedNullObject(
     return false;
   }
   if (
-    dictionary.type !== 'ObjStm'
+    resolveCriticalStreamType(
+      data,
+      dictionary.type,
+      { authoritativeOffsets },
+    ) !== 'ObjStm'
     || dictionary.objectCount === undefined
     || dictionary.firstObjectOffset === undefined
     || entry.objectIndex >= dictionary.objectCount
@@ -2490,12 +2499,41 @@ function compressedObjectIsNull(
   return containsOnlyWhitespaceAndComments(data, valueStart + 'null'.length, end);
 }
 
+function resolveCriticalStreamType(
+  data: Uint8Array,
+  type: string | RawPdfReference | undefined,
+  candidates: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+): string | null | undefined {
+  if (typeof type === 'string' || type === undefined) return type;
+  const offset = candidates.authoritativeOffsets.get(referenceKey(
+    type.objectNumber,
+    type.generationNumber,
+  ));
+  if (offset === undefined) return null;
+  const header = readIndirectObjectHeader(data, offset);
+  if (
+    !header
+    || header.start !== offset
+    || header.objectNumber !== type.objectNumber
+    || header.generationNumber !== type.generationNumber
+  ) return null;
+  const valueStart = skipWhitespaceAndComments(data, header.end);
+  if (matchesKeyword(data, valueStart, 'null')) {
+    const objectEnd = skipWhitespaceAndComments(data, valueStart + 'null'.length);
+    return matchesKeyword(data, objectEnd, 'endobj') ? undefined : null;
+  }
+  const value = readPdfName(data, valueStart);
+  if (!value) return null;
+  const objectEnd = skipWhitespaceAndComments(data, value.end);
+  return matchesKeyword(data, objectEnd, 'endobj') ? value.value : null;
+}
+
 function parseCriticalDictionary(
   data: Uint8Array,
   dictionaryStart: number,
   dictionaryEnd: number,
 ): ParsedDictionary {
-  let type: string | undefined;
+  let type: string | RawPdfReference | undefined;
   let length: number | RawPdfReference | undefined;
   let filters: PdfFilters | undefined = [];
   let decodeParameters: PdfDecodeParameters | undefined;
@@ -2568,9 +2606,15 @@ function parseCriticalDictionary(
         continue;
       }
       const value = readPdfName(data, valueStart);
-      if (!value) throw new Error('Invalid PDF stream type');
-      type = value.value;
-      offset = value.end;
+      if (value) {
+        type = value.value;
+        offset = value.end;
+        continue;
+      }
+      const reference = readRawPdfReference(data, valueStart);
+      if (!reference) throw new Error('Invalid PDF stream type');
+      type = reference.reference;
+      offset = reference.end;
     } else if (key.value === 'Length') {
       if (length !== undefined) throw new Error('Duplicate PDF stream length');
       const value = readUnsignedInteger(data, valueStart);

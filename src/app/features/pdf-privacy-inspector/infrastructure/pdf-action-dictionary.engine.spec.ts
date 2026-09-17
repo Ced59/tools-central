@@ -480,6 +480,23 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => validatePdfObjectStreamBudgets(nullTypeOrdinaryStream)).not.toThrow();
 
+    const indirectTypeBody = [
+      '%PDF-1.7\n',
+      '1 0 obj\n<< /Type 2 0 R /Length 3 >>\nstream\nabc\nendstream\nendobj\n',
+      '2 0 obj\n/Foo\nendobj\n',
+    ].join('');
+    const indirectTypeXrefOffset = indirectTypeBody.length;
+    const indirectTypeOrdinaryStream = joinBytes(
+      indirectTypeBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(indirectTypeBody.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(indirectTypeBody.indexOf('2 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 3 >>\nstartxref\n',
+      String(indirectTypeXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(indirectTypeOrdinaryStream)).not.toThrow();
+
     const duplicateNullType = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Type null /Type /ObjStm /N 0 /First 0 /Length 0 >>\n',
       'stream\n\nendstream\nendobj\n%%EOF\n',
