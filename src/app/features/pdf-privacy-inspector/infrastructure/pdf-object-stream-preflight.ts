@@ -2,6 +2,8 @@ import { Inflate } from 'pako';
 
 export const PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS = 100_000;
+export const PDF_PRIVACY_MAX_RAW_TOKENS = 1_000_000;
+export const PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH = 256;
 
 const DICTIONARY_SEARCH_WINDOW_BYTES = 1 * 1_024 * 1_024;
 const INFLATE_CHUNK_BYTES = 64 * 1_024;
@@ -44,6 +46,11 @@ interface CriticalStreamDescriptor {
   filters: readonly string[] | undefined;
 }
 
+interface RawSyntaxBudget {
+  tokens: number;
+  containerDepth: number;
+}
+
 export interface PdfObjectStreamPreflightResult {
   encrypted: boolean;
   skippedEncryptedObjectStreams: number;
@@ -56,6 +63,7 @@ export interface PdfObjectStreamPreflightResult {
 export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStreamPreflightResult {
   const indirectLengths = collectIndirectLengths(data);
   const criticalStreams: CriticalStreamDescriptor[] = [];
+  const rawSyntaxBudget: RawSyntaxBudget = { tokens: 0, containerDepth: 0 };
   let encrypted = false;
   let expectTrailerDictionary = false;
   let validatedStreams = 0;
@@ -70,20 +78,24 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       continue;
     }
     if (byte === LEFT_PARENTHESIS) {
+      consumeRawTokens(rawSyntaxBudget);
       offset = skipLiteralString(data, offset);
       continue;
     }
     if (matchesBareKeyword(data, offset, 'trailer')) {
+      consumeRawTokens(rawSyntaxBudget);
       expectTrailerDictionary = true;
       offset += 'trailer'.length;
       continue;
     }
     if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      consumeRawTokens(rawSyntaxBudget);
       offset = skipHexString(data, offset);
       continue;
     }
     const objectHeaderEnd = readIndirectObjectHeaderEnd(data, offset);
     if (objectHeaderEnd !== undefined) {
+      consumeRawTokens(rawSyntaxBudget, 3);
       classicIndirectObjects += 1;
       if (
         classicIndirectObjects + compressedIndirectObjects
@@ -95,13 +107,18 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       continue;
     }
     if (byte !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
-      offset += 1;
+      offset = consumeRawSyntax(data, offset, data.byteLength, rawSyntaxBudget);
       continue;
     }
 
     const dictionaryStart = offset;
     const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
     if (dictionaryEnd === undefined) throw new Error('PDF dictionary limit');
+    const initialContainerDepth = rawSyntaxBudget.containerDepth;
+    consumeRawSyntaxRange(data, dictionaryStart, dictionaryEnd, rawSyntaxBudget);
+    if (rawSyntaxBudget.containerDepth !== initialContainerDepth) {
+      throw new Error('Invalid PDF container nesting');
+    }
     const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
     if (expectTrailerDictionary) {
       encrypted ||= dictionary.hasEncryptionDictionary;
@@ -125,6 +142,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     if (!matchesKeyword(data, endstream, 'endstream')) {
       throw new Error('Invalid PDF stream boundary');
     }
+    consumeRawTokens(rawSyntaxBudget, 2);
     offset = endstream + 'endstream'.length;
 
     if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
@@ -183,6 +201,87 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
   }
   return { encrypted, skippedEncryptedObjectStreams };
+}
+
+function consumeRawSyntaxRange(
+  data: Uint8Array,
+  start: number,
+  end: number,
+  budget: RawSyntaxBudget,
+): void {
+  let offset = start;
+  while (offset < end) offset = consumeRawSyntax(data, offset, end, budget);
+}
+
+function consumeRawSyntax(
+  data: Uint8Array,
+  start: number,
+  end: number,
+  budget: RawSyntaxBudget,
+): number {
+  const byte = data[start];
+  if (isWhitespace(byte)) return skipWhitespace(data, start);
+  if (byte === PERCENT) return skipComment(data, start);
+  if (byte === LEFT_PARENTHESIS) {
+    consumeRawTokens(budget);
+    return skipLiteralString(data, start);
+  }
+  if (byte === LESS_THAN && data[start + 1] !== LESS_THAN) {
+    consumeRawTokens(budget);
+    return skipHexString(data, start);
+  }
+  if (byte === LESS_THAN && data[start + 1] === LESS_THAN) {
+    consumeRawTokens(budget);
+    enterRawContainer(budget);
+    return start + 2;
+  }
+  if (byte === GREATER_THAN && data[start + 1] === GREATER_THAN) {
+    consumeRawTokens(budget);
+    leaveRawContainer(budget);
+    return start + 2;
+  }
+  if (byte === LEFT_BRACKET || byte === 0x7b) {
+    consumeRawTokens(budget);
+    enterRawContainer(budget);
+    return start + 1;
+  }
+  if (byte === RIGHT_BRACKET || byte === 0x7d) {
+    consumeRawTokens(budget);
+    leaveRawContainer(budget);
+    return start + 1;
+  }
+  if (byte === PDF_NAME) {
+    consumeRawTokens(budget);
+    const name = readPdfName(data, start);
+    if (!name || name.end > end) throw new Error('PDF raw name limit');
+    return name.end;
+  }
+
+  consumeRawTokens(budget);
+  if (isDelimiter(byte)) return start + 1;
+  let offset = start + 1;
+  while (offset < end && !isWhitespace(data[offset]) && !isDelimiter(data[offset])) {
+    offset += 1;
+  }
+  return offset;
+}
+
+function consumeRawTokens(budget: RawSyntaxBudget, count = 1): void {
+  budget.tokens += count;
+  if (!Number.isSafeInteger(budget.tokens) || budget.tokens > PDF_PRIVACY_MAX_RAW_TOKENS) {
+    throw new Error('PDF raw token limit');
+  }
+}
+
+function enterRawContainer(budget: RawSyntaxBudget): void {
+  budget.containerDepth += 1;
+  if (budget.containerDepth > PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH) {
+    throw new Error('PDF raw container depth limit');
+  }
+}
+
+function leaveRawContainer(budget: RawSyntaxBudget): void {
+  budget.containerDepth = Math.max(0, budget.containerDepth - 1);
 }
 
 function validateXrefSize(size: number | undefined): void {

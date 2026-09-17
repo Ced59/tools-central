@@ -15,6 +15,7 @@ import {
   PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES,
   PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES,
@@ -30,6 +31,8 @@ import {
 import {
   PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS,
   PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH,
+  PDF_PRIVACY_MAX_RAW_TOKENS,
   validatePdfObjectStreamBudgets,
 } from './pdf-object-stream-preflight';
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
@@ -160,6 +163,38 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => {
       validatePdfObjectStreamBudgets(oversizedXref);
     }).toThrow('PDF xref size limit');
+  }, 30_000);
+
+  it('borne les tokens et la profondeur des conteneurs classiques avant pdf-lib', () => {
+    const oversizedArray = joinBytes(
+      '%PDF-1.7\n1 0 obj\n[',
+      '0 '.repeat(PDF_PRIVACY_MAX_RAW_TOKENS),
+      ']\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(oversizedArray);
+    }).toThrow('PDF raw token limit');
+
+    const deeplyNestedArray = joinBytes(
+      '%PDF-1.7\n1 0 obj\n',
+      '['.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
+      '0',
+      ']'.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
+      '\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(deeplyNestedArray);
+    }).toThrow('PDF raw container depth limit');
+
+    const streamPayload = '0 '.repeat(PDF_PRIVACY_MAX_RAW_TOKENS + 1);
+    const tokensInsideStream = joinBytes(
+      `%PDF-1.7\n1 0 obj\n<< /Length ${String(streamPayload.length)} >>\nstream\n`,
+      streamPayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(tokensInsideStream);
+    }).not.toThrow();
   }, 30_000);
 
   it('inventorie un fichier embarqué uniquement atteignable depuis une action', async () => {
@@ -1236,6 +1271,41 @@ describe('inspectPdfStructuralSignals', () => {
       FT: 'Tx', T: PDFString.of('Shared'), DA: appearance, Kids: widgets,
     }));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne la fusion répétée des ressources DR héritées avant PDF.js', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const fontEntries = 2_048;
+    const localFonts = source.context.obj({});
+    const globalFonts = source.context.obj({});
+    for (let index = 0; index < fontEntries; index += 1) {
+      const key = PDFName.of(`F${String(index)}`);
+      localFonts.set(key, PDFName.of('Helvetica'));
+      globalFonts.set(key, PDFName.of('Helvetica'));
+    }
+    const localResources = source.context.obj({ Font: localFonts });
+    const globalResources = source.context.obj({ Font: globalFonts });
+    const mergeEntriesPerOccurrence = 3 + (fontEntries * 2);
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES / mergeEntriesPerOccurrence,
+    ) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Entry'),
+      })),
+    );
+    const parent = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Shared'), DR: localResources, Kids: widgets,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      DR: globalResources,
+      Fields: [parent],
+    }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });

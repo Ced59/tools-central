@@ -111,6 +111,7 @@ export const PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES = 1_000_000;
 export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
@@ -157,6 +158,7 @@ interface InspectionState {
   fieldIndexExpansionBytes: number;
   fieldAppearanceExpansionBytes: number;
   fieldAlternateTextExpansionBytes: number;
+  fieldResourceMergeEntries: number;
   annotationTextExpansionBytes: number;
   annotationGeometryExpansionBytes: number;
   annotationJavascriptExpansionBytes: number;
@@ -287,6 +289,7 @@ export async function inspectPdfStructuralSignals(
       fieldIndexExpansionBytes: 0,
       fieldAppearanceExpansionBytes: 0,
       fieldAlternateTextExpansionBytes: 0,
+      fieldResourceMergeEntries: 0,
       annotationTextExpansionBytes: 0,
       annotationGeometryExpansionBytes: 0,
       annotationJavascriptExpansionBytes: 0,
@@ -882,6 +885,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: number;
       inheritedOptionBytes: number;
       inheritedDefaultAppearanceBytes: number;
+      inheritedResources: PDFDict | undefined;
       inheritedJavascriptBytes: number;
       inheritedFieldType: string | undefined;
     }
@@ -890,6 +894,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     acroForm ? readObject(acroForm, 'DA') : undefined,
     state,
   );
+  const acroFormResources = acroForm ? readDictionary(acroForm, 'DR') : undefined;
   for (let index = 0; index < rawFields.size(); index += 1) {
     const field = rawFields.get(index);
     stack.push({
@@ -900,6 +905,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: 0,
       inheritedOptionBytes: 0,
       inheritedDefaultAppearanceBytes: acroFormDefaultAppearanceBytes,
+      inheritedResources: undefined,
       inheritedJavascriptBytes: 0,
       inheritedFieldType: undefined,
     });
@@ -983,6 +989,19 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
+    const fieldResources = field.has(PDFName.of('DR'))
+      ? readDictionary(field, 'DR')
+      : item.inheritedResources;
+    state.fieldResourceMergeEntries += measureResourceMergeEntries(
+      fieldResources,
+      acroFormResources,
+    );
+    if (
+      !Number.isSafeInteger(state.fieldResourceMergeEntries)
+      || state.fieldResourceMergeEntries > PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     state.fieldAlternateTextExpansionBytes += measureNormalizedValueBytes(
       readObject(field, 'TU'),
       state,
@@ -1027,11 +1046,43 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
         inheritedDefaultValueBytes: defaultValueBytes,
         inheritedOptionBytes: optionBytes,
         inheritedDefaultAppearanceBytes: defaultAppearanceBytes,
+        inheritedResources: fieldResources,
         inheritedJavascriptBytes: javascriptBytes,
         inheritedFieldType: fieldType,
       });
     }
   }
+}
+
+function measureResourceMergeEntries(
+  fieldResources: PDFDict | undefined,
+  acroFormResources: PDFDict | undefined,
+): number {
+  const valuesByKey = new Map<string, (PDFObject | undefined)[]>();
+  let entries = 0;
+  for (const resources of [fieldResources, acroFormResources]) {
+    if (!resources) continue;
+    for (const key of resources.keys()) {
+      entries += 1;
+      const name = key.decodeText();
+      const values = valuesByKey.get(name);
+      const value = resources.get(key);
+      if (!values) {
+        valuesByKey.set(name, [value]);
+      } else if (values[0] instanceof PDFDict && value instanceof PDFDict) {
+        values.push(value);
+      }
+    }
+  }
+
+  entries += valuesByKey.size;
+  for (const values of valuesByKey.values()) {
+    if (values.length < 2 || !(values[0] instanceof PDFDict)) continue;
+    for (const value of values) {
+      if (value instanceof PDFDict) entries += value.keys().length;
+    }
+  }
+  return entries;
 }
 
 function validateFieldOccurrenceSignatureBudget(
