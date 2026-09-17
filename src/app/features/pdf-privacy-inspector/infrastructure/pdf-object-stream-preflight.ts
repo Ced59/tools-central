@@ -31,6 +31,8 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
+type IndirectLengthCandidates = ReadonlyMap<string, ReadonlySet<number>>;
+
 interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
@@ -307,7 +309,109 @@ function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | 
 }
 
 function collectIndirectLengths(data: Uint8Array): Map<string, number | undefined> {
+  const candidates = collectIndirectLengthCandidates(data);
   const lengths = new Map<string, number | undefined>();
+  let offset = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset];
+    if (byte === PERCENT) {
+      offset = skipComment(data, offset);
+      continue;
+    }
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      offset = skipHexString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] === LESS_THAN) {
+      const dictionaryEnd = findDictionaryEnd(data, offset);
+      if (dictionaryEnd === undefined) throw new Error('PDF dictionary limit');
+      const dictionary = parseCriticalDictionary(data, offset, dictionaryEnd);
+      const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+      if (matchesKeyword(data, streamKeyword, 'stream')) {
+        const streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+        const length = resolveCandidateStreamLength(
+          dictionary.length,
+          candidates,
+          data,
+          streamStart,
+        );
+        if (length === undefined) throw new Error('Missing PDF stream length');
+        const streamEnd = streamStart + length;
+        if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) {
+          throw new Error('Invalid PDF stream length');
+        }
+        const endstream = skipWhitespace(data, streamEnd);
+        if (!matchesKeyword(data, endstream, 'endstream')) {
+          throw new Error('Invalid PDF stream boundary');
+        }
+        offset = endstream + 'endstream'.length;
+        continue;
+      }
+      offset = dictionaryEnd;
+      continue;
+    }
+
+    const previous = offset === 0 ? undefined : data[offset - 1];
+    if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) {
+      offset += 1;
+      continue;
+    }
+    const objectNumber = tryReadUnsignedInteger(data, offset);
+    if (!objectNumber) {
+      offset += 1;
+      continue;
+    }
+    const generationStart = skipWhitespaceAndComments(data, objectNumber.end);
+    if (generationStart === objectNumber.end) {
+      offset = objectNumber.end;
+      continue;
+    }
+    const generation = tryReadUnsignedInteger(data, generationStart);
+    if (!generation) {
+      offset = objectNumber.end;
+      continue;
+    }
+    const objectKeyword = skipWhitespaceAndComments(data, generation.end);
+    if (!matchesKeyword(data, objectKeyword, 'obj')) {
+      offset = generation.end;
+      continue;
+    }
+    const valueStart = skipWhitespaceAndComments(data, objectKeyword + 'obj'.length);
+    const value = tryReadUnsignedInteger(data, valueStart);
+    if (!value) {
+      offset = objectKeyword + 'obj'.length;
+      continue;
+    }
+    const objectEnd = skipWhitespaceAndComments(data, value.end);
+    if (!matchesKeyword(data, objectEnd, 'endobj')) {
+      offset = value.end;
+      continue;
+    }
+
+    const key = referenceKey(objectNumber.value, generation.value);
+    const current = lengths.get(key);
+    if (!lengths.has(key)) {
+      if (lengths.size >= MAX_INDIRECT_LENGTH_OBJECTS) {
+        throw new Error('PDF indirect length object limit');
+      }
+      lengths.set(key, value.value);
+    } else if (current === value.value) {
+      lengths.set(key, value.value);
+    } else {
+      lengths.set(key, undefined);
+    }
+    offset = objectEnd + 'endobj'.length;
+  }
+  return lengths;
+}
+
+function collectIndirectLengthCandidates(data: Uint8Array): Map<string, Set<number>> {
+  const candidates = new Map<string, Set<number>>();
+  let candidateValues = 0;
   for (let offset = 0; offset < data.byteLength; offset += 1) {
     const previous = offset === 0 ? undefined : data[offset - 1];
     if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) continue;
@@ -326,20 +430,42 @@ function collectIndirectLengths(data: Uint8Array): Map<string, number | undefine
     if (!matchesKeyword(data, objectEnd, 'endobj')) continue;
 
     const key = referenceKey(objectNumber.value, generation.value);
-    const current = lengths.get(key);
-    if (!lengths.has(key)) {
-      if (lengths.size >= MAX_INDIRECT_LENGTH_OBJECTS) {
+    let values = candidates.get(key);
+    if (!values) {
+      values = new Set<number>();
+      candidates.set(key, values);
+    }
+    if (!values.has(value.value)) {
+      candidateValues += 1;
+      if (candidateValues > MAX_INDIRECT_LENGTH_OBJECTS) {
         throw new Error('PDF indirect length object limit');
       }
-      lengths.set(key, value.value);
-    } else if (current === value.value) {
-      lengths.set(key, value.value);
-    } else {
-      lengths.set(key, undefined);
+      values.add(value.value);
     }
     offset = objectEnd + 'endobj'.length - 1;
   }
-  return lengths;
+  return candidates;
+}
+
+function resolveCandidateStreamLength(
+  length: number | RawPdfReference | undefined,
+  candidates: IndirectLengthCandidates,
+  data: Uint8Array,
+  streamStart: number,
+): number | undefined {
+  if (typeof length === 'number') return length;
+  if (!length) return undefined;
+  const values = candidates.get(referenceKey(length.objectNumber, length.generationNumber));
+  if (!values) return undefined;
+  let resolved: number | undefined;
+  for (const value of values) {
+    const streamEnd = streamStart + value;
+    if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) continue;
+    if (!matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')) continue;
+    if (resolved !== undefined && resolved !== value) return undefined;
+    resolved = value;
+  }
+  return resolved;
 }
 
 function resolveStreamLength(

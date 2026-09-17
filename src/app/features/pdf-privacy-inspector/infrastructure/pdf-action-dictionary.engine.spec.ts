@@ -7,6 +7,7 @@ import {
   PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES,
+  PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES,
   PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
@@ -92,6 +93,18 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => {
       validatePdfObjectStreamBudgets(indirectLengthFixture);
+    }).not.toThrow();
+
+    const payloadWithFakeLengthObject = '2 0 obj\n999999\nendobj\nabc';
+    const indirectLengthWithFakePayloadObject = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      payloadWithFakeLengthObject,
+      '\nendstream\nendobj\n2 0 obj\n',
+      String(payloadWithFakeLengthObject.length),
+      '\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(indirectLengthWithFakePayloadObject);
     }).not.toThrow();
 
     const ordinaryPayload = '<< /Type /ObjStm /Length 999999 >>\nstream\n';
@@ -585,7 +598,7 @@ describe('inspectPdfStructuralSignals', () => {
     ));
     source.catalog.set(PDFName.of('PlatformFileSpec'), source.context.obj({
       Type: 'Filespec',
-      F: PDFString.of(`${platformKey.toLowerCase()}.txt`),
+      [platformKey]: PDFString.of(`${platformKey.toLowerCase()}.txt`),
       EF: { [platformKey]: embeddedFile },
     }));
 
@@ -1017,6 +1030,35 @@ describe('inspectPdfStructuralSignals', () => {
       { length: annotationCount },
       () => source.context.register(source.context.obj({
         Type: 'Annot', Subtype: 'Text', Rect: [0, 0, 10, 10], OC: optionalContent,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne les configurations RichMedia matérialisées pour chaque annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const instancesPerAnnotation = 4_096;
+    const instance = source.context.register(source.context.obj({ Type: 'RichMediaInstance' }));
+    const instances = source.context.register(source.context.obj(Array.from(
+      { length: instancesPerAnnotation },
+      () => instance,
+    )));
+    const configuration = source.context.register(source.context.obj({ Instances: instances }));
+    const content = source.context.register(source.context.obj({
+      Configurations: [configuration],
+    }));
+    const entriesPerAnnotation = instancesPerAnnotation + 1;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES / entriesPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'RichMedia', Rect: [0, 0, 10, 10],
+        RichMediaContent: content,
       })),
     )));
 
