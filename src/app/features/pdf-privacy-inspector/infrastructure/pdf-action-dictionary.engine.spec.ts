@@ -12,6 +12,7 @@ import {
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
@@ -921,7 +922,7 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
-  it('borne les tableaux de couleur partagés avant leur clonage par annotation', async () => {
+  it('borne les tableaux de couleur et de fin de ligne partagés avant leur clonage', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
     const coordinatesPerColor = 4_096;
@@ -933,13 +934,37 @@ describe('inspectPdfStructuralSignals', () => {
     }));
     const geometryBytes = coordinatesPerColor * 8 + 32;
     const annotationCount = Math.floor(
-      PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES / (geometryBytes * 3),
+      PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES / (geometryBytes * 5),
     ) + 1;
     page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
       { length: annotationCount },
       () => source.context.register(source.context.obj({
-        Type: 'Annot', Subtype: 'Widget', Rect: [0, 0, 10, 10],
-        C: color, MK: appearanceCharacteristics,
+        Type: 'Annot', Subtype: 'Line', Rect: [0, 0, 10, 10], L: [0, 0, 1, 1],
+        C: color, IC: color, LE: color, MK: appearanceCharacteristics,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne les textes et couleurs d’un parent partagé matérialisés par les popups', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const metadataBytes = 1 * 1_024 * 1_024;
+    const metadata = source.context.register(PDFString.of('A'.repeat(metadataBytes)));
+    const parent = source.context.register(source.context.obj({
+      Type: 'Annot', Subtype: 'Text', Rect: [0, 0, 10, 10],
+      T: metadata, Contents: metadata, RC: metadata,
+    }));
+    const bytesPerAnnotation = metadataBytes * 3;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES / bytesPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Popup', Rect: [0, 0, 10, 10], Parent: parent,
       })),
     )));
 
@@ -1102,6 +1127,29 @@ describe('inspectPdfStructuralSignals', () => {
       FT: 'Ch', T: PDFString.of('Shared'), Opt: options, Kids: widgets,
     }));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le clonage répété des index partagés par les champs de choix', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const indicesPerField = 4_096;
+    const indices = source.context.register(source.context.obj(
+      Array.from({ length: indicesPerField }, () => 0),
+    ));
+    const normalizedIndexBytes = indicesPerField * 8 + 32;
+    const fieldCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES / normalizedIndexBytes,
+    ) + 1;
+    const fields = Array.from(
+      { length: fieldCount },
+      () => source.context.register(source.context.obj({
+        FT: 'Ch', T: PDFString.of('Choice'), I: indices,
+      })),
+    );
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: fields }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });

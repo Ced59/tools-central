@@ -108,6 +108,7 @@ export const PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
@@ -153,6 +154,7 @@ interface InspectionState {
   annotationTargetExpansionBytes: number;
   fieldValueExpansionBytes: number;
   fieldOptionExpansionBytes: number;
+  fieldIndexExpansionBytes: number;
   fieldAppearanceExpansionBytes: number;
   fieldAlternateTextExpansionBytes: number;
   annotationTextExpansionBytes: number;
@@ -282,6 +284,7 @@ export async function inspectPdfStructuralSignals(
       annotationTargetExpansionBytes: 0,
       fieldValueExpansionBytes: 0,
       fieldOptionExpansionBytes: 0,
+      fieldIndexExpansionBytes: 0,
       fieldAppearanceExpansionBytes: 0,
       fieldAlternateTextExpansionBytes: 0,
       annotationTextExpansionBytes: 0,
@@ -959,6 +962,15 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
+    if (fieldType === 'Ch') {
+      state.fieldIndexExpansionBytes += measureGeometryBytes(readObject(field, 'I'), state);
+      if (
+        !Number.isSafeInteger(state.fieldIndexExpansionBytes)
+        || state.fieldIndexExpansionBytes > PDF_PRIVACY_MAX_FIELD_INDEX_EXPANSION_BYTES
+      ) {
+        throw new PdfActionDictionaryInspectionError();
+      }
+    }
     const defaultAppearanceBytes = field.has(PDFName.of('DA'))
       ? measureNormalizedValueBytes(readObject(field, 'DA'), state)
       : item.inheritedDefaultAppearanceBytes;
@@ -1181,6 +1193,7 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
   for (let index = 0; index < annotations.size(); index += 1) {
     const annotation = resolvePdfObject(annotations.get(index), state.document);
     if (!(annotation instanceof PDFDict)) continue;
+    const parentExpansion = measureAnnotationParentExpansion(annotation, state);
     for (const key of ['Contents', 'T', 'Subj', 'RC', 'NM', 'M', 'CreationDate']) {
       state.annotationTextExpansionBytes += measureNormalizedValueBytes(
         readObject(annotation, key),
@@ -1188,6 +1201,7 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
       );
     }
     state.annotationTextExpansionBytes += measureFileAttachmentMetadataBytes(annotation, state);
+    state.annotationTextExpansionBytes += parentExpansion.textBytes;
     if (
       !Number.isSafeInteger(state.annotationTextExpansionBytes)
       || state.annotationTextExpansionBytes > PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES
@@ -1195,7 +1209,8 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
       throw new PdfActionDictionaryInspectionError();
     }
     for (const key of [
-      'Rect', 'QuadPoints', 'Vertices', 'InkList', 'L', 'CL', 'RD', 'Path', 'C',
+      'Rect', 'QuadPoints', 'Vertices', 'InkList', 'L', 'CL', 'RD', 'Path',
+      'C', 'IC', 'LE',
     ]) {
       state.annotationGeometryExpansionBytes += measureGeometryBytes(
         readObject(annotation, key),
@@ -1222,6 +1237,7 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
         );
       }
     }
+    state.annotationGeometryExpansionBytes += parentExpansion.geometryBytes;
     if (
       !Number.isSafeInteger(state.annotationGeometryExpansionBytes)
       || state.annotationGeometryExpansionBytes > PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES
@@ -1262,6 +1278,41 @@ function measureFileAttachmentMetadataBytes(
   }
   if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
   return total;
+}
+
+function measureAnnotationParentExpansion(
+  annotation: PDFDict,
+  state: InspectionState,
+): { textBytes: number; geometryBytes: number } {
+  let textBytes = 0;
+  let geometryBytes = 0;
+  let contentParent: PDFDict | undefined;
+
+  if (readName(annotation, 'Subtype')?.decodeText() === 'Popup') {
+    const popupParent = readDictionary(annotation, 'Parent');
+    if (!popupParent) return { textBytes, geometryBytes };
+    textBytes += measureNormalizedValueBytes(readObject(popupParent, 'CreationDate'), state);
+    geometryBytes += measureGeometryBytes(readObject(popupParent, 'Rect'), state);
+    contentParent = readName(popupParent, 'RT')?.decodeText() === 'Group'
+      ? readDictionary(popupParent, 'IRT')
+      : popupParent;
+  } else if (readName(annotation, 'RT')?.decodeText() === 'Group') {
+    contentParent = readDictionary(annotation, 'IRT');
+    textBytes += measureNormalizedValueBytes(
+      contentParent ? readObject(contentParent, 'CreationDate') : undefined,
+      state,
+    );
+  }
+  if (!contentParent) return { textBytes, geometryBytes };
+
+  for (const key of ['T', 'Contents', 'M', 'RC']) {
+    textBytes += measureNormalizedValueBytes(readObject(contentParent, key), state);
+  }
+  geometryBytes += measureGeometryBytes(readObject(contentParent, 'C'), state);
+  if (!Number.isSafeInteger(textBytes) || !Number.isSafeInteger(geometryBytes)) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  return { textBytes, geometryBytes };
 }
 
 function validatePageTreeAnnotationBudgets(
