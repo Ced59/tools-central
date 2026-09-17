@@ -14,6 +14,7 @@ import {
   PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_JAVASCRIPT_BYTES,
+  PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
@@ -126,6 +127,29 @@ describe('inspectPdfStructuralSignals', () => {
       occurrences: 1,
     });
   });
+
+  it('borne le même script partagé par plusieurs noms JavaScript', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const scriptBytes = 1 * 1_024 * 1_024;
+    const sharedScript = source.context.register(PDFString.of('A'.repeat(scriptBytes)));
+    const sharedAction = source.context.register(source.context.obj({
+      Type: 'Action', S: 'JavaScript', JS: sharedScript,
+    }));
+    const entryCount = Math.floor(
+      PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES / scriptBytes,
+    ) + 1;
+    const entries = Array.from({ length: entryCount }, (_, index) => [
+      PDFString.of(`entry-${String(index)}`),
+      sharedAction,
+    ]).flat();
+    source.catalog.set(PDFName.of('Names'), source.context.obj({
+      JavaScript: { Names: entries },
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
 
   it('ne double pas une annotation atteinte depuis la destination du plan', async () => {
     const source = await PDFDocument.create();

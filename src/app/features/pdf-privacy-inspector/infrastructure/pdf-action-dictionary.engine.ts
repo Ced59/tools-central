@@ -98,6 +98,7 @@ export const PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES = 32 * 1_024 * 1_024;
@@ -132,6 +133,7 @@ interface InspectionState {
   decodedTextBytes: Map<PDFObject, number>;
   documentJavascriptBytes: number;
   documentJavascriptObjects: Set<PDFObject>;
+  nameTreeJavascriptExpansionBytes: number;
   fieldObjectCount: number;
   fieldObjects: Set<PDFObject>;
   fieldQualifiedNameBytes: number;
@@ -251,6 +253,7 @@ export async function inspectPdfStructuralSignals(
       decodedTextBytes: new Map<PDFObject, number>(),
       documentJavascriptBytes: 0,
       documentJavascriptObjects: new Set<PDFObject>(),
+      nameTreeJavascriptExpansionBytes: 0,
       fieldObjectCount: 0,
       fieldObjects: new Set<PDFObject>(),
       fieldQualifiedNameBytes: 0,
@@ -1131,6 +1134,18 @@ function inspectJavascriptNameTreeNextActions(
       for (let index = 1; index < entries.size(); index += 2) {
         const entry = resolvePdfObject(entries.get(index), document);
         if (!(entry instanceof PDFDict)) continue;
+        const javascript = readObject(entry, 'JS');
+        if (readName(entry, 'S')?.decodeText() === 'JavaScript' && javascript) {
+          validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
+          state.nameTreeJavascriptExpansionBytes += measurePdfTextBytes(javascript, state);
+          if (
+            !Number.isSafeInteger(state.nameTreeJavascriptExpansionBytes)
+            || state.nameTreeJavascriptExpansionBytes
+              > PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES
+          ) {
+            throw new PdfActionDictionaryInspectionError();
+          }
+        }
         const next = entry.get(PDFName.of('Next'));
         if (next) {
           inspectActionEntry(next, 'next-action', undefined, state, false, false, new Set());
