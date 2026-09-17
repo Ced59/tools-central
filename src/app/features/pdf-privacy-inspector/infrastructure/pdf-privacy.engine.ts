@@ -561,8 +561,8 @@ function mergeSignatureInventories(
     if (!fieldName) return pdfJsSignature;
     const matches = structuralByFieldName.get(fieldName);
     if (!matches) return pdfJsSignature;
+    if (matches.cursor >= matches.indices.length) return pdfJsSignature;
     const structuralIndex = matches.indices[matches.cursor];
-    if (structuralIndex === undefined) return pdfJsSignature;
     matches.cursor += 1;
     structuralUsed[structuralIndex] = true;
 
