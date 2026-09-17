@@ -290,7 +290,6 @@ describe('inspectPdfPrivacyDocument', () => {
       ['decrypted.txt', {
         filename: 'decrypted.txt',
         description: 'Document confidentiel',
-        contentType: 'text/plain',
         content: 'contenu-secret',
       }],
     ]));

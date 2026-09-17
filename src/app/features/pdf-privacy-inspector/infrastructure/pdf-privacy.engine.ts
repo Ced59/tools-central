@@ -499,10 +499,16 @@ function mergeDecryptedAttachmentMetadata(
       : -1;
     if (metadataIndex < 0 && !signalFileName) {
       const signalContentType = sanitizePdfPrivacyValue(signal.contentType);
-      metadataIndex = metadata.findIndex((item, index) => (
-        !usedMetadata.has(index)
-        && (!signalContentType || item.contentType === signalContentType)
-      ));
+      if (signalContentType) {
+        metadataIndex = metadata.findIndex((item, index) => (
+          !usedMetadata.has(index) && item.contentType === signalContentType
+        ));
+      }
+      if (metadataIndex < 0) {
+        metadataIndex = metadata.findIndex((item, index) => (
+          !usedMetadata.has(index) && (!signalContentType || !item.contentType)
+        ));
+      }
     }
     if (metadataIndex < 0) return signal;
     usedMetadata.add(metadataIndex);
