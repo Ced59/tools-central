@@ -255,16 +255,19 @@ describe('inspectPdfStructuralSignals', () => {
       String(activeObjectStreamPayload.length),
       ' >>\nstream\n',
       activeObjectStreamPayload,
-      '\nendstream\nendobj\n',
+      '\nendstream\nendobj\n6 0 obj\n',
+      '<< /Type /ObjStm /N 0 /First 0 /Filter /FlateDecode /Length 4 >>\n',
+      'stream\nnope\nendstream\nendobj\n',
     ].join('');
     const compressedXrefOffset = compressedRevisionBody.length;
     const compressedXrefFixture = joinBytes(
       compressedRevisionBody,
-      '5 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [2 4] /Length 28 >>\nstream\n',
+      '5 0 obj\n<< /Type /XRef /Size 7 /W [1 4 2] /Index [2 5] /Length 35 >>\nstream\n',
       encodeXrefEntry(2, 4),
       encodeXrefEntry(1, compressedRevisionBody.indexOf('3 0 obj')),
       encodeXrefEntry(1, compressedRevisionBody.indexOf('4 0 obj')),
       encodeXrefEntry(1, compressedXrefOffset),
+      encodeXrefEntry(1, compressedRevisionBody.indexOf('6 0 obj')),
       '\nendstream\nendobj\nstartxref\n',
       String(compressedXrefOffset),
       '\n%%EOF\n',

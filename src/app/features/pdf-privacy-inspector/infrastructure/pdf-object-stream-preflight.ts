@@ -33,12 +33,19 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
+interface IndirectObjectHeader extends RawPdfReference {
+  start: number;
+  end: number;
+}
+
 interface IndirectLengthCandidateIndex {
   values: Map<string, Set<number>>;
   declarationOffsets: Map<string, Map<number, Set<number>>>;
   compressedValues: Map<string, Set<number>>;
   authoritativeOffsets: ReadonlyMap<string, number>;
   authoritativeCompressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>;
+  activeObjectStreamNumbers: ReadonlySet<number>;
+  compressedEntriesComplete: boolean;
   encryptedFromCrossReference: boolean;
 }
 
@@ -80,6 +87,7 @@ interface ByteRange {
 interface CrossReferenceMetadata {
   objectOffsets: Map<string, number>;
   compressedEntries: Map<string, CompressedCrossReferenceEntry>;
+  compressedEntriesComplete: boolean;
   encrypted: boolean;
 }
 
@@ -91,6 +99,7 @@ interface CrossReferenceSection {
   encrypted: boolean;
   previousOffset?: number;
   supplementalOffset?: number;
+  entriesDecoded: boolean;
 }
 
 export interface PdfObjectStreamPreflightResult {
@@ -106,6 +115,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
   const {
     lengths: indirectLengths,
     encryptedBeforeObjectStreamDiscovery,
+    objectStreamSelection,
   } = collectIndirectLengths(data);
   const criticalStreams: CriticalStreamDescriptor[] = [];
   const rawSyntaxBudget: RawSyntaxBudget = { tokens: 0, containerDepth: 0 };
@@ -115,6 +125,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
   let classicIndirectObjects = 0;
   let compressedIndirectObjects = 0;
   let offset = 0;
+  let currentObjectHeader: IndirectObjectHeader | undefined;
 
   while (offset < data.byteLength) {
     const byte = data[offset];
@@ -138,8 +149,8 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       offset = skipHexString(data, offset);
       continue;
     }
-    const objectHeaderEnd = readIndirectObjectHeaderEnd(data, offset);
-    if (objectHeaderEnd !== undefined) {
+    const objectHeader = readIndirectObjectHeader(data, offset);
+    if (objectHeader) {
       consumeRawTokens(rawSyntaxBudget, 3);
       classicIndirectObjects += 1;
       if (
@@ -148,7 +159,8 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       ) {
         throw new Error('PDF classic indirect object limit');
       }
-      offset = objectHeaderEnd;
+      currentObjectHeader = objectHeader;
+      offset = objectHeader.end;
       continue;
     }
     if (byte !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
@@ -172,6 +184,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
     const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
     if (!matchesKeyword(data, streamKeyword, 'stream')) {
+      currentObjectHeader = undefined;
       offset = dictionaryEnd;
       continue;
     }
@@ -189,8 +202,15 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
     consumeRawTokens(rawSyntaxBudget, 2);
     offset = endstream + 'endstream'.length;
+    const streamObjectHeader = currentObjectHeader;
+    currentObjectHeader = undefined;
 
     if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
+    if (
+      dictionary.type === 'ObjStm'
+      && streamObjectHeader
+      && shouldSkipInactiveObjectStream(objectStreamSelection, streamObjectHeader)
+    ) continue;
     if (dictionary.type === 'XRef') {
       encrypted ||= dictionary.hasEncryptionDictionary;
       validateXrefSize(dictionary.xrefSize);
@@ -342,7 +362,7 @@ function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | 
 function readIndirectObjectHeader(
   data: Uint8Array,
   start: number,
-): { objectNumber: number; generationNumber: number; end: number } | undefined {
+): IndirectObjectHeader | undefined {
   const previous = start === 0 ? undefined : data[start - 1];
   if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) return undefined;
   const objectNumber = tryReadUnsignedInteger(data, start);
@@ -356,6 +376,7 @@ function readIndirectObjectHeader(
     return undefined;
   }
   return {
+    start,
     objectNumber: objectNumber.value,
     generationNumber: generation.value,
     end: objectKeyword + 'obj'.length,
@@ -365,6 +386,7 @@ function readIndirectObjectHeader(
 function collectIndirectLengths(data: Uint8Array): {
   lengths: Map<string, number | undefined>;
   encryptedBeforeObjectStreamDiscovery: boolean;
+  objectStreamSelection: IndirectLengthCandidateIndex;
 } {
   const candidates = collectIndirectLengthCandidates(data);
   const encryptedBeforeObjectStreamDiscovery = detectEncryptionBeforeObjectStreamDiscovery(
@@ -490,17 +512,23 @@ function collectIndirectLengths(data: Uint8Array): {
     }
     offset = objectEnd + 'endobj'.length;
   }
-  return { lengths, encryptedBeforeObjectStreamDiscovery };
+  return { lengths, encryptedBeforeObjectStreamDiscovery, objectStreamSelection: candidates };
 }
 
 function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandidateIndex {
   const crossReference = collectCrossReferenceMetadata(data);
+  const activeObjectStreamNumbers = new Set<number>();
+  for (const entry of crossReference.compressedEntries.values()) {
+    activeObjectStreamNumbers.add(entry.objectStreamNumber);
+  }
   const candidates: IndirectLengthCandidateIndex = {
     values: new Map<string, Set<number>>(),
     declarationOffsets: new Map<string, Map<number, Set<number>>>(),
     compressedValues: new Map<string, Set<number>>(),
     authoritativeOffsets: crossReference.objectOffsets,
     authoritativeCompressedEntries: crossReference.compressedEntries,
+    activeObjectStreamNumbers,
+    compressedEntriesComplete: crossReference.compressedEntriesComplete,
     encryptedFromCrossReference: crossReference.encrypted,
   };
   let candidateValues = 0;
@@ -762,23 +790,42 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   const compressedEntries = new Map<string, CompressedCrossReferenceEntry>();
   const startXrefOffset = findLastBareKeyword(data, 'startxref');
   if (startXrefOffset === undefined) {
-    return { objectOffsets, compressedEntries, encrypted: false };
+    return {
+      objectOffsets,
+      compressedEntries,
+      compressedEntriesComplete: false,
+      encrypted: false,
+    };
   }
   const valueStart = skipWhitespaceAndComments(data, startXrefOffset + 'startxref'.length);
   const xrefPosition = tryReadUnsignedInteger(data, valueStart);
   if (!xrefPosition || xrefPosition.value >= data.byteLength) {
-    return { objectOffsets, compressedEntries, encrypted: false };
+    return {
+      objectOffsets,
+      compressedEntries,
+      compressedEntriesComplete: false,
+      encrypted: false,
+    };
   }
 
   const visitedOffsets = new Set<number>();
   const definedObjectNumbers = new Set<number>();
   let encrypted = false;
+  let compressedEntriesComplete = true;
+  let parsedSection = false;
   let currentOffset: number | undefined = xrefPosition.value;
   while (currentOffset !== undefined) {
-    if (visitedOffsets.has(currentOffset) || visitedOffsets.size >= 128) break;
+    if (visitedOffsets.has(currentOffset) || visitedOffsets.size >= 128) {
+      compressedEntriesComplete = false;
+      break;
+    }
     visitedOffsets.add(currentOffset);
     const primarySection = readCrossReferenceSection(data, currentOffset, startXrefOffset);
-    if (!primarySection) break;
+    if (!primarySection) {
+      compressedEntriesComplete = false;
+      break;
+    }
+    parsedSection = true;
     let supplementalSection: CrossReferenceSection | undefined;
     if (primarySection.supplementalOffset !== undefined) {
       const supplementalOffset = primarySection.supplementalOffset;
@@ -786,19 +833,26 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
         supplementalOffset >= data.byteLength
         || visitedOffsets.has(supplementalOffset)
         || visitedOffsets.size >= 128
-      ) break;
+      ) {
+        compressedEntriesComplete = false;
+        break;
+      }
       visitedOffsets.add(supplementalOffset);
       supplementalSection = readCrossReferenceSection(
         data,
         supplementalOffset,
         startXrefOffset,
       );
-      if (!supplementalSection || supplementalSection.kind !== 'stream') break;
+      if (!supplementalSection || supplementalSection.kind !== 'stream') {
+        compressedEntriesComplete = false;
+        break;
+      }
     }
     const revisionDefinedObjectNumbers = new Set<number>();
     for (const section of [supplementalSection, primarySection]) {
       if (!section) continue;
       encrypted ||= section.encrypted;
+      compressedEntriesComplete &&= section.entriesDecoded;
       for (const [key, objectOffset] of section.objectOffsets) {
         const objectNumber = referenceObjectNumber(key);
         if (
@@ -822,7 +876,12 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
     }
     currentOffset = primarySection.previousOffset ?? supplementalSection?.previousOffset;
   }
-  return { objectOffsets, compressedEntries, encrypted };
+  return {
+    objectOffsets,
+    compressedEntries,
+    compressedEntriesComplete: parsedSection && compressedEntriesComplete,
+    encrypted,
+  };
 }
 
 function readCrossReferenceSection(
@@ -882,6 +941,7 @@ function readXrefStreamSection(
     definedObjectNumbers,
     encrypted: dictionary.hasEncryptionDictionary,
     previousOffset: dictionary.previousXrefOffset,
+    entriesDecoded: false,
   };
   const widths = dictionary.xrefWidths;
   if (!widths || widths.length !== 3 || widths.some(width => width > 8)) return section;
@@ -929,7 +989,9 @@ function readXrefStreamSection(
       if (type === undefined || fieldOne === undefined || fieldTwo === undefined) {
         return section;
       }
-      if (type === 1 && fieldOne < data.byteLength) {
+      if (type !== 0 && type !== 1 && type !== 2) return section;
+      if (type === 1) {
+        if (fieldOne >= data.byteLength) return section;
         section.objectOffsets.set(
           referenceKey(firstObject + index, fieldTwo),
           fieldOne,
@@ -942,6 +1004,7 @@ function readXrefStreamSection(
       }
     }
   }
+  section.entriesDecoded = true;
   return section;
 }
 
@@ -1014,6 +1077,7 @@ function readClassicCrossReferenceSection(
           encrypted: dictionary.hasEncryptionDictionary,
           previousOffset: dictionary.previousXrefOffset,
           supplementalOffset: dictionary.supplementalXrefOffset,
+          entriesDecoded: true,
         };
       } catch {
         return undefined;
@@ -1075,6 +1139,21 @@ function isInsideLineComment(data: Uint8Array, offset: number): boolean {
   return false;
 }
 
+function shouldSkipInactiveObjectStream(
+  candidates: IndirectLengthCandidateIndex,
+  header: IndirectObjectHeader,
+): boolean {
+  const declaredOffset = candidates.authoritativeOffsets.get(
+    referenceKey(header.objectNumber, header.generationNumber),
+  );
+  if (declaredOffset !== undefined && declaredOffset !== header.start) return true;
+  if (!candidates.compressedEntriesComplete) return false;
+  if (!candidates.activeObjectStreamNumbers.has(header.objectNumber)) return true;
+  if (header.generationNumber !== 0) return true;
+  const activeOffset = candidates.authoritativeOffsets.get(referenceKey(header.objectNumber, 0));
+  return activeOffset !== undefined && activeOffset !== header.start;
+}
+
 function collectCompressedIndirectLengthCandidates(
   data: Uint8Array,
   candidates: IndirectLengthCandidateIndex,
@@ -1130,6 +1209,10 @@ function collectCompressedIndirectLengthCandidates(
         || streamEnd > data.byteLength
         || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
       ) continue;
+      if (shouldSkipInactiveObjectStream(candidates, objectHeader)) {
+        offset = skipWhitespace(data, streamEnd) + 'endstream'.length - 1;
+        continue;
+      }
       processedStreams.add(streamStart);
       if (processedStreams.size > MAX_CRITICAL_STREAMS) {
         throw new Error('PDF stream limit');
