@@ -10,6 +10,7 @@ import {
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
   PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES,
@@ -852,6 +853,29 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les métadonnées FileSpec matérialisées pour chaque annotation de pièce jointe', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const metadataBytes = 1 * 1_024 * 1_024;
+    const metadata = source.context.register(PDFString.of('A'.repeat(metadataBytes)));
+    const fileSpec = source.context.register(source.context.obj({
+      Type: 'Filespec', UF: metadata, Desc: metadata,
+    }));
+    const bytesPerAnnotation = metadataBytes * 2;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES / bytesPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'FileAttachment', Rect: [0, 0, 10, 10], FS: fileSpec,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la normalisation répétée d’une géométrie partagée par les annotations', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -1075,6 +1099,26 @@ describe('inspectPdfStructuralSignals', () => {
       FT: 'Tx', T: PDFString.of('Shared'), DA: appearance, Kids: widgets,
     }));
     source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: [parent] }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le décodage répété du texte alternatif partagé par les widgets', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const alternateTextBytes = 1 * 1_024 * 1_024;
+    const alternateText = source.context.register(PDFString.of('A'.repeat(alternateTextBytes)));
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES / alternateTextBytes,
+    ) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', FT: 'Tx', TU: alternateText,
+      })),
+    );
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({ Fields: widgets }));
 
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .rejects.toMatchObject({ code: 'inspection-limit' });

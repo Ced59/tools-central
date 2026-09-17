@@ -109,6 +109,7 @@ export const PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES = 32 * 1_024 * 1_
 export const PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_OPTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_APPEARANCE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
@@ -153,6 +154,7 @@ interface InspectionState {
   fieldValueExpansionBytes: number;
   fieldOptionExpansionBytes: number;
   fieldAppearanceExpansionBytes: number;
+  fieldAlternateTextExpansionBytes: number;
   annotationTextExpansionBytes: number;
   annotationGeometryExpansionBytes: number;
   annotationJavascriptExpansionBytes: number;
@@ -281,6 +283,7 @@ export async function inspectPdfStructuralSignals(
       fieldValueExpansionBytes: 0,
       fieldOptionExpansionBytes: 0,
       fieldAppearanceExpansionBytes: 0,
+      fieldAlternateTextExpansionBytes: 0,
       annotationTextExpansionBytes: 0,
       annotationGeometryExpansionBytes: 0,
       annotationJavascriptExpansionBytes: 0,
@@ -966,6 +969,17 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
+    state.fieldAlternateTextExpansionBytes += measureNormalizedValueBytes(
+      readObject(field, 'TU'),
+      state,
+    );
+    if (
+      !Number.isSafeInteger(state.fieldAlternateTextExpansionBytes)
+      || state.fieldAlternateTextExpansionBytes
+        > PDF_PRIVACY_MAX_FIELD_ALTERNATE_TEXT_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     let qualifiedNameBytes = item.parentNameBytes;
     if (field.has(PDFName.of('T'))) {
       const partialName = readObject(field, 'T');
@@ -1173,6 +1187,7 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
         state,
       );
     }
+    state.annotationTextExpansionBytes += measureFileAttachmentMetadataBytes(annotation, state);
     if (
       !Number.isSafeInteger(state.annotationTextExpansionBytes)
       || state.annotationTextExpansionBytes > PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES
@@ -1218,6 +1233,24 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
       throw new PdfActionDictionaryInspectionError();
     }
   }
+}
+
+function measureFileAttachmentMetadataBytes(
+  annotation: PDFDict,
+  state: InspectionState,
+): number {
+  if (readName(annotation, 'Subtype')?.decodeText() !== 'FileAttachment') return 0;
+  const fileSpec = readDictionary(annotation, 'FS');
+  if (!fileSpec) return 0;
+
+  let total = measureNormalizedValueBytes(readObject(fileSpec, 'Desc'), state);
+  for (const key of ['UF', 'F', 'Unix', 'Mac', 'DOS']) {
+    if (!fileSpec.has(PDFName.of(key))) continue;
+    total += measureNormalizedValueBytes(readObject(fileSpec, key), state);
+    break;
+  }
+  if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  return total;
 }
 
 function validatePageTreeAnnotationBudgets(
