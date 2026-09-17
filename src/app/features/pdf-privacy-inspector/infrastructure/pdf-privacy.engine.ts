@@ -472,6 +472,7 @@ function collectAttachments(
 
 interface DecryptedAttachmentMetadata {
   fileName?: string;
+  rawFileName?: string;
   description?: string;
   contentType?: string;
 }
@@ -485,16 +486,19 @@ function mergeDecryptedAttachmentMetadata(
     const attachment = asRecord(rawAttachment);
     return {
       fileName: readableValue(attachment?.['filename']) ?? sanitizePdfPrivacyValue(key),
+      rawFileName: readableValue(attachment?.['rawFilename']),
       description: readableValue(attachment?.['description']),
       contentType: readableValue(attachment?.['contentType']),
     };
   });
   const usedMetadata = new Set<number>();
+  const consumedFileSpecs = new Set<string>();
   const merged = signals.map(signal => {
     const signalFileName = sanitizePdfPrivacyValue(signal.fileName);
     let metadataIndex = signalFileName
       ? metadata.findIndex((item, index) => (
-        !usedMetadata.has(index) && item.fileName === signalFileName
+        !usedMetadata.has(index)
+        && (item.fileName === signalFileName || item.rawFileName === signalFileName)
       ))
       : -1;
     if (metadataIndex < 0 && !signalFileName) {
@@ -513,6 +517,7 @@ function mergeDecryptedAttachmentMetadata(
     if (metadataIndex < 0) return signal;
     usedMetadata.add(metadataIndex);
     const decrypted = metadata[metadataIndex];
+    consumedFileSpecs.add(decryptedAttachmentIdentity(decrypted));
     return {
       ...signal,
       fileName: signalFileName ?? decrypted.fileName,
@@ -525,10 +530,28 @@ function mergeDecryptedAttachmentMetadata(
   ), 0);
   for (const [index, decrypted] of metadata.entries()) {
     if (usedMetadata.has(index)) continue;
+    const identity = decryptedAttachmentIdentity(decrypted);
+    if (consumedFileSpecs.has(identity)) continue;
     nextId += 1;
-    merged.push({ id: nextId, ...decrypted, occurrences: 1 });
+    merged.push({
+      id: nextId,
+      fileName: decrypted.fileName ?? decrypted.rawFileName,
+      description: decrypted.description,
+      contentType: decrypted.contentType,
+      occurrences: 1,
+    });
+    consumedFileSpecs.add(identity);
   }
   return merged;
+}
+
+function decryptedAttachmentIdentity(metadata: DecryptedAttachmentMetadata): string {
+  return JSON.stringify([
+    metadata.rawFileName ?? null,
+    metadata.fileName ?? null,
+    metadata.description ?? null,
+    metadata.contentType ?? null,
+  ]);
 }
 
 function collectAssociatedFileSignals(

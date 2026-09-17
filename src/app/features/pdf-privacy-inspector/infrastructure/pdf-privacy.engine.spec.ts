@@ -317,6 +317,39 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(JSON.stringify(report)).not.toContain('contenu-secret');
   });
 
+  it('regroupe les alias PDF.js qui pointent vers le même FileSpec déchiffré', async () => {
+    const aliasedFileSpec = {
+      rawFilename: 'folder/shared.txt',
+      filename: 'shared.txt',
+      description: 'Pièce jointe partagée',
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getAttachments: vi.fn().mockResolvedValue(new Map([
+        ['premier-alias', { ...aliasedFileSpec }],
+        ['second-alias', { ...aliasedFileSpec }],
+      ])),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 64,
+      passwordUsed: true,
+      structuralEncrypted: true,
+      associatedFiles: [{
+        id: 8,
+        fileName: 'folder/shared.txt',
+        occurrences: 1,
+      }],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'embedded-file')).toEqual([
+      expect.objectContaining({
+        id: 'attachment:associated:8',
+        label: 'folder/shared.txt',
+        value: 'Pièce jointe partagée',
+        occurrences: 1,
+      }),
+    ]);
+  });
+
   it('préserve les métadonnées privées renvoyées pour une signature', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{

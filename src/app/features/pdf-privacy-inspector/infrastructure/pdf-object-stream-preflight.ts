@@ -61,6 +61,7 @@ interface IndirectLengthCandidateIndex {
   compressedValues: Map<string, Set<number>>;
   authoritativeOffsets: ReadonlyMap<string, number>;
   authoritativeCompressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>;
+  authoritativeNullObjects: ReadonlySet<string>;
   activeObjectStreamNumbers: ReadonlySet<number>;
   compressedEntriesComplete: boolean;
   encryptedFromCrossReference: boolean;
@@ -120,6 +121,7 @@ interface XrefStreamLengthCandidate {
 interface CrossReferenceMetadata {
   objectOffsets: Map<string, number>;
   compressedEntries: Map<string, CompressedCrossReferenceEntry>;
+  authoritativeNullObjects: Set<string>;
   compressedEntriesComplete: boolean;
   encrypted: boolean;
 }
@@ -221,7 +223,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       encrypted ||= dictionaryDeclaresEncryption(
         data,
         dictionary,
-        objectStreamSelection.authoritativeOffsets,
+        objectStreamSelection,
       );
       validateXrefSize(dictionary.xrefSize);
       expectTrailerDictionary = false;
@@ -271,7 +273,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       encrypted ||= dictionaryDeclaresEncryption(
         data,
         dictionary,
-        objectStreamSelection.authoritativeOffsets,
+        objectStreamSelection,
       );
       validateXrefSize(dictionary.xrefSize);
     } else {
@@ -594,6 +596,7 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     compressedValues: new Map<string, Set<number>>(),
     authoritativeOffsets: crossReference.objectOffsets,
     authoritativeCompressedEntries: crossReference.compressedEntries,
+    authoritativeNullObjects: crossReference.authoritativeNullObjects,
     activeObjectStreamNumbers,
     compressedEntriesComplete: crossReference.compressedEntriesComplete,
     encryptedFromCrossReference: crossReference.encrypted,
@@ -821,7 +824,7 @@ function detectEncryptionBeforeObjectStreamDiscovery(
       continue;
     }
     if (
-      dictionaryDeclaresEncryption(data, dictionary, candidates.authoritativeOffsets)
+      dictionaryDeclaresEncryption(data, dictionary, candidates)
       && (expectTrailerDictionary || dictionary.type === 'XRef')
     ) return true;
     expectTrailerDictionary = false;
@@ -862,11 +865,13 @@ function detectEncryptionBeforeObjectStreamDiscovery(
 function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata {
   const objectOffsets = new Map<string, number>();
   const compressedEntries = new Map<string, CompressedCrossReferenceEntry>();
+  const authoritativeNullObjects = new Set<string>();
   const startXrefOffset = findLastBareKeyword(data, 'startxref');
   if (startXrefOffset === undefined) {
     return {
       objectOffsets,
       compressedEntries,
+      authoritativeNullObjects,
       compressedEntriesComplete: false,
       encrypted: false,
     };
@@ -877,6 +882,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
     return {
       objectOffsets,
       compressedEntries,
+      authoritativeNullObjects,
       compressedEntriesComplete: false,
       encrypted: false,
     };
@@ -967,12 +973,30 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   for (const [key, offset] of bootstrapOffsets) {
     if (objectOffsets.get(key) !== offset) compressedEntriesComplete = false;
   }
+  for (const reference of encryptionReferences) {
+    const key = referenceKey(reference.objectNumber, reference.generationNumber);
+    if (authoritativeNullObjects.has(key)) continue;
+    if (
+      isAuthoritativeNullObject(data, reference, objectOffsets)
+      || isAuthoritativeCompressedNullObject(
+        data,
+        reference,
+        objectOffsets,
+        compressedEntries,
+        expansionBudget,
+      )
+    ) authoritativeNullObjects.add(key);
+  }
   encrypted ||= encryptionReferences.some(reference => (
-    !isAuthoritativeNullObject(data, reference, objectOffsets)
+    !authoritativeNullObjects.has(referenceKey(
+      reference.objectNumber,
+      reference.generationNumber,
+    ))
   ));
   return {
     objectOffsets,
     compressedEntries,
+    authoritativeNullObjects,
     compressedEntriesComplete: parsedSection && compressedEntriesComplete,
     encrypted,
   };
@@ -1343,6 +1367,7 @@ function collectBootstrapStreamRanges(data: Uint8Array): readonly ByteRange[] {
     compressedValues: new Map<string, Set<number>>(),
     authoritativeOffsets: new Map<string, number>(),
     authoritativeCompressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
+    authoritativeNullObjects: new Set<string>(),
     activeObjectStreamNumbers: new Set<number>(),
     compressedEntriesComplete: false,
     encryptedFromCrossReference: false,
@@ -2278,13 +2303,16 @@ function referenceObjectNumber(key: string): number {
 }
 
 function dictionaryDeclaresEncryption(
-  data: Uint8Array,
+  _data: Uint8Array,
   dictionary: ParsedDictionary,
-  authoritativeOffsets: ReadonlyMap<string, number>,
+  candidates: Pick<IndirectLengthCandidateIndex, 'authoritativeNullObjects'>,
 ): boolean {
   if (dictionary.hasEncryptionDictionary) return true;
   return dictionary.encryptionReference !== undefined
-    && !isAuthoritativeNullObject(data, dictionary.encryptionReference, authoritativeOffsets);
+    && !candidates.authoritativeNullObjects.has(referenceKey(
+      dictionary.encryptionReference.objectNumber,
+      dictionary.encryptionReference.generationNumber,
+    ));
 }
 
 function isAuthoritativeNullObject(
@@ -2308,6 +2336,158 @@ function isAuthoritativeNullObject(
   if (!matchesKeyword(data, valueStart, 'null')) return false;
   const objectEnd = skipWhitespaceAndComments(data, valueStart + 'null'.length);
   return matchesKeyword(data, objectEnd, 'endobj');
+}
+
+function isAuthoritativeCompressedNullObject(
+  data: Uint8Array,
+  reference: RawPdfReference,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+): boolean {
+  if (reference.generationNumber !== 0) return false;
+  const entry = compressedEntries.get(referenceKey(reference.objectNumber, 0));
+  if (!entry) return false;
+  const objectStreamOffset = authoritativeOffsets.get(referenceKey(
+    entry.objectStreamNumber,
+    0,
+  ));
+  if (objectStreamOffset === undefined) return false;
+  const header = readIndirectObjectHeader(data, objectStreamOffset);
+  if (
+    !header
+    || header.start !== objectStreamOffset
+    || header.objectNumber !== entry.objectStreamNumber
+    || header.generationNumber !== 0
+  ) return false;
+
+  const dictionaryStart = skipWhitespaceAndComments(data, header.end);
+  if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return false;
+  const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+  if (dictionaryEnd === undefined) return false;
+  let dictionary: ParsedDictionary;
+  try {
+    dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+  } catch {
+    return false;
+  }
+  if (
+    dictionary.type !== 'ObjStm'
+    || dictionary.objectCount === undefined
+    || dictionary.firstObjectOffset === undefined
+    || entry.objectIndex >= dictionary.objectCount
+  ) return false;
+
+  const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+  if (!matchesKeyword(data, streamKeyword, 'stream')) return false;
+  let streamStart: number;
+  try {
+    streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+  } catch {
+    return false;
+  }
+  const length = resolveAuthoritativeUncompressedLength(
+    data,
+    dictionary.length,
+    authoritativeOffsets,
+  );
+  if (length === undefined) return false;
+  const streamEnd = streamStart + length;
+  if (
+    !Number.isSafeInteger(streamEnd)
+    || streamEnd > data.byteLength
+    || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
+  ) return false;
+  const decoded = decodeObjectStreamContents(
+    data.subarray(streamStart, streamEnd),
+    resolveFilters(data, dictionary.filters, { authoritativeOffsets }),
+    resolveDecodeParameters(data, dictionary.decodeParameters, { authoritativeOffsets }),
+    expansionBudget,
+  );
+  return decoded !== undefined && compressedObjectIsNull(
+    decoded,
+    dictionary.objectCount,
+    dictionary.firstObjectOffset,
+    reference.objectNumber,
+    entry.objectIndex,
+  );
+}
+
+function resolveAuthoritativeUncompressedLength(
+  data: Uint8Array,
+  length: number | RawPdfReference | undefined,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+): number | undefined {
+  if (typeof length === 'number') return length;
+  if (!length) return undefined;
+  const offset = authoritativeOffsets.get(referenceKey(
+    length.objectNumber,
+    length.generationNumber,
+  ));
+  if (offset === undefined) return undefined;
+  const header = readIndirectObjectHeader(data, offset);
+  if (
+    !header
+    || header.start !== offset
+    || header.objectNumber !== length.objectNumber
+    || header.generationNumber !== length.generationNumber
+  ) return undefined;
+  const valueStart = skipWhitespaceAndComments(data, header.end);
+  const value = tryReadUnsignedInteger(data, valueStart);
+  if (!value) return undefined;
+  const objectEnd = skipWhitespaceAndComments(data, value.end);
+  return matchesKeyword(data, objectEnd, 'endobj') ? value.value : undefined;
+}
+
+function compressedObjectIsNull(
+  data: Uint8Array,
+  objectCount: number,
+  firstObjectOffset: number,
+  expectedObjectNumber: number,
+  expectedObjectIndex: number,
+): boolean {
+  if (
+    !Number.isSafeInteger(objectCount)
+    || objectCount < 0
+    || objectCount > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
+    || !Number.isSafeInteger(firstObjectOffset)
+    || firstObjectOffset < 0
+    || firstObjectOffset > data.byteLength
+    || expectedObjectIndex < 0
+    || expectedObjectIndex >= objectCount
+  ) return false;
+  const objectNumbers: number[] = [];
+  const objectOffsets: number[] = [];
+  let headerOffset = 0;
+  for (let index = 0; index < objectCount; index += 1) {
+    headerOffset = skipWhitespaceAndComments(data, headerOffset);
+    const objectNumber = tryReadUnsignedInteger(data, headerOffset);
+    if (!objectNumber || objectNumber.end > firstObjectOffset) return false;
+    headerOffset = skipWhitespaceAndComments(data, objectNumber.end);
+    const objectOffset = tryReadUnsignedInteger(data, headerOffset);
+    if (!objectOffset || objectOffset.end > firstObjectOffset) return false;
+    objectNumbers.push(objectNumber.value);
+    objectOffsets.push(objectOffset.value);
+    headerOffset = objectOffset.end;
+  }
+  if (
+    skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset
+    || objectNumbers[expectedObjectIndex] !== expectedObjectNumber
+  ) return false;
+  const start = firstObjectOffset + (objectOffsets[expectedObjectIndex] ?? 0);
+  const end = expectedObjectIndex + 1 < objectCount
+    ? firstObjectOffset + (objectOffsets[expectedObjectIndex + 1] ?? 0)
+    : data.byteLength;
+  if (
+    !Number.isSafeInteger(start)
+    || !Number.isSafeInteger(end)
+    || start < firstObjectOffset
+    || end < start
+    || end > data.byteLength
+  ) return false;
+  const valueStart = skipWhitespaceAndComments(data, start);
+  if (!matchesKeyword(data, valueStart, 'null')) return false;
+  return containsOnlyWhitespaceAndComments(data, valueStart + 'null'.length, end);
 }
 
 function parseCriticalDictionary(

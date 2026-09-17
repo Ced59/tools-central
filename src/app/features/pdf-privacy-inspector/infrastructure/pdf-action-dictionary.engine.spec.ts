@@ -537,6 +537,23 @@ describe('inspectPdfStructuralSignals', () => {
       skippedEncryptedObjectStreams: 0,
     });
 
+    const compressedNullEncryptionFixture = joinBytes(
+      indirectNullBody,
+      '6 0 obj\n<< /Type /XRef /Size 7 /W [1 4 2] /Index [1 2 5 2] ',
+      '/Encrypt 2 0 R /Length 28 >>\nstream\n',
+      encodeXrefEntry(1, indirectNullBody.indexOf('1 0 obj')),
+      encodeXrefEntry(2, 1),
+      encodeXrefEntry(1, indirectNullBody.indexOf('5 0 obj')),
+      encodeXrefEntry(1, indirectNullXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(indirectNullXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(compressedNullEncryptionFixture)).toEqual({
+      encrypted: false,
+      skippedEncryptedObjectStreams: 0,
+    });
+
     const replacedEncryptionBody = indirectNullBody
       + '5 0 obj\n<< /Filter /Standard >>\nendobj\n';
     const replacedEncryptionXrefOffset = replacedEncryptionBody.length;
