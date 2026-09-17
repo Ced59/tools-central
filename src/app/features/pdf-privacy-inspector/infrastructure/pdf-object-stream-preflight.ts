@@ -35,6 +35,14 @@ interface RawPdfReference {
 
 type PdfFilterDecodeParameter = PdfFilterDecodeParameters | RawPdfReference | undefined;
 
+interface IndirectPdfDecodeParameters {
+  reference: RawPdfReference;
+}
+
+type PdfDecodeParameters = readonly PdfFilterDecodeParameter[]
+  | IndirectPdfDecodeParameters
+  | null;
+
 interface IndirectPdfFilters {
   reference: RawPdfReference;
 }
@@ -66,7 +74,7 @@ interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
   filters?: PdfFilters;
-  decodeParameters?: readonly PdfFilterDecodeParameter[] | null;
+  decodeParameters?: PdfDecodeParameters;
   objectCount?: number;
   firstObjectOffset?: number;
   xrefSize?: number;
@@ -81,7 +89,7 @@ interface CriticalStreamDescriptor {
   type: 'ObjStm' | 'XRef';
   contents: Uint8Array;
   filters: PdfFilters | undefined;
-  decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
+  decodeParameters: PdfDecodeParameters | undefined;
 }
 
 export interface PdfFilterDecodeParameters {
@@ -1060,9 +1068,17 @@ function collectXrefBootstrapOffsets(
       dictionary.filters.reference.generationNumber,
     ));
   }
-  for (const parameter of dictionary.decodeParameters ?? []) {
-    if (parameter && !('predictor' in parameter)) {
-      references.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
+  const decodeParameters = dictionary.decodeParameters;
+  if (decodeParameters && 'reference' in decodeParameters) {
+    references.add(referenceKey(
+      decodeParameters.reference.objectNumber,
+      decodeParameters.reference.generationNumber,
+    ));
+  } else {
+    for (const parameter of decodeParameters ?? []) {
+      if (parameter && !('predictor' in parameter)) {
+        references.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
+      }
     }
   }
   if (references.size === 0) return new Map<string, number>();
@@ -2041,7 +2057,7 @@ function parseCriticalDictionary(
   let type: string | undefined;
   let length: number | RawPdfReference | undefined;
   let filters: PdfFilters | undefined = [];
-  let decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
+  let decodeParameters: PdfDecodeParameters | undefined;
   let objectCount: number | undefined;
   let firstObjectOffset: number | undefined;
   let xrefSize: number | undefined;
@@ -2407,7 +2423,7 @@ function resolveFilters(
 function readDecodeParameters(
   data: Uint8Array,
   start: number,
-): { parameters: readonly PdfFilterDecodeParameter[]; end: number } {
+): { parameters: Exclude<PdfDecodeParameters, null>; end: number } {
   if (matchesKeyword(data, start, 'null')) return { parameters: [], end: start + 4 };
   if (data[start] === LESS_THAN && data[start + 1] === LESS_THAN) {
     const end = findDictionaryEnd(data, start);
@@ -2415,7 +2431,9 @@ function readDecodeParameters(
     return { parameters: [readDecodeParameterDictionary(data, start, end)], end };
   }
   const reference = readRawPdfReference(data, start);
-  if (reference) return { parameters: [reference.reference], end: reference.end };
+  if (reference) {
+    return { parameters: { reference: reference.reference }, end: reference.end };
+  }
   if (data[start] !== LEFT_BRACKET) throw new Error('Invalid PDF decode parameters');
   const parameters: PdfFilterDecodeParameter[] = [];
   let offset = start + 1;
@@ -2520,10 +2538,35 @@ function readDecodeParameterDictionary(
 
 function resolveDecodeParameters(
   data: Uint8Array,
-  parameters: readonly PdfFilterDecodeParameter[] | null | undefined,
+  parameters: PdfDecodeParameters | undefined,
   candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
 ): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
   if (parameters === null || parameters === undefined) return parameters;
+  if ('reference' in parameters) {
+    const reference = parameters.reference;
+    const offset = candidates?.authoritativeOffsets.get(referenceKey(
+      reference.objectNumber,
+      reference.generationNumber,
+    ));
+    if (offset === undefined) return null;
+    const header = readIndirectObjectHeader(data, offset);
+    if (
+      !header
+      || header.objectNumber !== reference.objectNumber
+      || header.generationNumber !== reference.generationNumber
+    ) return null;
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    let value: { parameters: Exclude<PdfDecodeParameters, null>; end: number };
+    try {
+      value = readDecodeParameters(data, valueStart);
+    } catch {
+      return null;
+    }
+    if ('reference' in value.parameters) return null;
+    const objectEnd = skipWhitespaceAndComments(data, value.end);
+    if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
+    return resolveDecodeParameters(data, value.parameters, candidates);
+  }
   const resolved: Array<PdfFilterDecodeParameters | undefined> = [];
   for (const parameter of parameters) {
     if (parameter === undefined) {

@@ -551,32 +551,50 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => validatePdfObjectStreamBudgets(filteredXref)).not.toThrow();
 
-    const indirectXrefBody = [
-      '%PDF-1.7\n',
-      '1 0 obj\nnull\nendobj\n',
-      '5 0 obj\n<< /Length 17 >>\nstream\n2 0 obj fake data\nendstream\nendobj\n',
-      '2 0 obj\n/ASCIIHexDecode\nendobj\n',
-      '3 0 obj\n<< /Predictor 1 >>\nendobj\n',
-    ].join('');
-    const indirectFilterXrefOffset = indirectXrefBody.length;
-    const indirectFilterXrefPayload = encodeAsciiHex(joinBytes(
-      encodeXrefEntry(1, indirectXrefBody.indexOf('1 0 obj')),
-      encodeXrefEntry(1, indirectXrefBody.lastIndexOf('2 0 obj')),
-      encodeXrefEntry(1, indirectXrefBody.indexOf('3 0 obj')),
-      encodeXrefEntry(1, indirectFilterXrefOffset),
-      encodeXrefEntry(1, indirectXrefBody.indexOf('5 0 obj')),
-    ));
-    const indirectFilterXref = joinBytes(
-      indirectXrefBody,
-      '4 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [1 5] ',
-      '/Filter 2 0 R /DecodeParms 3 0 R ',
-      `/Length ${String(indirectFilterXrefPayload.byteLength)} >>\nstream\n`,
-      indirectFilterXrefPayload,
-      '\nendstream\nendobj\nstartxref\n',
-      String(indirectFilterXrefOffset),
-      '\n%%EOF\n',
-    );
-    expect(() => validatePdfObjectStreamBudgets(indirectFilterXref)).not.toThrow();
+    for (const fixture of [
+      {
+        filterValue: '/ASCIIHexDecode',
+        decodeParametersValue: '<< /Predictor 1 >>',
+        encode: encodeAsciiHex,
+      },
+      {
+        filterValue: '[/ASCII85Decode /ASCIIHexDecode]',
+        decodeParametersValue: '[null << /Predictor 99 >>]',
+        encode: (contents: Uint8Array): Uint8Array => encodeAscii85(encodeAsciiHex(contents)),
+      },
+      {
+        filterValue: '/ASCIIHexDecode',
+        decodeParametersValue: 'null',
+        encode: encodeAsciiHex,
+      },
+    ]) {
+      const indirectXrefBody = [
+        '%PDF-1.7\n',
+        '1 0 obj\nnull\nendobj\n',
+        '5 0 obj\n<< /Length 17 >>\nstream\n2 0 obj fake data\nendstream\nendobj\n',
+        `2 0 obj\n${fixture.filterValue}\nendobj\n`,
+        `3 0 obj\n${fixture.decodeParametersValue}\nendobj\n`,
+      ].join('');
+      const indirectFilterXrefOffset = indirectXrefBody.length;
+      const indirectFilterXrefPayload = fixture.encode(joinBytes(
+        encodeXrefEntry(1, indirectXrefBody.indexOf('1 0 obj')),
+        encodeXrefEntry(1, indirectXrefBody.lastIndexOf('2 0 obj')),
+        encodeXrefEntry(1, indirectXrefBody.indexOf('3 0 obj')),
+        encodeXrefEntry(1, indirectFilterXrefOffset),
+        encodeXrefEntry(1, indirectXrefBody.indexOf('5 0 obj')),
+      ));
+      const indirectFilterXref = joinBytes(
+        indirectXrefBody,
+        '4 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [1 5] ',
+        '/Filter 2 0 R /DecodeParms 3 0 R ',
+        `/Length ${String(indirectFilterXrefPayload.byteLength)} >>\nstream\n`,
+        indirectFilterXrefPayload,
+        '\nendstream\nendobj\nstartxref\n',
+        String(indirectFilterXrefOffset),
+        '\n%%EOF\n',
+      );
+      expect(() => validatePdfObjectStreamBudgets(indirectFilterXref)).not.toThrow();
+    }
 
     const compressedPlain = encodeAscii85(deflate(plain));
     const indirectParameterBody = joinBytes(
