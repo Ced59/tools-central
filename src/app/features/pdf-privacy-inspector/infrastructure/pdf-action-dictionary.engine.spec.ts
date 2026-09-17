@@ -593,6 +593,53 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   });
 
+  it('compte chaque occurrence d’une même référence dans Fields', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const field = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Repeated'),
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: Array.from({ length: PDF_PRIVACY_MAX_DISCOVERED_ITEMS + 1 }, () => field),
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('facture une valeur partagée pour chaque référence de champ répétée', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const valueBytes = 1 * 1_024 * 1_024;
+    const value = source.context.register(PDFString.of('A'.repeat(valueBytes)));
+    const field = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Repeated'), V: value,
+    }));
+    const fieldCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_VALUE_EXPANSION_BYTES / valueBytes,
+    ) + 1;
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: Array.from({ length: fieldCount }, () => field),
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('rejette un cycle dans l’arbre des champs', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const field = source.context.obj({ FT: 'Tx', T: PDFString.of('Cyclic') });
+    const fieldReference = source.context.register(field);
+    field.set(PDFName.of('Kids'), source.context.obj([fieldReference]));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: [fieldReference],
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  });
+
   it('borne le nombre de signets avant leur normalisation par PDF.js', async () => {
     const source = await PDFDocument.create();
     source.addPage();

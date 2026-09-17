@@ -136,6 +136,8 @@ interface InspectionState {
   nameTreeJavascriptExpansionBytes: number;
   fieldObjectCount: number;
   fieldObjects: Set<PDFObject>;
+  fieldOccurrenceCount: number;
+  fieldOccurrenceSignatureBytes: number;
   fieldQualifiedNameBytes: number;
   fieldJavascriptBytes: number;
   fieldJavascriptObjects: Set<PDFObject>;
@@ -256,6 +258,8 @@ export async function inspectPdfStructuralSignals(
       nameTreeJavascriptExpansionBytes: 0,
       fieldObjectCount: 0,
       fieldObjects: new Set<PDFObject>(),
+      fieldOccurrenceCount: 0,
+      fieldOccurrenceSignatureBytes: 0,
       fieldQualifiedNameBytes: 0,
       fieldJavascriptBytes: 0,
       fieldJavascriptObjects: new Set<PDFObject>(),
@@ -855,14 +859,18 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
   const rawFields = acroForm ? readObject(acroForm, 'Fields') : undefined;
   if (!(rawFields instanceof PDFArray)) return;
 
-  const stack: {
-    object: PDFObject;
-    parentNameBytes: number;
-    inheritedValueBytes: number;
-    inheritedDefaultValueBytes: number;
-    inheritedOptionBytes: number;
-    inheritedDefaultAppearanceBytes: number;
-  }[] = [];
+  const stack: (
+    | { kind: 'leave'; object: PDFObject }
+    | {
+      kind: 'visit';
+      object: PDFObject;
+      parentNameBytes: number;
+      inheritedValueBytes: number;
+      inheritedDefaultValueBytes: number;
+      inheritedOptionBytes: number;
+      inheritedDefaultAppearanceBytes: number;
+    }
+  )[] = [];
   const acroFormDefaultAppearanceBytes = measureNormalizedValueBytes(
     acroForm ? readObject(acroForm, 'DA') : undefined,
     state,
@@ -870,6 +878,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
   for (let index = 0; index < rawFields.size(); index += 1) {
     const field = rawFields.get(index);
     stack.push({
+      kind: 'visit',
       object: field,
       parentNameBytes: 0,
       inheritedValueBytes: 0,
@@ -878,23 +887,29 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultAppearanceBytes: acroFormDefaultAppearanceBytes,
     });
   }
-  const visitedReferences = new Set<PDFRef>();
-  const visitedDirectObjects = new Set<PDFObject>();
+  const path = new Set<PDFObject>();
   while (stack.length > 0) {
     const item = stack.pop();
     if (!item) continue;
+    if (item.kind === 'leave') {
+      path.delete(item.object);
+      continue;
+    }
     consumeTraversalStep(state);
 
-    if (item.object instanceof PDFRef) {
-      if (visitedReferences.has(item.object)) continue;
-      visitedReferences.add(item.object);
-    }
     const field = resolvePdfObject(item.object, document);
     if (!(field instanceof PDFDict)) continue;
-    if (!(item.object instanceof PDFRef)) {
-      if (visitedDirectObjects.has(field)) continue;
-      visitedDirectObjects.add(field);
+    if (path.has(field)) {
+      throw new PdfActionDictionaryInspectionError();
     }
+    path.add(field);
+    stack.push({ kind: 'leave', object: field });
+
+    state.fieldOccurrenceCount += 1;
+    if (state.fieldOccurrenceCount > PDF_PRIVACY_MAX_DISCOVERED_ITEMS) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    validateFieldOccurrenceSignatureBudget(field, state);
 
     validateFieldObjectBudget(field, state);
     const valueBytes = field.has(PDFName.of('V'))
@@ -956,6 +971,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     for (let index = 0; index < kids.size(); index += 1) {
       const child = kids.get(index);
       stack.push({
+        kind: 'visit',
         object: child,
         parentNameBytes: qualifiedNameBytes,
         inheritedValueBytes: valueBytes,
@@ -964,6 +980,23 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
         inheritedDefaultAppearanceBytes: defaultAppearanceBytes,
       });
     }
+  }
+}
+
+function validateFieldOccurrenceSignatureBudget(
+  field: PDFDict,
+  state: InspectionState,
+): void {
+  if (readName(field, 'FT')?.decodeText() !== 'Sig') return;
+  const signature = readDictionary(field, 'V');
+  const contents = signature ? readObject(signature, 'Contents') : undefined;
+  if (!(contents instanceof PDFString) && !(contents instanceof PDFHexString)) return;
+  state.fieldOccurrenceSignatureBytes += contents.asBytes().byteLength;
+  if (
+    !Number.isSafeInteger(state.fieldOccurrenceSignatureBytes)
+    || state.fieldOccurrenceSignatureBytes > PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES
+  ) {
+    throw new PdfActionDictionaryInspectionError();
   }
 }
 
@@ -1397,7 +1430,11 @@ function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): nu
 }
 
 function validateFieldActionExpansionBudget(state: InspectionState): void {
-  const expandedBytes = state.fieldJavascriptBytes * Math.max(1, state.fieldObjectCount);
+  const expandedBytes = state.fieldJavascriptBytes * Math.max(
+    1,
+    state.fieldObjectCount,
+    state.fieldOccurrenceCount,
+  );
   if (
     !Number.isSafeInteger(expandedBytes)
     || expandedBytes > PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES
