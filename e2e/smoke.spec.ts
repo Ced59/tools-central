@@ -575,7 +575,6 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   expect(exported.report.categoryCounts['links']).toBeGreaterThan(0);
   expect(exported.report.categoryCounts['forms']).toBeGreaterThan(0);
   expect(exported.report.findings).toEqual(expect.arrayContaining([
-    expect.objectContaining({ message: { code: 'form-actions' } }),
     expect.objectContaining({
       message: { code: 'dictionary-action', actionType: 'URI', context: 'open-action' },
     }),
@@ -590,6 +589,9 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
       message: { code: 'dictionary-action', actionType: 'JavaScript', context: 'additional-action' },
     }),
     expect.objectContaining({ id: 'attachment:associated:1', label: 'associated-only.txt' }),
+  ]));
+  expect(exported.report.findings).not.toEqual(expect.arrayContaining([
+    expect.objectContaining({ message: { code: 'form-actions' } }),
   ]));
   expect(JSON.stringify(exported)).not.toContain('secret-script');
   expect(JSON.stringify(exported)).not.toContain('field-secret');

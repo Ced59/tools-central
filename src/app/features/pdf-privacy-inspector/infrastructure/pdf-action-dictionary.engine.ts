@@ -115,6 +115,7 @@ export const PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES = 1_000_000;
 export const PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES = 1_000_000;
 export const PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const NORMALIZED_CHOICE_OPTION_OVERHEAD_BYTES = 64;
 const NORMALIZED_GEOMETRY_NUMBER_BYTES = 8;
@@ -162,6 +163,7 @@ interface InspectionState {
   annotationTextExpansionBytes: number;
   annotationGeometryExpansionBytes: number;
   annotationJavascriptExpansionBytes: number;
+  annotationOptionalContentExpansionEntries: number;
   outlineValueExpansionBytes: number;
   geometryExpansionSizes: Map<PDFObject, number>;
   hasUnboundedEncryptedTextStreams: boolean;
@@ -293,6 +295,7 @@ export async function inspectPdfStructuralSignals(
       annotationTextExpansionBytes: 0,
       annotationGeometryExpansionBytes: 0,
       annotationJavascriptExpansionBytes: 0,
+      annotationOptionalContentExpansionEntries: 0,
       outlineValueExpansionBytes: 0,
       geometryExpansionSizes: new Map(),
       hasUnboundedEncryptedTextStreams: false,
@@ -1312,7 +1315,72 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
+    state.annotationOptionalContentExpansionEntries += measureAnnotationOptionalContentEntries(
+      annotation,
+      state,
+      PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES
+        - state.annotationOptionalContentExpansionEntries,
+    );
+    if (
+      !Number.isSafeInteger(state.annotationOptionalContentExpansionEntries)
+      || state.annotationOptionalContentExpansionEntries
+        > PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
   }
+}
+
+function measureAnnotationOptionalContentEntries(
+  annotation: PDFDict,
+  state: InspectionState,
+  remainingEntries: number,
+): number {
+  const optionalContent = readDictionary(annotation, 'OC');
+  if (!optionalContent || readName(optionalContent, 'Type')?.decodeText() !== 'OCMD') return 0;
+  let total = 0;
+  for (const key of ['VE', 'OCGs']) {
+    const value = readObject(optionalContent, key);
+    if (!(value instanceof PDFArray)) continue;
+    total += measureRepeatedArrayEntries(value, state, remainingEntries - total);
+    if (!Number.isSafeInteger(total) || total > remainingEntries) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+  }
+  return total;
+}
+
+function measureRepeatedArrayEntries(
+  root: PDFArray,
+  state: InspectionState,
+  maxEntries: number,
+): number {
+  const stack: { array: PDFArray; index: number; depth: number }[] = [
+    { array: root, index: 0, depth: 0 },
+  ];
+  const path = new Set<PDFArray>([root]);
+  let total = 0;
+  while (stack.length > 0) {
+    const frame = stack[stack.length - 1];
+    if (frame.index >= frame.array.size()) {
+      path.delete(frame.array);
+      stack.pop();
+      continue;
+    }
+    const object = resolvePdfObject(frame.array.get(frame.index), state.document);
+    frame.index += 1;
+    total += 1;
+    if (!Number.isSafeInteger(total) || total > maxEntries) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    if (!(object instanceof PDFArray)) continue;
+    if (frame.depth >= PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH || path.has(object)) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    path.add(object);
+    stack.push({ array: object, index: 0, depth: frame.depth + 1 });
+  }
+  return total;
 }
 
 function measureFileAttachmentMetadataBytes(
@@ -1602,6 +1670,10 @@ function validateOutlineBudget(document: PDFDocument, state: InspectionState): v
     );
     state.outlineValueExpansionBytes += measureNormalizedValueBytes(
       readObject(item, 'Dest'),
+      state,
+    );
+    state.outlineValueExpansionBytes += measureGeometryBytes(
+      readObject(item, 'C'),
       state,
     );
     const action = readDictionary(item, 'A');

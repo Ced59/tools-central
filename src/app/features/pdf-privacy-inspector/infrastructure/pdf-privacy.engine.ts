@@ -58,6 +58,7 @@ interface ActionDictionaryIndex {
   targets: Set<string>;
   targetlessAnnotationTriggerIds: Set<string>;
   targetlessOutlineExternalActions: number;
+  fieldJavascriptOccurrences: number;
 }
 
 type ConsumeDiscoveryBudget = (count?: number) => void;
@@ -163,6 +164,7 @@ export async function inspectPdfPrivacyDocument(
   const formActionCount = collectForms(
     fields,
     Boolean(document.isPureXfa) || hasXfaMetadata(metadata.info),
+    actionIndex?.fieldJavascriptOccurrences ?? 0,
     add,
     consumeDiscoveryBudget,
   );
@@ -425,6 +427,7 @@ function collectOpenAction(
 function collectForms(
   fields: Map<string, readonly object[]> | null,
   xfaPresent: boolean,
+  structurallyReportedActionCount: number,
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
 ): number {
@@ -470,14 +473,15 @@ function collectForms(
       occurrences: fieldCount,
     });
   }
-  if (actionCount > 0) {
+  const unreportedActionCount = Math.max(0, actionCount - structurallyReportedActionCount);
+  if (unreportedActionCount > 0) {
     add({
       id: 'javascript:forms',
       category: 'active-content',
       kind: 'javascript',
       severity: 'high',
       message: { code: 'form-actions' },
-      occurrences: actionCount,
+      occurrences: unreportedActionCount,
     });
   }
   if (xfaPresent) {
@@ -489,7 +493,7 @@ function collectForms(
       message: { code: 'xfa-form' },
     });
   }
-  return actionCount;
+  return Math.max(actionCount, structurallyReportedActionCount);
 }
 
 function collectSignatures(
@@ -545,9 +549,14 @@ function mergeSignatureInventories(
 
   const structuralUsed = structuralSignatures.map(() => false);
   const structuralByFieldName = new Map<string, { indices: number[]; cursor: number }>();
+  const unnamedStructuralIndices: number[] = [];
+  let unnamedStructuralCursor = 0;
   structuralSignatures.forEach((signature, index) => {
     const fieldName = readableValue(signature.fieldName);
-    if (!fieldName) return;
+    if (!fieldName) {
+      unnamedStructuralIndices.push(index);
+      return;
+    }
     const matches = structuralByFieldName.get(fieldName);
     if (matches) {
       matches.indices.push(index);
@@ -558,12 +567,18 @@ function mergeSignatureInventories(
   const merged = pdfJsSignatures.map(pdfJsSignature => {
     const pdfJsRecord = asRecord(pdfJsSignature);
     const fieldName = readableValue(pdfJsRecord?.['fieldName']);
-    if (!fieldName) return pdfJsSignature;
-    const matches = structuralByFieldName.get(fieldName);
-    if (!matches) return pdfJsSignature;
-    if (matches.cursor >= matches.indices.length) return pdfJsSignature;
-    const structuralIndex = matches.indices[matches.cursor];
-    matches.cursor += 1;
+    let structuralIndex: number | undefined;
+    if (fieldName) {
+      const matches = structuralByFieldName.get(fieldName);
+      if (matches && matches.cursor < matches.indices.length) {
+        structuralIndex = matches.indices[matches.cursor];
+        matches.cursor += 1;
+      }
+    } else if (unnamedStructuralCursor < unnamedStructuralIndices.length) {
+      structuralIndex = unnamedStructuralIndices[unnamedStructuralCursor];
+      unnamedStructuralCursor += 1;
+    }
+    if (structuralIndex === undefined) return pdfJsSignature;
     structuralUsed[structuralIndex] = true;
 
     const combined: Record<string, unknown> = { ...structuralSignatures[structuralIndex] };
@@ -752,6 +767,7 @@ function collectActionDictionarySignals(
     targets: new Set<string>(),
     targetlessAnnotationTriggerIds: new Set<string>(),
     targetlessOutlineExternalActions: 0,
+    fieldJavascriptOccurrences: 0,
   };
   let findingIndex = 0;
   for (const signal of signals) {
@@ -797,6 +813,15 @@ function collectActionDictionarySignals(
     const occurrences = Number.isSafeInteger(signal.occurrences) && signal.occurrences > 0
       ? signal.occurrences
       : 1;
+    if (
+      signal.actionType === 'JavaScript'
+      && signal.context === 'field-additional-action'
+    ) {
+      actionIndex.fieldJavascriptOccurrences += occurrences;
+      if (!Number.isSafeInteger(actionIndex.fieldJavascriptOccurrences)) {
+        throw new PdfPrivacyEngineError('inspection-limit');
+      }
+    }
     if (highRisk && !target && signal.context === 'annotation-action') {
       for (const triggerId of signal.triggerIds ?? []) {
         actionIndex.targetlessAnnotationTriggerIds.add(triggerId);

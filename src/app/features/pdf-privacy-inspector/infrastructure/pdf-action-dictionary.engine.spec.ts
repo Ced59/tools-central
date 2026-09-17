@@ -6,6 +6,7 @@ import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
   PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES,
   PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES,
@@ -997,6 +998,32 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les tableaux de contenu optionnel matérialisés pour chaque annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const entriesPerAnnotation = 4_096;
+    const optionalContentGroup = source.context.register(source.context.obj({ Type: 'OCG' }));
+    const groups = source.context.register(source.context.obj(Array.from(
+      { length: entriesPerAnnotation },
+      () => optionalContentGroup,
+    )));
+    const optionalContent = source.context.register(source.context.obj({
+      Type: 'OCMD', OCGs: groups,
+    }));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES / entriesPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Text', Rect: [0, 0, 10, 10], OC: optionalContent,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne les tableaux de bordure et tirets partagés par les annotations', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();
@@ -1340,6 +1367,29 @@ describe('inspectPdfStructuralSignals', () => {
     let next: PDFRef | undefined;
     for (let index = outlineCount - 1; index >= 0; index -= 1) {
       const item = source.context.obj({ Title: title });
+      if (next) item.set(PDFName.of('Next'), next);
+      next = source.context.register(item);
+    }
+    source.catalog.set(PDFName.of('Outlines'), source.context.obj({ First: next }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le clonage répété d’une couleur partagée par les signets', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const coordinatesPerColor = 4_096;
+    const color = source.context.register(source.context.obj(
+      Array.from({ length: coordinatesPerColor }, () => 0.5),
+    ));
+    const normalizedColorBytes = coordinatesPerColor * 8 + 32;
+    const outlineCount = Math.floor(
+      PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES / normalizedColorBytes,
+    ) + 1;
+    let next: PDFRef | undefined;
+    for (let index = outlineCount - 1; index >= 0; index -= 1) {
+      const item = source.context.obj({ Title: PDFString.of('Section'), C: color });
       if (next) item.set(PDFName.of('Next'), next);
       next = source.context.register(item);
     }

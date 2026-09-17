@@ -351,6 +351,34 @@ describe('inspectPdfPrivacyDocument', () => {
     });
   });
 
+  it('fusionne par occurrence une signature sans nom dans les deux inventaires', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue([{
+        fieldName: '',
+        coversWholeDocument: true,
+      }]),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      structuralSignatures: [{
+        signerName: 'Alice',
+        reason: 'Validation interne',
+      }],
+    });
+
+    const signatures = report.findings.filter(finding => finding.kind === 'digital-signature');
+    expect(signatures).toHaveLength(1);
+    expect(signatures[0]).toMatchObject({
+      value: 'Alice',
+      message: {
+        code: 'signature-details',
+        reason: 'Validation interne',
+        coversWholeDocument: true,
+      },
+    });
+  });
+
   it('classe le nom privé d’un champ de signature comme une métadonnée à vérifier', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{
@@ -406,6 +434,34 @@ describe('inspectPdfPrivacyDocument', () => {
       severity: 'low',
       message: { code: 'acroform-summary', fieldCount: 2, populatedCount: 0 },
     });
+  });
+
+  it('ne recompte pas un JavaScript de champ déjà inventorié structurellement', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      hasJSActions: vi.fn().mockResolvedValue(true),
+      getFieldObjects: vi.fn().mockResolvedValue(new Map([
+        ['approval', [{
+          actions: new Map([['Mouse Up', ['approve()']]]),
+        }]],
+      ])),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [{
+        actionType: 'JavaScript',
+        context: 'field-additional-action',
+        occurrences: 1,
+      }],
+    });
+
+    const javascriptFindings = report.findings.filter(finding => finding.kind === 'javascript');
+    expect(javascriptFindings).toEqual([
+      expect.objectContaining({
+        id: 'automatic:dictionary:1:JavaScript',
+        occurrences: 1,
+      }),
+    ]);
   });
 
   it('distingue les champs homonymes tout en regroupant leurs widgets enfants', async () => {
