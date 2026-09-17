@@ -18,7 +18,10 @@ import {
   extractPdfVersion,
   inspectPdfPrivacyDocument,
 } from './pdf-privacy.engine';
-import { shouldDeferStructuralFailure } from './pdf-privacy-worker-policy';
+import {
+  mustRejectBeforePdfJs,
+  shouldDeferStructuralFailure,
+} from './pdf-privacy-worker-policy';
 import type {
   PdfPrivacyWorkerRequest,
   PdfPrivacyWorkerResponse,
@@ -43,6 +46,9 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     try {
       objectStreamPreflight = validatePdfObjectStreamBudgets(input);
     } catch {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    if (mustRejectBeforePdfJs(objectStreamPreflight)) {
       throw new PdfActionDictionaryInspectionError();
     }
     post({ type: 'progress', percent: 1 });
@@ -73,17 +79,8 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     post({ type: 'progress', percent: 2 });
     const document = await loadingTask.promise;
     if (structuralFailure) throw structuralFailure;
-    if (!structuralSignals && !objectStreamPreflight.encrypted) {
-      throw new PdfActionDictionaryInspectionError();
-    }
-    const safeStructuralSignals = structuralSignals ?? {
-      actionDictionaries: [],
-      associatedFiles: [],
-      signatures: [],
-      encrypted: true,
-      hasUnboundedEncryptedTextStreams: false,
-    };
-    if (safeStructuralSignals.hasUnboundedEncryptedTextStreams) {
+    if (!structuralSignals) throw new PdfActionDictionaryInspectionError();
+    if (structuralSignals.hasUnboundedEncryptedTextStreams) {
       throw new PdfActionDictionaryInspectionError();
     }
     const report = await inspectPdfPrivacyDocument(
@@ -92,9 +89,9 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         headerData,
         fileBytes,
         passwordUsed: Boolean(command.password),
-        actionDictionaries: safeStructuralSignals.actionDictionaries,
-        associatedFiles: safeStructuralSignals.associatedFiles,
-        structuralSignatures: safeStructuralSignals.signatures,
+        actionDictionaries: structuralSignals.actionDictionaries,
+        associatedFiles: structuralSignals.associatedFiles,
+        structuralSignatures: structuralSignals.signatures,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

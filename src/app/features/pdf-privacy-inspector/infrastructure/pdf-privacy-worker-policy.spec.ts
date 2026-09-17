@@ -1,9 +1,23 @@
 import { describe, expect, it } from 'vitest';
 
 import { PdfActionDictionaryInspectionError } from './pdf-action-dictionary.engine';
-import { shouldDeferStructuralFailure } from './pdf-privacy-worker-policy';
+import {
+  mustRejectBeforePdfJs,
+  shouldDeferStructuralFailure,
+} from './pdf-privacy-worker-policy';
 
 describe('shouldDeferStructuralFailure', () => {
+  it('rejette un object stream chiffré avant PDF.js', () => {
+    expect(mustRejectBeforePdfJs({
+      encrypted: true,
+      skippedEncryptedObjectStreams: 1,
+    })).toBe(true);
+    expect(mustRejectBeforePdfJs({
+      encrypted: true,
+      skippedEncryptedObjectStreams: 0,
+    })).toBe(false);
+  });
+
   it('arrête avant PDF.js pour une limite structurelle non chiffrée', () => {
     expect(shouldDeferStructuralFailure(
       new PdfActionDictionaryInspectionError(),

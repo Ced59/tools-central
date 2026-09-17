@@ -789,6 +789,30 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('borne les cibles chaînées des actions additionnelles par annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const targetBytes = 1 * 1_024 * 1_024;
+    const target = source.context.register(PDFString.of('A'.repeat(targetBytes)));
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'GoTo',
+      Next: { Type: 'Action', S: 'URI', URI: target },
+    }));
+    const additionalActions = source.context.register(source.context.obj({ D: action }));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES / targetBytes,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Link', Rect: [0, 0, 10, 10], AA: additionalActions,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
   it('borne la normalisation répétée du texte partagé par les annotations', async () => {
     const source = await PDFDocument.create();
     const page = source.addPage();

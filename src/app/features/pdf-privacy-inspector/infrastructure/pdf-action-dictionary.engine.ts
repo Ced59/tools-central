@@ -1129,9 +1129,7 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
-    const action = readDictionary(annotation, 'A');
-    if (!action) continue;
-    state.annotationTargetExpansionBytes += measureTargetBytes(action, state.document);
+    state.annotationTargetExpansionBytes += measureAnnotationTargetBytes(annotation, state);
     if (
       !Number.isSafeInteger(state.annotationTargetExpansionBytes)
       || state.annotationTargetExpansionBytes > PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES
@@ -1235,6 +1233,55 @@ function measureAnnotationJavascriptBytes(
     }
   }
   if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  return total;
+}
+
+function measureAnnotationTargetBytes(
+  annotation: PDFDict,
+  state: InspectionState,
+): number {
+  let total = 0;
+  const action = annotation.get(PDFName.of('A'));
+  if (action) total += measureActionTargetChainBytes(action, state);
+  const additionalActions = readDictionary(annotation, 'AA');
+  if (additionalActions) {
+    for (const rawAction of additionalActions.asMap().values()) {
+      total += measureActionTargetChainBytes(rawAction, state);
+    }
+  }
+  if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  return total;
+}
+
+function measureActionTargetChainBytes(
+  root: PDFObject,
+  state: InspectionState,
+): number {
+  const stack: { object: PDFObject; depth: number }[] = [{ object: root, depth: 0 }];
+  const visited = new Set<PDFObject>();
+  let total = 0;
+  while (stack.length > 0) {
+    const item = stack.pop();
+    if (!item) continue;
+    if (item.depth > PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    consumeTraversalStep(state);
+    const object = resolvePdfObject(item.object, state.document);
+    if (!object || visited.has(object)) continue;
+    visited.add(object);
+    if (object instanceof PDFArray) {
+      for (let index = 0; index < object.size(); index += 1) {
+        stack.push({ object: object.get(index), depth: item.depth + 1 });
+      }
+      continue;
+    }
+    if (!(object instanceof PDFDict)) continue;
+    total += measureTargetBytes(object, state.document);
+    const next = object.get(PDFName.of('Next'));
+    if (next) stack.push({ object: next, depth: item.depth + 1 });
+    if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+  }
   return total;
 }
 
