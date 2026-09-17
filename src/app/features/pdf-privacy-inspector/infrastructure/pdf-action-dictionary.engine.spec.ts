@@ -752,44 +752,46 @@ describe('inspectPdfStructuralSignals', () => {
     }
 
     const compressedPlain = encodeAscii85(deflate(plain));
-    const indirectParameterBody = joinBytes(
-      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
-      '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter 8 0 R ',
-      `/DecodeParms [null 9 0 R] /Length ${String(compressedPlain.byteLength)} >>\nstream\n`,
-      compressedPlain,
-      '\nendstream\nendobj\n8 0 obj\n[/ASCII85Decode /FlateDecode]\nendobj\n',
-      '9 0 obj\n<< /Predictor 1 >>\nendobj\n',
-    );
-    const indirectXrefOffset = indirectParameterBody.byteLength;
-    const objectThreeOffset = findByteSequence(
-      indirectParameterBody,
-      new TextEncoder().encode('3 0 obj'),
-    );
-    const objectNineOffset = findByteSequence(
-      indirectParameterBody,
-      new TextEncoder().encode('9 0 obj'),
-    );
-    const objectEightOffset = findByteSequence(
-      indirectParameterBody,
-      new TextEncoder().encode('8 0 obj'),
-    );
-    const indirectXrefPayload = joinBytes(
-      encodeXrefEntry(2, 3),
-      encodeXrefEntry(1, objectThreeOffset),
-      encodeXrefEntry(1, objectEightOffset),
-      encodeXrefEntry(1, objectNineOffset),
-      encodeXrefEntry(1, indirectXrefOffset),
-    );
-    const indirectParameters = joinBytes(
-      indirectParameterBody,
-      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [2 2 8 3] /Length 35 >>',
-      '\nstream\n',
-      indirectXrefPayload,
-      '\nendstream\nendobj\nstartxref\n',
-      String(indirectXrefOffset),
-      '\n%%EOF\n',
-    );
-    expect(() => validatePdfObjectStreamBudgets(indirectParameters)).not.toThrow();
+    for (const indirectParameterValue of ['<< /Predictor 1 >>', 'null']) {
+      const indirectParameterBody = joinBytes(
+        '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+        '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter 8 0 R ',
+        `/DecodeParms [null 9 0 R] /Length ${String(compressedPlain.byteLength)} >>\nstream\n`,
+        compressedPlain,
+        '\nendstream\nendobj\n8 0 obj\n[/ASCII85Decode /FlateDecode]\nendobj\n',
+        `9 0 obj\n${indirectParameterValue}\nendobj\n`,
+      );
+      const indirectXrefOffset = indirectParameterBody.byteLength;
+      const objectThreeOffset = findByteSequence(
+        indirectParameterBody,
+        new TextEncoder().encode('3 0 obj'),
+      );
+      const objectNineOffset = findByteSequence(
+        indirectParameterBody,
+        new TextEncoder().encode('9 0 obj'),
+      );
+      const objectEightOffset = findByteSequence(
+        indirectParameterBody,
+        new TextEncoder().encode('8 0 obj'),
+      );
+      const indirectXrefPayload = joinBytes(
+        encodeXrefEntry(2, 3),
+        encodeXrefEntry(1, objectThreeOffset),
+        encodeXrefEntry(1, objectEightOffset),
+        encodeXrefEntry(1, objectNineOffset),
+        encodeXrefEntry(1, indirectXrefOffset),
+      );
+      const indirectParameters = joinBytes(
+        indirectParameterBody,
+        '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [2 2 8 3] /Length 35 >>',
+        '\nstream\n',
+        indirectXrefPayload,
+        '\nendstream\nendobj\nstartxref\n',
+        String(indirectXrefOffset),
+        '\n%%EOF\n',
+      );
+      expect(() => validatePdfObjectStreamBudgets(indirectParameters)).not.toThrow();
+    }
 
     const intermediateBytes = 22 * 1_024 * 1_024;
     const shrinkingIntermediate = new Uint8Array(intermediateBytes + 2);

@@ -12,7 +12,9 @@ const Bn=new Uint8Array(0);class DecodeStream {
   ensureBuffer(e){const t=this.buffer;if(e<=t.byteLength)return t;let n=this.minBufferLength;for(;n<e;)n*=2;const a=new Uint8Array(n);a.set(t);return this.buffer=a}
   async decode(n){const r=[];let i=0;for await(const e of n){r.push(e);i+=e.byteLength}const o=new Uint8Array(i);return o}
 }
-export { DecodeStream };
+function ea(e){return e}
+class BrotliStream extends DecodeStream{constructor(e){super();this.stream=e}readBlock(){const e=this.stream.getBytes(),t=ea(new Int8Array(e.buffer,e.byteOffset,e.length));this.buffer=new Uint8Array(t.buffer,t.byteOffset,t.length);this.bufferLength=this.buffer.length;this.eof=!0}}
+export { BrotliStream, DecodeStream };
 `;
 
 async function importPatchedFixture() {
@@ -47,6 +49,16 @@ test('debits progressive DecompressionStream chunks before retaining them', asyn
   await new DecodeStream().decode([new Uint8Array(decodedStreamLimitBytes / 2)]);
   await assert.rejects(
     () => new DecodeStream().decode([new Uint8Array(1)]),
+    /TC_PDF_DECODED_STREAM_LIMIT/,
+  );
+});
+
+test('rejects Brotli whole-buffer fallback before its built-in decoder allocates', async () => {
+  const { patched, module: { BrotliStream } } = await importPatchedFixture();
+
+  assert.match(patched, /class BrotliStream[\s\S]*readBlock\(\)\{tcPdfDecodedStreamLimit\(\)\}/);
+  assert.throws(
+    () => new BrotliStream({ getBytes: () => new Uint8Array([1]) }).readBlock(),
     /TC_PDF_DECODED_STREAM_LIMIT/,
   );
 });

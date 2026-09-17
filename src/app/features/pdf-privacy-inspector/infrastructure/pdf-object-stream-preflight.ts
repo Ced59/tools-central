@@ -2898,13 +2898,19 @@ function resolveDecodeParameters(
       || header.objectNumber !== parameter.objectNumber
       || header.generationNumber !== parameter.generationNumber
     ) return null;
-    const dictionaryStart = skipWhitespaceAndComments(data, header.end);
-    if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return null;
-    const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    if (matchesKeyword(data, valueStart, 'null')) {
+      const objectEnd = skipWhitespaceAndComments(data, valueStart + 'null'.length);
+      if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
+      resolved.push(undefined);
+      continue;
+    }
+    if (data[valueStart] !== LESS_THAN || data[valueStart + 1] !== LESS_THAN) return null;
+    const dictionaryEnd = findDictionaryEnd(data, valueStart);
     if (dictionaryEnd === undefined) return null;
     const objectEnd = skipWhitespaceAndComments(data, dictionaryEnd);
     if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
-    resolved.push(readDecodeParameterDictionary(data, dictionaryStart, dictionaryEnd));
+    resolved.push(readDecodeParameterDictionary(data, valueStart, dictionaryEnd));
   }
   return resolved;
 }
