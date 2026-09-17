@@ -4,6 +4,7 @@ import {
   PDFDocument,
   PDFHexString,
   PDFName,
+  PDFNull,
   PDFNumber,
   PDFRawStream,
   PDFRef,
@@ -11,11 +12,13 @@ import {
   PDFString,
   type PDFObject,
 } from 'pdf-lib';
-import { Inflate } from 'pako';
 
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
 import {
   PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS,
+  PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  decodePdfStreamContentsBounded,
+  type PdfFilterDecodeParameters,
   type PdfObjectStreamPreflightResult,
   validatePdfObjectStreamBudgets,
 } from './pdf-object-stream-preflight';
@@ -123,7 +126,6 @@ export const PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const NORMALIZED_CHOICE_OPTION_OVERHEAD_BYTES = 64;
 const NORMALIZED_GEOMETRY_NUMBER_BYTES = 8;
 const NORMALIZED_GEOMETRY_ARRAY_OVERHEAD_BYTES = 32;
-const TEXT_INFLATE_CHUNK_BYTES = 64 * 1_024;
 const TARGET_TOO_LONG = Symbol('target-too-long');
 const ANNOTATION_SUBTYPES = new Set([
   'FileAttachment', 'Link', 'Movie', 'RichMedia', 'Screen', 'Sound', 'Widget', '3D',
@@ -838,10 +840,19 @@ function validateDecodedStreamSize(
     state.hasUnboundedEncryptedTextStreams = true;
     return undefined;
   }
-  if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0])) {
+  try {
+    const decoded = decodePdfStreamContentsBounded(
+      contents,
+      filters,
+      readFilterDecodeParameters(stream.dict),
+      maxDecodedBytes,
+    );
+    if (!decoded) throw new PdfActionDictionaryInspectionError();
+    return decoded.byteLength;
+  } catch (error: unknown) {
+    if (error instanceof PdfActionDictionaryInspectionError) throw error;
     throw new PdfActionDictionaryInspectionError();
   }
-  return validateInflatedSize(contents, maxDecodedBytes);
 }
 
 function validateFieldObjectBudget(
@@ -1012,8 +1023,10 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     const fieldResources = field.has(PDFName.of('DR'))
       ? readDictionary(field, 'DR')
       : item.inheritedResources;
+    const appearanceResources = readSelectedAppearanceResources(field);
     state.fieldResourceMergeEntries += measureResourceMergeEntries(
       fieldResources,
+      appearanceResources,
       acroFormResources,
     );
     if (
@@ -1076,11 +1089,12 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
 
 function measureResourceMergeEntries(
   fieldResources: PDFDict | undefined,
+  appearanceResources: PDFDict | undefined,
   acroFormResources: PDFDict | undefined,
 ): number {
   const valuesByKey = new Map<string, (PDFObject | undefined)[]>();
   let entries = 0;
-  for (const resources of [fieldResources, acroFormResources]) {
+  for (const resources of [fieldResources, appearanceResources, acroFormResources]) {
     if (!resources) continue;
     for (const key of resources.keys()) {
       entries += 1;
@@ -1103,6 +1117,23 @@ function measureResourceMergeEntries(
     }
   }
   return entries;
+}
+
+function readSelectedAppearanceResources(field: PDFDict): PDFDict | undefined {
+  if (readName(field, 'Subtype')?.decodeText() !== 'Widget') return undefined;
+  const appearances = readDictionary(field, 'AP');
+  if (!appearances) return undefined;
+  const normalAppearance = readObject(appearances, 'N');
+  let stream: PDFStream | undefined;
+  if (normalAppearance instanceof PDFStream) {
+    stream = normalAppearance;
+  } else if (normalAppearance instanceof PDFDict) {
+    const appearanceState = readName(field, 'AS');
+    if (!appearanceState) return undefined;
+    const selected = readObject(normalAppearance, appearanceState.decodeText());
+    if (selected instanceof PDFStream) stream = selected;
+  }
+  return stream ? readDictionary(stream.dict, 'Resources') : undefined;
 }
 
 function validateFieldOccurrenceSignatureBudget(
@@ -1976,23 +2007,74 @@ function readFilterNames(dictionary: PDFDict): readonly string[] {
   return names;
 }
 
-function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): number {
-  const inflater = new Inflate({ chunkSize: TEXT_INFLATE_CHUNK_BYTES });
-  let decodedBytes = 0;
-  inflater.onData = chunk => {
-    decodedBytes += chunk.byteLength;
-    if (decodedBytes > maxDecodedBytes) {
-      throw new PdfActionDictionaryInspectionError();
+function readFilterDecodeParameters(
+  dictionary: PDFDict,
+): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
+  const rawParameters = readObject(dictionary, 'DecodeParms') ?? readObject(dictionary, 'DP');
+  if (!rawParameters) return undefined;
+  if (rawParameters === PDFNull) return [];
+  if (rawParameters instanceof PDFDict) return [readFilterDecodeParameterDictionary(rawParameters)];
+  if (!(rawParameters instanceof PDFArray)) return null;
+
+  const parameters: (PdfFilterDecodeParameters | undefined)[] = [];
+  for (let index = 0; index < rawParameters.size(); index += 1) {
+    let value: PDFObject | undefined;
+    try {
+      value = rawParameters.lookup(index);
+    } catch {
+      return null;
     }
-  };
-  try {
-    const succeeded = inflater.push(contents, true);
-    if (!succeeded || inflater.err !== 0) throw new PdfActionDictionaryInspectionError();
-    return decodedBytes;
-  } catch (error: unknown) {
-    if (error instanceof PdfActionDictionaryInspectionError) throw error;
+    if (value === PDFNull) {
+      parameters.push(undefined);
+    } else if (value instanceof PDFDict) {
+      parameters.push(readFilterDecodeParameterDictionary(value));
+    } else {
+      return null;
+    }
+  }
+  return parameters;
+}
+
+function readFilterDecodeParameterDictionary(
+  dictionary: PDFDict,
+): PdfFilterDecodeParameters {
+  const predictor = readDecodeParameterInteger(dictionary, 'Predictor') ?? 1;
+  const colors = readDecodeParameterInteger(dictionary, 'Colors') ?? 1;
+  const longBitsPerComponent = readDecodeParameterInteger(dictionary, 'BitsPerComponent');
+  const shortBitsPerComponent = readDecodeParameterInteger(dictionary, 'BPC');
+  if (longBitsPerComponent !== undefined && shortBitsPerComponent !== undefined) {
     throw new PdfActionDictionaryInspectionError();
   }
+  const bitsPerComponent = longBitsPerComponent ?? shortBitsPerComponent ?? 8;
+  const columns = readDecodeParameterInteger(dictionary, 'Columns') ?? 1;
+  const earlyChange = readDecodeParameterInteger(dictionary, 'EarlyChange') ?? 1;
+  if (
+    ![1, 2, 10, 11, 12, 13, 14, 15].includes(predictor)
+    || colors < 1
+    || colors > 32
+    || ![1, 2, 4, 8, 16].includes(bitsPerComponent)
+    || columns < 1
+    || columns > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES
+    || (earlyChange !== 0 && earlyChange !== 1)
+  ) throw new PdfActionDictionaryInspectionError();
+  return {
+    predictor,
+    colors,
+    bitsPerComponent,
+    columns,
+    earlyChange,
+  };
+}
+
+function readDecodeParameterInteger(dictionary: PDFDict, key: string): number | undefined {
+  const value = readObject(dictionary, key);
+  if (value === undefined) return undefined;
+  if (!(value instanceof PDFNumber)) throw new PdfActionDictionaryInspectionError();
+  const integer = value.asNumber();
+  if (!Number.isSafeInteger(integer) || integer < 0) {
+    throw new PdfActionDictionaryInspectionError();
+  }
+  return integer;
 }
 
 function isHandledTriggerKey(parent: PDFDict, key: PDFName): boolean {

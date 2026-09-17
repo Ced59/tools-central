@@ -84,7 +84,7 @@ interface CriticalStreamDescriptor {
   decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
 }
 
-interface PdfFilterDecodeParameters {
+export interface PdfFilterDecodeParameters {
   predictor: number;
   colors: number;
   bitsPerComponent: number;
@@ -1459,6 +1459,18 @@ function decodeObjectStreamContents(
     }
   }
   return decoded;
+}
+
+export function decodePdfStreamContentsBounded(
+  contents: Uint8Array,
+  filters: readonly string[] | undefined,
+  decodeParameters: readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined,
+  maxDecodedBytes: number,
+): Uint8Array | undefined {
+  return decodeObjectStreamContents(contents, filters, decodeParameters, {
+    expandedBytes: 0,
+    maxBytes: maxDecodedBytes,
+  });
 }
 
 function remainingExpansionBytes(budget: PdfStreamExpansionBudget): number {

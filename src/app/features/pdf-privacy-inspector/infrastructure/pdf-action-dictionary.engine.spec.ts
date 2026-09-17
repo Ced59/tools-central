@@ -1101,15 +1101,45 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
   });
 
-  it('accepte un flux XMP compressé sous la limite', async () => {
-    const source = await PDFDocument.create();
-    source.addPage();
-    source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.flateStream(
-      '<x:xmpmeta>safe</x:xmpmeta>',
-      { Type: 'Metadata', Subtype: 'XML' },
-    )));
+  it('accepte les filtres PDF textuels standards et leurs chaînes sous la limite', async () => {
+    const plain = new TextEncoder().encode('<x:xmpmeta>safe</x:xmpmeta>');
+    const fixtures: readonly {
+      filters: string | readonly string[];
+      contents: Uint8Array;
+      decodeParameters?: Readonly<{ Predictor: number; Columns: number }>;
+    }[] = [
+      { filters: 'FlateDecode', contents: deflate(plain) },
+      {
+        filters: 'FlateDecode',
+        contents: deflate(Uint8Array.of(0, ...plain)),
+        decodeParameters: { Predictor: 12, Columns: plain.byteLength },
+      },
+      { filters: 'LZWDecode', contents: encodeLzwLiteral(plain) },
+      { filters: 'ASCII85Decode', contents: encodeAscii85(plain) },
+      { filters: 'ASCIIHexDecode', contents: encodeAsciiHex(plain) },
+      { filters: 'RunLengthDecode', contents: encodeRunLengthLiteral(plain) },
+      {
+        filters: ['ASCII85Decode', 'FlateDecode'],
+        contents: encodeAscii85(deflate(plain)),
+      },
+    ];
 
-    await expect(inspectPdfStructuralSignals(await source.save())).resolves.not.toBeNull();
+    for (const fixture of fixtures) {
+      const source = await PDFDocument.create();
+      source.addPage();
+      source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.stream(
+        Uint8Array.from(fixture.contents),
+        {
+          Type: 'Metadata',
+          Subtype: 'XML',
+          Filter: fixture.filters,
+          ...(fixture.decodeParameters ? { DecodeParms: fixture.decodeParameters } : {}),
+        },
+      )));
+
+      await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+        .resolves.not.toBeNull();
+    }
   });
 
   it('refuse un flux JavaScript dont la taille décompressée dépasse la limite', async () => {
@@ -1901,6 +1931,42 @@ describe('inspectPdfStructuralSignals', () => {
       { length: widgetCount },
       () => source.context.register(source.context.obj({
         Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Entry'),
+      })),
+    );
+    const parent = source.context.register(source.context.obj({
+      FT: 'Tx', T: PDFString.of('Shared'), DR: localResources, Kids: widgets,
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      DR: globalResources,
+      Fields: [parent],
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('inclut les ressources de l’apparence sélectionnée dans le budget de fusion', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const appearanceFontEntries = 2_048;
+    const appearanceFonts = source.context.obj({});
+    for (let index = 0; index < appearanceFontEntries; index += 1) {
+      appearanceFonts.set(PDFName.of(`F${String(index)}`), PDFName.of('Helvetica'));
+    }
+    const localResources = source.context.obj({ Font: { Local: 'Helvetica' } });
+    const globalResources = source.context.obj({ Font: { Global: 'Helvetica' } });
+    const appearanceResources = source.context.obj({ Font: appearanceFonts });
+    const appearance = source.context.register(source.context.flateStream('', {
+      Type: 'XObject', Subtype: 'Form', BBox: [0, 0, 1, 1], Resources: appearanceResources,
+    }));
+    const mergeEntriesPerOccurrence = 4 + appearanceFontEntries + 2;
+    const widgetCount = Math.floor(
+      PDF_PRIVACY_MAX_FIELD_RESOURCE_MERGE_ENTRIES / mergeEntriesPerOccurrence,
+    ) + 1;
+    const widgets = Array.from(
+      { length: widgetCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Widget', T: PDFString.of('Entry'), AP: { N: appearance },
       })),
     );
     const parent = source.context.register(source.context.obj({
