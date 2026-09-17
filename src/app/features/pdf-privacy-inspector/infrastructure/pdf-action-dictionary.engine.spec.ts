@@ -474,6 +474,19 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(ordinaryStreamFixture);
     }).not.toThrow();
 
+    const nullTypeOrdinaryStream = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type null /Length 3 >>\n',
+      'stream\nabc\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(nullTypeOrdinaryStream)).not.toThrow();
+
+    const duplicateNullType = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type null /Type /ObjStm /N 0 /First 0 /Length 0 >>\n',
+      'stream\n\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(duplicateNullType))
+      .toThrow('Duplicate PDF stream type');
+
     const encryptedFixture = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 10 ',
       '/Filter /FlateDecode >>\nstream\nciphertext\nendstream\nendobj\n',

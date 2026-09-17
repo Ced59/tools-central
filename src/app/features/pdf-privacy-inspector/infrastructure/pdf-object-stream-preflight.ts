@@ -2326,6 +2326,7 @@ function parseCriticalDictionary(
   let xrefIndex: readonly number[] | undefined;
   let previousXrefOffset: number | undefined;
   let supplementalXrefOffset: number | undefined;
+  let hasType = false;
   let hasFilter = false;
   let hasDecodeParameters = false;
   let hasEncryptionDictionary = false;
@@ -2379,7 +2380,13 @@ function parseCriticalDictionary(
     offset = key.end;
     const valueStart = skipWhitespaceAndComments(data, offset);
     if (key.value === 'Type') {
-      if (type !== undefined) throw new Error('Duplicate PDF stream type');
+      if (hasType) throw new Error('Duplicate PDF stream type');
+      hasType = true;
+      if (matchesKeyword(data, valueStart, 'null')) {
+        type = undefined;
+        offset = valueStart + 'null'.length;
+        continue;
+      }
       const value = readPdfName(data, valueStart);
       if (!value) throw new Error('Invalid PDF stream type');
       type = value.value;
