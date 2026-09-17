@@ -467,6 +467,14 @@ describe('inspectPdfStructuralSignals', () => {
         filterDictionary: '/Filter [/ASCIIHexDecode /RunLengthDecode]',
         payload: encodeAsciiHex(encodeRunLengthLiteral(plain)),
       },
+      ...([1, 2, 4] as const).map(bitsPerComponent => ({
+        filterDictionary: [
+          '/Filter /FlateDecode',
+          `/DP << /Predictor 2 /BPC ${String(bitsPerComponent)} `,
+          `/Columns ${String(plain.byteLength * 8 / bitsPerComponent)} >>`,
+        ].join(' '),
+        payload: deflate(encodeTiffPredictor(plain, bitsPerComponent)),
+      })),
     ];
 
     for (const fixture of fixtures) {
@@ -485,18 +493,22 @@ describe('inspectPdfStructuralSignals', () => {
 
     const xrefBody = '%PDF-1.7\n1 0 obj\nnull\nendobj\n';
     const xrefOffset = xrefBody.length;
-    const encodeXrefEntry = (objectOffset: number): Uint8Array => Uint8Array.of(
-      1,
+    const encodeXrefEntry = (
+      type: number,
+      objectOffset: number,
+      fieldTwo = 0,
+    ): Uint8Array => Uint8Array.of(
+      type,
       (objectOffset >>> 24) & 0xff,
       (objectOffset >>> 16) & 0xff,
       (objectOffset >>> 8) & 0xff,
       objectOffset & 0xff,
-      0,
-      0,
+      (fieldTwo >>> 8) & 0xff,
+      fieldTwo & 0xff,
     );
     const encodedXref = encodeAsciiHex(joinBytes(
-      encodeXrefEntry(xrefBody.indexOf('1 0 obj')),
-      encodeXrefEntry(xrefOffset),
+      encodeXrefEntry(1, xrefBody.indexOf('1 0 obj')),
+      encodeXrefEntry(1, xrefOffset),
     ));
     const filteredXref = joinBytes(
       xrefBody,
@@ -508,7 +520,60 @@ describe('inspectPdfStructuralSignals', () => {
       '\n%%EOF\n',
     );
     expect(() => validatePdfObjectStreamBudgets(filteredXref)).not.toThrow();
-  });
+
+    const compressedPlain = encodeAscii85(deflate(plain));
+    const indirectParameterBody = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+      '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter [/ASCII85Decode /FlateDecode] ',
+      `/DecodeParms [null 9 0 R] /Length ${String(compressedPlain.byteLength)} >>\nstream\n`,
+      compressedPlain,
+      '\nendstream\nendobj\n9 0 obj\n<< /Predictor 1 >>\nendobj\n',
+    );
+    const indirectXrefOffset = indirectParameterBody.byteLength;
+    const objectThreeOffset = findByteSequence(
+      indirectParameterBody,
+      new TextEncoder().encode('3 0 obj'),
+    );
+    const objectNineOffset = findByteSequence(
+      indirectParameterBody,
+      new TextEncoder().encode('9 0 obj'),
+    );
+    const indirectXrefPayload = joinBytes(
+      encodeXrefEntry(2, 3),
+      encodeXrefEntry(1, objectThreeOffset),
+      encodeXrefEntry(1, objectNineOffset),
+      encodeXrefEntry(1, indirectXrefOffset),
+    );
+    const indirectParameters = joinBytes(
+      indirectParameterBody,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [2 2 9 2] /Length 28 >>',
+      '\nstream\n',
+      indirectXrefPayload,
+      '\nendstream\nendobj\nstartxref\n',
+      String(indirectXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(indirectParameters)).not.toThrow();
+
+    const intermediateBytes = 22 * 1_024 * 1_024;
+    const shrinkingIntermediate = new Uint8Array(intermediateBytes + 2);
+    shrinkingIntermediate.fill(0x30);
+    for (let index = 0; index < intermediateBytes; index += 2) {
+      shrinkingIntermediate[index] = 0x33;
+    }
+    shrinkingIntermediate[intermediateBytes] = 0x3e;
+    shrinkingIntermediate[intermediateBytes + 1] = 0x3e;
+    const shrinkingCompressed = deflate(shrinkingIntermediate);
+    const shrinkingChain = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 ',
+      `/Filter [/FlateDecode /ASCIIHexDecode /ASCIIHexDecode] /Length ${String(shrinkingCompressed.byteLength)} >>`,
+      '\nstream\n',
+      shrinkingCompressed,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(shrinkingChain))
+      .toThrow('PDF object stream expansion limit');
+  }, 30_000);
 
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
     const objectDeclarations = Array.from(
@@ -2239,6 +2304,26 @@ function encodeRunLengthLiteral(contents: Uint8Array): Uint8Array {
     offset += chunk.byteLength;
   }
   encoded[offset] = 128;
+  return encoded;
+}
+
+function encodeTiffPredictor(
+  contents: Uint8Array,
+  bitsPerComponent: 1 | 2 | 4,
+): Uint8Array {
+  const encoded = new Uint8Array(contents.byteLength);
+  const sampleMask = (1 << bitsPerComponent) - 1;
+  let previous = 0;
+  const sampleCount = contents.byteLength * 8 / bitsPerComponent;
+  for (let sample = 0; sample < sampleCount; sample += 1) {
+    const bitOffset = sample * bitsPerComponent;
+    const byteOffset = Math.floor(bitOffset / 8);
+    const shift = 8 - bitsPerComponent - (bitOffset % 8);
+    const current = (contents[byteOffset] >> shift) & sampleMask;
+    const difference = (current - previous) & sampleMask;
+    previous = current;
+    encoded[byteOffset] = encoded[byteOffset] | (difference << shift);
+  }
   return encoded;
 }
 

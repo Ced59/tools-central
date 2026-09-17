@@ -33,6 +33,8 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
+type PdfFilterDecodeParameter = PdfFilterDecodeParameters | RawPdfReference | undefined;
+
 interface IndirectObjectHeader extends RawPdfReference {
   start: number;
   end: number;
@@ -58,7 +60,7 @@ interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
   filters?: readonly string[];
-  decodeParameters?: readonly (PdfFilterDecodeParameters | undefined)[] | null;
+  decodeParameters?: readonly PdfFilterDecodeParameter[] | null;
   objectCount?: number;
   firstObjectOffset?: number;
   xrefSize?: number;
@@ -73,7 +75,7 @@ interface CriticalStreamDescriptor {
   type: 'ObjStm' | 'XRef';
   contents: Uint8Array;
   filters: readonly string[] | undefined;
-  decodeParameters: readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined;
+  decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
 }
 
 interface PdfFilterDecodeParameters {
@@ -110,6 +112,11 @@ interface CrossReferenceSection {
   previousOffset?: number;
   supplementalOffset?: number;
   entriesDecoded: boolean;
+}
+
+interface PdfStreamExpansionBudget {
+  expandedBytes: number;
+  maxBytes: number;
 }
 
 export interface PdfObjectStreamPreflightResult {
@@ -245,30 +252,23 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     });
   }
 
-  let expandedBytes = 0;
+  const expansionBudget: PdfStreamExpansionBudget = {
+    expandedBytes: 0,
+    maxBytes: PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  };
   let skippedEncryptedObjectStreams = 0;
   for (const stream of criticalStreams) {
     if (encrypted && stream.type === 'ObjStm') {
       skippedEncryptedObjectStreams += 1;
       continue;
     }
-    const remaining = PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES - expandedBytes;
-    if (remaining < 0) throw new Error('PDF object stream expansion limit');
     const decoded = decodeObjectStreamContents(
       stream.contents,
       stream.filters,
-      stream.decodeParameters,
-      remaining,
+      resolveDecodeParameters(data, stream.decodeParameters, objectStreamSelection),
+      expansionBudget,
     );
     if (!decoded) throw new Error('Unsupported or invalid PDF object stream filter');
-
-    expandedBytes += decoded.byteLength;
-    if (
-      !Number.isSafeInteger(expandedBytes)
-      || expandedBytes > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES
-    ) {
-      throw new Error('PDF object stream expansion limit');
-    }
   }
   return { encrypted, skippedEncryptedObjectStreams };
 }
@@ -818,6 +818,10 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   let encrypted = false;
   let compressedEntriesComplete = true;
   let parsedSection = false;
+  const expansionBudget: PdfStreamExpansionBudget = {
+    expandedBytes: 0,
+    maxBytes: PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  };
   let currentOffset: number | undefined = xrefPosition.value;
   while (currentOffset !== undefined) {
     if (visitedOffsets.has(currentOffset) || visitedOffsets.size >= 128) {
@@ -825,7 +829,12 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
       break;
     }
     visitedOffsets.add(currentOffset);
-    const primarySection = readCrossReferenceSection(data, currentOffset, startXrefOffset);
+    const primarySection = readCrossReferenceSection(
+      data,
+      currentOffset,
+      startXrefOffset,
+      expansionBudget,
+    );
     if (!primarySection) {
       compressedEntriesComplete = false;
       break;
@@ -847,6 +856,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
         data,
         supplementalOffset,
         startXrefOffset,
+        expansionBudget,
       );
       if (!supplementalSection || supplementalSection.kind !== 'stream') {
         compressedEntriesComplete = false;
@@ -893,6 +903,7 @@ function readCrossReferenceSection(
   data: Uint8Array,
   sectionOffset: number,
   lastStartXrefOffset: number,
+  expansionBudget: PdfStreamExpansionBudget,
 ): CrossReferenceSection | undefined {
   const xrefOffset = skipWhitespaceAndComments(data, sectionOffset);
   if (matchesKeyword(data, xrefOffset, 'xref')) {
@@ -914,13 +925,14 @@ function readCrossReferenceSection(
     return undefined;
   }
   if (dictionary.type !== 'XRef') return undefined;
-  return readXrefStreamSection(data, dictionaryEnd, dictionary);
+  return readXrefStreamSection(data, dictionaryEnd, dictionary, expansionBudget);
 }
 
 function readXrefStreamSection(
   data: Uint8Array,
   dictionaryEnd: number,
   dictionary: ParsedDictionary,
+  expansionBudget: PdfStreamExpansionBudget,
 ): CrossReferenceSection | undefined {
   const ranges = readXrefRanges(dictionary);
   if (!ranges) return undefined;
@@ -976,8 +988,8 @@ function readXrefStreamSection(
   const decoded = decodeObjectStreamContents(
     data.subarray(streamStart, streamEnd),
     dictionary.filters,
-    dictionary.decodeParameters,
-    expectedBytes,
+    resolveDecodeParameters(data, dictionary.decodeParameters),
+    expansionBudget,
   );
   if (!decoded || decoded.byteLength !== expectedBytes) return section;
 
@@ -1167,7 +1179,10 @@ function collectCompressedIndirectLengthCandidates(
   const compressedCandidates = new Map<string, Set<number>>();
   const processedStreams = new Set<number>();
   let candidateValues = countCandidateValues(candidates.values);
-  let expandedBytes = 0;
+  const expansionBudget: PdfStreamExpansionBudget = {
+    expandedBytes: 0,
+    maxBytes: PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
+  };
   let changed = true;
   while (changed) {
     changed = false;
@@ -1224,18 +1239,13 @@ function collectCompressedIndirectLengthCandidates(
         throw new Error('PDF stream limit');
       }
 
-      const remaining = PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES - expandedBytes;
       const decoded = decodeObjectStreamContents(
         data.subarray(streamStart, streamEnd),
         dictionary.filters,
-        dictionary.decodeParameters,
-        remaining,
+        resolveDecodeParameters(data, dictionary.decodeParameters, candidates),
+        expansionBudget,
       );
       if (!decoded) continue;
-      expandedBytes += decoded.byteLength;
-      if (expandedBytes > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES) {
-        throw new Error('PDF object stream expansion limit');
-      }
       const values = readCompressedIntegerObjects(
         decoded,
         dictionary.objectCount,
@@ -1299,7 +1309,7 @@ function decodeObjectStreamContents(
   contents: Uint8Array,
   filters: readonly string[] | undefined,
   decodeParameters: readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined,
-  maxDecodedBytes: number,
+  expansionBudget: PdfStreamExpansionBudget,
 ): Uint8Array | undefined {
   if (
     !filters
@@ -1310,37 +1320,62 @@ function decodeObjectStreamContents(
       && decodeParameters.length !== filters.length
     )
   ) return undefined;
-  try {
-    let decoded = contents;
-    if (filters.length === 0 && decoded.byteLength > maxDecodedBytes) {
-      throw new Error('PDF object stream expansion limit');
-    }
-    for (let index = 0; index < filters.length; index += 1) {
-      const filter = filters[index];
-      const parameters = decodeParameters?.[index];
-      if (filter === 'FlateDecode' || filter === 'Fl') {
-        decoded = boundedInflatedContents(decoded, maxDecodedBytes);
-        decoded = applyPdfPredictor(decoded, parameters, maxDecodedBytes);
-      } else if (filter === 'LZWDecode' || filter === 'LZW') {
-        decoded = decodeLzwContents(decoded, maxDecodedBytes, parameters?.earlyChange ?? 1);
-        decoded = applyPdfPredictor(decoded, parameters, maxDecodedBytes);
-      } else if (filter === 'ASCII85Decode' || filter === 'A85') {
-        decoded = decodeAscii85Contents(decoded, maxDecodedBytes);
-      } else if (filter === 'ASCIIHexDecode' || filter === 'AHx') {
-        decoded = decodeAsciiHexContents(decoded, maxDecodedBytes);
-      } else if (filter === 'RunLengthDecode' || filter === 'RL') {
-        decoded = decodeRunLengthContents(decoded, maxDecodedBytes);
-      } else {
-        return undefined;
-      }
-    }
+  let decoded = contents;
+  if (filters.length === 0) {
+    chargeExpandedBytes(expansionBudget, decoded.byteLength);
     return decoded;
-  } catch (error) {
-    if (error instanceof Error && error.message === 'PDF object stream expansion limit') {
-      throw error;
-    }
-    return undefined;
   }
+  for (let index = 0; index < filters.length; index += 1) {
+    const filter = filters[index];
+    const parameters = decodeParameters?.[index];
+    let stage: Uint8Array;
+    if (filter === 'FlateDecode' || filter === 'Fl') {
+      stage = boundedInflatedContents(decoded, remainingExpansionBytes(expansionBudget));
+    } else if (filter === 'LZWDecode' || filter === 'LZW') {
+      stage = decodeLzwContents(
+        decoded,
+        remainingExpansionBytes(expansionBudget),
+        parameters?.earlyChange ?? 1,
+      );
+    } else if (filter === 'ASCII85Decode' || filter === 'A85') {
+      stage = decodeAscii85Contents(decoded, remainingExpansionBytes(expansionBudget));
+    } else if (filter === 'ASCIIHexDecode' || filter === 'AHx') {
+      stage = decodeAsciiHexContents(decoded, remainingExpansionBytes(expansionBudget));
+    } else if (filter === 'RunLengthDecode' || filter === 'RL') {
+      stage = decodeRunLengthContents(decoded, remainingExpansionBytes(expansionBudget));
+    } else {
+      return undefined;
+    }
+    chargeExpandedBytes(expansionBudget, stage.byteLength);
+    if ((filter === 'FlateDecode' || filter === 'Fl' || filter === 'LZWDecode' || filter === 'LZW')) {
+      const predicted = applyPdfPredictor(
+        stage,
+        parameters,
+        remainingExpansionBytes(expansionBudget),
+      );
+      if (predicted !== stage) chargeExpandedBytes(expansionBudget, predicted.byteLength);
+      decoded = predicted;
+    } else {
+      decoded = stage;
+    }
+  }
+  return decoded;
+}
+
+function remainingExpansionBytes(budget: PdfStreamExpansionBudget): number {
+  const remaining = budget.maxBytes - budget.expandedBytes;
+  if (!Number.isSafeInteger(remaining) || remaining < 0) {
+    throw new Error('PDF object stream expansion limit');
+  }
+  return remaining;
+}
+
+function chargeExpandedBytes(budget: PdfStreamExpansionBudget, byteLength: number): void {
+  budget.expandedBytes += byteLength;
+  if (
+    !Number.isSafeInteger(budget.expandedBytes)
+    || budget.expandedBytes > budget.maxBytes
+  ) throw new Error('PDF object stream expansion limit');
 }
 
 class BoundedByteAccumulator {
@@ -1640,7 +1675,25 @@ function decodeTiffPredictor(
     }
     return decoded;
   }
-  throw new Error('Unsupported TIFF predictor component width');
+  const bitsPerComponent = parameters.bitsPerComponent;
+  const samplesPerRow = parameters.colors * parameters.columns;
+  const sampleMask = (1 << bitsPerComponent) - 1;
+  for (let rowStart = 0; rowStart < decoded.byteLength; rowStart += rowBytes) {
+    const previousSamples = new Uint8Array(parameters.colors);
+    for (let sample = 0; sample < samplesPerRow; sample += 1) {
+      const bitOffset = sample * bitsPerComponent;
+      const byteOffset = rowStart + Math.floor(bitOffset / 8);
+      const shift = 8 - bitsPerComponent - (bitOffset % 8);
+      const color = sample % parameters.colors;
+      const encoded = (decoded[byteOffset] >> shift) & sampleMask;
+      const value = (encoded + previousSamples[color]) & sampleMask;
+      previousSamples[color] = value;
+      decoded[byteOffset] = (
+        decoded[byteOffset] & ~(sampleMask << shift)
+      ) | (value << shift);
+    }
+  }
+  return decoded;
 }
 
 function decodePngPredictor(
@@ -1850,7 +1903,7 @@ function parseCriticalDictionary(
   let type: string | undefined;
   let length: number | RawPdfReference | undefined;
   let filters: readonly string[] | undefined = [];
-  let decodeParameters: readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined;
+  let decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
   let objectCount: number | undefined;
   let firstObjectOffset: number | undefined;
   let xrefSize: number | undefined;
@@ -2097,15 +2150,17 @@ function readFilters(
 function readDecodeParameters(
   data: Uint8Array,
   start: number,
-): { parameters: readonly (PdfFilterDecodeParameters | undefined)[]; end: number } {
+): { parameters: readonly PdfFilterDecodeParameter[]; end: number } {
   if (matchesKeyword(data, start, 'null')) return { parameters: [], end: start + 4 };
   if (data[start] === LESS_THAN && data[start + 1] === LESS_THAN) {
     const end = findDictionaryEnd(data, start);
     if (end === undefined) throw new Error('Invalid PDF decode parameters');
     return { parameters: [readDecodeParameterDictionary(data, start, end)], end };
   }
-  if (data[start] !== LEFT_BRACKET) throw new Error('Indirect PDF decode parameters');
-  const parameters: Array<PdfFilterDecodeParameters | undefined> = [];
+  const reference = readRawPdfReference(data, start);
+  if (reference) return { parameters: [reference.reference], end: reference.end };
+  if (data[start] !== LEFT_BRACKET) throw new Error('Invalid PDF decode parameters');
+  const parameters: PdfFilterDecodeParameter[] = [];
   let offset = start + 1;
   while (offset < data.byteLength) {
     offset = skipWhitespaceAndComments(data, offset);
@@ -2116,6 +2171,12 @@ function readDecodeParameters(
     if (matchesKeyword(data, offset, 'null')) {
       parameters.push(undefined);
       offset += 4;
+      continue;
+    }
+    const itemReference = readRawPdfReference(data, offset);
+    if (itemReference) {
+      parameters.push(itemReference.reference);
+      offset = itemReference.end;
       continue;
     }
     if (data[offset] !== LESS_THAN || data[offset + 1] !== LESS_THAN) {
@@ -2194,6 +2255,44 @@ function readDecodeParameterDictionary(
   };
 }
 
+function resolveDecodeParameters(
+  data: Uint8Array,
+  parameters: readonly PdfFilterDecodeParameter[] | null | undefined,
+  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
+  if (parameters === null || parameters === undefined) return parameters;
+  const resolved: Array<PdfFilterDecodeParameters | undefined> = [];
+  for (const parameter of parameters) {
+    if (parameter === undefined) {
+      resolved.push(undefined);
+      continue;
+    }
+    if ('predictor' in parameter) {
+      resolved.push(parameter);
+      continue;
+    }
+    const offset = candidates?.authoritativeOffsets.get(referenceKey(
+      parameter.objectNumber,
+      parameter.generationNumber,
+    ));
+    if (offset === undefined) return null;
+    const header = readIndirectObjectHeader(data, offset);
+    if (
+      !header
+      || header.objectNumber !== parameter.objectNumber
+      || header.generationNumber !== parameter.generationNumber
+    ) return null;
+    const dictionaryStart = skipWhitespaceAndComments(data, header.end);
+    if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return null;
+    const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+    if (dictionaryEnd === undefined) return null;
+    const objectEnd = skipWhitespaceAndComments(data, dictionaryEnd);
+    if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
+    resolved.push(readDecodeParameterDictionary(data, dictionaryStart, dictionaryEnd));
+  }
+  return resolved;
+}
+
 function readPdfName(data: Uint8Array, start: number): RawPdfName | undefined {
   if (data[start] !== PDF_NAME) return undefined;
   const characters: number[] = [];
@@ -2234,6 +2333,27 @@ function readUnsignedInteger(
     offset += 1;
   }
   return digits === 0 ? undefined : { value, end: offset };
+}
+
+function readRawPdfReference(
+  data: Uint8Array,
+  start: number,
+): { reference: RawPdfReference; end: number } | undefined {
+  const objectNumber = readUnsignedInteger(data, start);
+  if (!objectNumber) return undefined;
+  const generationStart = skipWhitespaceAndComments(data, objectNumber.end);
+  if (generationStart === objectNumber.end) return undefined;
+  const generation = readUnsignedInteger(data, generationStart);
+  if (!generation) return undefined;
+  const marker = skipWhitespaceAndComments(data, generation.end);
+  if (marker === generation.end || !matchesKeyword(data, marker, 'R')) return undefined;
+  return {
+    reference: {
+      objectNumber: objectNumber.value,
+      generationNumber: generation.value,
+    },
+    end: marker + 1,
+  };
 }
 
 function tryReadUnsignedInteger(
