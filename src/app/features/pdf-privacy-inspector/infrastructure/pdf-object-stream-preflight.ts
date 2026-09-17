@@ -84,6 +84,7 @@ interface ParsedDictionary {
   previousXrefOffset?: number;
   supplementalXrefOffset?: number;
   hasEncryptionDictionary: boolean;
+  encryptionReference?: RawPdfReference;
 }
 
 interface CriticalStreamDescriptor {
@@ -124,6 +125,7 @@ interface CrossReferenceSection {
   compressedEntries: Map<string, CompressedCrossReferenceEntry>;
   definedObjectNumbers: Set<number>;
   encrypted: boolean;
+  encryptionReference?: RawPdfReference;
   previousOffset?: number;
   supplementalOffset?: number;
   entriesDecoded: boolean;
@@ -211,7 +213,11 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
     const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
     if (expectTrailerDictionary) {
-      encrypted ||= dictionary.hasEncryptionDictionary;
+      encrypted ||= dictionaryDeclaresEncryption(
+        data,
+        dictionary,
+        objectStreamSelection.authoritativeOffsets,
+      );
       validateXrefSize(dictionary.xrefSize);
       expectTrailerDictionary = false;
     }
@@ -257,7 +263,11 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       && shouldSkipInactiveObjectStream(objectStreamSelection, streamObjectHeader)
     ) continue;
     if (dictionary.type === 'XRef') {
-      encrypted ||= dictionary.hasEncryptionDictionary;
+      encrypted ||= dictionaryDeclaresEncryption(
+        data,
+        dictionary,
+        objectStreamSelection.authoritativeOffsets,
+      );
       validateXrefSize(dictionary.xrefSize);
     } else {
       if (dictionary.objectCount === undefined) throw new Error('Missing PDF object count');
@@ -806,7 +816,7 @@ function detectEncryptionBeforeObjectStreamDiscovery(
       continue;
     }
     if (
-      dictionary.hasEncryptionDictionary
+      dictionaryDeclaresEncryption(data, dictionary, candidates.authoritativeOffsets)
       && (expectTrailerDictionary || dictionary.type === 'XRef')
     ) return true;
     expectTrailerDictionary = false;
@@ -870,6 +880,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   const visitedOffsets = new Set<number>();
   const definedObjectNumbers = new Set<number>();
   let encrypted = false;
+  const encryptionReferences: RawPdfReference[] = [];
   let compressedEntriesComplete = true;
   let parsedSection = false;
   const bootstrapOffsets: Array<readonly [string, number]> = [];
@@ -922,6 +933,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
     for (const section of [supplementalSection, primarySection]) {
       if (!section) continue;
       encrypted ||= section.encrypted;
+      if (section.encryptionReference) encryptionReferences.push(section.encryptionReference);
       compressedEntriesComplete &&= section.entriesDecoded;
       bootstrapOffsets.push(...section.bootstrapOffsets);
       for (const [key, objectOffset] of section.objectOffsets) {
@@ -950,6 +962,9 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   for (const [key, offset] of bootstrapOffsets) {
     if (objectOffsets.get(key) !== offset) compressedEntriesComplete = false;
   }
+  encrypted ||= encryptionReferences.some(reference => (
+    !isAuthoritativeNullObject(data, reference, objectOffsets)
+  ));
   return {
     objectOffsets,
     compressedEntries,
@@ -1016,6 +1031,7 @@ function readXrefStreamSection(
     compressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
     definedObjectNumbers,
     encrypted: dictionary.hasEncryptionDictionary,
+    encryptionReference: dictionary.encryptionReference,
     previousOffset: dictionary.previousXrefOffset,
     entriesDecoded: false,
     bootstrapOffsets: new Map<string, number>(),
@@ -1303,6 +1319,7 @@ function readClassicCrossReferenceSection(
           compressedEntries,
           definedObjectNumbers,
           encrypted: dictionary.hasEncryptionDictionary,
+          encryptionReference: dictionary.encryptionReference,
           previousOffset: dictionary.previousXrefOffset,
           supplementalOffset: dictionary.supplementalXrefOffset,
           entriesDecoded: true,
@@ -2160,6 +2177,39 @@ function referenceObjectNumber(key: string): number {
   return Number(key.slice(0, key.indexOf(':')));
 }
 
+function dictionaryDeclaresEncryption(
+  data: Uint8Array,
+  dictionary: ParsedDictionary,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+): boolean {
+  if (dictionary.hasEncryptionDictionary) return true;
+  return dictionary.encryptionReference !== undefined
+    && !isAuthoritativeNullObject(data, dictionary.encryptionReference, authoritativeOffsets);
+}
+
+function isAuthoritativeNullObject(
+  data: Uint8Array,
+  reference: RawPdfReference,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+): boolean {
+  const offset = authoritativeOffsets.get(referenceKey(
+    reference.objectNumber,
+    reference.generationNumber,
+  ));
+  if (offset === undefined) return false;
+  const header = readIndirectObjectHeader(data, offset);
+  if (
+    !header
+    || header.start !== offset
+    || header.objectNumber !== reference.objectNumber
+    || header.generationNumber !== reference.generationNumber
+  ) return false;
+  const valueStart = skipWhitespaceAndComments(data, header.end);
+  if (!matchesKeyword(data, valueStart, 'null')) return false;
+  const objectEnd = skipWhitespaceAndComments(data, valueStart + 'null'.length);
+  return matchesKeyword(data, objectEnd, 'endobj');
+}
+
 function parseCriticalDictionary(
   data: Uint8Array,
   dictionaryStart: number,
@@ -2179,6 +2229,8 @@ function parseCriticalDictionary(
   let hasFilter = false;
   let hasDecodeParameters = false;
   let hasEncryptionDictionary = false;
+  let encryptionReference: RawPdfReference | undefined;
+  let hasEncryptionEntry = false;
   let dictionaryDepth = 0;
   let arrayDepth = 0;
   let offset = dictionaryStart;
@@ -2320,8 +2372,12 @@ function parseCriticalDictionary(
       }
       offset = value.end;
     } else {
-      if (key.value === 'Encrypt' && !matchesKeyword(data, valueStart, 'null')) {
-        hasEncryptionDictionary = true;
+      if (key.value === 'Encrypt') {
+        if (hasEncryptionEntry) throw new Error('Duplicate PDF encryption dictionary');
+        hasEncryptionEntry = true;
+        const reference = readRawPdfReference(data, valueStart);
+        if (reference) encryptionReference = reference.reference;
+        else if (!matchesKeyword(data, valueStart, 'null')) hasEncryptionDictionary = true;
       }
       offset = skipPdfValue(data, valueStart, dictionaryEnd);
     }
@@ -2339,6 +2395,7 @@ function parseCriticalDictionary(
     previousXrefOffset,
     supplementalXrefOffset,
     hasEncryptionDictionary,
+    encryptionReference,
   };
 }
 

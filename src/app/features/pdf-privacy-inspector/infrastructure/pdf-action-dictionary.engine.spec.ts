@@ -467,6 +467,57 @@ describe('inspectPdfStructuralSignals', () => {
       skippedEncryptedObjectStreams: 0,
     });
 
+    const indirectNullBody = [
+      '%PDF-1.7',
+      '1 0 obj',
+      '<< /Type /ObjStm /N 1 /First 4 /Length 8 >>',
+      'stream',
+      '2 0 null',
+      'endstream',
+      'endobj',
+      '5 0 obj',
+      'null',
+      'endobj',
+      '',
+    ].join('\n');
+    const indirectNullXrefOffset = indirectNullBody.length;
+    const indirectNullFixture = joinBytes(
+      indirectNullBody,
+      '6 0 obj\n<< /Type /XRef /Size 7 /W [1 4 2] /Index [1 2 5 2] ',
+      '/Encrypt 5 0 R /Length 28 >>\nstream\n',
+      encodeXrefEntry(1, indirectNullBody.indexOf('1 0 obj')),
+      encodeXrefEntry(2, 1),
+      encodeXrefEntry(1, indirectNullBody.indexOf('5 0 obj')),
+      encodeXrefEntry(1, indirectNullXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(indirectNullXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(indirectNullFixture)).toEqual({
+      encrypted: false,
+      skippedEncryptedObjectStreams: 0,
+    });
+
+    const replacedEncryptionBody = indirectNullBody
+      + '5 0 obj\n<< /Filter /Standard >>\nendobj\n';
+    const replacedEncryptionXrefOffset = replacedEncryptionBody.length;
+    const replacedEncryptionFixture = joinBytes(
+      replacedEncryptionBody,
+      '6 0 obj\n<< /Type /XRef /Size 7 /W [1 4 2] /Index [1 2 5 2] ',
+      '/Encrypt 5 0 R /Length 28 >>\nstream\n',
+      encodeXrefEntry(1, replacedEncryptionBody.indexOf('1 0 obj')),
+      encodeXrefEntry(2, 1),
+      encodeXrefEntry(1, replacedEncryptionBody.lastIndexOf('5 0 obj')),
+      encodeXrefEntry(1, replacedEncryptionXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(replacedEncryptionXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(replacedEncryptionFixture)).toEqual({
+      encrypted: true,
+      skippedEncryptedObjectStreams: 1,
+    });
+
     const encryptedLengthCandidate = `2 0 ${String(fakeBoundary)}`;
     const compressedEncryptedCandidate = deflate(new TextEncoder().encode(encryptedLengthCandidate));
     const encryptedCandidateFixture = joinBytes(
