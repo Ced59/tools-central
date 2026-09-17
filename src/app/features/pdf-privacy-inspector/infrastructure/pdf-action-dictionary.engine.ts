@@ -1995,6 +1995,7 @@ function readEmbeddedFileBytes(stream: PDFStream): number | undefined {
 function readFilterNames(dictionary: PDFDict): readonly string[] {
   const filter = readObject(dictionary, 'Filter');
   if (!filter) return [];
+  if (filter === PDFNull) return [];
   if (filter instanceof PDFName) return [filter.decodeText()];
   if (!(filter instanceof PDFArray)) throw new PdfActionDictionaryInspectionError();
   const names: string[] = [];

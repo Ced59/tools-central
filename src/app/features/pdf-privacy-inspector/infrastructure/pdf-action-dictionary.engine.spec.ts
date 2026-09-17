@@ -1,4 +1,4 @@
-import { PDFDict, PDFDocument, PDFName, PDFRef, PDFString } from 'pdf-lib';
+import { PDFDict, PDFDocument, PDFName, PDFNull, PDFRef, PDFString } from 'pdf-lib';
 import { deflate } from 'pako';
 import { describe, expect, it } from 'vitest';
 
@@ -1153,6 +1153,36 @@ describe('inspectPdfStructuralSignals', () => {
       await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
         .resolves.not.toBeNull();
     }
+  });
+
+  it('traite /Filter null comme un flux texte non filtré pour XMP, JavaScript et XFA', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const nullFilteredStream = (contents: string): PDFRef => {
+      const stream = source.context.stream(contents);
+      stream.dict.set(PDFName.of('Filter'), PDFNull);
+      return source.context.register(stream);
+    };
+    const xmp = source.context.stream(
+      '<x:xmpmeta>safe</x:xmpmeta>',
+      { Type: 'Metadata', Subtype: 'XML' },
+    );
+    xmp.dict.set(PDFName.of('Filter'), PDFNull);
+    source.catalog.set(PDFName.of('Metadata'), source.context.register(xmp));
+    source.catalog.set(PDFName.of('OpenAction'), source.context.obj({
+      Type: 'Action',
+      S: 'JavaScript',
+      JS: nullFilteredStream('app.alert("safe")'),
+    }));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: [],
+      XFA: [PDFString.of('datasets'), nullFilteredStream('<xfa>safe</xfa>')],
+    }));
+
+    const pdf = await source.save({ useObjectStreams: false });
+
+    expect(new TextDecoder().decode(pdf)).toContain('/Filter null');
+    await expect(inspectPdfStructuralSignals(pdf)).resolves.not.toBeNull();
   });
 
   it('refuse un flux JavaScript dont la taille décompressée dépasse la limite', async () => {
