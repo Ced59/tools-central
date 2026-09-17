@@ -296,6 +296,32 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(xrefStreamFixture);
     }).toThrow('PDF raw container depth limit');
 
+    const obsoleteXrefLengthBody = '%PDF-1.7\n7 0 obj\n999\nendobj\n';
+    const obsoleteXrefOffset = obsoleteXrefLengthBody.length;
+    const obsoleteXrefRevision = [
+      obsoleteXrefLengthBody,
+      'xref\n7 1\n',
+      `${String(obsoleteXrefLengthBody.indexOf('7 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 8 >>\nstartxref\n',
+      String(obsoleteXrefOffset),
+      '\n%%EOF\n',
+    ].join('');
+    const activeXrefLengthOffset = obsoleteXrefRevision.length;
+    const indirectXrefLengthBody = obsoleteXrefRevision + '7 0 obj\n14\nendobj\n';
+    const indirectXrefOffset = indirectXrefLengthBody.length;
+    const indirectXrefLengthFixture = joinBytes(
+      indirectXrefLengthBody,
+      '8 0 obj\n<< /Type /XRef /Size 9 /Prev ',
+      String(obsoleteXrefOffset),
+      ' /W [1 4 2] /Index [7 2] /Length 7 0 R >>\nstream\n',
+      encodeXrefEntry(1, activeXrefLengthOffset),
+      encodeXrefEntry(1, indirectXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(indirectXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(indirectXrefLengthFixture)).not.toThrow();
+
     const staleObjectStreamPayload = '2 0 99';
     const activeObjectStreamPayload = '2 0 3';
     const compressedRevisionBody = [

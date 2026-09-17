@@ -112,6 +112,11 @@ interface ByteRange {
   end: number;
 }
 
+interface XrefStreamLengthCandidate {
+  value: number;
+  offset?: number;
+}
+
 interface CrossReferenceMetadata {
   objectOffsets: Map<string, number>;
   compressedEntries: Map<string, CompressedCrossReferenceEntry>;
@@ -516,7 +521,7 @@ function collectIndirectLengths(data: Uint8Array): {
     }
     const objectKeyword = skipWhitespaceAndComments(data, generation.end);
     if (!matchesKeyword(data, objectKeyword, 'obj')) {
-      offset = generation.end;
+      offset = objectNumber.end;
       continue;
     }
     const valueStart = skipWhitespaceAndComments(data, objectKeyword + 'obj'.length);
@@ -1045,8 +1050,6 @@ function readXrefStreamSection(
     || !Number.isSafeInteger(expectedBytes)
     || expectedBytes > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES
   ) return section;
-  if (typeof dictionary.length !== 'number') return section;
-
   const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
   if (!matchesKeyword(data, streamKeyword, 'stream')) return section;
   let streamStart: number;
@@ -1055,59 +1058,104 @@ function readXrefStreamSection(
   } catch {
     return section;
   }
-  const streamEnd = streamStart + dictionary.length;
-  if (
-    !Number.isSafeInteger(streamEnd)
-    || streamEnd > data.byteLength
-    || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
-  ) return section;
-  const bootstrapOffsets = collectXrefBootstrapOffsets(data, dictionary);
-  section.bootstrapOffsets = bootstrapOffsets;
-  const bootstrapCandidates = { authoritativeOffsets: bootstrapOffsets };
-  const decoded = decodeObjectStreamContents(
-    data.subarray(streamStart, streamEnd),
-    resolveFilters(data, dictionary.filters, bootstrapCandidates),
-    resolveDecodeParameters(data, dictionary.decodeParameters, bootstrapCandidates),
-    expansionBudget,
+  const streamLength = dictionary.length;
+  if (streamLength === undefined) return section;
+  const streamRanges = typeof streamLength === 'number'
+    ? undefined
+    : collectBootstrapStreamRanges(data);
+  const sharedBootstrapOffsets = collectXrefBootstrapOffsets(data, dictionary, streamRanges);
+  const lengthCandidates = collectXrefStreamLengthCandidates(
+    data,
+    streamLength,
+    streamRanges ?? [],
   );
-  if (!decoded || decoded.byteLength !== expectedBytes) return section;
-
-  let decodedOffset = 0;
-  for (const [firstObject, count] of ranges) {
-    for (let index = 0; index < count; index += 1) {
-      const type = widths[0] === 0
-        ? 1
-        : readBigEndianUnsignedInteger(decoded, decodedOffset, widths[0] ?? 0);
-      decodedOffset += widths[0] ?? 0;
-      const fieldOne = readBigEndianUnsignedInteger(decoded, decodedOffset, widths[1] ?? 0);
-      decodedOffset += widths[1] ?? 0;
-      const fieldTwo = readBigEndianUnsignedInteger(decoded, decodedOffset, widths[2] ?? 0);
-      decodedOffset += widths[2] ?? 0;
-      if (type === undefined || fieldOne === undefined || fieldTwo === undefined) {
-        return section;
-      }
-      if (type !== 0 && type !== 1 && type !== 2) return section;
-      if (type === 1) {
-        if (fieldOne >= data.byteLength) return section;
-        section.objectOffsets.set(
-          referenceKey(firstObject + index, fieldTwo),
-          fieldOne,
-        );
-      } else if (type === 2) {
-        section.compressedEntries.set(
-          referenceKey(firstObject + index, 0),
-          { objectStreamNumber: fieldOne, objectIndex: fieldTwo },
-        );
-      }
+  let acceptedSection: CrossReferenceSection | undefined;
+  for (const lengthCandidate of lengthCandidates) {
+    const streamEnd = streamStart + lengthCandidate.value;
+    if (
+      !Number.isSafeInteger(streamEnd)
+      || streamEnd > data.byteLength
+      || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
+    ) continue;
+    const bootstrapOffsets = new Map(sharedBootstrapOffsets);
+    if (typeof streamLength !== 'number') {
+      const lengthKey = referenceKey(
+        streamLength.objectNumber,
+        streamLength.generationNumber,
+      );
+      if (lengthCandidate.offset === undefined) continue;
+      const existingOffset = bootstrapOffsets.get(lengthKey);
+      if (existingOffset !== undefined && existingOffset !== lengthCandidate.offset) continue;
+      bootstrapOffsets.set(lengthKey, lengthCandidate.offset);
     }
+    const bootstrapCandidates = { authoritativeOffsets: bootstrapOffsets };
+    const decoded = decodeObjectStreamContents(
+      data.subarray(streamStart, streamEnd),
+      resolveFilters(data, dictionary.filters, bootstrapCandidates),
+      resolveDecodeParameters(data, dictionary.decodeParameters, bootstrapCandidates),
+      expansionBudget,
+    );
+    if (!decoded || decoded.byteLength !== expectedBytes) continue;
+
+    const objectOffsets = new Map<string, number>();
+    const compressedEntries = new Map<string, CompressedCrossReferenceEntry>();
+    let decodedOffset = 0;
+    let entriesValid = true;
+    for (const [firstObject, count] of ranges) {
+      for (let index = 0; index < count; index += 1) {
+        const type = widths[0] === 0
+          ? 1
+          : readBigEndianUnsignedInteger(decoded, decodedOffset, widths[0] ?? 0);
+        decodedOffset += widths[0] ?? 0;
+        const fieldOne = readBigEndianUnsignedInteger(decoded, decodedOffset, widths[1] ?? 0);
+        decodedOffset += widths[1] ?? 0;
+        const fieldTwo = readBigEndianUnsignedInteger(decoded, decodedOffset, widths[2] ?? 0);
+        decodedOffset += widths[2] ?? 0;
+        if (
+          type === undefined
+          || fieldOne === undefined
+          || fieldTwo === undefined
+          || (type !== 0 && type !== 1 && type !== 2)
+          || (type === 1 && fieldOne >= data.byteLength)
+        ) {
+          entriesValid = false;
+          break;
+        }
+        if (type === 1) {
+          objectOffsets.set(referenceKey(firstObject + index, fieldTwo), fieldOne);
+        } else if (type === 2) {
+          compressedEntries.set(
+            referenceKey(firstObject + index, 0),
+            { objectStreamNumber: fieldOne, objectIndex: fieldTwo },
+          );
+        }
+      }
+      if (!entriesValid) break;
+    }
+    if (!entriesValid) continue;
+    if (typeof streamLength !== 'number') {
+      const lengthKey = referenceKey(
+        streamLength.objectNumber,
+        streamLength.generationNumber,
+      );
+      if (objectOffsets.get(lengthKey) !== lengthCandidate.offset) continue;
+    }
+    if (acceptedSection) return section;
+    acceptedSection = {
+      ...section,
+      objectOffsets,
+      compressedEntries,
+      entriesDecoded: true,
+      bootstrapOffsets,
+    };
   }
-  section.entriesDecoded = true;
-  return section;
+  return acceptedSection ?? section;
 }
 
 function collectXrefBootstrapOffsets(
   data: Uint8Array,
   dictionary: ParsedDictionary,
+  knownStreamRanges?: readonly ByteRange[],
 ): ReadonlyMap<string, number> {
   const references = new Set<string>();
   const outerFilterReferences: RawPdfReference[] = [];
@@ -1142,7 +1190,7 @@ function collectXrefBootstrapOffsets(
   }
   if (references.size === 0) return new Map<string, number>();
 
-  const streamRanges = collectBootstrapStreamRanges(data);
+  const streamRanges = knownStreamRanges ?? collectBootstrapStreamRanges(data);
   const offsets = collectBootstrapOffsetsForReferences(data, references, streamRanges);
   const nestedReferences = new Set<string>();
   for (const reference of outerFilterReferences) {
@@ -1189,6 +1237,58 @@ function collectXrefBootstrapOffsets(
     for (const [key, offset] of nestedOffsets) offsets.set(key, offset);
   }
   return offsets;
+}
+
+function collectXrefStreamLengthCandidates(
+  data: Uint8Array,
+  length: number | RawPdfReference | undefined,
+  streamRanges: readonly ByteRange[],
+): readonly XrefStreamLengthCandidate[] {
+  if (typeof length === 'number') return [{ value: length }];
+  if (!length) return [];
+  const key = referenceKey(length.objectNumber, length.generationNumber);
+  const candidates: XrefStreamLengthCandidate[] = [];
+  let declarations = 0;
+  let offset = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset];
+    if (byte === PERCENT) {
+      offset = skipComment(data, offset);
+      continue;
+    }
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      offset = skipHexString(data, offset);
+      continue;
+    }
+    const header = readIndirectObjectHeader(data, offset);
+    if (!header) {
+      offset += 1;
+      continue;
+    }
+    if (
+      referenceKey(header.objectNumber, header.generationNumber) === key
+      && !isOffsetInsideRanges(offset, streamRanges)
+    ) {
+      declarations += 1;
+      if (declarations > MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
+        throw new Error('PDF indirect length candidate limit');
+      }
+      const valueStart = skipWhitespaceAndComments(data, header.end);
+      const value = tryReadUnsignedInteger(data, valueStart);
+      if (value) {
+        const objectEnd = skipWhitespaceAndComments(data, value.end);
+        if (matchesKeyword(data, objectEnd, 'endobj')) {
+          candidates.push({ value: value.value, offset });
+        }
+      }
+    }
+    offset = header.end;
+  }
+  return candidates;
 }
 
 function collectBootstrapOffsetsForReferences(
