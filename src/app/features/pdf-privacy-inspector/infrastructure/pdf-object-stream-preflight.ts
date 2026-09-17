@@ -543,6 +543,15 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     compressedEntriesComplete: crossReference.compressedEntriesComplete,
     encryptedFromCrossReference: crossReference.encrypted,
   };
+  collectRawIndirectLengthCandidates(data, candidates);
+  removeCandidatesDeclaredInsideStreams(data, candidates);
+  return candidates;
+}
+
+function collectRawIndirectLengthCandidates(
+  data: Uint8Array,
+  candidates: IndirectLengthCandidateIndex,
+): void {
   let candidateValues = 0;
   let candidateDeclarations = 0;
   for (let offset = 0; offset < data.byteLength; offset += 1) {
@@ -597,8 +606,6 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     }
     offset = objectEnd + 'endobj'.length - 1;
   }
-  removeCandidatesDeclaredInsideStreams(data, candidates);
-  return candidates;
 }
 
 function removeCandidatesDeclaredInsideStreams(
@@ -1060,6 +1067,7 @@ function collectXrefBootstrapOffsets(
   }
   if (references.size === 0) return new Map<string, number>();
 
+  const streamRanges = collectBootstrapStreamRanges(data);
   const offsets = new Map<string, number>();
   const ambiguous = new Set<string>();
   const declarationCounts = new Map<string, number>();
@@ -1084,7 +1092,7 @@ function collectXrefBootstrapOffsets(
       continue;
     }
     const key = referenceKey(header.objectNumber, header.generationNumber);
-    if (references.has(key)) {
+    if (references.has(key) && !isOffsetInsideRanges(offset, streamRanges)) {
       const count = (declarationCounts.get(key) ?? 0) + 1;
       declarationCounts.set(key, count);
       if (count > MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
@@ -1098,6 +1106,22 @@ function collectXrefBootstrapOffsets(
   }
   for (const key of ambiguous) offsets.delete(key);
   return offsets;
+}
+
+function collectBootstrapStreamRanges(data: Uint8Array): readonly ByteRange[] {
+  const candidates: IndirectLengthCandidateIndex = {
+    values: new Map<string, Set<number>>(),
+    declarationOffsets: new Map<string, Map<number, Set<number>>>(),
+    compressedValues: new Map<string, Set<number>>(),
+    authoritativeOffsets: new Map<string, number>(),
+    authoritativeCompressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
+    activeObjectStreamNumbers: new Set<number>(),
+    compressedEntriesComplete: false,
+    encryptedFromCrossReference: false,
+  };
+  collectRawIndirectLengthCandidates(data, candidates);
+  removeCandidatesDeclaredInsideStreams(data, candidates);
+  return collectKnownStreamRanges(data, candidates);
 }
 
 function readXrefRanges(

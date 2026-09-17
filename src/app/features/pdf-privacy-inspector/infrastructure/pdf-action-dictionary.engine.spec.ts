@@ -524,19 +524,21 @@ describe('inspectPdfStructuralSignals', () => {
     const indirectXrefBody = [
       '%PDF-1.7\n',
       '1 0 obj\nnull\nendobj\n',
+      '5 0 obj\n<< /Length 17 >>\nstream\n2 0 obj fake data\nendstream\nendobj\n',
       '2 0 obj\n/ASCIIHexDecode\nendobj\n',
       '3 0 obj\n<< /Predictor 1 >>\nendobj\n',
     ].join('');
     const indirectFilterXrefOffset = indirectXrefBody.length;
     const indirectFilterXrefPayload = encodeAsciiHex(joinBytes(
       encodeXrefEntry(1, indirectXrefBody.indexOf('1 0 obj')),
-      encodeXrefEntry(1, indirectXrefBody.indexOf('2 0 obj')),
+      encodeXrefEntry(1, indirectXrefBody.lastIndexOf('2 0 obj')),
       encodeXrefEntry(1, indirectXrefBody.indexOf('3 0 obj')),
       encodeXrefEntry(1, indirectFilterXrefOffset),
+      encodeXrefEntry(1, indirectXrefBody.indexOf('5 0 obj')),
     ));
     const indirectFilterXref = joinBytes(
       indirectXrefBody,
-      '4 0 obj\n<< /Type /XRef /Size 5 /W [1 4 2] /Index [1 4] ',
+      '4 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [1 5] ',
       '/Filter 2 0 R /DecodeParms 3 0 R ',
       `/Length ${String(indirectFilterXrefPayload.byteLength)} >>\nstream\n`,
       indirectFilterXrefPayload,
