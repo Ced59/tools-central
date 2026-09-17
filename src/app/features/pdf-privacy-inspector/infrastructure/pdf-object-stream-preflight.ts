@@ -47,7 +47,8 @@ interface IndirectPdfFilters {
   reference: RawPdfReference;
 }
 
-type PdfFilters = readonly string[] | IndirectPdfFilters;
+type PdfFilter = string | RawPdfReference;
+type PdfFilters = readonly PdfFilter[] | IndirectPdfFilters;
 
 interface IndirectObjectHeader extends RawPdfReference {
   start: number;
@@ -1062,14 +1063,25 @@ function collectXrefBootstrapOffsets(
   dictionary: ParsedDictionary,
 ): ReadonlyMap<string, number> {
   const references = new Set<string>();
-  if (dictionary.filters && 'reference' in dictionary.filters) {
+  const outerFilterReferences: RawPdfReference[] = [];
+  const filters = dictionary.filters;
+  if (filters && 'reference' in filters) {
+    outerFilterReferences.push(filters.reference);
     references.add(referenceKey(
-      dictionary.filters.reference.objectNumber,
-      dictionary.filters.reference.generationNumber,
+      filters.reference.objectNumber,
+      filters.reference.generationNumber,
     ));
+  } else {
+    for (const filter of filters ?? []) {
+      if (typeof filter !== 'string') {
+        references.add(referenceKey(filter.objectNumber, filter.generationNumber));
+      }
+    }
   }
   const decodeParameters = dictionary.decodeParameters;
+  const outerDecodeParameterReferences: RawPdfReference[] = [];
   if (decodeParameters && 'reference' in decodeParameters) {
+    outerDecodeParameterReferences.push(decodeParameters.reference);
     references.add(referenceKey(
       decodeParameters.reference.objectNumber,
       decodeParameters.reference.generationNumber,
@@ -1084,6 +1096,59 @@ function collectXrefBootstrapOffsets(
   if (references.size === 0) return new Map<string, number>();
 
   const streamRanges = collectBootstrapStreamRanges(data);
+  const offsets = collectBootstrapOffsetsForReferences(data, references, streamRanges);
+  const nestedReferences = new Set<string>();
+  for (const reference of outerFilterReferences) {
+    const offset = offsets.get(referenceKey(reference.objectNumber, reference.generationNumber));
+    if (offset === undefined) continue;
+    const header = readIndirectObjectHeader(data, offset);
+    if (!header) continue;
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    try {
+      const value = readFilters(data, valueStart);
+      const objectEnd = skipWhitespaceAndComments(data, value.end);
+      if (!matchesKeyword(data, objectEnd, 'endobj') || 'reference' in value.filters) continue;
+      for (const filter of value.filters) {
+        if (typeof filter !== 'string') {
+          nestedReferences.add(referenceKey(filter.objectNumber, filter.generationNumber));
+        }
+      }
+    } catch {
+      // The actual resolver will reject the malformed value after xref selection.
+    }
+  }
+  for (const reference of outerDecodeParameterReferences) {
+    const offset = offsets.get(referenceKey(reference.objectNumber, reference.generationNumber));
+    if (offset === undefined) continue;
+    const header = readIndirectObjectHeader(data, offset);
+    if (!header) continue;
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    try {
+      const value = readDecodeParameters(data, valueStart);
+      const objectEnd = skipWhitespaceAndComments(data, value.end);
+      if (!matchesKeyword(data, objectEnd, 'endobj') || 'reference' in value.parameters) continue;
+      for (const parameter of value.parameters) {
+        if (parameter && !('predictor' in parameter)) {
+          nestedReferences.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
+        }
+      }
+    } catch {
+      // The actual resolver will reject the malformed value after xref selection.
+    }
+  }
+  for (const key of offsets.keys()) nestedReferences.delete(key);
+  if (nestedReferences.size > 0) {
+    const nestedOffsets = collectBootstrapOffsetsForReferences(data, nestedReferences, streamRanges);
+    for (const [key, offset] of nestedOffsets) offsets.set(key, offset);
+  }
+  return offsets;
+}
+
+function collectBootstrapOffsetsForReferences(
+  data: Uint8Array,
+  references: ReadonlySet<string>,
+  streamRanges: readonly ByteRange[],
+): Map<string, number> {
   const offsets = new Map<string, number>();
   const ambiguous = new Set<string>();
   const declarationCounts = new Map<string, number>();
@@ -2373,7 +2438,7 @@ function readFilters(
     };
   }
   if (data[start] !== LEFT_BRACKET) throw new Error('Invalid PDF stream filter');
-  const filters: string[] = [];
+  const filters: PdfFilter[] = [];
   let offset = start + 1;
   while (offset < data.byteLength) {
     offset = skipWhitespaceAndComments(data, offset);
@@ -2382,9 +2447,15 @@ function readFilters(
       throw new Error('PDF stream filter limit');
     }
     const filter = readPdfName(data, offset);
-    if (!filter) throw new Error('Invalid PDF stream filter array');
-    filters.push(filter.value);
-    offset = filter.end;
+    if (filter) {
+      filters.push(filter.value);
+      offset = filter.end;
+      continue;
+    }
+    const referenceItem = readRawPdfReference(data, offset);
+    if (!referenceItem) throw new Error('Invalid PDF stream filter array');
+    filters.push(referenceItem.reference);
+    offset = referenceItem.end;
   }
   throw new Error('Unterminated PDF stream filter array');
 }
@@ -2394,30 +2465,57 @@ function resolveFilters(
   filters: PdfFilters | undefined,
   candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
 ): readonly string[] | undefined {
-  if (filters === undefined || !('reference' in filters)) return filters;
-  const reference = filters.reference;
-  const offset = candidates?.authoritativeOffsets.get(referenceKey(
-    reference.objectNumber,
-    reference.generationNumber,
-  ));
-  if (offset === undefined) return undefined;
-  const header = readIndirectObjectHeader(data, offset);
-  if (
-    !header
-    || header.objectNumber !== reference.objectNumber
-    || header.generationNumber !== reference.generationNumber
-  ) return undefined;
-  const valueStart = skipWhitespaceAndComments(data, header.end);
-  let value: { filters: PdfFilters; end: number };
-  try {
-    value = readFilters(data, valueStart);
-  } catch {
-    return undefined;
+  if (filters === undefined) return undefined;
+  if ('reference' in filters) {
+    const reference = filters.reference;
+    const offset = candidates?.authoritativeOffsets.get(referenceKey(
+      reference.objectNumber,
+      reference.generationNumber,
+    ));
+    if (offset === undefined) return undefined;
+    const header = readIndirectObjectHeader(data, offset);
+    if (
+      !header
+      || header.objectNumber !== reference.objectNumber
+      || header.generationNumber !== reference.generationNumber
+    ) return undefined;
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    let value: { filters: PdfFilters; end: number };
+    try {
+      value = readFilters(data, valueStart);
+    } catch {
+      return undefined;
+    }
+    if ('reference' in value.filters) return undefined;
+    const objectEnd = skipWhitespaceAndComments(data, value.end);
+    if (!matchesKeyword(data, objectEnd, 'endobj')) return undefined;
+    return resolveFilters(data, value.filters, candidates);
   }
-  if ('reference' in value.filters) return undefined;
-  const objectEnd = skipWhitespaceAndComments(data, value.end);
-  if (!matchesKeyword(data, objectEnd, 'endobj')) return undefined;
-  return value.filters;
+  const resolved: string[] = [];
+  for (const filter of filters) {
+    if (typeof filter === 'string') {
+      resolved.push(filter);
+      continue;
+    }
+    const offset = candidates?.authoritativeOffsets.get(referenceKey(
+      filter.objectNumber,
+      filter.generationNumber,
+    ));
+    if (offset === undefined) return undefined;
+    const header = readIndirectObjectHeader(data, offset);
+    if (
+      !header
+      || header.objectNumber !== filter.objectNumber
+      || header.generationNumber !== filter.generationNumber
+    ) return undefined;
+    const valueStart = skipWhitespaceAndComments(data, header.end);
+    const value = readPdfName(data, valueStart);
+    if (!value) return undefined;
+    const objectEnd = skipWhitespaceAndComments(data, value.end);
+    if (!matchesKeyword(data, objectEnd, 'endobj')) return undefined;
+    resolved.push(value.value);
+  }
+  return resolved;
 }
 
 function readDecodeParameters(

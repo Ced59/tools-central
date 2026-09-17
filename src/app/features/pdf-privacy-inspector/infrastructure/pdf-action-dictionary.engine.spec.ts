@@ -558,8 +558,8 @@ describe('inspectPdfStructuralSignals', () => {
         encode: encodeAsciiHex,
       },
       {
-        filterValue: '[/ASCII85Decode /ASCIIHexDecode]',
-        decodeParametersValue: '[null << /Predictor 99 >>]',
+        filterValue: '[/ASCII85Decode 6 0 R]',
+        decodeParametersValue: '[null 7 0 R]',
         encode: (contents: Uint8Array): Uint8Array => encodeAscii85(encodeAsciiHex(contents)),
       },
       {
@@ -574,6 +574,8 @@ describe('inspectPdfStructuralSignals', () => {
         '5 0 obj\n<< /Length 17 >>\nstream\n2 0 obj fake data\nendstream\nendobj\n',
         `2 0 obj\n${fixture.filterValue}\nendobj\n`,
         `3 0 obj\n${fixture.decodeParametersValue}\nendobj\n`,
+        '6 0 obj\n/ASCIIHexDecode\nendobj\n',
+        '7 0 obj\n<< /Predictor 99 >>\nendobj\n',
       ].join('');
       const indirectFilterXrefOffset = indirectXrefBody.length;
       const indirectFilterXrefPayload = fixture.encode(joinBytes(
@@ -582,10 +584,12 @@ describe('inspectPdfStructuralSignals', () => {
         encodeXrefEntry(1, indirectXrefBody.indexOf('3 0 obj')),
         encodeXrefEntry(1, indirectFilterXrefOffset),
         encodeXrefEntry(1, indirectXrefBody.indexOf('5 0 obj')),
+        encodeXrefEntry(1, indirectXrefBody.indexOf('6 0 obj')),
+        encodeXrefEntry(1, indirectXrefBody.indexOf('7 0 obj')),
       ));
       const indirectFilterXref = joinBytes(
         indirectXrefBody,
-        '4 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [1 5] ',
+        '4 0 obj\n<< /Type /XRef /Size 8 /W [1 4 2] /Index [1 7] ',
         '/Filter 2 0 R /DecodeParms 3 0 R ',
         `/Length ${String(indirectFilterXrefPayload.byteLength)} >>\nstream\n`,
         indirectFilterXrefPayload,
