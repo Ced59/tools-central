@@ -1246,7 +1246,6 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
       .resolves.toMatchObject({
         encrypted: true,
-        hasUnboundedEncryptedTextStreams: true,
       });
   });
 

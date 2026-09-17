@@ -19,7 +19,7 @@ import {
   inspectPdfPrivacyDocument,
 } from './pdf-privacy.engine';
 import {
-  mustRejectBeforePdfJs,
+  mustRejectAfterPasswordClassification,
   shouldDeferStructuralFailure,
 } from './pdf-privacy-worker-policy';
 import type {
@@ -48,17 +48,19 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     } catch {
       throw new PdfActionDictionaryInspectionError();
     }
-    if (mustRejectBeforePdfJs(objectStreamPreflight)) {
-      throw new PdfActionDictionaryInspectionError();
-    }
+    const rejectEncryptedObjectStreams = mustRejectAfterPasswordClassification(
+      objectStreamPreflight,
+    );
     post({ type: 'progress', percent: 1 });
     let structuralSignals: Awaited<ReturnType<typeof inspectPdfStructuralSignals>> = null;
     let structuralFailure: PdfActionDictionaryInspectionError | undefined;
-    try {
-      structuralSignals = await inspectPdfStructuralSignals(input, objectStreamPreflight);
-    } catch (error: unknown) {
-      if (!shouldDeferStructuralFailure(error, objectStreamPreflight.encrypted)) throw error;
-      structuralFailure = error;
+    if (!rejectEncryptedObjectStreams) {
+      try {
+        structuralSignals = await inspectPdfStructuralSignals(input, objectStreamPreflight);
+      } catch (error: unknown) {
+        if (!shouldDeferStructuralFailure(error, objectStreamPreflight.encrypted)) throw error;
+        structuralFailure = error;
+      }
     }
     const parsingWorker = new Worker(versionedWorkerUrl(command.assetRoot), { type: 'module' });
     pdfWorker = new PDFWorker({ port: parsingWorker });
@@ -78,11 +80,9 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     });
     post({ type: 'progress', percent: 2 });
     const document = await loadingTask.promise;
+    if (rejectEncryptedObjectStreams) throw new PdfActionDictionaryInspectionError();
     if (structuralFailure) throw structuralFailure;
     if (!structuralSignals) throw new PdfActionDictionaryInspectionError();
-    if (structuralSignals.hasUnboundedEncryptedTextStreams) {
-      throw new PdfActionDictionaryInspectionError();
-    }
     const report = await inspectPdfPrivacyDocument(
       document,
       {

@@ -21,6 +21,102 @@ export class PdfPrivacyEngineError extends Error {
   }
 }
 
+export const PDF_PRIVACY_MAX_PDFJS_OUTPUT_BYTES = 32 * 1_024 * 1_024;
+const PDF_PRIVACY_MAX_PDFJS_OUTPUT_NODES = 1_000_000;
+
+/**
+ * Applies a document-wide bound to values materialized by PDF.js after it has
+ * decrypted filtered streams. Object identity is retained across calls so a
+ * shared value is charged once, while repeated occurrences still consume the
+ * existing discovery budgets when they are normalized into findings.
+ */
+export class PdfJsDecryptedOutputBudget {
+  private consumedBytes = 0;
+  private enqueuedNodes = 0;
+  private readonly visited = new WeakSet();
+
+  constructor(private readonly maxBytes = PDF_PRIVACY_MAX_PDFJS_OUTPUT_BYTES) {
+    if (!Number.isSafeInteger(maxBytes) || maxBytes < 0) {
+      throw new PdfPrivacyEngineError('inspection-limit');
+    }
+  }
+
+  consume(value: unknown): void {
+    const stack: unknown[] = [];
+    const enqueue = (item: unknown): void => {
+      this.enqueuedNodes += 1;
+      if (this.enqueuedNodes > PDF_PRIVACY_MAX_PDFJS_OUTPUT_NODES) {
+        throw new PdfPrivacyEngineError('inspection-limit');
+      }
+      stack.push(item);
+    };
+    enqueue(value);
+
+    while (stack.length > 0) {
+      const current = stack.pop();
+      if (typeof current === 'string') {
+        this.addBytes(current.length * 2);
+        continue;
+      }
+      if (typeof current === 'number' || typeof current === 'bigint') {
+        this.addBytes(8);
+        continue;
+      }
+      if (typeof current === 'boolean') {
+        this.addBytes(1);
+        continue;
+      }
+      if ((typeof current !== 'object' && typeof current !== 'function') || current === null) {
+        continue;
+      }
+      if (this.visited.has(current)) continue;
+      this.visited.add(current);
+
+      if (current instanceof ArrayBuffer) {
+        this.addBytes(current.byteLength);
+        continue;
+      }
+      if (ArrayBuffer.isView(current)) {
+        this.addBytes(current.byteLength);
+        continue;
+      }
+      if (current instanceof Map) {
+        for (const [key, entry] of current) {
+          enqueue(key);
+          enqueue(entry);
+        }
+        continue;
+      }
+      if (current instanceof Set) {
+        for (const entry of current) enqueue(entry);
+        continue;
+      }
+
+      const iterator = (current as { [Symbol.iterator]?: () => Iterator<unknown> })[
+        Symbol.iterator
+      ];
+      if (typeof iterator === 'function') {
+        const values = iterator.call(current);
+        for (let next = values.next(); !next.done; next = values.next()) enqueue(next.value);
+        continue;
+      }
+
+      for (const key of Reflect.ownKeys(current)) {
+        if (typeof key === 'string') this.addBytes(key.length * 2);
+        const descriptor = Object.getOwnPropertyDescriptor(current, key);
+        if (descriptor && 'value' in descriptor) enqueue(descriptor.value);
+      }
+    }
+  }
+
+  private addBytes(bytes: number): void {
+    this.consumedBytes += bytes;
+    if (!Number.isSafeInteger(this.consumedBytes) || this.consumedBytes > this.maxBytes) {
+      throw new PdfPrivacyEngineError('inspection-limit');
+    }
+  }
+}
+
 export interface PdfJsPrivacyMetadata {
   info: object;
   metadata: Iterable<readonly [string, unknown]> | null;
@@ -117,6 +213,7 @@ export async function inspectPdfPrivacyDocument(
 
   const structuralAttachmentsAvailable = input.associatedFiles !== null
     && input.associatedFiles !== undefined;
+  const decryptedOutputBudget = new PdfJsDecryptedOutputBudget();
   input.onProgress?.(8);
   const [metadata, attachments, documentActions, hasJavascript, fields, signatures, permissions, openAction, outline] = await Promise.all([
     document.getMetadata(),
@@ -129,6 +226,17 @@ export async function inspectPdfPrivacyDocument(
     document.getOpenAction(),
     document.getOutline(),
   ]);
+  for (const output of [
+    metadata,
+    attachments,
+    documentActions,
+    hasJavascript,
+    fields,
+    signatures,
+    permissions,
+    openAction,
+    outline,
+  ]) decryptedOutputBudget.consume(output);
   const pdfVersion = effectivePdfVersion(metadata.info) ?? headerPdfVersion;
   input.onProgress?.(20);
 
@@ -189,6 +297,8 @@ export async function inspectPdfPrivacyDocument(
         page.getAnnotations({ intent: 'any' }),
         page.getJSActions(),
       ]);
+      decryptedOutputBudget.consume(annotations);
+      decryptedOutputBudget.consume(pageActions);
       collectPageAnnotations(
         annotations,
         pageNumber,

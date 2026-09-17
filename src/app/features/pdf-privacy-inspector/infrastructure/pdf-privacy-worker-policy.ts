@@ -1,7 +1,13 @@
 import { PdfActionDictionaryInspectionError } from './pdf-action-dictionary.engine';
 import type { PdfObjectStreamPreflightResult } from './pdf-object-stream-preflight';
 
-export function mustRejectBeforePdfJs(preflight: PdfObjectStreamPreflightResult): boolean {
+/**
+ * Ciphertext object streams cannot be expanded safely by the structural parser.
+ * PDF.js must nevertheless run first so its password error remains authoritative.
+ */
+export function mustRejectAfterPasswordClassification(
+  preflight: PdfObjectStreamPreflightResult,
+): boolean {
   return preflight.skippedEncryptedObjectStreams > 0;
 }
 

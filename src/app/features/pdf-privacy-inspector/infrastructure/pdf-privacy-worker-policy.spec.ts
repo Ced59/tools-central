@@ -2,17 +2,17 @@ import { describe, expect, it } from 'vitest';
 
 import { PdfActionDictionaryInspectionError } from './pdf-action-dictionary.engine';
 import {
-  mustRejectBeforePdfJs,
+  mustRejectAfterPasswordClassification,
   shouldDeferStructuralFailure,
 } from './pdf-privacy-worker-policy';
 
 describe('shouldDeferStructuralFailure', () => {
-  it('rejette un object stream chiffré avant PDF.js', () => {
-    expect(mustRejectBeforePdfJs({
+  it('diffère le rejet d’un object stream chiffré après la classification du mot de passe', () => {
+    expect(mustRejectAfterPasswordClassification({
       encrypted: true,
       skippedEncryptedObjectStreams: 1,
     })).toBe(true);
-    expect(mustRejectBeforePdfJs({
+    expect(mustRejectAfterPasswordClassification({
       encrypted: true,
       skippedEncryptedObjectStreams: 0,
     })).toBe(false);

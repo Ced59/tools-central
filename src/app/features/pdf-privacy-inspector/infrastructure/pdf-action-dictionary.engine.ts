@@ -69,7 +69,6 @@ export interface PdfStructuralSignals {
   associatedFiles: readonly PdfAssociatedFileSignal[];
   signatures: readonly PdfStructuralSignatureSignal[];
   encrypted: boolean;
-  hasUnboundedEncryptedTextStreams: boolean;
 }
 
 export class PdfActionDictionaryInspectionError extends Error {
@@ -178,7 +177,6 @@ interface InspectionState {
   annotationMediaTextExpansionBytes: number;
   outlineValueExpansionBytes: number;
   geometryExpansionSizes: Map<PDFObject, number>;
-  hasUnboundedEncryptedTextStreams: boolean;
 }
 
 interface StoredActionDictionarySignal {
@@ -317,7 +315,6 @@ export async function inspectPdfStructuralSignals(
       annotationMediaTextExpansionBytes: 0,
       outlineValueExpansionBytes: 0,
       geometryExpansionSizes: new Map(),
-      hasUnboundedEncryptedTextStreams: false,
     };
     validateInfoBudget(document, state);
     validateAcroFormFieldBudgets(document, state);
@@ -379,7 +376,6 @@ export async function inspectPdfStructuralSignals(
       associatedFiles: [...state.associatedFiles.values()],
       signatures: state.signatures,
       encrypted: document.isEncrypted,
-      hasUnboundedEncryptedTextStreams: state.hasUnboundedEncryptedTextStreams,
     };
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
@@ -838,7 +834,8 @@ function validateDecodedStreamSize(
   const contents = stream.getContents();
   const filters = readFilterNames(stream.dict);
   if (filters.length > 0 && state.document.isEncrypted) {
-    state.hasUnboundedEncryptedTextStreams = true;
+    // pdf-lib only exposes ciphertext here. PDF.js decrypts and normalizes the
+    // value later under PdfJsDecryptedOutputBudget in the isolated worker.
     return undefined;
   }
   try {

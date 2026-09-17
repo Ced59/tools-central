@@ -2,6 +2,7 @@ import { PDFDict, PDFDocument, PDFName } from 'pdf-lib';
 import { describe, expect, it, vi } from 'vitest';
 
 import {
+  PdfJsDecryptedOutputBudget,
   PdfPrivacyEngineError,
   extractPdfVersion,
   inspectPdfPrivacyDocument,
@@ -51,6 +52,21 @@ describe('extractPdfVersion', () => {
 });
 
 describe('inspectPdfPrivacyDocument', () => {
+  it('borne globalement les sorties déchiffrées et filtrées matérialisées par PDF.js', () => {
+    const budget = new PdfJsDecryptedOutputBudget(96);
+    const shared = { value: 'secret' };
+    const cyclic: Record<string, unknown> = { shared };
+    cyclic['self'] = cyclic;
+
+    budget.consume(new Map([['metadata', cyclic], ['duplicate', shared]]));
+
+    expect(() => {
+      budget.consume('sortie filtrée supplémentaire');
+    }).toThrow(
+      new PdfPrivacyEngineError('inspection-limit'),
+    );
+  });
+
   it('utilise la version PDF effective exposée par le catalogue', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getMetadata: vi.fn().mockResolvedValue({
