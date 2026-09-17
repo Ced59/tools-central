@@ -437,6 +437,79 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('décode les filtres PDF standards et leurs chaînes avant le budget', () => {
+    const plain = new TextEncoder().encode('2 0 3');
+    const pngSubRow = Uint8Array.of(1, plain[0], ...plain.slice(1).map((value, index) => (
+      value - plain[index]
+    ) & 0xff));
+    const predictedFlate = deflate(pngSubRow);
+    const fixtures = [
+      {
+        filterDictionary: '/Filter /ASCIIHexDecode /DecodeParms null',
+        payload: encodeAsciiHex(plain),
+      },
+      {
+        filterDictionary: '/Filter /RunLengthDecode',
+        payload: encodeRunLengthLiteral(plain),
+      },
+      {
+        filterDictionary: '/Filter /LZWDecode',
+        payload: encodeLzwLiteral(plain),
+      },
+      {
+        filterDictionary: [
+          '/Filter [/ASCII85Decode /FlateDecode]',
+          `/DecodeParms [null << /Predictor 12 /Columns ${String(plain.byteLength)} >>]`,
+        ].join(' '),
+        payload: encodeAscii85(predictedFlate),
+      },
+      {
+        filterDictionary: '/Filter [/ASCIIHexDecode /RunLengthDecode]',
+        payload: encodeAsciiHex(encodeRunLengthLiteral(plain)),
+      },
+    ];
+
+    for (const fixture of fixtures) {
+      const pdf = joinBytes(
+        '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+        '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+        String(fixture.payload.byteLength),
+        ' ',
+        fixture.filterDictionary,
+        ' >>\nstream\n',
+        fixture.payload,
+        '\nendstream\nendobj\n%%EOF\n',
+      );
+      expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+    }
+
+    const xrefBody = '%PDF-1.7\n1 0 obj\nnull\nendobj\n';
+    const xrefOffset = xrefBody.length;
+    const encodeXrefEntry = (objectOffset: number): Uint8Array => Uint8Array.of(
+      1,
+      (objectOffset >>> 24) & 0xff,
+      (objectOffset >>> 16) & 0xff,
+      (objectOffset >>> 8) & 0xff,
+      objectOffset & 0xff,
+      0,
+      0,
+    );
+    const encodedXref = encodeAsciiHex(joinBytes(
+      encodeXrefEntry(xrefBody.indexOf('1 0 obj')),
+      encodeXrefEntry(xrefOffset),
+    ));
+    const filteredXref = joinBytes(
+      xrefBody,
+      '2 0 obj\n<< /Type /XRef /Size 3 /W [1 4 2] /Index [1 2] ',
+      `/Filter /ASCIIHexDecode /Length ${String(encodedXref.byteLength)} >>\nstream\n`,
+      encodedXref,
+      '\nendstream\nendobj\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(filteredXref)).not.toThrow();
+  });
+
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
     const objectDeclarations = Array.from(
       { length: PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1 },
@@ -2118,4 +2191,70 @@ function joinBytes(...parts: readonly (Uint8Array | string)[]): Uint8Array {
     offset += chunk.byteLength;
   }
   return result;
+}
+
+function encodeAsciiHex(contents: Uint8Array): Uint8Array {
+  const hex = [...contents]
+    .map(value => value.toString(16).padStart(2, '0'))
+    .join('');
+  return new TextEncoder().encode(`${hex}>`);
+}
+
+function encodeAscii85(contents: Uint8Array): Uint8Array {
+  let encoded = '';
+  for (let offset = 0; offset < contents.byteLength; offset += 4) {
+    const byteCount = Math.min(4, contents.byteLength - offset);
+    let value = 0;
+    for (let index = 0; index < 4; index += 1) {
+      value = value * 256 + (contents[offset + index] ?? 0);
+    }
+    if (byteCount === 4 && value === 0) {
+      encoded += 'z';
+      continue;
+    }
+    const digits = new Array<number>(5);
+    for (let index = 4; index >= 0; index -= 1) {
+      digits[index] = value % 85;
+      value = Math.floor(value / 85);
+    }
+    encoded += digits.slice(0, byteCount + 1)
+      .map(digit => String.fromCharCode(digit + 0x21))
+      .join('');
+  }
+  return new TextEncoder().encode(`${encoded}~>`);
+}
+
+function encodeRunLengthLiteral(contents: Uint8Array): Uint8Array {
+  const chunks: Uint8Array[] = [];
+  let byteLength = 1;
+  for (let offset = 0; offset < contents.byteLength; offset += 128) {
+    const chunk = contents.slice(offset, offset + 128);
+    chunks.push(Uint8Array.of(chunk.byteLength - 1, ...chunk));
+    byteLength += chunk.byteLength + 1;
+  }
+  const encoded = new Uint8Array(byteLength);
+  let offset = 0;
+  for (const chunk of chunks) {
+    encoded.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  encoded[offset] = 128;
+  return encoded;
+}
+
+function encodeLzwLiteral(contents: Uint8Array): Uint8Array {
+  const codes = [256, ...contents, 257];
+  const bitLength = codes.length * 9;
+  const encoded = new Uint8Array(Math.ceil(bitLength / 8));
+  let bitOffset = 0;
+  for (const code of codes) {
+    for (let index = 8; index >= 0; index -= 1) {
+      if ((code & (1 << index)) !== 0) {
+        const byteIndex = Math.floor(bitOffset / 8);
+        encoded[byteIndex] = encoded[byteIndex] | (1 << (7 - (bitOffset % 8)));
+      }
+      bitOffset += 1;
+    }
+  }
+  return encoded;
 }
