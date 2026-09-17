@@ -2354,6 +2354,7 @@ function readDecodeParameterDictionary(
 ): PdfFilterDecodeParameters {
   const values = new Map<string, number>();
   let depth = 0;
+  let arrayDepth = 0;
   let offset = start;
   while (offset < end) {
     const byte = data[offset];
@@ -2369,12 +2370,26 @@ function readDecodeParameterDictionary(
       offset += 2;
     } else if (byte === LESS_THAN) {
       offset = skipHexString(data, offset);
-    } else if (depth === 1 && byte === PDF_NAME) {
+    } else if (depth === 1 && byte === LEFT_BRACKET) {
+      arrayDepth += 1;
+      offset += 1;
+    } else if (depth === 1 && byte === RIGHT_BRACKET) {
+      arrayDepth = Math.max(0, arrayDepth - 1);
+      offset += 1;
+    } else if (depth === 1 && arrayDepth === 0 && byte === PDF_NAME) {
       const key = readPdfName(data, offset);
       if (!key) throw new Error('Invalid PDF decode parameter name');
       offset = key.end;
       if (!['Predictor', 'Colors', 'BitsPerComponent', 'BPC', 'Columns', 'EarlyChange']
-        .includes(key.value)) continue;
+        .includes(key.value)) {
+        const extensionValueStart = skipWhitespaceAndComments(data, offset);
+        if (data[extensionValueStart] === PDF_NAME) {
+          const extensionName = readPdfName(data, extensionValueStart);
+          if (!extensionName) throw new Error('Invalid PDF extension name');
+          offset = extensionName.end;
+        }
+        continue;
+      }
       if (values.has(key.value)) throw new Error('Duplicate PDF decode parameter');
       const valueStart = skipWhitespaceAndComments(data, offset);
       const value = readUnsignedInteger(data, valueStart);
@@ -2479,6 +2494,7 @@ function readUnsignedInteger(
   start: number,
 ): { value: number; end: number } | undefined {
   let offset = start;
+  if (data[offset] === 0x2b) offset += 1;
   let value = 0;
   let digits = 0;
   while (offset < data.byteLength) {

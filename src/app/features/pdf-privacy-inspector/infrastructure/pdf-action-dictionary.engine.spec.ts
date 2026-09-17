@@ -448,6 +448,14 @@ describe('inspectPdfStructuralSignals', () => {
       {
         filterDictionary: '/Filter /ASCIIHexDecode /DecodeParms null',
         payload: encodeAsciiHex(plain),
+        explicitPlusLength: true,
+      },
+      {
+        filterDictionary: [
+          '/Filter /ASCIIHexDecode',
+          '/DecodeParms << /Vendor [/Predictor 99] /ScalarVendor /Predictor >>',
+        ].join(' '),
+        payload: encodeAsciiHex(plain),
       },
       {
         filterDictionary: '/Filter /RunLengthDecode',
@@ -482,7 +490,7 @@ describe('inspectPdfStructuralSignals', () => {
       const pdf = joinBytes(
         '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
         '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
-        String(fixture.payload.byteLength),
+        fixture.explicitPlusLength ? `+${String(fixture.payload.byteLength)}` : String(fixture.payload.byteLength),
         ' ',
         fixture.filterDictionary,
         ' >>\nstream\n',
