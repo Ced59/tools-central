@@ -189,6 +189,45 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(xrefSelectedShortFixture);
     }).not.toThrow();
 
+    const obsoleteStreamBody = [
+      '%PDF-1.7\n',
+      '1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+      '2 0 obj\n3\nendobj\n',
+    ].join('');
+    const obsoleteStreamXrefOffset = obsoleteStreamBody.length;
+    const obsoleteStreamRevision = [
+      obsoleteStreamBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(obsoleteStreamBody.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(obsoleteStreamBody.indexOf('2 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 3 >>\nstartxref\n',
+      String(obsoleteStreamXrefOffset),
+      '\n%%EOF\n',
+    ].join('');
+    const activeStreamOffset = obsoleteStreamRevision.length;
+    const activeStreamBody = [
+      obsoleteStreamRevision,
+      '1 0 obj\n<< /Length 2 0 R >>\nstream\nabcdef\nendstream\nendobj\n',
+    ].join('');
+    const activeStreamLengthOffset = activeStreamBody.length;
+    const activeStreamRevisionBody = [
+      activeStreamBody,
+      '2 0 obj\n6\nendobj\n',
+    ].join('');
+    const activeStreamXrefOffset = activeStreamRevisionBody.length;
+    const replacedStreamAndLength = joinBytes(
+      activeStreamRevisionBody,
+      'xref\n1 2\n',
+      `${String(activeStreamOffset).padStart(10, '0')} 00000 n \n`,
+      `${String(activeStreamLengthOffset).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 3 /Prev ',
+      String(obsoleteStreamXrefOffset),
+      ' >>\nstartxref\n',
+      String(activeStreamXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(replacedStreamAndLength)).not.toThrow();
+
     const xrefStreamAttackTail = [
       '\nendstream\nendobj\n2 0 obj\n3\nendobj\n',
       '['.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),

@@ -222,9 +222,21 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       continue;
     }
 
-    const length = resolveStreamLength(dictionary.length, indirectLengths);
-    if (length === undefined) throw new Error('Missing PDF stream length');
     const streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+    const streamObjectHeader = currentObjectHeader;
+    const knownInactiveStream = streamObjectHeader
+      ? isKnownInactiveStreamObject(objectStreamSelection, streamObjectHeader)
+      : false;
+    const length = knownInactiveStream
+      ? resolveCandidateStreamLength(
+        dictionary.length,
+        objectStreamSelection,
+        data,
+        streamStart,
+        true,
+      )
+      : resolveStreamLength(dictionary.length, indirectLengths);
+    if (length === undefined) throw new Error('Missing PDF stream length');
     const streamEnd = streamStart + length;
     if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) {
       throw new Error('Invalid PDF stream length');
@@ -235,9 +247,9 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
     consumeRawTokens(rawSyntaxBudget, 2);
     offset = endstream + 'endstream'.length;
-    const streamObjectHeader = currentObjectHeader;
     currentObjectHeader = undefined;
 
+    if (knownInactiveStream) continue;
     if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
     if (
       dictionary.type === 'ObjStm'
@@ -418,6 +430,7 @@ function collectIndirectLengths(data: Uint8Array): {
     ? new Map<string, Set<number>>()
     : collectCompressedIndirectLengthCandidates(data, candidates);
   const lengths = new Map<string, number | undefined>();
+  let currentObjectHeader: IndirectObjectHeader | undefined;
   for (const [key, values] of compressedCandidates) {
     lengths.set(key, values.size === 1 ? values.values().next().value : undefined);
   }
@@ -437,17 +450,23 @@ function collectIndirectLengths(data: Uint8Array): {
       continue;
     }
     if (byte === LESS_THAN && data[offset + 1] === LESS_THAN) {
+      const streamObjectHeader = currentObjectHeader;
+      currentObjectHeader = undefined;
       const dictionaryEnd = findDictionaryEnd(data, offset);
       if (dictionaryEnd === undefined) throw new Error('PDF dictionary limit');
       const dictionary = parseCriticalDictionary(data, offset, dictionaryEnd);
       const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
       if (matchesKeyword(data, streamKeyword, 'stream')) {
         const streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+        const knownInactiveStream = streamObjectHeader
+          ? isKnownInactiveStreamObject(candidates, streamObjectHeader)
+          : false;
         const length = resolveCandidateStreamLength(
           dictionary.length,
           candidates,
           data,
           streamStart,
+          knownInactiveStream,
         );
         if (length === undefined) throw new Error('Missing PDF stream length');
         const streamEnd = streamStart + length;
@@ -493,9 +512,21 @@ function collectIndirectLengths(data: Uint8Array): {
     const valueStart = skipWhitespaceAndComments(data, objectKeyword + 'obj'.length);
     const value = tryReadUnsignedInteger(data, valueStart);
     if (!value) {
-      offset = objectKeyword + 'obj'.length;
+      if (data[valueStart] === LESS_THAN && data[valueStart + 1] === LESS_THAN) {
+        currentObjectHeader = {
+          start: offset,
+          objectNumber: objectNumber.value,
+          generationNumber: generation.value,
+          end: objectKeyword + 'obj'.length,
+        };
+        offset = valueStart;
+      } else {
+        currentObjectHeader = undefined;
+        offset = objectKeyword + 'obj'.length;
+      }
       continue;
     }
+    currentObjectHeader = undefined;
     const objectEnd = skipWhitespaceAndComments(data, value.end);
     if (!matchesKeyword(data, objectEnd, 'endobj')) {
       offset = value.end;
@@ -1352,6 +1383,16 @@ function shouldSkipInactiveObjectStream(
   return activeOffset !== undefined && activeOffset !== header.start;
 }
 
+function isKnownInactiveStreamObject(
+  candidates: IndirectLengthCandidateIndex,
+  header: IndirectObjectHeader,
+): boolean {
+  const key = referenceKey(header.objectNumber, header.generationNumber);
+  const activeOffset = candidates.authoritativeOffsets.get(key);
+  if (activeOffset !== undefined) return activeOffset !== header.start;
+  return candidates.authoritativeCompressedEntries.has(key);
+}
+
 function collectCompressedIndirectLengthCandidates(
   data: Uint8Array,
   candidates: IndirectLengthCandidateIndex,
@@ -1397,11 +1438,13 @@ function collectCompressedIndirectLengthCandidates(
         continue;
       }
       if (processedStreams.has(streamStart)) continue;
+      const knownInactiveStream = isKnownInactiveStreamObject(candidates, objectHeader);
       const length = resolveCandidateStreamLength(
         dictionary.length,
         candidates,
         data,
         streamStart,
+        knownInactiveStream,
       );
       if (length === undefined) continue;
       const streamEnd = streamStart + length;
@@ -1410,7 +1453,7 @@ function collectCompressedIndirectLengthCandidates(
         || streamEnd > data.byteLength
         || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
       ) continue;
-      if (shouldSkipInactiveObjectStream(candidates, objectHeader)) {
+      if (knownInactiveStream || shouldSkipInactiveObjectStream(candidates, objectHeader)) {
         offset = skipWhitespace(data, streamEnd) + 'endstream'.length - 1;
         continue;
       }
@@ -2045,6 +2088,7 @@ function resolveCandidateStreamLength(
   candidates: IndirectLengthCandidateIndex,
   data: Uint8Array,
   streamStart: number,
+  ignoreCrossReferenceAuthority = false,
 ): number | undefined {
   if (typeof length === 'number') return length;
   if (!length) return undefined;
@@ -2060,18 +2104,20 @@ function resolveCandidateStreamLength(
     }
   }
 
-  const authoritativeOffset = candidates.authoritativeOffsets.get(key);
-  if (authoritativeOffset !== undefined) {
-    const authoritativeValues = boundaryValues.filter(value => (
-      candidates.declarationOffsets.get(key)?.get(value)?.has(authoritativeOffset) ?? false
-    ));
-    return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
-  }
-  if (candidates.authoritativeCompressedEntries.has(key)) {
-    const compressedValues = candidates.compressedValues.get(key);
-    if (!compressedValues) return undefined;
-    const authoritativeValues = boundaryValues.filter(value => compressedValues.has(value));
-    return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
+  if (!ignoreCrossReferenceAuthority) {
+    const authoritativeOffset = candidates.authoritativeOffsets.get(key);
+    if (authoritativeOffset !== undefined) {
+      const authoritativeValues = boundaryValues.filter(value => (
+        candidates.declarationOffsets.get(key)?.get(value)?.has(authoritativeOffset) ?? false
+      ));
+      return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
+    }
+    if (candidates.authoritativeCompressedEntries.has(key)) {
+      const compressedValues = candidates.compressedValues.get(key);
+      if (!compressedValues) return undefined;
+      const authoritativeValues = boundaryValues.filter(value => compressedValues.has(value));
+      return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
+    }
   }
 
   const plausibleValues = boundaryValues.filter(value => hasCandidateSourceOutsideRange(
