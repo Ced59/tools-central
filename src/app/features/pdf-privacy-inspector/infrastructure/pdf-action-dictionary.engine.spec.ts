@@ -98,6 +98,19 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(indirectLengthFixture);
     }).not.toThrow();
 
+    const commentedDirectBoundary = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 3 >>\n',
+      'stream\nabc\n% commentaire de frontière\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(commentedDirectBoundary)).not.toThrow();
+
+    const commentedIndirectBoundary = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 2 0 R >>\n',
+      'stream\nabc\n% commentaire de frontière\nendstream\nendobj\n',
+      '2 0 obj\n3\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(commentedIndirectBoundary)).not.toThrow();
+
     const payloadWithFakeLengthObject = '2 0 obj\n999999\nendobj\nabc';
     const indirectLengthWithFakePayloadObject = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',

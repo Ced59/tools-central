@@ -241,7 +241,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) {
       throw new Error('Invalid PDF stream length');
     }
-    const endstream = skipWhitespace(data, streamEnd);
+    const endstream = skipWhitespaceAndComments(data, streamEnd);
     if (!matchesKeyword(data, endstream, 'endstream')) {
       throw new Error('Invalid PDF stream boundary');
     }
@@ -473,7 +473,7 @@ function collectIndirectLengths(data: Uint8Array): {
         if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) {
           throw new Error('Invalid PDF stream length');
         }
-        const endstream = skipWhitespace(data, streamEnd);
+        const endstream = skipWhitespaceAndComments(data, streamEnd);
         if (!matchesKeyword(data, endstream, 'endstream')) {
           throw new Error('Invalid PDF stream boundary');
         }
@@ -733,7 +733,7 @@ function collectKnownStreamRanges(
       offset = dictionaryEnd;
       continue;
     }
-    const endstream = skipWhitespace(data, streamEnd);
+    const endstream = skipWhitespaceAndComments(data, streamEnd);
     if (!matchesKeyword(data, endstream, 'endstream')) {
       offset = dictionaryEnd;
       continue;
@@ -834,12 +834,12 @@ function detectEncryptionBeforeObjectStreamDiscovery(
     if (
       !Number.isSafeInteger(streamEnd)
       || streamEnd > data.byteLength
-      || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
+      || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
     ) {
       offset = dictionaryEnd;
       continue;
     }
-    offset = skipWhitespace(data, streamEnd) + 'endstream'.length;
+    offset = skipWhitespaceAndComments(data, streamEnd) + 'endstream'.length;
   }
   return false;
 }
@@ -1043,7 +1043,7 @@ function readXrefStreamSection(
   if (
     !Number.isSafeInteger(streamEnd)
     || streamEnd > data.byteLength
-    || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
+    || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
   ) return section;
   const bootstrapOffsets = collectXrefBootstrapOffsets(data, dictionary);
   section.bootstrapOffsets = bootstrapOffsets;
@@ -1451,10 +1451,10 @@ function collectCompressedIndirectLengthCandidates(
       if (
         !Number.isSafeInteger(streamEnd)
         || streamEnd > data.byteLength
-        || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
+        || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
       ) continue;
       if (knownInactiveStream || shouldSkipInactiveObjectStream(candidates, objectHeader)) {
-        offset = skipWhitespace(data, streamEnd) + 'endstream'.length - 1;
+        offset = skipWhitespaceAndComments(data, streamEnd) + 'endstream'.length - 1;
         continue;
       }
       processedStreams.add(streamStart);
@@ -2099,7 +2099,7 @@ function resolveCandidateStreamLength(
   for (const value of values) {
     const streamEnd = streamStart + value;
     if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) continue;
-    if (matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')) {
+    if (matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')) {
       boundaryValues.push(value);
     }
   }
