@@ -62,7 +62,7 @@
         </div>
         <dl class="report-summary">
           <div><dt i18n="@@pdf_privacy_pages">Pages inspectées</dt><dd>{{ report.inspectedPages }} / {{ report.pageCount }}</dd></div>
-          <div><dt i18n="@@pdf_privacy_total">Occurrences détectées</dt><dd>{{ report.severityCounts.high + report.severityCounts.medium + report.severityCounts.low + report.severityCounts.info }}</dd></div>
+          <div><dt i18n="@@pdf_privacy_total">Occurrences détectées</dt><dd>{{ totalOccurrences(report) }}</dd></div>
           <div class="summary-high"><dt i18n="@@pdf_privacy_high_count">Attention forte</dt><dd>{{ report.severityCounts.high }}</dd></div>
           <div class="summary-medium"><dt i18n="@@pdf_privacy_medium_count">À vérifier</dt><dd>{{ report.severityCounts.medium }}</dd></div>
         </dl>
@@ -73,7 +73,7 @@
           <p class="clear-state" role="status"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i><span i18n="@@pdf_privacy_clear_state">Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</span></p>
         } @else {
           <div class="category-filters" aria-label="Filtrer le rapport" i18n-aria-label="@@pdf_privacy_filter_label">
-            <button type="button" [class.is-active]="selectedCategory() === 'all'" [attr.aria-pressed]="selectedCategory() === 'all'" (click)="selectCategory('all')"><span i18n="@@pdf_privacy_filter_all">Tout</span> <strong>{{ report.findingCount }}</strong></button>
+            <button type="button" [class.is-active]="selectedCategory() === 'all'" [attr.aria-pressed]="selectedCategory() === 'all'" (click)="selectCategory('all')"><span i18n="@@pdf_privacy_filter_all">Tout</span> <strong>{{ totalOccurrences(report) }}</strong></button>
             @for (category of availableCategories(); track category) {
               <button type="button" [class.is-active]="selectedCategory() === category" [attr.aria-pressed]="selectedCategory() === category" (click)="selectCategory(category)">{{ categoryLabel(category) }} <strong>{{ report.categoryCounts[category] }}</strong></button>
             }

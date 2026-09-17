@@ -97,6 +97,16 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(ordinaryStreamFixture);
     }).not.toThrow();
 
+    const encryptedFixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Length 10 ',
+      '/Filter /FlateDecode >>\nstream\nciphertext\nendstream\nendobj\n',
+      'trailer\n<< /Encrypt 9 0 R >>\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(encryptedFixture)).toEqual({
+      encrypted: true,
+      skippedEncryptedObjectStreams: 1,
+    });
+
     const expanded = new Uint8Array(PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES + 1);
     const compressed = deflate(expanded);
     const fixture = joinBytes(

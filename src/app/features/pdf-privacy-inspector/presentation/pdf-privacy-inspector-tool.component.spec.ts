@@ -49,7 +49,7 @@ describe('PdfPrivacyInspectorToolComponent', () => {
       pdfVersion: '1.7', pageCount: 2, inspectedPages: 2, fileBytes: 10,
       encrypted: false, passwordUsed: false,
       findings: [
-        { id: 'js', category: 'active-content', kind: 'javascript', severity: 'high', label: 'OpenAction' },
+        { id: 'js', category: 'active-content', kind: 'javascript', severity: 'high', label: 'OpenAction', occurrences: 3 },
         { id: 'meta', category: 'metadata', kind: 'document-metadata', severity: 'low', label: 'Author', value: 'Alice' },
       ],
     });
@@ -64,6 +64,7 @@ describe('PdfPrivacyInspectorToolComponent', () => {
     const element = fixture.nativeElement as HTMLElement;
     expect(element.querySelector('[data-testid="pdf-privacy-result"]')?.textContent).toContain('Alice');
     expect(element.querySelector('[data-testid="pdf-privacy-result"]')?.textContent).not.toContain('OpenAction');
+    expect(element.querySelector('.category-filters button strong')?.textContent).toBe('4');
   });
 
   it('rend les codes sémantiques du Worker via la couche de présentation', () => {

@@ -32,15 +32,29 @@ interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
   filters?: readonly string[];
+  hasEncryptionDictionary: boolean;
+}
+
+interface CriticalStreamDescriptor {
+  type: 'ObjStm' | 'XRef';
+  contents: Uint8Array;
+  filters: readonly string[] | undefined;
+}
+
+export interface PdfObjectStreamPreflightResult {
+  encrypted: boolean;
+  skippedEncryptedObjectStreams: number;
 }
 
 /**
  * Bounds compressed object and xref streams before pdf-lib eagerly expands
  * them. The scan never decodes arbitrary document strings or ordinary streams.
  */
-export function validatePdfObjectStreamBudgets(data: Uint8Array): void {
+export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStreamPreflightResult {
   const indirectLengths = collectIndirectLengths(data);
-  let expandedBytes = 0;
+  const criticalStreams: CriticalStreamDescriptor[] = [];
+  let encrypted = false;
+  let expectTrailerDictionary = false;
   let validatedStreams = 0;
   let offset = 0;
 
@@ -52,6 +66,11 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): void {
     }
     if (byte === LEFT_PARENTHESIS) {
       offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (matchesBareKeyword(data, offset, 'trailer')) {
+      expectTrailerDictionary = true;
+      offset += 'trailer'.length;
       continue;
     }
     if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
@@ -66,13 +85,17 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): void {
     const dictionaryStart = offset;
     const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
     if (dictionaryEnd === undefined) throw new Error('PDF dictionary limit');
+    const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+    if (expectTrailerDictionary) {
+      encrypted ||= dictionary.hasEncryptionDictionary;
+      expectTrailerDictionary = false;
+    }
     const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
     if (!matchesKeyword(data, streamKeyword, 'stream')) {
       offset = dictionaryEnd;
       continue;
     }
 
-    const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
     const length = resolveStreamLength(dictionary.length, indirectLengths);
     if (length === undefined) throw new Error('Missing PDF stream length');
     const streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
@@ -87,22 +110,35 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): void {
     offset = endstream + 'endstream'.length;
 
     if (dictionary.type !== 'ObjStm' && dictionary.type !== 'XRef') continue;
+    if (dictionary.type === 'XRef') encrypted ||= dictionary.hasEncryptionDictionary;
     validatedStreams += 1;
     if (validatedStreams > MAX_CRITICAL_STREAMS) throw new Error('PDF stream limit');
-    if (!dictionary.filters) throw new Error('Unsupported PDF object stream filter');
+    criticalStreams.push({
+      type: dictionary.type,
+      contents: data.subarray(streamStart, streamEnd),
+      filters: dictionary.filters,
+    });
+  }
 
-    const contents = data.subarray(streamStart, streamEnd);
+  let expandedBytes = 0;
+  let skippedEncryptedObjectStreams = 0;
+  for (const stream of criticalStreams) {
+    if (encrypted && stream.type === 'ObjStm') {
+      skippedEncryptedObjectStreams += 1;
+      continue;
+    }
+    if (!stream.filters) throw new Error('Unsupported PDF object stream filter');
     const remaining = PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES - expandedBytes;
     if (remaining < 0) throw new Error('PDF object stream expansion limit');
 
     let decodedBytes: number;
-    if (dictionary.filters.length === 0) {
-      decodedBytes = contents.byteLength;
+    if (stream.filters.length === 0) {
+      decodedBytes = stream.contents.byteLength;
     } else if (
-      dictionary.filters.length === 1
-      && ['FlateDecode', 'Fl'].includes(dictionary.filters[0] ?? '')
+      stream.filters.length === 1
+      && ['FlateDecode', 'Fl'].includes(stream.filters[0] ?? '')
     ) {
-      decodedBytes = boundedInflatedSize(contents, remaining);
+      decodedBytes = boundedInflatedSize(stream.contents, remaining);
     } else {
       throw new Error('Unsupported PDF object stream filter');
     }
@@ -115,6 +151,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): void {
       throw new Error('PDF object stream expansion limit');
     }
   }
+  return { encrypted, skippedEncryptedObjectStreams };
 }
 
 function collectIndirectLengths(data: Uint8Array): Map<string, number | undefined> {
@@ -175,6 +212,7 @@ function parseCriticalDictionary(
   let length: number | RawPdfReference | undefined;
   let filters: readonly string[] | undefined = [];
   let hasFilter = false;
+  let hasEncryptionDictionary = false;
   let dictionaryDepth = 0;
   let arrayDepth = 0;
   let offset = dictionaryStart;
@@ -258,9 +296,11 @@ function parseCriticalDictionary(
         filters = undefined;
         offset = valueStart + 1;
       }
+    } else if (key.value === 'Encrypt') {
+      hasEncryptionDictionary = true;
     }
   }
-  return { type, length, filters };
+  return { type, length, filters, hasEncryptionDictionary };
 }
 
 function findDictionaryEnd(data: Uint8Array, start: number): number | undefined {
@@ -432,6 +472,11 @@ function matchesKeyword(data: Uint8Array, start: number, keyword: string): boole
   return (before === undefined || isWhitespace(before) || isDelimiter(before))
     && (!hasAfter || isWhitespace(data[start + keyword.length])
       || isDelimiter(data[start + keyword.length]));
+}
+
+function matchesBareKeyword(data: Uint8Array, start: number, keyword: string): boolean {
+  if (!matchesKeyword(data, start, keyword)) return false;
+  return start === 0 || isWhitespace(data[start - 1]);
 }
 
 function isWhitespace(byte: number | undefined): boolean {

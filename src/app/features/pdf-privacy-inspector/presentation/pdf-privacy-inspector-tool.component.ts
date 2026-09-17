@@ -159,6 +159,13 @@ export class PdfPrivacyInspectorToolComponent {
     this.selectedCategory.set(category);
   }
 
+  totalOccurrences(report: PdfPrivacyReport): number {
+    return report.severityCounts.high
+      + report.severityCounts.medium
+      + report.severityCounts.low
+      + report.severityCounts.info;
+  }
+
   downloadReport(): void {
     const file = this.file();
     const report = this.result();

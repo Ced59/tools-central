@@ -12,11 +12,13 @@ import {
   PdfActionDictionaryInspectionError,
   inspectPdfStructuralSignals,
 } from './pdf-action-dictionary.engine';
+import { validatePdfObjectStreamBudgets } from './pdf-object-stream-preflight';
 import {
   PdfPrivacyEngineError,
   extractPdfVersion,
   inspectPdfPrivacyDocument,
 } from './pdf-privacy.engine';
+import { shouldDeferStructuralFailure } from './pdf-privacy-worker-policy';
 import type {
   PdfPrivacyWorkerRequest,
   PdfPrivacyWorkerResponse,
@@ -33,24 +35,27 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
   let pdfWorker: PDFWorker | undefined;
 
   try {
-    const parsingWorker = new Worker(versionedWorkerUrl(command.assetRoot), { type: 'module' });
-    pdfWorker = new PDFWorker({ port: parsingWorker });
     const input = new Uint8Array(command.data);
     const headerData = input.slice(0, 1_024);
     const fileBytes = input.byteLength;
     extractPdfVersion(headerData);
+    let objectStreamPreflight: ReturnType<typeof validatePdfObjectStreamBudgets>;
+    try {
+      objectStreamPreflight = validatePdfObjectStreamBudgets(input);
+    } catch {
+      throw new PdfActionDictionaryInspectionError();
+    }
     post({ type: 'progress', percent: 1 });
     let structuralSignals: Awaited<ReturnType<typeof inspectPdfStructuralSignals>> = null;
-    let structuralFailure: Error | undefined;
+    let structuralFailure: PdfActionDictionaryInspectionError | undefined;
     try {
-      structuralSignals = await inspectPdfStructuralSignals(input);
+      structuralSignals = await inspectPdfStructuralSignals(input, objectStreamPreflight);
     } catch (error: unknown) {
-      // Let PDF.js report a missing/incorrect password before surfacing a
-      // structural safety limit on encrypted metadata.
-      structuralFailure = error instanceof Error
-        ? error
-        : new PdfActionDictionaryInspectionError();
+      if (!shouldDeferStructuralFailure(error, objectStreamPreflight.encrypted)) throw error;
+      structuralFailure = error;
     }
+    const parsingWorker = new Worker(versionedWorkerUrl(command.assetRoot), { type: 'module' });
+    pdfWorker = new PDFWorker({ port: parsingWorker });
     loadingTask = getDocument({
       data: input,
       password: command.password,
@@ -68,8 +73,17 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
     post({ type: 'progress', percent: 2 });
     const document = await loadingTask.promise;
     if (structuralFailure) throw structuralFailure;
-    if (!structuralSignals) throw new PdfActionDictionaryInspectionError();
-    if (structuralSignals.hasUnboundedEncryptedTextStreams) {
+    if (!structuralSignals && !objectStreamPreflight.encrypted) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    const safeStructuralSignals = structuralSignals ?? {
+      actionDictionaries: [],
+      associatedFiles: [],
+      signatures: [],
+      encrypted: true,
+      hasUnboundedEncryptedTextStreams: false,
+    };
+    if (safeStructuralSignals.hasUnboundedEncryptedTextStreams) {
       throw new PdfActionDictionaryInspectionError();
     }
     const report = await inspectPdfPrivacyDocument(
@@ -78,9 +92,9 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
         headerData,
         fileBytes,
         passwordUsed: Boolean(command.password),
-        actionDictionaries: structuralSignals.actionDictionaries,
-        associatedFiles: structuralSignals.associatedFiles,
-        structuralSignatures: structuralSignals.signatures,
+        actionDictionaries: safeStructuralSignals.actionDictionaries,
+        associatedFiles: safeStructuralSignals.associatedFiles,
+        structuralSignatures: safeStructuralSignals.signatures,
         onProgress: percent => {
           post({ type: 'progress', percent });
         },

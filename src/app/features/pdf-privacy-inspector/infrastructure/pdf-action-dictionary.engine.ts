@@ -14,7 +14,10 @@ import {
 import { Inflate } from 'pako';
 
 import { PDF_PRIVACY_MAX_DISCOVERED_ITEMS } from '../domain/pdf-privacy.models';
-import { validatePdfObjectStreamBudgets } from './pdf-object-stream-preflight';
+import {
+  type PdfObjectStreamPreflightResult,
+  validatePdfObjectStreamBudgets,
+} from './pdf-object-stream-preflight';
 
 export interface PdfActionDictionarySignal {
   actionType: string;
@@ -225,10 +228,11 @@ type AssociatedWorkItem = AssociatedVisitFrame | AssociatedLeaveFrame | Associat
  */
 export async function inspectPdfStructuralSignals(
   data: Uint8Array,
+  objectStreamPreflight?: PdfObjectStreamPreflightResult,
 ): Promise<PdfStructuralSignals | null> {
   try {
     try {
-      validatePdfObjectStreamBudgets(data);
+      if (!objectStreamPreflight) validatePdfObjectStreamBudgets(data);
     } catch {
       throw new PdfActionDictionaryInspectionError();
     }
