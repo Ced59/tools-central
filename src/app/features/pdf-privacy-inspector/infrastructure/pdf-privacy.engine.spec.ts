@@ -321,6 +321,36 @@ describe('inspectPdfPrivacyDocument', () => {
     });
   });
 
+  it('fusionne l’inventaire structurel lorsque PDF.js ne renvoie qu’une partie des signatures', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue([{
+        fieldName: 'Direct',
+        coversWholeDocument: true,
+      }]),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      structuralSignatures: [{
+        fieldName: 'Direct',
+        signerName: 'Alice',
+      }, {
+        fieldName: 'Inherited',
+        signerName: 'Bob',
+      }],
+    });
+
+    const signatures = report.findings.filter(finding => finding.kind === 'digital-signature');
+    expect(signatures).toHaveLength(2);
+    expect(signatures.find(finding => finding.label === 'Direct')).toMatchObject({
+      value: 'Alice',
+      message: { code: 'signature-details', coversWholeDocument: true },
+    });
+    expect(signatures.find(finding => finding.label === 'Inherited')).toMatchObject({
+      value: 'Bob',
+    });
+  });
+
   it('classe le nom privé d’un champ de signature comme une métadonnée à vérifier', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{

@@ -663,6 +663,26 @@ describe('inspectPdfStructuralSignals', () => {
       .rejects.toMatchObject({ code: 'inspection-limit' });
   }, 30_000);
 
+  it('ne facture pas un script de champ aux champs indépendants', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const javascript = source.context.register(PDFString.of('A'.repeat(40 * 1_024)));
+    const scriptedField = source.context.register(source.context.obj({
+      FT: 'Tx',
+      T: PDFString.of('Scripted'),
+      AA: { K: { Type: 'Action', S: 'JavaScript', JS: javascript } },
+    }));
+    const unrelatedFields = Array.from({ length: 1_000 }, () => (
+      source.context.register(source.context.obj({ FT: 'Tx' }))
+    ));
+    source.catalog.set(PDFName.of('AcroForm'), source.context.obj({
+      Fields: [scriptedField, ...unrelatedFields],
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .resolves.not.toBeNull();
+  });
+
   it('borne le nombre de champs avant leur normalisation par PDF.js', async () => {
     const source = await PDFDocument.create();
     source.addPage();

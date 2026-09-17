@@ -144,8 +144,7 @@ interface InspectionState {
   fieldOccurrenceCount: number;
   fieldOccurrenceSignatureBytes: number;
   fieldQualifiedNameBytes: number;
-  fieldJavascriptBytes: number;
-  fieldJavascriptObjects: Set<PDFObject>;
+  fieldJavascriptExpansionBytes: number;
   signatureObjectCount: number;
   signaturePayloadBytes: number;
   signatureTailBytes: number;
@@ -273,8 +272,7 @@ export async function inspectPdfStructuralSignals(
       fieldOccurrenceCount: 0,
       fieldOccurrenceSignatureBytes: 0,
       fieldQualifiedNameBytes: 0,
-      fieldJavascriptBytes: 0,
-      fieldJavascriptObjects: new Set<PDFObject>(),
+      fieldJavascriptExpansionBytes: 0,
       signatureObjectCount: 0,
       signaturePayloadBytes: 0,
       signatureTailBytes: 0,
@@ -338,8 +336,6 @@ export async function inspectPdfStructuralSignals(
       inspectEmbeddedFileSpec(object, state);
       queue.push({ kind: 'children-frame', iterator: structuralChildren(object) });
     }
-    validateFieldActionExpansionBudget(state);
-
     return {
       actionDictionaries: [...state.signals.values()].map(signal => ({
         actionType: signal.actionType,
@@ -366,24 +362,12 @@ function collectActionDictionary(
   dictionary: PDFDict,
   context: PdfActionDictionaryContext,
   triggerId: string | undefined,
-  fieldContext: boolean,
   state: InspectionState,
 ): void {
   const actionName = readName(dictionary, 'S');
   if (!actionName || actionName.sizeInBytes() > 128) return;
   const actionType = actionName.decodeText();
   if (!actionType || !ACTION_NAMES.has(actionType)) return;
-  if (fieldContext && actionType === 'JavaScript') {
-    const javascript = readObject(dictionary, 'JS');
-    const resolvedJavascript = javascript
-      ? resolvePdfObject(javascript, state.document)
-      : undefined;
-    if (javascript && resolvedJavascript && !state.fieldJavascriptObjects.has(resolvedJavascript)) {
-      state.fieldJavascriptObjects.add(resolvedJavascript);
-      state.fieldJavascriptBytes += measurePdfTextBytes(javascript, state);
-    }
-  }
-
   consumeDiscoveredSignal(state);
 
   const rawTarget = state.canReadTarget ? readTarget(dictionary) : undefined;
@@ -526,7 +510,6 @@ function inspectActionEntry(
         dictionary,
         workItem.context,
         workItem.triggerId,
-        workItem.fieldContext,
         state,
       );
     }
@@ -891,6 +874,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: number;
       inheritedOptionBytes: number;
       inheritedDefaultAppearanceBytes: number;
+      inheritedJavascriptBytes: number;
       inheritedFieldType: string | undefined;
     }
   )[] = [];
@@ -908,6 +892,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
       inheritedDefaultValueBytes: 0,
       inheritedOptionBytes: 0,
       inheritedDefaultAppearanceBytes: acroFormDefaultAppearanceBytes,
+      inheritedJavascriptBytes: 0,
       inheritedFieldType: undefined,
     });
   }
@@ -938,6 +923,16 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
     validateFieldOccurrenceSignatureBudget(field, fieldType, state);
 
     validateFieldObjectBudget(field, state, fieldType);
+    const javascriptBytes = item.inheritedJavascriptBytes
+      + measureFieldActionJavascriptBytes(field, state);
+    state.fieldJavascriptExpansionBytes += javascriptBytes;
+    if (
+      !Number.isSafeInteger(javascriptBytes)
+      || !Number.isSafeInteger(state.fieldJavascriptExpansionBytes)
+      || state.fieldJavascriptExpansionBytes > PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
     const valueBytes = field.has(PDFName.of('V'))
       ? measureNormalizedValueBytes(readObject(field, 'V'), state)
       : item.inheritedValueBytes;
@@ -1004,6 +999,7 @@ function validateAcroFormFieldBudgets(document: PDFDocument, state: InspectionSt
         inheritedDefaultValueBytes: defaultValueBytes,
         inheritedOptionBytes: optionBytes,
         inheritedDefaultAppearanceBytes: defaultAppearanceBytes,
+        inheritedJavascriptBytes: javascriptBytes,
         inheritedFieldType: fieldType,
       });
     }
@@ -1042,6 +1038,75 @@ function validateFieldOccurrenceSignatureBudget(
   ) {
     throw new PdfActionDictionaryInspectionError();
   }
+}
+
+function measureFieldActionJavascriptBytes(
+  field: PDFDict,
+  state: InspectionState,
+): number {
+  const stack: Array<{
+    object: PDFObject;
+    allowContainer: boolean;
+    chainDepth: number;
+  }> = [];
+  const action = field.get(PDFName.of('A'));
+  const additionalActions = field.get(PDFName.of('AA'));
+  if (action) stack.push({ object: action, allowContainer: false, chainDepth: 0 });
+  if (additionalActions) {
+    stack.push({ object: additionalActions, allowContainer: true, chainDepth: 0 });
+  }
+
+  const visited = new Set<PDFObject>();
+  const measuredScripts = new Set<PDFObject>();
+  let total = 0;
+  while (stack.length > 0) {
+    const item = stack.pop();
+    if (!item) continue;
+    consumeTraversalStep(state);
+    if (item.chainDepth > PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    const object = resolvePdfObject(item.object, state.document);
+    if (!object || visited.has(object)) continue;
+    visited.add(object);
+
+    if (object instanceof PDFArray) {
+      for (let index = 0; index < object.size(); index += 1) {
+        stack.push({
+          object: object.get(index),
+          allowContainer: false,
+          chainDepth: item.chainDepth + 1,
+        });
+      }
+      continue;
+    }
+    const dictionary = object instanceof PDFStream ? object.dict : object;
+    if (!(dictionary instanceof PDFDict)) continue;
+    if (item.allowContainer) {
+      for (const child of dictionary.asMap().values()) {
+        stack.push({ object: child, allowContainer: false, chainDepth: item.chainDepth });
+      }
+      continue;
+    }
+
+    if (readName(dictionary, 'S')?.decodeText() === 'JavaScript') {
+      const javascript = readObject(dictionary, 'JS');
+      if (javascript) {
+        validatePdfTextObjects(javascript, PDF_PRIVACY_MAX_JAVASCRIPT_BYTES, state);
+        total += measureUniquePdfTextBytes(javascript, state, measuredScripts);
+        if (!Number.isSafeInteger(total)) throw new PdfActionDictionaryInspectionError();
+      }
+    }
+    const next = dictionary.get(PDFName.of('Next'));
+    if (next) {
+      stack.push({
+        object: next,
+        allowContainer: false,
+        chainDepth: item.chainDepth + 1,
+      });
+    }
+  }
+  return total;
 }
 
 type SignatureByteRange = readonly [number, number, number, number];
@@ -1516,20 +1581,6 @@ function validateInflatedSize(contents: Uint8Array, maxDecodedBytes: number): nu
     return decodedBytes;
   } catch (error: unknown) {
     if (error instanceof PdfActionDictionaryInspectionError) throw error;
-    throw new PdfActionDictionaryInspectionError();
-  }
-}
-
-function validateFieldActionExpansionBudget(state: InspectionState): void {
-  const expandedBytes = state.fieldJavascriptBytes * Math.max(
-    1,
-    state.fieldObjectCount,
-    state.fieldOccurrenceCount,
-  );
-  if (
-    !Number.isSafeInteger(expandedBytes)
-    || expandedBytes > PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES
-  ) {
     throw new PdfActionDictionaryInspectionError();
   }
 }

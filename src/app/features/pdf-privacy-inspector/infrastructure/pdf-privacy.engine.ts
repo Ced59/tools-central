@@ -178,7 +178,7 @@ export async function inspectPdfPrivacyDocument(
   }
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
   collectSignatures(
-    signatures && signatures.length > 0 ? signatures : input.structuralSignatures,
+    mergeSignatureInventories(signatures, input.structuralSignatures),
     add,
     consumeDiscoveryBudget,
   );
@@ -534,6 +534,50 @@ function collectSignatures(
       },
     });
   });
+}
+
+function mergeSignatureInventories(
+  pdfJsSignatures: readonly object[] | null | undefined,
+  structuralSignatures: readonly PdfStructuralSignatureSignal[] | null | undefined,
+): readonly object[] | null {
+  if (!pdfJsSignatures?.length) return structuralSignatures ?? null;
+  if (!structuralSignatures?.length) return pdfJsSignatures;
+
+  const structuralUsed = structuralSignatures.map(() => false);
+  const structuralByFieldName = new Map<string, { indices: number[]; cursor: number }>();
+  structuralSignatures.forEach((signature, index) => {
+    const fieldName = readableValue(signature.fieldName);
+    if (!fieldName) return;
+    const matches = structuralByFieldName.get(fieldName);
+    if (matches) {
+      matches.indices.push(index);
+    } else {
+      structuralByFieldName.set(fieldName, { indices: [index], cursor: 0 });
+    }
+  });
+  const merged = pdfJsSignatures.map(pdfJsSignature => {
+    const pdfJsRecord = asRecord(pdfJsSignature);
+    const fieldName = readableValue(pdfJsRecord?.['fieldName']);
+    if (!fieldName) return pdfJsSignature;
+    const matches = structuralByFieldName.get(fieldName);
+    if (!matches) return pdfJsSignature;
+    const structuralIndex = matches.indices[matches.cursor];
+    if (structuralIndex === undefined) return pdfJsSignature;
+    matches.cursor += 1;
+    structuralUsed[structuralIndex] = true;
+
+    const combined: Record<string, unknown> = { ...structuralSignatures[structuralIndex] };
+    if (pdfJsRecord) {
+      for (const [key, value] of Object.entries(pdfJsRecord)) {
+        if (value !== undefined && value !== null) combined[key] = value;
+      }
+    }
+    return combined;
+  });
+  structuralSignatures.forEach((signature, index) => {
+    if (!structuralUsed[index]) merged.push(signature);
+  });
+  return merged;
 }
 
 function collectOutlineItems(
