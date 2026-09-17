@@ -190,7 +190,9 @@ describe('inspectPdfStructuralSignals', () => {
 
     const xrefStreamAttackTail = [
       '\nendstream\nendobj\n2 0 obj\n3\nendobj\n',
-      '0 '.repeat(PDF_PRIVACY_MAX_RAW_TOKENS + 1),
+      '['.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
+      '0',
+      ']'.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
       '\n',
     ].join('');
     const xrefStreamBody = [
@@ -213,29 +215,115 @@ describe('inspectPdfStructuralSignals', () => {
       '\n%%EOF\n',
     ].join('');
     const currentXrefOffset = previousRevision.length;
-    const encodeXrefEntry = (objectOffset: number): Uint8Array => Uint8Array.of(
-      1,
-      (objectOffset >>> 24) & 0xff,
-      (objectOffset >>> 16) & 0xff,
-      (objectOffset >>> 8) & 0xff,
-      objectOffset & 0xff,
-      0,
-      0,
+    const encodeXrefEntry = (
+      type: number,
+      fieldOne: number,
+      fieldTwo = 0,
+    ): Uint8Array => Uint8Array.of(
+      type,
+      (fieldOne >>> 24) & 0xff,
+      (fieldOne >>> 16) & 0xff,
+      (fieldOne >>> 8) & 0xff,
+      fieldOne & 0xff,
+      (fieldTwo >>> 8) & 0xff,
+      fieldTwo & 0xff,
     );
     const xrefStreamFixture = joinBytes(
       previousRevision,
       '5 0 obj\n<< /Type /XRef /Size 6 /Prev ',
       String(previousXrefOffset),
       ' /W [1 4 2] /Index [2 1 5 1] /Length 14 >>\nstream\n',
-      encodeXrefEntry(activeLengthOffset),
-      encodeXrefEntry(currentXrefOffset),
+      encodeXrefEntry(1, activeLengthOffset),
+      encodeXrefEntry(1, currentXrefOffset),
       '\nendstream\nendobj\nstartxref\n',
       String(currentXrefOffset),
       '\n%%EOF\n',
     );
     expect(() => {
       validatePdfObjectStreamBudgets(xrefStreamFixture);
-    }).toThrow('PDF raw token limit');
+    }).toThrow('PDF raw container depth limit');
+
+    const staleObjectStreamPayload = '2 0 99';
+    const activeObjectStreamPayload = '2 0 3';
+    const compressedRevisionBody = [
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+      '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(staleObjectStreamPayload.length),
+      ' >>\nstream\n',
+      staleObjectStreamPayload,
+      '\nendstream\nendobj\n4 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(activeObjectStreamPayload.length),
+      ' >>\nstream\n',
+      activeObjectStreamPayload,
+      '\nendstream\nendobj\n',
+    ].join('');
+    const compressedXrefOffset = compressedRevisionBody.length;
+    const compressedXrefFixture = joinBytes(
+      compressedRevisionBody,
+      '5 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [2 4] /Length 28 >>\nstream\n',
+      encodeXrefEntry(2, 4),
+      encodeXrefEntry(1, compressedRevisionBody.indexOf('3 0 obj')),
+      encodeXrefEntry(1, compressedRevisionBody.indexOf('4 0 obj')),
+      encodeXrefEntry(1, compressedXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(compressedXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(compressedXrefFixture);
+    }).not.toThrow();
+
+    const hybridAttackTail = [
+      '\nendstream\nendobj\n',
+      '['.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
+      '0',
+      ']'.repeat(PDF_PRIVACY_MAX_RAW_CONTAINER_DEPTH + 1),
+      '\n',
+    ].join('');
+    const hybridBody = [
+      '%PDF-1.7\n2 0 obj\n',
+      String(3 + hybridAttackTail.length),
+      '\nendobj\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc',
+      hybridAttackTail,
+      'endstream\n4 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(activeObjectStreamPayload.length),
+      ' >>\nstream\n',
+      activeObjectStreamPayload,
+      '\nendstream\nendobj\n',
+    ].join('');
+    const hybridPreviousXrefOffset = hybridBody.length;
+    const hybridPreviousRevision = [
+      hybridBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(hybridBody.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(hybridBody.indexOf('2 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 6 >>\nstartxref\n',
+      String(hybridPreviousXrefOffset),
+      '\n%%EOF\n',
+    ].join('');
+    const supplementalXrefOffset = hybridPreviousRevision.length;
+    const supplementalXrefObject = joinBytes(
+      '5 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [2 1 4 2] /Length 21 >>\nstream\n',
+      encodeXrefEntry(2, 4),
+      encodeXrefEntry(1, hybridBody.indexOf('4 0 obj')),
+      encodeXrefEntry(1, supplementalXrefOffset),
+      '\nendstream\nendobj\n',
+    );
+    const hybridCurrentXrefOffset = supplementalXrefOffset + supplementalXrefObject.byteLength;
+    const hybridXrefFixture = joinBytes(
+      hybridPreviousRevision,
+      supplementalXrefObject,
+      'xref\n0 1\n0000000000 65535 f \ntrailer\n<< /Size 6 /XRefStm ',
+      String(supplementalXrefOffset),
+      ' /Prev ',
+      String(hybridPreviousXrefOffset),
+      ' >>\nstartxref\n',
+      String(hybridCurrentXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(hybridXrefFixture);
+    }).toThrow('PDF raw container depth limit');
 
     const compressedLengthPayload = '2 0 3';
     const compressedLengthFixture = joinBytes(

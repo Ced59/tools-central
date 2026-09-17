@@ -38,7 +38,13 @@ interface IndirectLengthCandidateIndex {
   declarationOffsets: Map<string, Map<number, Set<number>>>;
   compressedValues: Map<string, Set<number>>;
   authoritativeOffsets: ReadonlyMap<string, number>;
+  authoritativeCompressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>;
   encryptedFromCrossReference: boolean;
+}
+
+interface CompressedCrossReferenceEntry {
+  objectStreamNumber: number;
+  objectIndex: number;
 }
 
 interface ParsedDictionary {
@@ -51,6 +57,7 @@ interface ParsedDictionary {
   xrefWidths?: readonly number[];
   xrefIndex?: readonly number[];
   previousXrefOffset?: number;
+  supplementalXrefOffset?: number;
   hasEncryptionDictionary: boolean;
 }
 
@@ -72,14 +79,18 @@ interface ByteRange {
 
 interface CrossReferenceMetadata {
   objectOffsets: Map<string, number>;
+  compressedEntries: Map<string, CompressedCrossReferenceEntry>;
   encrypted: boolean;
 }
 
 interface CrossReferenceSection {
+  kind: 'classic' | 'stream';
   objectOffsets: Map<string, number>;
+  compressedEntries: Map<string, CompressedCrossReferenceEntry>;
   definedObjectNumbers: Set<number>;
   encrypted: boolean;
   previousOffset?: number;
+  supplementalOffset?: number;
 }
 
 export interface PdfObjectStreamPreflightResult {
@@ -325,6 +336,13 @@ function validateXrefSize(size: number | undefined): void {
 }
 
 function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | undefined {
+  return readIndirectObjectHeader(data, start)?.end;
+}
+
+function readIndirectObjectHeader(
+  data: Uint8Array,
+  start: number,
+): { objectNumber: number; generationNumber: number; end: number } | undefined {
   const previous = start === 0 ? undefined : data[start - 1];
   if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) return undefined;
   const objectNumber = tryReadUnsignedInteger(data, start);
@@ -337,7 +355,11 @@ function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | 
   if (objectKeyword === generation.end || !matchesKeyword(data, objectKeyword, 'obj')) {
     return undefined;
   }
-  return objectKeyword + 'obj'.length;
+  return {
+    objectNumber: objectNumber.value,
+    generationNumber: generation.value,
+    end: objectKeyword + 'obj'.length,
+  };
 }
 
 function collectIndirectLengths(data: Uint8Array): {
@@ -443,6 +465,10 @@ function collectIndirectLengths(data: Uint8Array): {
       offset = objectEnd + 'endobj'.length;
       continue;
     }
+    if (candidates.authoritativeCompressedEntries.has(key)) {
+      offset = objectEnd + 'endobj'.length;
+      continue;
+    }
     if (authoritativeOffset !== undefined) {
       if (!lengths.has(key) && lengths.size >= MAX_INDIRECT_LENGTH_OBJECTS) {
         throw new Error('PDF indirect length object limit');
@@ -474,6 +500,7 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     declarationOffsets: new Map<string, Map<number, Set<number>>>(),
     compressedValues: new Map<string, Set<number>>(),
     authoritativeOffsets: crossReference.objectOffsets,
+    authoritativeCompressedEntries: crossReference.compressedEntries,
     encryptedFromCrossReference: crossReference.encrypted,
   };
   let candidateValues = 0;
@@ -732,12 +759,15 @@ function detectEncryptionBeforeObjectStreamDiscovery(
 
 function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata {
   const objectOffsets = new Map<string, number>();
+  const compressedEntries = new Map<string, CompressedCrossReferenceEntry>();
   const startXrefOffset = findLastBareKeyword(data, 'startxref');
-  if (startXrefOffset === undefined) return { objectOffsets, encrypted: false };
+  if (startXrefOffset === undefined) {
+    return { objectOffsets, compressedEntries, encrypted: false };
+  }
   const valueStart = skipWhitespaceAndComments(data, startXrefOffset + 'startxref'.length);
   const xrefPosition = tryReadUnsignedInteger(data, valueStart);
   if (!xrefPosition || xrefPosition.value >= data.byteLength) {
-    return { objectOffsets, encrypted: false };
+    return { objectOffsets, compressedEntries, encrypted: false };
   }
 
   const visitedOffsets = new Set<number>();
@@ -747,19 +777,52 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   while (currentOffset !== undefined) {
     if (visitedOffsets.has(currentOffset) || visitedOffsets.size >= 128) break;
     visitedOffsets.add(currentOffset);
-    const section = readCrossReferenceSection(data, currentOffset, startXrefOffset);
-    if (!section) break;
-    encrypted ||= section.encrypted;
-    for (const [key, objectOffset] of section.objectOffsets) {
-      const objectNumber = referenceObjectNumber(key);
-      if (!definedObjectNumbers.has(objectNumber)) objectOffsets.set(key, objectOffset);
+    const primarySection = readCrossReferenceSection(data, currentOffset, startXrefOffset);
+    if (!primarySection) break;
+    let supplementalSection: CrossReferenceSection | undefined;
+    if (primarySection.supplementalOffset !== undefined) {
+      const supplementalOffset = primarySection.supplementalOffset;
+      if (
+        supplementalOffset >= data.byteLength
+        || visitedOffsets.has(supplementalOffset)
+        || visitedOffsets.size >= 128
+      ) break;
+      visitedOffsets.add(supplementalOffset);
+      supplementalSection = readCrossReferenceSection(
+        data,
+        supplementalOffset,
+        startXrefOffset,
+      );
+      if (!supplementalSection || supplementalSection.kind !== 'stream') break;
     }
-    for (const objectNumber of section.definedObjectNumbers) {
+    const revisionDefinedObjectNumbers = new Set<number>();
+    for (const section of [supplementalSection, primarySection]) {
+      if (!section) continue;
+      encrypted ||= section.encrypted;
+      for (const [key, objectOffset] of section.objectOffsets) {
+        const objectNumber = referenceObjectNumber(key);
+        if (
+          !definedObjectNumbers.has(objectNumber)
+          && !revisionDefinedObjectNumbers.has(objectNumber)
+        ) objectOffsets.set(key, objectOffset);
+      }
+      for (const [key, entry] of section.compressedEntries) {
+        const objectNumber = referenceObjectNumber(key);
+        if (
+          !definedObjectNumbers.has(objectNumber)
+          && !revisionDefinedObjectNumbers.has(objectNumber)
+        ) compressedEntries.set(key, entry);
+      }
+      for (const objectNumber of section.definedObjectNumbers) {
+        revisionDefinedObjectNumbers.add(objectNumber);
+      }
+    }
+    for (const objectNumber of revisionDefinedObjectNumbers) {
       definedObjectNumbers.add(objectNumber);
     }
-    currentOffset = section.previousOffset;
+    currentOffset = primarySection.previousOffset ?? supplementalSection?.previousOffset;
   }
-  return { objectOffsets, encrypted };
+  return { objectOffsets, compressedEntries, encrypted };
 }
 
 function readCrossReferenceSection(
@@ -806,12 +869,16 @@ function readXrefStreamSection(
       || entryCount > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1
     ) throw new Error('PDF xref size limit');
     for (let index = 0; index < count; index += 1) {
-      definedObjectNumbers.add(firstObject + index);
+      const objectNumber = firstObject + index;
+      if (definedObjectNumbers.has(objectNumber)) return undefined;
+      definedObjectNumbers.add(objectNumber);
     }
   }
 
   const section: CrossReferenceSection = {
+    kind: 'stream',
     objectOffsets: new Map<string, number>(),
+    compressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
     definedObjectNumbers,
     encrypted: dictionary.hasEncryptionDictionary,
     previousOffset: dictionary.previousXrefOffset,
@@ -867,6 +934,11 @@ function readXrefStreamSection(
           referenceKey(firstObject + index, fieldTwo),
           fieldOne,
         );
+      } else if (type === 2) {
+        section.compressedEntries.set(
+          referenceKey(firstObject + index, 0),
+          { objectStreamNumber: fieldOne, objectIndex: fieldTwo },
+        );
       }
     }
   }
@@ -919,6 +991,7 @@ function readClassicCrossReferenceSection(
   lastStartXrefOffset: number,
 ): CrossReferenceSection | undefined {
   const objectOffsets = new Map<string, number>();
+  const compressedEntries = new Map<string, CompressedCrossReferenceEntry>();
   const definedObjectNumbers = new Set<number>();
   let entriesRead = 0;
   let offset = xrefOffset + 'xref'.length;
@@ -934,10 +1007,13 @@ function readClassicCrossReferenceSection(
       try {
         const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
         return {
+          kind: 'classic',
           objectOffsets,
+          compressedEntries,
           definedObjectNumbers,
           encrypted: dictionary.hasEncryptionDictionary,
           previousOffset: dictionary.previousXrefOffset,
+          supplementalOffset: dictionary.supplementalXrefOffset,
         };
       } catch {
         return undefined;
@@ -1011,11 +1087,11 @@ function collectCompressedIndirectLengthCandidates(
   while (changed) {
     changed = false;
     for (let offset = 0; offset < data.byteLength; offset += 1) {
-      const objectHeaderEnd = readIndirectObjectHeaderEnd(data, offset);
-      if (objectHeaderEnd === undefined) continue;
-      const dictionaryStart = skipWhitespaceAndComments(data, objectHeaderEnd);
+      const objectHeader = readIndirectObjectHeader(data, offset);
+      if (!objectHeader) continue;
+      const dictionaryStart = skipWhitespaceAndComments(data, objectHeader.end);
       if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
-        offset = objectHeaderEnd - 1;
+        offset = objectHeader.end - 1;
         continue;
       }
       let dictionaryEnd: number | undefined;
@@ -1077,6 +1153,18 @@ function collectCompressedIndirectLengthCandidates(
       );
       for (const value of values) {
         const key = referenceKey(value.objectNumber, 0);
+        const authoritativeEntry = candidates.authoritativeCompressedEntries.get(key);
+        if (authoritativeEntry) {
+          const authoritativeStreamOffset = candidates.authoritativeOffsets.get(
+            referenceKey(authoritativeEntry.objectStreamNumber, 0),
+          );
+          if (
+            objectHeader.objectNumber !== authoritativeEntry.objectStreamNumber
+            || objectHeader.generationNumber !== 0
+            || value.objectIndex !== authoritativeEntry.objectIndex
+            || (authoritativeStreamOffset !== undefined && authoritativeStreamOffset !== offset)
+          ) continue;
+        }
         let allValues = candidates.values.get(key);
         if (!allValues) {
           allValues = new Set<number>();
@@ -1143,7 +1231,7 @@ function readCompressedIntegerObjects(
   data: Uint8Array,
   objectCount: number,
   firstObjectOffset: number,
-): Array<{ objectNumber: number; value: number }> {
+): Array<{ objectNumber: number; objectIndex: number; value: number }> {
   if (
     !Number.isSafeInteger(objectCount)
     || objectCount < 0
@@ -1168,7 +1256,7 @@ function readCompressedIntegerObjects(
   }
   if (skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset) return [];
 
-  const values: Array<{ objectNumber: number; value: number }> = [];
+  const values: Array<{ objectNumber: number; objectIndex: number; value: number }> = [];
   for (let index = 0; index < objectCount; index += 1) {
     const start = firstObjectOffset + (objectOffsets[index] ?? 0);
     const end = index + 1 < objectCount
@@ -1186,7 +1274,11 @@ function readCompressedIntegerObjects(
     if (!value || value.end > end || !containsOnlyWhitespaceAndComments(data, value.end, end)) {
       continue;
     }
-    values.push({ objectNumber: objectNumbers[index] ?? 0, value: value.value });
+    values.push({
+      objectNumber: objectNumbers[index] ?? 0,
+      objectIndex: index,
+      value: value.value,
+    });
   }
   return values;
 }
@@ -1234,6 +1326,12 @@ function resolveCandidateStreamLength(
     const authoritativeValues = boundaryValues.filter(value => (
       candidates.declarationOffsets.get(key)?.get(value)?.has(authoritativeOffset) ?? false
     ));
+    return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
+  }
+  if (candidates.authoritativeCompressedEntries.has(key)) {
+    const compressedValues = candidates.compressedValues.get(key);
+    if (!compressedValues) return undefined;
+    const authoritativeValues = boundaryValues.filter(value => compressedValues.has(value));
     return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
   }
 
@@ -1291,6 +1389,7 @@ function parseCriticalDictionary(
   let xrefWidths: readonly number[] | undefined;
   let xrefIndex: readonly number[] | undefined;
   let previousXrefOffset: number | undefined;
+  let supplementalXrefOffset: number | undefined;
   let hasFilter = false;
   let hasEncryptionDictionary = false;
   let dictionaryDepth = 0;
@@ -1399,6 +1498,7 @@ function parseCriticalDictionary(
       || key.value === 'First'
       || key.value === 'Size'
       || key.value === 'Prev'
+      || key.value === 'XRefStm'
     ) {
       const value = readUnsignedInteger(data, valueStart);
       if (!value) throw new Error('Invalid PDF object count');
@@ -1411,9 +1511,14 @@ function parseCriticalDictionary(
       } else if (key.value === 'Size') {
         if (xrefSize !== undefined) throw new Error('Duplicate PDF xref size');
         xrefSize = value.value;
-      } else {
+      } else if (key.value === 'Prev') {
         if (previousXrefOffset !== undefined) throw new Error('Duplicate PDF previous xref');
         previousXrefOffset = value.value;
+      } else {
+        if (supplementalXrefOffset !== undefined) {
+          throw new Error('Duplicate PDF supplemental xref');
+        }
+        supplementalXrefOffset = value.value;
       }
       offset = value.end;
     } else if (key.value === 'Encrypt') {
@@ -1430,6 +1535,7 @@ function parseCriticalDictionary(
     xrefWidths,
     xrefIndex,
     previousXrefOffset,
+    supplementalXrefOffset,
     hasEncryptionDictionary,
   };
 }
