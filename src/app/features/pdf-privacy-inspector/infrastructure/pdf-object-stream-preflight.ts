@@ -2244,6 +2244,7 @@ function readFilters(
   data: Uint8Array,
   start: number,
 ): { filters: PdfFilters; end: number } {
+  if (matchesKeyword(data, start, 'null')) return { filters: [], end: start + 4 };
   if (data[start] === PDF_NAME) {
     const filter = readPdfName(data, start);
     if (!filter) throw new Error('Invalid PDF stream filter');

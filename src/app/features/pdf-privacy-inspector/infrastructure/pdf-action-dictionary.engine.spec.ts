@@ -446,6 +446,10 @@ describe('inspectPdfStructuralSignals', () => {
     const predictedFlate = deflate(pngSubRow);
     const fixtures = [
       {
+        filterDictionary: '/Filter null',
+        payload: plain,
+      },
+      {
         filterDictionary: '/Filter /ASCIIHexDecode /DecodeParms null',
         payload: encodeAsciiHex(plain),
         explicitPlusLength: true,

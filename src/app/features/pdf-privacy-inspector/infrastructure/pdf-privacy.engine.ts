@@ -215,28 +215,24 @@ export async function inspectPdfPrivacyDocument(
     && input.associatedFiles !== undefined;
   const decryptedOutputBudget = new PdfJsDecryptedOutputBudget();
   input.onProgress?.(8);
-  const [metadata, attachments, documentActions, hasJavascript, fields, signatures, permissions, openAction, outline] = await Promise.all([
-    document.getMetadata(),
-    structuralAttachmentsAvailable ? Promise.resolve(null) : document.getAttachments(),
-    document.getJSActions(),
-    document.hasJSActions(),
-    document.getFieldObjects(),
-    document.getSignatures(),
-    document.getPermissions(),
-    document.getOpenAction(),
-    document.getOutline(),
-  ]);
-  for (const output of [
-    metadata,
-    attachments,
-    documentActions,
-    hasJavascript,
-    fields,
-    signatures,
-    permissions,
-    openAction,
-    outline,
-  ]) decryptedOutputBudget.consume(output);
+  const metadata = await document.getMetadata();
+  decryptedOutputBudget.consume(metadata);
+  const attachments = structuralAttachmentsAvailable ? null : await document.getAttachments();
+  decryptedOutputBudget.consume(attachments);
+  const documentActions = await document.getJSActions();
+  decryptedOutputBudget.consume(documentActions);
+  const hasJavascript = await document.hasJSActions();
+  decryptedOutputBudget.consume(hasJavascript);
+  const fields = await document.getFieldObjects();
+  decryptedOutputBudget.consume(fields);
+  const signatures = await document.getSignatures();
+  decryptedOutputBudget.consume(signatures);
+  const permissions = await document.getPermissions();
+  decryptedOutputBudget.consume(permissions);
+  const openAction = await document.getOpenAction();
+  decryptedOutputBudget.consume(openAction);
+  const outline = await document.getOutline();
+  decryptedOutputBudget.consume(outline);
   const pdfVersion = effectivePdfVersion(metadata.info) ?? headerPdfVersion;
   input.onProgress?.(20);
 
@@ -293,11 +289,9 @@ export async function inspectPdfPrivacyDocument(
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
     const page = await document.getPage(pageNumber);
     try {
-      const [annotations, pageActions] = await Promise.all([
-        page.getAnnotations({ intent: 'any' }),
-        page.getJSActions(),
-      ]);
+      const annotations = await page.getAnnotations({ intent: 'any' });
       decryptedOutputBudget.consume(annotations);
+      const pageActions = await page.getJSActions();
       decryptedOutputBudget.consume(pageActions);
       collectPageAnnotations(
         annotations,

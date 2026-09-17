@@ -111,7 +111,7 @@ async function inspect(command: PdfPrivacyWorkerRequest): Promise<void> {
 }
 
 function versionedWorkerUrl(assetRoot: string): string {
-  const workerUrl = new URL('pdf.worker.min.mjs', assetRoot);
+  const workerUrl = new URL('pdf.worker.privacy-bounded.mjs', assetRoot);
   workerUrl.searchParams.set('v', version);
   return workerUrl.toString();
 }
@@ -124,6 +124,8 @@ function failureCode(error: unknown): PdfPrivacyFailureCode {
     : undefined;
   if (code === PasswordResponses.NEED_PASSWORD) return 'password-required';
   if (code === PasswordResponses.INCORRECT_PASSWORD) return 'incorrect-password';
+  const message = error instanceof Error ? error.message : '';
+  if (message.includes('TC_PDF_DECODED_STREAM_LIMIT')) return 'inspection-limit';
   const name = error instanceof Error ? error.name : '';
   if (name === 'InvalidPDFException' || name === 'FormatError') return 'invalid-pdf';
   return 'corrupt-document';
