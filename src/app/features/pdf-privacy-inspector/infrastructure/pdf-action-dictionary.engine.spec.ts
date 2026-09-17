@@ -182,11 +182,60 @@ describe('inspectPdfStructuralSignals', () => {
       `${String(selectedShortObjectTwoOffset).padStart(10, '0')} 00000 n \n`,
       'trailer\n<< /Size 3 >>\nstartxref\n',
       String(selectedShortXrefOffset),
-      '\n%%EOF\n',
+      '\n% startxref bogus\n%%EOF\n',
     );
     expect(() => {
       validatePdfObjectStreamBudgets(xrefSelectedShortFixture);
     }).not.toThrow();
+
+    const xrefStreamAttackTail = [
+      '\nendstream\nendobj\n2 0 obj\n3\nendobj\n',
+      '0 '.repeat(PDF_PRIVACY_MAX_RAW_TOKENS + 1),
+      '\n',
+    ].join('');
+    const xrefStreamBody = [
+      '%PDF-1.7\n2 0 obj\n',
+      String(3 + xrefStreamAttackTail.length),
+      '\nendobj\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc',
+      xrefStreamAttackTail,
+      'endstream\n',
+    ].join('');
+    const previousXrefOffset = xrefStreamBody.length;
+    const staleLengthOffset = xrefStreamBody.indexOf('2 0 obj');
+    const activeLengthOffset = xrefStreamBody.lastIndexOf('2 0 obj');
+    const previousRevision = [
+      xrefStreamBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(xrefStreamBody.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(staleLengthOffset).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 6 >>\nstartxref\n',
+      String(previousXrefOffset),
+      '\n%%EOF\n',
+    ].join('');
+    const currentXrefOffset = previousRevision.length;
+    const encodeXrefEntry = (objectOffset: number): Uint8Array => Uint8Array.of(
+      1,
+      (objectOffset >>> 24) & 0xff,
+      (objectOffset >>> 16) & 0xff,
+      (objectOffset >>> 8) & 0xff,
+      objectOffset & 0xff,
+      0,
+      0,
+    );
+    const xrefStreamFixture = joinBytes(
+      previousRevision,
+      '5 0 obj\n<< /Type /XRef /Size 6 /Prev ',
+      String(previousXrefOffset),
+      ' /W [1 4 2] /Index [2 1 5 1] /Length 14 >>\nstream\n',
+      encodeXrefEntry(activeLengthOffset),
+      encodeXrefEntry(currentXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(currentXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(xrefStreamFixture);
+    }).toThrow('PDF raw token limit');
 
     const compressedLengthPayload = '2 0 3';
     const compressedLengthFixture = joinBytes(
@@ -199,6 +248,30 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => {
       validatePdfObjectStreamBudgets(compressedLengthFixture);
+    }).not.toThrow();
+
+    const staleCompressedLengthPayload = '2 0 99';
+    const activeClassicBody = [
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+      '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(staleCompressedLengthPayload.length),
+      ' >>\nstream\n',
+      staleCompressedLengthPayload,
+      '\nendstream\nendobj\n2 0 obj\n3\nendobj\n',
+    ].join('');
+    const activeClassicXrefOffset = activeClassicBody.length;
+    const activeClassicFixture = joinBytes(
+      activeClassicBody,
+      'xref\n0 4\n0000000000 65535 f \n',
+      `${String(activeClassicBody.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(activeClassicBody.lastIndexOf('2 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(activeClassicBody.indexOf('3 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 4 >>\nstartxref\n',
+      String(activeClassicXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(activeClassicFixture);
     }).not.toThrow();
 
     const payloadWithFakeEncryptedTrailer = [
