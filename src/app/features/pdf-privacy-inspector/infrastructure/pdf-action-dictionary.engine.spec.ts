@@ -129,6 +129,24 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(indirectLengthWithTwoApparentBoundaries);
     }).not.toThrow();
 
+    const payloadWithDeclarationAfterFakeBoundary = [
+      'endstream',
+      '2 0 obj',
+      '0',
+      'endobj',
+      'still-payload',
+    ].join('\n');
+    const indirectLengthWithLateFakeDeclaration = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      payloadWithDeclarationAfterFakeBoundary,
+      '\nendstream\nendobj\n2 0 obj\n',
+      String(payloadWithDeclarationAfterFakeBoundary.length),
+      '\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(indirectLengthWithLateFakeDeclaration);
+    }).not.toThrow();
+
     const compressedLengthPayload = '2 0 3';
     const compressedLengthFixture = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
@@ -141,6 +159,26 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => {
       validatePdfObjectStreamBudgets(compressedLengthFixture);
     }).not.toThrow();
+
+    const payloadWithFakeEncryptedTrailer = [
+      'trailer',
+      '<< /Encrypt 9 0 R >>',
+      'ordinary payload',
+    ].join('\n');
+    const unresolvedLengthPayload = `2 0 ${String(payloadWithFakeEncryptedTrailer.length)}`;
+    const unresolvedLengthWithFakeTrailer = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      payloadWithFakeEncryptedTrailer,
+      '\nendstream\nendobj\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(unresolvedLengthPayload.length),
+      ' >>\nstream\n',
+      unresolvedLengthPayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(unresolvedLengthWithFakeTrailer)).toEqual({
+      encrypted: false,
+      skippedEncryptedObjectStreams: 0,
+    });
 
     const ordinaryPayload = '<< /Type /ObjStm /Length 999999 >>\nstream\n';
     const ordinaryStreamFixture = joinBytes(
@@ -212,6 +250,18 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => {
       validatePdfObjectStreamBudgets(headersInsideStream);
     }).not.toThrow();
+
+    const duplicateLengthDeclarations = '2 0 obj\n3\nendobj\n'.repeat(
+      PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1,
+    );
+    const duplicateLengthDeclarationsInsideStream = joinBytes(
+      `%PDF-1.7\n1 0 obj\n<< /Length ${String(duplicateLengthDeclarations.length)} >>\nstream\n`,
+      duplicateLengthDeclarations,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(duplicateLengthDeclarationsInsideStream);
+    }).toThrow('PDF indirect length declaration limit');
 
     const oversizedCompressedCount = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N ',

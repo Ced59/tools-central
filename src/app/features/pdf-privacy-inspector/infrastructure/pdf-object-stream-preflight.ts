@@ -9,6 +9,8 @@ const DICTIONARY_SEARCH_WINDOW_BYTES = 1 * 1_024 * 1_024;
 const INFLATE_CHUNK_BYTES = 64 * 1_024;
 const MAX_CRITICAL_STREAMS = 10_000;
 const MAX_INDIRECT_LENGTH_OBJECTS = 100_000;
+const MAX_INDIRECT_LENGTH_DECLARATIONS = 100_000;
+const MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT = 64;
 const MAX_NAME_BYTES = 256;
 
 const PDF_NAME = 0x2f;
@@ -442,6 +444,7 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     compressedValues: new Map<string, Set<number>>(),
   };
   let candidateValues = 0;
+  let candidateDeclarations = 0;
   for (let offset = 0; offset < data.byteLength; offset += 1) {
     const previous = offset === 0 ? undefined : data[offset - 1];
     if (previous !== undefined && !isWhitespace(previous) && !isDelimiter(previous)) continue;
@@ -470,6 +473,9 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
       if (candidateValues > MAX_INDIRECT_LENGTH_OBJECTS) {
         throw new Error('PDF indirect length object limit');
       }
+      if (values.size >= MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
+        throw new Error('PDF indirect length candidate limit');
+      }
       values.add(value.value);
     }
     let offsetsByValue = candidates.declarationOffsets.get(key);
@@ -482,7 +488,13 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
       declarationOffsets = new Set<number>();
       offsetsByValue.set(value.value, declarationOffsets);
     }
-    declarationOffsets.add(offset);
+    if (!declarationOffsets.has(offset)) {
+      candidateDeclarations += 1;
+      if (candidateDeclarations > MAX_INDIRECT_LENGTH_DECLARATIONS) {
+        throw new Error('PDF indirect length declaration limit');
+      }
+      declarationOffsets.add(offset);
+    }
     offset = objectEnd + 'endobj'.length - 1;
   }
   removeCandidatesDeclaredInsideStreams(data, candidates);
@@ -607,6 +619,7 @@ function detectEncryptionBeforeObjectStreamDiscovery(
   data: Uint8Array,
   candidates: IndirectLengthCandidateIndex,
 ): boolean {
+  if (detectEncryptionFromLastCrossReference(data)) return true;
   let expectTrailerDictionary = false;
   let offset = 0;
   while (offset < data.byteLength) {
@@ -669,10 +682,7 @@ function detectEncryptionBeforeObjectStreamDiscovery(
       data,
       streamStart,
     );
-    if (length === undefined) {
-      offset = dictionaryEnd;
-      continue;
-    }
+    if (length === undefined) return false;
     const streamEnd = streamStart + length;
     if (
       !Number.isSafeInteger(streamEnd)
@@ -685,6 +695,61 @@ function detectEncryptionBeforeObjectStreamDiscovery(
     offset = skipWhitespace(data, streamEnd) + 'endstream'.length;
   }
   return false;
+}
+
+function detectEncryptionFromLastCrossReference(data: Uint8Array): boolean {
+  const startXrefOffset = findLastBareKeyword(data, 'startxref');
+  if (startXrefOffset === undefined) return false;
+  const valueStart = skipWhitespaceAndComments(data, startXrefOffset + 'startxref'.length);
+  const xrefPosition = tryReadUnsignedInteger(data, valueStart);
+  if (!xrefPosition || xrefPosition.value >= data.byteLength) return false;
+  const xrefOffset = skipWhitespaceAndComments(data, xrefPosition.value);
+
+  if (matchesKeyword(data, xrefOffset, 'xref')) {
+    let offset = xrefOffset + 'xref'.length;
+    while (offset < startXrefOffset) {
+      if (!matchesBareKeyword(data, offset, 'trailer')) {
+        offset += 1;
+        continue;
+      }
+      const dictionaryStart = skipWhitespaceAndComments(data, offset + 'trailer'.length);
+      if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
+        return false;
+      }
+      const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+      if (dictionaryEnd === undefined || dictionaryEnd > startXrefOffset) return false;
+      try {
+        return parseCriticalDictionary(
+          data,
+          dictionaryStart,
+          dictionaryEnd,
+        ).hasEncryptionDictionary;
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  const objectHeaderEnd = readIndirectObjectHeaderEnd(data, xrefOffset);
+  if (objectHeaderEnd === undefined) return false;
+  const dictionaryStart = skipWhitespaceAndComments(data, objectHeaderEnd);
+  if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return false;
+  const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+  if (dictionaryEnd === undefined) return false;
+  try {
+    const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+    return dictionary.type === 'XRef' && dictionary.hasEncryptionDictionary;
+  } catch {
+    return false;
+  }
+}
+
+function findLastBareKeyword(data: Uint8Array, keyword: string): number | undefined {
+  for (let offset = data.byteLength - keyword.length; offset >= 0; offset -= 1) {
+    if (matchesBareKeyword(data, offset, keyword)) return offset;
+  }
+  return undefined;
 }
 
 function collectCompressedIndirectLengthCandidates(
@@ -774,6 +839,9 @@ function collectCompressedIndirectLengthCandidates(
           candidateValues += 1;
           if (candidateValues > MAX_INDIRECT_LENGTH_OBJECTS) {
             throw new Error('PDF indirect length object limit');
+          }
+          if (allValues.size >= MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
+            throw new Error('PDF indirect length candidate limit');
           }
           allValues.add(value.value);
           changed = true;
@@ -905,23 +973,53 @@ function resolveCandidateStreamLength(
   const key = referenceKey(length.objectNumber, length.generationNumber);
   const values = candidates.values.get(key);
   if (!values) return undefined;
-  let resolved: number | undefined;
+  const boundaryValues: number[] = [];
   for (const value of values) {
     const streamEnd = streamStart + value;
     if (!Number.isSafeInteger(streamEnd) || streamEnd > data.byteLength) continue;
-    if (!matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')) continue;
-    const isCompressedValue = candidates.compressedValues.get(key)?.has(value) ?? false;
-    const declarations = candidates.declarationOffsets.get(key)?.get(value);
-    if (
-      !isCompressedValue
-      && declarations
-      && declarations.size > 0
-      && [...declarations].every(offset => offset >= streamStart && offset < streamEnd)
-    ) continue;
-    if (resolved !== undefined && resolved !== value) return undefined;
-    resolved = value;
+    if (matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')) {
+      boundaryValues.push(value);
+    }
+  }
+
+  const plausibleValues = boundaryValues.filter(value => hasCandidateSourceOutsideRange(
+    candidates,
+    key,
+    value,
+    streamStart,
+    streamStart + value,
+  ));
+  let resolved: number | undefined;
+  for (const hypothesis of plausibleValues) {
+    const hypothesisEnd = streamStart + hypothesis;
+    const hasCompetingExternalSource = plausibleValues.some(value => (
+      value !== hypothesis
+      && hasCandidateSourceOutsideRange(
+        candidates,
+        key,
+        value,
+        streamStart,
+        hypothesisEnd,
+      )
+    ));
+    if (hasCompetingExternalSource) continue;
+    if (resolved !== undefined && resolved !== hypothesis) return undefined;
+    resolved = hypothesis;
   }
   return resolved;
+}
+
+function hasCandidateSourceOutsideRange(
+  candidates: IndirectLengthCandidateIndex,
+  key: string,
+  value: number,
+  rangeStart: number,
+  rangeEnd: number,
+): boolean {
+  if (candidates.compressedValues.get(key)?.has(value)) return true;
+  const declarations = candidates.declarationOffsets.get(key)?.get(value);
+  if (!declarations || declarations.size === 0) return false;
+  return [...declarations].some(offset => offset < rangeStart || offset >= rangeEnd);
 }
 
 function resolveStreamLength(
