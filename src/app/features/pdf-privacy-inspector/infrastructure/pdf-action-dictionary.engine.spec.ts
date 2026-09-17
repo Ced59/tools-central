@@ -27,6 +27,7 @@ import {
   PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES,
+  PDF_PRIVACY_MAX_TEXT_STREAM_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_XMP_BYTES,
   PDF_PRIVACY_MAX_XFA_BYTES,
   PdfActionDictionaryInspectionError,
@@ -1166,6 +1167,35 @@ describe('inspectPdfStructuralSignals', () => {
     const names: (PDFString | PDFRef)[] = [];
     for (let index = 0; index < scriptCount; index += 1) {
       const script = source.context.register(source.context.flateStream('A'.repeat(scriptBytes)));
+      const action = source.context.register(source.context.obj({
+        Type: 'Action', S: 'JavaScript', JS: script,
+      }));
+      names.push(PDFString.of(`script-${String(index)}`), action);
+    }
+    source.catalog.set(PDFName.of('Names'), source.context.obj({
+      JavaScript: { Names: names },
+    }));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('partage le budget des étapes de décodage entre les flux texte', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const finalBytes = 300 * 1_024;
+    const finalScript = new Uint8Array(finalBytes).fill(0x41);
+    const encodedScript = deflate(encodeAsciiHex(finalScript));
+    const expansionPerScript = (finalBytes * 2) + 1 + finalBytes;
+    const scriptCount = Math.floor(
+      PDF_PRIVACY_MAX_TEXT_STREAM_EXPANSION_BYTES / expansionPerScript,
+    ) + 1;
+    const names: (PDFString | PDFRef)[] = [];
+    for (let index = 0; index < scriptCount; index += 1) {
+      const script = source.context.register(source.context.stream(
+        Uint8Array.from(encodedScript),
+        { Filter: ['FlateDecode', 'ASCIIHexDecode'] },
+      ));
       const action = source.context.register(source.context.obj({
         Type: 'Action', S: 'JavaScript', JS: script,
       }));

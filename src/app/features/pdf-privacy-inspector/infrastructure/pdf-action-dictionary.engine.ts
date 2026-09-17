@@ -20,6 +20,7 @@ import {
   decodePdfStreamContentsBounded,
   type PdfFilterDecodeParameters,
   type PdfObjectStreamPreflightResult,
+  type PdfStreamExpansionBudget,
   validatePdfObjectStreamBudgets,
 } from './pdf-object-stream-preflight';
 
@@ -105,6 +106,7 @@ export const PDF_PRIVACY_MAX_FIELD_ACTION_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_SIGNATURE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_SIGNATURE_TAIL_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_DOCUMENT_JAVASCRIPT_BYTES = 32 * 1_024 * 1_024;
+export const PDF_PRIVACY_MAX_TEXT_STREAM_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_NAMETREE_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_FIELD_NAME_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_INFO_EXPANSION_BYTES = 32 * 1_024 * 1_024;
@@ -145,6 +147,7 @@ interface InspectionState {
   discoveredSignals: number;
   validatedTextLimits: Map<PDFObject, number>;
   decodedTextBytes: Map<PDFObject, number>;
+  textStreamExpansionBudget: PdfStreamExpansionBudget;
   documentJavascriptBytes: number;
   documentJavascriptObjects: Set<PDFObject>;
   nameTreeJavascriptExpansionBytes: number;
@@ -280,6 +283,10 @@ export async function inspectPdfStructuralSignals(
       discoveredSignals: 0,
       validatedTextLimits: new Map<PDFObject, number>(),
       decodedTextBytes: new Map<PDFObject, number>(),
+      textStreamExpansionBudget: {
+        expandedBytes: 0,
+        maxBytes: PDF_PRIVACY_MAX_TEXT_STREAM_EXPANSION_BYTES,
+      },
       documentJavascriptBytes: 0,
       documentJavascriptObjects: new Set<PDFObject>(),
       nameTreeJavascriptExpansionBytes: 0,
@@ -830,13 +837,7 @@ function validateDecodedStreamSize(
 ): number | undefined {
   const contents = stream.getContents();
   const filters = readFilterNames(stream.dict);
-  if (filters.length === 0) {
-    if (contents.byteLength > maxDecodedBytes) {
-      throw new PdfActionDictionaryInspectionError();
-    }
-    return contents.byteLength;
-  }
-  if (state.document.isEncrypted) {
+  if (filters.length > 0 && state.document.isEncrypted) {
     state.hasUnboundedEncryptedTextStreams = true;
     return undefined;
   }
@@ -846,6 +847,7 @@ function validateDecodedStreamSize(
       filters,
       readFilterDecodeParameters(stream.dict),
       maxDecodedBytes,
+      state.textStreamExpansionBudget,
     );
     if (!decoded) throw new PdfActionDictionaryInspectionError();
     return decoded.byteLength;

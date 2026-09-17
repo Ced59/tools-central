@@ -121,7 +121,7 @@ interface CrossReferenceSection {
   bootstrapOffsets: ReadonlyMap<string, number>;
 }
 
-interface PdfStreamExpansionBudget {
+export interface PdfStreamExpansionBudget {
   expandedBytes: number;
   maxBytes: number;
 }
@@ -1466,11 +1466,19 @@ export function decodePdfStreamContentsBounded(
   filters: readonly string[] | undefined,
   decodeParameters: readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined,
   maxDecodedBytes: number,
+  aggregateBudget?: PdfStreamExpansionBudget,
 ): Uint8Array | undefined {
-  return decodeObjectStreamContents(contents, filters, decodeParameters, {
+  const localBudget: PdfStreamExpansionBudget = {
     expandedBytes: 0,
-    maxBytes: maxDecodedBytes,
-  });
+    maxBytes: aggregateBudget
+      ? Math.min(maxDecodedBytes, remainingExpansionBytes(aggregateBudget))
+      : maxDecodedBytes,
+  };
+  const decoded = decodeObjectStreamContents(contents, filters, decodeParameters, localBudget);
+  if (decoded && aggregateBudget) {
+    chargeExpandedBytes(aggregateBudget, localBudget.expandedBytes);
+  }
+  return decoded;
 }
 
 function remainingExpansionBytes(budget: PdfStreamExpansionBudget): number {
