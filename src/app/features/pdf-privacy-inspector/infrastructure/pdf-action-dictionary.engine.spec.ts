@@ -136,15 +136,56 @@ describe('inspectPdfStructuralSignals', () => {
       'endobj',
       'still-payload',
     ].join('\n');
-    const indirectLengthWithLateFakeDeclaration = joinBytes(
+    const lateDeclarationBody = [
       '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
       payloadWithDeclarationAfterFakeBoundary,
       '\nendstream\nendobj\n2 0 obj\n',
       String(payloadWithDeclarationAfterFakeBoundary.length),
-      '\nendobj\n%%EOF\n',
+      '\nendobj\n',
+    ].join('');
+    const lateDeclarationXrefOffset = lateDeclarationBody.length;
+    const lateDeclarationObjectOneOffset = lateDeclarationBody.indexOf('1 0 obj');
+    const lateDeclarationObjectTwoOffset = lateDeclarationBody.lastIndexOf('2 0 obj');
+    const indirectLengthWithLateFakeDeclaration = joinBytes(
+      lateDeclarationBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(lateDeclarationObjectOneOffset).padStart(10, '0')} 00000 n \n`,
+      `${String(lateDeclarationObjectTwoOffset).padStart(10, '0')} 00000 n \n`,
+      '% trailer\ntrailer\n<< /Size 3 >>\nstartxref\n',
+      String(lateDeclarationXrefOffset),
+      '\n%%EOF\n',
     );
     expect(() => {
       validatePdfObjectStreamBudgets(indirectLengthWithLateFakeDeclaration);
+    }).not.toThrow();
+
+    const activeShortLength = 3;
+    const obsoleteLongPayload = [
+      'abc\nendstream\nendobj\n2 0 obj\n',
+      String(activeShortLength),
+      '\nendobj\n0 0 0\n',
+    ].join('');
+    const xrefSelectedShortBody = [
+      '%PDF-1.7\n2 0 obj\n',
+      String(obsoleteLongPayload.length),
+      '\nendobj\n1 0 obj\n<< /Length 2 0 R >>\nstream\n',
+      obsoleteLongPayload,
+      'endstream\n',
+    ].join('');
+    const selectedShortXrefOffset = xrefSelectedShortBody.length;
+    const selectedShortObjectOneOffset = xrefSelectedShortBody.indexOf('1 0 obj');
+    const selectedShortObjectTwoOffset = xrefSelectedShortBody.lastIndexOf('2 0 obj');
+    const xrefSelectedShortFixture = joinBytes(
+      xrefSelectedShortBody,
+      'xref\n0 3\n0000000000 65535 f \n',
+      `${String(selectedShortObjectOneOffset).padStart(10, '0')} 00000 n \n`,
+      `${String(selectedShortObjectTwoOffset).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 3 >>\nstartxref\n',
+      String(selectedShortXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(xrefSelectedShortFixture);
     }).not.toThrow();
 
     const compressedLengthPayload = '2 0 3';

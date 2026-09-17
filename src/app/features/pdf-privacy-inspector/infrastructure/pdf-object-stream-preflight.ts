@@ -37,6 +37,8 @@ interface IndirectLengthCandidateIndex {
   values: Map<string, Set<number>>;
   declarationOffsets: Map<string, Map<number, Set<number>>>;
   compressedValues: Map<string, Set<number>>;
+  authoritativeOffsets: ReadonlyMap<string, number>;
+  encryptedFromCrossReference: boolean;
 }
 
 interface ParsedDictionary {
@@ -46,6 +48,7 @@ interface ParsedDictionary {
   objectCount?: number;
   firstObjectOffset?: number;
   xrefSize?: number;
+  previousXrefOffset?: number;
   hasEncryptionDictionary: boolean;
 }
 
@@ -63,6 +66,17 @@ interface RawSyntaxBudget {
 interface ByteRange {
   start: number;
   end: number;
+}
+
+interface CrossReferenceMetadata {
+  objectOffsets: Map<string, number>;
+  encrypted: boolean;
+}
+
+interface CrossReferenceSection {
+  objectOffsets: Map<string, number>;
+  encrypted: boolean;
+  previousOffset?: number;
 }
 
 export interface PdfObjectStreamPreflightResult {
@@ -421,6 +435,11 @@ function collectIndirectLengths(data: Uint8Array): {
     }
 
     const key = referenceKey(objectNumber.value, generation.value);
+    const authoritativeOffset = candidates.authoritativeOffsets.get(key);
+    if (authoritativeOffset !== undefined && authoritativeOffset !== offset) {
+      offset = objectEnd + 'endobj'.length;
+      continue;
+    }
     const current = lengths.get(key);
     if (!lengths.has(key)) {
       if (lengths.size >= MAX_INDIRECT_LENGTH_OBJECTS) {
@@ -438,10 +457,13 @@ function collectIndirectLengths(data: Uint8Array): {
 }
 
 function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandidateIndex {
+  const crossReference = collectCrossReferenceMetadata(data);
   const candidates: IndirectLengthCandidateIndex = {
     values: new Map<string, Set<number>>(),
     declarationOffsets: new Map<string, Map<number, Set<number>>>(),
     compressedValues: new Map<string, Set<number>>(),
+    authoritativeOffsets: crossReference.objectOffsets,
+    encryptedFromCrossReference: crossReference.encrypted,
   };
   let candidateValues = 0;
   let candidateDeclarations = 0;
@@ -619,7 +641,7 @@ function detectEncryptionBeforeObjectStreamDiscovery(
   data: Uint8Array,
   candidates: IndirectLengthCandidateIndex,
 ): boolean {
-  if (detectEncryptionFromLastCrossReference(data)) return true;
+  if (candidates.encryptedFromCrossReference) return true;
   let expectTrailerDictionary = false;
   let offset = 0;
   while (offset < data.byteLength) {
@@ -697,52 +719,127 @@ function detectEncryptionBeforeObjectStreamDiscovery(
   return false;
 }
 
-function detectEncryptionFromLastCrossReference(data: Uint8Array): boolean {
+function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata {
+  const objectOffsets = new Map<string, number>();
   const startXrefOffset = findLastBareKeyword(data, 'startxref');
-  if (startXrefOffset === undefined) return false;
+  if (startXrefOffset === undefined) return { objectOffsets, encrypted: false };
   const valueStart = skipWhitespaceAndComments(data, startXrefOffset + 'startxref'.length);
   const xrefPosition = tryReadUnsignedInteger(data, valueStart);
-  if (!xrefPosition || xrefPosition.value >= data.byteLength) return false;
-  const xrefOffset = skipWhitespaceAndComments(data, xrefPosition.value);
+  if (!xrefPosition || xrefPosition.value >= data.byteLength) {
+    return { objectOffsets, encrypted: false };
+  }
 
-  if (matchesKeyword(data, xrefOffset, 'xref')) {
-    let offset = xrefOffset + 'xref'.length;
-    while (offset < startXrefOffset) {
-      if (!matchesBareKeyword(data, offset, 'trailer')) {
-        offset += 1;
-        continue;
-      }
-      const dictionaryStart = skipWhitespaceAndComments(data, offset + 'trailer'.length);
-      if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
-        return false;
-      }
-      const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
-      if (dictionaryEnd === undefined || dictionaryEnd > startXrefOffset) return false;
-      try {
-        return parseCriticalDictionary(
-          data,
-          dictionaryStart,
-          dictionaryEnd,
-        ).hasEncryptionDictionary;
-      } catch {
-        return false;
-      }
+  const visitedOffsets = new Set<number>();
+  let encrypted = false;
+  let currentOffset: number | undefined = xrefPosition.value;
+  while (currentOffset !== undefined) {
+    if (visitedOffsets.has(currentOffset) || visitedOffsets.size >= 128) break;
+    visitedOffsets.add(currentOffset);
+    const section = readCrossReferenceSection(data, currentOffset, startXrefOffset);
+    if (!section) break;
+    encrypted ||= section.encrypted;
+    for (const [key, offset] of section.objectOffsets) {
+      if (!objectOffsets.has(key)) objectOffsets.set(key, offset);
     }
-    return false;
+    currentOffset = section.previousOffset;
+  }
+  return { objectOffsets, encrypted };
+}
+
+function readCrossReferenceSection(
+  data: Uint8Array,
+  sectionOffset: number,
+  lastStartXrefOffset: number,
+): CrossReferenceSection | undefined {
+  const xrefOffset = skipWhitespaceAndComments(data, sectionOffset);
+  if (matchesKeyword(data, xrefOffset, 'xref')) {
+    return readClassicCrossReferenceSection(data, xrefOffset, lastStartXrefOffset);
   }
 
   const objectHeaderEnd = readIndirectObjectHeaderEnd(data, xrefOffset);
-  if (objectHeaderEnd === undefined) return false;
+  if (objectHeaderEnd === undefined) return undefined;
   const dictionaryStart = skipWhitespaceAndComments(data, objectHeaderEnd);
-  if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return false;
+  if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
+    return undefined;
+  }
   const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
-  if (dictionaryEnd === undefined) return false;
+  if (dictionaryEnd === undefined) return undefined;
   try {
     const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
-    return dictionary.type === 'XRef' && dictionary.hasEncryptionDictionary;
+    if (dictionary.type !== 'XRef') return undefined;
+    return {
+      objectOffsets: new Map<string, number>(),
+      encrypted: dictionary.hasEncryptionDictionary,
+      previousOffset: dictionary.previousXrefOffset,
+    };
   } catch {
-    return false;
+    return undefined;
   }
+}
+
+function readClassicCrossReferenceSection(
+  data: Uint8Array,
+  xrefOffset: number,
+  lastStartXrefOffset: number,
+): CrossReferenceSection | undefined {
+  const objectOffsets = new Map<string, number>();
+  let entriesRead = 0;
+  let offset = xrefOffset + 'xref'.length;
+  while (offset < lastStartXrefOffset) {
+    offset = skipWhitespaceAndComments(data, offset);
+    if (matchesKeyword(data, offset, 'trailer')) {
+      const dictionaryStart = skipWhitespaceAndComments(data, offset + 'trailer'.length);
+      if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
+        return undefined;
+      }
+      const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+      if (dictionaryEnd === undefined || dictionaryEnd > lastStartXrefOffset) return undefined;
+      try {
+        const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+        return {
+          objectOffsets,
+          encrypted: dictionary.hasEncryptionDictionary,
+          previousOffset: dictionary.previousXrefOffset,
+        };
+      } catch {
+        return undefined;
+      }
+    }
+
+    const firstObject = tryReadUnsignedInteger(data, offset);
+    if (!firstObject) return undefined;
+    offset = skipWhitespaceAndComments(data, firstObject.end);
+    const count = tryReadUnsignedInteger(data, offset);
+    if (!count) return undefined;
+    offset = count.end;
+    entriesRead += count.value;
+    if (
+      !Number.isSafeInteger(entriesRead)
+      || entriesRead > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1
+    ) throw new Error('PDF xref size limit');
+
+    for (let index = 0; index < count.value; index += 1) {
+      offset = skipWhitespaceAndComments(data, offset);
+      const objectOffset = tryReadUnsignedInteger(data, offset);
+      if (!objectOffset) return undefined;
+      offset = skipWhitespaceAndComments(data, objectOffset.end);
+      const generation = tryReadUnsignedInteger(data, offset);
+      if (!generation) return undefined;
+      offset = skipWhitespaceAndComments(data, generation.end);
+      const marker = data[offset];
+      if (marker !== 0x6e && marker !== 0x66) return undefined;
+      if (marker === 0x6e) {
+        const objectNumber = firstObject.value + index;
+        if (!Number.isSafeInteger(objectNumber)) return undefined;
+        objectOffsets.set(
+          referenceKey(objectNumber, generation.value),
+          objectOffset.value,
+        );
+      }
+      offset += 1;
+    }
+  }
+  return undefined;
 }
 
 function findLastBareKeyword(data: Uint8Array, keyword: string): number | undefined {
@@ -982,6 +1079,14 @@ function resolveCandidateStreamLength(
     }
   }
 
+  const authoritativeOffset = candidates.authoritativeOffsets.get(key);
+  if (authoritativeOffset !== undefined) {
+    const authoritativeValues = boundaryValues.filter(value => (
+      candidates.declarationOffsets.get(key)?.get(value)?.has(authoritativeOffset) ?? false
+    ));
+    return authoritativeValues.length === 1 ? authoritativeValues[0] : undefined;
+  }
+
   const plausibleValues = boundaryValues.filter(value => hasCandidateSourceOutsideRange(
     candidates,
     key,
@@ -989,24 +1094,7 @@ function resolveCandidateStreamLength(
     streamStart,
     streamStart + value,
   ));
-  let resolved: number | undefined;
-  for (const hypothesis of plausibleValues) {
-    const hypothesisEnd = streamStart + hypothesis;
-    const hasCompetingExternalSource = plausibleValues.some(value => (
-      value !== hypothesis
-      && hasCandidateSourceOutsideRange(
-        candidates,
-        key,
-        value,
-        streamStart,
-        hypothesisEnd,
-      )
-    ));
-    if (hasCompetingExternalSource) continue;
-    if (resolved !== undefined && resolved !== hypothesis) return undefined;
-    resolved = hypothesis;
-  }
-  return resolved;
+  return plausibleValues.length === 1 ? plausibleValues[0] : undefined;
 }
 
 function hasCandidateSourceOutsideRange(
@@ -1046,6 +1134,7 @@ function parseCriticalDictionary(
   let objectCount: number | undefined;
   let firstObjectOffset: number | undefined;
   let xrefSize: number | undefined;
+  let previousXrefOffset: number | undefined;
   let hasFilter = false;
   let hasEncryptionDictionary = false;
   let dictionaryDepth = 0;
@@ -1131,7 +1220,12 @@ function parseCriticalDictionary(
         filters = undefined;
         offset = valueStart + 1;
       }
-    } else if (key.value === 'N' || key.value === 'First' || key.value === 'Size') {
+    } else if (
+      key.value === 'N'
+      || key.value === 'First'
+      || key.value === 'Size'
+      || key.value === 'Prev'
+    ) {
       const value = readUnsignedInteger(data, valueStart);
       if (!value) throw new Error('Invalid PDF object count');
       if (key.value === 'N') {
@@ -1140,9 +1234,12 @@ function parseCriticalDictionary(
       } else if (key.value === 'First') {
         if (firstObjectOffset !== undefined) throw new Error('Duplicate PDF first offset');
         firstObjectOffset = value.value;
-      } else {
+      } else if (key.value === 'Size') {
         if (xrefSize !== undefined) throw new Error('Duplicate PDF xref size');
         xrefSize = value.value;
+      } else {
+        if (previousXrefOffset !== undefined) throw new Error('Duplicate PDF previous xref');
+        previousXrefOffset = value.value;
       }
       offset = value.end;
     } else if (key.value === 'Encrypt') {
@@ -1156,6 +1253,7 @@ function parseCriticalDictionary(
     objectCount,
     firstObjectOffset,
     xrefSize,
+    previousXrefOffset,
     hasEncryptionDictionary,
   };
 }
