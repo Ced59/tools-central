@@ -171,7 +171,11 @@ export async function inspectPdfPrivacyDocument(
   );
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
   collectSignatures(
-    mergeSignatureInventories(signatures, input.structuralSignatures),
+    mergeSignatureInventories(
+      signatures,
+      input.structuralSignatures,
+      input.passwordUsed || permissions !== null,
+    ),
     add,
     consumeDiscoveryBudget,
   );
@@ -559,6 +563,7 @@ function collectSignatures(
 function mergeSignatureInventories(
   pdfJsSignatures: readonly object[] | null | undefined,
   structuralSignatures: readonly PdfStructuralSignatureSignal[] | null | undefined,
+  encrypted: boolean,
 ): readonly object[] | null {
   if (!pdfJsSignatures?.length) return structuralSignatures ?? null;
   if (!structuralSignatures?.length) return pdfJsSignatures;
@@ -589,6 +594,9 @@ function mergeSignatureInventories(
       if (matches && matches.cursor < matches.indices.length) {
         structuralIndex = matches.indices[matches.cursor];
         matches.cursor += 1;
+      } else if (encrypted && unnamedStructuralCursor < unnamedStructuralIndices.length) {
+        structuralIndex = unnamedStructuralIndices[unnamedStructuralCursor];
+        unnamedStructuralCursor += 1;
       }
     } else if (unnamedStructuralCursor < unnamedStructuralIndices.length) {
       structuralIndex = unnamedStructuralIndices[unnamedStructuralCursor];

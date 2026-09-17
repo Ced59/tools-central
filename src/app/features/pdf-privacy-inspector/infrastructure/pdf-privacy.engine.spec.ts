@@ -379,6 +379,33 @@ describe('inspectPdfPrivacyDocument', () => {
     });
   });
 
+  it('fusionne par occurrence une signature nommée après déchiffrement', async () => {
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      getSignatures: vi.fn().mockResolvedValue([{
+        fieldName: 'Approval',
+        coversWholeDocument: true,
+      }]),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: true,
+      structuralSignatures: [{
+        subFilter: 'ETSI.CAdES.detached',
+      }],
+    });
+
+    const signatures = report.findings.filter(finding => finding.kind === 'digital-signature');
+    expect(signatures).toHaveLength(1);
+    expect(signatures[0]).toMatchObject({
+      label: 'Approval',
+      message: {
+        code: 'signature-details',
+        subFilter: 'ETSI.CAdES.detached',
+        coversWholeDocument: true,
+      },
+    });
+  });
+
   it('classe le nom privé d’un champ de signature comme une métadonnée à vérifier', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getSignatures: vi.fn().mockResolvedValue([{

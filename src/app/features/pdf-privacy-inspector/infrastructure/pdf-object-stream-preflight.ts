@@ -118,6 +118,7 @@ interface CrossReferenceSection {
   previousOffset?: number;
   supplementalOffset?: number;
   entriesDecoded: boolean;
+  bootstrapOffsets: ReadonlyMap<string, number>;
 }
 
 interface PdfStreamExpansionBudget {
@@ -824,6 +825,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   let encrypted = false;
   let compressedEntriesComplete = true;
   let parsedSection = false;
+  const bootstrapOffsets: Array<readonly [string, number]> = [];
   const expansionBudget: PdfStreamExpansionBudget = {
     expandedBytes: 0,
     maxBytes: PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES,
@@ -874,6 +876,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
       if (!section) continue;
       encrypted ||= section.encrypted;
       compressedEntriesComplete &&= section.entriesDecoded;
+      bootstrapOffsets.push(...section.bootstrapOffsets);
       for (const [key, objectOffset] of section.objectOffsets) {
         const objectNumber = referenceObjectNumber(key);
         if (
@@ -896,6 +899,9 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
       definedObjectNumbers.add(objectNumber);
     }
     currentOffset = primarySection.previousOffset ?? supplementalSection?.previousOffset;
+  }
+  for (const [key, offset] of bootstrapOffsets) {
+    if (objectOffsets.get(key) !== offset) compressedEntriesComplete = false;
   }
   return {
     objectOffsets,
@@ -965,6 +971,7 @@ function readXrefStreamSection(
     encrypted: dictionary.hasEncryptionDictionary,
     previousOffset: dictionary.previousXrefOffset,
     entriesDecoded: false,
+    bootstrapOffsets: new Map<string, number>(),
   };
   const widths = dictionary.xrefWidths;
   if (!widths || widths.length !== 3 || widths.some(width => width > 8)) return section;
@@ -991,10 +998,13 @@ function readXrefStreamSection(
     || streamEnd > data.byteLength
     || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
   ) return section;
+  const bootstrapOffsets = collectXrefBootstrapOffsets(data, dictionary);
+  section.bootstrapOffsets = bootstrapOffsets;
+  const bootstrapCandidates = { authoritativeOffsets: bootstrapOffsets };
   const decoded = decodeObjectStreamContents(
     data.subarray(streamStart, streamEnd),
-    resolveFilters(data, dictionary.filters),
-    resolveDecodeParameters(data, dictionary.decodeParameters),
+    resolveFilters(data, dictionary.filters, bootstrapCandidates),
+    resolveDecodeParameters(data, dictionary.decodeParameters, bootstrapCandidates),
     expansionBudget,
   );
   if (!decoded || decoded.byteLength !== expectedBytes) return section;
@@ -1030,6 +1040,64 @@ function readXrefStreamSection(
   }
   section.entriesDecoded = true;
   return section;
+}
+
+function collectXrefBootstrapOffsets(
+  data: Uint8Array,
+  dictionary: ParsedDictionary,
+): ReadonlyMap<string, number> {
+  const references = new Set<string>();
+  if (dictionary.filters && 'reference' in dictionary.filters) {
+    references.add(referenceKey(
+      dictionary.filters.reference.objectNumber,
+      dictionary.filters.reference.generationNumber,
+    ));
+  }
+  for (const parameter of dictionary.decodeParameters ?? []) {
+    if (parameter && !('predictor' in parameter)) {
+      references.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
+    }
+  }
+  if (references.size === 0) return new Map<string, number>();
+
+  const offsets = new Map<string, number>();
+  const ambiguous = new Set<string>();
+  const declarationCounts = new Map<string, number>();
+  let offset = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset];
+    if (byte === PERCENT) {
+      offset = skipComment(data, offset);
+      continue;
+    }
+    if (byte === LEFT_PARENTHESIS) {
+      offset = skipLiteralString(data, offset);
+      continue;
+    }
+    if (byte === LESS_THAN && data[offset + 1] !== LESS_THAN) {
+      offset = skipHexString(data, offset);
+      continue;
+    }
+    const header = readIndirectObjectHeader(data, offset);
+    if (!header) {
+      offset += 1;
+      continue;
+    }
+    const key = referenceKey(header.objectNumber, header.generationNumber);
+    if (references.has(key)) {
+      const count = (declarationCounts.get(key) ?? 0) + 1;
+      declarationCounts.set(key, count);
+      if (count > MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
+        throw new Error('PDF indirect length candidate limit');
+      }
+      const previous = offsets.get(key);
+      if (previous === undefined) offsets.set(key, offset);
+      else if (previous !== offset) ambiguous.add(key);
+    }
+    offset = header.end;
+  }
+  for (const key of ambiguous) offsets.delete(key);
+  return offsets;
 }
 
 function readXrefRanges(
@@ -1102,6 +1170,7 @@ function readClassicCrossReferenceSection(
           previousOffset: dictionary.previousXrefOffset,
           supplementalOffset: dictionary.supplementalXrefOffset,
           entriesDecoded: true,
+          bootstrapOffsets: new Map<string, number>(),
         };
       } catch {
         return undefined;

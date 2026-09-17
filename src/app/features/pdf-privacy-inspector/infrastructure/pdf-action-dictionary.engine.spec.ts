@@ -521,6 +521,31 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => validatePdfObjectStreamBudgets(filteredXref)).not.toThrow();
 
+    const indirectXrefBody = [
+      '%PDF-1.7\n',
+      '1 0 obj\nnull\nendobj\n',
+      '2 0 obj\n/ASCIIHexDecode\nendobj\n',
+      '3 0 obj\n<< /Predictor 1 >>\nendobj\n',
+    ].join('');
+    const indirectFilterXrefOffset = indirectXrefBody.length;
+    const indirectFilterXrefPayload = encodeAsciiHex(joinBytes(
+      encodeXrefEntry(1, indirectXrefBody.indexOf('1 0 obj')),
+      encodeXrefEntry(1, indirectXrefBody.indexOf('2 0 obj')),
+      encodeXrefEntry(1, indirectXrefBody.indexOf('3 0 obj')),
+      encodeXrefEntry(1, indirectFilterXrefOffset),
+    ));
+    const indirectFilterXref = joinBytes(
+      indirectXrefBody,
+      '4 0 obj\n<< /Type /XRef /Size 5 /W [1 4 2] /Index [1 4] ',
+      '/Filter 2 0 R /DecodeParms 3 0 R ',
+      `/Length ${String(indirectFilterXrefPayload.byteLength)} >>\nstream\n`,
+      indirectFilterXrefPayload,
+      '\nendstream\nendobj\nstartxref\n',
+      String(indirectFilterXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(indirectFilterXref)).not.toThrow();
+
     const compressedPlain = encodeAscii85(deflate(plain));
     const indirectParameterBody = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
