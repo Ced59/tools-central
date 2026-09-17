@@ -464,6 +464,40 @@ describe('inspectPdfPrivacyDocument', () => {
     ]);
   });
 
+  it('ne recompte pas les JavaScript de page déjà inventoriés structurellement', async () => {
+    const page: PdfJsPrivacyPage = {
+      getAnnotations: vi.fn().mockResolvedValue([]),
+      getJSActions: vi.fn().mockResolvedValue(new Map([
+        ['PageOpen', ['open()']],
+        ['PageClose', ['close()']],
+      ])),
+      cleanup: vi.fn(),
+    };
+    const report = await inspectPdfPrivacyDocument(documentFixture({
+      hasJSActions: vi.fn().mockResolvedValue(true),
+      getPage: vi.fn().mockResolvedValue(page),
+    }), {
+      headerData: pdfBytes(),
+      fileBytes: 16,
+      passwordUsed: false,
+      actionDictionaries: [
+        {
+          actionType: 'JavaScript', context: 'page-additional-action', occurrences: 1,
+        },
+        {
+          actionType: 'JavaScript', context: 'explicit-action', occurrences: 1,
+        },
+      ],
+    });
+
+    expect(report.findings.filter(finding => finding.kind === 'javascript')).toEqual([
+      expect.objectContaining({ id: 'automatic:dictionary:1:JavaScript', occurrences: 1 }),
+      expect.objectContaining({ id: 'automatic:dictionary:2:JavaScript', occurrences: 1 }),
+    ]);
+    expect(report.findings.some(finding => finding.id.startsWith('javascript:page:'))).toBe(false);
+    expect(report.findings.some(finding => finding.id === 'javascript:forms:detected')).toBe(false);
+  });
+
   it('distingue les champs homonymes tout en regroupant leurs widgets enfants', async () => {
     const report = await inspectPdfPrivacyDocument(documentFixture({
       getFieldObjects: vi.fn().mockResolvedValue(new Map([

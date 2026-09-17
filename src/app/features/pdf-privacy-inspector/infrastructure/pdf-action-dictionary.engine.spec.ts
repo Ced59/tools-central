@@ -6,7 +6,9 @@ import {
   PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH,
   PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES,
+  PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES,
+  PDF_PRIVACY_MAX_ANNOTATION_RENDITION_EXPANSION_ENTRIES,
   PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES,
   PDF_PRIVACY_MAX_ANNOTATION_TEXT_EXPANSION_BYTES,
   PDF_PRIVACY_MAX_ANNOTATION_TARGET_EXPANSION_BYTES,
@@ -105,6 +107,19 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => {
       validatePdfObjectStreamBudgets(indirectLengthWithFakePayloadObject);
+    }).not.toThrow();
+
+    const compressedLengthPayload = '2 0 3';
+    const compressedLengthFixture = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Length 2 0 R >>\nstream\nabc\nendstream\nendobj\n',
+      '3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Length ',
+      String(compressedLengthPayload.length),
+      ' >>\nstream\n',
+      compressedLengthPayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => {
+      validatePdfObjectStreamBudgets(compressedLengthFixture);
     }).not.toThrow();
 
     const ordinaryPayload = '<< /Type /ObjStm /Length 999999 >>\nstream\n';
@@ -1059,6 +1074,62 @@ describe('inspectPdfStructuralSignals', () => {
       () => source.context.register(source.context.obj({
         Type: 'Annot', Subtype: 'RichMedia', Rect: [0, 0, 10, 10],
         RichMediaContent: content,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne le texte FileSpec RichMedia matérialisé pour chaque annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const textBytes = 1 * 1_024 * 1_024;
+    const metadata = source.context.register(PDFString.of('A'.repeat(textBytes)));
+    const embeddedFile = source.context.register(source.context.stream(Uint8Array.of(1), {
+      Type: 'EmbeddedFile', Subtype: 'audio#2Fmpeg',
+    }));
+    const asset = source.context.register(source.context.obj({
+      Type: 'Filespec', UF: metadata, Desc: metadata, EF: { UF: embeddedFile },
+    }));
+    const instance = source.context.register(source.context.obj({ Asset: asset }));
+    const configuration = source.context.register(source.context.obj({ Instances: [instance] }));
+    const content = source.context.register(source.context.obj({
+      Configurations: [configuration],
+    }));
+    const bytesPerAnnotation = textBytes * 2;
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES / bytesPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'RichMedia', Rect: [0, 0, 10, 10],
+        RichMediaContent: content,
+      })),
+    )));
+
+    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+      .rejects.toMatchObject({ code: 'inspection-limit' });
+  }, 30_000);
+
+  it('borne les arbres de rendition Screen parcourus pour chaque annotation', async () => {
+    const source = await PDFDocument.create();
+    const page = source.addPage();
+    const renditionsPerAnnotation = 4_096;
+    const renditionTree = source.context.register(source.context.obj({
+      S: 'SR', R: Array.from({ length: renditionsPerAnnotation }, () => PDFName.of('Invalid')),
+    }));
+    const action = source.context.register(source.context.obj({
+      Type: 'Action', S: 'Rendition', R: renditionTree,
+    }));
+    const annotationCount = Math.floor(
+      PDF_PRIVACY_MAX_ANNOTATION_RENDITION_EXPANSION_ENTRIES / renditionsPerAnnotation,
+    ) + 1;
+    page.node.set(PDFName.of('Annots'), source.context.obj(Array.from(
+      { length: annotationCount },
+      () => source.context.register(source.context.obj({
+        Type: 'Annot', Subtype: 'Screen', Rect: [0, 0, 10, 10], A: action,
       })),
     )));
 

@@ -38,6 +38,7 @@ interface ParsedDictionary {
   length?: number | RawPdfReference;
   filters?: readonly string[];
   objectCount?: number;
+  firstObjectOffset?: number;
   xrefSize?: number;
   hasEncryptionDictionary: boolean;
 }
@@ -310,7 +311,11 @@ function readIndirectObjectHeaderEnd(data: Uint8Array, start: number): number | 
 
 function collectIndirectLengths(data: Uint8Array): Map<string, number | undefined> {
   const candidates = collectIndirectLengthCandidates(data);
+  const compressedCandidates = collectCompressedIndirectLengthCandidates(data, candidates);
   const lengths = new Map<string, number | undefined>();
+  for (const [key, values] of compressedCandidates) {
+    lengths.set(key, values.size === 1 ? values.values().next().value : undefined);
+  }
   let offset = 0;
   while (offset < data.byteLength) {
     const byte = data[offset];
@@ -447,6 +452,207 @@ function collectIndirectLengthCandidates(data: Uint8Array): Map<string, Set<numb
   return candidates;
 }
 
+function collectCompressedIndirectLengthCandidates(
+  data: Uint8Array,
+  candidates: Map<string, Set<number>>,
+): Map<string, Set<number>> {
+  const compressedCandidates = new Map<string, Set<number>>();
+  const processedStreams = new Set<number>();
+  let candidateValues = countCandidateValues(candidates);
+  let expandedBytes = 0;
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (let offset = 0; offset < data.byteLength; offset += 1) {
+      const objectHeaderEnd = readIndirectObjectHeaderEnd(data, offset);
+      if (objectHeaderEnd === undefined) continue;
+      const dictionaryStart = skipWhitespaceAndComments(data, objectHeaderEnd);
+      if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) {
+        offset = objectHeaderEnd - 1;
+        continue;
+      }
+      let dictionaryEnd: number | undefined;
+      let dictionary: ParsedDictionary;
+      try {
+        dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+        if (dictionaryEnd === undefined) continue;
+        dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+      } catch {
+        continue;
+      }
+      if (
+        dictionary.type !== 'ObjStm'
+        || dictionary.objectCount === undefined
+        || dictionary.firstObjectOffset === undefined
+      ) continue;
+      const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+      if (!matchesKeyword(data, streamKeyword, 'stream')) continue;
+      let streamStart: number;
+      try {
+        streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+      } catch {
+        continue;
+      }
+      if (processedStreams.has(streamStart)) continue;
+      const length = resolveCandidateStreamLength(
+        dictionary.length,
+        candidates,
+        data,
+        streamStart,
+      );
+      if (length === undefined) continue;
+      const streamEnd = streamStart + length;
+      if (
+        !Number.isSafeInteger(streamEnd)
+        || streamEnd > data.byteLength
+        || !matchesKeyword(data, skipWhitespace(data, streamEnd), 'endstream')
+      ) continue;
+      processedStreams.add(streamStart);
+      if (processedStreams.size > MAX_CRITICAL_STREAMS) {
+        throw new Error('PDF stream limit');
+      }
+
+      const remaining = PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES - expandedBytes;
+      const decoded = decodeObjectStreamContents(
+        data.subarray(streamStart, streamEnd),
+        dictionary.filters,
+        remaining,
+      );
+      if (!decoded) continue;
+      expandedBytes += decoded.byteLength;
+      if (expandedBytes > PDF_PRIVACY_MAX_OBJECT_STREAM_EXPANSION_BYTES) {
+        throw new Error('PDF object stream expansion limit');
+      }
+      const values = readCompressedIntegerObjects(
+        decoded,
+        dictionary.objectCount,
+        dictionary.firstObjectOffset,
+      );
+      for (const value of values) {
+        const key = referenceKey(value.objectNumber, 0);
+        let allValues = candidates.get(key);
+        if (!allValues) {
+          allValues = new Set<number>();
+          candidates.set(key, allValues);
+        }
+        if (!allValues.has(value.value)) {
+          candidateValues += 1;
+          if (candidateValues > MAX_INDIRECT_LENGTH_OBJECTS) {
+            throw new Error('PDF indirect length object limit');
+          }
+          allValues.add(value.value);
+          changed = true;
+        }
+        let compressedValues = compressedCandidates.get(key);
+        if (!compressedValues) {
+          compressedValues = new Set<number>();
+          compressedCandidates.set(key, compressedValues);
+        }
+        compressedValues.add(value.value);
+      }
+    }
+  }
+  return compressedCandidates;
+}
+
+function countCandidateValues(candidates: IndirectLengthCandidates): number {
+  let count = 0;
+  for (const values of candidates.values()) count += values.size;
+  return count;
+}
+
+function decodeObjectStreamContents(
+  contents: Uint8Array,
+  filters: readonly string[] | undefined,
+  maxDecodedBytes: number,
+): Uint8Array | undefined {
+  if (!filters) return undefined;
+  if (filters.length === 0) {
+    if (contents.byteLength > maxDecodedBytes) {
+      throw new Error('PDF object stream expansion limit');
+    }
+    return contents;
+  }
+  if (filters.length !== 1 || !['FlateDecode', 'Fl'].includes(filters[0] ?? '')) {
+    return undefined;
+  }
+  try {
+    return boundedInflatedContents(contents, maxDecodedBytes);
+  } catch {
+    return undefined;
+  }
+}
+
+function readCompressedIntegerObjects(
+  data: Uint8Array,
+  objectCount: number,
+  firstObjectOffset: number,
+): Array<{ objectNumber: number; value: number }> {
+  if (
+    !Number.isSafeInteger(objectCount)
+    || objectCount < 0
+    || objectCount > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
+    || !Number.isSafeInteger(firstObjectOffset)
+    || firstObjectOffset < 0
+    || firstObjectOffset > data.byteLength
+  ) return [];
+  const objectNumbers: number[] = [];
+  const objectOffsets: number[] = [];
+  let headerOffset = 0;
+  for (let index = 0; index < objectCount; index += 1) {
+    headerOffset = skipWhitespaceAndComments(data, headerOffset);
+    const objectNumber = tryReadUnsignedInteger(data, headerOffset);
+    if (!objectNumber || objectNumber.end > firstObjectOffset) return [];
+    headerOffset = skipWhitespaceAndComments(data, objectNumber.end);
+    const objectOffset = tryReadUnsignedInteger(data, headerOffset);
+    if (!objectOffset || objectOffset.end > firstObjectOffset) return [];
+    objectNumbers.push(objectNumber.value);
+    objectOffsets.push(objectOffset.value);
+    headerOffset = objectOffset.end;
+  }
+  if (skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset) return [];
+
+  const values: Array<{ objectNumber: number; value: number }> = [];
+  for (let index = 0; index < objectCount; index += 1) {
+    const start = firstObjectOffset + (objectOffsets[index] ?? 0);
+    const end = index + 1 < objectCount
+      ? firstObjectOffset + (objectOffsets[index + 1] ?? 0)
+      : data.byteLength;
+    if (
+      !Number.isSafeInteger(start)
+      || !Number.isSafeInteger(end)
+      || start < firstObjectOffset
+      || end < start
+      || end > data.byteLength
+    ) return [];
+    const valueStart = skipWhitespaceAndComments(data, start);
+    const value = tryReadUnsignedInteger(data, valueStart);
+    if (!value || value.end > end || !containsOnlyWhitespaceAndComments(data, value.end, end)) {
+      continue;
+    }
+    values.push({ objectNumber: objectNumbers[index] ?? 0, value: value.value });
+  }
+  return values;
+}
+
+function containsOnlyWhitespaceAndComments(
+  data: Uint8Array,
+  start: number,
+  end: number,
+): boolean {
+  let offset = start;
+  while (offset < end) {
+    if (isWhitespace(data[offset])) {
+      offset += 1;
+      continue;
+    }
+    if (data[offset] !== PERCENT) return false;
+    offset += 1;
+    while (offset < end && data[offset] !== 0x0a && data[offset] !== 0x0d) offset += 1;
+  }
+  return true;
+}
+
 function resolveCandidateStreamLength(
   length: number | RawPdfReference | undefined,
   candidates: IndirectLengthCandidates,
@@ -490,6 +696,7 @@ function parseCriticalDictionary(
   let length: number | RawPdfReference | undefined;
   let filters: readonly string[] | undefined = [];
   let objectCount: number | undefined;
+  let firstObjectOffset: number | undefined;
   let xrefSize: number | undefined;
   let hasFilter = false;
   let hasEncryptionDictionary = false;
@@ -576,12 +783,15 @@ function parseCriticalDictionary(
         filters = undefined;
         offset = valueStart + 1;
       }
-    } else if (key.value === 'N' || key.value === 'Size') {
+    } else if (key.value === 'N' || key.value === 'First' || key.value === 'Size') {
       const value = readUnsignedInteger(data, valueStart);
       if (!value) throw new Error('Invalid PDF object count');
       if (key.value === 'N') {
         if (objectCount !== undefined) throw new Error('Duplicate PDF object count');
         objectCount = value.value;
+      } else if (key.value === 'First') {
+        if (firstObjectOffset !== undefined) throw new Error('Duplicate PDF first offset');
+        firstObjectOffset = value.value;
       } else {
         if (xrefSize !== undefined) throw new Error('Duplicate PDF xref size');
         xrefSize = value.value;
@@ -591,7 +801,15 @@ function parseCriticalDictionary(
       hasEncryptionDictionary = true;
     }
   }
-  return { type, length, filters, objectCount, xrefSize, hasEncryptionDictionary };
+  return {
+    type,
+    length,
+    filters,
+    objectCount,
+    firstObjectOffset,
+    xrefSize,
+    hasEncryptionDictionary,
+  };
 }
 
 function findDictionaryEnd(data: Uint8Array, start: number): number | undefined {
@@ -799,4 +1017,24 @@ function boundedInflatedSize(contents: Uint8Array, maxDecodedBytes: number): num
   const succeeded = inflater.push(contents, true);
   if (!succeeded || inflater.err !== 0) throw new Error('Invalid PDF object stream');
   return decodedBytes;
+}
+
+function boundedInflatedContents(contents: Uint8Array, maxDecodedBytes: number): Uint8Array {
+  const inflater = new Inflate({ chunkSize: INFLATE_CHUNK_BYTES });
+  const chunks: Uint8Array[] = [];
+  let decodedBytes = 0;
+  inflater.onData = chunk => {
+    decodedBytes += chunk.byteLength;
+    if (decodedBytes > maxDecodedBytes) throw new Error('PDF object stream expansion limit');
+    chunks.push(chunk.slice());
+  };
+  const succeeded = inflater.push(contents, true);
+  if (!succeeded || inflater.err !== 0) throw new Error('Invalid PDF object stream');
+  const result = new Uint8Array(decodedBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    result.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return result;
 }

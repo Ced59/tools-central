@@ -59,6 +59,7 @@ interface ActionDictionaryIndex {
   targetlessAnnotationTriggerIds: Set<string>;
   targetlessOutlineExternalActions: number;
   fieldJavascriptOccurrences: number;
+  pageJavascriptOccurrences: number;
 }
 
 type ConsumeDiscoveryBudget = (count?: number) => void;
@@ -168,16 +169,6 @@ export async function inspectPdfPrivacyDocument(
     add,
     consumeDiscoveryBudget,
   );
-  if (hasJavascript && documentActionCount === 0 && formActionCount === 0) {
-    add({
-      id: 'javascript:forms:detected',
-      category: 'active-content',
-      kind: 'javascript',
-      severity: 'high',
-      message: { code: 'form-actions-undetailed' },
-      occurrences: 1,
-    });
-  }
   collectOpenAction(openAction, add, consumeDiscoveryBudget);
   collectSignatures(
     mergeSignatureInventories(signatures, input.structuralSignatures),
@@ -186,6 +177,7 @@ export async function inspectPdfPrivacyDocument(
   );
   collectOutlineItems(outline ?? [], links, actionIndex, add, consumeDiscoveryBudget);
 
+  let pageActionCount = actionIndex?.pageJavascriptOccurrences ?? 0;
   for (let pageNumber = 1; pageNumber <= document.numPages; pageNumber += 1) {
     const page = await document.getPage(pageNumber);
     try {
@@ -202,17 +194,34 @@ export async function inspectPdfPrivacyDocument(
         add,
         consumeDiscoveryBudget,
       );
-      collectJavascriptActions(
+      pageActionCount += collectJavascriptActions(
         pageActions,
         `page:${String(pageNumber)}`,
         add,
         consumeDiscoveryBudget,
         pageNumber,
+        actionIndex,
       );
     } finally {
       page.cleanup();
     }
     input.onProgress?.(20 + Math.round(pageNumber / document.numPages * 72));
+  }
+
+  if (
+    hasJavascript
+    && documentActionCount === 0
+    && formActionCount === 0
+    && pageActionCount === 0
+  ) {
+    add({
+      id: 'javascript:forms:detected',
+      category: 'active-content',
+      kind: 'javascript',
+      severity: 'high',
+      message: { code: 'form-actions-undetailed' },
+      occurrences: 1,
+    });
   }
 
   for (const [key, link] of links) {
@@ -384,12 +393,19 @@ function collectJavascriptActions(
   add: (finding: PdfPrivacyFinding) => void,
   consume: ConsumeDiscoveryBudget,
   pageNumber?: number,
+  actionIndex?: ActionDictionaryIndex | null,
 ): number {
   if (!actions) return 0;
   let count = 0;
   for (const [rawEvent, payload] of actions) {
     const event = sanitizePdfPrivacyValue(rawEvent) ?? 'Action';
-    const occurrences = Math.max(1, Array.isArray(payload) ? payload.length : 1);
+    let occurrences = Math.max(1, Array.isArray(payload) ? payload.length : 1);
+    if (actionIndex && actionIndex.pageJavascriptOccurrences > 0) {
+      const duplicates = Math.min(occurrences, actionIndex.pageJavascriptOccurrences);
+      occurrences -= duplicates;
+      actionIndex.pageJavascriptOccurrences -= duplicates;
+    }
+    if (occurrences === 0) continue;
     consume(occurrences);
     count += occurrences;
     add({
@@ -768,6 +784,7 @@ function collectActionDictionarySignals(
     targetlessAnnotationTriggerIds: new Set<string>(),
     targetlessOutlineExternalActions: 0,
     fieldJavascriptOccurrences: 0,
+    pageJavascriptOccurrences: 0,
   };
   let findingIndex = 0;
   for (const signal of signals) {
@@ -794,6 +811,7 @@ function collectActionDictionarySignals(
         signal.context === 'annotation-action'
         || signal.context === 'annotation-additional-action'
         || signal.context === 'field-additional-action'
+        || signal.context === 'page-additional-action'
         || signal.context === 'outline-action'
         || signal.context === 'next-action'
         || signal.context === 'explicit-action'
@@ -819,6 +837,15 @@ function collectActionDictionarySignals(
     ) {
       actionIndex.fieldJavascriptOccurrences += occurrences;
       if (!Number.isSafeInteger(actionIndex.fieldJavascriptOccurrences)) {
+        throw new PdfPrivacyEngineError('inspection-limit');
+      }
+    }
+    if (
+      signal.actionType === 'JavaScript'
+      && (signal.context === 'page-additional-action' || signal.context === 'explicit-action')
+    ) {
+      actionIndex.pageJavascriptOccurrences += occurrences;
+      if (!Number.isSafeInteger(actionIndex.pageJavascriptOccurrences)) {
         throw new PdfPrivacyEngineError('inspection-limit');
       }
     }

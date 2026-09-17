@@ -117,6 +117,8 @@ export const PDF_PRIVACY_MAX_ANNOTATION_GEOMETRY_EXPANSION_BYTES = 32 * 1_024 * 
 export const PDF_PRIVACY_MAX_ANNOTATION_JAVASCRIPT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_ANNOTATION_OPTIONAL_CONTENT_EXPANSION_ENTRIES = 1_000_000;
 export const PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES = 1_000_000;
+export const PDF_PRIVACY_MAX_ANNOTATION_RENDITION_EXPANSION_ENTRIES = 1_000_000;
+export const PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 export const PDF_PRIVACY_MAX_OUTLINE_VALUE_EXPANSION_BYTES = 32 * 1_024 * 1_024;
 const NORMALIZED_CHOICE_OPTION_OVERHEAD_BYTES = 64;
 const NORMALIZED_GEOMETRY_NUMBER_BYTES = 8;
@@ -167,6 +169,8 @@ interface InspectionState {
   annotationJavascriptExpansionBytes: number;
   annotationOptionalContentExpansionEntries: number;
   annotationRichMediaExpansionEntries: number;
+  annotationRenditionExpansionEntries: number;
+  annotationMediaTextExpansionBytes: number;
   outlineValueExpansionBytes: number;
   geometryExpansionSizes: Map<PDFObject, number>;
   hasUnboundedEncryptedTextStreams: boolean;
@@ -300,6 +304,8 @@ export async function inspectPdfStructuralSignals(
       annotationJavascriptExpansionBytes: 0,
       annotationOptionalContentExpansionEntries: 0,
       annotationRichMediaExpansionEntries: 0,
+      annotationRenditionExpansionEntries: 0,
+      annotationMediaTextExpansionBytes: 0,
       outlineValueExpansionBytes: 0,
       geometryExpansionSizes: new Map(),
       hasUnboundedEncryptedTextStreams: false,
@@ -1339,16 +1345,40 @@ function validatePageAnnotationBudget(page: PDFDict, state: InspectionState): vo
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
-    state.annotationRichMediaExpansionEntries += measureAnnotationRichMediaEntries(
+    const richMediaExpansion = measureAnnotationRichMediaExpansion(
       annotation,
       state,
       PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES
         - state.annotationRichMediaExpansionEntries,
+      PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES
+        - state.annotationMediaTextExpansionBytes,
     );
+    state.annotationRichMediaExpansionEntries += richMediaExpansion.entries;
+    state.annotationMediaTextExpansionBytes += richMediaExpansion.textBytes;
     if (
       !Number.isSafeInteger(state.annotationRichMediaExpansionEntries)
       || state.annotationRichMediaExpansionEntries
         > PDF_PRIVACY_MAX_ANNOTATION_RICH_MEDIA_EXPANSION_ENTRIES
+    ) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    const renditionExpansion = measureAnnotationRenditionExpansion(
+      annotation,
+      state,
+      PDF_PRIVACY_MAX_ANNOTATION_RENDITION_EXPANSION_ENTRIES
+        - state.annotationRenditionExpansionEntries,
+      PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES
+        - state.annotationMediaTextExpansionBytes,
+    );
+    state.annotationRenditionExpansionEntries += renditionExpansion.entries;
+    state.annotationMediaTextExpansionBytes += renditionExpansion.textBytes;
+    if (
+      !Number.isSafeInteger(state.annotationRenditionExpansionEntries)
+      || state.annotationRenditionExpansionEntries
+        > PDF_PRIVACY_MAX_ANNOTATION_RENDITION_EXPANSION_ENTRIES
+      || !Number.isSafeInteger(state.annotationMediaTextExpansionBytes)
+      || state.annotationMediaTextExpansionBytes
+        > PDF_PRIVACY_MAX_ANNOTATION_MEDIA_TEXT_EXPANSION_BYTES
     ) {
       throw new PdfActionDictionaryInspectionError();
     }
@@ -1407,18 +1437,22 @@ function measureRepeatedArrayEntries(
   return total;
 }
 
-function measureAnnotationRichMediaEntries(
+function measureAnnotationRichMediaExpansion(
   annotation: PDFDict,
   state: InspectionState,
   remainingEntries: number,
-): number {
-  if (readName(annotation, 'Subtype')?.decodeText() !== 'RichMedia') return 0;
+  remainingTextBytes: number,
+): { entries: number; textBytes: number } {
+  if (readName(annotation, 'Subtype')?.decodeText() !== 'RichMedia') {
+    return { entries: 0, textBytes: 0 };
+  }
   const content = readDictionary(annotation, 'RichMediaContent');
   const configurations = content ? readObject(content, 'Configurations') : undefined;
-  if (!(configurations instanceof PDFArray)) return 0;
+  if (!(configurations instanceof PDFArray)) return { entries: 0, textBytes: 0 };
 
-  let total = configurations.size();
-  if (!Number.isSafeInteger(total) || total > remainingEntries) {
+  let entries = configurations.size();
+  let textBytes = 0;
+  if (!Number.isSafeInteger(entries) || entries > remainingEntries) {
     throw new PdfActionDictionaryInspectionError();
   }
   for (let index = 0; index < configurations.size(); index += 1) {
@@ -1426,12 +1460,113 @@ function measureAnnotationRichMediaEntries(
     if (!(configuration instanceof PDFDict)) continue;
     const instances = readObject(configuration, 'Instances');
     if (!(instances instanceof PDFArray)) continue;
-    total += instances.size();
-    if (!Number.isSafeInteger(total) || total > remainingEntries) {
+    entries += instances.size();
+    if (!Number.isSafeInteger(entries) || entries > remainingEntries) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    for (let instanceIndex = 0; instanceIndex < instances.size(); instanceIndex += 1) {
+      const instance = resolvePdfObject(instances.get(instanceIndex), state.document);
+      if (!(instance instanceof PDFDict)) continue;
+      const asset = readDictionary(instance, 'Asset');
+      if (!asset) continue;
+      textBytes += measureFileSpecTextBytes(asset, state);
+      if (!Number.isSafeInteger(textBytes) || textBytes > remainingTextBytes) {
+        throw new PdfActionDictionaryInspectionError();
+      }
+    }
+  }
+  return { entries, textBytes };
+}
+
+function measureAnnotationRenditionExpansion(
+  annotation: PDFDict,
+  state: InspectionState,
+  remainingEntries: number,
+  remainingTextBytes: number,
+): { entries: number; textBytes: number } {
+  if (readName(annotation, 'Subtype')?.decodeText() !== 'Screen') {
+    return { entries: 0, textBytes: 0 };
+  }
+  const actions: PDFObject[] = [];
+  const action = annotation.get(PDFName.of('A'));
+  if (action) actions.push(action);
+  const additionalActions = readDictionary(annotation, 'AA');
+  if (additionalActions) actions.push(...additionalActions.asMap().values());
+
+  let entries = 0;
+  let textBytes = 0;
+  for (const rawAction of actions) {
+    const renditionAction = resolvePdfObject(rawAction, state.document);
+    if (!(renditionAction instanceof PDFDict)) continue;
+    if (readName(renditionAction, 'S')?.decodeText() !== 'Rendition') continue;
+    const operation = readObject(renditionAction, 'OP');
+    if (
+      operation !== undefined
+      && (!(operation instanceof PDFNumber) || ![0, 1].includes(operation.asNumber()))
+    ) continue;
+    const measured = measureRenditionTree(
+      readObject(renditionAction, 'R'),
+      state,
+      remainingEntries - entries,
+      remainingTextBytes - textBytes,
+    );
+    entries += measured.entries;
+    textBytes += measured.textBytes;
+    if (
+      !Number.isSafeInteger(entries)
+      || entries > remainingEntries
+      || !Number.isSafeInteger(textBytes)
+      || textBytes > remainingTextBytes
+    ) throw new PdfActionDictionaryInspectionError();
+  }
+  return { entries, textBytes };
+}
+
+function measureRenditionTree(
+  root: PDFObject | undefined,
+  state: InspectionState,
+  maxEntries: number,
+  maxTextBytes: number,
+): { entries: number; textBytes: number } {
+  if (!root) return { entries: 0, textBytes: 0 };
+  const stack: { object: PDFObject; depth: number }[] = [{ object: root, depth: 0 }];
+  const visited = new Set<PDFObject>();
+  let entries = 0;
+  let textBytes = 0;
+  while (stack.length > 0) {
+    const item = stack.pop();
+    if (!item) continue;
+    if (item.depth > PDF_PRIVACY_MAX_ACTION_CHAIN_DEPTH) {
+      throw new PdfActionDictionaryInspectionError();
+    }
+    const rendition = resolvePdfObject(item.object, state.document);
+    if (!(rendition instanceof PDFDict) || visited.has(rendition)) continue;
+    visited.add(rendition);
+    const subtype = readName(rendition, 'S')?.decodeText();
+    if (subtype === 'SR') {
+      const children = readObject(rendition, 'R');
+      if (!(children instanceof PDFArray)) continue;
+      entries += children.size();
+      if (!Number.isSafeInteger(entries) || entries > maxEntries) {
+        throw new PdfActionDictionaryInspectionError();
+      }
+      for (let index = 0; index < children.size(); index += 1) {
+        stack.push({ object: children.get(index), depth: item.depth + 1 });
+      }
+      continue;
+    }
+    if (subtype !== 'MR') continue;
+    const clip = readDictionary(rendition, 'C');
+    if (!clip || readName(clip, 'S')?.decodeText() !== 'MCD') continue;
+    textBytes += measureNormalizedValueBytes(readObject(clip, 'N'), state);
+    textBytes += measureNormalizedValueBytes(readObject(clip, 'CT'), state);
+    const fileSpec = readDictionary(clip, 'D');
+    if (fileSpec) textBytes += measureFileSpecTextBytes(fileSpec, state);
+    if (!Number.isSafeInteger(textBytes) || textBytes > maxTextBytes) {
       throw new PdfActionDictionaryInspectionError();
     }
   }
-  return total;
+  return { entries, textBytes };
 }
 
 function measureFileAttachmentMetadataBytes(
@@ -1442,6 +1577,10 @@ function measureFileAttachmentMetadataBytes(
   const fileSpec = readDictionary(annotation, 'FS');
   if (!fileSpec) return 0;
 
+  return measureFileSpecTextBytes(fileSpec, state);
+}
+
+function measureFileSpecTextBytes(fileSpec: PDFDict, state: InspectionState): number {
   let total = measureNormalizedValueBytes(readObject(fileSpec, 'Desc'), state);
   for (const key of FILE_SPEC_PLATFORM_KEYS) {
     if (!fileSpec.has(PDFName.of(key))) continue;
