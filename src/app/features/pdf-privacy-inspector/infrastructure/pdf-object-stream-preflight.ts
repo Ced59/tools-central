@@ -35,6 +35,12 @@ interface RawPdfReference {
 
 type PdfFilterDecodeParameter = PdfFilterDecodeParameters | RawPdfReference | undefined;
 
+interface IndirectPdfFilters {
+  reference: RawPdfReference;
+}
+
+type PdfFilters = readonly string[] | IndirectPdfFilters;
+
 interface IndirectObjectHeader extends RawPdfReference {
   start: number;
   end: number;
@@ -59,7 +65,7 @@ interface CompressedCrossReferenceEntry {
 interface ParsedDictionary {
   type?: string;
   length?: number | RawPdfReference;
-  filters?: readonly string[];
+  filters?: PdfFilters;
   decodeParameters?: readonly PdfFilterDecodeParameter[] | null;
   objectCount?: number;
   firstObjectOffset?: number;
@@ -74,7 +80,7 @@ interface ParsedDictionary {
 interface CriticalStreamDescriptor {
   type: 'ObjStm' | 'XRef';
   contents: Uint8Array;
-  filters: readonly string[] | undefined;
+  filters: PdfFilters | undefined;
   decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
 }
 
@@ -264,7 +270,7 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     }
     const decoded = decodeObjectStreamContents(
       stream.contents,
-      stream.filters,
+      resolveFilters(data, stream.filters, objectStreamSelection),
       resolveDecodeParameters(data, stream.decodeParameters, objectStreamSelection),
       expansionBudget,
     );
@@ -987,7 +993,7 @@ function readXrefStreamSection(
   ) return section;
   const decoded = decodeObjectStreamContents(
     data.subarray(streamStart, streamEnd),
-    dictionary.filters,
+    resolveFilters(data, dictionary.filters),
     resolveDecodeParameters(data, dictionary.decodeParameters),
     expansionBudget,
   );
@@ -1241,7 +1247,7 @@ function collectCompressedIndirectLengthCandidates(
 
       const decoded = decodeObjectStreamContents(
         data.subarray(streamStart, streamEnd),
-        dictionary.filters,
+        resolveFilters(data, dictionary.filters, candidates),
         resolveDecodeParameters(data, dictionary.decodeParameters, candidates),
         expansionBudget,
       );
@@ -1902,7 +1908,7 @@ function parseCriticalDictionary(
 ): ParsedDictionary {
   let type: string | undefined;
   let length: number | RawPdfReference | undefined;
-  let filters: readonly string[] | undefined = [];
+  let filters: PdfFilters | undefined = [];
   let decodeParameters: readonly PdfFilterDecodeParameter[] | null | undefined;
   let objectCount: number | undefined;
   let firstObjectOffset: number | undefined;
@@ -2124,13 +2130,20 @@ function findDictionaryEnd(data: Uint8Array, start: number): number | undefined 
 function readFilters(
   data: Uint8Array,
   start: number,
-): { filters: readonly string[]; end: number } {
+): { filters: PdfFilters; end: number } {
   if (data[start] === PDF_NAME) {
     const filter = readPdfName(data, start);
     if (!filter) throw new Error('Invalid PDF stream filter');
     return { filters: [filter.value], end: filter.end };
   }
-  if (data[start] !== LEFT_BRACKET) throw new Error('Indirect PDF stream filter');
+  const reference = readRawPdfReference(data, start);
+  if (reference) {
+    return {
+      filters: { reference: reference.reference },
+      end: reference.end,
+    };
+  }
+  if (data[start] !== LEFT_BRACKET) throw new Error('Invalid PDF stream filter');
   const filters: string[] = [];
   let offset = start + 1;
   while (offset < data.byteLength) {
@@ -2145,6 +2158,37 @@ function readFilters(
     offset = filter.end;
   }
   throw new Error('Unterminated PDF stream filter array');
+}
+
+function resolveFilters(
+  data: Uint8Array,
+  filters: PdfFilters | undefined,
+  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+): readonly string[] | undefined {
+  if (filters === undefined || !('reference' in filters)) return filters;
+  const reference = filters.reference;
+  const offset = candidates?.authoritativeOffsets.get(referenceKey(
+    reference.objectNumber,
+    reference.generationNumber,
+  ));
+  if (offset === undefined) return undefined;
+  const header = readIndirectObjectHeader(data, offset);
+  if (
+    !header
+    || header.objectNumber !== reference.objectNumber
+    || header.generationNumber !== reference.generationNumber
+  ) return undefined;
+  const valueStart = skipWhitespaceAndComments(data, header.end);
+  let value: { filters: PdfFilters; end: number };
+  try {
+    value = readFilters(data, valueStart);
+  } catch {
+    return undefined;
+  }
+  if ('reference' in value.filters) return undefined;
+  const objectEnd = skipWhitespaceAndComments(data, value.end);
+  if (!matchesKeyword(data, objectEnd, 'endobj')) return undefined;
+  return value.filters;
 }
 
 function readDecodeParameters(
