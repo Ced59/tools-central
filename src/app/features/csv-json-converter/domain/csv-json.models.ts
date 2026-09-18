@@ -502,9 +502,8 @@ function detectDelimiter(
       equallyConsistentCandidates.push(candidate);
     }
   }
-  const ambiguousCandidates = headerCandidates.length > 1
-    ? headerCandidates
-    : equallyConsistentCandidates;
+  if (headerCandidates.length === 1) return headerCandidates[0];
+  const ambiguousCandidates = headerCandidates.length > 1 ? headerCandidates : equallyConsistentCandidates;
   if (bestConsistency === 0 || ambiguousCandidates.length > 1) {
     best = 'comma';
     addIssue(state, 'delimiter-fallback', 'warning', null, null, ambiguousCandidates.join(','));

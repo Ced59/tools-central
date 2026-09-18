@@ -51,11 +51,13 @@ describe('convertCsvJson', () => {
       'a,b,c;note\n1,2;foo\n3,4,5;bar',
       CSV_DEFAULTS,
     );
+    const soleHeaderCandidate = convertCsvJson('a;b\nx|y\nu|v', CSV_DEFAULTS);
 
     expect(semicolonCandidate.detectedDelimiter).toBe('comma');
     expect(commaCandidate.detectedDelimiter).toBe('comma');
     expect(noCommaCandidate.detectedDelimiter).toBe('comma');
     expect(irregularCommaCandidate.detectedDelimiter).toBe('comma');
+    expect(soleHeaderCandidate.detectedDelimiter).toBe('semicolon');
     expect(semicolonCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
     expect(commaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
     expect(noCommaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
@@ -63,6 +65,10 @@ describe('convertCsvJson', () => {
     expect(JSON.parse(irregularCommaCandidate.output)).toEqual([
       { a: 1, b: '2;foo', 'c;note': '' },
       { a: 3, b: 4, 'c;note': '5;bar' },
+    ]);
+    expect(JSON.parse(soleHeaderCandidate.output)).toEqual([
+      { a: 'x|y', b: '' },
+      { a: 'u|v', b: '' },
     ]);
   });
 
