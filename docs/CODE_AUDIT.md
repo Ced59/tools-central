@@ -19,7 +19,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,17 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 301,97 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
 | Tests unitaires | suite non compilable | 140 fichiers, 570 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
-| Couverture | aucun seuil | 56,34 % statements, 46,95 % branches, 53,11 % fonctions, 60,35 % lignes |
+| Couverture | aucun seuil | 56,33 % statements, 46,95 % branches, 53,11 % fonctions, 60,35 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |

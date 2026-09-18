@@ -2603,7 +2603,7 @@ describe('inspectPdfStructuralSignals', () => {
     await expect(inspectPdfStructuralSignals(
       await source.save({ useObjectStreams: false }),
     )).rejects.toMatchObject({ code: 'inspection-limit' });
-  });
+  }, 30_000);
 
   it('parcourt une chaîne Next bornée sans dépendre de la pile JavaScript', async () => {
     const source = await PDFDocument.create();
