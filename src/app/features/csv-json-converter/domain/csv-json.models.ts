@@ -364,7 +364,7 @@ function convertJsonToCsv(
     direction: 'json-to-csv',
     output,
     delimiter,
-    headers: mapping.map(entry => entry.output),
+    headers: outputHeaders,
     previewRows,
     issues: state.issues,
     inputRows: parsedRows.length,
@@ -581,22 +581,34 @@ function parseMapping(
   const sourceSet = new Set(sourceHeaders);
   const outputs = new Set<string>();
   const mapping: ColumnMapping[] = [];
-  for (const [index, line] of rawMapping.split(/\r?\n/u).entries()) {
+  let lineStart = 0;
+  let lineNumber = 0;
+  while (lineStart <= rawMapping.length) {
+    lineNumber += 1;
+    if (lineNumber > CSV_JSON_MAX_ROWS) {
+      addIssue(state, 'mapping-invalid', 'error', lineNumber);
+      break;
+    }
+    const newlineIndex = rawMapping.indexOf('\n', lineStart);
+    const lineEnd = newlineIndex === -1 ? rawMapping.length : newlineIndex;
+    let line = rawMapping.slice(lineStart, lineEnd);
+    lineStart = newlineIndex === -1 ? rawMapping.length + 1 : newlineIndex + 1;
+    if (line.endsWith('\r')) line = line.slice(0, -1);
     if (!line.trim() || line.trimStart().startsWith('#')) continue;
     const parsedLine = parseMappingLine(line);
     if (!parsedLine) {
-      addIssue(state, 'mapping-invalid', 'error', index + 1, null, line.slice(0, 160));
+      addIssue(state, 'mapping-invalid', 'error', lineNumber, null, line.slice(0, 160));
       continue;
     }
     const { source, output } = parsedLine;
     if (source.length > CSV_JSON_MAX_CELL_CHARACTERS || output.length > CSV_JSON_MAX_CELL_CHARACTERS) {
-      addIssue(state, 'cell-limit', 'error', index + 1);
+      addIssue(state, 'cell-limit', 'error', lineNumber);
       continue;
     }
-    if (!sourceSet.has(source)) addIssue(state, 'mapping-source-missing', 'error', index + 1, null, source);
-    if (outputs.has(output)) addIssue(state, 'mapping-output-duplicate', 'error', index + 1, null, output);
+    if (!sourceSet.has(source)) addIssue(state, 'mapping-source-missing', 'error', lineNumber, null, source);
+    if (outputs.has(output)) addIssue(state, 'mapping-output-duplicate', 'error', lineNumber, null, output);
     if (mapping.length >= CSV_JSON_MAX_COLUMNS) {
-      addIssue(state, 'column-limit', 'error', index + 1);
+      addIssue(state, 'column-limit', 'error', lineNumber);
       break;
     }
     outputs.add(output);
@@ -771,6 +783,7 @@ function validateJsonNumbers(source: string, state: MutableConversionState): voi
 function validateUniqueJsonMemberNames(source: string, state: MutableConversionState): void {
   const stack: JsonContainerFrame[] = [];
   let index = 0;
+  let rootArrayElements = 0;
 
   const skipWhitespace = (): void => {
     while (index < source.length && /[\t\n\r ]/u.test(source[index])) index += 1;
@@ -812,7 +825,10 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
   const startValue = (): boolean => {
     const character = source[index];
     if (character === '{' || character === '[') {
-      if (stack.length >= 14) return false;
+      if (stack.length >= 14) {
+        addIssue(state, 'json-depth-limit', 'error');
+        return false;
+      }
       stack.push(character === '{'
         ? { kind: 'object', state: 'key-or-end', keys: new Set<string>() }
         : { kind: 'array', state: 'value-or-end' });
@@ -886,8 +902,15 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
         stack.pop();
         index += 1;
         completeValue();
-      } else if (!startValue()) {
-        return;
+      } else {
+        if (stack.length === 1) {
+          rootArrayElements += 1;
+          if (rootArrayElements > CSV_JSON_MAX_ROWS) {
+            addIssue(state, 'row-limit', 'error');
+            return;
+          }
+        }
+        if (!startValue()) return;
       }
     } else if (character === ',') {
       frame.state = 'value-or-end';

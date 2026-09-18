@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import {
   CSV_JSON_MAX_CELL_CHARACTERS,
@@ -142,6 +142,21 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.output).toBe('');
     expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+  });
+
+  it('borne les lignes physiques du mapping sans les matérialiser dans un tableau', () => {
+    const result = convertCsvJson('[{"value":"x"}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping: `value => output${'\n'.repeat(CSV_JSON_MAX_ROWS + 1)}`,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues).toContainEqual(expect.objectContaining({
+      code: 'mapping-invalid',
+      row: CSV_JSON_MAX_ROWS + 1,
+    }));
   });
 
   it('applique la limite de cellule aux noms définis par le mapping', () => {
@@ -313,6 +328,8 @@ describe('convertCsvJson', () => {
 
     expect(keyResult.output).toBe("'=2+2\r\nvalue");
     expect(mappingResult.output).toBe("'@commande\r\nvalue");
+    expect(keyResult.previewHeaders).toEqual(["'=2+2"]);
+    expect(mappingResult.previewHeaders).toEqual(["'@commande"]);
     expect(keyResult.issues[0]?.code).toBe('spreadsheet-formula-protected');
   });
 
@@ -450,6 +467,22 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.output).toBe('');
     expect(result.issues.some(issue => issue.code === 'row-limit')).toBe(true);
+  });
+
+  it('rejette un tableau JSON trop long avant de le matérialiser', () => {
+    const source = `[${Array.from({ length: CSV_JSON_MAX_ROWS + 1 }, () => '{}').join(',')}]`;
+    const parse = vi.spyOn(JSON, 'parse');
+
+    try {
+      const result = convertCsvJson(source, { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+
+      expect(result.ok).toBe(false);
+      expect(result.output).toBe('');
+      expect(result.issues.some(issue => issue.code === 'row-limit')).toBe(true);
+      expect(parse).not.toHaveBeenCalled();
+    } finally {
+      parse.mockRestore();
+    }
   });
 
   it('tolère des largeurs irrégulières en les signalant et complète les cellules absentes', () => {
