@@ -50,10 +50,6 @@
             <span class="step">1</span>
             <h3 i18n="@@json_ts_source_title">Données JSON</h3>
           </div>
-          <label class="file-button" for="json-ts-file">
-            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
-            <ng-container i18n="@@json_ts_import">Importer</ng-container>
-          </label>
           <input
             id="json-ts-file"
             class="visually-hidden"
@@ -61,6 +57,10 @@
             accept=".json,.txt,application/json,text/plain"
             (change)="loadFile($event)"
           >
+          <label class="file-button" for="json-ts-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <ng-container i18n="@@json_ts_import">Importer</ng-container>
+          </label>
         </div>
         @if (fileName()) {
           <p class="file-name"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>{{ fileName() }}</p>

@@ -259,6 +259,15 @@ describe('generateTypeScriptFromJson', () => {
     expect(result.output).toContain('zero: number;');
   });
 
+  it('compares large integer tokens with the represented IEEE-754 value', () => {
+    const lossy = generateTypeScriptFromJson('{"value":1000000000000000100}', DEFAULT_OPTIONS);
+    const exact = generateTypeScriptFromJson('{"value":1000000000000000128}', DEFAULT_OPTIONS);
+
+    expect(lossy.issues[0].code).toBe('unsafe-number');
+    expect(exact.ok).toBe(true);
+    expect(exact.output).toContain('value: number;');
+  });
+
   it('rejects a source above the character limit without parsing it', () => {
     const result = generateTypeScriptFromJson(
       `"${'x'.repeat(JSON_TO_TYPESCRIPT_MAX_SOURCE_CHARACTERS)}"`,

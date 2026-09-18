@@ -742,6 +742,9 @@ test('JSON to TypeScript infers optional fields, exports code and remains respon
 
   await expect(page.getByRole('heading', { level: 1 }))
     .toHaveText('Générer des types TypeScript depuis JSON');
+  const fileInput = page.locator('#json-ts-file');
+  await fileInput.focus();
+  await expect(page.locator('label[for="json-ts-file"]')).toHaveCSS('outline-style', 'solid');
   await page.locator('#json-ts-source').fill(JSON.stringify([
     { id: 1, name: 'Ada', createdAt: '2026-09-18T14:30:00Z', secret: 'private-token-123' },
     { id: 2, name: null, active: true },

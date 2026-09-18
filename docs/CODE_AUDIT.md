@@ -7,7 +7,7 @@ Périmètre : application Angular, architecture, dépendances, sécurité, tests
 
 Le socle bloquant a été corrigé. Le projet compile sous Angular 22, n’embarque plus aucun élément de l’écosystème Prime, ne présente plus de vulnérabilité npm connue, prérend réellement toutes ses pages publiques, et dispose d’une CI qui sépare validation et production. La branche `master` est protégée par une PR et le statut obligatoire `Verify` ; le déploiement ne peut commencer qu’après le merge et après une seconde validation complète. Cette chaîne a été exécutée avec succès jusqu’au VPS et contrôlée sur les URL publiques après le merge du validateur JSON Schema.
 
-Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Seize features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf`, `ooxml-metadata-cleaner`, `pdf-privacy-inspector`, `csv-json-converter`, `json-diff` et `json-schema-validator`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 73 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
+Le dépôt reste un produit en migration, pas une Clean Architecture achevée. Dix-sept features servent désormais de références (`percentage-of-number`, le moteur de nettoyage PDF, `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor`, `software-application-schema-builder`, `pdf-to-images`, `images-to-pdf`, `ooxml-metadata-cleaner`, `pdf-privacy-inspector`, `csv-json-converter`, `json-diff`, `json-schema-validator` et `json-to-typescript`), mais l’essentiel du code historique reste organisé par composants. Les prochaines PR doivent donc réduire la dette par tranche fonctionnelle, sans refonte globale. La priorité produit/SEO n’est pas de publier les 106 outils encore indisponibles : elle est d’améliorer les 74 outils réels, faire relire les traductions et livrer les nouvelles intentions une par une.
 
 ## Mesures vérifiées après corrections
 
@@ -16,19 +16,19 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. S
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 659,80 kB brut, 166,41 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 303,80 kB transféré) |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 661,84 kB brut, 166,68 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 303,85 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 158 fichiers, 849 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
-| Couverture | aucun seuil | 57,25 % statements, 48,27 % branches, 54,06 % fonctions, 61,24 % lignes |
-| E2E | aucun | 17 parcours Playwright verts, dont des scénarios PDF de confidentialité, CSV ↔ JSON et diff JSON réels |
-| Routes statiques | 2 | 2 496 pages prérendues ; 2 408 URL sont indexables et les variantes d’outils non relues sont omises des locales secondaires |
-| Catalogue | incohérences possibles | 4 catégories, 19 groupes, 177 outils, 71 disponibles en français et 65 dans les locales secondaires |
+| Tests unitaires | suite non compilable | 158 fichiers, 850 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
+| Couverture | aucun seuil | 60,62 % statements, 52,20 % branches, 58,32 % fonctions, 64,54 % lignes |
+| E2E | aucun | 19 parcours Playwright verts, dont des scénarios PDF de confidentialité, CSV ↔ JSON, diff JSON, JSON Schema et JSON → TypeScript réels |
+| Routes statiques | 2 | 2 499 pages prérendues ; 2 411 URL sont indexables et les variantes d’outils non relues sont omises des locales secondaires |
+| Catalogue | incohérences possibles | 4 catégories, 19 groupes, 180 outils, 74 disponibles en français et 65 dans les locales secondaires |
 | Locales | 30 configurées | 30 compilées et contrôlées |
-| Traductions secondaires | marqueurs incomplets non bloqués | 187 862 segments, 0 `TODO`, 0 warning technique |
+| Traductions secondaires | marqueurs incomplets non bloqués | 201 550 segments, 0 `TODO`, 0 warning technique |
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale sur l’accueil mobile : LCP 2 008 ms, CLS 0,0043, `DOMContentLoaded` 684,4 ms et interaction thème 57,6 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale sur l’accueil mobile : LCP 1 808 ms, CLS 0, `DOMContentLoaded` 271,3 ms et interaction thème 88,1 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 

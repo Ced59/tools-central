@@ -198,9 +198,14 @@ function isLosslessJsonNumber(token: string): boolean {
   const numeric = Number(token);
   if (!Number.isFinite(numeric)) return false;
   const sourceDecimal = canonicalDecimal(token);
+  if (sourceDecimal === null) return false;
+  if (sourceDecimal.scale <= 0) {
+    if (!Number.isInteger(numeric)) return false;
+    const sourceInteger = sourceDecimal.coefficient * (10n ** BigInt(-sourceDecimal.scale));
+    return sourceInteger === BigInt(numeric);
+  }
   const numericDecimal = canonicalDecimal(String(numeric));
-  return sourceDecimal !== null
-    && numericDecimal !== null
+  return numericDecimal !== null
     && sourceDecimal.coefficient === numericDecimal.coefficient
     && sourceDecimal.scale === numericDecimal.scale;
 }
