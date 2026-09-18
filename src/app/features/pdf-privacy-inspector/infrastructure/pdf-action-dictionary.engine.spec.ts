@@ -880,6 +880,15 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => validatePdfObjectStreamBudgets(signedIrrelevantParameters)).not.toThrow();
 
+    const namedIrrelevantParameters = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter /FlateDecode ',
+      '/DecodeParms << /EarlyChange /Vendor >> ',
+      `/Length ${String(signedParameters.byteLength)} >>\nstream\n`,
+      signedParameters,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(namedIrrelevantParameters)).not.toThrow();
+
     const compressedTypeCarrier = new TextEncoder().encode('6 0 /Foo');
     const compressedTypeBody = joinBytes(
       '%PDF-1.7\n3 0 obj\n<< /Type 6 0 R /Length 1 >>\nstream\nx\nendstream\nendobj\n',
@@ -1615,7 +1624,7 @@ describe('inspectPdfStructuralSignals', () => {
     const fixtures: readonly {
       filters: string | readonly string[];
       contents: Uint8Array;
-      decodeParameters?: Readonly<Record<string, number>>;
+      decodeParameters?: Readonly<Record<string, number | string>>;
     }[] = [
       { filters: 'FlateDecode', contents: deflate(plain) },
       {
@@ -1627,6 +1636,11 @@ describe('inspectPdfStructuralSignals', () => {
         filters: 'FlateDecode',
         contents: deflate(plain),
         decodeParameters: { EarlyChange: 2 },
+      },
+      {
+        filters: 'FlateDecode',
+        contents: deflate(plain),
+        decodeParameters: { EarlyChange: 'Vendor' },
       },
       {
         filters: 'FlateDecode',

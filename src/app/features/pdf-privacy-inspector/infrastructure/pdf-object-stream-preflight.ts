@@ -33,12 +33,14 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
+type RawPdfDecodeParameterValue = number | RawPdfReference | 'invalid';
+
 interface RawPdfFilterDecodeParameters {
-  predictor: number | RawPdfReference;
-  colors: number | RawPdfReference;
-  bitsPerComponent: number | RawPdfReference;
-  columns: number | RawPdfReference;
-  earlyChange: number | RawPdfReference;
+  predictor: RawPdfDecodeParameterValue;
+  colors: RawPdfDecodeParameterValue;
+  bitsPerComponent: RawPdfDecodeParameterValue;
+  columns: RawPdfDecodeParameterValue;
+  earlyChange: RawPdfDecodeParameterValue;
 }
 
 type PdfFilterDecodeParameter = RawPdfFilterDecodeParameters | RawPdfReference | undefined;
@@ -359,10 +361,11 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       skippedEncryptedObjectStreams += 1;
       continue;
     }
+    const filters = resolveFilters(data, stream.filters, objectStreamSelection);
     const decoded = decodeObjectStreamContents(
       stream.contents,
-      resolveFilters(data, stream.filters, objectStreamSelection),
-      resolveDecodeParameters(data, stream.decodeParameters, objectStreamSelection),
+      filters,
+      resolveDecodeParameters(data, stream.decodeParameters, objectStreamSelection, filters),
       expansionBudget,
     );
     if (!decoded) throw new Error('Unsupported or invalid PDF object stream filter');
@@ -1178,10 +1181,11 @@ function readXrefStreamSection(
       bootstrapOffsets.set(lengthKey, lengthCandidate.offset);
     }
     const bootstrapCandidates = { authoritativeOffsets: bootstrapOffsets };
+    const filters = resolveFilters(data, dictionary.filters, bootstrapCandidates);
     const decoded = decodeObjectStreamContents(
       data.subarray(streamStart, streamEnd),
-      resolveFilters(data, dictionary.filters, bootstrapCandidates),
-      resolveDecodeParameters(data, dictionary.decodeParameters, bootstrapCandidates),
+      filters,
+      resolveDecodeParameters(data, dictionary.decodeParameters, bootstrapCandidates, filters),
       expansionBudget,
     );
     if (!decoded || decoded.byteLength !== expectedBytes) continue;
@@ -1345,7 +1349,7 @@ function addDecodeParameterScalarReferences(
     parameters.columns,
     parameters.earlyChange,
   ]) {
-    if (typeof value !== 'number') {
+    if (typeof value === 'object') {
       references.add(referenceKey(value.objectNumber, value.generationNumber));
     }
   }
@@ -1709,10 +1713,11 @@ function collectCompressedIndirectLengthCandidates(
         throw new Error('PDF stream limit');
       }
 
+      const filters = resolveFilters(data, dictionary.filters, candidates);
       const decoded = decodeObjectStreamContents(
         data.subarray(streamStart, streamEnd),
-        resolveFilters(data, dictionary.filters, candidates),
-        resolveDecodeParameters(data, dictionary.decodeParameters, candidates),
+        filters,
+        resolveDecodeParameters(data, dictionary.decodeParameters, candidates, filters),
         expansionBudget,
       );
       if (!decoded) continue;
@@ -2609,10 +2614,16 @@ function isAuthoritativeCompressedNullObject(
     || streamEnd > data.byteLength
     || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
   ) return false;
+  const filters = resolveFilters(data, dictionary.filters, { authoritativeOffsets });
   const decoded = decodeObjectStreamContents(
     data.subarray(streamStart, streamEnd),
-    resolveFilters(data, dictionary.filters, { authoritativeOffsets }),
-    resolveDecodeParameters(data, dictionary.decodeParameters, { authoritativeOffsets }),
+    filters,
+    resolveDecodeParameters(
+      data,
+      dictionary.decodeParameters,
+      { authoritativeOffsets },
+      filters,
+    ),
     expansionBudget,
   );
   return decoded !== undefined && compressedObjectIsNull(
@@ -3301,7 +3312,7 @@ function readDecodeParameterDictionary(
   start: number,
   end: number,
 ): RawPdfFilterDecodeParameters {
-  const values = new Map<string, number | RawPdfReference>();
+  const values = new Map<string, RawPdfDecodeParameterValue>();
   let depth = 0;
   let arrayDepth = 0;
   let offset = start;
@@ -3339,8 +3350,12 @@ function readDecodeParameterDictionary(
         }
         continue;
       }
-      if (values.has(key.value)) throw new Error('Duplicate PDF decode parameter');
       const valueStart = skipWhitespaceAndComments(data, offset);
+      if (values.has(key.value)) {
+        values.set(key.value, 'invalid');
+        offset = skipPdfValue(data, valueStart, end);
+        continue;
+      }
       const reference = readRawPdfReference(data, valueStart);
       if (reference) {
         values.set(key.value, reference.reference);
@@ -3348,7 +3363,11 @@ function readDecodeParameterDictionary(
         continue;
       }
       const value = readInteger(data, valueStart);
-      if (!value) throw new Error('Invalid PDF decode parameter');
+      if (!value) {
+        values.set(key.value, 'invalid');
+        offset = skipPdfValue(data, valueStart, end);
+        continue;
+      }
       values.set(key.value, value.value);
       offset = value.end;
     } else {
@@ -3358,10 +3377,9 @@ function readDecodeParameterDictionary(
 
   const predictor = values.get('Predictor') ?? 1;
   const colors = values.get('Colors') ?? 1;
-  if (values.has('BitsPerComponent') && values.has('BPC')) {
-    throw new Error('Duplicate PDF bits per component');
-  }
-  const bitsPerComponent = values.get('BitsPerComponent') ?? values.get('BPC') ?? 8;
+  const bitsPerComponent = values.has('BitsPerComponent') && values.has('BPC')
+    ? 'invalid'
+    : values.get('BitsPerComponent') ?? values.get('BPC') ?? 8;
   const columns = values.get('Columns') ?? 1;
   const earlyChange = values.get('EarlyChange') ?? 1;
   return {
@@ -3375,10 +3393,11 @@ function readDecodeParameterDictionary(
 
 function resolveDecodeParameterScalar(
   data: Uint8Array,
-  value: number | RawPdfReference,
+  value: RawPdfDecodeParameterValue,
   candidates?: CompressedReferenceCandidates,
 ): number | null {
   if (typeof value === 'number') return value;
+  if (value === 'invalid') return null;
   const key = referenceKey(value.objectNumber, value.generationNumber);
   const offset = candidates?.authoritativeOffsets.get(key);
   if (offset === undefined) {
@@ -3413,7 +3432,15 @@ function resolveDecodeParameterDictionary(
   data: Uint8Array,
   parameter: RawPdfFilterDecodeParameters,
   candidates?: CompressedReferenceCandidates,
+  filter?: string,
 ): PdfFilterDecodeParameters | null {
+  const usesPredictor = filter === 'FlateDecode'
+    || filter === 'Fl'
+    || filter === 'LZWDecode'
+    || filter === 'LZW';
+  if (!usesPredictor) {
+    return { predictor: 1, colors: 1, bitsPerComponent: 8, columns: 1, earlyChange: 1 };
+  }
   const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates);
   const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates);
   const bitsPerComponent = resolveDecodeParameterScalar(
@@ -3422,7 +3449,10 @@ function resolveDecodeParameterDictionary(
     candidates,
   );
   const columns = resolveDecodeParameterScalar(data, parameter.columns, candidates);
-  const earlyChange = resolveDecodeParameterScalar(data, parameter.earlyChange, candidates);
+  const usesEarlyChange = filter === 'LZWDecode' || filter === 'LZW';
+  const earlyChange = usesEarlyChange
+    ? resolveDecodeParameterScalar(data, parameter.earlyChange, candidates)
+    : 1;
   if (
     predictor === null
     || colors === null
@@ -3437,6 +3467,7 @@ function resolveDecodeParameters(
   data: Uint8Array,
   parameters: PdfDecodeParameters | undefined,
   candidates?: CompressedReferenceCandidates,
+  filters?: readonly string[],
 ): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
   if (parameters === null || parameters === undefined) return parameters;
   if ('reference' in parameters) {
@@ -3456,7 +3487,7 @@ function resolveDecodeParameters(
       const direct = compressed.kind === 'dictionary'
         ? [compressed.parameter]
         : compressed.parameters;
-      return resolveDecodeParameters(data, direct, candidates);
+      return resolveDecodeParameters(data, direct, candidates, filters);
     }
     const header = readIndirectObjectHeader(data, offset);
     if (
@@ -3474,16 +3505,22 @@ function resolveDecodeParameters(
     if ('reference' in value.parameters) return null;
     const objectEnd = skipWhitespaceAndComments(data, value.end);
     if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
-    return resolveDecodeParameters(data, value.parameters, candidates);
+    return resolveDecodeParameters(data, value.parameters, candidates, filters);
   }
   const resolved: Array<PdfFilterDecodeParameters | undefined> = [];
-  for (const parameter of parameters) {
+  for (let index = 0; index < parameters.length; index += 1) {
+    const parameter = parameters[index];
     if (parameter === undefined) {
       resolved.push(undefined);
       continue;
     }
     if ('predictor' in parameter) {
-      const resolvedParameter = resolveDecodeParameterDictionary(data, parameter, candidates);
+      const resolvedParameter = resolveDecodeParameterDictionary(
+        data,
+        parameter,
+        candidates,
+        filters?.[index],
+      );
       if (!resolvedParameter) return null;
       resolved.push(resolvedParameter);
       continue;
@@ -3506,6 +3543,7 @@ function resolveDecodeParameters(
         data,
         compressed.parameter,
         candidates,
+        filters?.[index],
       );
       if (!resolvedParameter) return null;
       resolved.push(resolvedParameter);
@@ -3533,6 +3571,7 @@ function resolveDecodeParameters(
       data,
       readDecodeParameterDictionary(data, valueStart, dictionaryEnd),
       candidates,
+      filters?.[index],
     );
     if (!resolvedParameter) return null;
     resolved.push(resolvedParameter);

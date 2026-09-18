@@ -841,7 +841,7 @@ function validateDecodedStreamSize(
     const decoded = decodePdfStreamContentsBounded(
       contents,
       filters,
-      readFilterDecodeParameters(stream.dict),
+      readFilterDecodeParameters(stream.dict, filters),
       maxDecodedBytes,
       state.textStreamExpansionBudget,
     );
@@ -2017,11 +2017,15 @@ function readFilterNames(dictionary: PDFDict): readonly string[] {
 
 function readFilterDecodeParameters(
   dictionary: PDFDict,
+  filters: readonly string[],
 ): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
+  if (filters.length === 0) return undefined;
   const rawParameters = readObject(dictionary, 'DecodeParms') ?? readObject(dictionary, 'DP');
   if (!rawParameters) return undefined;
   if (rawParameters === PDFNull) return [];
-  if (rawParameters instanceof PDFDict) return [readFilterDecodeParameterDictionary(rawParameters)];
+  if (rawParameters instanceof PDFDict) {
+    return [readFilterDecodeParameterDictionary(rawParameters, filters[0])];
+  }
   if (!(rawParameters instanceof PDFArray)) return null;
 
   const parameters: (PdfFilterDecodeParameters | undefined)[] = [];
@@ -2035,7 +2039,7 @@ function readFilterDecodeParameters(
     if (value === PDFNull) {
       parameters.push(undefined);
     } else if (value instanceof PDFDict) {
-      parameters.push(readFilterDecodeParameterDictionary(value));
+      parameters.push(readFilterDecodeParameterDictionary(value, filters[index]));
     } else {
       return null;
     }
@@ -2045,7 +2049,13 @@ function readFilterDecodeParameters(
 
 function readFilterDecodeParameterDictionary(
   dictionary: PDFDict,
+  filter: string | undefined,
 ): PdfFilterDecodeParameters {
+  const usesPredictor = filter === 'FlateDecode'
+    || filter === 'Fl'
+    || filter === 'LZWDecode'
+    || filter === 'LZW';
+  if (!usesPredictor) return defaultFilterDecodeParameters();
   const predictor = readDecodeParameterInteger(dictionary, 'Predictor') ?? 1;
   const colors = readDecodeParameterInteger(dictionary, 'Colors') ?? 1;
   const longBitsPerComponent = readDecodeParameterInteger(dictionary, 'BitsPerComponent');
@@ -2055,7 +2065,10 @@ function readFilterDecodeParameterDictionary(
   }
   const bitsPerComponent = longBitsPerComponent ?? shortBitsPerComponent ?? 8;
   const columns = readDecodeParameterInteger(dictionary, 'Columns') ?? 1;
-  const earlyChange = readDecodeParameterInteger(dictionary, 'EarlyChange') ?? 1;
+  const usesEarlyChange = filter === 'LZWDecode' || filter === 'LZW';
+  const earlyChange = usesEarlyChange
+    ? readDecodeParameterInteger(dictionary, 'EarlyChange') ?? 1
+    : 1;
   return {
     predictor,
     colors,
@@ -2063,6 +2076,10 @@ function readFilterDecodeParameterDictionary(
     columns,
     earlyChange,
   };
+}
+
+function defaultFilterDecodeParameters(): PdfFilterDecodeParameters {
+  return { predictor: 1, colors: 1, bitsPerComponent: 8, columns: 1, earlyChange: 1 };
 }
 
 function readDecodeParameterInteger(dictionary: PDFDict, key: string): number | undefined {
