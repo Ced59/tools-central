@@ -673,18 +673,25 @@ function flattenRecord(
     addIssue(state, 'json-depth-limit', 'error', row);
     return;
   }
-  for (const [key, value] of Object.entries(record)) {
+  for (const key in record) {
+    if (!Object.hasOwn(record, key)) continue;
+    const value = record[key];
     const outputKey = key || 'colonne_1';
     const outputPath = prefix ? `${prefix}.${outputKey}` : outputKey;
     const originSegments = [...originPrefix, key];
-    if (isRecord(value) && Object.keys(value).length > 0) {
+    if (isRecord(value) && hasOwnProperties(value)) {
       flattenRecord(value, outputPath, originSegments, target, knownPathOrigins, state, row, depth + 1);
+      if (hasErrors(state)) return;
     } else {
       const origin = JSON.stringify(originSegments);
       const knownOrigin = knownPathOrigins.get(outputPath);
       if (Object.hasOwn(target, outputPath) || (knownOrigin !== undefined && knownOrigin !== origin)) {
         addIssue(state, 'json-path-collision', 'error', row, null, outputPath.slice(0, 160));
-        continue;
+        return;
+      }
+      if (knownOrigin === undefined && knownPathOrigins.size >= CSV_JSON_MAX_COLUMNS) {
+        addIssue(state, 'column-limit', 'error', row);
+        return;
       }
       if (!key && knownOrigin === undefined) {
         addIssue(state, 'empty-header', 'warning', row, 1, outputPath);
@@ -693,6 +700,13 @@ function flattenRecord(
       target[outputPath] = value;
     }
   }
+}
+
+function hasOwnProperties(record: Readonly<Record<string, unknown>>): boolean {
+  for (const key in record) {
+    if (Object.hasOwn(record, key)) return true;
+  }
+  return false;
 }
 
 function validateJsonRowStructure(

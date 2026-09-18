@@ -315,6 +315,31 @@ describe('convertCsvJson', () => {
     expect(result.issues[0]?.code).toBe('json-no-columns');
   });
 
+  it('arrête l’aplatissement dès la première colonne au-delà de la limite', () => {
+    const reads = Array.from({ length: CSV_JSON_MAX_COLUMNS + 2 }, () => 0);
+    const row = Object.create(null) as Record<string, unknown>;
+    for (let index = 0; index < reads.length; index += 1) {
+      Object.defineProperty(row, `column_${String(index)}`, {
+        enumerable: true,
+        get: () => {
+          reads[index] += 1;
+          return index;
+        },
+      });
+    }
+    const parse = vi.spyOn(JSON, 'parse').mockReturnValue([row]);
+
+    try {
+      const result = convertCsvJson('[{}]', { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+
+      expect(result.ok).toBe(false);
+      expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+      expect(reads[CSV_JSON_MAX_COLUMNS + 1]).toBe(1);
+    } finally {
+      parse.mockRestore();
+    }
+  });
+
   it('protège aussi les en-têtes CSV issus des clés ou du mapping', () => {
     const keyResult = convertCsvJson('[{"=2+2":"value"}]', {
       ...CSV_DEFAULTS,
