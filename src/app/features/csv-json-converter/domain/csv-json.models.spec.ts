@@ -84,6 +84,16 @@ describe('convertCsvJson', () => {
     expect(preserved.issues.some(issue => issue.code === 'duplicate-header')).toBe(false);
   });
 
+  it('conserve les espaces après un champ entre guillemets lorsque le trimming est désactivé', () => {
+    const source = 'value,kind\n"x" \t,text';
+    const preserved = convertCsvJson(source, CSV_DEFAULTS);
+    const trimmed = convertCsvJson(source, { ...CSV_DEFAULTS, trimCells: true });
+
+    expect(preserved.ok).toBe(true);
+    expect(JSON.parse(preserved.output)).toEqual([{ value: 'x \t', kind: 'text' }]);
+    expect(JSON.parse(trimmed.output)).toEqual([{ value: 'x', kind: 'text' }]);
+  });
+
   it('infère seulement les types sûrs et conserve les identifiants à zéro initial', () => {
     const result = convertCsvJson(
       'code,count,ratio,precise,tiny,empty,nil,yes,no\n00123,42,1.25,0.1234567890123456789,1e-400,,null,true,false',

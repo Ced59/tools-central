@@ -442,7 +442,7 @@ function parseCsv(
         if (character === '\r' && source[index + 1] === '\n') index += 1;
         line += 1;
       } else if (character === ' ' || character === '\t') {
-        continue;
+        field += character;
       } else {
         addIssue(state, 'unexpected-after-quote', 'error', line, row.length + 1, character);
         break;
