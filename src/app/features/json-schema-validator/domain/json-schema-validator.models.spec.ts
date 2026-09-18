@@ -95,6 +95,29 @@ describe('prepareJsonSchemaValidation', () => {
     expect(result.result.issues[0]).toMatchObject({ code: 'external-reference', path: '/$ref' });
   });
 
+  it('ignores reference-shaped annotation data that is not a subschema', () => {
+    const result = prepareJsonSchemaValidation(
+      '{"default":{"$ref":"https://example.com/value"},"examples":[{"$ref":"relative.json"}]}',
+      '{}',
+      OPTIONS,
+    );
+    expect(result.ok).toBe(true);
+  });
+
+  it('still rejects remote references in nested schema positions', () => {
+    const result = prepareJsonSchemaValidation(
+      '{"properties":{"value":{"$ref":"relative.json"}}}',
+      '{}',
+      OPTIONS,
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'external-reference',
+      path: '/properties/value/$ref',
+    });
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);
@@ -168,6 +191,19 @@ describe('applySafeJsonSchemaCorrections', () => {
       [error('type', '', '#/type', '', 'string')],
     );
     expect(corrected.value).toBe('corrigé');
+  });
+
+  it('does not allocate corrections for unbounded array or string limits', () => {
+    const corrected = applySafeJsonSchemaCorrections(
+      { properties: { values: { type: 'array', items: { type: 'string' } }, label: { type: 'string' } } },
+      { values: [], label: '' },
+      [
+        error('minItems', '/values', '#/properties/values/minItems', '', '', 1_000_000_000),
+        error('minLength', '/label', '#/properties/label/minLength', '', '', 1_000_000_000),
+      ],
+    );
+    expect(corrected.corrections).toEqual([]);
+    expect(corrected.value).toEqual({ values: [], label: '' });
   });
 });
 

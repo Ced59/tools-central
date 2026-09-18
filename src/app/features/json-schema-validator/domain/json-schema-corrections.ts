@@ -1,8 +1,12 @@
-import type {
-  JsonSchemaCorrection,
-  JsonSchemaValidationError,
+import {
+  JSON_SCHEMA_MAX_OUTPUT_CHARACTERS,
+  type JsonObject,
+  type JsonSchemaCorrection,
+  type JsonSchemaValidationError,
 } from './json-schema-validator.models';
-import type { JsonObject, JsonValue } from './strict-json-parser';
+import type { JsonValue } from './strict-json-parser';
+
+const MAX_AUTOMATIC_ARRAY_ITEMS = 10_000;
 
 export function applySafeJsonSchemaCorrections(
   schema: JsonObject | boolean,
@@ -71,17 +75,14 @@ function applyCorrection(
       replacement = error.keyword === 'maximum' ? limit : nextRepresentable(limit, -1);
     }
   } else if (error.keyword === 'minLength' && typeof current === 'string' && error.limit !== null) {
-    replacement = current.padEnd(error.limit, 'a');
-    action = 'extend';
+    replacement = extendStringWithinBudget(current, error.limit);
+    if (replacement !== undefined) action = 'extend';
   } else if (error.keyword === 'maxLength' && typeof current === 'string' && error.limit !== null) {
     replacement = Array.from(current).slice(0, error.limit).join('');
     action = 'truncate';
   } else if (error.keyword === 'minItems' && Array.isArray(current) && error.limit !== null) {
-    const itemSchema = schemaValue['items'];
-    const next = current.map(cloneJson);
-    while (next.length < error.limit) next.push(exampleForSchema(itemSchema) ?? null);
-    replacement = next;
-    action = 'extend';
+    replacement = extendArrayWithinBudget(current, schemaValue['items'], error.limit);
+    if (replacement !== undefined) action = 'extend';
   } else if (error.keyword === 'maxItems' && Array.isArray(current) && error.limit !== null) {
     replacement = current.slice(0, error.limit).map(cloneJson);
     action = 'truncate';
@@ -93,6 +94,32 @@ function applyCorrection(
   const value = setPointer(root, path, replacement);
   if (value === null) return null;
   return { value, correction: { action, path, keyword: error.keyword } };
+}
+
+function extendStringWithinBudget(current: string, targetLength: number): string | undefined {
+  if (!Number.isSafeInteger(targetLength)
+    || targetLength < current.length
+    || targetLength > JSON_SCHEMA_MAX_OUTPUT_CHARACTERS) return undefined;
+  return current.padEnd(targetLength, 'a');
+}
+
+function extendArrayWithinBudget(
+  current: readonly JsonValue[],
+  itemSchema: JsonValue | undefined,
+  targetLength: number,
+): JsonValue[] | undefined {
+  if (!Number.isSafeInteger(targetLength)
+    || targetLength < current.length
+    || targetLength > MAX_AUTOMATIC_ARRAY_ITEMS) return undefined;
+  const missingItems = targetLength - current.length;
+  const example = exampleForSchema(itemSchema) ?? null;
+  const currentCharacters = JSON.stringify(current).length;
+  const itemCharacters = JSON.stringify(example).length + 1;
+  const remainingCharacters = JSON_SCHEMA_MAX_OUTPUT_CHARACTERS - currentCharacters;
+  if (remainingCharacters < 0 || missingItems > Math.floor(remainingCharacters / itemCharacters)) return undefined;
+  const next = current.map(cloneJson);
+  for (let index = 0; index < missingItems; index += 1) next.push(cloneJson(example));
+  return next;
 }
 
 function exampleForSchema(schema: JsonValue | undefined): JsonValue | undefined {

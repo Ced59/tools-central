@@ -26,7 +26,7 @@ const AJV_OPTIONS: Options = {
   coerceTypes: false,
   messages: false,
   removeAdditional: false,
-  strict: true,
+  strict: false,
   strictTuples: false,
   unicodeRegExp: true,
   useDefaults: false,
@@ -104,7 +104,7 @@ function normalizeErrors(errors: readonly ErrorObject[]): JsonSchemaValidationEr
 }
 
 function expectedValue(keyword: string, params: Readonly<Record<string, unknown>>): string {
-  if (keyword === 'type') return readString(params['type']);
+  if (keyword === 'type') return readExpectedTypes(params['type']);
   if (keyword === 'format') return readString(params['format']);
   if (keyword === 'pattern') return readString(params['pattern']);
   if (keyword === 'required') return readString(params['missingProperty']);
@@ -115,6 +115,12 @@ function expectedValue(keyword: string, params: Readonly<Record<string, unknown>
   if (comparison) return comparison;
   const limit = readNumber(params['limit']);
   return limit === null ? '' : String(limit);
+}
+
+function readExpectedTypes(value: unknown): string {
+  if (typeof value === 'string') return readString(value);
+  if (Array.isArray(value) && value.every(item => typeof item === 'string')) return boundedJson(value);
+  return '';
 }
 
 function createCorrectionCandidate(

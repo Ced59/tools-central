@@ -269,38 +269,111 @@ function inspectSchemaSafety(schema: JsonObject | boolean): number {
   while (stack.length > 0) {
     const current = stack.pop();
     if (!current) break;
-    if (Array.isArray(current.value)) {
-      for (let index = current.value.length - 1; index >= 0; index -= 1) {
-        stack.push({ value: current.value[index], path: appendPointer(current.path, String(index)) });
-      }
-      continue;
-    }
     if (!isObject(current.value)) continue;
-    for (const [key, child] of Object.entries(current.value)) {
-      const path = appendPointer(current.path, key);
-      if ((key === '$ref' || key === '$dynamicRef' || key === '$recursiveRef')
-        && typeof child === 'string'
-        && !child.startsWith('#')) {
-        throw new SchemaSafetyError('external-reference', path, child.slice(0, 240));
-      }
-      if ((key === 'pattern' || key === 'patternProperties') && typeof child === 'string') {
-        patterns += 1;
-        if (child.length > JSON_SCHEMA_MAX_PATTERN_CHARACTERS || patterns > JSON_SCHEMA_MAX_PATTERNS) {
-          throw new SchemaSafetyError('pattern-limit', path, String(child.length));
-        }
-      } else if (key === 'patternProperties' && isObject(child)) {
-        for (const pattern of Object.keys(child)) {
-          patterns += 1;
-          if (pattern.length > JSON_SCHEMA_MAX_PATTERN_CHARACTERS || patterns > JSON_SCHEMA_MAX_PATTERNS) {
-            throw new SchemaSafetyError('pattern-limit', appendPointer(path, pattern), String(pattern.length));
-          }
-        }
-      }
-      stack.push({ value: child, path });
-    }
+    inspectReferences(current.value, current.path);
+    patterns = inspectPatterns(current.value, current.path, patterns);
+    pushSubschemas(current.value, current.path, stack);
   }
   return patterns;
 }
+
+function inspectReferences(schema: JsonObject, path: string): void {
+  for (const keyword of ['$ref', '$dynamicRef', '$recursiveRef'] as const) {
+    const reference = schema[keyword];
+    if (typeof reference === 'string' && !reference.startsWith('#')) {
+      throw new SchemaSafetyError('external-reference', appendPointer(path, keyword), reference.slice(0, 240));
+    }
+  }
+}
+
+function inspectPatterns(schema: JsonObject, path: string, initialCount: number): number {
+  let count = initialCount;
+  const pattern = schema['pattern'];
+  if (typeof pattern === 'string') count = countPattern(pattern, appendPointer(path, 'pattern'), count);
+  const patternProperties = schema['patternProperties'];
+  if (isObject(patternProperties)) {
+    const containerPath = appendPointer(path, 'patternProperties');
+    for (const propertyPattern of Object.keys(patternProperties)) {
+      count = countPattern(propertyPattern, appendPointer(containerPath, propertyPattern), count);
+    }
+  }
+  return count;
+}
+
+function countPattern(pattern: string, path: string, currentCount: number): number {
+  const nextCount = currentCount + 1;
+  if (pattern.length > JSON_SCHEMA_MAX_PATTERN_CHARACTERS || nextCount > JSON_SCHEMA_MAX_PATTERNS) {
+    throw new SchemaSafetyError('pattern-limit', path, String(pattern.length));
+  }
+  return nextCount;
+}
+
+function pushSubschemas(
+  schema: JsonObject,
+  path: string,
+  stack: Array<{ value: JsonValue; path: string }>,
+): void {
+  for (const keyword of SINGLE_SUBSCHEMA_KEYWORDS) {
+    const value = schema[keyword];
+    const keywordPath = appendPointer(path, keyword);
+    if (keyword === 'items' && Array.isArray(value)) pushSchemaArray(value, keywordPath, stack);
+    else pushSchema(value, keywordPath, stack);
+  }
+  for (const keyword of SCHEMA_ARRAY_KEYWORDS) {
+    const value = schema[keyword];
+    if (Array.isArray(value)) pushSchemaArray(value, appendPointer(path, keyword), stack);
+  }
+  for (const keyword of SCHEMA_MAP_KEYWORDS) {
+    const value = schema[keyword];
+    if (isObject(value)) pushSchemaMap(value, appendPointer(path, keyword), stack);
+  }
+  const dependencies = schema['dependencies'];
+  if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
+}
+
+function pushSchemaArray(
+  values: readonly JsonValue[],
+  path: string,
+  stack: Array<{ value: JsonValue; path: string }>,
+): void {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    pushSchema(values[index], appendPointer(path, String(index)), stack);
+  }
+}
+
+function pushSchemaMap(
+  values: JsonObject,
+  path: string,
+  stack: Array<{ value: JsonValue; path: string }>,
+): void {
+  for (const [key, value] of Object.entries(values)) pushSchema(value, appendPointer(path, key), stack);
+}
+
+function pushSchema(
+  value: JsonValue | undefined,
+  path: string,
+  stack: Array<{ value: JsonValue; path: string }>,
+): void {
+  if (typeof value === 'boolean' || isObject(value)) stack.push({ value, path });
+}
+
+const SINGLE_SUBSCHEMA_KEYWORDS = [
+  'additionalItems',
+  'additionalProperties',
+  'contains',
+  'contentSchema',
+  'else',
+  'if',
+  'items',
+  'not',
+  'propertyNames',
+  'then',
+  'unevaluatedItems',
+  'unevaluatedProperties',
+] as const;
+
+const SCHEMA_ARRAY_KEYWORDS = ['allOf', 'anyOf', 'oneOf', 'prefixItems'] as const;
+const SCHEMA_MAP_KEYWORDS = ['$defs', 'definitions', 'dependentSchemas', 'patternProperties', 'properties'] as const;
 
 function issue(
   code: JsonSchemaIssueCode,

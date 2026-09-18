@@ -66,6 +66,24 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.errors[0].keyword).toBe('minimum');
   });
 
+  it('accepts standards-valid constraints without redundant type keywords', () => {
+    const result = validateJsonSchemaDocuments('{"properties":{"score":{"minimum":0}}}', '{"score":-1}', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].keyword).toBe('minimum');
+  });
+
+  it('preserves union types in normalized diagnostics', () => {
+    const result = validateJsonSchemaDocuments('{"type":["string","null"]}', '42', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.errors[0]).toMatchObject({ keyword: 'type', expected: '["string","null"]' });
+  });
+
   it('reports invalid schemas instead of throwing', () => {
     const result = validateJsonSchemaDocuments('{"type":"unknown"}', '{}', {
       draft: 'auto',
