@@ -132,6 +132,24 @@ describe('generateTypeScriptFromJson', () => {
     });
   });
 
+  it('does not shadow renderer built-ins with generated declarations', () => {
+    const result = generateTypeScriptFromJson(`{
+      "array": {},
+      "date": {},
+      "values": [1],
+      "createdAt": "2026-09-18T14:30:00Z"
+    }`, { ...DEFAULT_OPTIONS, rootName: 'Array', inferDates: true });
+
+    expect(result.normalizedRootName).toBe('ArrayType');
+    expect(result.output).toContain('export interface ArrayType {');
+    expect(result.output).toContain('array: ArrayType2;');
+    expect(result.output).toContain('date: DateType;');
+    expect(result.output).toContain('values: Array<number>;');
+    expect(result.output).toContain('createdAt: Date;');
+    expect(result.output).not.toContain('export interface Array {');
+    expect(result.output).not.toContain('export interface Date {');
+  });
+
   it('infers only valid ISO dates when enabled', () => {
     const result = generateTypeScriptFromJson(`{
       "createdAt": "2026-09-18T14:30:00Z",
@@ -258,6 +276,8 @@ describe('normalizeTypeName', () => {
     ['order item', 'OrderItem'],
     ['résultat-api', 'ResultatApi'],
     ['42 answers', 'Type42Answers'],
+    ['Array', 'ArrayType'],
+    ['Date', 'DateType'],
     ['', 'Root'],
     ['___', '___'],
   ])('normalizes %s', (value, expected) => {

@@ -11,6 +11,8 @@ export const JSON_TO_TYPESCRIPT_MAX_OUTPUT_CHARACTERS = 2_000_000;
 export const JSON_TO_TYPESCRIPT_MAX_DECLARATIONS = 5_000;
 export const JSON_TO_TYPESCRIPT_MAX_PROPERTIES = 50_000;
 
+const RENDERER_RESERVED_TYPE_NAMES = new Set(['Array', 'Date']);
+
 export type TypeScriptDeclarationKind = 'interface' | 'type';
 export type TypeScriptArrayObjectMode = 'merge' | 'union';
 
@@ -462,7 +464,8 @@ export function normalizeTypeName(value: string, fallback = 'Root'): string {
     .join('')
     .slice(0, 80);
   const safe = normalized || fallback;
-  return /^[A-Za-z_$]/u.test(safe) ? safe : `Type${safe}`;
+  const identifier = /^[A-Za-z_$]/u.test(safe) ? safe : `Type${safe}`;
+  return RENDERER_RESERVED_TYPE_NAMES.has(identifier) ? `${identifier}Type` : identifier;
 }
 
 function singularize(value: string): string {
