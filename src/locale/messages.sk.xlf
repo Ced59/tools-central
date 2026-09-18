@@ -86409,6 +86409,749 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Obrazovka</target>
       </segment>
     </unit>
+    <unit id="group_dev_data_title">
+      <segment>
+        <source>Données</source>
+        <target state="translated">Údaje</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_desc">
+      <segment>
+        <source>Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.</source>
+        <target state="translated">Konvertujte, kontrolujte a pripravte formáty štruktúrovaných údajov bez odosielania ich obsahu.</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_title">
+      <segment>
+        <source>Conversion tabulaire</source>
+        <target state="translated">Tabuľková konverzia</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_desc">
+      <segment>
+        <source>Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.</source>
+        <target state="translated">Transformujte tabuľky medzi formátmi a ovládajte stĺpce, typy a chyby.</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON konvertor</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_desc">
+      <segment>
+        <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
+        <target state="translated">Lokálne konvertujte CSV a JSON s automatickým oddeľovačom, mapovaním stĺpcov, bezpečnými typmi, diagnostikou a ochranou vzorcov.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_title">
+      <segment>
+        <source>Convertir CSV et JSON sans perdre le contrôle des colonnes</source>
+        <target state="translated">Konvertujte CSV a JSON bez straty kontroly nad stĺpcami</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_lead">
+      <segment>
+        <source>Ce convertisseur transforme localement un tableau CSV en objets JSON, ou un tableau d’objets JSON en CSV. Il détecte les séparateurs, respecte les champs multilignes, permet de sélectionner et renommer les colonnes, montre les anomalies avant export et n’envoie aucune valeur vers un serveur.</source>
+        <target state="translated">Tento konvertor lokálne transformuje tabuľku CSV na objekty JSON, alebo tabuľku objektov JSON na CSV. Detekuje oddeľovače, rešpektuje viacriadkové polia, umožňuje vybrať a premenovať stĺpce, zobrazuje anomálie pred exportom a neodosiela žiadne hodnoty na server.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Prípadové štúdie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_title">
+      <segment>
+        <source>Préparer un export CSV pour une API</source>
+        <target state="translated">Pripraviť export CSV pre API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_text">
+      <segment>
+        <source>Transformez des lignes provenant d’un tableur en tableau JSON, conservez les identifiants à zéro initial et activez seulement l’inférence des nombres, booléens et valeurs nulles lorsque le schéma le permet.</source>
+        <target state="translated">Transformujte riadky z tabuľkového procesora na tabuľku JSON, zachovajte identifikátory s počiatočnou nulou a aktivujte len inferenciu čísel, booleanov a null hodnôt, keď to schéma umožňuje.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_title">
+      <segment>
+        <source>Rendre un JSON lisible dans un tableur</source>
+        <target state="translated">Urobiť JSON čitateľným v tabuľkovom procesore</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_text">
+      <segment>
+        <source>Aplatissez les objets imbriqués avec des chemins pointés, choisissez le séparateur attendu par votre environnement et ajoutez un BOM UTF-8 si le logiciel cible l’exige.</source>
+        <target state="translated">Zploštite vnorené objekty s ukazovateľovými cestami, vyberte oddeľovač očakávaný vaším prostredím a pridajte BOM UTF-8, ak to cieľový softvér vyžaduje.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_title">
+      <segment>
+        <source>Renommer et filtrer sans script jetable</source>
+        <target state="translated">Premenovať a filtrovať bez jednorazového skriptu</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_text">
+      <segment>
+        <source>Déclarez un mapping « source =&gt; sortie » pour sélectionner les colonnes utiles, les réordonner et produire des noms stables sans modifier le fichier d’origine.</source>
+        <target state="translated">Vyhláste mapovanie „zdroj =&gt; výstup“ na výber užitočných stĺpcov, ich preusporiadanie a vytvorenie stabilných názvov bez zmeny pôvodného súboru.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Odporúčaná metóda</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_1">
+      <segment>
+        <source>Commencez sans mapping et vérifiez le séparateur détecté, les en-têtes et l’aperçu. Les fichiers CSV européens utilisent souvent le point-virgule lorsque la virgule sert de séparateur décimal, tandis que les TSV utilisent une tabulation.</source>
+        <target state="translated">Začnite bez mapovania a skontrolujte detekovaný oddeľovač, hlavičky a náhľad. Európske CSV súbory často používajú bodkočiarku, keď čiarka slúži ako desatinný oddeľovač, zatiaľ čo TSV používajú tabulátor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_2">
+      <segment>
+        <source>Examinez chaque diagnostic de largeur, d’en-tête vide ou dupliqué. L’outil complète les cellules absentes et crée des noms stables pour éviter l’écrasement, mais cette tolérance ne remplace pas la correction de la source.</source>
+        <target state="translated">Skontrolujte každú diagnostiku šírky, prázdnej alebo duplicitnej hlavičky. Nástroj doplní chýbajúce bunky a vytvorí stabilné názvy, aby sa predišlo prepisovaniu, ale táto tolerancia nenahrádza opravu zdroja.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_3">
+      <segment>
+        <source>Ajoutez ensuite le mapping dans l’ordre attendu par le consommateur. Pour JSON vers CSV, utilisez les chemins pointés affichés dans l’aperçu, par exemple « profil.nom =&gt; nom ».</source>
+        <target state="translated">Potom pridajte mapovanie v poradí očakávanom spotrebiteľom. Pre JSON na CSV použite ukazovateľové cesty zobrazené v náhľade, napríklad „profil.meno =&gt; meno“.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing">
+      <segment>
+        <source>Types et fidélité</source>
+        <target state="translated">Typy a vernosť</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_title">
+      <segment>
+        <source>Chaînes par défaut</source>
+        <target state="translated">Predvolené reťazce</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_text">
+      <segment>
+        <source>Désactivez l’inférence lorsque les valeurs sont des codes, références ou numéros de téléphone. Une valeur comme 00123 reste toujours une chaîne afin de préserver ses zéros.</source>
+        <target state="translated">Deaktivujte inferenciu, keď sú hodnoty kódy, referencie alebo telefónne čísla. Hodnota ako 00123 zostáva vždy reťazcom, aby sa zachovali jej nuly.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_title">
+      <segment>
+        <source>Inférence limitée</source>
+        <target state="translated">Obmedzená inferencia</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_text">
+      <segment>
+        <source>Le mode typé reconnaît true, false, null et les nombres finis représentables sans perte d’entier. Les dates restent des chaînes : leur fuseau et leur calendrier ne sont jamais devinés.</source>
+        <target state="translated">Typovaný režim rozpoznáva true, false, null a konečné čísla, ktoré sú reprezentovateľné bez straty celého čísla. Dátumy zostávajú reťazcami: ich časové pásmo a kalendár sa nikdy neodhadujú.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_title">
+      <segment>
+        <source>Objets imbriqués</source>
+        <target state="translated">Vnorené objekty</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_text">
+      <segment>
+        <source>En JSON vers CSV, les objets deviennent des chemins pointés et les tableaux sont sérialisés dans une cellule JSON. La conversion inverse crée des clés plates, même si leur nom contient un point.</source>
+        <target state="translated">Pri prevode JSON na CSV sa objekty stávajú ukazovateľovými cestami a polia sú serializované do bunky JSON. Inverzná konverzia vytvára ploché kľúče, aj keď ich názov obsahuje bod.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security">
+      <segment>
+        <source>Sécurité, limites et confidentialité</source>
+        <target state="translated">Bezpečnosť, obmedzenia a súkromie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_1">
+      <segment>
+        <source>Le traitement s’effectue dans un Web Worker éphémère. Les fichiers restent dans le navigateur et aucune requête réseau n’est nécessaire pour convertir, copier ou télécharger la sortie.</source>
+        <target state="translated">Spracovanie prebieha v dočasnom webovom pracovníkovi. Súbory zostávajú v prehliadači a na konverziu, kopírovanie alebo sťahovanie výstupu nie je potrebný žiadny sieťový požiadavok.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_2">
+      <segment>
+        <source>La source est limitée à 4 millions de caractères ou 4 Mo pour un fichier, avec au plus 100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie.</source>
+        <target state="translated">Zdroj je obmedzený na 4 milióny znakov alebo 4 MB pre súbor, s maximálne 100 000 riadkami, 250 stĺpcami, 100 000 znakmi na bunku a 16 miliónmi znakov vo výstupe.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_3">
+      <segment>
+        <source>Lors d’un export CSV, la protection optionnelle préfixe les textes commençant par =, +, - ou @. Elle réduit le risque d’exécution de formule à l’ouverture dans un tableur sans prétendre assainir un fichier pour tous les logiciels.</source>
+        <target state="translated">Pri exporte CSV voliteľná ochrana predchádza textom začínajúcim na =, +, - alebo @. Znižuje riziko vykonania vzorca pri otvorení v tabuľkovom procesore bez toho, aby sa snažila vyčistiť súbor pre všetky softvéry.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Často kladené otázky</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q1">
+      <segment>
+        <source>Les retours de ligne dans une cellule CSV sont-ils conservés ?</source>
+        <target state="translated">Sú návraty riadkov v bunke CSV zachované?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a1">
+      <segment>
+        <source>Oui, lorsqu’ils se trouvent dans un champ entouré de guillemets doubles. Un guillemet littéral se note avec deux guillemets, conformément au format CSV courant.</source>
+        <target state="translated">Áno, ak sa nachádzajú v poli obklopenom dvojitými úvodzovkami. Literálny úvodzovka sa zapisuje dvoma úvodzovkami, v súlade s bežným formátom CSV.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q2">
+      <segment>
+        <source>Pourquoi mon JSON doit-il commencer par un tableau ?</source>
+        <target state="translated">Prečo musí môj JSON začínať poľom?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a2">
+      <segment>
+        <source>Une feuille CSV représente une suite de lignes partageant des colonnes. Un objet JSON isolé ou un mélange de scalaires n’offre pas cette structure tabulaire ; la racine doit donc être un tableau d’objets.</source>
+        <target state="translated">CSV hárky predstavujú sekvenciu riadkov zdieľajúcich stĺpce. Izolovaný objekt JSON alebo zmes skalárov nenabízajú túto tabuľkovú štruktúru; koreňom musí byť pole objektov.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q3">
+      <segment>
+        <source>La conversion est-elle parfaitement réversible ?</source>
+        <target state="translated">Je konverzia dokonale reverzibilná?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a3">
+      <segment>
+        <source>Non. CSV ne transporte ni schéma de types, ni structure imbriquée standard. Conservez le fichier source et vérifiez les types, valeurs nulles, tableaux et chemins aplatis avant d’utiliser la sortie.</source>
+        <target state="translated">Nie. CSV neprenáša ani schému typov, ani štandardnú vnorenú štruktúru. Uchovajte pôvodný súbor a skontrolujte typy, null hodnoty, polia a zploštené cesty pred použitím výstupu.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip_title">
+      <segment>
+        <source>Tester un petit échantillon d’abord</source>
+        <target state="translated">Najprv otestujte malú vzorku</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip">
+      <segment>
+        <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+        <target state="translated">Overte niekoľko reprezentatívnych riadkov, vrátane prázdnych buniek, úvodzoviek, oddeľovačov, návratov riadkov a citlivých identifikátorov, a potom aplikujte rovnaké možnosti na celý súbor.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON konvertor</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_subtitle">
+      <segment>
+        <source> Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée. </source>
+        <target state="translated">Preveďte, mapujte a kontrolujte svoje tabuľky lokálne, s náhľadom chýb a ovládanou inferenciou typov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_privacy">
+      <segment>
+        <source>Les fichiers et les valeurs restent dans votre navigateur.</source>
+        <target state="translated">Súbory a hodnoty zostávajú vo vašom prehliadači.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_title">
+      <segment>
+        <source>Préparer la conversion</source>
+        <target state="translated">Pripravte konverziu</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_subtitle">
+      <segment>
+        <source>Collez une source UTF-8 ou chargez un fichier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum.</source>
+        <target state="translated">Vložte zdroj UTF-8 alebo nahrajte súbor <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximálne.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_direction_aria">
+      <segment>
+        <source>Sens de conversion</source>
+        <target state="translated">Smer konverzie</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_choose_file">
+      <segment>
+        <source>Choisir un fichier</source>
+        <target state="translated">Vybrať súbor</target>
+      </segment>
+    </unit>
+
+    <unit id="csv_json_source_help">
+      <segment>
+        <source>UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</source>
+        <target state="translated">Iba UTF-8. Bunky, riadky, stĺpce a výstupy sú obmedzené pred spracovaním.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_label">
+      <segment>
+        <source>Séparateur CSV</source>
+        <target state="translated">CSV oddeľovač</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_auto">
+      <segment>
+        <source>Détection automatique</source>
+        <target state="translated">Automatické zistenie</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_comma">
+      <segment>
+        <source>Virgule</source>
+        <target state="translated">Čiarka</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_semicolon">
+      <segment>
+        <source>Point-virgule</source>
+        <target state="translated">Stredník</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_tab">
+      <segment>
+        <source>Tabulation</source>
+        <target state="translated">Tabulátor</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_pipe">
+      <segment>
+        <source>Barre verticale</source>
+        <target state="translated">Vertikálna čiara</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_trim">
+      <segment>
+        <source>Supprimer les espaces en bord de cellule</source>
+        <target state="translated">Odstrániť medzery na okrajoch bunky</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_headers">
+      <segment>
+        <source>La première ligne contient les en-têtes</source>
+        <target state="translated">Prvý riadok obsahuje hlavičky</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_types">
+      <segment>
+        <source>Inférer nombres, booléens et null</source>
+        <target state="translated">Inferovať čísla, booleany a null</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_formulas">
+      <segment>
+        <source>Neutraliser les formules de tableur dans les textes</source>
+        <target state="translated">Neutralizovať vzorce tabuľkového procesora v textoch</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_bom">
+      <segment>
+        <source>Ajouter un BOM UTF-8 pour Excel</source>
+        <target state="translated">Pridať BOM UTF-8 pre Excel</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_title">
+      <segment>
+        <source>Mapping, sélection et ordre des colonnes</source>
+        <target state="translated">Mapovanie, výber a poradie stĺpcov</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_help">
+      <segment>
+        <source>Une règle par ligne au format « source =&gt; sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</source>
+        <target state="translated">Jedno pravidlo na riadok vo formáte „zdroj =&gt; výstup“. Nechajte prázdne pre zachovanie všetkých stĺpcov. Vnorené JSON cesty používajú bod.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_placeholder">
+      <segment>
+        <source>profil.nom =&gt; nom
+email =&gt; contact</source>
+        <target state="translated">profil.meno =&gt; meno
+email =&gt; kontakt</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_convert">
+      <segment>
+        <source>Convertir localement</source>
+        <target state="translated">Konvertovať lokálne</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Zrušiť</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_processing">
+      <segment>
+        <source>Conversion dans un Worker dédié…</source>
+        <target state="translated">Konverzia v dedikovanom pracovníkovi…</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_result_title">
+      <segment>
+        <source>Résultat et contrôle</source>
+        <target state="translated">Výsledok a kontrola</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_rows">
+      <segment>
+        <source> lignes</source>
+        <target state="translated">riadkov</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_columns">
+      <segment>
+        <source> colonnes</source>
+        <target state="translated">stĺpcov</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_separator">
+      <segment>
+        <source>séparateur</source>
+        <target state="translated">oddeľovač</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Skopírované</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopírovať</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_download">
+      <segment>
+        <source>Télécharger .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></source>
+        <target state="translated">Stiahnuť .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></target>
+      </segment>
+    </unit>
+    <unit id="csv_json_diagnostics">
+      <segment>
+        <source>Diagnostics</source>
+        <target state="translated">Diagnostika</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_title">
+      <segment>
+        <source>Aperçu des premières lignes</source>
+        <target state="translated">Náhľad prvých riadkov</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_aria">
+      <segment>
+        <source>Aperçu tabulaire défilable</source>
+        <target state="translated">Posúvateľný tabuľkový náhľad</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_title">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Výstup</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_truncated">
+      <segment>
+        <source>L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Textový náhľad je skrátený na 50 000 znakov; sťahovanie obsahuje celý výstup.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limits_title">
+      <segment>
+        <source>Formats, limites et confidentialité</source>
+        <target state="translated">Formáty, limity a súkromie</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_csv">
+      <segment>
+        <source>CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</source>
+        <target state="translated">CSV v súlade s dvojitými úvodzovkami, oddeľovačmi čiarka, stredník, tabulátor alebo vertikálna čiara, s integrovanými návratmi riadkov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_json">
+      <segment>
+        <source>JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</source>
+        <target state="translated">JSON vo forme poľa objektov. Vnorené objekty sú sploštené s bodovými cestami; polia zostávajú serializované v JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_security">
+      <segment>
+        <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
+        <target state="translated">100 000 riadkov, 250 stĺpcov, 100 000 znakov na bunku a 16 miliónov znakov na výstup. Žiadna sieť nie je použitá.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Návrat k nástrojom na dáta</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_error_generic">
+      <segment>
+        <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
+        <target state="translated">Konverzia zlyhala. Skontrolujte zdroj a skúste to znova.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_empty">
+      <segment>
+        <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
+        <target state="translated">Zdroj je prázdny. Vložte CSV alebo JSON pred konverziou.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_source_large">
+      <segment>
+        <source>La source dépasse la limite de 4 000 000 de caractères.</source>
+        <target state="translated">Zdroj presahuje limit 4 000 000 znakov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_output_large">
+      <segment>
+        <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
+        <target state="translated">Výstup by presiahol bezpečnostný limit 16 000 000 znakov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_rows">
+      <segment>
+        <source>Le tableau dépasse la limite de 100 000 lignes.</source>
+        <target state="translated">Tabuľka presahuje limit 100 000 riadkov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_columns">
+      <segment>
+        <source>Le tableau dépasse la limite de 250 colonnes.</source>
+        <target state="translated">Tabuľka presahuje limit 250 stĺpcov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_cell">
+      <segment>
+        <source>Une cellule dépasse la limite de 100 000 caractères.</source>
+        <target state="translated">Jedna bunka presahuje limit 100 000 znakov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_open">
+      <segment>
+        <source>Un champ CSV entre guillemets n’est pas fermé.</source>
+        <target state="translated">Pole CSV v úvodzovkách nie je uzavreté.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_tail">
+      <segment>
+        <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
+        <target state="translated">Neočakávaný znak nasleduje po uzavretí poľa CSV.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_width">
+      <segment>
+        <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
+        <target state="translated">Tento riadok nemá rovnaký počet stĺpcov ako hlavička. Chýbajúce bunky sú ponechané prázdne.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_empty">
+      <segment>
+        <source>Un nom de colonne vide a reçu un identifiant stable.</source>
+        <target state="translated">Prázdny názov stĺpca dostal stabilný identifikátor.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_duplicate">
+      <segment>
+        <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
+        <target state="translated">Duplicitný názov stĺpca bol suffixovaný, aby sa predišlo prepisovaniu údajov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_delimiter">
+      <segment>
+        <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
+        <target state="translated">Oddeľovač nebolo možné zistiť; predvolene sa používa čiarka.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping">
+      <segment>
+        <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
+        <target state="translated">Mapovanie musí obsahovať pravidlo „zdroj =&gt; výstup“ na riadok.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_source">
+      <segment>
+        <source>Une colonne source du mapping n’existe pas dans les données.</source>
+        <target state="translated">Stĺpec zdroja mapovania neexistuje v údajoch.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_output">
+      <segment>
+        <source>Deux règles utilisent le même nom de sortie.</source>
+        <target state="translated">Dve pravidlá používajú rovnaké meno výstupu.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_invalid">
+      <segment>
+        <source>La source n’est pas un document JSON valide.</source>
+        <target state="translated">Zdroj nie je platný dokument JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_root">
+      <segment>
+        <source>La racine JSON doit être un tableau d’objets.</source>
+        <target state="translated">JSON koreň musí byť pole objektov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_row">
+      <segment>
+        <source>Chaque élément du tableau JSON doit être un objet.</source>
+        <target state="translated">Každý prvok JSON poľa musí byť objekt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_depth">
+      <segment>
+        <source>Une valeur JSON dépasse 12 niveaux d’imbrication.</source>
+        <target state="translated">Hodnota JSON presahuje 12 úrovní vnorenia.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_formula">
+      <segment>
+        <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
+        <target state="translated">Bunky vyzerajúce ako vzorce boli prefixované apostrofom, aby sa obmedzilo ich vykonávanie v tabuľkovom procesore.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_row">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
+        <target state="translated">Riadok <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_position">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
+        <target state="translated">Riadok <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, stĺpec <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Vybraný súbor je prázdny.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Súbor presahuje limit <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_format">
+      <segment>
+        <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
+        <target state="translated">Vyberte súbor CSV, TSV, TXT alebo JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Súbor nie je kódovaný v platnom UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Nemožno prečítať tento súbor lokálne.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_csv_label">
+      <segment>
+        <source>Source CSV</source>
+        <target state="translated">Zdroj CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_json_label">
+      <segment>
+        <source>Source JSON</source>
+        <target state="translated">Zdroj JSON</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_number">
+      <segment>
+        <source>Un nombre JSON serait arrondi ou rendu infini par JavaScript. Convertissez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">JSON číslo by bolo zaokrúhlené alebo by sa stalo nekonečným v JavaScripte. Preveďte ho na reťazec, aby ste zachovali jeho presnú hodnotu.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_path_collision">
+      <segment>
+        <source>Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.</source>
+        <target state="translated">Kľúč obsahujúci bod koliduje s vnorenou cestou objektu. Premeňte jeden z kľúčov.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Automatické kopírovanie zlyhalo. Vyberte výstup a skopírujte ho ručne.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_collision">
+      <segment>
+        <source>Deux en-têtes deviennent identiques après la neutralisation des formules. Renommez l’une des colonnes.</source>
+        <target state="translated">Dva hlavičky sa stanú identickými po neutralizácii vzorcov. Premeňte názov jednej z kolón.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_no_columns">
+      <segment>
+        <source>Le tableau JSON contient des lignes sans aucune propriété exportable. Ajoutez au moins une clé.</source>
+        <target state="translated">JSON tabuľka obsahuje riadky bez akýchkoľvek exportovateľných vlastností. Pridajte aspoň jeden kľúč.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_unicode">
+      <segment>
+        <source>Une chaîne JSON contient un caractère UTF-16 non apparié qui serait altéré lors de l’export.</source>
+        <target state="translated">Reťazec JSON obsahuje nezhodný znak UTF-16, ktorý by bol pri exporte poškodený.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">meno;email;aktívny;skóre
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;meno&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;matematika&quot;, &quot;kód&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;meno&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;kompilátor&quot;, &quot;námorník&quot;]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

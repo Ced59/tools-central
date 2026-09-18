@@ -86441,6 +86441,749 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Οθόνη</target>
       </segment>
     </unit>
+    <unit id="group_dev_data_title">
+      <segment>
+        <source>Données</source>
+        <target state="translated">Δεδομένα</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_desc">
+      <segment>
+        <source>Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.</source>
+        <target state="translated">Μετατρέψτε, ελέγξτε και προετοιμάστε μορφές δομημένων δεδομένων χωρίς να στείλετε το περιεχόμενό τους.</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_title">
+      <segment>
+        <source>Conversion tabulaire</source>
+        <target state="translated">Πίνακας μετατροπής</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_desc">
+      <segment>
+        <source>Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.</source>
+        <target state="translated">Μετατρέψτε πίνακες μεταξύ μορφών διατηρώντας τον έλεγχο στις στήλες, τους τύπους και τα σφάλματα.</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">Μετατροπέας CSV ↔ JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_desc">
+      <segment>
+        <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
+        <target state="translated">Μετατρέψτε τοπικά CSV και JSON με αυτόματο διαχωριστή, χαρτογράφηση στηλών, ασφαλείς τύπους, διαγνωστικά και προστασία τύπων.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_title">
+      <segment>
+        <source>Convertir CSV et JSON sans perdre le contrôle des colonnes</source>
+        <target state="translated">Μετατροπή CSV και JSON χωρίς να χάσετε τον έλεγχο των στηλών</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_lead">
+      <segment>
+        <source>Ce convertisseur transforme localement un tableau CSV en objets JSON, ou un tableau d’objets JSON en CSV. Il détecte les séparateurs, respecte les champs multilignes, permet de sélectionner et renommer les colonnes, montre les anomalies avant export et n’envoie aucune valeur vers un serveur.</source>
+        <target state="translated">Αυτός ο μετατροπέας μετατρέπει τοπικά έναν πίνακα CSV σε αντικείμενα JSON, ή έναν πίνακα αντικειμένων JSON σε CSV. Ανιχνεύει τους διαχωριστές, σέβεται τα πολυγραμμικά πεδία, επιτρέπει την επιλογή και μετονομασία στηλών, δείχνει ανωμαλίες πριν από την εξαγωγή και δεν στέλνει καμία τιμή σε διακομιστή.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Περίπτωσεις χρήσης</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_title">
+      <segment>
+        <source>Préparer un export CSV pour une API</source>
+        <target state="translated">Προετοιμάστε μια εξαγωγή CSV για μια API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_text">
+      <segment>
+        <source>Transformez des lignes provenant d’un tableur en tableau JSON, conservez les identifiants à zéro initial et activez seulement l’inférence des nombres, booléens et valeurs nulles lorsque le schéma le permet.</source>
+        <target state="translated">Μετατρέψτε γραμμές από ένα υπολογιστικό φύλλο σε πίνακα JSON, διατηρήστε τα αναγνωριστικά με αρχική τιμή μηδέν και ενεργοποιήστε μόνο την ανίχνευση αριθμών, boolean και null τιμών όταν το σχήμα το επιτρέπει.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_title">
+      <segment>
+        <source>Rendre un JSON lisible dans un tableur</source>
+        <target state="translated">Κάντε ένα JSON αναγνώσιμο σε υπολογιστικό φύλλο</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_text">
+      <segment>
+        <source>Aplatissez les objets imbriqués avec des chemins pointés, choisissez le séparateur attendu par votre environnement et ajoutez un BOM UTF-8 si le logiciel cible l’exige.</source>
+        <target state="translated">Επίπεδο αντικείμενα με διαδρομές, επιλέξτε τον αναμενόμενο διαχωριστή από το περιβάλλον σας και προσθέστε ένα BOM UTF-8 αν το λογισμικό στόχος το απαιτεί.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_title">
+      <segment>
+        <source>Renommer et filtrer sans script jetable</source>
+        <target state="translated">Μετονομάστε και φιλτράρετε χωρίς προσωρινό σενάριο</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_text">
+      <segment>
+        <source>Déclarez un mapping « source =&gt; sortie » pour sélectionner les colonnes utiles, les réordonner et produire des noms stables sans modifier le fichier d’origine.</source>
+        <target state="translated">Δηλώστε μια χαρτογράφηση «πηγή =&gt; έξοδος» για να επιλέξετε τις χρήσιμες στήλες, να τις αναδιοργανώσετε και να παράγετε σταθερά ονόματα χωρίς να τροποποιήσετε το αρχικό αρχείο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Συνιστώμενη μέθοδος</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_1">
+      <segment>
+        <source>Commencez sans mapping et vérifiez le séparateur détecté, les en-têtes et l’aperçu. Les fichiers CSV européens utilisent souvent le point-virgule lorsque la virgule sert de séparateur décimal, tandis que les TSV utilisent une tabulation.</source>
+        <target state="translated">Ξεκινήστε χωρίς χαρτογράφηση και ελέγξτε τον ανιχνευμένο διαχωριστή, τις κεφαλίδες και την προεπισκόπηση. Τα ευρωπαϊκά αρχεία CSV χρησιμοποιούν συχνά το ερωτηματικό όταν η κόμμα χρησιμεύει ως δεκαδικός διαχωριστής, ενώ τα TSV χρησιμοποιούν μια ταμπου.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_2">
+      <segment>
+        <source>Examinez chaque diagnostic de largeur, d’en-tête vide ou dupliqué. L’outil complète les cellules absentes et crée des noms stables pour éviter l’écrasement, mais cette tolérance ne remplace pas la correction de la source.</source>
+        <target state="translated">Εξετάστε κάθε διάγνωση πλάτους, κενής ή διπλής κεφαλίδας. Το εργαλείο συμπληρώνει τα κενά κελιά και δημιουργεί σταθερά ονόματα για να αποφευχθεί η αντικατάσταση, αλλά αυτή η ανοχή δεν αντικαθιστά τη διόρθωση της πηγής.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_3">
+      <segment>
+        <source>Ajoutez ensuite le mapping dans l’ordre attendu par le consommateur. Pour JSON vers CSV, utilisez les chemins pointés affichés dans l’aperçu, par exemple « profil.nom =&gt; nom ».</source>
+        <target state="translated">Στη συνέχεια, προσθέστε τη χαρτογράφηση με τη σειρά που αναμένεται από τον καταναλωτή. Για JSON προς CSV, χρησιμοποιήστε τις διαδρομές που εμφανίζονται στην προεπισκόπηση, για παράδειγμα «profil.nom =&gt; nom».</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing">
+      <segment>
+        <source>Types et fidélité</source>
+        <target state="translated">Τύποι και πιστότητα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_title">
+      <segment>
+        <source>Chaînes par défaut</source>
+        <target state="translated">Προεπιλεγμένες αλυσίδες</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_text">
+      <segment>
+        <source>Désactivez l’inférence lorsque les valeurs sont des codes, références ou numéros de téléphone. Une valeur comme 00123 reste toujours une chaîne afin de préserver ses zéros.</source>
+        <target state="translated">Απενεργοποιήστε την ανίχνευση όταν οι τιμές είναι κωδικοί, αναφορές ή αριθμοί τηλεφώνου. Μια τιμή όπως 00123 παραμένει πάντα αλφαριθμητική για να διατηρήσει τα μηδενικά της.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_title">
+      <segment>
+        <source>Inférence limitée</source>
+        <target state="translated">Περιορισμένη ανίχνευση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_text">
+      <segment>
+        <source>Le mode typé reconnaît true, false, null et les nombres finis représentables sans perte d’entier. Les dates restent des chaînes : leur fuseau et leur calendrier ne sont jamais devinés.</source>
+        <target state="translated">Η τυποποιημένη λειτουργία αναγνωρίζει true, false, null και τους πεπερασμένους αριθμούς που μπορούν να αναπαρασταθούν χωρίς απώλεια ακέραιου. Οι ημερομηνίες παραμένουν αλφαριθμητικές: η ζώνη και το ημερολόγιό τους δεν μαντεύονται ποτέ.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_title">
+      <segment>
+        <source>Objets imbriqués</source>
+        <target state="translated">Ενσωματωμένα αντικείμενα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_text">
+      <segment>
+        <source>En JSON vers CSV, les objets deviennent des chemins pointés et les tableaux sont sérialisés dans une cellule JSON. La conversion inverse crée des clés plates, même si leur nom contient un point.</source>
+        <target state="translated">Στο JSON προς CSV, τα αντικείμενα γίνονται διαδρομές και οι πίνακες σειριοποιούνται σε ένα κελί JSON. Η αντίστροφη μετατροπή δημιουργεί επίπεδα κλειδιά, ακόμη και αν το όνομά τους περιέχει μια τελεία.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security">
+      <segment>
+        <source>Sécurité, limites et confidentialité</source>
+        <target state="translated">Ασφάλεια, όρια και ιδιωτικότητα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_1">
+      <segment>
+        <source>Le traitement s’effectue dans un Web Worker éphémère. Les fichiers restent dans le navigateur et aucune requête réseau n’est nécessaire pour convertir, copier ou télécharger la sortie.</source>
+        <target state="translated">Η επεξεργασία πραγματοποιείται σε έναν προσωρινό Web Worker. Τα αρχεία παραμένουν στον περιηγητή και καμία δικτυακή αίτηση δεν απαιτείται για να μετατρέψετε, να αντιγράψετε ή να κατεβάσετε την έξοδο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_2">
+      <segment>
+        <source>La source est limitée à 4 millions de caractères ou 4 Mo pour un fichier, avec au plus 100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie.</source>
+        <target state="translated">Η πηγή περιορίζεται σε 4 εκατομμύρια χαρακτήρες ή 4 MB για ένα αρχείο, με το πολύ 100.000 γραμμές, 250 στήλες, 100.000 χαρακτήρες ανά κελί και 16 εκατομμύρια χαρακτήρες στην έξοδο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_3">
+      <segment>
+        <source>Lors d’un export CSV, la protection optionnelle préfixe les textes commençant par =, +, - ou @. Elle réduit le risque d’exécution de formule à l’ouverture dans un tableur sans prétendre assainir un fichier pour tous les logiciels.</source>
+        <target state="translated">Κατά την εξαγωγή CSV, η προαιρετική προστασία προθέτει κείμενα που αρχίζουν με =, +, - ή @. Μειώνει τον κίνδυνο εκτέλεσης τύπου κατά το άνοιγμα σε υπολογιστικό φύλλο χωρίς να ισχυρίζεται ότι καθαρίζει ένα αρχείο για όλα τα λογισμικά.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Συχνές ερωτήσεις</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q1">
+      <segment>
+        <source>Les retours de ligne dans une cellule CSV sont-ils conservés ?</source>
+        <target state="translated">Διατηρούνται οι επιστροφές γραμμής σε ένα κελί CSV;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a1">
+      <segment>
+        <source>Oui, lorsqu’ils se trouvent dans un champ entouré de guillemets doubles. Un guillemet littéral se note avec deux guillemets, conformément au format CSV courant.</source>
+        <target state="translated">Ναι, όταν βρίσκονται σε ένα πεδίο περιτριγυρισμένο από διπλά εισαγωγικά. Ένα κυριολεκτικό εισαγωγικό σημειώνεται με δύο εισαγωγικά, σύμφωνα με τη συνήθη μορφή CSV.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q2">
+      <segment>
+        <source>Pourquoi mon JSON doit-il commencer par un tableau ?</source>
+        <target state="translated">Γιατί το JSON μου πρέπει να ξεκινά με έναν πίνακα;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a2">
+      <segment>
+        <source>Une feuille CSV représente une suite de lignes partageant des colonnes. Un objet JSON isolé ou un mélange de scalaires n’offre pas cette structure tabulaire ; la racine doit donc être un tableau d’objets.</source>
+        <target state="translated">Ένα αρχείο CSV αναπαριστά μια σειρά γραμμών που μοιράζονται στήλες. Ένα απομονωμένο αντικείμενο JSON ή ένα μείγμα κλιμάκων δεν προσφέρει αυτή τη δομημένη μορφή; η ρίζα πρέπει επομένως να είναι ένας πίνακας αντικειμένων.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q3">
+      <segment>
+        <source>La conversion est-elle parfaitement réversible ?</source>
+        <target state="translated">Είναι η μετατροπή απόλυτα αναστρέψιμη;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a3">
+      <segment>
+        <source>Non. CSV ne transporte ni schéma de types, ni structure imbriquée standard. Conservez le fichier source et vérifiez les types, valeurs nulles, tableaux et chemins aplatis avant d’utiliser la sortie.</source>
+        <target state="translated">Όχι. Το CSV δεν μεταφέρει ούτε σχήμα τύπων, ούτε τυπική ενσωματωμένη δομή. Διατηρήστε το αρχείο πηγής και ελέγξτε τους τύπους, τις null τιμές, τους πίνακες και τις επίπεδες διαδρομές πριν χρησιμοποιήσετε την έξοδο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip_title">
+      <segment>
+        <source>Tester un petit échantillon d’abord</source>
+        <target state="translated">Δοκιμάστε πρώτα ένα μικρό δείγμα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip">
+      <segment>
+        <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+        <target state="translated">Επικυρώστε μερικές αντιπροσωπευτικές γραμμές, συμπεριλαμβανομένων των κενών κελιών, εισαγωγικών, διαχωριστών, επιστροφών γραμμής και ευαίσθητων αναγνωριστικών, και στη συνέχεια εφαρμόστε τις ίδιες επιλογές στο πλήρες αρχείο.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">Μετατροπέας CSV ↔ JSON</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_subtitle">
+      <segment>
+        <source> Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée. </source>
+        <target state="translated">Μετατρέψτε, χαρτογραφήστε και ελέγξτε τους πίνακές σας τοπικά, με προεπισκόπηση σφαλμάτων και ελεγχόμενη ανίχνευση τύπων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_privacy">
+      <segment>
+        <source>Les fichiers et les valeurs restent dans votre navigateur.</source>
+        <target state="translated">Τα αρχεία και οι τιμές παραμένουν στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_title">
+      <segment>
+        <source>Préparer la conversion</source>
+        <target state="translated">Προετοιμάστε τη μετατροπή</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_subtitle">
+      <segment>
+        <source>Collez une source UTF-8 ou chargez un fichier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum.</source>
+        <target state="translated">Επικολλήστε μια πηγή UTF-8 ή φορτώστε ένα αρχείο <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> μέγιστου μεγέθους.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_direction_aria">
+      <segment>
+        <source>Sens de conversion</source>
+        <target state="translated">Κατεύθυνση μετατροπής</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_choose_file">
+      <segment>
+        <source>Choisir un fichier</source>
+        <target state="translated">Επιλέξτε ένα αρχείο</target>
+      </segment>
+    </unit>
+
+    <unit id="csv_json_source_help">
+      <segment>
+        <source>UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</source>
+        <target state="translated">Μόνο UTF-8. Τα κελιά, οι γραμμές, οι στήλες και οι εξόδοι περιορίζονται πριν από την επεξεργασία.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_label">
+      <segment>
+        <source>Séparateur CSV</source>
+        <target state="translated">Διαχωριστικό CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_auto">
+      <segment>
+        <source>Détection automatique</source>
+        <target state="translated">Αυτόματη ανίχνευση</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_comma">
+      <segment>
+        <source>Virgule</source>
+        <target state="translated">Κόμμα</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_semicolon">
+      <segment>
+        <source>Point-virgule</source>
+        <target state="translated">Ερωτηματικό</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_tab">
+      <segment>
+        <source>Tabulation</source>
+        <target state="translated">Ταμπ</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_pipe">
+      <segment>
+        <source>Barre verticale</source>
+        <target state="translated">Κάθετος διαχωριστής</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_trim">
+      <segment>
+        <source>Supprimer les espaces en bord de cellule</source>
+        <target state="translated">Αφαίρεση κενών χώρων από τα άκρα του κελιού</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_headers">
+      <segment>
+        <source>La première ligne contient les en-têtes</source>
+        <target state="translated">Η πρώτη γραμμή περιέχει τις κεφαλίδες</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_types">
+      <segment>
+        <source>Inférer nombres, booléens et null</source>
+        <target state="translated">Ανίχνευση αριθμών, boolean και null</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_formulas">
+      <segment>
+        <source>Neutraliser les formules de tableur dans les textes</source>
+        <target state="translated">Απενεργοποίηση τύπων υπολογιστικών φύλλων στα κείμενα</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_bom">
+      <segment>
+        <source>Ajouter un BOM UTF-8 pour Excel</source>
+        <target state="translated">Προσθήκη BOM UTF-8 για το Excel</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_title">
+      <segment>
+        <source>Mapping, sélection et ordre des colonnes</source>
+        <target state="translated">Χαρτογράφηση, επιλογή και σειρά στηλών</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_help">
+      <segment>
+        <source>Une règle par ligne au format « source =&gt; sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</source>
+        <target state="translated">Μία κανόνας ανά γραμμή στη μορφή «πηγή =&gt; έξοδος». Αφήστε κενό για να διατηρήσετε όλες τις στήλες. Οι ενσωματωμένες διαδρομές JSON χρησιμοποιούν τελεία.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_placeholder">
+      <segment>
+        <source>profil.nom =&gt; nom
+email =&gt; contact</source>
+        <target state="translated">profil.nom =&gt; όνομα
+email =&gt; επαφή</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_convert">
+      <segment>
+        <source>Convertir localement</source>
+        <target state="translated">Μετατροπή τοπικά</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Ακύρωση</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_processing">
+      <segment>
+        <source>Conversion dans un Worker dédié…</source>
+        <target state="translated">Μετατροπή σε αφιερωμένο Worker…</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_result_title">
+      <segment>
+        <source>Résultat et contrôle</source>
+        <target state="translated">Αποτέλεσμα και έλεγχος</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_rows">
+      <segment>
+        <source> lignes</source>
+        <target state="translated">γραμμές</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_columns">
+      <segment>
+        <source> colonnes</source>
+        <target state="translated">στήλες</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_separator">
+      <segment>
+        <source>séparateur</source>
+        <target state="translated">διαχωριστικό</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Αντιγράφηκε</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_download">
+      <segment>
+        <source>Télécharger .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></source>
+        <target state="translated">Λήψη .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></target>
+      </segment>
+    </unit>
+    <unit id="csv_json_diagnostics">
+      <segment>
+        <source>Diagnostics</source>
+        <target state="translated">Διαγνωστικά</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_title">
+      <segment>
+        <source>Aperçu des premières lignes</source>
+        <target state="translated">Προεπισκόπηση πρώτων γραμμών</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_aria">
+      <segment>
+        <source>Aperçu tabulaire défilable</source>
+        <target state="translated">Προεπισκόπηση πίνακα με δυνατότητα κύλισης</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_title">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Έξοδος</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_truncated">
+      <segment>
+        <source>L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Η προεπισκόπηση κειμένου έχει περικοπεί στα 50.000 χαρακτήρες; η λήψη περιέχει την πλήρη έξοδο.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limits_title">
+      <segment>
+        <source>Formats, limites et confidentialité</source>
+        <target state="translated">Μορφές, όρια και ιδιωτικότητα</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_csv">
+      <segment>
+        <source>CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</source>
+        <target state="translated">CSV σύμφωνα με τα διπλά εισαγωγικά, διαχωριστές κόμμα, ερωτηματικό, ταμπ ή κάθετο διαχωριστή, με ενσωματωμένες επιστροφές γραμμής.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_json">
+      <segment>
+        <source>JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</source>
+        <target state="translated">JSON σε μορφή πίνακα αντικειμένων. Τα ενσωματωμένα αντικείμενα ισοπεδώνονται με διαδρομές σημείων; οι πίνακες παραμένουν σειριοποιημένοι σε JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_security">
+      <segment>
+        <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
+        <target state="translated">100 000 γραμμές, 250 στήλες, 100 000 χαρακτήρες ανά κελί και 16 εκατομμύρια χαρακτήρες στην έξοδο. Δεν χρησιμοποιείται κανένα δίκτυο.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Επιστροφή στα εργαλεία δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_error_generic">
+      <segment>
+        <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
+        <target state="translated">Η μετατροπή απέτυχε. Ελέγξτε την πηγή και δοκιμάστε ξανά.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_empty">
+      <segment>
+        <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
+        <target state="translated">Η πηγή είναι κενή. Επικολλήστε CSV ή JSON πριν από τη μετατροπή.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_source_large">
+      <segment>
+        <source>La source dépasse la limite de 4 000 000 de caractères.</source>
+        <target state="translated">Η πηγή υπερβαίνει το όριο των 4 000 000 χαρακτήρων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_output_large">
+      <segment>
+        <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
+        <target state="translated">Η έξοδος θα υπερέβαινε το όριο ασφαλείας των 16 000 000 χαρακτήρων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_rows">
+      <segment>
+        <source>Le tableau dépasse la limite de 100 000 lignes.</source>
+        <target state="translated">Ο πίνακας υπερβαίνει το όριο των 100 000 γραμμών.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_columns">
+      <segment>
+        <source>Le tableau dépasse la limite de 250 colonnes.</source>
+        <target state="translated">Ο πίνακας υπερβαίνει το όριο των 250 στηλών.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_cell">
+      <segment>
+        <source>Une cellule dépasse la limite de 100 000 caractères.</source>
+        <target state="translated">Ένα κελί υπερβαίνει το όριο των 100 000 χαρακτήρων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_open">
+      <segment>
+        <source>Un champ CSV entre guillemets n’est pas fermé.</source>
+        <target state="translated">Ένα πεδίο CSV σε εισαγωγικά δεν είναι κλειστό.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_tail">
+      <segment>
+        <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
+        <target state="translated">Ένας απροσδόκητος χαρακτήρας ακολουθεί το κλείσιμο ενός πεδίου CSV.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_width">
+      <segment>
+        <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
+        <target state="translated">Αυτή η γραμμή δεν έχει τον ίδιο αριθμό στηλών με την κεφαλίδα. Οι απουσιάζουσες κελίες αφήνονται κενές.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_empty">
+      <segment>
+        <source>Un nom de colonne vide a reçu un identifiant stable.</source>
+        <target state="translated">Ένα κενό όνομα στήλης έχει λάβει ένα σταθερό αναγνωριστικό.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_duplicate">
+      <segment>
+        <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
+        <target state="translated">Ένα διπλό όνομα στήλης έχει προστεθεί ένα επίθημα για να αποφευχθεί η αντικατάσταση δεδομένων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_delimiter">
+      <segment>
+        <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
+        <target state="translated">Ο διαχωριστής δεν μπόρεσε να ανιχνευθεί· η κόμμα χρησιμοποιείται από προεπιλογή.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping">
+      <segment>
+        <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
+        <target state="translated">Η αντιστοίχιση πρέπει να περιέχει έναν κανόνα «πηγή =&gt; έξοδος» ανά γραμμή.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_source">
+      <segment>
+        <source>Une colonne source du mapping n’existe pas dans les données.</source>
+        <target state="translated">Μια στήλη πηγής της αντιστοίχισης δεν υπάρχει στα δεδομένα.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_output">
+      <segment>
+        <source>Deux règles utilisent le même nom de sortie.</source>
+        <target state="translated">Δύο κανόνες χρησιμοποιούν το ίδιο όνομα εξόδου.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_invalid">
+      <segment>
+        <source>La source n’est pas un document JSON valide.</source>
+        <target state="translated">Η πηγή δεν είναι έγκυρο έγγραφο JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_root">
+      <segment>
+        <source>La racine JSON doit être un tableau d’objets.</source>
+        <target state="translated">Η ρίζα JSON πρέπει να είναι πίνακας αντικειμένων.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_row">
+      <segment>
+        <source>Chaque élément du tableau JSON doit être un objet.</source>
+        <target state="translated">Κάθε στοιχείο του πίνακα JSON πρέπει να είναι αντικείμενο.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_depth">
+      <segment>
+        <source>Une valeur JSON dépasse 12 niveaux d’imbrication.</source>
+        <target state="translated">Μια τιμή JSON ξεπερνά τα 12 επίπεδα εμφωλευσης.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_formula">
+      <segment>
+        <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
+        <target state="translated">Τα κελιά που μοιάζουν με τύπους έχουν προστεθεί με ένα απόστροφο για να περιοριστεί η εκτέλεσή τους σε ένα υπολογιστικό φύλλο.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_row">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
+        <target state="translated">Γραμμή <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_position">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
+        <target state="translated">Γραμμή <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, στήλη <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Το επιλεγμένο αρχείο είναι κενό.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Το αρχείο υπερβαίνει το όριο των <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_format">
+      <segment>
+        <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
+        <target state="translated">Επιλέξτε ένα αρχείο CSV, TSV, TXT ή JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Το αρχείο δεν είναι κωδικοποιημένο σε έγκυρο UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Αδύνατη η ανάγνωση αυτού του αρχείου τοπικά.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_csv_label">
+      <segment>
+        <source>Source CSV</source>
+        <target state="translated">Πηγή CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_json_label">
+      <segment>
+        <source>Source JSON</source>
+        <target state="translated">Πηγή JSON</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_number">
+      <segment>
+        <source>Un nombre JSON serait arrondi ou rendu infini par JavaScript. Convertissez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Ένας αριθμός JSON θα στρογγυλοποιηθεί ή θα γίνει άπειρος από το JavaScript. Μετατρέψτε τον σε συμβολοσειρά για να διατηρήσετε την ακριβή του τιμή.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_path_collision">
+      <segment>
+        <source>Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.</source>
+        <target state="translated">Ένα κλειδί που περιέχει μια τελεία συγκρούεται με μια διαδρομή ενσωματωμένου αντικειμένου. Μετονομάστε ένα από τα κλειδιά.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Αυτόματη αντιγραφή αδύνατη. Επιλέξτε την έξοδο και αντιγράψτε την χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_collision">
+      <segment>
+        <source>Deux en-têtes deviennent identiques après la neutralisation des formules. Renommez l’une des colonnes.</source>
+        <target state="translated">Δύο επικεφαλίδες γίνονται ίδιες μετά την εξουδετέρωση των τύπων. Μετονομάστε μία από τις στήλες.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_no_columns">
+      <segment>
+        <source>Le tableau JSON contient des lignes sans aucune propriété exportable. Ajoutez au moins une clé.</source>
+        <target state="translated">Ο πίνακας JSON περιέχει γραμμές χωρίς καμία εξαγώγιμη ιδιότητα. Προσθέστε τουλάχιστον ένα κλειδί.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_unicode">
+      <segment>
+        <source>Une chaîne JSON contient un caractère UTF-16 non apparié qui serait altéré lors de l’export.</source>
+        <target state="translated">Μια συμβολοσειρά JSON περιέχει έναν μη ζευγαρωμένο χαρακτήρα UTF-16 που θα αλλοιωθεί κατά την εξαγωγή.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">όνομα;email;ενεργό;βαθμός
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;μαθηματικά&quot;, &quot;κώδικας&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;μεταγλωττιστής&quot;, &quot;ναυτικό&quot;]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

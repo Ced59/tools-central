@@ -81,6 +81,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 
 ### Outils livrés depuis l’audit
 
+- **Convertisseur CSV ↔ JSON** — implémenté en Clean Architecture, traitement local dans un Worker annulable, import UTF-8 strict, détection virgule/point-virgule/tabulation/barre verticale, champs cités et multilignes, inférence prudente des types, mapping/sélection/réordonnancement, aplatissement des objets JSON, diagnostics de lignes irrégulières, protection contre les formules de tableur, limites explicites, aperçu, copie et téléchargement. Route publiée en français : `/categories/dev/data/csv-json-converter` ; les autres locales restent hors index jusqu’à leur relecture.
 - **Prévisualiseur de snippet Google** — implémenté en Clean Architecture, traitement local, vues ordinateur/mobile, estimation typographique en pixels, recommandations, tests unitaires et E2E. Route : `/categories/dev/seo/serp-snippet-preview`.
 - **Générateur et validateur robots.txt** — implémenté en Clean Architecture, traitement local, génération sûre, validation bornée à 500 Kio, simulation URL/user-agent conforme à RFC 9309, export texte, tests unitaires et E2E. Route : `/categories/dev/seo/robots-txt-builder`.
 - **Générateur et validateur sitemap XML** — implémenté en Clean Architecture, traitement local, génération de sitemap ou d’index, validation XML bornée, contrôle des URL, dates, doublons, périmètre et limites du protocole, export XML, tests unitaires et E2E. Route : `/categories/dev/seo/sitemap-xml-builder`.

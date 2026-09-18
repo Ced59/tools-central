@@ -86437,6 +86437,749 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Skjerm</target>
       </segment>
     </unit>
+    <unit id="group_dev_data_title">
+      <segment>
+        <source>Données</source>
+        <target state="translated">Data</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_desc">
+      <segment>
+        <source>Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.</source>
+        <target state="translated">Convert, validate, and prepare structured data formats without sending their content.</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_title">
+      <segment>
+        <source>Conversion tabulaire</source>
+        <target state="translated">Tabular Conversion</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_desc">
+      <segment>
+        <source>Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.</source>
+        <target state="translated">Transform tables between formats while controlling columns, types, and errors.</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON Converter</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_desc">
+      <segment>
+        <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
+        <target state="translated">Convert CSV and JSON locally with automatic delimiter, column mapping, safe types, diagnostics, and formula protection.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_title">
+      <segment>
+        <source>Convertir CSV et JSON sans perdre le contrôle des colonnes</source>
+        <target state="translated">Convert CSV and JSON without losing control of columns</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_lead">
+      <segment>
+        <source>Ce convertisseur transforme localement un tableau CSV en objets JSON, ou un tableau d’objets JSON en CSV. Il détecte les séparateurs, respecte les champs multilignes, permet de sélectionner et renommer les colonnes, montre les anomalies avant export et n’envoie aucune valeur vers un serveur.</source>
+        <target state="translated">This converter locally transforms a CSV table into JSON objects, or a table of JSON objects into CSV. It detects delimiters, respects multiline fields, allows selecting and renaming columns, shows anomalies before export, and does not send any values to a server.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Use Cases</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_title">
+      <segment>
+        <source>Préparer un export CSV pour une API</source>
+        <target state="translated">Prepare a CSV export for an API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_text">
+      <segment>
+        <source>Transformez des lignes provenant d’un tableur en tableau JSON, conservez les identifiants à zéro initial et activez seulement l’inférence des nombres, booléens et valeurs nulles lorsque le schéma le permet.</source>
+        <target state="translated">Transform rows from a spreadsheet into a JSON table, keep zero-padded identifiers, and enable number, boolean, and null inference only when the schema allows.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_title">
+      <segment>
+        <source>Rendre un JSON lisible dans un tableur</source>
+        <target state="translated">Make JSON readable in a spreadsheet</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_text">
+      <segment>
+        <source>Aplatissez les objets imbriqués avec des chemins pointés, choisissez le séparateur attendu par votre environnement et ajoutez un BOM UTF-8 si le logiciel cible l’exige.</source>
+        <target state="translated">Flatten nested objects with pointed paths, choose the expected delimiter for your environment, and add a UTF-8 BOM if the target software requires it.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_title">
+      <segment>
+        <source>Renommer et filtrer sans script jetable</source>
+        <target state="translated">Rename and filter without disposable scripts</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_text">
+      <segment>
+        <source>Déclarez un mapping « source =&gt; sortie » pour sélectionner les colonnes utiles, les réordonner et produire des noms stables sans modifier le fichier d’origine.</source>
+        <target state="translated">Declare a mapping "source => output" to select useful columns, reorder them, and produce stable names without modifying the original file.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Recommended Method</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_1">
+      <segment>
+        <source>Commencez sans mapping et vérifiez le séparateur détecté, les en-têtes et l’aperçu. Les fichiers CSV européens utilisent souvent le point-virgule lorsque la virgule sert de séparateur décimal, tandis que les TSV utilisent une tabulation.</source>
+        <target state="translated">Start without mapping and check the detected delimiter, headers, and preview. European CSV files often use a semicolon when the comma serves as a decimal separator, while TSV uses a tab.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_2">
+      <segment>
+        <source>Examinez chaque diagnostic de largeur, d’en-tête vide ou dupliqué. L’outil complète les cellules absentes et crée des noms stables pour éviter l’écrasement, mais cette tolérance ne remplace pas la correction de la source.</source>
+        <target state="translated">Examine each width, empty or duplicate header diagnostic. The tool fills in missing cells and creates stable names to avoid overwriting, but this tolerance does not replace correcting the source.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_3">
+      <segment>
+        <source>Ajoutez ensuite le mapping dans l’ordre attendu par le consommateur. Pour JSON vers CSV, utilisez les chemins pointés affichés dans l’aperçu, par exemple « profil.nom =&gt; nom ».</source>
+        <target state="translated">Then add the mapping in the order expected by the consumer. For JSON to CSV, use the pointed paths displayed in the preview, for example "profile.name => name".</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing">
+      <segment>
+        <source>Types et fidélité</source>
+        <target state="translated">Types and Fidelity</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_title">
+      <segment>
+        <source>Chaînes par défaut</source>
+        <target state="translated">Default Strings</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_text">
+      <segment>
+        <source>Désactivez l’inférence lorsque les valeurs sont des codes, références ou numéros de téléphone. Une valeur comme 00123 reste toujours une chaîne afin de préserver ses zéros.</source>
+        <target state="translated">Disable inference when values are codes, references, or phone numbers. A value like 00123 always remains a string to preserve its leading zeros.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_title">
+      <segment>
+        <source>Inférence limitée</source>
+        <target state="translated">Limited Inference</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_text">
+      <segment>
+        <source>Le mode typé reconnaît true, false, null et les nombres finis représentables sans perte d’entier. Les dates restent des chaînes : leur fuseau et leur calendrier ne sont jamais devinés.</source>
+        <target state="translated">The typed mode recognizes true, false, null, and finite numbers representable without integer loss. Dates remain strings: their timezone and calendar are never guessed.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_title">
+      <segment>
+        <source>Objets imbriqués</source>
+        <target state="translated">Nested Objects</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_text">
+      <segment>
+        <source>En JSON vers CSV, les objets deviennent des chemins pointés et les tableaux sont sérialisés dans une cellule JSON. La conversion inverse crée des clés plates, même si leur nom contient un point.</source>
+        <target state="translated">In JSON to CSV, objects become pointed paths and arrays are serialized into a JSON cell. The reverse conversion creates flat keys, even if their name contains a dot.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security">
+      <segment>
+        <source>Sécurité, limites et confidentialité</source>
+        <target state="translated">Security, Limits, and Privacy</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_1">
+      <segment>
+        <source>Le traitement s’effectue dans un Web Worker éphémère. Les fichiers restent dans le navigateur et aucune requête réseau n’est nécessaire pour convertir, copier ou télécharger la sortie.</source>
+        <target state="translated">Processing occurs in a temporary Web Worker. Files remain in the browser, and no network requests are needed to convert, copy, or download the output.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_2">
+      <segment>
+        <source>La source est limitée à 4 millions de caractères ou 4 Mo pour un fichier, avec au plus 100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie.</source>
+        <target state="translated">The source is limited to 4 million characters or 4 MB for a file, with at most 100,000 rows, 250 columns, 100,000 characters per cell, and 16 million characters in output.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_3">
+      <segment>
+        <source>Lors d’un export CSV, la protection optionnelle préfixe les textes commençant par =, +, - ou @. Elle réduit le risque d’exécution de formule à l’ouverture dans un tableur sans prétendre assainir un fichier pour tous les logiciels.</source>
+        <target state="translated">When exporting CSV, the optional protection prefixes texts starting with =, +, - or @. It reduces the risk of formula execution when opened in a spreadsheet without claiming to sanitize a file for all software.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Frequently Asked Questions</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q1">
+      <segment>
+        <source>Les retours de ligne dans une cellule CSV sont-ils conservés ?</source>
+        <target state="translated">Are line breaks in a CSV cell preserved?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a1">
+      <segment>
+        <source>Oui, lorsqu’ils se trouvent dans un champ entouré de guillemets doubles. Un guillemet littéral se note avec deux guillemets, conformément au format CSV courant.</source>
+        <target state="translated">Yes, when they are in a field surrounded by double quotes. A literal quote is noted with two quotes, according to the common CSV format.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q2">
+      <segment>
+        <source>Pourquoi mon JSON doit-il commencer par un tableau ?</source>
+        <target state="translated">Why must my JSON start with an array?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a2">
+      <segment>
+        <source>Une feuille CSV représente une suite de lignes partageant des colonnes. Un objet JSON isolé ou un mélange de scalaires n’offre pas cette structure tabulaire ; la racine doit donc être un tableau d’objets.</source>
+        <target state="translated">A CSV sheet represents a series of rows sharing columns. An isolated JSON object or a mix of scalars does not provide this tabular structure; the root must therefore be an array of objects.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q3">
+      <segment>
+        <source>La conversion est-elle parfaitement réversible ?</source>
+        <target state="translated">Is the conversion perfectly reversible?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a3">
+      <segment>
+        <source>Non. CSV ne transporte ni schéma de types, ni structure imbriquée standard. Conservez le fichier source et vérifiez les types, valeurs nulles, tableaux et chemins aplatis avant d’utiliser la sortie.</source>
+        <target state="translated">No. CSV carries neither type schema nor standard nested structure. Keep the source file and check types, null values, arrays, and flattened paths before using the output.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip_title">
+      <segment>
+        <source>Tester un petit échantillon d’abord</source>
+        <target state="translated">Test a small sample first</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip">
+      <segment>
+        <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+        <target state="translated">Validate a few representative rows, including empty cells, quotes, delimiters, line breaks, and sensitive identifiers, then apply the same options to the full file.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON Converter</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_subtitle">
+      <segment>
+        <source> Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée. </source>
+        <target state="translated">Konverter, mappe og kontroller tabellene dine lokalt, med feilsjekk og kontrollert typeinferens.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_privacy">
+      <segment>
+        <source>Les fichiers et les valeurs restent dans votre navigateur.</source>
+        <target state="translated">Filene og verdiene forblir i nettleseren din.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_title">
+      <segment>
+        <source>Préparer la conversion</source>
+        <target state="translated">Forbered konverteringen</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_subtitle">
+      <segment>
+        <source>Collez une source UTF-8 ou chargez un fichier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum.</source>
+        <target state="translated">Lim inn en UTF-8 kilde eller last opp en fil på <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maksimum.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_direction_aria">
+      <segment>
+        <source>Sens de conversion</source>
+        <target state="translated">Konverteringsretning</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_choose_file">
+      <segment>
+        <source>Choisir un fichier</source>
+        <target state="translated">Velg en fil</target>
+      </segment>
+    </unit>
+
+    <unit id="csv_json_source_help">
+      <segment>
+        <source>UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</source>
+        <target state="translated">Kun UTF-8. Cellene, radene, kolonnene og utdataene er begrenset før behandling.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_label">
+      <segment>
+        <source>Séparateur CSV</source>
+        <target state="translated">CSV-separator</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_auto">
+      <segment>
+        <source>Détection automatique</source>
+        <target state="translated">Automatisk deteksjon</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_comma">
+      <segment>
+        <source>Virgule</source>
+        <target state="translated">Kommategn</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_semicolon">
+      <segment>
+        <source>Point-virgule</source>
+        <target state="translated">Semikolon</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_tab">
+      <segment>
+        <source>Tabulation</source>
+        <target state="translated">Tabulator</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_pipe">
+      <segment>
+        <source>Barre verticale</source>
+        <target state="translated">Vertikal strek</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_trim">
+      <segment>
+        <source>Supprimer les espaces en bord de cellule</source>
+        <target state="translated">Fjern mellomrom fra cellens kanter</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_headers">
+      <segment>
+        <source>La première ligne contient les en-têtes</source>
+        <target state="translated">Den første raden inneholder overskriftene</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_types">
+      <segment>
+        <source>Inférer nombres, booléens et null</source>
+        <target state="translated">Inferere tall, boolske verdier og null</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_formulas">
+      <segment>
+        <source>Neutraliser les formules de tableur dans les textes</source>
+        <target state="translated">Nøytraliser regnearkformler i tekstene</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_bom">
+      <segment>
+        <source>Ajouter un BOM UTF-8 pour Excel</source>
+        <target state="translated">Legg til en UTF-8 BOM for Excel</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_title">
+      <segment>
+        <source>Mapping, sélection et ordre des colonnes</source>
+        <target state="translated">Mapping, valg og rekkefølge av kolonner</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_help">
+      <segment>
+        <source>Une règle par ligne au format « source =&gt; sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</source>
+        <target state="translated">En regel per linje i formatet « kilde =&gt; utdata ». La stå tomt for å beholde alle kolonnene. Nestede JSON-stier bruker punkt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_placeholder">
+      <segment>
+        <source>profil.nom =&gt; nom
+email =&gt; contact</source>
+        <target state="translated">profil.navn =&gt; navn
+email =&gt; kontakt</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_convert">
+      <segment>
+        <source>Convertir localement</source>
+        <target state="translated">Konverter lokalt</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Avbryt</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_processing">
+      <segment>
+        <source>Conversion dans un Worker dédié…</source>
+        <target state="translated">Konvertering i en dedikert Worker…</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_result_title">
+      <segment>
+        <source>Résultat et contrôle</source>
+        <target state="translated">Resultat og kontroll</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_rows">
+      <segment>
+        <source> lignes</source>
+        <target state="translated">rader</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_columns">
+      <segment>
+        <source> colonnes</source>
+        <target state="translated">kolonner</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_separator">
+      <segment>
+        <source>séparateur</source>
+        <target state="translated">separator</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Kopiert</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopier</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_download">
+      <segment>
+        <source>Télécharger .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></source>
+        <target state="translated">Last ned .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></target>
+      </segment>
+    </unit>
+    <unit id="csv_json_diagnostics">
+      <segment>
+        <source>Diagnostics</source>
+        <target state="translated">Diagnostikk</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_title">
+      <segment>
+        <source>Aperçu des premières lignes</source>
+        <target state="translated">Forhåndsvisning av de første radene</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_aria">
+      <segment>
+        <source>Aperçu tabulaire défilable</source>
+        <target state="translated">Rullbar tabellarisk forhåndsvisning</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_title">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Utdata</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_truncated">
+      <segment>
+        <source>L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Tekstforhåndsvisningen er avkortet til 50 000 tegn; nedlastingen inneholder hele utdataene.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limits_title">
+      <segment>
+        <source>Formats, limites et confidentialité</source>
+        <target state="translated">Formater, grenser og personvern</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_csv">
+      <segment>
+        <source>CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</source>
+        <target state="translated">CSV i henhold til doble anførselstegn, komma, semikolon, tabulator eller vertikal strek, med innebygde linjeskift.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_json">
+      <segment>
+        <source>JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</source>
+        <target state="translated">JSON i form av en tabell av objekter. Nestede objekter blir flatet ut med punktede stier; tabeller forblir serialisert i JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_security">
+      <segment>
+        <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
+        <target state="translated">100 000 rader, 250 kolonner, 100 000 tegn per celle og 16 millioner tegn i utdata. Ingen nettverk brukes.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Tilbake til dataverktøyene</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_error_generic">
+      <segment>
+        <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
+        <target state="translated">Konverteringen mislyktes. Sjekk kilden og prøv igjen.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_empty">
+      <segment>
+        <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
+        <target state="translated">Kilden er tom. Lim inn CSV eller JSON før konvertering.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_source_large">
+      <segment>
+        <source>La source dépasse la limite de 4 000 000 de caractères.</source>
+        <target state="translated">Kilden overskrider grensen på 4 000 000 tegn.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_output_large">
+      <segment>
+        <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
+        <target state="translated">Utdataene vil overskride sikkerhetsgrensen på 16 000 000 tegn.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_rows">
+      <segment>
+        <source>Le tableau dépasse la limite de 100 000 lignes.</source>
+        <target state="translated">Tabellen overskrider grensen på 100 000 rader.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_columns">
+      <segment>
+        <source>Le tableau dépasse la limite de 250 colonnes.</source>
+        <target state="translated">Tabellen overskrider grensen på 250 kolonner.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_cell">
+      <segment>
+        <source>Une cellule dépasse la limite de 100 000 caractères.</source>
+        <target state="translated">En celle overskrider grensen på 100 000 tegn.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_open">
+      <segment>
+        <source>Un champ CSV entre guillemets n’est pas fermé.</source>
+        <target state="translated">Et CSV-felt i anførselstegn er ikke lukket.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_tail">
+      <segment>
+        <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
+        <target state="translated">Et uventet tegn følger etter lukking av et CSV-felt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_width">
+      <segment>
+        <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
+        <target state="translated">Denne raden har ikke samme antall kolonner som overskriften. Manglende celler etterlates tomme.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_empty">
+      <segment>
+        <source>Un nom de colonne vide a reçu un identifiant stable.</source>
+        <target state="translated">Et tomt kolonnenavn har fått en stabil identifikator.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_duplicate">
+      <segment>
+        <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
+        <target state="translated">Et duplisert kolonnenavn har fått et suffiks for å unngå datatap.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_delimiter">
+      <segment>
+        <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
+        <target state="translated">Avgrensningen kunne ikke oppdages; komma brukes som standard.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping">
+      <segment>
+        <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
+        <target state="translated">Mapping må inneholde en regel «kilde =&gt; utdata» per rad.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_source">
+      <segment>
+        <source>Une colonne source du mapping n’existe pas dans les données.</source>
+        <target state="translated">En kildekolonne i mapping finnes ikke i dataene.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_output">
+      <segment>
+        <source>Deux règles utilisent le même nom de sortie.</source>
+        <target state="translated">To regler bruker samme utdata-navn.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_invalid">
+      <segment>
+        <source>La source n’est pas un document JSON valide.</source>
+        <target state="translated">Kilden er ikke et gyldig JSON-dokument.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_root">
+      <segment>
+        <source>La racine JSON doit être un tableau d’objets.</source>
+        <target state="translated">JSON-roten må være en liste med objekter.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_row">
+      <segment>
+        <source>Chaque élément du tableau JSON doit être un objet.</source>
+        <target state="translated">Hvert element i JSON-listen må være et objekt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_depth">
+      <segment>
+        <source>Une valeur JSON dépasse 12 niveaux d’imbrication.</source>
+        <target state="translated">En JSON overskrider en verdi 12 nivåer med innkapsling.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_formula">
+      <segment>
+        <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
+        <target state="translated">Celler som ligner på formler har fått et apostrof-prefiks for å begrense utførelsen i et regneark.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_row">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
+        <target state="translated">Rad <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_position">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
+        <target state="translated">Rad <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, kolonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Den valgte filen er tom.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Filen overskrider grensen på <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_format">
+      <segment>
+        <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
+        <target state="translated">Velg en CSV-, TSV-, TXT- eller JSON-fil.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Filen er ikke kodet i gyldig UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Kan ikke lese denne filen lokalt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_csv_label">
+      <segment>
+        <source>Source CSV</source>
+        <target state="translated">Kilde CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_json_label">
+      <segment>
+        <source>Source JSON</source>
+        <target state="translated">Kilde JSON</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_number">
+      <segment>
+        <source>Un nombre JSON serait arrondi ou rendu infini par JavaScript. Convertissez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Et JSON-nummer vil bli avrundet eller gjort uendelig av JavaScript. Konverter det til en streng for å bevare den nøyaktige verdien.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_path_collision">
+      <segment>
+        <source>Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.</source>
+        <target state="translated">En nøkkel som inneholder et punkt kolliderer med en innkapslet objektbane. Gi nytt navn til en av nøklene.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy_failed">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Automatisk kopiering mislyktes. Velg utdata og kopier dem manuelt.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_collision">
+      <segment>
+        <source>Deux en-têtes deviennent identiques après la neutralisation des formules. Renommez l’une des colonnes.</source>
+        <target state="translated">To overskrifter blir identiske etter nøytralisering av formlene. Gi nytt navn til en av kolonnene.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_no_columns">
+      <segment>
+        <source>Le tableau JSON contient des lignes sans aucune propriété exportable. Ajoutez au moins une clé.</source>
+        <target state="translated">JSON-tabellen inneholder rader uten noen eksportbare egenskaper. Legg til minst én nøkkel.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_unicode">
+      <segment>
+        <source>Une chaîne JSON contient un caractère UTF-16 non apparié qui serait altéré lors de l’export.</source>
+        <target state="translated">En JSON-streng inneholder et uparret UTF-16-tegn som vil bli endret under eksport.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">navn;epost;aktiv;poeng
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;navn&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;matematikk&quot;, &quot;kode&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;navn&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;kompilator&quot;, &quot;marine&quot;]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -1,0 +1,197 @@
+<section class="tool-page">
+  <div class="page-hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-code"></i></div>
+        <h1 i18n="@@csv_json_title">Convertisseur CSV ↔ JSON</h1>
+        <p class="hero-subtitle" i18n="@@csv_json_subtitle">
+          Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée.
+        </p>
+        <div class="privacy-note">
+          <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+          <span i18n="@@csv_json_privacy">Les fichiers et les valeurs restent dans votre navigateur.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container tool-content">
+    <div class="tool-card workspace-card">
+      <div class="card-header">
+        <h2 i18n="@@csv_json_workspace_title">Préparer la conversion</h2>
+        <p i18n="@@csv_json_workspace_subtitle">Collez une source UTF-8 ou chargez un fichier de {{ maxFileSizeLabel }} maximum.</p>
+      </div>
+
+      <div class="direction-switch" role="group" i18n-aria-label="@@csv_json_direction_aria" aria-label="Sens de conversion">
+        <button type="button" [class.active]="options().direction === 'csv-to-json'" [attr.aria-pressed]="options().direction === 'csv-to-json'" (click)="selectDirection('csv-to-json')">CSV → JSON</button>
+        <button type="button" [class.active]="options().direction === 'json-to-csv'" [attr.aria-pressed]="options().direction === 'json-to-csv'" (click)="selectDirection('json-to-csv')">JSON → CSV</button>
+      </div>
+
+      <div class="source-toolbar">
+        <label class="file-button" for="csv-json-file">
+          <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+          <span i18n="@@csv_json_choose_file">Choisir un fichier</span>
+          <input id="csv-json-file" class="visually-hidden" type="file" accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,text/plain,application/json" (change)="selectFile($event)" />
+        </label>
+        @if (fileName()) { <span class="file-name">{{ fileName() }}</span> }
+      </div>
+
+      <div class="field">
+        <div class="label-line">
+          <label for="csv-json-source">
+            @if (options().direction === 'csv-to-json') {
+              <span i18n="@@csv_json_source_csv_label">Source CSV</span>
+            } @else {
+              <span i18n="@@csv_json_source_json_label">Source JSON</span>
+            }
+          </label>
+          <span>{{ formatNumber(source().length) }} / {{ formatNumber(maxSourceCharacters) }}</span>
+        </div>
+        <textarea id="csv-json-source" rows="13" spellcheck="false" [value]="source()" (input)="updateSource($event)" aria-describedby="csv-json-source-help"></textarea>
+        <small id="csv-json-source-help" i18n="@@csv_json_source_help">UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</small>
+      </div>
+
+      <div class="options-grid">
+        <div class="field">
+          <label for="csv-json-delimiter" i18n="@@csv_json_delimiter_label">Séparateur CSV</label>
+          <select id="csv-json-delimiter" [value]="options().delimiter" (change)="updateDelimiter($event)">
+            @if (options().direction === 'csv-to-json') {
+              <option value="auto" i18n="@@csv_json_delimiter_auto">Détection automatique</option>
+            }
+            <option value="comma" i18n="@@csv_json_delimiter_comma">Virgule</option>
+            <option value="semicolon" i18n="@@csv_json_delimiter_semicolon">Point-virgule</option>
+            <option value="tab" i18n="@@csv_json_delimiter_tab">Tabulation</option>
+            <option value="pipe" i18n="@@csv_json_delimiter_pipe">Barre verticale</option>
+          </select>
+        </div>
+        @if (options().direction === 'csv-to-json') {
+          <label class="check-option">
+            <input type="checkbox" [checked]="options().trimCells" (change)="updateBooleanOption('trimCells', $event)" />
+            <span i18n="@@csv_json_trim">Supprimer les espaces en bord de cellule</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox" [checked]="options().firstRowHeaders" (change)="updateBooleanOption('firstRowHeaders', $event)" />
+            <span i18n="@@csv_json_headers">La première ligne contient les en-têtes</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox" [checked]="options().inferTypes" (change)="updateBooleanOption('inferTypes', $event)" />
+            <span i18n="@@csv_json_types">Inférer nombres, booléens et null</span>
+          </label>
+        } @else {
+          <label class="check-option">
+            <input type="checkbox" [checked]="options().protectSpreadsheetFormulas" (change)="updateBooleanOption('protectSpreadsheetFormulas', $event)" />
+            <span i18n="@@csv_json_formulas">Neutraliser les formules de tableur dans les textes</span>
+          </label>
+          <label class="check-option">
+            <input type="checkbox" [checked]="options().includeBom" (change)="updateBooleanOption('includeBom', $event)" />
+            <span i18n="@@csv_json_bom">Ajouter un BOM UTF-8 pour Excel</span>
+          </label>
+        }
+      </div>
+
+      <details class="mapping-panel">
+        <summary id="csv-json-mapping-label" i18n="@@csv_json_mapping_title">Mapping, sélection et ordre des colonnes</summary>
+        <p i18n="@@csv_json_mapping_help">Une règle par ligne au format « source => sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</p>
+        <textarea rows="5" spellcheck="false" aria-labelledby="csv-json-mapping-label" [value]="options().mapping" (input)="updateMapping($event)" i18n-placeholder="@@csv_json_mapping_placeholder" placeholder="profil.nom => nom&#10;email => contact"></textarea>
+      </details>
+
+      <div class="actions">
+        <button class="primary-action" type="button" [disabled]="!canConvert()" (click)="convert()">
+          <i class="tc-icon tc-icon-bolt" aria-hidden="true"></i>
+          <span i18n="@@csv_json_convert">Convertir localement</span>
+        </button>
+        @if (isBusy()) {
+          <button class="secondary-action" type="button" (click)="cancel()" i18n="@@csv_json_cancel">Annuler</button>
+        }
+        <button class="secondary-action" type="button" [disabled]="isBusy()" (click)="reset()" i18n="@@tool_reset">Réinitialiser</button>
+      </div>
+
+      <div class="status-region" aria-live="polite">
+        @if (isBusy()) { <p class="processing" i18n="@@csv_json_processing">Conversion dans un Worker dédié…</p> }
+        @if (errorMessage()) { <p class="error-box">{{ errorMessage() }}</p> }
+      </div>
+    </div>
+
+    @if (result(); as conversion) {
+      <div class="tool-card result-card" data-testid="csv-json-result">
+        <div class="result-heading">
+          <div>
+            <h2 i18n="@@csv_json_result_title">Résultat et contrôle</h2>
+            <p>
+              <span>{{ formatNumber(conversion.stats.outputRows) }}</span>
+              <span i18n="@@csv_json_rows"> lignes</span>
+              · <span>{{ formatNumber(conversion.stats.columns) }}</span>
+              <span i18n="@@csv_json_columns"> colonnes</span>
+              · <span i18n="@@csv_json_separator">séparateur</span> {{ delimiterLabel(conversion.detectedDelimiter) }}
+            </p>
+          </div>
+          <div class="result-actions">
+            <button type="button" [disabled]="!conversion.ok" (click)="copyOutput()">
+              <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
+              @if (copied()) { <span i18n="@@csv_json_copied">Copié</span> } @else { <span i18n="@@csv_json_copy">Copier</span> }
+            </button>
+            <button type="button" [disabled]="!conversion.ok" (click)="downloadOutput()">
+              <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+              <span i18n="@@csv_json_download">Télécharger .{{ conversion.outputExtension }}</span>
+            </button>
+          </div>
+        </div>
+
+        @if (conversion.issues.length) {
+          <div class="diagnostics" [class.has-errors]="errorCount() > 0" [attr.role]="errorCount() > 0 ? 'alert' : 'status'" [attr.aria-live]="errorCount() > 0 ? 'assertive' : 'polite'" aria-atomic="true">
+            <h3>
+              <span i18n="@@csv_json_diagnostics">Diagnostics</span>
+              <span class="badge">{{ errorCount() }} / {{ warningCount() }}</span>
+            </h3>
+            <ul>
+              @for (issue of conversion.issues; track trackIssue($index, issue)) {
+                <li [class]="'issue issue--' + issue.severity">
+                  <i class="tc-icon" [class.tc-icon-exclamation-triangle]="issue.severity !== 'info'" [class.tc-icon-info-circle]="issue.severity === 'info'" aria-hidden="true"></i>
+                  <span>{{ issueLabel(issue) }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (conversion.previewHeaders.length) {
+          <h3 i18n="@@csv_json_preview_title">Aperçu des premières lignes</h3>
+          <div class="table-scroll" tabindex="0" role="region" i18n-aria-label="@@csv_json_preview_aria" aria-label="Aperçu tabulaire défilable">
+            <table>
+              <thead><tr>@for (header of conversion.previewHeaders; track $index) { <th scope="col">{{ header }}</th> }</tr></thead>
+              <tbody>
+                @for (row of conversion.previewRows; track $index) {
+                  <tr>@for (cell of row; track $index) { <td>{{ cell }}</td> }</tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+
+        @if (conversion.output) {
+          <div class="output-block">
+            <h3 i18n="@@csv_json_output_title">Sortie</h3>
+            @if (outputPreviewTruncated()) { <p i18n="@@csv_json_output_truncated">L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</p> }
+            <pre tabindex="0"><code>{{ outputPreview() }}</code></pre>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="tool-card limits-card">
+      <h2 i18n="@@csv_json_limits_title">Formats, limites et confidentialité</h2>
+      <div class="limits-grid">
+        <div><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i><p i18n="@@csv_json_limit_csv">CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</p></div>
+        <div><i class="tc-icon tc-icon-sitemap" aria-hidden="true"></i><p i18n="@@csv_json_limit_json">JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</p></div>
+        <div><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><p i18n="@@csv_json_limit_security">100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</p></div>
+      </div>
+    </div>
+
+    <div class="back-section">
+      <a class="back-link" routerLink="/categories/dev/data">
+        <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+        <span i18n="@@csv_json_back">Retour aux outils de données</span>
+      </a>
+    </div>
+  </div>
+</section>
