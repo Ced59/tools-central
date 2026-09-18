@@ -87146,6 +87146,44 @@ email =&gt; επαφή</target>
         <target state="translated">Μια συμβολοσειρά JSON περιέχει έναν μη ζευγαρωμένο χαρακτήρα UTF-16 που θα αλλοιωθεί κατά την εξαγωγή.</target>
       </segment>
     </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">όνομα;email;ενεργό;βαθμός
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;μαθηματικά&quot;, &quot;κώδικας&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;μεταγλωττιστής&quot;, &quot;ναυτικό&quot;]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -87142,6 +87142,44 @@ email =&gt; contact</target>
         <target state="translated">一个 JSON 字符串包含一个未配对的 UTF-16 字符，在导出时会被更改。</target>
       </segment>
     </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">姓名;电子邮件;活跃;分数
+阿达·洛夫莱斯;ada@example.test;true;98.5
+格蕾丝·霍普;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    "id": 1,
+    "profil": { "nom": "阿达·洛夫莱斯" },
+    "tags": ["数学", "代码"]
+  },
+  {
+    "id": 2,
+    "profil": { "nom": "格蕾丝·霍普" },
+    "tags": ["编译器", "海军"]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

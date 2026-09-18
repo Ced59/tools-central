@@ -33,8 +33,10 @@ type ToolState = 'idle' | 'processing' | 'done' | 'error';
 type BooleanOption = 'firstRowHeaders' | 'trimCells' | 'inferTypes'
   | 'protectSpreadsheetFormulas' | 'includeBom';
 
-const DEFAULT_CSV = 'nom;email;actif;score\nAda Lovelace;ada@example.test;true;98.5\nGrace Hopper;grace@example.test;true;100';
-const DEFAULT_JSON = `[
+const DEFAULT_CSV = $localize`:Exemple CSV initial du convertisseur@@csv_json_default_csv:nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100`;
+const DEFAULT_JSON = $localize`:Exemple JSON initial du convertisseur@@csv_json_default_json:[
   {
     "id": 1,
     "profil": { "nom": "Ada Lovelace" },

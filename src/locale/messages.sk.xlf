@@ -87114,6 +87114,44 @@ email =&gt; kontakt</target>
         <target state="translated">Reťazec JSON obsahuje nezhodný znak UTF-16, ktorý by bol pri exporte poškodený.</target>
       </segment>
     </unit>
+    <unit id="csv_json_default_csv">
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+        <target state="translated">meno;email;aktívny;skóre
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+        <target state="translated">[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;meno&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;matematika&quot;, &quot;kód&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;meno&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;kompilátor&quot;, &quot;námorník&quot;]
+  }
+]</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -45221,7 +45221,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     <unit id="csv_json_delimiter_comma">
       <notes>
         <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:61,62</note>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:236</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:241</note>
       </notes>
       <segment>
         <source>Virgule</source>
@@ -45230,7 +45230,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     <unit id="csv_json_delimiter_semicolon">
       <notes>
         <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:62,63</note>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:237</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:242</note>
       </notes>
       <segment>
         <source>Point-virgule</source>
@@ -45239,7 +45239,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     <unit id="csv_json_delimiter_tab">
       <notes>
         <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:63,64</note>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:238</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:243</note>
       </notes>
       <segment>
         <source>Tabulation</source>
@@ -45248,7 +45248,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     <unit id="csv_json_delimiter_pipe">
       <notes>
         <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:64,66</note>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:239</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:244</note>
       </notes>
       <segment>
         <source>Barre verticale</source>
@@ -45479,9 +45479,40 @@ email =&gt; contact</source>
         <source>Retour aux outils de données</source>
       </segment>
     </unit>
+    <unit id="csv_json_default_csv">
+      <notes>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:36,38</note>
+        <note category="description">Exemple CSV initial du convertisseur</note>
+      </notes>
+      <segment>
+        <source>nom;email;actif;score
+Ada Lovelace;ada@example.test;true;98.5
+Grace Hopper;grace@example.test;true;100</source>
+      </segment>
+    </unit>
+    <unit id="csv_json_default_json">
+      <notes>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:39,50</note>
+        <note category="description">Exemple JSON initial du convertisseur</note>
+      </notes>
+      <segment>
+        <source>[
+  {
+    &quot;id&quot;: 1,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Ada Lovelace&quot; },
+    &quot;tags&quot;: [&quot;mathématiques&quot;, &quot;code&quot;]
+  },
+  {
+    &quot;id&quot;: 2,
+    &quot;profil&quot;: { &quot;nom&quot;: &quot;Grace Hopper&quot; },
+    &quot;tags&quot;: [&quot;compilateur&quot;, &quot;marine&quot;]
+  }
+]</source>
+      </segment>
+    </unit>
     <unit id="csv_json_error_generic">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:187</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:192</note>
       </notes>
       <segment>
         <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
@@ -45489,7 +45520,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_copy_failed">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:213</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:218</note>
       </notes>
       <segment>
         <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
@@ -45497,7 +45528,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_empty">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:244</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:249</note>
       </notes>
       <segment>
         <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
@@ -45505,7 +45536,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_source_large">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:245</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:250</note>
       </notes>
       <segment>
         <source>La source dépasse la limite de 4 000 000 de caractères.</source>
@@ -45513,7 +45544,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_output_large">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:246</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:251</note>
       </notes>
       <segment>
         <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
@@ -45521,7 +45552,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_rows">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:247</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:252</note>
       </notes>
       <segment>
         <source>Le tableau dépasse la limite de 100 000 lignes.</source>
@@ -45529,7 +45560,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_columns">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:248</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:253</note>
       </notes>
       <segment>
         <source>Le tableau dépasse la limite de 250 colonnes.</source>
@@ -45537,7 +45568,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_cell">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:249</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:254</note>
       </notes>
       <segment>
         <source>Une cellule dépasse la limite de 100 000 caractères.</source>
@@ -45545,7 +45576,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_quote_open">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:250</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:255</note>
       </notes>
       <segment>
         <source>Un champ CSV entre guillemets n’est pas fermé.</source>
@@ -45553,7 +45584,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_quote_tail">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:251</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:256</note>
       </notes>
       <segment>
         <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
@@ -45561,7 +45592,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_width">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:252</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:257</note>
       </notes>
       <segment>
         <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
@@ -45569,7 +45600,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_header_empty">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:253</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:258</note>
       </notes>
       <segment>
         <source>Un nom de colonne vide a reçu un identifiant stable.</source>
@@ -45577,7 +45608,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_header_duplicate">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:254</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:259</note>
       </notes>
       <segment>
         <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
@@ -45585,7 +45616,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_delimiter">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:255</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:260</note>
       </notes>
       <segment>
         <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
@@ -45593,7 +45624,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_mapping">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:256</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:261</note>
       </notes>
       <segment>
         <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
@@ -45601,7 +45632,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_mapping_source">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:257</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:262</note>
       </notes>
       <segment>
         <source>Une colonne source du mapping n’existe pas dans les données.</source>
@@ -45609,7 +45640,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_mapping_output">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:258</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:263</note>
       </notes>
       <segment>
         <source>Deux règles utilisent le même nom de sortie.</source>
@@ -45617,7 +45648,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_header_collision">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:259</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:264</note>
       </notes>
       <segment>
         <source>Deux en-têtes deviennent identiques après la neutralisation des formules. Renommez l’une des colonnes.</source>
@@ -45625,7 +45656,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_invalid">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:260</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:265</note>
       </notes>
       <segment>
         <source>La source n’est pas un document JSON valide.</source>
@@ -45633,7 +45664,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_number">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:261</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:266</note>
       </notes>
       <segment>
         <source>Un nombre JSON serait arrondi ou rendu infini par JavaScript. Convertissez-le en chaîne pour préserver sa valeur exacte.</source>
@@ -45641,7 +45672,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_root">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:262</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:267</note>
       </notes>
       <segment>
         <source>La racine JSON doit être un tableau d’objets.</source>
@@ -45649,7 +45680,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_row">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:263</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:268</note>
       </notes>
       <segment>
         <source>Chaque élément du tableau JSON doit être un objet.</source>
@@ -45657,7 +45688,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_no_columns">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:264</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:269</note>
       </notes>
       <segment>
         <source>Le tableau JSON contient des lignes sans aucune propriété exportable. Ajoutez au moins une clé.</source>
@@ -45665,7 +45696,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_json_unicode">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:265</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:270</note>
       </notes>
       <segment>
         <source>Une chaîne JSON contient un caractère UTF-16 non apparié qui serait altéré lors de l’export.</source>
@@ -45673,7 +45704,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_depth">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:266</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:271</note>
       </notes>
       <segment>
         <source>Une valeur JSON dépasse 12 niveaux d’imbrication.</source>
@@ -45681,7 +45712,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_path_collision">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:267</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:272</note>
       </notes>
       <segment>
         <source>Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.</source>
@@ -45689,7 +45720,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_formula">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:268</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:273</note>
       </notes>
       <segment>
         <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
@@ -45697,7 +45728,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_row">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:273</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:278</note>
       </notes>
       <segment>
         <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
@@ -45705,7 +45736,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_issue_position">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:274</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:279</note>
       </notes>
       <segment>
         <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
@@ -45713,7 +45744,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_file_empty">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:307</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:312</note>
       </notes>
       <segment>
         <source>Le fichier sélectionné est vide.</source>
@@ -45721,7 +45752,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_file_large">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:308</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:313</note>
       </notes>
       <segment>
         <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
@@ -45729,7 +45760,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_file_format">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:309</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:314</note>
       </notes>
       <segment>
         <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
@@ -45737,7 +45768,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_file_encoding">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:310</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:315</note>
       </notes>
       <segment>
         <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
@@ -45745,7 +45776,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_file_error">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:312</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:317</note>
       </notes>
       <segment>
         <source>Impossible de lire ce fichier localement.</source>
