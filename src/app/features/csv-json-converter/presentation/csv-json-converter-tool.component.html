@@ -31,8 +31,8 @@
         <label class="file-button" for="csv-json-file">
           <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
           <span i18n="@@csv_json_choose_file">Choisir un fichier</span>
+          <input id="csv-json-file" class="visually-hidden" type="file" accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,text/plain,application/json" (change)="selectFile($event)" />
         </label>
-        <input id="csv-json-file" class="visually-hidden" type="file" accept=".csv,.tsv,.txt,.json,text/csv,text/tab-separated-values,text/plain,application/json" (change)="selectFile($event)" />
         @if (fileName()) { <span class="file-name">{{ fileName() }}</span> }
       </div>
 

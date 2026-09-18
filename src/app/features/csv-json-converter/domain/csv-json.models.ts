@@ -508,7 +508,7 @@ function flattenRecord(
   }
   for (const [key, value] of Object.entries(record)) {
     const path = prefix ? `${prefix}.${key}` : key;
-    if (isRecord(value)) {
+    if (isRecord(value) && Object.keys(value).length > 0) {
       flattenRecord(value, path, target, state, row, depth + 1);
     } else if (Object.hasOwn(target, path)) {
       addIssue(state, 'json-path-collision', 'error', row, null, path.slice(0, 160));

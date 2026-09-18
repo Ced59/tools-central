@@ -203,9 +203,12 @@ export class CsvJsonConverterToolComponent {
     this.clearCopiedTimer();
     this.copied.set(copied);
     if (copied) {
+      this.errorMessage.set('');
       this.copiedTimer = setTimeout(() => {
         this.copied.set(false);
       }, 2_000);
+    } else {
+      this.errorMessage.set($localize`:@@csv_json_copy_failed:Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.`);
     }
   }
 

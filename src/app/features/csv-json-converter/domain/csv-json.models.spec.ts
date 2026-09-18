@@ -100,6 +100,17 @@ describe('convertCsvJson', () => {
     expect(result.issues.some(issue => issue.code === 'spreadsheet-formula-protected')).toBe(true);
   });
 
+  it('préserve les objets vides comme des cellules JSON explicites', () => {
+    const result = convertCsvJson('[{"id":1,"profile":{},"nested":{"settings":{}}}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.previewHeaders).toEqual(['id', 'profile', 'nested.settings']);
+    expect(result.output).toBe('id,profile,nested.settings\r\n1,{},{}');
+  });
+
   it('protège aussi les en-têtes CSV issus des clés ou du mapping', () => {
     const keyResult = convertCsvJson('[{"=2+2":"value"}]', {
       ...CSV_DEFAULTS,

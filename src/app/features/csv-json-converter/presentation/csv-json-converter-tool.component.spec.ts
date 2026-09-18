@@ -1,8 +1,9 @@
 import { LOCALE_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { BrowserCsvJsonClipboardAdapter } from '../infrastructure/browser-csv-json-clipboard.adapter';
 import { CsvJsonConverterToolComponent } from './csv-json-converter-tool.component';
 
 describe('CsvJsonConverterToolComponent', () => {
@@ -26,6 +27,7 @@ describe('CsvJsonConverterToolComponent', () => {
     expect(host.querySelector('h1')?.textContent).toContain('CSV');
     expect(host.querySelector<HTMLTextAreaElement>('#csv-json-source')?.value).toContain('Ada');
     expect(host.querySelectorAll('[role="group"] button')).toHaveLength(2);
+    expect(host.querySelector<HTMLInputElement>('#csv-json-file')?.closest('label.file-button')).not.toBeNull();
     expect(host.querySelector('.mapping-panel textarea')?.getAttribute('aria-labelledby'))
       .toBe('csv-json-mapping-label');
   });
@@ -101,5 +103,30 @@ describe('CsvJsonConverterToolComponent', () => {
     const alert = (fixture.nativeElement as HTMLElement).querySelector('[role="alert"]');
     expect(alert?.getAttribute('aria-live')).toBe('assertive');
     expect(alert?.textContent).toContain('JSON valide');
+  });
+
+  it('annonce un échec de copie dans la région de statut', async () => {
+    const copy = vi.spyOn(BrowserCsvJsonClipboardAdapter.prototype, 'copy').mockResolvedValue(false);
+    component.result.set({
+      ok: true,
+      direction: 'csv-to-json',
+      output: '[]',
+      outputMediaType: 'application/json;charset=utf-8',
+      outputExtension: 'json',
+      detectedDelimiter: 'comma',
+      previewHeaders: [],
+      previewRows: [],
+      issues: [],
+      stats: { inputRows: 0, outputRows: 0, columns: 0, inputCharacters: 0, outputCharacters: 2 },
+    });
+
+    await component.copyOutput();
+    fixture.detectChanges();
+
+    expect(component.copied()).toBe(false);
+    expect(component.errorMessage()).toContain('Copie automatique impossible');
+    expect((fixture.nativeElement as HTMLElement).querySelector('.status-region')?.textContent)
+      .toContain('Copie automatique impossible');
+    copy.mockRestore();
   });
 });
