@@ -234,6 +234,7 @@ function convertJsonToCsv(
   const flattenedRows: Record<string, unknown>[] = [];
   const headers: string[] = [];
   const knownHeaders = new Set<string>();
+  const knownPathOrigins = new Map<string, string>();
   for (let rowIndex = 0; rowIndex < parsedRows.length; rowIndex += 1) {
     const row = parsedRows[rowIndex];
     if (!isRecord(row)) {
@@ -242,7 +243,7 @@ function convertJsonToCsv(
     }
     if (!validateJsonRowStructure(row, state, rowIndex + 1)) break;
     const flattened = Object.create(null) as Record<string, unknown>;
-    flattenRecord(row, '', flattened, state, rowIndex + 1, 0);
+    flattenRecord(row, '', [], flattened, knownPathOrigins, state, rowIndex + 1, 0);
     flattenedRows.push(flattened);
     for (const key of Object.keys(flattened)) {
       if (!knownHeaders.has(key)) {
@@ -544,17 +545,12 @@ function parseMapping(
   const mapping: ColumnMapping[] = [];
   for (const [index, line] of rawMapping.split(/\r?\n/u).entries()) {
     if (!line.trim() || line.trimStart().startsWith('#')) continue;
-    const separator = line.indexOf('=>');
-    if (separator < 0) {
+    const parsedLine = parseMappingLine(line);
+    if (!parsedLine) {
       addIssue(state, 'mapping-invalid', 'error', index + 1, null, line.slice(0, 160));
       continue;
     }
-    const source = line.slice(0, separator).trim();
-    const output = line.slice(separator + 2).trim();
-    if (!source || !output) {
-      addIssue(state, 'mapping-invalid', 'error', index + 1, null, line.slice(0, 160));
-      continue;
-    }
+    const { source, output } = parsedLine;
     if (!sourceSet.has(source)) addIssue(state, 'mapping-source-missing', 'error', index + 1, null, source);
     if (outputs.has(output)) addIssue(state, 'mapping-output-duplicate', 'error', index + 1, null, output);
     if (mapping.length >= CSV_JSON_MAX_COLUMNS) {
@@ -568,10 +564,51 @@ function parseMapping(
   return mapping;
 }
 
+function parseMappingLine(line: string): ColumnMapping | null {
+  let inQuotedName = false;
+  let escaped = false;
+  let separator = -1;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (inQuotedName) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') inQuotedName = false;
+      continue;
+    }
+    if (character === '"') {
+      inQuotedName = true;
+      continue;
+    }
+    if (character === '=' && line[index + 1] === '>') {
+      separator = index;
+      break;
+    }
+  }
+  if (separator < 0 || inQuotedName) return null;
+  const source = parseMappingName(line.slice(0, separator));
+  const output = parseMappingName(line.slice(separator + 2));
+  return source === null || output === null ? null : { source, output };
+}
+
+function parseMappingName(rawName: string): string | null {
+  const name = rawName.trim();
+  if (!name) return null;
+  if (!name.startsWith('"')) return name.includes('"') ? null : name;
+  try {
+    const parsed: unknown = JSON.parse(name);
+    return typeof parsed === 'string' && parsed.length > 0 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 function flattenRecord(
   record: Readonly<Record<string, unknown>>,
   prefix: string,
+  originPrefix: readonly string[],
   target: Record<string, unknown>,
+  knownPathOrigins: Map<string, string>,
   state: MutableConversionState,
   row: number,
   depth: number,
@@ -582,11 +619,17 @@ function flattenRecord(
   }
   for (const [key, value] of Object.entries(record)) {
     const path = prefix ? `${prefix}.${key}` : key;
+    const originSegments = [...originPrefix, key];
     if (isRecord(value) && Object.keys(value).length > 0) {
-      flattenRecord(value, path, target, state, row, depth + 1);
-    } else if (Object.hasOwn(target, path)) {
-      addIssue(state, 'json-path-collision', 'error', row, null, path.slice(0, 160));
+      flattenRecord(value, path, originSegments, target, knownPathOrigins, state, row, depth + 1);
     } else {
+      const origin = JSON.stringify(originSegments);
+      const knownOrigin = knownPathOrigins.get(path);
+      if (Object.hasOwn(target, path) || (knownOrigin !== undefined && knownOrigin !== origin)) {
+        addIssue(state, 'json-path-collision', 'error', row, null, path.slice(0, 160));
+        continue;
+      }
+      knownPathOrigins.set(path, origin);
       target[path] = value;
     }
   }
@@ -674,6 +717,7 @@ function isLosslessJsonNumber(token: string): boolean {
   if (token.length > 128) return false;
   const numeric = Number(token);
   if (!Number.isFinite(numeric)) return false;
+  if (numeric === 0 && token.startsWith('-')) return false;
   const sourceDecimal = canonicalDecimal(token);
   const numericDecimal = canonicalDecimal(String(numeric));
   return sourceDecimal !== null

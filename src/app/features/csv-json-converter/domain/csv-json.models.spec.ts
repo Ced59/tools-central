@@ -66,6 +66,19 @@ describe('convertCsvJson', () => {
     ]);
   });
 
+  it('accepte les noms réservés lorsqu’ils sont écrits comme chaînes JSON', () => {
+    const result = convertCsvJson('#id,a=>b\n1,2', {
+      ...CSV_DEFAULTS,
+      mapping: '"#id" => identifier\n"a=>b" => "sortie=>finale"',
+    });
+
+    expect(result.ok).toBe(true);
+    expect(JSON.parse(result.output)).toEqual([{
+      identifier: 1,
+      'sortie=>finale': 2,
+    }]);
+  });
+
   it('rejette un mapping qui dépasserait la limite de colonnes', () => {
     const mapping = Array.from(
       { length: CSV_JSON_MAX_COLUMNS + 1 },
@@ -272,6 +285,18 @@ describe('convertCsvJson', () => {
     expect(preciseDecimal.issues[0]?.code).toBe('json-number-unsafe');
   });
 
+  it('rejette le zéro négatif JSON et le conserve comme texte depuis CSV', () => {
+    const jsonResult = convertCsvJson('[{"x":[-0]}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+    const csvResult = convertCsvJson('x\n-0', CSV_DEFAULTS);
+
+    expect(jsonResult.ok).toBe(false);
+    expect(jsonResult.issues[0]?.code).toBe('json-number-unsafe');
+    expect(JSON.parse(csvResult.output)).toEqual([{ x: '-0' }]);
+  });
+
   it('rejette une collision entre une clé pointée et un chemin imbriqué', () => {
     const result = convertCsvJson('[{"a.b":1,"a":{"b":2}}]', {
       ...CSV_DEFAULTS,
@@ -280,6 +305,16 @@ describe('convertCsvJson', () => {
 
     expect(result.ok).toBe(false);
     expect(result.issues[0]?.code).toBe('json-path-collision');
+  });
+
+  it('rejette aussi une collision de chemin répartie sur plusieurs lignes', () => {
+    const result = convertCsvJson('[{"a.b":1},{"a":{"b":2}}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]).toMatchObject({ code: 'json-path-collision', row: 2 });
   });
 
   it('applique la limite de profondeur aux tableaux imbriqués', () => {
