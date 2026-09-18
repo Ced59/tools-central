@@ -3864,6 +3864,7 @@ function resolveDecodeParameterScalar(
   data: Uint8Array,
   value: RawPdfDecodeParameterValue,
   candidates?: CompressedReferenceCandidates,
+  nullDefault?: number,
 ): number | null {
   if (typeof value === 'number') return value;
   if (value === 'invalid') return null;
@@ -3873,11 +3874,15 @@ function resolveDecodeParameterScalar(
     const compressedEntry = candidates?.authoritativeCompressedEntries?.get(key);
     const compressedValues = candidates?.compressedScalarValues?.get(key);
     if (
+      value.generationNumber === 0
+      && compressedEntry
+      && candidates?.compressedNullObjects?.has(key)
+    ) return nullDefault ?? null;
+    if (
       value.generationNumber !== 0
       || !compressedEntry
       || !compressedValues
       || compressedValues.size !== 1
-      || candidates?.compressedNullObjects?.has(key)
       || (candidates?.compressedNames?.get(key)?.size ?? 0) > 0
     ) return null;
     const scalar = compressedValues.values().next().value;
@@ -3891,6 +3896,10 @@ function resolveDecodeParameterScalar(
     || header.generationNumber !== value.generationNumber
   ) return null;
   const valueStart = skipWhitespaceAndComments(data, header.end);
+  if (matchesKeyword(data, valueStart, 'null')) {
+    const objectEnd = skipWhitespaceAndComments(data, valueStart + 4);
+    return matchesKeyword(data, objectEnd, 'endobj') ? nullDefault ?? null : null;
+  }
   const scalar = readInteger(data, valueStart);
   if (!scalar) return null;
   const objectEnd = skipWhitespaceAndComments(data, scalar.end);
@@ -3910,17 +3919,18 @@ function resolveDecodeParameterDictionary(
   if (!usesPredictor) {
     return { predictor: 1, colors: 1, bitsPerComponent: 8, columns: 1, earlyChange: 1 };
   }
-  const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates);
-  const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates);
+  const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates, 1);
+  const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates, 1);
   const bitsPerComponent = resolveDecodeParameterScalar(
     data,
     parameter.bitsPerComponent,
     candidates,
+    8,
   );
-  const columns = resolveDecodeParameterScalar(data, parameter.columns, candidates);
+  const columns = resolveDecodeParameterScalar(data, parameter.columns, candidates, 1);
   const usesEarlyChange = filter === 'LZWDecode' || filter === 'LZW';
   const earlyChange = usesEarlyChange
-    ? resolveDecodeParameterScalar(data, parameter.earlyChange, candidates)
+    ? resolveDecodeParameterScalar(data, parameter.earlyChange, candidates, 1)
     : 1;
   if (
     predictor === null

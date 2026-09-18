@@ -761,6 +761,12 @@ describe('inspectPdfStructuralSignals', () => {
         objectSevenValue: '1',
       },
       {
+        filterValue: '/FlateDecode',
+        decodeParametersValue: '<< /Predictor 7 0 R >>',
+        encode: deflate,
+        objectSevenValue: 'null',
+      },
+      {
         filterValue: '[/ASCII85Decode 6 0 R]',
         decodeParametersValue: '[null 7 0 R]',
         encode: (contents: Uint8Array): Uint8Array => encodeAscii85(encodeAsciiHex(contents)),
@@ -880,6 +886,38 @@ describe('inspectPdfStructuralSignals', () => {
       '\n%%EOF\n',
     );
     expect(() => validatePdfObjectStreamBudgets(compressedScalarXref)).not.toThrow();
+
+    const compressedNullCarrier = new TextEncoder().encode('7 0 null');
+    const compressedNullBody = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      '/Filter /FlateDecode /DecodeParms << /Predictor 7 0 R >> ',
+      `/Length ${String(compressedScalarTarget.byteLength)} >>\nstream\n`,
+      compressedScalarTarget,
+      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      `/Length ${String(compressedNullCarrier.byteLength)} >>\nstream\n`,
+      compressedNullCarrier,
+      '\nendstream\nendobj\n',
+    );
+    const compressedNullXrefOffset = compressedNullBody.byteLength;
+    const compressedNullXref = joinBytes(
+      compressedNullBody,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 7 2 10 1] ',
+      '/Length 28 >>\nstream\n',
+      encodeXrefEntry(1, findByteSequence(
+        compressedNullBody,
+        new TextEncoder().encode('3 0 obj'),
+      )),
+      encodeXrefEntry(2, 8, 0),
+      encodeXrefEntry(1, findByteSequence(
+        compressedNullBody,
+        new TextEncoder().encode('8 0 obj'),
+      )),
+      encodeXrefEntry(1, compressedNullXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(compressedNullXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(compressedNullXref)).not.toThrow();
 
     const signedParameters = deflate(plain);
     const signedIrrelevantParameters = joinBytes(
