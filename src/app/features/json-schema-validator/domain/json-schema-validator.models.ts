@@ -264,23 +264,43 @@ function withoutDeclaredDraft(schema: JsonObject | boolean): JsonObject | boolea
   return clone;
 }
 
+interface SchemaResource {
+  root: JsonObject;
+  path: string;
+}
+
+interface SchemaTraversalEntry {
+  value: JsonValue;
+  path: string;
+  resource: SchemaResource;
+}
+
+interface SchemaAnchorTarget {
+  value: JsonValue;
+  path: string;
+}
+
 function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraft): number {
   if (typeof schema === 'boolean') return 0;
   let patterns = 0;
   const visited = new Set<JsonObject>();
-  const localAnchors = indexLocalAnchors(schema);
-  const stack: Array<{ value: JsonValue; path: string }> = [{ value: schema, path: '' }];
+  const anchorIndexes = new WeakMap<JsonObject, ReadonlyMap<string, readonly SchemaAnchorTarget[]>>();
+  const initialResource: SchemaResource = { root: schema, path: '' };
+  const stack: SchemaTraversalEntry[] = [{ value: schema, path: '', resource: initialResource }];
   while (stack.length > 0) {
     const current = stack.pop();
     if (!current) break;
     if (!isObject(current.value)) continue;
     if (visited.has(current.value)) continue;
     visited.add(current.value);
+    const resource = current.value !== current.resource.root && typeof current.value['$id'] === 'string'
+      ? { root: current.value, path: current.path }
+      : current.resource;
     inspectReferences(current.value, current.path, draft);
-    pushLocalReferenceTargets(schema, current.value, draft, localAnchors, stack);
+    pushLocalReferenceTargets(resource, current.value, draft, anchorIndexes, stack);
     if (draft === 'draft-07' && typeof current.value['$ref'] === 'string') continue;
     patterns = inspectPatterns(current.value, current.path, patterns);
-    pushSubschemas(current.value, current.path, draft, stack);
+    pushSubschemas(current.value, current.path, draft, resource, stack);
   }
   return patterns;
 }
@@ -295,56 +315,73 @@ function inspectReferences(schema: JsonObject, path: string, draft: JsonSchemaDr
 }
 
 function pushLocalReferenceTargets(
-  root: JsonObject,
+  resource: SchemaResource,
   schema: JsonObject,
   draft: JsonSchemaDraft,
-  localAnchors: ReadonlyMap<string, ReadonlyArray<{ value: JsonValue; path: string }>>,
-  stack: Array<{ value: JsonValue; path: string }>,
+  anchorIndexes: WeakMap<JsonObject, ReadonlyMap<string, readonly SchemaAnchorTarget[]>>,
+  stack: SchemaTraversalEntry[],
 ): void {
   for (const keyword of referenceKeywords(draft)) {
     const reference = schema[keyword];
     if (typeof reference !== 'string') continue;
-    const target = resolveLocalReference(root, reference);
+    const target = resolveLocalReference(resource.root, reference);
     if (target !== null) {
-      pushSchema(target.value, target.path, stack);
+      pushSchema(target.value, resourcePath(resource.path, target.path), resource, stack);
       continue;
     }
-    for (const anchorTarget of localAnchors.get(reference) ?? []) {
-      pushSchema(anchorTarget.value, anchorTarget.path, stack);
+    const anchors = getLocalAnchorIndex(resource, draft, anchorIndexes);
+    for (const anchorTarget of anchors.get(reference) ?? []) {
+      pushSchema(anchorTarget.value, anchorTarget.path, resource, stack);
     }
   }
 }
 
-function indexLocalAnchors(root: JsonObject): Map<string, Array<{ value: JsonValue; path: string }>> {
-  const anchors = new Map<string, Array<{ value: JsonValue; path: string }>>();
-  const stack: Array<{ value: JsonValue; path: string }> = [{ value: root, path: '' }];
+function getLocalAnchorIndex(
+  resource: SchemaResource,
+  draft: JsonSchemaDraft,
+  cache: WeakMap<JsonObject, ReadonlyMap<string, readonly SchemaAnchorTarget[]>>,
+): ReadonlyMap<string, readonly SchemaAnchorTarget[]> {
+  const cached = cache.get(resource.root);
+  if (cached) return cached;
+  const anchors = indexLocalAnchors(resource, draft);
+  cache.set(resource.root, anchors);
+  return anchors;
+}
+
+function indexLocalAnchors(
+  resource: SchemaResource,
+  draft: JsonSchemaDraft,
+): Map<string, SchemaAnchorTarget[]> {
+  const anchors = new Map<string, SchemaAnchorTarget[]>();
+  const visited = new Set<JsonObject>();
+  const stack: SchemaAnchorTarget[] = [{ value: resource.root, path: resource.path }];
   while (stack.length > 0) {
     const current = stack.pop();
     if (!current) break;
-    if (Array.isArray(current.value)) {
-      for (let index = current.value.length - 1; index >= 0; index -= 1) {
-        stack.push({ value: current.value[index], path: appendPointer(current.path, String(index)) });
+    if (!isObject(current.value)) continue;
+    if (visited.has(current.value)) continue;
+    visited.add(current.value);
+    const identifier = current.value['$id'];
+    if (current.value !== resource.root && typeof identifier === 'string') {
+      if (draft === 'draft-07' && /^#[a-z_][-a-z0-9._]*$/iu.test(identifier)) {
+        addAnchorTarget(anchors, identifier, current);
       }
       continue;
     }
-    if (!isObject(current.value)) continue;
     addLocalAnchor(anchors, current.value['$anchor'], current);
     addLocalAnchor(anchors, current.value['$dynamicAnchor'], current);
-    const identifier = current.value['$id'];
     if (typeof identifier === 'string' && /^#[a-z_][-a-z0-9._]*$/iu.test(identifier)) {
       addAnchorTarget(anchors, identifier, current);
     }
-    for (const [key, value] of Object.entries(current.value)) {
-      stack.push({ value, path: appendPointer(current.path, key) });
-    }
+    pushAnchorSubschemas(current.value, current.path, draft, stack);
   }
   return anchors;
 }
 
 function addLocalAnchor(
-  anchors: Map<string, Array<{ value: JsonValue; path: string }>>,
+  anchors: Map<string, SchemaAnchorTarget[]>,
   anchor: JsonValue | undefined,
-  target: { value: JsonValue; path: string },
+  target: SchemaAnchorTarget,
 ): void {
   if (typeof anchor === 'string' && /^[a-z_][-a-z0-9._]*$/iu.test(anchor)) {
     addAnchorTarget(anchors, `#${anchor}`, target);
@@ -352,9 +389,9 @@ function addLocalAnchor(
 }
 
 function addAnchorTarget(
-  anchors: Map<string, Array<{ value: JsonValue; path: string }>>,
+  anchors: Map<string, SchemaAnchorTarget[]>,
   reference: string,
-  target: { value: JsonValue; path: string },
+  target: SchemaAnchorTarget,
 ): void {
   const targets = anchors.get(reference) ?? [];
   targets.push(target);
@@ -386,6 +423,10 @@ function resolveLocalReference(root: JsonObject, reference: string): { value: Js
     }
   }
   return { value, path: pointer };
+}
+
+function resourcePath(resourcePathValue: string, pointer: string): string {
+  return pointer ? `${resourcePathValue}${pointer}` : resourcePathValue;
 }
 
 function referenceKeywords(draft: JsonSchemaDraft): readonly string[] {
@@ -420,51 +461,104 @@ function pushSubschemas(
   schema: JsonObject,
   path: string,
   draft: JsonSchemaDraft,
-  stack: Array<{ value: JsonValue; path: string }>,
+  resource: SchemaResource,
+  stack: SchemaTraversalEntry[],
 ): void {
   for (const keyword of singleSubschemaKeywords(draft)) {
     const value = schema[keyword];
     const keywordPath = appendPointer(path, keyword);
     if (keyword === 'items' && draft !== 'draft-2020-12' && Array.isArray(value)) {
-      pushSchemaArray(value, keywordPath, stack);
+      pushSchemaArray(value, keywordPath, resource, stack);
     }
-    else pushSchema(value, keywordPath, stack);
+    else pushSchema(value, keywordPath, resource, stack);
   }
   for (const keyword of schemaArrayKeywords(draft)) {
     const value = schema[keyword];
-    if (Array.isArray(value)) pushSchemaArray(value, appendPointer(path, keyword), stack);
+    if (Array.isArray(value)) pushSchemaArray(value, appendPointer(path, keyword), resource, stack);
   }
   for (const keyword of schemaMapKeywords(draft)) {
     const value = schema[keyword];
-    if (isObject(value)) pushSchemaMap(value, appendPointer(path, keyword), stack);
+    if (isObject(value)) pushSchemaMap(value, appendPointer(path, keyword), resource, stack);
   }
   const dependencies = schema['dependencies'];
-  if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
+  if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), resource, stack);
 }
 
 function pushSchemaArray(
   values: readonly JsonValue[],
   path: string,
-  stack: Array<{ value: JsonValue; path: string }>,
+  resource: SchemaResource,
+  stack: SchemaTraversalEntry[],
 ): void {
   for (let index = values.length - 1; index >= 0; index -= 1) {
-    pushSchema(values[index], appendPointer(path, String(index)), stack);
+    pushSchema(values[index], appendPointer(path, String(index)), resource, stack);
   }
 }
 
 function pushSchemaMap(
   values: JsonObject,
   path: string,
-  stack: Array<{ value: JsonValue; path: string }>,
+  resource: SchemaResource,
+  stack: SchemaTraversalEntry[],
 ): void {
-  for (const [key, value] of Object.entries(values)) pushSchema(value, appendPointer(path, key), stack);
+  for (const [key, value] of Object.entries(values)) {
+    pushSchema(value, appendPointer(path, key), resource, stack);
+  }
 }
 
 function pushSchema(
   value: JsonValue | undefined,
   path: string,
-  stack: Array<{ value: JsonValue; path: string }>,
+  resource: SchemaResource,
+  stack: SchemaTraversalEntry[],
 ): void {
+  if (typeof value === 'boolean' || isObject(value)) stack.push({ value, path, resource });
+}
+
+function pushAnchorSubschemas(
+  schema: JsonObject,
+  path: string,
+  draft: JsonSchemaDraft,
+  stack: SchemaAnchorTarget[],
+): void {
+  for (const keyword of singleSubschemaKeywords(draft)) {
+    const value = schema[keyword];
+    const keywordPath = appendPointer(path, keyword);
+    if (keyword === 'items' && draft !== 'draft-2020-12' && Array.isArray(value)) {
+      pushAnchorSchemaArray(value, keywordPath, stack);
+    } else {
+      pushAnchorSchema(value, keywordPath, stack);
+    }
+  }
+  for (const keyword of schemaArrayKeywords(draft)) {
+    const value = schema[keyword];
+    if (Array.isArray(value)) pushAnchorSchemaArray(value, appendPointer(path, keyword), stack);
+  }
+  for (const keyword of anchorSchemaMapKeywords(draft)) {
+    const value = schema[keyword];
+    if (isObject(value)) pushAnchorSchemaMap(value, appendPointer(path, keyword), stack);
+  }
+  const dependencies = schema['dependencies'];
+  if (isObject(dependencies)) pushAnchorSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
+}
+
+function pushAnchorSchemaArray(
+  values: readonly JsonValue[],
+  path: string,
+  stack: SchemaAnchorTarget[],
+): void {
+  for (let index = values.length - 1; index >= 0; index -= 1) {
+    pushAnchorSchema(values[index], appendPointer(path, String(index)), stack);
+  }
+}
+
+function pushAnchorSchemaMap(values: JsonObject, path: string, stack: SchemaAnchorTarget[]): void {
+  for (const [key, value] of Object.entries(values)) {
+    pushAnchorSchema(value, appendPointer(path, key), stack);
+  }
+}
+
+function pushAnchorSchema(value: JsonValue | undefined, path: string, stack: SchemaAnchorTarget[]): void {
   if (typeof value === 'boolean' || isObject(value)) stack.push({ value, path });
 }
 
@@ -508,6 +602,12 @@ function schemaMapKeywords(draft: JsonSchemaDraft): readonly string[] {
   return draft === 'draft-07'
     ? ['definitions', 'patternProperties', 'properties']
     : ['$defs', 'dependentSchemas', 'patternProperties', 'properties'];
+}
+
+function anchorSchemaMapKeywords(draft: JsonSchemaDraft): readonly string[] {
+  return draft === 'draft-07'
+    ? schemaMapKeywords(draft)
+    : ['$defs', 'definitions', 'dependentSchemas', 'patternProperties', 'properties'];
 }
 
 function issue(

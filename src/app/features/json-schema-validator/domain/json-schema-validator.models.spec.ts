@@ -193,6 +193,39 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it('resolves local pointers against the current embedded resource', () => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      $ref: '#/$defs/embedded',
+      $defs: {
+        embedded: {
+          $id: 'embedded-resource',
+          $ref: '#/definitions/value',
+          definitions: { value: { pattern } },
+        },
+      },
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/$defs/embedded/definitions/value/pattern',
+    });
+  });
+
+  it('does not index anchors from opaque annotation values', () => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      $ref: '#real',
+      $defs: { target: { $anchor: 'real', type: 'string' } },
+      default: { $anchor: 'real', pattern },
+      examples: [{ $dynamicAnchor: 'real', pattern }],
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(true);
+  });
+
   it.each([
     'https://json-schema.org/draft/2019-09/schema',
     'https://json-schema.org/draft/2020-12/schema',
