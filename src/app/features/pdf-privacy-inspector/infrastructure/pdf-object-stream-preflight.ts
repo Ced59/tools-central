@@ -115,6 +115,11 @@ interface CompressedScalarBootstrapState {
   valuesByObjectStream: Map<number, readonly CompressedObjectValue[]>;
   failedObjectStreams: Set<number>;
   resolvingObjectStreams: Set<number>;
+  compressedScalarValues: Map<string, Set<number>>;
+  compressedNames: Map<string, Set<string>>;
+  compressedNullObjects: Set<string>;
+  compressedFilterArrays: Map<string, readonly PdfFilter[]>;
+  compressedDecodeParameters: Map<string, CompressedDecodeParameterValue>;
 }
 
 interface CompressedCrossReferenceEntry {
@@ -1064,6 +1069,11 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
     valuesByObjectStream: new Map<number, readonly CompressedObjectValue[]>(),
     failedObjectStreams: new Set<number>(),
     resolvingObjectStreams: new Set<number>(),
+    compressedScalarValues: new Map<string, Set<number>>(),
+    compressedNames: new Map<string, Set<string>>(),
+    compressedNullObjects: new Set<string>(),
+    compressedFilterArrays: new Map<string, readonly PdfFilter[]>(),
+    compressedDecodeParameters: new Map<string, CompressedDecodeParameterValue>(),
   };
   for (const reference of encryptionReferences) {
     const key = referenceKey(reference.objectNumber, reference.generationNumber);
@@ -2603,6 +2613,315 @@ function isAuthoritativeCompressedNullObject(
   )) ?? false;
 }
 
+function bootstrapCandidates(
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  bootstrapState: CompressedScalarBootstrapState,
+): CompressedReferenceCandidates {
+  return {
+    authoritativeOffsets,
+    authoritativeCompressedEntries: compressedEntries,
+    compressedScalarValues: bootstrapState.compressedScalarValues,
+    compressedNames: bootstrapState.compressedNames,
+    compressedNullObjects: bootstrapState.compressedNullObjects,
+    compressedFilterArrays: bootstrapState.compressedFilterArrays,
+    compressedDecodeParameters: bootstrapState.compressedDecodeParameters,
+  };
+}
+
+function recordBootstrapCompressedValues(
+  values: readonly CompressedObjectValue[],
+  objectStreamNumber: number,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  bootstrapState: CompressedScalarBootstrapState,
+): void {
+  for (const value of values) {
+    const key = referenceKey(value.objectNumber, 0);
+    const entry = compressedEntries.get(key);
+    if (
+      !entry
+      || entry.objectStreamNumber !== objectStreamNumber
+      || entry.objectIndex !== value.objectIndex
+    ) continue;
+    if (value.integer !== undefined) {
+      let scalars = bootstrapState.compressedScalarValues.get(key);
+      if (!scalars) {
+        scalars = new Set<number>();
+        bootstrapState.compressedScalarValues.set(key, scalars);
+      }
+      scalars.add(value.integer);
+    } else if (value.name !== undefined) {
+      let names = bootstrapState.compressedNames.get(key);
+      if (!names) {
+        names = new Set<string>();
+        bootstrapState.compressedNames.set(key, names);
+      }
+      names.add(value.name);
+    } else if (value.isNull) {
+      bootstrapState.compressedNullObjects.add(key);
+    }
+    if (value.filters) bootstrapState.compressedFilterArrays.set(key, value.filters);
+    if (value.decodeParameters) {
+      bootstrapState.compressedDecodeParameters.set(key, value.decodeParameters);
+    }
+  }
+}
+
+function bootstrapFilterDependencies(
+  data: Uint8Array,
+  filters: PdfFilters | undefined,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+  resolvingReferences = new Set<string>(),
+): void {
+  if (!filters) return;
+  if ('reference' in filters) {
+    bootstrapFilterReference(
+      data,
+      filters.reference,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+      resolvingReferences,
+    );
+    return;
+  }
+  for (const filter of filters) {
+    if (typeof filter === 'string') continue;
+    bootstrapFilterReference(
+      data,
+      filter,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+      resolvingReferences,
+    );
+  }
+}
+
+function bootstrapFilterReference(
+  data: Uint8Array,
+  reference: RawPdfReference,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+  resolvingReferences: Set<string>,
+): void {
+  const key = referenceKey(reference.objectNumber, reference.generationNumber);
+  if (resolvingReferences.has(key)) return;
+  resolvingReferences.add(key);
+  try {
+    const offset = authoritativeOffsets.get(key);
+    if (offset !== undefined) {
+      const header = readIndirectObjectHeader(data, offset);
+      if (
+        !header
+        || header.start !== offset
+        || header.objectNumber !== reference.objectNumber
+        || header.generationNumber !== reference.generationNumber
+      ) return;
+      const valueStart = skipWhitespaceAndComments(data, header.end);
+      try {
+        const value = readFilters(data, valueStart);
+        bootstrapFilterDependencies(
+          data,
+          value.filters,
+          authoritativeOffsets,
+          compressedEntries,
+          expansionBudget,
+          bootstrapState,
+          resolvingReferences,
+        );
+      } catch {
+        return;
+      }
+      return;
+    }
+    if (reference.generationNumber !== 0) return;
+    const entry = compressedEntries.get(key);
+    if (!entry) return;
+    const values = readBootstrapObjectStreamValues(
+      data,
+      entry.objectStreamNumber,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
+    const filterArray = values?.find(value => (
+      value.objectNumber === reference.objectNumber
+      && value.objectIndex === entry.objectIndex
+    ))?.filters;
+    bootstrapFilterDependencies(
+      data,
+      filterArray,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+      resolvingReferences,
+    );
+  } finally {
+    resolvingReferences.delete(key);
+  }
+}
+
+function bootstrapDecodeParameterDependencies(
+  data: Uint8Array,
+  parameters: PdfDecodeParameters | undefined,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+  resolvingReferences = new Set<string>(),
+): void {
+  if (parameters === null || parameters === undefined) return;
+  if ('reference' in parameters) {
+    bootstrapDecodeParameterReference(
+      data,
+      parameters.reference,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+      resolvingReferences,
+    );
+    return;
+  }
+  for (const parameter of parameters) {
+    if (parameter === undefined) continue;
+    if (!('predictor' in parameter)) {
+      bootstrapDecodeParameterReference(
+        data,
+        parameter,
+        authoritativeOffsets,
+        compressedEntries,
+        expansionBudget,
+        bootstrapState,
+        resolvingReferences,
+      );
+      continue;
+    }
+    for (const value of [
+      parameter.predictor,
+      parameter.colors,
+      parameter.bitsPerComponent,
+      parameter.columns,
+      parameter.earlyChange,
+    ]) {
+      if (typeof value !== 'object') continue;
+      bootstrapCompressedReference(
+        data,
+        value,
+        authoritativeOffsets,
+        compressedEntries,
+        expansionBudget,
+        bootstrapState,
+      );
+    }
+  }
+}
+
+function bootstrapDecodeParameterReference(
+  data: Uint8Array,
+  reference: RawPdfReference,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+  resolvingReferences: Set<string>,
+): void {
+  const key = referenceKey(reference.objectNumber, reference.generationNumber);
+  if (resolvingReferences.has(key)) return;
+  resolvingReferences.add(key);
+  try {
+    const offset = authoritativeOffsets.get(key);
+    if (offset !== undefined) {
+      const header = readIndirectObjectHeader(data, offset);
+      if (
+        !header
+        || header.start !== offset
+        || header.objectNumber !== reference.objectNumber
+        || header.generationNumber !== reference.generationNumber
+      ) return;
+      const valueStart = skipWhitespaceAndComments(data, header.end);
+      try {
+        const value = readDecodeParameters(data, valueStart);
+        bootstrapDecodeParameterDependencies(
+          data,
+          value.parameters,
+          authoritativeOffsets,
+          compressedEntries,
+          expansionBudget,
+          bootstrapState,
+          resolvingReferences,
+        );
+      } catch {
+        return;
+      }
+      return;
+    }
+    if (reference.generationNumber !== 0) return;
+    const entry = compressedEntries.get(key);
+    if (!entry) return;
+    const values = readBootstrapObjectStreamValues(
+      data,
+      entry.objectStreamNumber,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
+    const compressed = values?.find(value => (
+      value.objectNumber === reference.objectNumber
+      && value.objectIndex === entry.objectIndex
+    ))?.decodeParameters;
+    if (!compressed) return;
+    const resolved = compressed.kind === 'dictionary'
+      ? [compressed.parameter]
+      : compressed.parameters;
+    bootstrapDecodeParameterDependencies(
+      data,
+      resolved,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+      resolvingReferences,
+    );
+  } finally {
+    resolvingReferences.delete(key);
+  }
+}
+
+function bootstrapCompressedReference(
+  data: Uint8Array,
+  reference: RawPdfReference,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+): void {
+  if (reference.generationNumber !== 0) return;
+  const key = referenceKey(reference.objectNumber, 0);
+  if (authoritativeOffsets.has(key)) return;
+  const entry = compressedEntries.get(key);
+  if (!entry) return;
+  readBootstrapObjectStreamValues(
+    data,
+    entry.objectStreamNumber,
+    authoritativeOffsets,
+    compressedEntries,
+    expansionBudget,
+    bootstrapState,
+  );
+}
+
 function readBootstrapObjectStreamValues(
   data: Uint8Array,
   objectStreamNumber: number,
@@ -2710,20 +3029,47 @@ function readBootstrapObjectStreamValues(
         'endstream',
       )
     ) return undefined;
-    const filters = resolveFilters(data, dictionary.filters, { authoritativeOffsets });
+    bootstrapFilterDependencies(
+      data,
+      dictionary.filters,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
+    const candidates = bootstrapCandidates(
+      authoritativeOffsets,
+      compressedEntries,
+      bootstrapState,
+    );
+    const filters = resolveFilters(data, dictionary.filters, candidates);
+    bootstrapDecodeParameterDependencies(
+      data,
+      dictionary.decodeParameters,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
     const decoded = decodeObjectStreamContents(
       data.subarray(streamStart, streamEnd),
       filters,
       resolveDecodeParameters(
         data,
         dictionary.decodeParameters,
-        { authoritativeOffsets },
+        candidates,
         filters,
       ),
       expansionBudget,
     );
     if (!decoded) return undefined;
     const values = readCompressedObjectValues(decoded, objectCount, firstObjectOffset);
+    recordBootstrapCompressedValues(
+      values,
+      objectStreamNumber,
+      compressedEntries,
+      bootstrapState,
+    );
     bootstrapState.valuesByObjectStream.set(objectStreamNumber, values);
     completed = true;
     return values;

@@ -1220,6 +1220,54 @@ describe('inspectPdfStructuralSignals', () => {
       buildCompressedObjectStreamScalars(1, true),
     )).toEqual({ encrypted: false, skippedEncryptedObjectStreams: 0 });
 
+    const targetPayload = deflate(new TextEncoder().encode('4 0 null'));
+    const targetStream = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /ObjStm /N 6 0 R /First 7 0 R ',
+      '/Filter 5 0 R /DecodeParms 9 0 R ',
+      `/Length ${String(targetPayload.byteLength)} >>\nstream\n`,
+      targetPayload,
+      '\nendstream\nendobj\n',
+    );
+    const carrierValues = ['/FlateDecode', '1', '4', '<< /Predictor 1 >>'];
+    const carrierOffsets: number[] = [];
+    let carrierValueOffset = 0;
+    for (const value of carrierValues) {
+      carrierOffsets.push(carrierValueOffset);
+      carrierValueOffset += value.length + 1;
+    }
+    const carrierHeader = `5 ${String(carrierOffsets[0])} 6 ${String(carrierOffsets[1])} `
+      + `7 ${String(carrierOffsets[2])} 9 ${String(carrierOffsets[3])} `;
+    const carrierPayload = `${carrierHeader}${carrierValues.join(' ')}`;
+    const carrierStream = joinBytes(
+      '8 0 obj\n<< /Type /ObjStm /N 4 ',
+      `/First ${String(carrierHeader.length)} /Length ${String(carrierPayload.length)} >>\n`,
+      `stream\n${carrierPayload}\nendstream\nendobj\n`,
+    );
+    const dependencyBody = joinBytes(targetStream, carrierStream);
+    const targetStreamOffset = '%PDF-1.7\n'.length;
+    const carrierStreamOffset = targetStream.byteLength;
+    const dependencyXrefOffset = dependencyBody.byteLength;
+    const compressedFilterEncryption = joinBytes(
+      dependencyBody,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] ',
+      '/Index [1 1 4 7] /Encrypt 4 0 R /Length 56 >>\nstream\n',
+      encodeXrefRow(1, targetStreamOffset),
+      encodeXrefRow(2, 1, 0),
+      encodeXrefRow(2, 8, 0),
+      encodeXrefRow(2, 8, 1),
+      encodeXrefRow(2, 8, 2),
+      encodeXrefRow(1, carrierStreamOffset),
+      encodeXrefRow(2, 8, 3),
+      encodeXrefRow(1, dependencyXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(dependencyXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(validatePdfObjectStreamBudgets(compressedFilterEncryption)).toEqual({
+      encrypted: false,
+      skippedEncryptedObjectStreams: 0,
+    });
+
     const oversizedXref = joinBytes(
       '%PDF-1.7\ntrailer\n<< /Size ',
       String(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 2),
