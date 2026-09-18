@@ -8,6 +8,10 @@ import type { JsonValue } from './strict-json-parser';
 
 const MAX_AUTOMATIC_ARRAY_ITEMS = 10_000;
 
+interface CorrectionBudget {
+  remainingCharacters: number;
+}
+
 export function applySafeJsonSchemaCorrections(
   schema: JsonObject | boolean,
   instance: JsonValue,
@@ -15,9 +19,12 @@ export function applySafeJsonSchemaCorrections(
 ): { value: JsonValue; corrections: JsonSchemaCorrection[] } {
   let value = cloneJson(instance);
   const corrections: JsonSchemaCorrection[] = [];
+  const budget: CorrectionBudget = {
+    remainingCharacters: Math.max(0, JSON_SCHEMA_MAX_OUTPUT_CHARACTERS - JSON.stringify(instance).length),
+  };
   for (const error of errors) {
     if (corrections.length >= 100) break;
-    const correction = applyCorrection(schema, value, error);
+    const correction = applyCorrection(schema, value, error, budget);
     if (correction === null) continue;
     value = correction.value;
     corrections.push(correction.correction);
@@ -29,6 +36,7 @@ function applyCorrection(
   schema: JsonObject | boolean,
   root: JsonValue,
   error: JsonSchemaValidationError,
+  budget: CorrectionBudget,
 ): { value: JsonValue; correction: JsonSchemaCorrection } | null {
   if (typeof schema === 'boolean') return null;
   const path = error.instancePath;
@@ -40,6 +48,11 @@ function applyCorrection(
     const propertySchema = isObject(properties) ? properties[error.property] : undefined;
     const replacement = exampleForSchema(propertySchema);
     if (replacement === undefined) return null;
+    const addedCharacters = JSON.stringify(error.property).length
+      + 1
+      + JSON.stringify(replacement).length
+      + (Object.keys(parent).length > 0 ? 1 : 0);
+    if (!reserveCharacters(budget, addedCharacters)) return null;
     parent[error.property] = cloneJson(replacement);
     return {
       value: root,
@@ -75,13 +88,18 @@ function applyCorrection(
       replacement = error.keyword === 'maximum' ? limit : nextRepresentable(limit, -1);
     }
   } else if (error.keyword === 'minLength' && typeof current === 'string' && error.limit !== null) {
-    replacement = extendStringWithinBudget(current, error.limit);
+    replacement = extendStringWithinBudget(current, error.limit, budget.remainingCharacters);
     if (replacement !== undefined) action = 'extend';
   } else if (error.keyword === 'maxLength' && typeof current === 'string' && error.limit !== null) {
     replacement = Array.from(current).slice(0, error.limit).join('');
     action = 'truncate';
   } else if (error.keyword === 'minItems' && Array.isArray(current) && error.limit !== null) {
-    replacement = extendArrayWithinBudget(current, schemaValue['items'], error.limit);
+    replacement = extendArrayWithinBudget(
+      current,
+      schemaValue['items'],
+      error.limit,
+      budget.remainingCharacters,
+    );
     if (replacement !== undefined) action = 'extend';
   } else if (error.keyword === 'maxItems' && Array.isArray(current) && error.limit !== null) {
     replacement = current.slice(0, error.limit).map(cloneJson);
@@ -91,17 +109,26 @@ function applyCorrection(
   }
 
   if (replacement === undefined) return null;
+  const addedCharacters = Math.max(0, JSON.stringify(replacement).length - JSON.stringify(current).length);
+  if (!reserveCharacters(budget, addedCharacters)) return null;
   const value = setPointer(root, path, replacement);
-  if (value === null) return null;
+  if (value === null) {
+    budget.remainingCharacters += addedCharacters;
+    return null;
+  }
   return { value, correction: { action, path, keyword: error.keyword } };
 }
 
-function extendStringWithinBudget(current: string, targetLength: number): string | undefined {
+function extendStringWithinBudget(
+  current: string,
+  targetLength: number,
+  remainingCharacters: number,
+): string | undefined {
   const currentCodePoints = Array.from(current).length;
   const missingCodePoints = targetLength - currentCodePoints;
   if (!Number.isSafeInteger(targetLength)
     || missingCodePoints < 0
-    || current.length + missingCodePoints > JSON_SCHEMA_MAX_OUTPUT_CHARACTERS) return undefined;
+    || missingCodePoints > remainingCharacters) return undefined;
   return `${current}${'a'.repeat(missingCodePoints)}`;
 }
 
@@ -109,19 +136,26 @@ function extendArrayWithinBudget(
   current: readonly JsonValue[],
   itemSchema: JsonValue | undefined,
   targetLength: number,
+  remainingCharacters: number,
 ): JsonValue[] | undefined {
   if (!Number.isSafeInteger(targetLength)
     || targetLength < current.length
     || targetLength > MAX_AUTOMATIC_ARRAY_ITEMS) return undefined;
   const missingItems = targetLength - current.length;
   const example = exampleForSchema(itemSchema) ?? null;
-  const currentCharacters = JSON.stringify(current).length;
-  const itemCharacters = JSON.stringify(example).length + 1;
-  const remainingCharacters = JSON_SCHEMA_MAX_OUTPUT_CHARACTERS - currentCharacters;
-  if (remainingCharacters < 0 || missingItems > Math.floor(remainingCharacters / itemCharacters)) return undefined;
+  const itemCharacters = JSON.stringify(example).length;
+  const separatorCharacters = missingItems === 0 ? 0 : current.length > 0 ? missingItems : missingItems - 1;
+  const addedCharacters = missingItems * itemCharacters + separatorCharacters;
+  if (!Number.isSafeInteger(addedCharacters) || addedCharacters > remainingCharacters) return undefined;
   const next = current.map(cloneJson);
   for (let index = 0; index < missingItems; index += 1) next.push(cloneJson(example));
   return next;
+}
+
+function reserveCharacters(budget: CorrectionBudget, characters: number): boolean {
+  if (!Number.isSafeInteger(characters) || characters < 0 || characters > budget.remainingCharacters) return false;
+  budget.remainingCharacters -= characters;
+  return true;
 }
 
 function exampleForSchema(schema: JsonValue | undefined): JsonValue | undefined {

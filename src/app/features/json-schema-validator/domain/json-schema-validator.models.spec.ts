@@ -383,6 +383,31 @@ describe('applySafeJsonSchemaCorrections', () => {
     expect(corrected.value).toEqual({ values: [], label: '' });
   });
 
+  it('shares one output budget across every automatic array extension', () => {
+    const largeDefault = 'x'.repeat(390);
+    const properties = Object.fromEntries(Array.from({ length: 3 }, (_, index) => [
+      `values${String(index)}`,
+      { type: 'array', items: { default: largeDefault } },
+    ])) as JsonObject;
+    const instance = Object.fromEntries(Array.from({ length: 3 }, (_, index) => [
+      `values${String(index)}`,
+      [],
+    ])) as JsonObject;
+    const errors = Array.from({ length: 3 }, (_, index) => error(
+      'minItems',
+      `/values${String(index)}`,
+      `#/properties/values${String(index)}/minItems`,
+      '',
+      '',
+      10_000,
+    ));
+
+    const corrected = applySafeJsonSchemaCorrections({ properties }, instance, errors);
+
+    expect(corrected.corrections).toHaveLength(1);
+    expect(JSON.stringify(corrected.value).length).toBeLessThanOrEqual(4_000_000);
+  });
+
   it('extends strings by Unicode code points', () => {
     const corrected = applySafeJsonSchemaCorrections(
       { type: 'string', minLength: 2 },
@@ -417,10 +442,18 @@ describe('serializeJsonSchemaReport', () => {
       errors: [],
       errorsTruncated: false,
       totalErrors: 0,
-      correction: null,
+      correction: {
+        source: '{"password":"secret-in-report"}',
+        corrections: [{ action: 'replace', path: '/password', keyword: 'type' }],
+        valid: true,
+        remainingErrors: 0,
+      },
       stats: { schemaCharacters: 10, instanceCharacters: 2, schemaNodes: 1, instanceNodes: 1, patterns: 0 },
     });
     expect(report).toContain('"valid": true');
+    expect(report).toContain('"path": "/password"');
+    expect(report).not.toContain('secret-in-report');
+    expect(report).not.toContain('"source"');
     expect(report).not.toContain('sourceDocuments');
   });
 });

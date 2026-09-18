@@ -190,7 +190,13 @@ export function serializeJsonSchemaReport(
     totalErrors: result.totalErrors,
     errorsTruncated: result.errorsTruncated,
     errors: result.errors,
-    correction: result.correction,
+    correction: result.correction === null
+      ? null
+      : {
+          corrections: result.correction.corrections,
+          valid: result.correction.valid,
+          remainingErrors: result.correction.remainingErrors,
+        },
     stats: result.stats,
   }, null, 2);
   return report.length <= JSON_SCHEMA_MAX_OUTPUT_CHARACTERS ? report : null;

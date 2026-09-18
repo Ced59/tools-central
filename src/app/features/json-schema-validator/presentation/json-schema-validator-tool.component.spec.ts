@@ -109,6 +109,34 @@ describe('JsonSchemaValidatorToolComponent', () => {
     expect(TestWorker.instances[0].terminate).toHaveBeenCalledOnce();
   });
 
+  it('disables validation until an asynchronous file import has completed', async () => {
+    const fixture = TestBed.createComponent(JsonSchemaValidatorToolComponent);
+    const component = fixture.componentInstance;
+    let resolveBuffer: ((buffer: ArrayBuffer) => void) | undefined;
+    const file = {
+      name: 'instance.json',
+      size: 2,
+      arrayBuffer: () => new Promise<ArrayBuffer>(resolve => {
+        resolveBuffer = resolve;
+      }),
+    } as Blob & { name: string; size: number };
+    const event = {
+      target: { files: [file], value: 'C:\\fakepath\\instance.json' },
+    } as unknown as Event;
+
+    const loading = component.loadFile('instance', event);
+    expect(component.state()).toBe('loading');
+    expect(component.canValidate()).toBe(false);
+    await component.validate();
+    expect(TestWorker.instances).toHaveLength(0);
+
+    resolveBuffer?.(new TextEncoder().encode('{}').buffer);
+    await loading;
+    expect(component.instanceSource()).toBe('{}');
+    expect(component.state()).toBe('idle');
+    expect(component.canValidate()).toBe(true);
+  });
+
   it('describes validation keywords without exposing raw Ajv messages', () => {
     const component = TestBed.createComponent(JsonSchemaValidatorToolComponent).componentInstance;
     expect(component.validationErrorLabel({

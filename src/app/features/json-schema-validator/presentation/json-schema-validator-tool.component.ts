@@ -34,7 +34,7 @@ import { BrowserJsonSchemaFileReaderAdapter } from '../infrastructure/browser-js
 import { BrowserJsonSchemaLocationAdapter } from '../infrastructure/browser-json-schema-location.adapter';
 import { JsonSchemaValidatorWorkerAdapter } from '../infrastructure/json-schema-validator-worker.adapter';
 
-type ToolState = 'idle' | 'processing' | 'done' | 'error';
+type ToolState = 'idle' | 'loading' | 'processing' | 'done' | 'error';
 type CopiedTarget = JsonSchemaArtifact | 'share' | null;
 
 const DEFAULT_SCHEMA = `{
@@ -119,7 +119,8 @@ export class JsonSchemaValidatorToolComponent {
   readonly result = signal<JsonSchemaValidationResult | null>(null);
   readonly errorMessage = signal('');
   readonly copiedTarget = signal<CopiedTarget>(null);
-  readonly isBusy = computed(() => this.state() === 'processing');
+  readonly isLoading = computed(() => this.state() === 'loading');
+  readonly isBusy = computed(() => this.state() === 'loading' || this.state() === 'processing');
   readonly canValidate = computed(() => (
     this.schemaSource().trim().length > 0
     && this.instanceSource().trim().length > 0
@@ -174,7 +175,7 @@ export class JsonSchemaValidatorToolComponent {
     this.result.set(null);
     this.errorMessage.set('');
     this.copiedTarget.set(null);
-    this.state.set('idle');
+    this.state.set('loading');
     try {
       const source = await this.readFileUseCase.execute({
         fileName: file.name,

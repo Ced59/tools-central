@@ -157,7 +157,9 @@
         (click)="validate()"
       >
         <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
-        @if (isBusy()) {
+        @if (isLoading()) {
+          <ng-container i18n="@@json_schema_loading_file">Lecture du fichier…</ng-container>
+        } @else if (isBusy()) {
           <ng-container i18n="@@json_schema_validating">Validation en cours…</ng-container>
         } @else {
           <ng-container i18n="@@json_schema_validate">Valider le JSON</ng-container>
@@ -170,7 +172,9 @@
   </section>
 
   <div class="live-region" aria-live="polite" aria-atomic="true">
-    @if (isBusy()) {
+    @if (isLoading()) {
+      <span i18n="@@json_schema_live_loading">Lecture locale du fichier en cours.</span>
+    } @else if (isBusy()) {
       <span i18n="@@json_schema_live_processing">Validation locale en cours.</span>
     } @else if (result()?.ok && result()?.valid) {
       <span i18n="@@json_schema_live_valid">Le document est valide.</span>

@@ -272,4 +272,22 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.report).toContain('"keyword": "type"');
     expect(result.report).not.toContain('secret-value');
   });
+
+  it('keeps corrected source data out of the technical report', () => {
+    const result = validateJsonSchemaDocuments(
+      JSON.stringify({
+        type: 'object',
+        required: ['name'],
+        properties: {
+          name: { type: 'string', default: 'Ada' },
+          password: { type: 'string' },
+        },
+      }),
+      '{"password":"private-token-123"}',
+      { draft: 'auto', validateFormats: true },
+    );
+    expect(result.correction?.source).toContain('private-token-123');
+    expect(result.report).not.toContain('private-token-123');
+    expect(result.report).not.toContain('"source"');
+  });
 });
