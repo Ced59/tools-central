@@ -23,7 +23,6 @@ import {
 import { applySafeJsonSchemaCorrections } from '../domain/json-schema-corrections';
 
 const AJV_OPTIONS: Options = {
-  allErrors: true,
   coerceTypes: false,
   logger: false,
   messages: false,
@@ -43,13 +42,13 @@ export function validateJsonSchemaDocuments(
   const preparation = prepareJsonSchemaValidation(schemaSource, instanceSource, options);
   if (!preparation.ok) return preparation.result;
   const prepared = preparation.prepared;
-  if (prepared.stats.schemaNodes * prepared.stats.instanceNodes > JSON_SCHEMA_MAX_VALIDATION_OPERATIONS) {
-    return engineFailure(prepared, 'validation-limit');
-  }
 
   try {
-    const validator = compileValidator(prepared, options.validateFormats);
+    const collectAllErrors = prepared.stats.schemaNodes * prepared.stats.instanceNodes
+      <= JSON_SCHEMA_MAX_VALIDATION_OPERATIONS;
+    const validator = compileValidator(prepared, options.validateFormats, collectAllErrors);
     const valid = validator(prepared.instance);
+    if (!valid && !collectAllErrors) return engineFailure(prepared, 'validation-limit');
     const rawErrors = valid ? [] : validator.errors ?? [];
     const totalErrors = rawErrors.length;
     const errors = normalizeErrors(rawErrors.slice(0, JSON_SCHEMA_MAX_ERRORS));
@@ -78,14 +77,20 @@ export function validateJsonSchemaDocuments(
 function compileValidator(
   prepared: PreparedJsonSchemaValidation,
   validateFormats: boolean,
+  allErrors: boolean,
 ): ValidateFunction<JsonValue> {
-  const ajv = createAjv(prepared.draft, validateFormats);
+  const ajv = createAjv(prepared.draft, validateFormats, allErrors);
   return ajv.compile<JsonValue>(prepared.schema);
 }
 
-function createAjv(draft: JsonSchemaDraft, validateFormats: boolean): Ajv | Ajv2019 | Ajv2020 {
+function createAjv(
+  draft: JsonSchemaDraft,
+  validateFormats: boolean,
+  allErrors: boolean,
+): Ajv | Ajv2019 | Ajv2020 {
   const options = {
     ...AJV_OPTIONS,
+    allErrors,
     ignoreKeywordsWithRef: draft === 'draft-07',
     validateFormats,
   };

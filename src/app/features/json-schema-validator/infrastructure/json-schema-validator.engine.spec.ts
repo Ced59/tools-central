@@ -203,6 +203,15 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.errors).toEqual([]);
   });
 
+  it('accepts a large valid instance with fail-fast validation', () => {
+    const schema = '{"type":"array","items":{"type":"number"}}';
+    const instance = JSON.stringify(Array.from({ length: 10_000 }, () => 42));
+    const result = validateJsonSchemaDocuments(schema, instance, { draft: 'auto', validateFormats: true });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toEqual([]);
+  });
+
   it('includes only normalized diagnostics in the report', () => {
     const result = validateJsonSchemaDocuments('{"type":"number"}', '"secret-value"', {
       draft: 'auto',
