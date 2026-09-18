@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  CSV_JSON_MAX_CELL_CHARACTERS,
+  CSV_JSON_MAX_COLUMNS,
+  CSV_JSON_MAX_ROWS,
   CSV_JSON_MAX_SOURCE_CHARACTERS,
   convertCsvJson,
   type CsvJsonConversionOptions,
@@ -63,6 +66,22 @@ describe('convertCsvJson', () => {
     ]);
   });
 
+  it('rejette un mapping qui dépasserait la limite de colonnes', () => {
+    const mapping = Array.from(
+      { length: CSV_JSON_MAX_COLUMNS + 1 },
+      (_, index) => `value => output_${String(index + 1)}`,
+    ).join('\n');
+    const result = convertCsvJson('[{"value":"x"}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+  });
+
   it('signale les en-têtes ambigus et stabilise leurs noms sans écraser de valeur', () => {
     const result = convertCsvJson('nom,,nom\nAda,Math,Ada', CSV_DEFAULTS);
 
@@ -109,6 +128,18 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(true);
     expect(result.previewHeaders).toEqual(['id', 'profile', 'nested.settings']);
     expect(result.output).toBe('id,profile,nested.settings\r\n1,{},{}');
+  });
+
+  it('applique la limite de cellule aux en-têtes CSV générés', () => {
+    const oversizedKey = 'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS + 1);
+    const result = convertCsvJson(JSON.stringify([{ [oversizedKey]: 'value' }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
   });
 
   it('protège aussi les en-têtes CSV issus des clés ou du mapping', () => {
@@ -186,6 +217,19 @@ describe('convertCsvJson', () => {
     expect(oversized.issues[0]?.code).toBe('source-too-large');
     expect(malformed.issues.some(issue => issue.code === 'unclosed-quote')).toBe(true);
     expect(malformed.ok).toBe(false);
+  });
+
+  it('n’autorise pas une ligne de données supplémentaire sans ligne d’en-tête', () => {
+    const source = Array.from({ length: CSV_JSON_MAX_ROWS + 1 }, () => 'x').join('\n');
+    const result = convertCsvJson(source, {
+      ...CSV_DEFAULTS,
+      firstRowHeaders: false,
+      inferTypes: false,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues.some(issue => issue.code === 'row-limit')).toBe(true);
   });
 
   it('tolère des largeurs irrégulières en les signalant et complète les cellules absentes', () => {

@@ -121,7 +121,12 @@ function convertCsvToJson(
   options: CsvJsonConversionOptions,
   state: MutableConversionState,
 ): CsvJsonConversionResult {
-  const parsed = parseCsv(source, options.delimiter, state);
+  const parsed = parseCsv(
+    source,
+    options.delimiter,
+    state,
+    CSV_JSON_MAX_ROWS + (options.firstRowHeaders ? 1 : 0),
+  );
   if (hasErrors(state)) return emptyResult('csv-to-json', parsed.delimiter, source.length, state.issues);
   const widestRow = parsed.rows.reduce((maximum, row) => Math.max(maximum, row.length), 0);
   const sourceHeaders = createHeaders(
@@ -241,13 +246,20 @@ function convertJsonToCsv(
   const outputLines: string[] = [];
   const previewRows: string[][] = [];
   let protectedFormulaCount = 0;
-  const outputHeaders = mapping.map(entry => {
-    if (options.protectSpreadsheetFormulas && isSpreadsheetFormula(entry.output, entry.output)) {
+  const outputHeaders = mapping.map((entry, columnIndex) => {
+    let outputHeader = entry.output;
+    if (options.protectSpreadsheetFormulas && isSpreadsheetFormula(outputHeader, outputHeader)) {
       protectedFormulaCount += 1;
-      return `'${entry.output}`;
+      outputHeader = `'${outputHeader}`;
     }
-    return entry.output;
+    if (outputHeader.length > CSV_JSON_MAX_CELL_CHARACTERS) {
+      addIssue(state, 'cell-limit', 'error', 1, columnIndex + 1);
+    }
+    return outputHeader;
   });
+  if (hasErrors(state)) {
+    return emptyResult('json-to-csv', delimiter, source.length, state.issues);
+  }
   outputLines.push(outputHeaders.map(header => encodeCsvCell(header, delimiterCharacter)).join(delimiterCharacter));
   for (const [rowIndex, row] of flattenedRows.entries()) {
     const visibleValues = mapping.map((entry, columnIndex) => {
@@ -294,6 +306,7 @@ function parseCsv(
   source: string,
   requestedDelimiter: CsvJsonDelimiter,
   state: MutableConversionState,
+  maximumRows: number,
 ): CsvParseResult {
   const delimiter = requestedDelimiter === 'auto' ? detectDelimiter(source, state) : requestedDelimiter;
   const delimiterCharacter = DELIMITERS[delimiter];
@@ -321,7 +334,7 @@ function parseCsv(
   const pushRow = (): boolean => {
     rows.push(row);
     row = [];
-    if (rows.length > CSV_JSON_MAX_ROWS + 1) {
+    if (rows.length > maximumRows) {
       addIssue(state, 'row-limit', 'error', line);
       return false;
     }
@@ -487,6 +500,10 @@ function parseMapping(
     }
     if (!sourceSet.has(source)) addIssue(state, 'mapping-source-missing', 'error', index + 1, null, source);
     if (outputs.has(output)) addIssue(state, 'mapping-output-duplicate', 'error', index + 1, null, output);
+    if (mapping.length >= CSV_JSON_MAX_COLUMNS) {
+      addIssue(state, 'column-limit', 'error', index + 1);
+      break;
+    }
     outputs.add(output);
     mapping.push({ source, output });
   }
