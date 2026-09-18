@@ -197,6 +197,55 @@ describe('compareJsonDocuments', () => {
     expect(paths[1]).toContain(`${second}"/value`);
   });
 
+  it('masque une clé d’association ignorée dans les chemins du rapport', () => {
+    const result = compareJsonDocuments(
+      '[{"id":"customer-secret","value":1}]',
+      '[{"id":"customer-secret","value":2}]',
+      { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0/id' },
+    );
+
+    expect(result.ok).toBe(true);
+    expect(result.changes[0]?.path).toBe('/@~1id=#1/value');
+    expect(result.report).not.toContain('customer-secret');
+    expect(result.patch).not.toContain('customer-secret');
+  });
+
+  it('exclut les éléments ignorés avant de valider leur clé d’association', () => {
+    const missingKey = compareJsonDocuments(
+      '[{"ignored":true},{"id":"a","value":1}]',
+      '[{"ignored":false},{"id":"a","value":2}]',
+      { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0' },
+    );
+    const duplicateKey = compareJsonDocuments(
+      '[{"id":"a","ignored":true},{"id":"a","value":1}]',
+      '[{"id":"a","ignored":false},{"id":"a","value":2}]',
+      { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0' },
+    );
+
+    expect(missingKey.ok).toBe(true);
+    expect(missingKey.changes).toEqual([
+      expect.objectContaining({ kind: 'changed', path: '/@~1id="a"/value' }),
+    ]);
+    expect(duplicateKey.ok).toBe(true);
+    expect(duplicateKey.issues).toEqual([]);
+  });
+
+  it('préserve les espaces significatifs des segments JSON Pointer', () => {
+    const ignored = compareJsonDocuments('{" key ":1}', '{" key ":2}', {
+      ...DEFAULTS,
+      ignoredPaths: '/ key ',
+    });
+    const keyed = compareJsonDocuments(
+      '[{"id ":"a","value":1}]',
+      '[{"id ":"a","value":2}]',
+      { ...DEFAULTS, arrayMode: 'key', arrayKey: '/id ' },
+    );
+
+    expect(ignored.equivalent).toBe(true);
+    expect(keyed.ok).toBe(true);
+    expect(keyed.changes[0]?.path).toBe('/@~1id ="a"/value');
+  });
+
   it('n’ajoute ni ne retire un élément de tableau dont le chemin est ignoré', () => {
     const added = compareJsonDocuments('["a"]', '["a","volatile"]', {
       ...DEFAULTS,

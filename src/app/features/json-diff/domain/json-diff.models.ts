@@ -106,6 +106,14 @@ interface ComparisonState {
   patch: JsonPatchOperation[];
 }
 
+interface KeyedArrayItem {
+  stableKey: string;
+  displayKey: string;
+  keyPath: string;
+  value: JsonValue;
+  index: number;
+}
+
 type ParserIssueCode = Extract<
   JsonDiffIssueCode,
   'invalid-json' | 'duplicate-key' | 'unsafe-number' | 'invalid-unicode' | 'depth-limit' | 'node-limit'
@@ -474,11 +482,16 @@ function compareArraysByKey(
   rightPath: string,
   state: ComparisonState,
 ): void {
-  const leftItems = indexArrayByKey(left, leftPath, state.keySegments);
-  const rightItems = indexArrayByKey(right, rightPath, state.keySegments);
+  const leftItems = indexArrayByKey(left, leftPath, state.keySegments, state.ignoredPaths);
+  const rightItems = indexArrayByKey(right, rightPath, state.keySegments, state.ignoredPaths);
+  const redactedLabels = createRedactedKeyLabels(leftItems.ordered, rightItems.ordered);
   for (const item of leftItems.ordered) {
     const counterpart = rightItems.byKey.get(item.stableKey);
-    const logicalPath = appendLogicalKey(path, state.options.arrayKey, item.displayKey);
+    const logicalPath = appendLogicalKey(
+      path,
+      state.options.arrayKey,
+      reportKey(item, counterpart, redactedLabels, state.ignoredPaths),
+    );
     const leftItemPath = appendPointer(leftPath, String(item.index));
     const rightItemPath = counterpart
       ? appendPointer(rightPath, String(counterpart.index))
@@ -509,7 +522,11 @@ function compareArraysByKey(
     if (isIgnored(rightItemPath, state.ignoredPaths)) continue;
     addChange(state, {
       kind: 'added',
-      path: appendLogicalKey(path, state.options.arrayKey, item.displayKey),
+      path: appendLogicalKey(
+        path,
+        state.options.arrayKey,
+        reportKey(item, undefined, redactedLabels, state.ignoredPaths),
+      ),
       after: item.value,
       afterIndex: item.index,
     }, undefined, rightItemPath);
@@ -520,27 +537,62 @@ function indexArrayByKey(
   values: readonly JsonValue[],
   path: string,
   keySegments: readonly string[],
+  ignoredPaths: ReadonlySet<string>,
 ): {
-  ordered: Array<{ stableKey: string; displayKey: string; value: JsonValue; index: number }>;
-  byKey: Map<string, { stableKey: string; displayKey: string; value: JsonValue; index: number }>;
+  ordered: KeyedArrayItem[];
+  byKey: Map<string, KeyedArrayItem>;
 } {
-  const ordered: Array<{ stableKey: string; displayKey: string; value: JsonValue; index: number }> = [];
-  const byKey = new Map<string, { stableKey: string; displayKey: string; value: JsonValue; index: number }>();
+  const ordered: KeyedArrayItem[] = [];
+  const byKey = new Map<string, KeyedArrayItem>();
   for (let index = 0; index < values.length; index += 1) {
+    const itemPath = appendPointer(path, String(index));
+    if (isIgnored(itemPath, ignoredPaths)) continue;
     const value = values[index];
     const key = resolveKey(value, keySegments);
     if (!isKeyPrimitive(key)) {
-      throw new JsonDiffError('array-key-invalid', appendPointer(path, String(index)));
+      throw new JsonDiffError('array-key-invalid', itemPath);
     }
     const stableKey = `${typeof key}:${JSON.stringify(key)}`;
     if (byKey.has(stableKey)) {
       throw new JsonDiffError('array-key-duplicate', path, previewValue(key));
     }
-    const item = { stableKey, displayKey: JSON.stringify(key), value, index };
+    const item = {
+      stableKey,
+      displayKey: JSON.stringify(key),
+      keyPath: appendPointerSegments(itemPath, keySegments),
+      value,
+      index,
+    };
     ordered.push(item);
     byKey.set(stableKey, item);
   }
   return { ordered, byKey };
+}
+
+function createRedactedKeyLabels(
+  left: readonly KeyedArrayItem[],
+  right: readonly KeyedArrayItem[],
+): ReadonlyMap<string, string> {
+  const labels = new Map<string, string>();
+  for (const items of [left, right]) {
+    for (const item of items) {
+      if (!labels.has(item.stableKey)) labels.set(item.stableKey, `#${String(labels.size + 1)}`);
+    }
+  }
+  return labels;
+}
+
+function reportKey(
+  item: KeyedArrayItem,
+  counterpart: KeyedArrayItem | undefined,
+  redactedLabels: ReadonlyMap<string, string>,
+  ignoredPaths: ReadonlySet<string>,
+): string {
+  if (!isIgnored(item.keyPath, ignoredPaths)
+    && (counterpart === undefined || !isIgnored(counterpart.keyPath, ignoredPaths))) {
+    return item.displayKey;
+  }
+  return redactedLabels.get(item.stableKey) ?? '#';
 }
 
 function buildPatch(left: JsonValue, right: JsonValue, path: string, state: ComparisonState): void {
@@ -645,22 +697,20 @@ function sanitizeForExport(
 function parsePointerList(source: string): ReadonlySet<string> {
   const paths = new Set<string>();
   for (const rawLine of source.split(/\r?\n/gu)) {
-    const line = rawLine.trim();
-    if (!line) continue;
+    if (!rawLine.trim()) continue;
     try {
-      paths.add(normalizePointer(line));
+      paths.add(normalizePointer(rawLine));
     } catch {
-      throw new JsonDiffError('invalid-ignore-path', line.slice(0, 160));
+      throw new JsonDiffError('invalid-ignore-path', rawLine.slice(0, 160));
     }
   }
   return paths;
 }
 
 function parseArrayKey(source: string): readonly string[] {
-  const key = source.trim();
-  if (!key) throw new JsonDiffError('array-key-required');
+  if (!source.trim()) throw new JsonDiffError('array-key-required');
   try {
-    const normalized = normalizePointer(key);
+    const normalized = normalizePointer(source);
     const segments = decodePointer(normalized);
     if (segments.length === 0) throw new Error('empty');
     return segments;
@@ -781,6 +831,10 @@ function issue(
 
 function appendPointer(path: string, segment: string): string {
   return `${path}/${escapePointer(segment)}`;
+}
+
+function appendPointerSegments(path: string, segments: readonly string[]): string {
+  return segments.reduce((current, segment) => appendPointer(current, segment), path);
 }
 
 function appendLogicalKey(path: string, keyPath: string, key: string): string {
