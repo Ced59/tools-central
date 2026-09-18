@@ -3,8 +3,10 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   CSV_JSON_MAX_CELL_CHARACTERS,
   CSV_JSON_MAX_COLUMNS,
+  CSV_JSON_MAX_PREVIEW_CHARACTERS,
   CSV_JSON_MAX_ROWS,
   CSV_JSON_MAX_SOURCE_CHARACTERS,
+  CSV_JSON_PREVIEW_CELL_CHARACTERS,
   convertCsvJson,
   type CsvJsonConversionOptions,
 } from './csv-json.models';
@@ -184,6 +186,29 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.output).toBe('');
     expect(result.issues.some(issue => issue.code === 'output-too-large')).toBe(true);
+  });
+
+  it('borne indépendamment le texte envoyé à l’aperçu tabulaire', () => {
+    const mapping = Array.from(
+      { length: 150 },
+      (_, index) => `value => output_${String(index + 1)}`,
+    ).join('\n');
+    const result = convertCsvJson(JSON.stringify([{ value: 'x'.repeat(99_000) }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping,
+    });
+    const previewCells = [...result.previewHeaders, ...result.previewRows.flat()];
+
+    expect(result.ok).toBe(true);
+    expect(result.output.length).toBeGreaterThan(14_000_000);
+    expect(Math.max(...previewCells.map(cell => cell.length))).toBeLessThanOrEqual(
+      CSV_JSON_PREVIEW_CELL_CHARACTERS,
+    );
+    expect(previewCells.reduce((total, cell) => total + cell.length, 0)).toBeLessThanOrEqual(
+      CSV_JSON_MAX_PREVIEW_CHARACTERS,
+    );
+    expect(result.previewRows[0]?.[0]).toMatch(/…$/u);
   });
 
   it('arrête le mapping dès la première valeur JSON imbriquée hors limite', () => {

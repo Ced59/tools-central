@@ -5,6 +5,8 @@ export const CSV_JSON_MAX_COLUMNS = 250;
 export const CSV_JSON_MAX_CELL_CHARACTERS = 100_000;
 export const CSV_JSON_MAX_ISSUES = 100;
 export const CSV_JSON_PREVIEW_ROWS = 12;
+export const CSV_JSON_PREVIEW_CELL_CHARACTERS = 500;
+export const CSV_JSON_MAX_PREVIEW_CHARACTERS = 50_000;
 
 export type CsvJsonDirection = 'csv-to-json' | 'json-to-csv';
 export type CsvJsonDelimiter = 'auto' | 'comma' | 'semicolon' | 'tab' | 'pipe';
@@ -183,7 +185,7 @@ function convertCsvToJson(
       );
     }
     if (!appendOutput(rowIndex === 0 ? '\n  {\n' : ',\n  {\n')) break;
-    const preview: string[] = [];
+    const preview = previewRows.length < CSV_JSON_PREVIEW_ROWS ? [] as string[] : null;
     for (let mappingIndex = 0; mappingIndex < mapping.length; mappingIndex += 1) {
       const entry = mapping[mappingIndex];
       const columnIndex = sourceIndexes.get(entry.source) ?? -1;
@@ -194,10 +196,10 @@ function convertCsvToJson(
       const serializedValue = JSON.stringify(value);
       const propertySuffix = mappingIndex === mapping.length - 1 ? '\n' : ',\n';
       if (!appendOutput(`    ${serializedKey}: ${serializedValue}${propertySuffix}`)) break;
-      preview.push(previewValue(value));
+      if (preview !== null) preview.push(previewValue(value));
     }
     if (hasErrors(state) || !appendOutput('  }')) break;
-    if (previewRows.length < CSV_JSON_PREVIEW_ROWS) previewRows.push(preview);
+    if (preview !== null) previewRows.push(preview);
   }
 
   if (hasErrors(state)) {
@@ -1091,6 +1093,7 @@ function result(input: {
   outputRows: number;
   inputCharacters: number;
 }): CsvJsonConversionResult {
+  const preview = boundPreviewTable(input.headers, input.previewRows);
   return {
     ok: !input.issues.some(issue => issue.severity === 'error'),
     direction: input.direction,
@@ -1100,8 +1103,8 @@ function result(input: {
       : 'text/csv;charset=utf-8',
     outputExtension: input.direction === 'csv-to-json' ? 'json' : 'csv',
     detectedDelimiter: input.delimiter,
-    previewHeaders: input.headers,
-    previewRows: input.previewRows,
+    previewHeaders: preview.headers,
+    previewRows: preview.rows,
     issues: input.issues,
     stats: {
       inputRows: input.inputRows,
@@ -1110,6 +1113,27 @@ function result(input: {
       inputCharacters: input.inputCharacters,
       outputCharacters: input.output.length,
     },
+  };
+}
+
+function boundPreviewTable(
+  headers: readonly string[],
+  rows: readonly (readonly string[])[],
+): { headers: string[]; rows: string[][] } {
+  let characters = 0;
+  const boundCell = (value: string): string => {
+    const remaining = CSV_JSON_MAX_PREVIEW_CHARACTERS - characters;
+    const maximum = Math.min(CSV_JSON_PREVIEW_CELL_CHARACTERS, Math.max(0, remaining));
+    let bounded = value;
+    if (value.length > maximum) {
+      bounded = maximum <= 0 ? '' : maximum === 1 ? '…' : `${value.slice(0, maximum - 1)}…`;
+    }
+    characters += bounded.length;
+    return bounded;
+  };
+  return {
+    headers: headers.map(boundCell),
+    rows: rows.map(row => row.map(boundCell)),
   };
 }
 
