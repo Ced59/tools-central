@@ -687,3 +687,51 @@ test('JSON diff matches arrays by key, exports a standard patch and remains resp
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+test('JSON Schema validator localizes errors, verifies its correction and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/data/json-schema-validator');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Valider un JSON avec JSON Schema');
+  await page.locator('#json-schema-schema').fill(JSON.stringify({
+    $schema: 'https://json-schema.org/draft/2020-12/schema',
+    type: 'object',
+    required: ['name', 'email', 'age'],
+    properties: {
+      name: { type: 'string', examples: ['Ada'] },
+      email: { type: 'string', format: 'email' },
+      age: { type: 'integer', minimum: 18 },
+    },
+    additionalProperties: false,
+  }));
+  await page.locator('#json-schema-instance').fill('{"email":"invalid","age":15,"private":true}');
+
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Valider le JSON' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+
+  const result = page.getByTestId('json-schema-result');
+  await expect(result).toContainText('4 erreur(s) détectée(s)');
+  await expect(result).toContainText('/email');
+  await expect(result).toContainText('Proposition valide');
+
+  const reportSummary = result.getByText('Rapport technique JSON');
+  await reportSummary.click();
+  const downloadPromise = page.waitForEvent('download');
+  await result.getByRole('button', { name: 'Télécharger le rapport' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('json-schema-validation-report.json');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const report = JSON.parse(await readFile(path as string, 'utf8')) as { valid: boolean; totalErrors: number };
+  expect(report).toMatchObject({ valid: false, totalErrors: 4 });
+
+  await result.getByRole('button', { name: 'Remplacer les données' }).click();
+  await page.getByRole('button', { name: 'Valider le JSON' }).click();
+  await expect(page.getByTestId('json-schema-result')).toContainText('Le JSON est valide');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/data/json-schema-validator');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
