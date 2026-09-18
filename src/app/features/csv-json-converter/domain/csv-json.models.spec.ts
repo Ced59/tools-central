@@ -521,21 +521,44 @@ describe('convertCsvJson', () => {
       (_, index) => `"nested_${String(index)}":${String(index)}`,
     ).join(',');
     const nestedSource = `[{"left":{${nestedMembers}},"right":{${nestedMembers}}}]`;
+    const distributedSource = `[${Array.from(
+      { length: CSV_JSON_MAX_COLUMNS + 1 },
+      (_, index) => `{"distributed_${String(index)}":${String(index)}}`,
+    ).join(',')}]`;
     const parse = vi.spyOn(JSON, 'parse');
 
     try {
       const result = convertCsvJson(source, { ...CSV_DEFAULTS, direction: 'json-to-csv' });
       const nestedResult = convertCsvJson(nestedSource, { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+      const distributedResult = convertCsvJson(distributedSource, {
+        ...CSV_DEFAULTS,
+        direction: 'json-to-csv',
+      });
 
       expect(result.ok).toBe(false);
       expect(nestedResult.ok).toBe(false);
+      expect(distributedResult.ok).toBe(false);
       expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
       expect(nestedResult.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+      expect(distributedResult.issues.some(issue => issue.code === 'column-limit')).toBe(true);
       expect(parse).not.toHaveBeenCalledWith(source);
       expect(parse).not.toHaveBeenCalledWith(nestedSource);
+      expect(parse).not.toHaveBeenCalledWith(distributedSource);
     } finally {
       parse.mockRestore();
     }
+  });
+
+  it('compte un tableau d’objets comme une seule colonne aplatie', () => {
+    const result = convertCsvJson(JSON.stringify([{
+      items: Array.from(
+        { length: CSV_JSON_MAX_COLUMNS + 1 },
+        (_, index) => ({ [`property_${String(index)}`]: index }),
+      ),
+    }]), { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+
+    expect(result.ok).toBe(true);
+    expect(result.previewHeaders).toEqual(['items']);
   });
 
   it('tolère des largeurs irrégulières en les signalant et complète les cellules absentes', () => {
