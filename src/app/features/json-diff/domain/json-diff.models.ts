@@ -505,6 +505,10 @@ function compareArraysByKey(
       continue;
     }
     if (item.index !== counterpart.index) {
+      if (hasIgnoredDescendant(leftItemPath, state.ignoredPaths)
+        || hasIgnoredDescendant(rightItemPath, state.ignoredPaths)) {
+        throw new JsonDiffError('ignore-patch-conflict', path || '/');
+      }
       addChange(state, {
         kind: 'moved',
         path: logicalPath,

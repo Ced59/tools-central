@@ -178,6 +178,19 @@ describe('compareJsonDocuments', () => {
     expect(result.patch).toBe('[]');
   });
 
+  it('rejette un déplacement par clé qui traverse un descendant positionnel ignoré', () => {
+    const result = compareJsonDocuments(
+      '[{"id":"a","secret":"OLD"},{"id":"b","secret":"B"}]',
+      '[{"id":"b","secret":"B"},{"id":"a","secret":"NEW"}]',
+      { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0/secret' },
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]).toMatchObject({ code: 'ignore-patch-conflict', path: '/' });
+    expect(result.report).toBe('');
+    expect(result.patch).toBe('');
+  });
+
   it('conserve les identifiants complets et distincts dans les chemins des tableaux par clé', () => {
     const prefix = 'x'.repeat(260);
     const first = `${prefix}a`;
