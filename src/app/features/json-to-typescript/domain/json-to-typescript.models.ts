@@ -268,8 +268,16 @@ function mergeTypes(left: TypeNode, right: TypeNode, mergeObjects: boolean): Typ
   if (left.kind === 'array' && right.kind === 'array') {
     return { kind: 'array', element: mergeTypes(left.element, right.element, mergeObjects) };
   }
-  if (mergeObjects && left.kind === 'object' && right.kind === 'object') {
-    return mergeObjectTypes(left, right);
+  if (mergeObjects) {
+    const variants = [left, right].flatMap(node => node.kind === 'union' ? node.variants : [node]);
+    const objectVariants = variants.filter((node): node is ObjectTypeNode => node.kind === 'object');
+    if (objectVariants.length > 1) {
+      const mergedObject = objectVariants.slice(1).reduce(mergeObjectTypes, objectVariants[0]);
+      return makeUnion([
+        mergedObject,
+        ...variants.filter(node => node.kind !== 'object'),
+      ]);
+    }
   }
   return makeUnion([left, right]);
 }
@@ -505,17 +513,32 @@ function countNodeKind(root: TypeNode, kind: TypeNode['kind']): number {
 }
 
 function isIsoDate(value: string): boolean {
-  if (/^\d{4}-\d{2}-\d{2}$/u.test(value)) {
-    const [year, month, day] = value.split('-').map(Number);
-    const date = new Date(Date.UTC(year, month - 1, day));
-    return date.getUTCFullYear() === year
-      && date.getUTCMonth() === month - 1
-      && date.getUTCDate() === day;
+  const dateOnly = /^(\d{4})-(\d{2})-(\d{2})$/u.exec(value);
+  if (dateOnly) {
+    return isValidCalendarDate(Number(dateOnly[1]), Number(dateOnly[2]), Number(dateOnly[3]));
   }
-  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,9})?)?(?:Z|[+-]\d{2}:\d{2})$/u.test(value)) {
+
+  const dateTime = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,9})?)?(?:Z|[+-](\d{2}):(\d{2}))$/u.exec(value);
+  if (!dateTime) {
+    return false;
+  }
+  const [, year, month, day, hour, minute, second = '0', offsetHour = '0', offsetMinute = '0'] = dateTime;
+  if (!isValidCalendarDate(Number(year), Number(month), Number(day))
+    || Number(hour) > 23
+    || Number(minute) > 59
+    || Number(second) > 59
+    || Number(offsetHour) > 23
+    || Number(offsetMinute) > 59) {
     return false;
   }
   return Number.isFinite(Date.parse(value));
+}
+
+function isValidCalendarDate(year: number, month: number, day: number): boolean {
+  if (month < 1 || month > 12 || day < 1) return false;
+  const leapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+  const daysInMonth = [31, leapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+  return day <= daysInMonth[month - 1];
 }
 
 function buildWarnings(

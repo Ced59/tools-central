@@ -47,6 +47,19 @@ describe('generateTypeScriptFromJson', () => {
     expect(result.warnings.map(warning => warning.code)).toContain('optional-properties');
   });
 
+  it('merges object samples separated by another union member', () => {
+    const result = generateTypeScriptFromJson('[{"a":1},null,{"b":2}]', {
+      ...DEFAULT_OPTIONS,
+      rootName: 'Users',
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.output).toContain('export type Users = Array<User1 | null>;');
+    expect(result.output).toContain('a?: number;');
+    expect(result.output).toContain('b?: number;');
+    expect(result.output).not.toContain('User2');
+  });
+
   it('keeps heterogeneous object samples as a union when requested', () => {
     const result = generateTypeScriptFromJson(`[
       { "kind": "circle", "radius": 4 },
@@ -115,12 +128,14 @@ describe('generateTypeScriptFromJson', () => {
       "createdAt": "2026-09-18T14:30:00Z",
       "birthday": "1815-12-10",
       "invalid": "2026-02-30",
+      "invalidDateTime": "2026-02-30T12:00:00Z",
       "withoutZone": "2026-09-18T14:30:00"
     }`, { ...DEFAULT_OPTIONS, inferDates: true });
 
     expect(result.output).toContain('createdAt: Date;');
     expect(result.output).toContain('birthday: Date;');
     expect(result.output).toContain('invalid: string;');
+    expect(result.output).toContain('invalidDateTime: string;');
     expect(result.output).toContain('withoutZone: string;');
     expect(result.stats.inferredDates).toBe(2);
     expect(result.warnings).toContainEqual({ code: 'date-inference', count: 2, detail: '' });
