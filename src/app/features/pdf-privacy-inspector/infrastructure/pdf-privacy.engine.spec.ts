@@ -1052,8 +1052,53 @@ describe('inspectPdfPrivacyDocument', () => {
     expect(JSON.stringify(report)).not.toContain('private-value');
   });
 
-  it('refuse les documents vides ou dépassant la limite de pages', async () => {
-    await expect(inspectPdfPrivacyDocument(documentFixture({ numPages: 0 }), {
+  it('inspecte les signaux documentaires d’un PDF valide sans page', async () => {
+    const body = [
+      '%PDF-1.7\n',
+      '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n',
+      '2 0 obj\n<< /Type /Pages /Kids [] /Count 0 >>\nendobj\n',
+      '3 0 obj\n<< /Author (Alice) >>\nendobj\n',
+    ].join('');
+    const xrefOffset = body.length;
+    const bytes = new TextEncoder().encode([
+      body,
+      'xref\n0 4\n0000000000 65535 f \n',
+      `${String(body.indexOf('1 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(body.indexOf('2 0 obj')).padStart(10, '0')} 00000 n \n`,
+      `${String(body.indexOf('3 0 obj')).padStart(10, '0')} 00000 n \n`,
+      'trailer\n<< /Size 4 /Root 1 0 R /Info 3 0 R >>\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    ].join(''));
+    const headerData = bytes.slice(0, 1_024);
+    const fileBytes = bytes.byteLength;
+    const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    const loadingTask = getDocument({ data: bytes });
+
+    try {
+      const document = await loadingTask.promise;
+      const getPage = vi.spyOn(document, 'getPage');
+      const report = await inspectPdfPrivacyDocument(document, {
+        headerData,
+        fileBytes,
+        passwordUsed: false,
+        associatedFiles: [],
+      });
+
+      expect(report).toMatchObject({ pageCount: 0, inspectedPages: 0 });
+      expect(report.findings).toContainEqual(expect.objectContaining({
+        kind: 'document-metadata',
+        label: 'Author',
+        value: 'Alice',
+      }));
+      expect(getPage).not.toHaveBeenCalled();
+    } finally {
+      await loadingTask.destroy();
+    }
+  }, 15_000);
+
+  it('refuse un nombre de pages invalide ou dépassant la limite', async () => {
+    await expect(inspectPdfPrivacyDocument(documentFixture({ numPages: -1 }), {
       headerData: pdfBytes(), fileBytes: 16, passwordUsed: false,
     })).rejects.toMatchObject({ code: 'invalid-pdf' });
     await expect(inspectPdfPrivacyDocument(documentFixture({ numPages: PDF_PRIVACY_MAX_PAGES + 1 }), {

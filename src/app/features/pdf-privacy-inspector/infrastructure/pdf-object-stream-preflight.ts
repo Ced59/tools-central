@@ -33,7 +33,15 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
-type PdfFilterDecodeParameter = PdfFilterDecodeParameters | RawPdfReference | undefined;
+interface RawPdfFilterDecodeParameters {
+  predictor: number | RawPdfReference;
+  colors: number | RawPdfReference;
+  bitsPerComponent: number | RawPdfReference;
+  columns: number | RawPdfReference;
+  earlyChange: number | RawPdfReference;
+}
+
+type PdfFilterDecodeParameter = RawPdfFilterDecodeParameters | RawPdfReference | undefined;
 
 interface IndirectPdfDecodeParameters {
   reference: RawPdfReference;
@@ -1212,7 +1220,10 @@ function collectXrefBootstrapOffsets(
     ));
   } else {
     for (const parameter of decodeParameters ?? []) {
-      if (parameter && !('predictor' in parameter)) {
+      if (!parameter) continue;
+      if ('predictor' in parameter) {
+        addDecodeParameterScalarReferences(parameter, references);
+      } else {
         references.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
       }
     }
@@ -1252,7 +1263,10 @@ function collectXrefBootstrapOffsets(
       const objectEnd = skipWhitespaceAndComments(data, value.end);
       if (!matchesKeyword(data, objectEnd, 'endobj') || 'reference' in value.parameters) continue;
       for (const parameter of value.parameters) {
-        if (parameter && !('predictor' in parameter)) {
+        if (!parameter) continue;
+        if ('predictor' in parameter) {
+          addDecodeParameterScalarReferences(parameter, nestedReferences);
+        } else {
           nestedReferences.add(referenceKey(parameter.objectNumber, parameter.generationNumber));
         }
       }
@@ -1266,6 +1280,23 @@ function collectXrefBootstrapOffsets(
     for (const [key, offset] of nestedOffsets) offsets.set(key, offset);
   }
   return offsets;
+}
+
+function addDecodeParameterScalarReferences(
+  parameters: RawPdfFilterDecodeParameters,
+  references: Set<string>,
+): void {
+  for (const value of [
+    parameters.predictor,
+    parameters.colors,
+    parameters.bitsPerComponent,
+    parameters.columns,
+    parameters.earlyChange,
+  ]) {
+    if (typeof value !== 'number') {
+      references.add(referenceKey(value.objectNumber, value.generationNumber));
+    }
+  }
 }
 
 function collectXrefStreamLengthCandidates(
@@ -3003,8 +3034,8 @@ function readDecodeParameterDictionary(
   data: Uint8Array,
   start: number,
   end: number,
-): PdfFilterDecodeParameters {
-  const values = new Map<string, number>();
+): RawPdfFilterDecodeParameters {
+  const values = new Map<string, number | RawPdfReference>();
   let depth = 0;
   let arrayDepth = 0;
   let offset = start;
@@ -3044,6 +3075,12 @@ function readDecodeParameterDictionary(
       }
       if (values.has(key.value)) throw new Error('Duplicate PDF decode parameter');
       const valueStart = skipWhitespaceAndComments(data, offset);
+      const reference = readRawPdfReference(data, valueStart);
+      if (reference) {
+        values.set(key.value, reference.reference);
+        offset = reference.end;
+        continue;
+      }
       const value = readUnsignedInteger(data, valueStart);
       if (!value) throw new Error('Invalid PDF decode parameter');
       values.set(key.value, value.value);
@@ -3068,6 +3105,55 @@ function readDecodeParameterDictionary(
     columns,
     earlyChange,
   };
+}
+
+function resolveDecodeParameterScalar(
+  data: Uint8Array,
+  value: number | RawPdfReference,
+  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+): number | null {
+  if (typeof value === 'number') return value;
+  const offset = candidates?.authoritativeOffsets.get(referenceKey(
+    value.objectNumber,
+    value.generationNumber,
+  ));
+  if (offset === undefined) return null;
+  const header = readIndirectObjectHeader(data, offset);
+  if (
+    !header
+    || header.start !== offset
+    || header.objectNumber !== value.objectNumber
+    || header.generationNumber !== value.generationNumber
+  ) return null;
+  const valueStart = skipWhitespaceAndComments(data, header.end);
+  const scalar = readUnsignedInteger(data, valueStart);
+  if (!scalar) return null;
+  const objectEnd = skipWhitespaceAndComments(data, scalar.end);
+  return matchesKeyword(data, objectEnd, 'endobj') ? scalar.value : null;
+}
+
+function resolveDecodeParameterDictionary(
+  data: Uint8Array,
+  parameter: RawPdfFilterDecodeParameters,
+  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+): PdfFilterDecodeParameters | null {
+  const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates);
+  const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates);
+  const bitsPerComponent = resolveDecodeParameterScalar(
+    data,
+    parameter.bitsPerComponent,
+    candidates,
+  );
+  const columns = resolveDecodeParameterScalar(data, parameter.columns, candidates);
+  const earlyChange = resolveDecodeParameterScalar(data, parameter.earlyChange, candidates);
+  if (
+    predictor === null
+    || colors === null
+    || bitsPerComponent === null
+    || columns === null
+    || earlyChange === null
+  ) return null;
+  return { predictor, colors, bitsPerComponent, columns, earlyChange };
 }
 
 function resolveDecodeParameters(
@@ -3108,7 +3194,9 @@ function resolveDecodeParameters(
       continue;
     }
     if ('predictor' in parameter) {
-      resolved.push(parameter);
+      const resolvedParameter = resolveDecodeParameterDictionary(data, parameter, candidates);
+      if (!resolvedParameter) return null;
+      resolved.push(resolvedParameter);
       continue;
     }
     const offset = candidates?.authoritativeOffsets.get(referenceKey(
@@ -3134,7 +3222,13 @@ function resolveDecodeParameters(
     if (dictionaryEnd === undefined) return null;
     const objectEnd = skipWhitespaceAndComments(data, dictionaryEnd);
     if (!matchesKeyword(data, objectEnd, 'endobj')) return null;
-    resolved.push(readDecodeParameterDictionary(data, valueStart, dictionaryEnd));
+    const resolvedParameter = resolveDecodeParameterDictionary(
+      data,
+      readDecodeParameterDictionary(data, valueStart, dictionaryEnd),
+      candidates,
+    );
+    if (!resolvedParameter) return null;
+    resolved.push(resolvedParameter);
   }
   return resolved;
 }

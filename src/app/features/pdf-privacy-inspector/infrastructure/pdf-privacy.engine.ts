@@ -205,7 +205,7 @@ export async function inspectPdfPrivacyDocument(
   },
 ): Promise<PdfPrivacyReport> {
   const headerPdfVersion = extractPdfVersion(input.headerData);
-  if (!Number.isSafeInteger(document.numPages) || document.numPages <= 0) {
+  if (!Number.isSafeInteger(document.numPages) || document.numPages < 0) {
     throw new PdfPrivacyEngineError('invalid-pdf');
   }
   if (document.numPages > PDF_PRIVACY_MAX_PAGES) {
