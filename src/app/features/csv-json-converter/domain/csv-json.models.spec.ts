@@ -82,6 +82,38 @@ describe('convertCsvJson', () => {
     expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
   });
 
+  it('interrompt la sérialisation avant de matérialiser une sortie trop grande', () => {
+    const mapping = Array.from(
+      { length: CSV_JSON_MAX_COLUMNS },
+      (_, index) => `value => output_${String(index + 1)}`,
+    ).join('\n');
+    const result = convertCsvJson(JSON.stringify([{ value: 'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS) }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues.some(issue => issue.code === 'output-too-large')).toBe(true);
+  });
+
+  it('borne aussi la sérialisation JSON avant de dupliquer les valeurs mappées', () => {
+    const mapping = Array.from(
+      { length: CSV_JSON_MAX_COLUMNS },
+      (_, index) => `value => output_${String(index + 1)}`,
+    ).join('\n');
+    const result = convertCsvJson(`value\n${'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS)}`, {
+      ...CSV_DEFAULTS,
+      mapping,
+      inferTypes: false,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues.some(issue => issue.code === 'output-too-large')).toBe(true);
+  });
+
   it('signale les en-têtes ambigus et stabilise leurs noms sans écraser de valeur', () => {
     const result = convertCsvJson('nom,,nom\nAda,Math,Ada', CSV_DEFAULTS);
 
@@ -140,6 +172,28 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.output).toBe('');
     expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
+  });
+
+  it('rejette les en-têtes qui entrent en collision après neutralisation des formules', () => {
+    const result = convertCsvJson(JSON.stringify([{ '=x': 1, "'=x": 2 }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues.some(issue => issue.code === 'csv-header-collision')).toBe(true);
+  });
+
+  it('rejette un tableau non vide qui ne contient aucune colonne exportable', () => {
+    const result = convertCsvJson('[{}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues[0]?.code).toBe('json-no-columns');
   });
 
   it('protège aussi les en-têtes CSV issus des clés ou du mapping', () => {

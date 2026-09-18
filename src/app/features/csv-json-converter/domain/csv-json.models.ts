@@ -25,10 +25,12 @@ export type CsvJsonIssueCode =
   | 'mapping-invalid'
   | 'mapping-source-missing'
   | 'mapping-output-duplicate'
+  | 'csv-header-collision'
   | 'json-invalid'
   | 'json-number-unsafe'
   | 'json-root-not-array'
   | 'json-row-not-object'
+  | 'json-no-columns'
   | 'json-depth-limit'
   | 'json-path-collision'
   | 'spreadsheet-formula-protected';
@@ -139,8 +141,18 @@ function convertCsvToJson(
   const mapping = parseMapping(options.mapping, sourceHeaders, state);
   if (hasErrors(state)) return emptyResult('csv-to-json', parsed.delimiter, source.length, state.issues);
   const sourceIndexes = new Map(sourceHeaders.map((header, index) => [header, index]));
-  const outputRecords: Record<string, unknown>[] = [];
+  const outputChunks = ['['];
+  let outputCharacters = 1;
   const previewRows: string[][] = [];
+  const appendOutput = (chunk: string): boolean => {
+    if (outputCharacters + chunk.length > CSV_JSON_MAX_OUTPUT_CHARACTERS) {
+      addIssue(state, 'output-too-large', 'error');
+      return false;
+    }
+    outputChunks.push(chunk);
+    outputCharacters += chunk.length;
+    return true;
+  };
 
   for (let rowIndex = 0; rowIndex < dataRows.length; rowIndex += 1) {
     const row = dataRows[rowIndex];
@@ -154,25 +166,31 @@ function convertCsvToJson(
         `${String(row.length)}/${String(sourceHeaders.length)}`,
       );
     }
-    const record = Object.create(null) as Record<string, unknown>;
+    if (!appendOutput(rowIndex === 0 ? '\n  {\n' : ',\n  {\n')) break;
     const preview: string[] = [];
-    for (const entry of mapping) {
+    for (let mappingIndex = 0; mappingIndex < mapping.length; mappingIndex += 1) {
+      const entry = mapping[mappingIndex];
       const columnIndex = sourceIndexes.get(entry.source) ?? -1;
       const rawValue = columnIndex >= 0 ? (row[columnIndex] ?? '') : '';
       const normalized = options.trimCells ? rawValue.trim() : rawValue;
       const value = options.inferTypes ? inferCsvValue(normalized) : normalized;
-      record[entry.output] = value;
+      const serializedKey = JSON.stringify(entry.output);
+      const serializedValue = JSON.stringify(value);
+      const propertySuffix = mappingIndex === mapping.length - 1 ? '\n' : ',\n';
+      if (!appendOutput(`    ${serializedKey}: ${serializedValue}${propertySuffix}`)) break;
       preview.push(previewValue(value));
     }
-    outputRecords.push(record);
+    if (hasErrors(state) || !appendOutput('  }')) break;
     if (previewRows.length < CSV_JSON_PREVIEW_ROWS) previewRows.push(preview);
   }
 
-  const output = JSON.stringify(outputRecords, null, 2);
-  if (output.length > CSV_JSON_MAX_OUTPUT_CHARACTERS) {
-    addIssue(state, 'output-too-large', 'error');
+  if (hasErrors(state)) {
     return emptyResult('csv-to-json', parsed.delimiter, source.length, state.issues);
   }
+  if (!appendOutput(dataRows.length > 0 ? '\n]' : ']')) {
+    return emptyResult('csv-to-json', parsed.delimiter, source.length, state.issues);
+  }
+  const output = outputChunks.join('');
   return result({
     direction: 'csv-to-json',
     output,
@@ -181,7 +199,7 @@ function convertCsvToJson(
     previewRows,
     issues: state.issues,
     inputRows: parsed.rows.length,
-    outputRows: outputRecords.length,
+    outputRows: dataRows.length,
     inputCharacters: source.length,
   });
 }
@@ -236,6 +254,9 @@ function convertJsonToCsv(
     }
     if (hasErrors(state)) break;
   }
+  if (!hasErrors(state) && parsedRows.length > 0 && headers.length === 0) {
+    addIssue(state, 'json-no-columns', 'error');
+  }
   const mapping = parseMapping(options.mapping, headers, state);
   if (hasErrors(state)) {
     return emptyResult('json-to-csv', selectedOutputDelimiter(options.delimiter), source.length, state.issues);
@@ -246,6 +267,7 @@ function convertJsonToCsv(
   const outputLines: string[] = [];
   const previewRows: string[][] = [];
   let protectedFormulaCount = 0;
+  const knownOutputHeaders = new Set<string>();
   const outputHeaders = mapping.map((entry, columnIndex) => {
     let outputHeader = entry.output;
     if (options.protectSpreadsheetFormulas && isSpreadsheetFormula(outputHeader, outputHeader)) {
@@ -255,12 +277,28 @@ function convertJsonToCsv(
     if (outputHeader.length > CSV_JSON_MAX_CELL_CHARACTERS) {
       addIssue(state, 'cell-limit', 'error', 1, columnIndex + 1);
     }
+    if (knownOutputHeaders.has(outputHeader)) {
+      addIssue(state, 'csv-header-collision', 'error', 1, columnIndex + 1, outputHeader.slice(0, 160));
+    }
+    knownOutputHeaders.add(outputHeader);
     return outputHeader;
   });
   if (hasErrors(state)) {
     return emptyResult('json-to-csv', delimiter, source.length, state.issues);
   }
-  outputLines.push(outputHeaders.map(header => encodeCsvCell(header, delimiterCharacter)).join(delimiterCharacter));
+  const bom = options.includeBom ? '\ufeff' : '';
+  const headerLine = encodeCsvRowWithinLimit(
+    outputHeaders,
+    delimiterCharacter,
+    bom.length,
+    false,
+    state,
+  );
+  if (headerLine === null) {
+    return emptyResult('json-to-csv', delimiter, source.length, state.issues);
+  }
+  outputLines.push(headerLine);
+  let outputCharacters = bom.length + headerLine.length;
   for (const [rowIndex, row] of flattenedRows.entries()) {
     const visibleValues = mapping.map((entry, columnIndex) => {
       const value = row[entry.source];
@@ -274,9 +312,18 @@ function convertJsonToCsv(
       if (protectedCell !== cell) protectedFormulaCount += 1;
       return protectedCell;
     });
-    if (previewRows.length < CSV_JSON_PREVIEW_ROWS) previewRows.push(visibleValues);
-    outputLines.push(visibleValues.map(value => encodeCsvCell(value, delimiterCharacter)).join(delimiterCharacter));
     if (hasErrors(state)) break;
+    const outputLine = encodeCsvRowWithinLimit(
+      visibleValues,
+      delimiterCharacter,
+      outputCharacters,
+      true,
+      state,
+    );
+    if (outputLine === null) break;
+    if (previewRows.length < CSV_JSON_PREVIEW_ROWS) previewRows.push(visibleValues);
+    outputLines.push(outputLine);
+    outputCharacters += 2 + outputLine.length;
   }
   if (hasErrors(state)) {
     return emptyResult('json-to-csv', delimiter, source.length, state.issues);
@@ -284,7 +331,7 @@ function convertJsonToCsv(
   if (protectedFormulaCount > 0) {
     addIssue(state, 'spreadsheet-formula-protected', 'info', null, null, String(protectedFormulaCount));
   }
-  const output = `${options.includeBom ? '\ufeff' : ''}${outputLines.join('\r\n')}`;
+  const output = `${bom}${outputLines.join('\r\n')}`;
   if (output.length > CSV_JSON_MAX_OUTPUT_CHARACTERS) {
     addIssue(state, 'output-too-large', 'error');
     return emptyResult('json-to-csv', delimiter, source.length, state.issues);
@@ -620,6 +667,31 @@ function encodeCsvCell(value: string, delimiter: string): string {
     return `"${value.replace(/"/gu, '""')}"`;
   }
   return value;
+}
+
+function encodeCsvRowWithinLimit(
+  values: readonly string[],
+  delimiter: string,
+  existingOutputCharacters: number,
+  includeLeadingLineBreak: boolean,
+  state: MutableConversionState,
+): string | null {
+  const chunks: string[] = [];
+  const lineBreakCharacters = includeLeadingLineBreak ? 2 : 0;
+  let rowCharacters = 0;
+  for (let index = 0; index < values.length; index += 1) {
+    const encoded = encodeCsvCell(values[index], delimiter);
+    const separatorCharacters = index === 0 ? 0 : delimiter.length;
+    const nextRowCharacters = rowCharacters + separatorCharacters + encoded.length;
+    if (existingOutputCharacters + lineBreakCharacters + nextRowCharacters > CSV_JSON_MAX_OUTPUT_CHARACTERS) {
+      addIssue(state, 'output-too-large', 'error');
+      return null;
+    }
+    if (index > 0) chunks.push(delimiter);
+    chunks.push(encoded);
+    rowCharacters = nextRowCharacters;
+  }
+  return chunks.join('');
 }
 
 function isSpreadsheetFormula(cell: string, value: unknown): boolean {
