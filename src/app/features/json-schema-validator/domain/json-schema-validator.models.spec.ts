@@ -228,6 +228,27 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it('preserves an embedded resource when a root pointer jumps directly to its descendant', () => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      $ref: '#/$defs/embedded/definitions/value',
+      $defs: {
+        embedded: {
+          $id: 'embedded-resource',
+          definitions: { value: { $ref: '#/hidden/x' } },
+          hidden: { x: { pattern } },
+        },
+      },
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/$defs/embedded/hidden/x/pattern',
+    });
+  });
+
   it('does not index anchors from opaque annotation values', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({
