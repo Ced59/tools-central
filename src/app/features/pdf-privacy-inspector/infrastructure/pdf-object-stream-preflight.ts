@@ -70,6 +70,8 @@ interface IndirectLengthCandidateIndex {
   compressedScalarValues: Map<string, Set<number>>;
   compressedNames: Map<string, Set<string>>;
   compressedNullObjects: Set<string>;
+  compressedFilterArrays: Map<string, readonly PdfFilter[]>;
+  compressedDecodeParameters: Map<string, CompressedDecodeParameterValue>;
   authoritativeOffsets: ReadonlyMap<string, number>;
   authoritativeCompressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>;
   authoritativeNullObjects: ReadonlySet<string>;
@@ -87,16 +89,23 @@ type CompressedReferenceCandidates = Pick<
   | 'compressedNames'
   | 'compressedNullObjects'
   | 'compressedScalarValues'
+  | 'compressedFilterArrays'
+  | 'compressedDecodeParameters'
 >>;
 
-type CompressedScalarObject = {
+type CompressedDecodeParameterValue =
+  | { kind: 'dictionary'; parameter: RawPdfFilterDecodeParameters }
+  | { kind: 'array'; parameters: readonly PdfFilterDecodeParameter[] };
+
+interface CompressedObjectValue {
   objectNumber: number;
   objectIndex: number;
-} & (
-  | { kind: 'integer'; value: number }
-  | { kind: 'name'; value: string }
-  | { kind: 'null' }
-);
+  integer?: number;
+  name?: string;
+  isNull?: boolean;
+  filters?: readonly PdfFilter[];
+  decodeParameters?: CompressedDecodeParameterValue;
+}
 
 interface CompressedCrossReferenceEntry {
   objectStreamNumber: number;
@@ -640,6 +649,8 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     compressedScalarValues: new Map<string, Set<number>>(),
     compressedNames: new Map<string, Set<string>>(),
     compressedNullObjects: new Set<string>(),
+    compressedFilterArrays: new Map<string, readonly PdfFilter[]>(),
+    compressedDecodeParameters: new Map<string, CompressedDecodeParameterValue>(),
     authoritativeOffsets: crossReference.objectOffsets,
     authoritativeCompressedEntries: crossReference.compressedEntries,
     authoritativeNullObjects: crossReference.authoritativeNullObjects,
@@ -1445,6 +1456,8 @@ function collectBootstrapStreamRanges(data: Uint8Array): readonly ByteRange[] {
     compressedScalarValues: new Map<string, Set<number>>(),
     compressedNames: new Map<string, Set<string>>(),
     compressedNullObjects: new Set<string>(),
+    compressedFilterArrays: new Map<string, readonly PdfFilter[]>(),
+    compressedDecodeParameters: new Map<string, CompressedDecodeParameterValue>(),
     authoritativeOffsets: new Map<string, number>(),
     authoritativeCompressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
     authoritativeNullObjects: new Set<string>(),
@@ -1703,7 +1716,7 @@ function collectCompressedIndirectLengthCandidates(
         expansionBudget,
       );
       if (!decoded) continue;
-      const values = readCompressedScalarObjects(
+      const values = readCompressedObjectValues(
         decoded,
         dictionary.objectCount,
         dictionary.firstObjectOffset,
@@ -1725,38 +1738,46 @@ function collectCompressedIndirectLengthCandidates(
           isAuthoritative = true;
         }
         if (isAuthoritative) {
-          if (value.kind === 'integer') {
+          if (value.integer !== undefined) {
             let scalarValues = candidates.compressedScalarValues.get(key);
             if (!scalarValues) {
               scalarValues = new Set<number>();
               candidates.compressedScalarValues.set(key, scalarValues);
             }
-            if (!scalarValues.has(value.value)) {
-              scalarValues.add(value.value);
+            if (!scalarValues.has(value.integer)) {
+              scalarValues.add(value.integer);
               changed = true;
             }
-          } else if (value.kind === 'name') {
+          } else if (value.name !== undefined) {
             let names = candidates.compressedNames.get(key);
             if (!names) {
               names = new Set<string>();
               candidates.compressedNames.set(key, names);
             }
-            if (!names.has(value.value)) {
-              names.add(value.value);
+            if (!names.has(value.name)) {
+              names.add(value.name);
               changed = true;
             }
-          } else if (!candidates.compressedNullObjects.has(key)) {
+          } else if (value.isNull && !candidates.compressedNullObjects.has(key)) {
             candidates.compressedNullObjects.add(key);
             changed = true;
           }
+          if (value.filters && !candidates.compressedFilterArrays.has(key)) {
+            candidates.compressedFilterArrays.set(key, value.filters);
+            changed = true;
+          }
+          if (value.decodeParameters && !candidates.compressedDecodeParameters.has(key)) {
+            candidates.compressedDecodeParameters.set(key, value.decodeParameters);
+            changed = true;
+          }
         }
-        if (value.kind !== 'integer' || value.value < 0) continue;
+        if (value.integer === undefined || value.integer < 0) continue;
         let allValues = candidates.values.get(key);
         if (!allValues) {
           allValues = new Set<number>();
           candidates.values.set(key, allValues);
         }
-        if (!allValues.has(value.value)) {
+        if (!allValues.has(value.integer)) {
           candidateValues += 1;
           if (candidateValues > MAX_INDIRECT_LENGTH_OBJECTS) {
             throw new Error('PDF indirect length object limit');
@@ -1764,7 +1785,7 @@ function collectCompressedIndirectLengthCandidates(
           if (allValues.size >= MAX_INDIRECT_LENGTH_CANDIDATES_PER_OBJECT) {
             throw new Error('PDF indirect length candidate limit');
           }
-          allValues.add(value.value);
+          allValues.add(value.integer);
           changed = true;
         }
         let trustedValues = candidates.compressedValues.get(key);
@@ -1772,13 +1793,13 @@ function collectCompressedIndirectLengthCandidates(
           trustedValues = new Set<number>();
           candidates.compressedValues.set(key, trustedValues);
         }
-        trustedValues.add(value.value);
+        trustedValues.add(value.integer);
         let compressedValues = compressedCandidates.get(key);
         if (!compressedValues) {
           compressedValues = new Set<number>();
           compressedCandidates.set(key, compressedValues);
         }
-        compressedValues.add(value.value);
+        compressedValues.add(value.integer);
       }
     }
   }
@@ -2273,11 +2294,11 @@ function paethPredictor(left: number, up: number, upperLeft: number): number {
   return upperLeft;
 }
 
-function readCompressedScalarObjects(
+function readCompressedObjectValues(
   data: Uint8Array,
   objectCount: number,
   firstObjectOffset: number,
-): CompressedScalarObject[] {
+): CompressedObjectValue[] {
   if (
     !Number.isSafeInteger(objectCount)
     || objectCount < 0
@@ -2302,7 +2323,7 @@ function readCompressedScalarObjects(
   }
   if (skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset) return [];
 
-  const values: CompressedScalarObject[] = [];
+  const values: CompressedObjectValue[] = [];
   for (let index = 0; index < objectCount; index += 1) {
     const start = firstObjectOffset + (objectOffsets[index] ?? 0);
     const end = index + 1 < objectCount
@@ -2323,18 +2344,64 @@ function readCompressedScalarObjects(
       && integer.end <= end
       && containsOnlyWhitespaceAndComments(data, integer.end, end)
     ) {
-      values.push({ objectNumber, objectIndex: index, kind: 'integer', value: integer.value });
+      values.push({ objectNumber, objectIndex: index, integer: integer.value });
       continue;
     }
     const name = readPdfName(data, valueStart);
     if (name && name.end <= end && containsOnlyWhitespaceAndComments(data, name.end, end)) {
-      values.push({ objectNumber, objectIndex: index, kind: 'name', value: name.value });
+      values.push({ objectNumber, objectIndex: index, name: name.value });
       continue;
     }
     if (
       matchesKeyword(data, valueStart, 'null')
       && containsOnlyWhitespaceAndComments(data, valueStart + 'null'.length, end)
-    ) values.push({ objectNumber, objectIndex: index, kind: 'null' });
+    ) {
+      values.push({ objectNumber, objectIndex: index, isNull: true });
+      continue;
+    }
+    const objectData = data.subarray(valueStart, end);
+    const value: CompressedObjectValue = { objectNumber, objectIndex: index };
+    if (objectData[0] === LEFT_BRACKET) {
+      try {
+        const filters = readFilters(objectData, 0);
+        if (
+          !('reference' in filters.filters)
+          && containsOnlyWhitespaceAndComments(objectData, filters.end, objectData.byteLength)
+        ) value.filters = filters.filters;
+      } catch {
+        // The same bounded array can instead be a DecodeParms array.
+      }
+      try {
+        const parameters = readDecodeParameters(objectData, 0);
+        if (
+          !('reference' in parameters.parameters)
+          && containsOnlyWhitespaceAndComments(objectData, parameters.end, objectData.byteLength)
+        ) {
+          value.decodeParameters = { kind: 'array', parameters: parameters.parameters };
+        }
+      } catch {
+        // A filter-name array is not a DecodeParms array.
+      }
+    } else if (objectData[0] === LESS_THAN && objectData[1] === LESS_THAN) {
+      try {
+        const parameters = readDecodeParameters(objectData, 0);
+        if (
+          !('reference' in parameters.parameters)
+          && parameters.parameters.length === 1
+          && parameters.parameters[0] !== undefined
+          && 'predictor' in parameters.parameters[0]
+          && containsOnlyWhitespaceAndComments(objectData, parameters.end, objectData.byteLength)
+        ) {
+          value.decodeParameters = {
+            kind: 'dictionary',
+            parameter: parameters.parameters[0],
+          };
+        }
+      } catch {
+        // Unsupported dictionaries remain unresolved and fail closed later.
+      }
+    }
+    if (value.filters || value.decodeParameters) values.push(value);
   }
   return values;
 }
@@ -3116,8 +3183,12 @@ function resolveFilters(
       ) return undefined;
       const names = candidates.compressedNames?.get(key);
       const isNull = candidates.compressedNullObjects?.has(key) ?? false;
-      if ((names?.size ?? 0) + (isNull ? 1 : 0) !== 1) return undefined;
+      const filterArray = candidates.compressedFilterArrays?.get(key);
+      if (
+        (names?.size ?? 0) + (isNull ? 1 : 0) + (filterArray ? 1 : 0) !== 1
+      ) return undefined;
       if (isNull) return [];
+      if (filterArray) return resolveFilters(data, filterArray, candidates);
       const name = names?.values().next().value;
       return name === undefined ? undefined : [name];
     }
@@ -3370,11 +3441,23 @@ function resolveDecodeParameters(
   if (parameters === null || parameters === undefined) return parameters;
   if ('reference' in parameters) {
     const reference = parameters.reference;
-    const offset = candidates?.authoritativeOffsets.get(referenceKey(
-      reference.objectNumber,
-      reference.generationNumber,
-    ));
-    if (offset === undefined) return null;
+    const key = referenceKey(reference.objectNumber, reference.generationNumber);
+    const offset = candidates?.authoritativeOffsets.get(key);
+    if (offset === undefined) {
+      if (
+        reference.generationNumber !== 0
+        || !candidates?.authoritativeCompressedEntries?.has(key)
+      ) return null;
+      const isNull = candidates.compressedNullObjects?.has(key) ?? false;
+      const compressed = candidates.compressedDecodeParameters?.get(key);
+      if ((isNull ? 1 : 0) + (compressed ? 1 : 0) !== 1) return null;
+      if (isNull) return [];
+      if (!compressed) return null;
+      const direct = compressed.kind === 'dictionary'
+        ? [compressed.parameter]
+        : compressed.parameters;
+      return resolveDecodeParameters(data, direct, candidates);
+    }
     const header = readIndirectObjectHeader(data, offset);
     if (
       !header
@@ -3405,11 +3488,29 @@ function resolveDecodeParameters(
       resolved.push(resolvedParameter);
       continue;
     }
-    const offset = candidates?.authoritativeOffsets.get(referenceKey(
-      parameter.objectNumber,
-      parameter.generationNumber,
-    ));
-    if (offset === undefined) return null;
+    const key = referenceKey(parameter.objectNumber, parameter.generationNumber);
+    const offset = candidates?.authoritativeOffsets.get(key);
+    if (offset === undefined) {
+      if (
+        parameter.generationNumber !== 0
+        || !candidates?.authoritativeCompressedEntries?.has(key)
+      ) return null;
+      if (candidates.compressedNullObjects?.has(key)) {
+        if (candidates.compressedDecodeParameters?.has(key)) return null;
+        resolved.push(undefined);
+        continue;
+      }
+      const compressed = candidates.compressedDecodeParameters?.get(key);
+      if (!compressed || compressed.kind !== 'dictionary') return null;
+      const resolvedParameter = resolveDecodeParameterDictionary(
+        data,
+        compressed.parameter,
+        candidates,
+      );
+      if (!resolvedParameter) return null;
+      resolved.push(resolvedParameter);
+      continue;
+    }
     const header = readIndirectObjectHeader(data, offset);
     if (
       !header

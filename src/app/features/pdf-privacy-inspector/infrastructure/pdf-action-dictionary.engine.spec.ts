@@ -1014,6 +1014,77 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
   });
 
+  it('résout un tableau de filtres indirect compressé depuis la xref active', () => {
+    const filteredPayload = deflate(new Uint8Array());
+    const filterArrayCarrier = new TextEncoder().encode('6 0 [/FlateDecode]');
+    const body = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Filter 6 0 R ',
+      `/Length ${String(filteredPayload.byteLength)} >>\nstream\n`,
+      filteredPayload,
+      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      `/Length ${String(filterArrayCarrier.byteLength)} >>\nstream\n`,
+      filterArrayCarrier,
+      '\nendstream\nendobj\n',
+    );
+    const xrefOffset = body.byteLength;
+    const pdf = joinBytes(
+      body,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 6 1 8 1 10 1] ',
+      '/Length 28 >>\nstream\n',
+      encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('3 0 obj'))),
+      encodeXrefRow(2, 8, 0),
+      encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('8 0 obj'))),
+      encodeXrefRow(1, xrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    );
+
+    expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+  });
+
+  it('résout les conteneurs DecodeParms indirects compressés depuis la xref active', () => {
+    const fixtures = [
+      {
+        filters: '/FlateDecode',
+        parameters: '<< /Predictor 1 >>',
+        payload: deflate(new Uint8Array()),
+      },
+      {
+        filters: '[/ASCII85Decode /FlateDecode]',
+        parameters: '[null << /Predictor 1 >>]',
+        payload: encodeAscii85(deflate(new Uint8Array())),
+      },
+    ];
+    for (const fixture of fixtures) {
+      const parametersCarrier = new TextEncoder().encode(`7 0 ${fixture.parameters}`);
+      const body = joinBytes(
+        `%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Filter ${fixture.filters} `,
+        `/DecodeParms 7 0 R /Length ${String(fixture.payload.byteLength)} >>\nstream\n`,
+        fixture.payload,
+        '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+        `/Length ${String(parametersCarrier.byteLength)} >>\nstream\n`,
+        parametersCarrier,
+        '\nendstream\nendobj\n',
+      );
+      const xrefOffset = body.byteLength;
+      const pdf = joinBytes(
+        body,
+        '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 7 2 10 1] ',
+        '/Length 28 >>\nstream\n',
+        encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('3 0 obj'))),
+        encodeXrefRow(2, 8, 0),
+        encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('8 0 obj'))),
+        encodeXrefRow(1, xrefOffset),
+        '\nendstream\nendobj\nstartxref\n',
+        String(xrefOffset),
+        '\n%%EOF\n',
+      );
+
+      expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+    }
+  });
+
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
     const objectDeclarations = Array.from(
       { length: PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1 },
