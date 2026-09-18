@@ -147,6 +147,19 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.valid).toBe(true);
   });
 
+  it.each([
+    ['{"not":{"multipleOf":0.1}}', false],
+    ['{"anyOf":[{"multipleOf":0.1},{"type":"string"}]}', true],
+    ['{"oneOf":[{"multipleOf":0.1},{"multipleOf":0.2}]}', true],
+  ])('evaluates exact decimal multiples inside combinators for %s', (schema, expectedValid) => {
+    const result = validateJsonSchemaDocuments(schema, '0.3', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(expectedValid);
+  });
+
   it('preserves the multipleOf divisor in normalized diagnostics', () => {
     const result = validateJsonSchemaDocuments('{"type":"number","multipleOf":0.1}', '0.35', {
       draft: 'auto',

@@ -77,6 +77,20 @@ describe('prepareJsonSchemaValidation', () => {
     expect(result.result.issues[0].code).toBe(expected);
   });
 
+  it.each(['-0', '-0.0'])('accepts the valid signed-zero token %s without losing its sign', instance => {
+    const result = prepareJsonSchemaValidation('true', instance, OPTIONS);
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(Object.is(result.prepared.instance, -0)).toBe(true);
+  });
+
+  it('still rejects a negative number that underflows to signed zero', () => {
+    const result = prepareJsonSchemaValidation('true', '-1e-999', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0].code).toBe('unsafe-number');
+  });
+
   it('rejects a scalar schema root', () => {
     const result = prepareJsonSchemaValidation('42', '{}', OPTIONS);
     expect(result.ok).toBe(false);

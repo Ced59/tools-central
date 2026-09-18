@@ -1,4 +1,4 @@
-import Ajv, { type ErrorObject, type Options, type ValidateFunction } from 'ajv';
+import Ajv, { _, type ErrorObject, type KeywordDefinition, type Options, type ValidateFunction } from 'ajv';
 import Ajv2019 from 'ajv/dist/2019';
 import Ajv2020 from 'ajv/dist/2020';
 import addFormats from 'ajv-formats';
@@ -35,6 +35,21 @@ const AJV_OPTIONS: Options = {
   validateFormats: true,
 };
 
+const EXACT_MULTIPLE_OF_KEYWORD: KeywordDefinition = {
+  keyword: 'multipleOf',
+  type: 'number',
+  schemaType: 'number',
+  errors: false,
+  compile(schema: unknown) {
+    const divisor = typeof schema === 'number' ? schema : Number.NaN;
+    return (data: unknown): boolean => typeof data === 'number' && isExactDecimalMultiple(data, divisor);
+  },
+  error: {
+    message: 'must be an exact multiple',
+    params: ({ schemaCode }) => _`{multipleOf: ${schemaCode}}`,
+  },
+};
+
 export function validateJsonSchemaDocuments(
   schemaSource: string,
   instanceSource: string,
@@ -48,10 +63,9 @@ export function validateJsonSchemaDocuments(
     const collectAllErrors = prepared.stats.schemaNodes * prepared.stats.instanceNodes
       <= JSON_SCHEMA_MAX_VALIDATION_OPERATIONS;
     const validator = compileValidator(prepared, options.validateFormats, collectAllErrors);
-    const ajvValid = validator(prepared.instance);
-    if (!ajvValid && !collectAllErrors) return engineFailure(prepared, 'validation-limit');
-    const rawErrors = ajvValid ? [] : filterExactMultipleErrors(validator.errors ?? [], prepared.instance);
-    const valid = ajvValid || rawErrors.length === 0;
+    const valid = validator(prepared.instance);
+    if (!valid && !collectAllErrors) return engineFailure(prepared, 'validation-limit');
+    const rawErrors = valid ? [] : validator.errors ?? [];
     const totalErrors = rawErrors.length;
     const errors = normalizeErrors(rawErrors.slice(0, JSON_SCHEMA_MAX_ERRORS));
     const correction = valid
@@ -101,6 +115,7 @@ function createAjv(
     : draft === 'draft-2019-09'
       ? new Ajv2019(options)
       : new Ajv(options);
+  ajv.removeKeyword('multipleOf').addKeyword(EXACT_MULTIPLE_OF_KEYWORD);
   addFormats(ajv, { mode: 'full' });
   return ajv;
 }
@@ -156,9 +171,8 @@ function createCorrectionCandidate(
     if (applied.corrections.length === 0) break;
     candidate = applied.value;
     corrections.push(...applied.corrections);
-    const ajvValid = validator(candidate);
-    const rawErrors = ajvValid ? [] : filterExactMultipleErrors(validator.errors ?? [], candidate);
-    valid = ajvValid || rawErrors.length === 0;
+    valid = validator(candidate);
+    const rawErrors = valid ? [] : validator.errors ?? [];
     remainingErrors = rawErrors.length;
     currentErrors = normalizeErrors(rawErrors.slice(0, JSON_SCHEMA_MAX_ERRORS));
     if (valid) break;
@@ -173,40 +187,6 @@ function createCorrectionCandidate(
     valid,
     remainingErrors,
   };
-}
-
-function filterExactMultipleErrors(
-  errors: readonly ErrorObject[],
-  instance: JsonValue,
-): ErrorObject[] {
-  return errors.filter(error => {
-    if (error.keyword !== 'multipleOf') return true;
-    const params = error.params as Record<string, unknown>;
-    const divisor = readNumber(params['multipleOf']);
-    const value = readInstanceValue(instance, error.instancePath);
-    return typeof value !== 'number' || divisor === null || !isExactDecimalMultiple(value, divisor);
-  });
-}
-
-function readInstanceValue(root: JsonValue, pointer: string): JsonValue | undefined {
-  if (!pointer) return root;
-  if (!pointer.startsWith('/')) return undefined;
-  let value: JsonValue = root;
-  for (const rawSegment of pointer.slice(1).split('/')) {
-    const segment = rawSegment.replace(/~1/gu, '/').replace(/~0/gu, '~');
-    if (Array.isArray(value)) {
-      if (!/^\d+$/u.test(segment)) return undefined;
-      const index = Number(segment);
-      if (index >= value.length) return undefined;
-      value = value[index];
-    } else if (value !== null && typeof value === 'object') {
-      if (!Object.hasOwn(value, segment)) return undefined;
-      value = value[segment];
-    } else {
-      return undefined;
-    }
-  }
-  return value;
 }
 
 function engineFailure(

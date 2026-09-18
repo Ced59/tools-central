@@ -196,7 +196,6 @@ function isLosslessJsonNumber(token: string): boolean {
   if (token.length > 128) return false;
   const numeric = Number(token);
   if (!Number.isFinite(numeric)) return false;
-  if (numeric === 0 && token.startsWith('-')) return false;
   const sourceDecimal = canonicalDecimal(token);
   const numericDecimal = canonicalDecimal(String(numeric));
   return sourceDecimal !== null
