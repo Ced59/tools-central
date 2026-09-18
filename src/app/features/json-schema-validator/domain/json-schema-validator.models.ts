@@ -266,6 +266,7 @@ function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraf
   if (typeof schema === 'boolean') return 0;
   let patterns = 0;
   const visited = new Set<JsonObject>();
+  const localAnchors = indexLocalAnchors(schema);
   const stack: Array<{ value: JsonValue; path: string }> = [{ value: schema, path: '' }];
   while (stack.length > 0) {
     const current = stack.pop();
@@ -274,7 +275,7 @@ function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraf
     if (visited.has(current.value)) continue;
     visited.add(current.value);
     inspectReferences(current.value, current.path, draft);
-    pushLocalReferenceTargets(schema, current.value, draft, stack);
+    pushLocalReferenceTargets(schema, current.value, draft, localAnchors, stack);
     if (draft === 'draft-07' && typeof current.value['$ref'] === 'string') continue;
     patterns = inspectPatterns(current.value, current.path, patterns);
     pushSubschemas(current.value, current.path, draft, stack);
@@ -295,14 +296,67 @@ function pushLocalReferenceTargets(
   root: JsonObject,
   schema: JsonObject,
   draft: JsonSchemaDraft,
+  localAnchors: ReadonlyMap<string, ReadonlyArray<{ value: JsonValue; path: string }>>,
   stack: Array<{ value: JsonValue; path: string }>,
 ): void {
   for (const keyword of referenceKeywords(draft)) {
     const reference = schema[keyword];
     if (typeof reference !== 'string') continue;
     const target = resolveLocalReference(root, reference);
-    if (target !== null) pushSchema(target.value, target.path, stack);
+    if (target !== null) {
+      pushSchema(target.value, target.path, stack);
+      continue;
+    }
+    for (const anchorTarget of localAnchors.get(reference) ?? []) {
+      pushSchema(anchorTarget.value, anchorTarget.path, stack);
+    }
   }
+}
+
+function indexLocalAnchors(root: JsonObject): Map<string, Array<{ value: JsonValue; path: string }>> {
+  const anchors = new Map<string, Array<{ value: JsonValue; path: string }>>();
+  const stack: Array<{ value: JsonValue; path: string }> = [{ value: root, path: '' }];
+  while (stack.length > 0) {
+    const current = stack.pop();
+    if (!current) break;
+    if (Array.isArray(current.value)) {
+      for (let index = current.value.length - 1; index >= 0; index -= 1) {
+        stack.push({ value: current.value[index], path: appendPointer(current.path, String(index)) });
+      }
+      continue;
+    }
+    if (!isObject(current.value)) continue;
+    addLocalAnchor(anchors, current.value['$anchor'], current);
+    addLocalAnchor(anchors, current.value['$dynamicAnchor'], current);
+    const identifier = current.value['$id'];
+    if (typeof identifier === 'string' && /^#[a-z_][-a-z0-9._]*$/iu.test(identifier)) {
+      addAnchorTarget(anchors, identifier, current);
+    }
+    for (const [key, value] of Object.entries(current.value)) {
+      stack.push({ value, path: appendPointer(current.path, key) });
+    }
+  }
+  return anchors;
+}
+
+function addLocalAnchor(
+  anchors: Map<string, Array<{ value: JsonValue; path: string }>>,
+  anchor: JsonValue | undefined,
+  target: { value: JsonValue; path: string },
+): void {
+  if (typeof anchor === 'string' && /^[a-z_][-a-z0-9._]*$/iu.test(anchor)) {
+    addAnchorTarget(anchors, `#${anchor}`, target);
+  }
+}
+
+function addAnchorTarget(
+  anchors: Map<string, Array<{ value: JsonValue; path: string }>>,
+  reference: string,
+  target: { value: JsonValue; path: string },
+): void {
+  const targets = anchors.get(reference) ?? [];
+  targets.push(target);
+  anchors.set(reference, targets);
 }
 
 function resolveLocalReference(root: JsonObject, reference: string): { value: JsonValue; path: string } | null {

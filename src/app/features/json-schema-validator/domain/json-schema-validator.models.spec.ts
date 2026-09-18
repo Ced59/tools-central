@@ -176,6 +176,23 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it('inspects a Draft 7 local anchor target without scanning ignored siblings', () => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $ref: '#value',
+      pattern,
+      definitions: {
+        value: { $id: '#value', pattern },
+      },
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/definitions/value/pattern',
+    });
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);
