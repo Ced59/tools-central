@@ -35,17 +35,32 @@ describe('convertCsvJson', () => {
     expect(result.stats).toMatchObject({ inputRows: 2, outputRows: 1, columns: 3 });
   });
 
-  it('privilégie la largeur de ligne cohérente au nombre brut de séparateurs', () => {
-    const result = convertCsvJson(
+  it('signale les séparateurs ambigus au lieu de choisir selon leur fréquence', () => {
+    const semicolonCandidate = convertCsvJson(
       'first,last;desc,value\nAda,Lovelace;hello,world',
       CSV_DEFAULTS,
     );
+    const commaCandidate = convertCsvJson(
+      'name,age,notes;flags\nAda,36,math;code\nGrace,85,navy;code',
+      CSV_DEFAULTS,
+    );
 
-    expect(result.detectedDelimiter).toBe('semicolon');
-    expect(JSON.parse(result.output)).toEqual([{
-      'first,last': 'Ada,Lovelace',
-      'desc,value': 'hello,world',
-    }]);
+    expect(semicolonCandidate.detectedDelimiter).toBe('comma');
+    expect(commaCandidate.detectedDelimiter).toBe('comma');
+    expect(semicolonCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
+    expect(commaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
+  });
+
+  it('respecte le choix de conserver ou supprimer les espaces des en-têtes', () => {
+    const preserved = convertCsvJson('" name ",name\nAlice,Ada', CSV_DEFAULTS);
+    const trimmed = convertCsvJson('" name ",age\nAlice,1', {
+      ...CSV_DEFAULTS,
+      trimCells: true,
+    });
+
+    expect(JSON.parse(preserved.output)).toEqual([{ ' name ': 'Alice', name: 'Ada' }]);
+    expect(JSON.parse(trimmed.output)).toEqual([{ name: 'Alice', age: 1 }]);
+    expect(preserved.issues.some(issue => issue.code === 'duplicate-header')).toBe(false);
   });
 
   it('infère seulement les types sûrs et conserve les identifiants à zéro initial', () => {

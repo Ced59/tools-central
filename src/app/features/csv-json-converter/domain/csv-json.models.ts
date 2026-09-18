@@ -136,6 +136,7 @@ function convertCsvToJson(
     options.firstRowHeaders ? (parsed.rows[0] ?? []) : [],
     widestRow,
     options.firstRowHeaders,
+    options.trimCells,
     state,
   );
   const dataRows = options.firstRowHeaders ? parsed.rows.slice(1) : parsed.rows;
@@ -458,7 +459,7 @@ function detectDelimiter(
   let best: Exclude<CsvJsonDelimiter, 'auto'> = 'comma';
   let bestConsistency = 0;
   let bestDeviation = Number.POSITIVE_INFINITY;
-  let bestMode = Number.POSITIVE_INFINITY;
+  let equallyConsistentCandidates: Exclude<CsvJsonDelimiter, 'auto'>[] = [];
   for (const candidate of Object.keys(DELIMITERS) as Exclude<CsvJsonDelimiter, 'auto'>[]) {
     const counts = delimiterCounts(source, DELIMITERS[candidate]);
     const frequencies = new Map<number, number>();
@@ -472,16 +473,19 @@ function detectDelimiter(
     const consistency = frequency / counts.length;
     const deviation = counts.reduce((total, count) => total + Math.abs(count - mode), 0);
     const isBetter = consistency > bestConsistency
-      || (consistency === bestConsistency && deviation < bestDeviation)
-      || (consistency === bestConsistency && deviation === bestDeviation && mode < bestMode);
+      || (consistency === bestConsistency && deviation < bestDeviation);
     if (isBetter) {
       best = candidate;
       bestConsistency = consistency;
       bestDeviation = deviation;
-      bestMode = mode;
+      equallyConsistentCandidates = [candidate];
+    } else if (consistency === bestConsistency && deviation === bestDeviation) {
+      equallyConsistentCandidates.push(candidate);
     }
   }
-  if (bestConsistency === 0) addIssue(state, 'delimiter-fallback', 'warning');
+  if (bestConsistency === 0 || equallyConsistentCandidates.length > 1) {
+    addIssue(state, 'delimiter-fallback', 'warning', null, null, equallyConsistentCandidates.join(','));
+  }
   return best;
 }
 
@@ -516,6 +520,7 @@ function createHeaders(
   provided: readonly string[],
   width: number,
   hasHeaderRow: boolean,
+  trimCells: boolean,
   state: MutableConversionState,
 ): string[] {
   const headers: string[] = [];
@@ -532,7 +537,7 @@ function createHeaders(
   }
   for (let index = 0; index < width; index += 1) {
     const raw = hasHeaderRow ? (provided[index] ?? '') : '';
-    let header = raw.trim();
+    let header = trimCells ? raw.trim() : raw;
     if (!header) {
       header = `colonne_${String(index + 1)}`;
       if (hasHeaderRow) addIssue(state, 'empty-header', 'warning', 1, index + 1, header);
