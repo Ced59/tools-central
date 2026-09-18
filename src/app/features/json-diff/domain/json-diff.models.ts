@@ -23,7 +23,7 @@ export type JsonDiffIssueCode =
   | 'array-key-required'
   | 'array-key-invalid'
   | 'array-key-duplicate'
-  | 'array-ignore-conflict'
+  | 'ignore-patch-conflict'
   | 'change-limit'
   | 'output-too-large';
 
@@ -112,7 +112,6 @@ interface ComparisonState {
 interface KeyedArrayItem {
   stableKey: string;
   displayKey: string;
-  keyPath: string;
   value: JsonValue;
   index: number;
 }
@@ -488,14 +487,9 @@ function compareArraysByKey(
 ): void {
   const leftItems = indexArrayByKey(left, leftPath, state.keySegments, state.ignoredPaths);
   const rightItems = indexArrayByKey(right, rightPath, state.keySegments, state.ignoredPaths);
-  const redactedLabels = createRedactedKeyLabels(leftItems.ordered, rightItems.ordered);
   for (const item of leftItems.ordered) {
     const counterpart = rightItems.byKey.get(item.stableKey);
-    const logicalPath = appendLogicalKey(
-      path,
-      state.options.arrayKey,
-      reportKey(item, counterpart, redactedLabels, state.ignoredPaths),
-    );
+    const logicalPath = appendLogicalKey(path, state.options.arrayKey, item.displayKey);
     const leftItemPath = appendPointer(leftPath, String(item.index));
     const rightItemPath = counterpart
       ? appendPointer(rightPath, String(counterpart.index))
@@ -526,11 +520,7 @@ function compareArraysByKey(
     if (isIgnored(rightItemPath, state.ignoredPaths)) continue;
     addChange(state, {
       kind: 'added',
-      path: appendLogicalKey(
-        path,
-        state.options.arrayKey,
-        reportKey(item, undefined, redactedLabels, state.ignoredPaths),
-      ),
+      path: appendLogicalKey(path, state.options.arrayKey, item.displayKey),
       after: item.value,
       afterIndex: item.index,
     }, undefined, rightItemPath);
@@ -552,6 +542,10 @@ function indexArrayByKey(
     const itemPath = appendPointer(path, String(index));
     if (isIgnored(itemPath, ignoredPaths)) continue;
     const value = values[index];
+    const keyPath = appendPointerSegments(itemPath, keySegments);
+    if (isIgnored(keyPath, ignoredPaths)) {
+      throw new JsonDiffError('ignore-patch-conflict', keyPath);
+    }
     const key = resolveKey(value, keySegments);
     if (!isKeyPrimitive(key)) {
       throw new JsonDiffError('array-key-invalid', itemPath);
@@ -563,7 +557,6 @@ function indexArrayByKey(
     const item = {
       stableKey,
       displayKey: JSON.stringify(key),
-      keyPath: appendPointerSegments(itemPath, keySegments),
       value,
       index,
     };
@@ -571,32 +564,6 @@ function indexArrayByKey(
     byKey.set(stableKey, item);
   }
   return { ordered, byKey };
-}
-
-function createRedactedKeyLabels(
-  left: readonly KeyedArrayItem[],
-  right: readonly KeyedArrayItem[],
-): ReadonlyMap<string, string> {
-  const labels = new Map<string, string>();
-  for (const items of [left, right]) {
-    for (const item of items) {
-      if (!labels.has(item.stableKey)) labels.set(item.stableKey, `#${String(labels.size + 1)}`);
-    }
-  }
-  return labels;
-}
-
-function reportKey(
-  item: KeyedArrayItem,
-  counterpart: KeyedArrayItem | undefined,
-  redactedLabels: ReadonlyMap<string, string>,
-  ignoredPaths: ReadonlySet<string>,
-): string {
-  if (!isIgnored(item.keyPath, ignoredPaths)
-    && (counterpart === undefined || !isIgnored(counterpart.keyPath, ignoredPaths))) {
-    return item.displayKey;
-  }
-  return redactedLabels.get(item.stableKey) ?? '#';
 }
 
 function buildPatch(left: JsonValue, right: JsonValue, path: string, state: ComparisonState): void {
@@ -628,6 +595,11 @@ function buildPatch(left: JsonValue, right: JsonValue, path: string, state: Comp
     const leftSet = new Set(leftKeys);
     for (const key of leftKeys) {
       const childPath = appendPointer(path, key);
+      if (!rightSet.has(key)
+        && !isIgnored(childPath, state.ignoredPaths)
+        && hasIgnoredDescendant(childPath, state.ignoredPaths)) {
+        throw new JsonDiffError('ignore-patch-conflict', childPath);
+      }
       if (!rightSet.has(key) && !isIgnored(childPath, state.ignoredPaths)) {
         addPatch(state, { op: 'remove', path: childPath });
       }
@@ -643,7 +615,12 @@ function buildPatch(left: JsonValue, right: JsonValue, path: string, state: Comp
     }
     return;
   }
-  if (!deepEqual(left, right)) addPatch(state, { op: 'replace', path, value: right });
+  if (!deepEqual(left, right)) {
+    if (hasIgnoredDescendant(path, state.ignoredPaths)) {
+      throw new JsonDiffError('ignore-patch-conflict', path || '/');
+    }
+    addPatch(state, { op: 'replace', path, value: right });
+  }
 }
 
 function addChange(
@@ -691,10 +668,10 @@ function assertArrayTailPatchIsPossible(
       const childPath = appendPointer(path, String(index));
       const ignored = isIgnored(childPath, ignoredPaths);
       if (hasIgnoredDescendant(childPath, ignoredPaths) && !ignored) {
-        throw new JsonDiffError('array-ignore-conflict', path || '/');
+        throw new JsonDiffError('ignore-patch-conflict', path || '/');
       }
       if (ignored && lowerRemovalExists) {
-        throw new JsonDiffError('array-ignore-conflict', path || '/');
+        throw new JsonDiffError('ignore-patch-conflict', path || '/');
       }
       if (!ignored) lowerRemovalExists = true;
     }
@@ -704,7 +681,7 @@ function assertArrayTailPatchIsPossible(
     for (let index = leftLength; index < rightLength; index += 1) {
       const childPath = appendPointer(path, String(index));
       if (isIgnored(childPath, ignoredPaths)) ignoredGapExists = true;
-      else if (ignoredGapExists) throw new JsonDiffError('array-ignore-conflict', path || '/');
+      else if (ignoredGapExists) throw new JsonDiffError('ignore-patch-conflict', path || '/');
     }
   }
 }

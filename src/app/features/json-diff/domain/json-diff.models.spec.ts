@@ -197,15 +197,15 @@ describe('compareJsonDocuments', () => {
     expect(paths[1]).toContain(`${second}"/value`);
   });
 
-  it('masque une clé d’association ignorée dans les chemins du rapport', () => {
+  it('rejette une clé d’association également déclarée comme ignorée', () => {
     const result = compareJsonDocuments(
       '[{"id":"customer-secret","value":1}]',
-      '[{"id":"customer-secret","value":2}]',
+      '[{"id":"other-secret","value":1}]',
       { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0/id' },
     );
 
-    expect(result.ok).toBe(true);
-    expect(result.changes[0]?.path).toBe('/@~1id=#1/value');
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]).toMatchObject({ code: 'ignore-patch-conflict', path: '/0/id' });
     expect(result.report).not.toContain('customer-secret');
     expect(result.patch).not.toContain('customer-secret');
   });
@@ -274,10 +274,34 @@ describe('compareJsonDocuments', () => {
       { ...DEFAULTS, ignoredPaths: '/1' },
     );
 
-    expect(removalConflict.issues[0]).toMatchObject({ code: 'array-ignore-conflict', path: '/' });
-    expect(additionConflict.issues[0]).toMatchObject({ code: 'array-ignore-conflict', path: '/' });
+    expect(removalConflict.issues[0]).toMatchObject({ code: 'ignore-patch-conflict', path: '/' });
+    expect(additionConflict.issues[0]).toMatchObject({ code: 'ignore-patch-conflict', path: '/' });
     expect(removalConflict.patch).toBe('');
     expect(additionConflict.patch).toBe('');
+  });
+
+  it('rejette une suppression ou un remplacement qui effacerait un descendant ignoré', () => {
+    const removedParent = compareJsonDocuments(
+      '{"account":{"name":"Ada","secret":"secret-token"}}',
+      '{}',
+      { ...DEFAULTS, ignoredPaths: '/account/secret' },
+    );
+    const replacedParent = compareJsonDocuments(
+      '{"account":{"secret":"secret-token"}}',
+      '{"account":false}',
+      { ...DEFAULTS, ignoredPaths: '/account/secret' },
+    );
+
+    expect(removedParent.issues[0]).toMatchObject({
+      code: 'ignore-patch-conflict',
+      path: '/account',
+    });
+    expect(replacedParent.issues[0]).toMatchObject({
+      code: 'ignore-patch-conflict',
+      path: '/account',
+    });
+    expect(removedParent.report).not.toContain('secret-token');
+    expect(replacedParent.patch).toBe('');
   });
 
   it('normalise les échappements des chemins ignorés', () => {

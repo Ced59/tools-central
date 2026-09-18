@@ -266,7 +266,7 @@ export class JsonDiffToolComponent {
       'array-key-required': $localize`:@@json_diff_issue_key_required:Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.`,
       'array-key-invalid': $localize`:@@json_diff_issue_key_invalid:Un objet du tableau ne possède pas une clé d’association scalaire valide.`,
       'array-key-duplicate': $localize`:@@json_diff_issue_key_duplicate:Une même clé d’association apparaît plusieurs fois dans un tableau.`,
-      'array-ignore-conflict': $localize`:@@json_diff_issue_array_ignore_conflict:Ces exclusions positionnelles déplaceraient un élément ignoré dans le patch. Ignorez le tableau entier ou comparez-le sans générer ce conflit.`,
+      'ignore-patch-conflict': $localize`:@@json_diff_issue_ignore_patch_conflict:Ces exclusions sont incompatibles avec un patch sans perte. Ignorez le conteneur entier ou retirez les chemins en conflit.`,
       'change-limit': $localize`:@@json_diff_issue_changes:La comparaison dépasse la limite de 20 000 différences.`,
       'output-too-large': $localize`:@@json_diff_issue_output:Le rapport et le patch dépasseraient la limite de sortie.`,
     };
