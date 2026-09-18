@@ -79,7 +79,11 @@ function compileValidator(
 }
 
 function createAjv(draft: JsonSchemaDraft, validateFormats: boolean): Ajv | Ajv2019 | Ajv2020 {
-  const options = { ...AJV_OPTIONS, validateFormats };
+  const options = {
+    ...AJV_OPTIONS,
+    ignoreKeywordsWithRef: draft === 'draft-07',
+    validateFormats,
+  };
   const ajv = draft === 'draft-2020-12'
     ? new Ajv2020(options)
     : draft === 'draft-2019-09'

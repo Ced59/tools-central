@@ -170,7 +170,7 @@ export function prepareJsonSchemaValidation(
   return {
     ok: true,
     prepared: {
-      schema: options.draft === 'auto' ? schema : withoutDeclaredDraft(schema),
+      schema: withoutDeclaredDraft(schema),
       instance: parsedInstance.parsed.value,
       draft,
       stats,

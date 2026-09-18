@@ -66,6 +66,39 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.errors[0].keyword).toBe('minimum');
   });
 
+  it('ignores reference siblings in Draft 7', () => {
+    const schema = JSON.stringify({
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      $ref: '#/definitions/value',
+      maxLength: 1,
+      definitions: { value: { type: 'string' } },
+    });
+    const result = validateJsonSchemaDocuments(schema, '"xx"', { draft: 'auto', validateFormats: true });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(true);
+  });
+
+  it('evaluates reference siblings in Draft 2019-09', () => {
+    const schema = JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2019-09/schema',
+      $ref: '#/$defs/value',
+      maxLength: 1,
+      $defs: { value: { type: 'string' } },
+    });
+    const result = validateJsonSchemaDocuments(schema, '"xx"', { draft: 'auto', validateFormats: true });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(false);
+    expect(result.errors.some(errorValue => errorValue.keyword === 'maxLength')).toBe(true);
+  });
+
+  it('normalizes the accepted HTTPS Draft 7 meta-schema alias', () => {
+    const schema = '{"$schema":"https://json-schema.org/draft-07/schema","type":"string"}';
+    const result = validateJsonSchemaDocuments(schema, '"value"', { draft: 'auto', validateFormats: true });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(true);
+    expect(result.draft).toBe('draft-07');
+  });
+
   it('accepts standards-valid constraints without redundant type keywords', () => {
     const result = validateJsonSchemaDocuments('{"properties":{"score":{"minimum":0}}}', '{"score":-1}', {
       draft: 'auto',
