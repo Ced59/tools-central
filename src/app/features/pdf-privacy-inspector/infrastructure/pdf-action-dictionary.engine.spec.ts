@@ -1174,7 +1174,10 @@ describe('inspectPdfStructuralSignals', () => {
       buildIndirectObjectStreamScalars(0, -1),
     )).toThrow('Missing PDF first offset');
 
-    const buildCompressedObjectStreamScalars = (objectCount: number): Uint8Array => {
+    const buildCompressedObjectStreamScalars = (
+      objectCount: number,
+      declaresNullEncryption = false,
+    ): Uint8Array => {
       const header = '%PDF-1.7\n';
       const targetPayload = '4 0 null';
       const targetStream = '1 0 obj\n<< /Type /ObjStm /N 6 0 R /First 7 0 R '
@@ -1193,7 +1196,9 @@ describe('inspectPdfStructuralSignals', () => {
       return joinBytes(
         body,
         '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] ',
-        '/Index [1 1 4 1 6 3 10 1] /Length 42 >>\nstream\n',
+        '/Index [1 1 4 1 6 3 10 1] ',
+        declaresNullEncryption ? '/Encrypt 4 0 R ' : '',
+        '/Length 42 >>\nstream\n',
         encodeXrefRow(1, targetOffset),
         encodeXrefRow(2, 1, 0),
         encodeXrefRow(2, 8, 0),
@@ -1211,6 +1216,9 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => validatePdfObjectStreamBudgets(
       buildCompressedObjectStreamScalars(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
     )).toThrow('PDF compressed indirect object limit');
+    expect(validatePdfObjectStreamBudgets(
+      buildCompressedObjectStreamScalars(1, true),
+    )).toEqual({ encrypted: false, skippedEncryptedObjectStreams: 0 });
 
     const oversizedXref = joinBytes(
       '%PDF-1.7\ntrailer\n<< /Size ',

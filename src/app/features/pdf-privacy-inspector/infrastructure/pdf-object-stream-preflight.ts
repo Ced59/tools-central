@@ -111,6 +111,12 @@ interface CompressedObjectValue {
   decodeParameters?: CompressedDecodeParameterValue;
 }
 
+interface CompressedScalarBootstrapState {
+  valuesByObjectStream: Map<number, readonly CompressedObjectValue[]>;
+  failedObjectStreams: Set<number>;
+  resolvingObjectStreams: Set<number>;
+}
+
 interface CompressedCrossReferenceEntry {
   objectStreamNumber: number;
   objectIndex: number;
@@ -1054,6 +1060,11 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
   for (const [key, offset] of bootstrapOffsets) {
     if (objectOffsets.get(key) !== offset) compressedEntriesComplete = false;
   }
+  const compressedScalarBootstrap: CompressedScalarBootstrapState = {
+    valuesByObjectStream: new Map<number, readonly CompressedObjectValue[]>(),
+    failedObjectStreams: new Set<number>(),
+    resolvingObjectStreams: new Set<number>(),
+  };
   for (const reference of encryptionReferences) {
     const key = referenceKey(reference.objectNumber, reference.generationNumber);
     if (authoritativeNullObjects.has(key)) continue;
@@ -1065,6 +1076,7 @@ function collectCrossReferenceMetadata(data: Uint8Array): CrossReferenceMetadata
         objectOffsets,
         compressedEntries,
         expansionBudget,
+        compressedScalarBootstrap,
       )
     ) authoritativeNullObjects.add(key);
   }
@@ -2571,102 +2583,190 @@ function isAuthoritativeCompressedNullObject(
   authoritativeOffsets: ReadonlyMap<string, number>,
   compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
   expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
 ): boolean {
   if (reference.generationNumber !== 0) return false;
   const entry = compressedEntries.get(referenceKey(reference.objectNumber, 0));
   if (!entry) return false;
-  const objectStreamOffset = authoritativeOffsets.get(referenceKey(
+  const values = readBootstrapObjectStreamValues(
+    data,
     entry.objectStreamNumber,
-    0,
-  ));
-  if (objectStreamOffset === undefined) return false;
-  const header = readIndirectObjectHeader(data, objectStreamOffset);
-  if (
-    !header
-    || header.start !== objectStreamOffset
-    || header.objectNumber !== entry.objectStreamNumber
-    || header.generationNumber !== 0
-  ) return false;
-
-  const dictionaryStart = skipWhitespaceAndComments(data, header.end);
-  if (data[dictionaryStart] !== LESS_THAN || data[dictionaryStart + 1] !== LESS_THAN) return false;
-  const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
-  if (dictionaryEnd === undefined) return false;
-  let dictionary: ParsedDictionary;
-  try {
-    dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
-  } catch {
-    return false;
-  }
-  const streamType = resolveCriticalStreamType(
-    data,
-    dictionary.type,
-    { authoritativeOffsets },
-  );
-  if (streamType !== 'ObjStm') return false;
-  if (typeof dictionary.type !== 'string') {
-    try {
-      dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd, streamType);
-    } catch {
-      return false;
-    }
-  }
-  const scalarCandidates = { authoritativeOffsets };
-  const objectCount = resolveCriticalUnsignedScalar(
-    data,
-    dictionary.objectCount,
-    scalarCandidates,
-  );
-  const firstObjectOffset = resolveCriticalUnsignedScalar(
-    data,
-    dictionary.firstObjectOffset,
-    scalarCandidates,
-  );
-  if (
-    objectCount === undefined
-    || firstObjectOffset === undefined
-    || entry.objectIndex >= objectCount
-  ) return false;
-
-  const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
-  if (!matchesKeyword(data, streamKeyword, 'stream')) return false;
-  let streamStart: number;
-  try {
-    streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
-  } catch {
-    return false;
-  }
-  const length = resolveAuthoritativeUncompressedLength(
-    data,
-    dictionary.length,
     authoritativeOffsets,
-  );
-  if (length === undefined) return false;
-  const streamEnd = streamStart + length;
-  if (
-    !Number.isSafeInteger(streamEnd)
-    || streamEnd > data.byteLength
-    || !matchesKeyword(data, skipWhitespaceAndComments(data, streamEnd), 'endstream')
-  ) return false;
-  const filters = resolveFilters(data, dictionary.filters, { authoritativeOffsets });
-  const decoded = decodeObjectStreamContents(
-    data.subarray(streamStart, streamEnd),
-    filters,
-    resolveDecodeParameters(
-      data,
-      dictionary.decodeParameters,
-      { authoritativeOffsets },
-      filters,
-    ),
+    compressedEntries,
     expansionBudget,
+    bootstrapState,
   );
-  return decoded !== undefined && compressedObjectIsNull(
-    decoded,
-    objectCount,
-    firstObjectOffset,
-    reference.objectNumber,
-    entry.objectIndex,
+  return values?.some(value => (
+    value.objectNumber === reference.objectNumber
+    && value.objectIndex === entry.objectIndex
+    && value.isNull === true
+  )) ?? false;
+}
+
+function readBootstrapObjectStreamValues(
+  data: Uint8Array,
+  objectStreamNumber: number,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+): readonly CompressedObjectValue[] | undefined {
+  const cached = bootstrapState.valuesByObjectStream.get(objectStreamNumber);
+  if (cached) return cached;
+  if (
+    bootstrapState.failedObjectStreams.has(objectStreamNumber)
+    || bootstrapState.resolvingObjectStreams.has(objectStreamNumber)
+  ) return undefined;
+  bootstrapState.resolvingObjectStreams.add(objectStreamNumber);
+  let completed = false;
+  try {
+    const objectStreamOffset = authoritativeOffsets.get(referenceKey(
+      objectStreamNumber,
+      0,
+    ));
+    if (objectStreamOffset === undefined) return undefined;
+    const header = readIndirectObjectHeader(data, objectStreamOffset);
+    if (
+      !header
+      || header.start !== objectStreamOffset
+      || header.objectNumber !== objectStreamNumber
+      || header.generationNumber !== 0
+    ) return undefined;
+
+    const dictionaryStart = skipWhitespaceAndComments(data, header.end);
+    if (
+      data[dictionaryStart] !== LESS_THAN
+      || data[dictionaryStart + 1] !== LESS_THAN
+    ) return undefined;
+    const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
+    if (dictionaryEnd === undefined) return undefined;
+    let dictionary: ParsedDictionary;
+    try {
+      dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+    } catch {
+      return undefined;
+    }
+    const streamType = resolveCriticalStreamType(
+      data,
+      dictionary.type,
+      { authoritativeOffsets },
+    );
+    if (streamType !== 'ObjStm') return undefined;
+    if (typeof dictionary.type !== 'string') {
+      try {
+        dictionary = parseCriticalDictionary(
+          data,
+          dictionaryStart,
+          dictionaryEnd,
+          streamType,
+        );
+      } catch {
+        return undefined;
+      }
+    }
+    const objectCount = resolveBootstrapUnsignedScalar(
+      data,
+      dictionary.objectCount,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
+    const firstObjectOffset = resolveBootstrapUnsignedScalar(
+      data,
+      dictionary.firstObjectOffset,
+      authoritativeOffsets,
+      compressedEntries,
+      expansionBudget,
+      bootstrapState,
+    );
+    if (
+      objectCount === undefined
+      || firstObjectOffset === undefined
+      || objectCount > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
+    ) return undefined;
+
+    const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
+    if (!matchesKeyword(data, streamKeyword, 'stream')) return undefined;
+    let streamStart: number;
+    try {
+      streamStart = readStreamStart(data, streamKeyword + 'stream'.length);
+    } catch {
+      return undefined;
+    }
+    const length = resolveAuthoritativeUncompressedLength(
+      data,
+      dictionary.length,
+      authoritativeOffsets,
+    );
+    if (length === undefined) return undefined;
+    const streamEnd = streamStart + length;
+    if (
+      !Number.isSafeInteger(streamEnd)
+      || streamEnd > data.byteLength
+      || !matchesKeyword(
+        data,
+        skipWhitespaceAndComments(data, streamEnd),
+        'endstream',
+      )
+    ) return undefined;
+    const filters = resolveFilters(data, dictionary.filters, { authoritativeOffsets });
+    const decoded = decodeObjectStreamContents(
+      data.subarray(streamStart, streamEnd),
+      filters,
+      resolveDecodeParameters(
+        data,
+        dictionary.decodeParameters,
+        { authoritativeOffsets },
+        filters,
+      ),
+      expansionBudget,
+    );
+    if (!decoded) return undefined;
+    const values = readCompressedObjectValues(decoded, objectCount, firstObjectOffset);
+    bootstrapState.valuesByObjectStream.set(objectStreamNumber, values);
+    completed = true;
+    return values;
+  } finally {
+    bootstrapState.resolvingObjectStreams.delete(objectStreamNumber);
+    if (!completed) bootstrapState.failedObjectStreams.add(objectStreamNumber);
+  }
+}
+
+function resolveBootstrapUnsignedScalar(
+  data: Uint8Array,
+  value: RawPdfUnsignedScalar | undefined,
+  authoritativeOffsets: ReadonlyMap<string, number>,
+  compressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>,
+  expansionBudget: PdfStreamExpansionBudget,
+  bootstrapState: CompressedScalarBootstrapState,
+): number | undefined {
+  if (value === undefined || typeof value === 'number') {
+    return value !== undefined && Number.isSafeInteger(value) && value >= 0
+      ? value
+      : undefined;
+  }
+  const direct = resolveCriticalUnsignedScalar(data, value, { authoritativeOffsets });
+  if (direct !== undefined) return direct;
+  const key = referenceKey(value.objectNumber, value.generationNumber);
+  if (authoritativeOffsets.has(key) || value.generationNumber !== 0) return undefined;
+  const entry = compressedEntries.get(key);
+  if (!entry) return undefined;
+  const values = readBootstrapObjectStreamValues(
+    data,
+    entry.objectStreamNumber,
+    authoritativeOffsets,
+    compressedEntries,
+    expansionBudget,
+    bootstrapState,
   );
+  const scalar = values?.find(candidate => (
+    candidate.objectNumber === value.objectNumber
+    && candidate.objectIndex === entry.objectIndex
+  ))?.integer;
+  return scalar !== undefined && Number.isSafeInteger(scalar) && scalar >= 0
+    ? scalar
+    : undefined;
 }
 
 function resolveAuthoritativeUncompressedLength(
@@ -2693,57 +2793,6 @@ function resolveAuthoritativeUncompressedLength(
   if (!value) return undefined;
   const objectEnd = skipWhitespaceAndComments(data, value.end);
   return matchesKeyword(data, objectEnd, 'endobj') ? value.value : undefined;
-}
-
-function compressedObjectIsNull(
-  data: Uint8Array,
-  objectCount: number,
-  firstObjectOffset: number,
-  expectedObjectNumber: number,
-  expectedObjectIndex: number,
-): boolean {
-  if (
-    !Number.isSafeInteger(objectCount)
-    || objectCount < 0
-    || objectCount > PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS
-    || !Number.isSafeInteger(firstObjectOffset)
-    || firstObjectOffset < 0
-    || firstObjectOffset > data.byteLength
-    || expectedObjectIndex < 0
-    || expectedObjectIndex >= objectCount
-  ) return false;
-  const objectNumbers: number[] = [];
-  const objectOffsets: number[] = [];
-  let headerOffset = 0;
-  for (let index = 0; index < objectCount; index += 1) {
-    headerOffset = skipWhitespaceAndComments(data, headerOffset);
-    const objectNumber = tryReadUnsignedInteger(data, headerOffset);
-    if (!objectNumber || objectNumber.end > firstObjectOffset) return false;
-    headerOffset = skipWhitespaceAndComments(data, objectNumber.end);
-    const objectOffset = tryReadUnsignedInteger(data, headerOffset);
-    if (!objectOffset || objectOffset.end > firstObjectOffset) return false;
-    objectNumbers.push(objectNumber.value);
-    objectOffsets.push(objectOffset.value);
-    headerOffset = objectOffset.end;
-  }
-  if (
-    skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset
-    || objectNumbers[expectedObjectIndex] !== expectedObjectNumber
-  ) return false;
-  const start = firstObjectOffset + (objectOffsets[expectedObjectIndex] ?? 0);
-  const end = expectedObjectIndex + 1 < objectCount
-    ? firstObjectOffset + (objectOffsets[expectedObjectIndex + 1] ?? 0)
-    : data.byteLength;
-  if (
-    !Number.isSafeInteger(start)
-    || !Number.isSafeInteger(end)
-    || start < firstObjectOffset
-    || end < start
-    || end > data.byteLength
-  ) return false;
-  const valueStart = skipWhitespaceAndComments(data, start);
-  if (!matchesKeyword(data, valueStart, 'null')) return false;
-  return containsOnlyWhitespaceAndComments(data, valueStart + 'null'.length, end);
 }
 
 function resolveCriticalStreamType(
