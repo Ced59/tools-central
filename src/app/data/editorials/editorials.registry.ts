@@ -24,6 +24,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/data/json-schema-validator.editorial'),
   },
+  'dev/data/json-to-typescript': {
+    available: true,
+    load: () => import('./dev/data/json-to-typescript.editorial'),
+  },
   'dev/ooxml/ooxml-sanitize-metadata': {
     available: true,
     load: () => import('./dev/ooxml/ooxml-sanitize-metadata.editorial'),

@@ -60,7 +60,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 | 10 | Convertisseur CSV ↔ JSON | mapping, types, délimiteur, streaming et aperçu des erreurs | P0 | M |
 | 11 | Comparer deux JSON | diff structurel, tableaux par clé, patch JSON et partage sans données | P0 | M |
 | 12 | Valider JSON Schema | erreurs localisées, exemples corrigés, formats et brouillons supportés | P0 | M |
-| 13 | Convertisseur JSON ↔ TypeScript | unions, nullabilité, dates, interfaces/types et export | P0 | M |
+| 13 | Générateur de types TypeScript depuis JSON | unions, nullabilité, dates, interfaces/types et export | P0 | M |
 | 14 | Analyseur JWT hors ligne | décodage, expiration, claims et vérification locale avec clé fournie | P0 | M |
 | 15 | Constructeur d'expression régulière | tests multiples, groupes expliqués, substitutions et limites de moteur | P0 | M |
 | 16 | Diff de texte sémantique | mot/ligne/caractère, espaces ignorés et patch téléchargeable | P0 | M |
@@ -81,6 +81,7 @@ Le statut dans le catalogue doit être vérifié avant planification. Si une int
 
 ### Outils livrés depuis l’audit
 
+- **JSON vers TypeScript** — implémenté en Clean Architecture avec parseur JSON strict, fusion ou union des objets d’un tableau, propriétés optionnelles, nullabilité, tableaux hétérogènes, détection ISO des dates activable, interfaces ou aliases, noms déterministes, rapport sans valeurs source et export `.ts`. Le calcul s’exécute dans un Worker local annulable et borné à 5 secondes. Route publiée en français : `/categories/dev/data/json-to-typescript` ; les autres locales restent hors index jusqu’à leur relecture.
 - **Validateur JSON Schema** — implémenté en Clean Architecture avec parseur JSON strict, Draft 7, 2019-09 et 2020-12, formats standards activables, références locales sans accès réseau, erreurs localisées par JSON Pointer, proposition corrigée prudente revalidée, rapport exportable, limites explicites et Worker annulable automatiquement après 5 secondes pour borner les schémas non fiables. Route publiée en français : `/categories/dev/data/json-schema-validator` ; les autres locales restent hors index jusqu’à leur relecture.
 - **Comparer deux JSON** — implémenté en Clean Architecture avec parseur strict, rejet des clés dupliquées, nombres non fidèles et Unicode mal formé, diff structurel local dans un Worker annulable, tableaux par index ou clé JSON Pointer, chemins ignorés, détection des déplacements, rapport complet et patch JSON RFC 6902. Route publiée en français : `/categories/dev/data/json-diff` ; les autres locales restent hors index jusqu’à leur relecture.
 - **Convertisseur CSV ↔ JSON** — implémenté en Clean Architecture, traitement local dans un Worker annulable, import UTF-8 strict, détection virgule/point-virgule/tabulation/barre verticale, champs cités et multilignes, inférence prudente des types, mapping/sélection/réordonnancement, aplatissement des objets JSON, diagnostics de lignes irrégulières, protection contre les formules de tableur, limites explicites, aperçu, copie et téléchargement. Route publiée en français : `/categories/dev/data/csv-json-converter` ; les autres locales restent hors index jusqu’à leur relecture.

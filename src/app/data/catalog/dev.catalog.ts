@@ -368,10 +368,27 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
             },
           },
         },
+        type: {
+          title: $localize`:@@dev_data_sg_type_title:Inférence de types`,
+          description: $localize`:@@dev_data_sg_type_desc:Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.`,
+          order: 2,
+          tools: {
+            'json-to-typescript': {
+              title: $localize`:@@tool_json_to_typescript_title:JSON vers TypeScript`,
+              description: $localize`:@@tool_json_to_typescript_desc:Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/json-to-typescript/presentation/json-to-typescript-tool.component')
+                  .then(m => m.JsonToTypeScriptToolComponent),
+            },
+          },
+        },
         compare: {
           title: $localize`:@@dev_data_sg_compare_title:Comparaison structurée`,
           description: $localize`:@@dev_data_sg_compare_desc:Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.`,
-          order: 2,
+          order: 3,
           tools: {
             'json-diff': {
               title: $localize`:@@tool_json_diff_title:Comparer deux JSON`,
@@ -388,7 +405,7 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
         validate: {
           title: $localize`:@@dev_data_sg_validate_title:Validation de contrats`,
           description: $localize`:@@dev_data_sg_validate_desc:Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.`,
-          order: 3,
+          order: 4,
           tools: {
             'json-schema-validator': {
               title: $localize`:@@tool_json_schema_validator_title:Validateur JSON Schema`,
