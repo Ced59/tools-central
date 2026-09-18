@@ -837,13 +837,13 @@ describe('inspectPdfStructuralSignals', () => {
     }
 
     const compressedScalarTarget = deflate(plain);
-    const compressedScalarCarrier = new TextEncoder().encode('7 0 1');
+    const compressedScalarCarrier = new TextEncoder().encode('7 0 9 2 1 -1');
     const compressedScalarBody = joinBytes(
       '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
-      '/Filter /FlateDecode /DecodeParms << /Predictor 7 0 R >> ',
+      '/Filter /FlateDecode /DecodeParms << /Predictor 7 0 R /EarlyChange 9 0 R >> ',
       `/Length ${String(compressedScalarTarget.byteLength)} >>\nstream\n`,
       compressedScalarTarget,
-      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 2 /First 8 ',
       `/Length ${String(compressedScalarCarrier.byteLength)} >>\nstream\n`,
       compressedScalarCarrier,
       '\nendstream\nendobj\n',
@@ -851,8 +851,8 @@ describe('inspectPdfStructuralSignals', () => {
     const compressedScalarXrefOffset = compressedScalarBody.byteLength;
     const compressedScalarXref = joinBytes(
       compressedScalarBody,
-      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 7 2 10 1] ',
-      '/Length 28 >>\nstream\n',
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 7 4] ',
+      '/Length 35 >>\nstream\n',
       encodeXrefEntry(1, findByteSequence(
         compressedScalarBody,
         new TextEncoder().encode('3 0 obj'),
@@ -862,12 +862,52 @@ describe('inspectPdfStructuralSignals', () => {
         compressedScalarBody,
         new TextEncoder().encode('8 0 obj'),
       )),
+      encodeXrefEntry(2, 8, 1),
       encodeXrefEntry(1, compressedScalarXrefOffset),
       '\nendstream\nendobj\nstartxref\n',
       String(compressedScalarXrefOffset),
       '\n%%EOF\n',
     );
     expect(() => validatePdfObjectStreamBudgets(compressedScalarXref)).not.toThrow();
+
+    const signedParameters = deflate(plain);
+    const signedIrrelevantParameters = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 /Filter /FlateDecode ',
+      '/DecodeParms << /Predictor 1 /Colors -1 /Columns -1 /EarlyChange -1 >> ',
+      `/Length ${String(signedParameters.byteLength)} >>\nstream\n`,
+      signedParameters,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(signedIrrelevantParameters)).not.toThrow();
+
+    const compressedTypeCarrier = new TextEncoder().encode('6 0 /Foo');
+    const compressedTypeBody = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type 6 0 R /Length 1 >>\nstream\nx\nendstream\nendobj\n',
+      '8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      `/Length ${String(compressedTypeCarrier.byteLength)} >>\nstream\n`,
+      compressedTypeCarrier,
+      '\nendstream\nendobj\n',
+    );
+    const compressedTypeXrefOffset = compressedTypeBody.byteLength;
+    const compressedTypeXref = joinBytes(
+      compressedTypeBody,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 6 1 8 1 10 1] ',
+      '/Length 28 >>\nstream\n',
+      encodeXrefEntry(1, findByteSequence(
+        compressedTypeBody,
+        new TextEncoder().encode('3 0 obj'),
+      )),
+      encodeXrefEntry(2, 8, 0),
+      encodeXrefEntry(1, findByteSequence(
+        compressedTypeBody,
+        new TextEncoder().encode('8 0 obj'),
+      )),
+      encodeXrefEntry(1, compressedTypeXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(compressedTypeXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(compressedTypeXref)).not.toThrow();
 
     const intermediateBytes = 22 * 1_024 * 1_024;
     const shrinkingIntermediate = new Uint8Array(intermediateBytes + 2);
@@ -1422,6 +1462,11 @@ describe('inspectPdfStructuralSignals', () => {
         contents: deflate(plain),
         decodeParameters: { EarlyChange: 2 },
       },
+      {
+        filters: 'FlateDecode',
+        contents: deflate(plain),
+        decodeParameters: { Predictor: 1, Colors: -1, Columns: -1, EarlyChange: -1 },
+      },
       { filters: 'LZWDecode', contents: encodeLzwLiteral(plain) },
       { filters: 'ASCII85Decode', contents: encodeAscii85(plain) },
       { filters: 'ASCIIHexDecode', contents: encodeAsciiHex(plain) },
@@ -1455,22 +1500,25 @@ describe('inspectPdfStructuralSignals', () => {
     }
   });
 
-  it('refuse EarlyChange hors plage uniquement lorsque le filtre actif est LZW', async () => {
-    const source = await PDFDocument.create();
-    source.addPage();
-    source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.stream(
-      encodeLzwLiteral(new TextEncoder().encode('<x:xmpmeta>safe</x:xmpmeta>')),
-      {
-        Type: 'Metadata',
-        Subtype: 'XML',
-        Filter: 'LZWDecode',
-        DecodeParms: { EarlyChange: 2 },
-      },
-    )));
+  it.each([-1, 2])(
+    'refuse EarlyChange=%i hors plage uniquement lorsque le filtre actif est LZW',
+    async earlyChange => {
+      const source = await PDFDocument.create();
+      source.addPage();
+      source.catalog.set(PDFName.of('Metadata'), source.context.register(source.context.stream(
+        encodeLzwLiteral(new TextEncoder().encode('<x:xmpmeta>safe</x:xmpmeta>')),
+        {
+          Type: 'Metadata',
+          Subtype: 'XML',
+          Filter: 'LZWDecode',
+          DecodeParms: { EarlyChange: earlyChange },
+        },
+      )));
 
-    await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
-      .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
-  });
+      await expect(inspectPdfStructuralSignals(await source.save({ useObjectStreams: false })))
+        .rejects.toBeInstanceOf(PdfActionDictionaryInspectionError);
+    },
+  );
 
   it('traite /Filter null comme un flux texte non filtré pour XMP, JavaScript et XFA', async () => {
     const source = await PDFDocument.create();

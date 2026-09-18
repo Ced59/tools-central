@@ -2061,7 +2061,7 @@ function readDecodeParameterInteger(dictionary: PDFDict, key: string): number | 
   if (value === undefined) return undefined;
   if (!(value instanceof PDFNumber)) throw new PdfActionDictionaryInspectionError();
   const integer = value.asNumber();
-  if (!Number.isSafeInteger(integer) || integer < 0) {
+  if (!Number.isSafeInteger(integer)) {
     throw new PdfActionDictionaryInspectionError();
   }
   return integer;

@@ -67,6 +67,9 @@ interface IndirectLengthCandidateIndex {
   values: Map<string, Set<number>>;
   declarationOffsets: Map<string, Map<number, Set<number>>>;
   compressedValues: Map<string, Set<number>>;
+  compressedScalarValues: Map<string, Set<number>>;
+  compressedNames: Map<string, Set<string>>;
+  compressedNullObjects: Set<string>;
   authoritativeOffsets: ReadonlyMap<string, number>;
   authoritativeCompressedEntries: ReadonlyMap<string, CompressedCrossReferenceEntry>;
   authoritativeNullObjects: ReadonlySet<string>;
@@ -75,13 +78,25 @@ interface IndirectLengthCandidateIndex {
   encryptedFromCrossReference: boolean;
 }
 
-type DecodeParameterReferenceCandidates = Pick<
+type CompressedReferenceCandidates = Pick<
   IndirectLengthCandidateIndex,
   'authoritativeOffsets'
 > & Partial<Pick<
   IndirectLengthCandidateIndex,
-  'authoritativeCompressedEntries' | 'compressedValues'
+  | 'authoritativeCompressedEntries'
+  | 'compressedNames'
+  | 'compressedNullObjects'
+  | 'compressedScalarValues'
 >>;
+
+type CompressedScalarObject = {
+  objectNumber: number;
+  objectIndex: number;
+} & (
+  | { kind: 'integer'; value: number }
+  | { kind: 'name'; value: string }
+  | { kind: 'null' }
+);
 
 interface CompressedCrossReferenceEntry {
   objectStreamNumber: number;
@@ -612,6 +627,9 @@ function collectIndirectLengthCandidates(data: Uint8Array): IndirectLengthCandid
     values: new Map<string, Set<number>>(),
     declarationOffsets: new Map<string, Map<number, Set<number>>>(),
     compressedValues: new Map<string, Set<number>>(),
+    compressedScalarValues: new Map<string, Set<number>>(),
+    compressedNames: new Map<string, Set<string>>(),
+    compressedNullObjects: new Set<string>(),
     authoritativeOffsets: crossReference.objectOffsets,
     authoritativeCompressedEntries: crossReference.compressedEntries,
     authoritativeNullObjects: crossReference.authoritativeNullObjects,
@@ -1409,6 +1427,9 @@ function collectBootstrapStreamRanges(data: Uint8Array): readonly ByteRange[] {
     values: new Map<string, Set<number>>(),
     declarationOffsets: new Map<string, Map<number, Set<number>>>(),
     compressedValues: new Map<string, Set<number>>(),
+    compressedScalarValues: new Map<string, Set<number>>(),
+    compressedNames: new Map<string, Set<string>>(),
+    compressedNullObjects: new Set<string>(),
     authoritativeOffsets: new Map<string, number>(),
     authoritativeCompressedEntries: new Map<string, CompressedCrossReferenceEntry>(),
     authoritativeNullObjects: new Set<string>(),
@@ -1655,7 +1676,7 @@ function collectCompressedIndirectLengthCandidates(
         expansionBudget,
       );
       if (!decoded) continue;
-      const values = readCompressedIntegerObjects(
+      const values = readCompressedScalarObjects(
         decoded,
         dictionary.objectCount,
         dictionary.firstObjectOffset,
@@ -1663,6 +1684,7 @@ function collectCompressedIndirectLengthCandidates(
       for (const value of values) {
         const key = referenceKey(value.objectNumber, 0);
         const authoritativeEntry = candidates.authoritativeCompressedEntries.get(key);
+        let isAuthoritative = false;
         if (authoritativeEntry) {
           const authoritativeStreamOffset = candidates.authoritativeOffsets.get(
             referenceKey(authoritativeEntry.objectStreamNumber, 0),
@@ -1673,7 +1695,35 @@ function collectCompressedIndirectLengthCandidates(
             || value.objectIndex !== authoritativeEntry.objectIndex
             || (authoritativeStreamOffset !== undefined && authoritativeStreamOffset !== offset)
           ) continue;
+          isAuthoritative = true;
         }
+        if (isAuthoritative) {
+          if (value.kind === 'integer') {
+            let scalarValues = candidates.compressedScalarValues.get(key);
+            if (!scalarValues) {
+              scalarValues = new Set<number>();
+              candidates.compressedScalarValues.set(key, scalarValues);
+            }
+            if (!scalarValues.has(value.value)) {
+              scalarValues.add(value.value);
+              changed = true;
+            }
+          } else if (value.kind === 'name') {
+            let names = candidates.compressedNames.get(key);
+            if (!names) {
+              names = new Set<string>();
+              candidates.compressedNames.set(key, names);
+            }
+            if (!names.has(value.value)) {
+              names.add(value.value);
+              changed = true;
+            }
+          } else if (!candidates.compressedNullObjects.has(key)) {
+            candidates.compressedNullObjects.add(key);
+            changed = true;
+          }
+        }
+        if (value.kind !== 'integer' || value.value < 0) continue;
         let allValues = candidates.values.get(key);
         if (!allValues) {
           allValues = new Set<number>();
@@ -1782,8 +1832,9 @@ function hasValidPredictorParameters(
   parameters: PdfFilterDecodeParameters | undefined,
 ): boolean {
   if (!parameters) return true;
-  return [1, 2, 10, 11, 12, 13, 14, 15].includes(parameters.predictor)
-    && parameters.colors >= 1
+  if (![1, 2, 10, 11, 12, 13, 14, 15].includes(parameters.predictor)) return false;
+  if (parameters.predictor === 1) return true;
+  return parameters.colors >= 1
     && parameters.colors <= 32
     && [1, 2, 4, 8, 16].includes(parameters.bitsPerComponent)
     && parameters.columns >= 1
@@ -2195,11 +2246,11 @@ function paethPredictor(left: number, up: number, upperLeft: number): number {
   return upperLeft;
 }
 
-function readCompressedIntegerObjects(
+function readCompressedScalarObjects(
   data: Uint8Array,
   objectCount: number,
   firstObjectOffset: number,
-): Array<{ objectNumber: number; objectIndex: number; value: number }> {
+): CompressedScalarObject[] {
   if (
     !Number.isSafeInteger(objectCount)
     || objectCount < 0
@@ -2224,7 +2275,7 @@ function readCompressedIntegerObjects(
   }
   if (skipWhitespaceAndComments(data, headerOffset) > firstObjectOffset) return [];
 
-  const values: Array<{ objectNumber: number; objectIndex: number; value: number }> = [];
+  const values: CompressedScalarObject[] = [];
   for (let index = 0; index < objectCount; index += 1) {
     const start = firstObjectOffset + (objectOffsets[index] ?? 0);
     const end = index + 1 < objectCount
@@ -2238,15 +2289,25 @@ function readCompressedIntegerObjects(
       || end > data.byteLength
     ) return [];
     const valueStart = skipWhitespaceAndComments(data, start);
-    const value = tryReadUnsignedInteger(data, valueStart);
-    if (!value || value.end > end || !containsOnlyWhitespaceAndComments(data, value.end, end)) {
+    const objectNumber = objectNumbers[index] ?? 0;
+    const integer = tryReadInteger(data, valueStart);
+    if (
+      integer
+      && integer.end <= end
+      && containsOnlyWhitespaceAndComments(data, integer.end, end)
+    ) {
+      values.push({ objectNumber, objectIndex: index, kind: 'integer', value: integer.value });
       continue;
     }
-    values.push({
-      objectNumber: objectNumbers[index] ?? 0,
-      objectIndex: index,
-      value: value.value,
-    });
+    const name = readPdfName(data, valueStart);
+    if (name && name.end <= end && containsOnlyWhitespaceAndComments(data, name.end, end)) {
+      values.push({ objectNumber, objectIndex: index, kind: 'name', value: name.value });
+      continue;
+    }
+    if (
+      matchesKeyword(data, valueStart, 'null')
+      && containsOnlyWhitespaceAndComments(data, valueStart + 'null'.length, end)
+    ) values.push({ objectNumber, objectIndex: index, kind: 'null' });
   }
   return values;
 }
@@ -2541,14 +2602,21 @@ function compressedObjectIsNull(
 function resolveCriticalStreamType(
   data: Uint8Array,
   type: string | RawPdfReference | undefined,
-  candidates: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+  candidates: CompressedReferenceCandidates,
 ): string | null | undefined {
   if (typeof type === 'string' || type === undefined) return type;
-  const offset = candidates.authoritativeOffsets.get(referenceKey(
-    type.objectNumber,
-    type.generationNumber,
-  ));
-  if (offset === undefined) return null;
+  const key = referenceKey(type.objectNumber, type.generationNumber);
+  const offset = candidates.authoritativeOffsets.get(key);
+  if (offset === undefined) {
+    const compressedEntry = candidates.authoritativeCompressedEntries?.get(key);
+    if (type.generationNumber !== 0 || !compressedEntry) return null;
+    const isNull = candidates.compressedNullObjects?.has(key) ?? false;
+    const names = candidates.compressedNames?.get(key);
+    if ((isNull ? 1 : 0) + (names?.size ?? 0) !== 1) return null;
+    if (isNull) return undefined;
+    if (!names) return null;
+    return names.values().next().value ?? null;
+  }
   const header = readIndirectObjectHeader(data, offset);
   if (
     !header
@@ -3089,7 +3157,7 @@ function readDecodeParameterDictionary(
         offset = reference.end;
         continue;
       }
-      const value = readUnsignedInteger(data, valueStart);
+      const value = readInteger(data, valueStart);
       if (!value) throw new Error('Invalid PDF decode parameter');
       values.set(key.value, value.value);
       offset = value.end;
@@ -3118,19 +3186,21 @@ function readDecodeParameterDictionary(
 function resolveDecodeParameterScalar(
   data: Uint8Array,
   value: number | RawPdfReference,
-  candidates?: DecodeParameterReferenceCandidates,
+  candidates?: CompressedReferenceCandidates,
 ): number | null {
   if (typeof value === 'number') return value;
   const key = referenceKey(value.objectNumber, value.generationNumber);
   const offset = candidates?.authoritativeOffsets.get(key);
   if (offset === undefined) {
     const compressedEntry = candidates?.authoritativeCompressedEntries?.get(key);
-    const compressedValues = candidates?.compressedValues?.get(key);
+    const compressedValues = candidates?.compressedScalarValues?.get(key);
     if (
       value.generationNumber !== 0
       || !compressedEntry
       || !compressedValues
       || compressedValues.size !== 1
+      || candidates?.compressedNullObjects?.has(key)
+      || (candidates?.compressedNames?.get(key)?.size ?? 0) > 0
     ) return null;
     const scalar = compressedValues.values().next().value;
     return scalar === undefined ? null : scalar;
@@ -3143,7 +3213,7 @@ function resolveDecodeParameterScalar(
     || header.generationNumber !== value.generationNumber
   ) return null;
   const valueStart = skipWhitespaceAndComments(data, header.end);
-  const scalar = readUnsignedInteger(data, valueStart);
+  const scalar = readInteger(data, valueStart);
   if (!scalar) return null;
   const objectEnd = skipWhitespaceAndComments(data, scalar.end);
   return matchesKeyword(data, objectEnd, 'endobj') ? scalar.value : null;
@@ -3152,7 +3222,7 @@ function resolveDecodeParameterScalar(
 function resolveDecodeParameterDictionary(
   data: Uint8Array,
   parameter: RawPdfFilterDecodeParameters,
-  candidates?: DecodeParameterReferenceCandidates,
+  candidates?: CompressedReferenceCandidates,
 ): PdfFilterDecodeParameters | null {
   const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates);
   const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates);
@@ -3176,7 +3246,7 @@ function resolveDecodeParameterDictionary(
 function resolveDecodeParameters(
   data: Uint8Array,
   parameters: PdfDecodeParameters | undefined,
-  candidates?: DecodeParameterReferenceCandidates,
+  candidates?: CompressedReferenceCandidates,
 ): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
   if (parameters === null || parameters === undefined) return parameters;
   if ('reference' in parameters) {
@@ -3293,6 +3363,31 @@ function readUnsignedInteger(
   return digits === 0 ? undefined : { value, end: offset };
 }
 
+function readInteger(
+  data: Uint8Array,
+  start: number,
+): { value: number; end: number } | undefined {
+  let offset = start;
+  let sign = 1;
+  if (data[offset] === 0x2b) offset += 1;
+  else if (data[offset] === 0x2d) {
+    sign = -1;
+    offset += 1;
+  }
+  let value = 0;
+  let digits = 0;
+  while (offset < data.byteLength) {
+    const byte = data[offset] ?? 0;
+    if (byte < 0x30 || byte > 0x39) break;
+    value = value * 10 + byte - 0x30;
+    if (!Number.isSafeInteger(value)) throw new Error('PDF integer limit');
+    digits += 1;
+    offset += 1;
+  }
+  if (digits === 0) return undefined;
+  return { value: sign * value, end: offset };
+}
+
 function readRawPdfReference(
   data: Uint8Array,
   start: number,
@@ -3320,6 +3415,17 @@ function tryReadUnsignedInteger(
 ): { value: number; end: number } | undefined {
   try {
     return readUnsignedInteger(data, start);
+  } catch {
+    return undefined;
+  }
+}
+
+function tryReadInteger(
+  data: Uint8Array,
+  start: number,
+): { value: number; end: number } | undefined {
+  try {
+    return readInteger(data, start);
   } catch {
     return undefined;
   }
