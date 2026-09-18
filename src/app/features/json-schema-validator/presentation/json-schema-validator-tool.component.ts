@@ -286,7 +286,7 @@ export class JsonSchemaValidatorToolComponent {
       'external-reference': $localize`:@@json_schema_issue_reference:Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.`,
       'pattern-limit': $localize`:@@json_schema_issue_pattern:Le schéma contient trop d’expressions régulières ou une expression trop longue.`,
       'schema-invalid': $localize`:@@json_schema_issue_schema:Le schéma n’est pas valide pour le brouillon sélectionné.`,
-      'validation-limit': $localize`:@@json_schema_issue_validation_limit:Le diagnostic exhaustif dépasserait 50 000 opérations de validation estimées. Réduisez la taille du document invalide ou validez un fragment à la fois.`,
+      'validation-limit': $localize`:@@json_schema_issue_validation_limit:La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.`,
       'validation-failed': $localize`:@@json_schema_issue_runtime:Le moteur a interrompu la validation de ce schéma.`,
       'output-too-large': $localize`:@@json_schema_issue_output:Le rapport dépasserait la limite de sortie.`,
     };

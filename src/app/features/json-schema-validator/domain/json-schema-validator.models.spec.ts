@@ -245,6 +245,21 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it.each([
+    'https://json-schema.org/draft/2019-09/schema',
+    'https://json-schema.org/draft/2020-12/schema',
+  ])('treats contentSchema as annotation-only metadata for %s', declaration => {
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: declaration,
+      type: 'string',
+      contentSchema: {
+        $ref: 'https://example.com/annotation-only',
+        pattern: 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1),
+      },
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(true);
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);

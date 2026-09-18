@@ -579,14 +579,12 @@ function singleSubschemaKeywords(draft: JsonSchemaDraft): readonly string[] {
     return [
       'additionalItems',
       ...COMMON_SINGLE_SUBSCHEMA_KEYWORDS,
-      'contentSchema',
       'unevaluatedItems',
       'unevaluatedProperties',
     ];
   }
   return [
     ...COMMON_SINGLE_SUBSCHEMA_KEYWORDS,
-    'contentSchema',
     'unevaluatedItems',
     'unevaluatedProperties',
   ];

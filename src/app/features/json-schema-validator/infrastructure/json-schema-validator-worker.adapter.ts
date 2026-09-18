@@ -1,7 +1,8 @@
 import type { JsonSchemaValidatorPort } from '../application/json-schema-validator.ports';
-import type {
-  JsonSchemaValidationOptions,
-  JsonSchemaValidationResult,
+import {
+  emptyJsonSchemaResult,
+  type JsonSchemaValidationOptions,
+  type JsonSchemaValidationResult,
 } from '../domain/json-schema-validator.models';
 import type {
   JsonSchemaValidatorWorkerRequest,
@@ -17,9 +18,12 @@ export interface JsonSchemaValidatorWorkerLike {
 
 export type JsonSchemaValidatorWorkerFactory = () => JsonSchemaValidatorWorkerLike;
 
+export const JSON_SCHEMA_VALIDATION_DEADLINE_MS = 5_000;
+
 export class JsonSchemaValidatorWorkerAdapter implements JsonSchemaValidatorPort {
   constructor(
     private readonly createWorker: JsonSchemaValidatorWorkerFactory = createJsonSchemaValidatorWorker,
+    private readonly deadlineMilliseconds = JSON_SCHEMA_VALIDATION_DEADLINE_MS,
   ) {}
 
   validate(
@@ -31,9 +35,11 @@ export class JsonSchemaValidatorWorkerAdapter implements JsonSchemaValidatorPort
     const worker = this.createWorker();
     return new Promise((resolve, reject) => {
       let settled = false;
+      let deadline: ReturnType<typeof setTimeout> | null = null;
       const finish = (callback: () => void): void => {
         if (settled) return;
         settled = true;
+        if (deadline !== null) clearTimeout(deadline);
         signal?.removeEventListener('abort', abort);
         worker.terminate();
         callback();
@@ -48,6 +54,11 @@ export class JsonSchemaValidatorWorkerAdapter implements JsonSchemaValidatorPort
         return;
       }
       signal?.addEventListener('abort', abort, { once: true });
+      deadline = setTimeout(() => {
+        finish(() => {
+          resolve(validationDeadlineResult(schema, instance, this.deadlineMilliseconds));
+        });
+      }, this.deadlineMilliseconds);
       worker.onmessage = ({ data }) => {
         if (data.type === 'failure') {
           finish(() => {
@@ -67,6 +78,26 @@ export class JsonSchemaValidatorWorkerAdapter implements JsonSchemaValidatorPort
       worker.postMessage({ schema, instance, options });
     });
   }
+}
+
+function validationDeadlineResult(
+  schema: string,
+  instance: string,
+  deadlineMilliseconds: number,
+): JsonSchemaValidationResult {
+  return emptyJsonSchemaResult({
+    code: 'validation-limit',
+    side: 'engine',
+    path: '',
+    detail: `${String(deadlineMilliseconds)}ms`,
+    position: null,
+  }, {
+    schemaCharacters: schema.length,
+    instanceCharacters: instance.length,
+    schemaNodes: 0,
+    instanceNodes: 0,
+    patterns: 0,
+  });
 }
 
 function createJsonSchemaValidatorWorker(): JsonSchemaValidatorWorkerLike {

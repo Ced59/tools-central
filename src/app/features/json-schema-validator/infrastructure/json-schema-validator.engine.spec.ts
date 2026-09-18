@@ -117,6 +117,24 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.errors[0]).toMatchObject({ keyword: 'type', expected: '["string","null"]' });
   });
 
+  it('accepts decimal multiples despite binary floating-point representation', () => {
+    const result = validateJsonSchemaDocuments('{"type":"number","multipleOf":0.1}', '0.3', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(true);
+  });
+
+  it('preserves the multipleOf divisor in normalized diagnostics', () => {
+    const result = validateJsonSchemaDocuments('{"type":"number","multipleOf":0.1}', '0.35', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]).toMatchObject({ keyword: 'multipleOf', expected: '', limit: 0.1 });
+  });
+
   it('reports invalid schemas instead of throwing', () => {
     const result = validateJsonSchemaDocuments('{"type":"unknown"}', '{}', {
       draft: 'auto',

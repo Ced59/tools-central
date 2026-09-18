@@ -26,6 +26,7 @@ const AJV_OPTIONS: Options = {
   coerceTypes: false,
   logger: false,
   messages: false,
+  multipleOfPrecision: 12,
   removeAdditional: false,
   strict: false,
   strictTuples: false,
@@ -112,7 +113,7 @@ function normalizeErrors(errors: readonly ErrorObject[]): JsonSchemaValidationEr
       schemaPath: error.schemaPath,
       property: readString(params['missingProperty']) || readString(params['additionalProperty']),
       expected: expectedValue(error.keyword, params),
-      limit: readNumber(params['limit']),
+      limit: readNumber(error.keyword === 'multipleOf' ? params['multipleOf'] : params['limit']),
     };
   });
 }

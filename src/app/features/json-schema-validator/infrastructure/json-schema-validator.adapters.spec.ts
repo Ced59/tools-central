@@ -52,6 +52,26 @@ describe('JsonSchemaValidatorWorkerAdapter', () => {
     worker.onerror?.({ message: 'worker crashed' } as ErrorEvent);
     await expect(promise).rejects.toThrow('worker crashed');
   });
+
+  it('terminates pathological validation after the automatic deadline', async () => {
+    vi.useFakeTimers();
+    try {
+      const worker = fakeWorker();
+      const promise = new JsonSchemaValidatorWorkerAdapter(() => worker, 25)
+        .validate('{"pattern":"^(a+)+$"}', '"aaaaaaaaaaaaaaaa!"', {
+          draft: 'auto',
+          validateFormats: true,
+        });
+      await vi.advanceTimersByTimeAsync(25);
+      await expect(promise).resolves.toMatchObject({
+        ok: false,
+        issues: [{ code: 'validation-limit', detail: '25ms' }],
+      });
+      expect(worker.terminate).toHaveBeenCalledOnce();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });
 
 describe('BrowserJsonSchemaFileReaderAdapter', () => {
