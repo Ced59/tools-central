@@ -1403,6 +1403,38 @@ describe('inspectPdfStructuralSignals', () => {
     ]);
   });
 
+  it('mesure les pièces jointes dont le filtre résolu ne décode rien', async () => {
+    const source = await PDFDocument.create();
+    source.addPage();
+    const indirectNull = source.context.register(PDFNull);
+    const fixtures = [
+      { fileName: 'direct-null.txt', payload: 'direct null', filter: PDFNull },
+      { fileName: 'indirect-null.txt', payload: 'indirect null', filter: indirectNull },
+      { fileName: 'empty-array.txt', payload: 'empty array', filter: source.context.obj([]) },
+    ];
+    const fileSpecs = fixtures.map(({ fileName, payload, filter }) => {
+      const embeddedFile = source.context.register(source.context.stream(
+        payload,
+        { Type: 'EmbeddedFile', Filter: filter },
+      ));
+      return source.context.obj({
+        Type: 'Filespec',
+        F: PDFString.of(fileName),
+        EF: { F: embeddedFile },
+      });
+    });
+    source.catalog.set(PDFName.of('AF'), source.context.obj(fileSpecs));
+
+    const signals = await inspectPdfStructuralSignals(await source.save({ useObjectStreams: false }));
+
+    expect(signals?.associatedFiles).toHaveLength(fixtures.length);
+    for (const { fileName, payload } of fixtures) {
+      expect(signals?.associatedFiles).toContainEqual(
+        expect.objectContaining({ fileName, bytes: payload.length }),
+      );
+    }
+  });
+
   it('omet la taille chiffrée d’une pièce jointe non compressée', async () => {
     const source = await PDFDocument.create();
     source.addPage();

@@ -1988,7 +1988,16 @@ function measureGeometryBytes(
 }
 
 function readEmbeddedFileBytes(stream: PDFStream): number | undefined {
-  return stream.dict.has(PDFName.of('Filter')) ? undefined : stream.getContentsSize();
+  const filterKey = PDFName.of('Filter');
+  const rawFilter = stream.dict.get(filterKey, true);
+  if (rawFilter === undefined) return stream.getContentsSize();
+  const filter = rawFilter instanceof PDFRef
+    ? stream.dict.context.lookup(rawFilter)
+    : rawFilter;
+  if (filter === PDFNull || (filter instanceof PDFArray && filter.size() === 0)) {
+    return stream.getContentsSize();
+  }
+  return undefined;
 }
 
 function readFilterNames(dictionary: PDFDict): readonly string[] {
