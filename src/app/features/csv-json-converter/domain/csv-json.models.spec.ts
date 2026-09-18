@@ -44,11 +44,14 @@ describe('convertCsvJson', () => {
       'name,age,notes;flags\nAda,36,math;code\nGrace,85,navy;code',
       CSV_DEFAULTS,
     );
+    const noCommaCandidate = convertCsvJson('a;b\tc\n1;2\t3', CSV_DEFAULTS);
 
     expect(semicolonCandidate.detectedDelimiter).toBe('comma');
     expect(commaCandidate.detectedDelimiter).toBe('comma');
+    expect(noCommaCandidate.detectedDelimiter).toBe('comma');
     expect(semicolonCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
     expect(commaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
+    expect(noCommaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
   });
 
   it('respecte le choix de conserver ou supprimer les espaces des en-têtes', () => {
@@ -239,6 +242,17 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(true);
     expect(result.previewHeaders).toEqual(['id', 'profile', 'nested.settings']);
     expect(result.output).toBe('id,profile,nested.settings\r\n1,{},{}');
+  });
+
+  it('attribue un en-tête stable aux clés JSON vides', () => {
+    const result = convertCsvJson('[{"":1}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.output).toBe('colonne_1\r\n1');
+    expect(result.issues[0]).toMatchObject({ code: 'empty-header', detail: 'colonne_1' });
   });
 
   it('applique la limite de cellule aux en-têtes CSV générés', () => {

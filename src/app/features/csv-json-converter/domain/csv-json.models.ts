@@ -484,6 +484,7 @@ function detectDelimiter(
     }
   }
   if (bestConsistency === 0 || equallyConsistentCandidates.length > 1) {
+    best = 'comma';
     addIssue(state, 'delimiter-fallback', 'warning', null, null, equallyConsistentCandidates.join(','));
   }
   return best;
@@ -641,19 +642,23 @@ function flattenRecord(
     return;
   }
   for (const [key, value] of Object.entries(record)) {
-    const path = prefix ? `${prefix}.${key}` : key;
+    const outputKey = key || 'colonne_1';
+    const outputPath = prefix ? `${prefix}.${outputKey}` : outputKey;
     const originSegments = [...originPrefix, key];
     if (isRecord(value) && Object.keys(value).length > 0) {
-      flattenRecord(value, path, originSegments, target, knownPathOrigins, state, row, depth + 1);
+      flattenRecord(value, outputPath, originSegments, target, knownPathOrigins, state, row, depth + 1);
     } else {
       const origin = JSON.stringify(originSegments);
-      const knownOrigin = knownPathOrigins.get(path);
-      if (Object.hasOwn(target, path) || (knownOrigin !== undefined && knownOrigin !== origin)) {
-        addIssue(state, 'json-path-collision', 'error', row, null, path.slice(0, 160));
+      const knownOrigin = knownPathOrigins.get(outputPath);
+      if (Object.hasOwn(target, outputPath) || (knownOrigin !== undefined && knownOrigin !== origin)) {
+        addIssue(state, 'json-path-collision', 'error', row, null, outputPath.slice(0, 160));
         continue;
       }
-      knownPathOrigins.set(path, origin);
-      target[path] = value;
+      if (!key && knownOrigin === undefined) {
+        addIssue(state, 'empty-header', 'warning', row, 1, outputPath);
+      }
+      knownPathOrigins.set(outputPath, origin);
+      target[outputPath] = value;
     }
   }
 }
