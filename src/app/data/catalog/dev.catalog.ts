@@ -368,6 +368,23 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
             },
           },
         },
+        compare: {
+          title: $localize`:@@dev_data_sg_compare_title:Comparaison structurée`,
+          description: $localize`:@@dev_data_sg_compare_desc:Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.`,
+          order: 2,
+          tools: {
+            'json-diff': {
+              title: $localize`:@@tool_json_diff_title:Comparer deux JSON`,
+              description: $localize`:@@tool_json_diff_desc:Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/json-diff/presentation/json-diff-tool.component')
+                  .then(m => m.JsonDiffToolComponent),
+            },
+          },
+        },
       },
     },
 

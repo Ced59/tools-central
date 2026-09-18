@@ -1,0 +1,324 @@
+<main class="json-diff-page">
+  <a class="back-link" routerLink="/categories/dev/data">
+    <i class="tc-icon tc-icon-arrow-left" aria-hidden="true"></i>
+    <span i18n="@@json_diff_back">Retour aux outils de données</span>
+  </a>
+
+  <header class="hero">
+    <div class="hero-icon" aria-hidden="true"><i class="tc-icon tc-icon-code"></i></div>
+    <div>
+      <p class="eyebrow" i18n="@@json_diff_eyebrow">Données structurées · traitement local</p>
+      <h1 i18n="@@json_diff_h1">Comparer deux JSON</h1>
+      <p i18n="@@json_diff_intro">
+        Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON.
+        Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902.
+      </p>
+    </div>
+  </header>
+
+  <section class="privacy-banner" aria-label="Confidentialité" i18n-aria-label="@@json_diff_privacy_label">
+    <i class="tc-icon tc-icon-shield" aria-hidden="true"></i>
+    <div>
+      <strong i18n="@@json_diff_privacy_title">Vos JSON restent dans ce navigateur</strong>
+      <p i18n="@@json_diff_privacy_text">
+        La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur.
+      </p>
+    </div>
+  </section>
+
+  <section class="workspace" aria-labelledby="json-diff-input-title">
+    <div class="section-heading">
+      <div>
+        <p class="step" i18n="@@json_diff_step_1">Étape 1</p>
+        <h2 id="json-diff-input-title" i18n="@@json_diff_input_title">Collez ou chargez les deux documents</h2>
+      </div>
+      <div class="heading-actions">
+        <button type="button" class="secondary-button" (click)="swapDocuments()" [disabled]="isBusy()">
+          <i class="tc-icon tc-icon-arrows-h" aria-hidden="true"></i>
+          <span i18n="@@json_diff_swap">Inverser</span>
+        </button>
+        <button type="button" class="secondary-button" (click)="resetExamples()" [disabled]="isBusy()">
+          <i class="tc-icon tc-icon-refresh" aria-hidden="true"></i>
+          <span i18n="@@json_diff_reset">Réinitialiser</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="editors-grid">
+      <article class="editor-card">
+        <div class="editor-header">
+          <div>
+            <span class="document-badge badge-left" i18n="@@json_diff_left_badge">A · Avant</span>
+            @if (leftFileName()) { <small>{{ leftFileName() }}</small> }
+          </div>
+          <label class="file-button" for="json-diff-left-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <span i18n="@@json_diff_open_file">Ouvrir un fichier</span>
+          </label>
+          <input
+            id="json-diff-left-file"
+            class="visually-hidden"
+            type="file"
+            accept=".json,.txt,application/json,text/plain"
+            (change)="loadFile('left', $event)"
+          >
+        </div>
+        <label for="json-diff-left" i18n="@@json_diff_left_label">Document JSON gauche</label>
+        <textarea
+          id="json-diff-left"
+          spellcheck="false"
+          autocomplete="off"
+          [value]="leftSource()"
+          [attr.maxlength]="maxSourceCharacters + 1"
+          (input)="updateSource('left', $event)"
+        ></textarea>
+        <small i18n="@@json_diff_character_count">
+          {{ formatNumber(leftSource().length) }} / {{ formatNumber(maxSourceCharacters) }} caractères
+        </small>
+      </article>
+
+      <article class="editor-card">
+        <div class="editor-header">
+          <div>
+            <span class="document-badge badge-right" i18n="@@json_diff_right_badge">B · Après</span>
+            @if (rightFileName()) { <small>{{ rightFileName() }}</small> }
+          </div>
+          <label class="file-button" for="json-diff-right-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <span i18n="@@json_diff_open_file">Ouvrir un fichier</span>
+          </label>
+          <input
+            id="json-diff-right-file"
+            class="visually-hidden"
+            type="file"
+            accept=".json,.txt,application/json,text/plain"
+            (change)="loadFile('right', $event)"
+          >
+        </div>
+        <label for="json-diff-right" i18n="@@json_diff_right_label">Document JSON droit</label>
+        <textarea
+          id="json-diff-right"
+          spellcheck="false"
+          autocomplete="off"
+          [value]="rightSource()"
+          [attr.maxlength]="maxSourceCharacters + 1"
+          (input)="updateSource('right', $event)"
+        ></textarea>
+        <small i18n="@@json_diff_character_count">
+          {{ formatNumber(rightSource().length) }} / {{ formatNumber(maxSourceCharacters) }} caractères
+        </small>
+      </article>
+    </div>
+    <p class="file-limit" i18n="@@json_diff_file_limit">Fichiers JSON ou TXT UTF-8, {{ maxFileSizeLabel }} maximum chacun.</p>
+  </section>
+
+  <section class="options-card" aria-labelledby="json-diff-options-title">
+    <div class="section-heading">
+      <div>
+        <p class="step" i18n="@@json_diff_step_2">Étape 2</p>
+        <h2 id="json-diff-options-title" i18n="@@json_diff_options_title">Choisissez la stratégie de comparaison</h2>
+      </div>
+    </div>
+
+    <div class="options-grid">
+      <div class="field">
+        <label for="json-diff-array-mode" i18n="@@json_diff_array_mode">Tableaux</label>
+        <select id="json-diff-array-mode" [value]="options().arrayMode" (change)="updateArrayMode($event)">
+          <option value="index" i18n="@@json_diff_array_index">Comparer par index</option>
+          <option value="key" i18n="@@json_diff_array_key_mode">Associer les objets par clé</option>
+        </select>
+        <small i18n="@@json_diff_array_help">Les tableaux de scalaires restent comparés par index.</small>
+      </div>
+
+      @if (options().arrayMode === 'key') {
+        <div class="field">
+          <label for="json-diff-array-key" i18n="@@json_diff_array_key">Clé d’association (JSON Pointer)</label>
+          <input
+            id="json-diff-array-key"
+            type="text"
+            autocomplete="off"
+            placeholder="/id"
+            [value]="options().arrayKey"
+            (input)="updateArrayKey($event)"
+          >
+          <small i18n="@@json_diff_array_key_help">Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</small>
+        </div>
+      }
+    </div>
+
+    <details class="ignore-panel">
+      <summary i18n="@@json_diff_ignore_summary">Ignorer des chemins volatils</summary>
+      <label for="json-diff-ignored" i18n="@@json_diff_ignore_label">Un JSON Pointer par ligne</label>
+      <textarea
+        id="json-diff-ignored"
+        rows="4"
+        spellcheck="false"
+        placeholder="/metadata/updatedAt&#10;/request/id"
+        [value]="options().ignoredPaths"
+        (input)="updateIgnoredPaths($event)"
+      ></textarea>
+      <small i18n="@@json_diff_ignore_help">Le chemin et tout son sous-arbre sont exclus du diff et du patch.</small>
+    </details>
+
+    <div class="run-row">
+      <button type="button" class="primary-button" (click)="compare()" [disabled]="!canCompare()">
+        @if (isBusy()) {
+          <span class="spinner" aria-hidden="true"></span>
+          <span i18n="@@json_diff_comparing">Comparaison locale…</span>
+        } @else {
+          <i class="tc-icon tc-icon-search" aria-hidden="true"></i>
+          <span i18n="@@json_diff_compare">Comparer les JSON</span>
+        }
+      </button>
+      <button type="button" class="secondary-button" (click)="copyShareLink()">
+        <i class="tc-icon tc-icon-link" aria-hidden="true"></i>
+        @if (copiedTarget() === 'share') {
+          <span i18n="@@json_diff_link_copied">Lien copié</span>
+        } @else {
+          <span i18n="@@json_diff_share">Partager l’outil sans les données</span>
+        }
+      </button>
+    </div>
+  </section>
+
+  <div class="live-region" aria-live="polite" aria-atomic="true">
+    @if (isBusy()) { <span i18n="@@json_diff_live_busy">Comparaison en cours.</span> }
+    @if (state() === 'done' && result()?.equivalent) { <span i18n="@@json_diff_live_equal">Les documents sont équivalents avec ces options.</span> }
+    @if (state() === 'done' && !result()?.equivalent) { <span i18n="@@json_diff_live_done">Comparaison terminée avec des différences.</span> }
+    @if (state() === 'error') { <span i18n="@@json_diff_live_error">La comparaison contient une erreur.</span> }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="error-banner" role="alert">
+      <i class="tc-icon tc-icon-exclamation-triangle" aria-hidden="true"></i>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (result(); as comparison) {
+    <section class="results" data-testid="json-diff-result" aria-labelledby="json-diff-result-title">
+      <div class="section-heading">
+        <div>
+          <p class="step" i18n="@@json_diff_step_3">Résultat</p>
+          <h2 id="json-diff-result-title" i18n="@@json_diff_result_title">Diff structurel</h2>
+        </div>
+      </div>
+
+      @if (!comparison.ok) {
+        <div class="issues" role="alert">
+          <h3 i18n="@@json_diff_issues_title">La comparaison ne peut pas continuer</h3>
+          <ul>
+            @for (item of comparison.issues; track item.code + ':' + item.side + ':' + item.path) {
+              <li>{{ issueLabel(item) }}</li>
+            }
+          </ul>
+        </div>
+      } @else {
+        <div class="result-status" [class.is-equal]="comparison.equivalent">
+          <i class="tc-icon" [class.tc-icon-check-circle]="comparison.equivalent" [class.tc-icon-code]="!comparison.equivalent" aria-hidden="true"></i>
+          <div>
+            @if (comparison.equivalent) {
+              <h3 i18n="@@json_diff_equal_title">Aucune différence structurelle</h3>
+              <p i18n="@@json_diff_equal_text">Les documents sont équivalents après application des chemins ignorés.</p>
+            } @else {
+              <h3 i18n="@@json_diff_different_title">{{ formatNumber(comparison.summary.total) }} différences détectées</h3>
+              <p i18n="@@json_diff_different_text">Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</p>
+            }
+          </div>
+        </div>
+
+        <div class="summary-grid" aria-label="Résumé des différences" i18n-aria-label="@@json_diff_summary_label">
+          <div><strong>{{ formatNumber(comparison.summary.added) }}</strong><span i18n="@@json_diff_summary_added">Ajouts</span></div>
+          <div><strong>{{ formatNumber(comparison.summary.removed) }}</strong><span i18n="@@json_diff_summary_removed">Suppressions</span></div>
+          <div><strong>{{ formatNumber(comparison.summary.changed) }}</strong><span i18n="@@json_diff_summary_changed">Valeurs</span></div>
+          <div><strong>{{ formatNumber(comparison.summary.typeChanged) }}</strong><span i18n="@@json_diff_summary_types">Types</span></div>
+          <div><strong>{{ formatNumber(comparison.summary.moved) }}</strong><span i18n="@@json_diff_summary_moved">Déplacements</span></div>
+        </div>
+
+        @if (comparison.changes.length > 0) {
+          <div class="changes-table-wrap">
+            <table>
+              <caption i18n="@@json_diff_changes_caption">Aperçu des différences structurelles</caption>
+              <thead>
+                <tr>
+                  <th scope="col" i18n="@@json_diff_col_change">Changement</th>
+                  <th scope="col" i18n="@@json_diff_col_path">Chemin</th>
+                  <th scope="col" i18n="@@json_diff_col_before">Avant</th>
+                  <th scope="col" i18n="@@json_diff_col_after">Après</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (change of comparison.changes; track trackChange($index, change)) {
+                  <tr>
+                    <td data-label="Changement" i18n-data-label="@@json_diff_col_change">
+                      <span class="change-badge" [class]="'change-badge kind-' + change.kind">{{ changeKindLabel(change.kind) }}</span>
+                      @if (change.kind === 'moved') { <small>{{ moveLabel(change) }}</small> }
+                    </td>
+                    <td data-label="Chemin" i18n-data-label="@@json_diff_col_path"><code>{{ change.path }}</code></td>
+                    <td data-label="Avant" i18n-data-label="@@json_diff_col_before"><code>{{ change.before || '—' }}</code></td>
+                    <td data-label="Après" i18n-data-label="@@json_diff_col_after"><code>{{ change.after || '—' }}</code></td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+          @if (comparison.changesTruncated) {
+            <p class="truncation-note" i18n="@@json_diff_changes_truncated">L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</p>
+          }
+        }
+
+        <div class="outputs-grid">
+          <details class="output-card" open>
+            <summary>
+              <span>
+                <strong i18n="@@json_diff_patch_title">Patch JSON RFC 6902</strong>
+                <small i18n="@@json_diff_patch_help">Applicable au document gauche avec les chemins ignorés exclus.</small>
+              </span>
+            </summary>
+            <div class="output-actions">
+              <button type="button" class="secondary-button" (click)="copyArtifact('patch')">
+                <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
+                @if (copiedTarget() === 'patch') {
+                  <span i18n="@@json_diff_copied">Copié</span>
+                } @else {
+                  <span i18n="@@json_diff_copy_patch">Copier le patch</span>
+                }
+              </button>
+              <button type="button" class="secondary-button" (click)="downloadArtifact('patch')">
+                <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+                <span i18n="@@json_diff_download_patch">Télécharger le patch</span>
+              </button>
+            </div>
+            <pre tabindex="0"><code>{{ patchPreview() }}</code></pre>
+            @if (patchPreviewTruncated()) { <p i18n="@@json_diff_output_truncated">Aperçu tronqué ; le téléchargement contient la sortie complète.</p> }
+          </details>
+
+          <details class="output-card">
+            <summary>
+              <span>
+                <strong i18n="@@json_diff_report_title">Rapport JSON complet</strong>
+                <small i18n="@@json_diff_report_help">Résumé, options et différences avec valeurs avant/après.</small>
+              </span>
+            </summary>
+            <div class="output-actions">
+              <button type="button" class="secondary-button" (click)="copyArtifact('report')">
+                <i class="tc-icon tc-icon-copy" aria-hidden="true"></i>
+                @if (copiedTarget() === 'report') {
+                  <span i18n="@@json_diff_copied">Copié</span>
+                } @else {
+                  <span i18n="@@json_diff_copy_report">Copier le rapport</span>
+                }
+              </button>
+              <button type="button" class="secondary-button" (click)="downloadArtifact('report')">
+                <i class="tc-icon tc-icon-download" aria-hidden="true"></i>
+                <span i18n="@@json_diff_download_report">Télécharger le rapport</span>
+              </button>
+            </div>
+            <pre tabindex="0"><code>{{ reportPreview() }}</code></pre>
+            @if (reportPreviewTruncated()) { <p i18n="@@json_diff_output_truncated">Aperçu tronqué ; le téléchargement contient la sortie complète.</p> }
+          </details>
+        </div>
+      }
+    </section>
+  }
+</main>

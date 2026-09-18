@@ -2988,7 +2988,7 @@
         <note category="location">src/app/components/pages/tools/math/rule-of-three/rule-of-three-missing-value-tool/rule-of-three-missing-value-tool.component.html:127,128</note>
         <note category="location">src/app/components/pages/tools/math/rule-of-three/rule-of-three-simple-tool/rule-of-three-simple-tool.component.html:130,131</note>
         <note category="location">src/app/components/pages/tools/math/rule-of-three/rule-of-three-table-tool/rule-of-three-table-tool.component.html:126,127</note>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:106,109</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:106,108</note>
         <note category="location">src/app/features/hreflang-checker/presentation/hreflang-checker-tool.component.html:194,195</note>
         <note category="location">src/app/features/html-head-auditor/presentation/html-head-auditor-tool.component.html:111</note>
         <note category="location">src/app/features/percentage-of-number/presentation/percentage-of-number-tool.component.html:109,110</note>
@@ -15601,9 +15601,41 @@
         <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
       </segment>
     </unit>
-    <unit id="group_dev_ooxml_title">
+    <unit id="dev_data_sg_compare_title">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:372</note>
+      </notes>
+      <segment>
+        <source>Comparaison structurée</source>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_compare_desc">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:373</note>
+      </notes>
+      <segment>
+        <source>Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.</source>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_title">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:377</note>
+      </notes>
+      <segment>
+        <source>Comparer deux JSON</source>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_desc">
       <notes>
         <note category="location">src/app/data/catalog/dev.catalog.ts:378</note>
+      </notes>
+      <segment>
+        <source>Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.</source>
+      </segment>
+    </unit>
+    <unit id="group_dev_ooxml_title">
+      <notes>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:395</note>
       </notes>
       <segment>
         <source>Open XML (OOXML)</source>
@@ -15611,7 +15643,7 @@
     </unit>
     <unit id="group_dev_ooxml_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:379</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
       </notes>
       <segment>
         <source>Inspecter les conteneurs OOXML (ZIP/XML) : relations, content types, métadonnées…</source>
@@ -15619,7 +15651,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:384</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:401</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15627,7 +15659,7 @@
     </unit>
     <unit id="dev_ooxml_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:385</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:402</note>
       </notes>
       <segment>
         <source>Explorer le ZIP OOXML (fichiers, relations, content types, métadonnées) et exporter en JSON.</source>
@@ -15635,7 +15667,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:388</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
       </notes>
       <segment>
         <source>Explorer un package OOXML (ZIP)</source>
@@ -15643,7 +15675,7 @@
     </unit>
     <unit id="tool_ooxml_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:388</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un DOCX/XLSX/PPTX, prévisualiser les XML, et télécharger une sélection.</source>
@@ -15651,7 +15683,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:389</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:406</note>
       </notes>
       <segment>
         <source>Relationships OOXML → JSON</source>
@@ -15659,7 +15691,7 @@
     </unit>
     <unit id="tool_ooxml_rels_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:389</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:406</note>
       </notes>
       <segment>
         <source>Exporter toutes les relations (_rels/*.rels) : targets, types, ids et graphe des dépendances.</source>
@@ -15667,7 +15699,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:390</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:407</note>
       </notes>
       <segment>
         <source>[Content_Types].xml → JSON</source>
@@ -15675,7 +15707,7 @@
     </unit>
     <unit id="tool_ooxml_content_types_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:390</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:407</note>
       </notes>
       <segment>
         <source>Inspecter les types de contenu déclarés (defaults/overrides) et détecter les incohérences.</source>
@@ -15683,7 +15715,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:408</note>
       </notes>
       <segment>
         <source>Métadonnées OOXML → JSON</source>
@@ -15691,7 +15723,7 @@
     </unit>
     <unit id="tool_ooxml_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:391</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:408</note>
       </notes>
       <segment>
         <source>Extraire docProps (core/app/custom) : auteur, dates, application, titres, tags, etc.</source>
@@ -15699,7 +15731,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:409</note>
       </notes>
       <segment>
         <source>Médias OOXML → JSON</source>
@@ -15707,7 +15739,7 @@
     </unit>
     <unit id="tool_ooxml_media_inventory_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:392</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:409</note>
       </notes>
       <segment>
         <source>Inventorier les médias (images/audio/vidéo) et leurs références (rels).</source>
@@ -15715,7 +15747,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:396</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:413</note>
       </notes>
       <segment>
         <source>Validation &amp; cohérence</source>
@@ -15723,7 +15755,7 @@
     </unit>
     <unit id="dev_ooxml_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:397</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:414</note>
       </notes>
       <segment>
         <source>Vérifier la cohérence des relationships, références manquantes, content types, et produire un diagnostic.</source>
@@ -15731,7 +15763,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:417</note>
       </notes>
       <segment>
         <source>Vérifier l&apos;intégrité OOXML</source>
@@ -15739,7 +15771,7 @@
     </unit>
     <unit id="tool_ooxml_integrity_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:400</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:417</note>
       </notes>
       <segment>
         <source>Détecter targets manquants, rels orphelins, content types incohérents et générer un rapport.</source>
@@ -15747,7 +15779,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:404</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:421</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -15755,7 +15787,7 @@
     </unit>
     <unit id="dev_ooxml_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:405</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées, supprimer des parties, regénérer un package OOXML minimal.</source>
@@ -15763,7 +15795,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:409</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:426</note>
       </notes>
       <segment>
         <source>Supprimer les métadonnées DOCX, XLSX et PPTX</source>
@@ -15771,7 +15803,7 @@
     </unit>
     <unit id="tool_ooxml_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:410</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:427</note>
       </notes>
       <segment>
         <source>Analyser puis nettoyer localement auteurs, société, dates, application, propriétés personnalisées et aperçu intégré d’un document Office.</source>
@@ -15779,7 +15811,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:421</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:438</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -15787,7 +15819,7 @@
     </unit>
     <unit id="dev_ooxml_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:422</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:439</note>
       </notes>
       <segment>
         <source>Graph des relations, arbre des parts, inspection des namespaces et fragments XML.</source>
@@ -15795,7 +15827,7 @@
     </unit>
     <unit id="tool_ooxml_diff_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:425</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
       </notes>
       <segment>
         <source>Comparer 2 packages OOXML</source>
@@ -15803,7 +15835,7 @@
     </unit>
     <unit id="tool_ooxml_diff_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:425</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
       </notes>
       <segment>
         <source>Comparer deux fichiers (DOCX/XLSX/PPTX) : diff par part (XML) + changements de médias et de relations.</source>
@@ -15811,7 +15843,7 @@
     </unit>
     <unit id="group_dev_word_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:435</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
       </notes>
       <segment>
         <source>Word (DOCX)</source>
@@ -15819,7 +15851,7 @@
     </unit>
     <unit id="group_dev_word_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:436</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:453</note>
       </notes>
       <segment>
         <source>Analyse et extraction de documents Word : texte, styles, champs, images, révisions…</source>
@@ -15827,7 +15859,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:441</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:458</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -15835,7 +15867,7 @@
     </unit>
     <unit id="dev_word_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:442</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:459</note>
       </notes>
       <segment>
         <source>Texte, styles, polices, champs, images, liens, tables, en-têtes/pieds, notes et révisions.</source>
@@ -15843,7 +15875,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:462</note>
       </notes>
       <segment>
         <source>DOCX → texte</source>
@@ -15851,7 +15883,7 @@
     </unit>
     <unit id="tool_docx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:445</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:462</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un DOCX (paragraphes, listes, tableaux) et l&apos;exporter (TXT/JSON).</source>
@@ -15859,7 +15891,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:446</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:463</note>
       </notes>
       <segment>
         <source>Styles DOCX → JSON</source>
@@ -15867,7 +15899,7 @@
     </unit>
     <unit id="tool_docx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:446</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:463</note>
       </notes>
       <segment>
         <source>Exporter les styles (paragraph/character/table) et leurs propriétés (héritage, basés sur, liens).</source>
@@ -15875,7 +15907,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:447</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
       </notes>
       <segment>
         <source>Polices DOCX → JSON</source>
@@ -15883,7 +15915,7 @@
     </unit>
     <unit id="tool_docx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:447</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
       </notes>
       <segment>
         <source>Lister les polices utilisées (runs/styles) et détecter celles qui ne sont jamais appliquées.</source>
@@ -15891,7 +15923,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:448</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
       </notes>
       <segment>
         <source>Listes &amp; numérotation → JSON</source>
@@ -15899,7 +15931,7 @@
     </unit>
     <unit id="tool_docx_numbering_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:448</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
       </notes>
       <segment>
         <source>Exporter numbering.xml : niveaux, formats, indentations, numId/abstractNumId, et mapping par paragraphes.</source>
@@ -15907,7 +15939,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:466</note>
       </notes>
       <segment>
         <source>Commentaires DOCX → JSON</source>
@@ -15915,7 +15947,7 @@
     </unit>
     <unit id="tool_docx_comments_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:449</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:466</note>
       </notes>
       <segment>
         <source>Extraire comments.xml : auteurs, dates, ancres, contenu et statistiques.</source>
@@ -15923,7 +15955,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:467</note>
       </notes>
       <segment>
         <source>Révisions (track changes) → JSON</source>
@@ -15931,7 +15963,7 @@
     </unit>
     <unit id="tool_docx_track_changes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:450</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:467</note>
       </notes>
       <segment>
         <source>Détecter insertions/suppressions, auteurs, dates et exporter un rapport de révisions.</source>
@@ -15939,7 +15971,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:451</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:468</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un DOCX</source>
@@ -15947,7 +15979,7 @@
     </unit>
     <unit id="tool_docx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:451</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:468</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + champs) et exporter en JSON/texte.</source>
@@ -15955,7 +15987,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un DOCX</source>
@@ -15963,7 +15995,7 @@
     </unit>
     <unit id="tool_docx_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:452</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
       </notes>
       <segment>
         <source>Extraire /word/media/* et produire un inventaire (dimensions, type, références).</source>
@@ -15971,7 +16003,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:453</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:470</note>
       </notes>
       <segment>
         <source>En-têtes &amp; pieds de page → JSON</source>
@@ -15979,7 +16011,7 @@
     </unit>
     <unit id="tool_docx_headers_footers_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:453</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:470</note>
       </notes>
       <segment>
         <source>Exporter header*.xml/footer*.xml, avec leurs rels, et distinguer first/even/default.</source>
@@ -15987,7 +16019,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:471</note>
       </notes>
       <segment>
         <source>Notes de bas de page → JSON</source>
@@ -15995,7 +16027,7 @@
     </unit>
     <unit id="tool_docx_footnotes_endnotes_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:454</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:471</note>
       </notes>
       <segment>
         <source>Extraire footnotes.xml et endnotes.xml : contenu, ancres et statistiques.</source>
@@ -16003,7 +16035,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:472</note>
       </notes>
       <segment>
         <source>Champs Word → JSON</source>
@@ -16011,7 +16043,7 @@
     </unit>
     <unit id="tool_docx_fields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:455</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:472</note>
       </notes>
       <segment>
         <source>Détecter les champs (TOC, PAGE, REF, DATE, IF, etc.) et exporter leurs codes/instructions.</source>
@@ -16019,7 +16051,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
       </notes>
       <segment>
         <source>MERGEFIELD (mail merge) → JSON</source>
@@ -16027,7 +16059,7 @@
     </unit>
     <unit id="tool_docx_mergefields_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:456</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
       </notes>
       <segment>
         <source>Extraire la liste des champs de fusion (MERGEFIELD) et vérifier doublons/variantes/formatage.</source>
@@ -16035,7 +16067,7 @@
     </unit>
     <unit id="dev_word_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:460</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:477</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16043,7 +16075,7 @@
     </unit>
     <unit id="dev_word_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:461</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:478</note>
       </notes>
       <segment>
         <source>Audit de compatibilité (styles, polices manquantes, liens cassés), et vérifs de conformité basiques.</source>
@@ -16051,7 +16083,7 @@
     </unit>
     <unit id="tool_docx_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
       </notes>
       <segment>
         <source>DOCM : détecter les macros</source>
@@ -16059,7 +16091,7 @@
     </unit>
     <unit id="tool_docx_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:464</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:481</note>
       </notes>
       <segment>
         <source>Détecter la présence de vbaProject.bin (DOCM/DOTM) et exporter un diagnostic (sans exécution).</source>
@@ -16067,7 +16099,7 @@
     </unit>
     <unit id="tool_docx_style_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:482</note>
       </notes>
       <segment>
         <source>Audit de styles (DOCX)</source>
@@ -16075,7 +16107,7 @@
     </unit>
     <unit id="tool_docx_style_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:465</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:482</note>
       </notes>
       <segment>
         <source>Détecter styles dupliqués, non utilisés, overrides excessifs et incohérences typographiques.</source>
@@ -16083,7 +16115,7 @@
     </unit>
     <unit id="dev_word_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:469</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:486</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16091,7 +16123,7 @@
     </unit>
     <unit id="dev_word_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:470</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:487</note>
       </notes>
       <segment>
         <source>Remplacement de placeholders, nettoyage (métadonnées), normalisation de styles, extraction en Markdown/HTML (approx).</source>
@@ -16099,7 +16131,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:490</note>
       </notes>
       <segment>
         <source>Remplacer des placeholders (DOCX)</source>
@@ -16107,7 +16139,7 @@
     </unit>
     <unit id="tool_docx_replace_placeholders_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:473</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:490</note>
       </notes>
       <segment>
         <source>Remplacer des balises (ex: {{name}}) en respectant les runs et produire un DOCX de sortie.</source>
@@ -16115,7 +16147,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:474</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (DOCX)</source>
@@ -16123,7 +16155,7 @@
     </unit>
     <unit id="tool_docx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:474</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:491</note>
       </notes>
       <segment>
         <source>Supprimer/normaliser les infos personnelles : docProps, commentaires, auteurs de révisions (optionnel).</source>
@@ -16131,7 +16163,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:475</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
       </notes>
       <segment>
         <source>DOCX → Markdown (approx)</source>
@@ -16139,7 +16171,7 @@
     </unit>
     <unit id="tool_docx_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:475</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:492</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens, images référencées.</source>
@@ -16147,7 +16179,7 @@
     </unit>
     <unit id="dev_word_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:479</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:496</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16155,7 +16187,7 @@
     </unit>
     <unit id="dev_word_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:480</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:497</note>
       </notes>
       <segment>
         <source>Inspection des parts WordprocessingML (document.xml, numbering, styles, rels) et export JSON/graph.</source>
@@ -16163,7 +16195,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
       </notes>
       <segment>
         <source>Viewer XML WordprocessingML</source>
@@ -16171,7 +16203,7 @@
     </unit>
     <unit id="tool_docx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:483</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
       </notes>
       <segment>
         <source>Explorer document.xml/styles.xml/numbering.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -16179,7 +16211,7 @@
     </unit>
     <unit id="group_dev_excel_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:493</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:510</note>
       </notes>
       <segment>
         <source>Excel (XLSX)</source>
@@ -16187,7 +16219,7 @@
     </unit>
     <unit id="group_dev_excel_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:494</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:511</note>
       </notes>
       <segment>
         <source>Inspecter des fichiers Excel : feuilles, formules, styles, chaînes partagées, médias…</source>
@@ -16195,7 +16227,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:499</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:516</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16203,7 +16235,7 @@
     </unit>
     <unit id="dev_excel_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:500</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:517</note>
       </notes>
       <segment>
         <source>Feuilles, cellules, styles, sharedStrings, noms définis, formules, charts et médias.</source>
@@ -16211,7 +16243,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:503</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:520</note>
       </notes>
       <segment>
         <source>Feuilles XLSX → JSON</source>
@@ -16219,7 +16251,7 @@
     </unit>
     <unit id="tool_xlsx_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:503</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:520</note>
       </notes>
       <segment>
         <source>Lister les feuilles (noms, états visibles/hidden, ids) et exporter la structure workbook.xml en JSON.</source>
@@ -16227,7 +16259,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:504</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:521</note>
       </notes>
       <segment>
         <source>Plage XLSX → CSV</source>
@@ -16235,7 +16267,7 @@
     </unit>
     <unit id="tool_xlsx_range_to_csv_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:504</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:521</note>
       </notes>
       <segment>
         <source>Extraire une plage (A1:D42) d&apos;une feuille et l&apos;exporter en CSV (en gérant sharedStrings et types de cellules).</source>
@@ -16243,7 +16275,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:522</note>
       </notes>
       <segment>
         <source>Formules XLSX → JSON</source>
@@ -16251,7 +16283,7 @@
     </unit>
     <unit id="tool_xlsx_formulas_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:505</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:522</note>
       </notes>
       <segment>
         <source>Extraire les formules (f) et leurs adresses, détecter les formules partagées et produire un inventaire.</source>
@@ -16259,7 +16291,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
       </notes>
       <segment>
         <source>Noms définis → JSON</source>
@@ -16267,7 +16299,7 @@
     </unit>
     <unit id="tool_xlsx_named_ranges_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:506</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
       </notes>
       <segment>
         <source>Exporter les definedNames : plages nommées, constantes, formules et portée (workbook/sheet).</source>
@@ -16275,7 +16307,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:507</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
       </notes>
       <segment>
         <source>Styles XLSX → JSON</source>
@@ -16283,7 +16315,7 @@
     </unit>
     <unit id="tool_xlsx_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:507</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
       </notes>
       <segment>
         <source>Inspecter styles.xml (formats, fonts, fills, borders, numFmts) et produire un rapport lisible.</source>
@@ -16291,7 +16323,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:508</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:525</note>
       </notes>
       <segment>
         <source>SharedStrings → JSON</source>
@@ -16299,7 +16331,7 @@
     </unit>
     <unit id="tool_xlsx_shared_strings_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:508</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:525</note>
       </notes>
       <segment>
         <source>Exporter sharedStrings.xml, stats (taille, doublons) et mapping vers les cellules.</source>
@@ -16307,7 +16339,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:509</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:526</note>
       </notes>
       <segment>
         <source>Charts &amp; médias (XLSX)</source>
@@ -16315,7 +16347,7 @@
     </unit>
     <unit id="tool_xlsx_charts_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:509</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:526</note>
       </notes>
       <segment>
         <source>Inventorier charts, drawings et médias, et exporter les relations vers /xl/media/* et /xl/charts/* .</source>
@@ -16323,7 +16355,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:513</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:530</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16331,7 +16363,7 @@
     </unit>
     <unit id="dev_excel_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:514</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:531</note>
       </notes>
       <segment>
         <source>Détecter feuilles cachées, références cassées, formules invalides (surface), protections et compatibilité.</source>
@@ -16339,7 +16371,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:517</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
       </notes>
       <segment>
         <source>Détecter les feuilles cachées</source>
@@ -16347,7 +16379,7 @@
     </unit>
     <unit id="tool_xlsx_hidden_sheets_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:517</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:534</note>
       </notes>
       <segment>
         <source>Détecter sheets hidden/veryHidden, états de workbook et exporter un rapport de visibilité.</source>
@@ -16355,7 +16387,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:518</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:535</note>
       </notes>
       <segment>
         <source>Protection XLSX (audit)</source>
@@ -16363,7 +16395,7 @@
     </unit>
     <unit id="tool_xlsx_protection_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:518</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:535</note>
       </notes>
       <segment>
         <source>Détecter workbookProtection/sheetProtection (présence, options) et exporter un diagnostic (sans contournement).</source>
@@ -16371,7 +16403,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:519</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:536</note>
       </notes>
       <segment>
         <source>XLSM : détecter les macros</source>
@@ -16379,7 +16411,7 @@
     </unit>
     <unit id="tool_xlsm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:519</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:536</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (XLSM/XLTM) et exporter un diagnostic (sans exécution).</source>
@@ -16387,7 +16419,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:523</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:540</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16395,7 +16427,7 @@
     </unit>
     <unit id="dev_excel_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:524</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:541</note>
       </notes>
       <segment>
         <source>Exporter vers CSV/JSON, supprimer des feuilles, nettoyer des métadonnées, normaliser des styles.</source>
@@ -16403,7 +16435,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:527</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:544</note>
       </notes>
       <segment>
         <source>Supprimer les feuilles cachées (XLSX)</source>
@@ -16411,7 +16443,7 @@
     </unit>
     <unit id="tool_xlsx_remove_hidden_sheets_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:527</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:544</note>
       </notes>
       <segment>
         <source>Créer une copie en supprimant les feuilles hidden/veryHidden (best-effort, package-level).</source>
@@ -16419,7 +16451,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:545</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (XLSX)</source>
@@ -16427,7 +16459,7 @@
     </unit>
     <unit id="tool_xlsx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:528</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:545</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16435,7 +16467,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:532</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:549</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16443,7 +16475,7 @@
     </unit>
     <unit id="dev_excel_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:533</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:550</note>
       </notes>
       <segment>
         <source>Explorer SpreadsheetML (workbook, worksheets, styles) et le graphe de relations OOXML.</source>
@@ -16451,7 +16483,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:536</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
       </notes>
       <segment>
         <source>Viewer XML SpreadsheetML</source>
@@ -16459,7 +16491,7 @@
     </unit>
     <unit id="tool_xlsx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:536</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
       </notes>
       <segment>
         <source>Explorer workbook.xml, worksheets, styles.xml et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16467,7 +16499,7 @@
     </unit>
     <unit id="group_dev_powerpoint_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:546</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:563</note>
       </notes>
       <segment>
         <source>PowerPoint (PPTX)</source>
@@ -16475,7 +16507,7 @@
     </unit>
     <unit id="group_dev_powerpoint_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:547</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:564</note>
       </notes>
       <segment>
         <source>Extraction et audit de slides : texte, notes, thèmes, médias, animations…</source>
@@ -16483,7 +16515,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:552</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:569</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16491,7 +16523,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:553</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
       </notes>
       <segment>
         <source>Texte des slides, notes, médias, thèmes, polices, liens et infos de deck.</source>
@@ -16499,7 +16531,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:556</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:573</note>
       </notes>
       <segment>
         <source>Slides PPTX → JSON</source>
@@ -16507,7 +16539,7 @@
     </unit>
     <unit id="tool_pptx_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:556</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:573</note>
       </notes>
       <segment>
         <source>Lister les slides, layouts, masters et exporter la structure PresentationML en JSON.</source>
@@ -16515,7 +16547,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:557</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:574</note>
       </notes>
       <segment>
         <source>PPTX → texte</source>
@@ -16523,7 +16555,7 @@
     </unit>
     <unit id="tool_pptx_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:557</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:574</note>
       </notes>
       <segment>
         <source>Extraire le texte des slides (shapes) et l&apos;exporter (TXT/JSON) avec repères slide/shape.</source>
@@ -16531,7 +16563,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:558</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:575</note>
       </notes>
       <segment>
         <source>Notes de présentation → JSON</source>
@@ -16539,7 +16571,7 @@
     </unit>
     <unit id="tool_pptx_notes_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:558</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:575</note>
       </notes>
       <segment>
         <source>Extraire les notes (notesSlides) et les associer aux slides.</source>
@@ -16547,7 +16579,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:576</note>
       </notes>
       <segment>
         <source>Polices PPTX → JSON</source>
@@ -16555,7 +16587,7 @@
     </unit>
     <unit id="tool_pptx_fonts_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:559</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:576</note>
       </notes>
       <segment>
         <source>Inventorier les polices utilisées (thèmes + runs) et produire un rapport exploitable.</source>
@@ -16563,7 +16595,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:560</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:577</note>
       </notes>
       <segment>
         <source>Extraire les médias (PPTX)</source>
@@ -16571,7 +16603,7 @@
     </unit>
     <unit id="tool_pptx_media_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:560</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:577</note>
       </notes>
       <segment>
         <source>Extraire images/audio/vidéo de /ppt/media/* et exporter un inventaire avec références (rels).</source>
@@ -16579,7 +16611,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
       </notes>
       <segment>
         <source>Extraire les liens d&apos;un PPTX</source>
@@ -16587,7 +16619,7 @@
     </unit>
     <unit id="tool_pptx_hyperlinks_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:561</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
       </notes>
       <segment>
         <source>Extraire les hyperlinks (rels + actions) et exporter en JSON/texte.</source>
@@ -16595,7 +16627,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:565</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:582</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16603,7 +16635,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:566</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:583</note>
       </notes>
       <segment>
         <source>Audit de cohérence (liens, médias manquants), compatibilité et état des animations/transitions (surface).</source>
@@ -16611,7 +16643,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:569</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
       </notes>
       <segment>
         <source>Audit animations/transitions</source>
@@ -16619,7 +16651,7 @@
     </unit>
     <unit id="tool_pptx_animation_audit_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:569</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
       </notes>
       <segment>
         <source>Détecter animations/transitions (timing) et exporter un rapport (surface) par slide.</source>
@@ -16627,7 +16659,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:587</note>
       </notes>
       <segment>
         <source>PPTM : détecter les macros</source>
@@ -16635,7 +16667,7 @@
     </unit>
     <unit id="tool_pptm_macro_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:570</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:587</note>
       </notes>
       <segment>
         <source>Détecter vbaProject.bin (PPTM/POTM) et exporter un diagnostic (sans exécution).</source>
@@ -16643,7 +16675,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:574</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:591</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16651,7 +16683,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:575</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:592</note>
       </notes>
       <segment>
         <source>Exporter texte, nettoyer métadonnées, extraire médias, regrouper/filtrer slides (approche package).</source>
@@ -16659,7 +16691,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:595</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (PPTX)</source>
@@ -16667,7 +16699,7 @@
     </unit>
     <unit id="tool_pptx_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:578</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:595</note>
       </notes>
       <segment>
         <source>Nettoyer docProps et traces applicatives avant partage (privacy-first).</source>
@@ -16675,7 +16707,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:582</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:599</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16683,7 +16715,7 @@
     </unit>
     <unit id="dev_powerpoint_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:583</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:600</note>
       </notes>
       <segment>
         <source>Explorer PresentationML (slides, layouts, masters) et relationships.</source>
@@ -16691,7 +16723,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:603</note>
       </notes>
       <segment>
         <source>Viewer XML PresentationML</source>
@@ -16699,7 +16731,7 @@
     </unit>
     <unit id="tool_pptx_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:586</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:603</note>
       </notes>
       <segment>
         <source>Explorer presentation.xml, slides, masters/layouts et relationships, avec recherche et export d&apos;extraits.</source>
@@ -16707,7 +16739,7 @@
     </unit>
     <unit id="group_dev_odf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:596</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:613</note>
       </notes>
       <segment>
         <source>OpenDocument (ODF)</source>
@@ -16715,7 +16747,7 @@
     </unit>
     <unit id="group_dev_odf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:597</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:614</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : inspection ZIP/XML, texte, styles, métadonnées, médias…</source>
@@ -16723,7 +16755,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:602</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:619</note>
       </notes>
       <segment>
         <source>Inspection &amp; extraction</source>
@@ -16731,7 +16763,7 @@
     </unit>
     <unit id="dev_odf_sg_inspect_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:603</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:620</note>
       </notes>
       <segment>
         <source>ODT/ODS/ODP : explorer le ZIP ODF, extraire texte, styles, métadonnées et médias.</source>
@@ -16739,7 +16771,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:606</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:623</note>
       </notes>
       <segment>
         <source>Explorer un package ODF (ZIP)</source>
@@ -16747,7 +16779,7 @@
     </unit>
     <unit id="tool_odf_package_explorer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:606</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:623</note>
       </notes>
       <segment>
         <source>Lister les fichiers internes d&apos;un ODT/ODS/ODP, prévisualiser content.xml/styles.xml/meta.xml et télécharger une sélection.</source>
@@ -16755,7 +16787,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:607</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:624</note>
       </notes>
       <segment>
         <source>ODT → texte</source>
@@ -16763,7 +16795,7 @@
     </unit>
     <unit id="tool_odt_text_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:607</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:624</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un ODT (paragraphes, listes, tableaux simples) et l&apos;exporter (TXT/JSON).</source>
@@ -16771,7 +16803,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:608</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:625</note>
       </notes>
       <segment>
         <source>Styles ODT → JSON</source>
@@ -16779,7 +16811,7 @@
     </unit>
     <unit id="tool_odt_styles_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:608</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:625</note>
       </notes>
       <segment>
         <source>Exporter les styles ODF (styles.xml) : paragraphes, caractères, pages, et propriétés héritées.</source>
@@ -16787,7 +16819,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:609</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
       </notes>
       <segment>
         <source>Extraire les images d&apos;un ODT</source>
@@ -16795,7 +16827,7 @@
     </unit>
     <unit id="tool_odt_images_extractor_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:609</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:626</note>
       </notes>
       <segment>
         <source>Extraire /Pictures/*, produire un inventaire (type, taille) et associer les images à leurs ancres dans content.xml.</source>
@@ -16803,7 +16835,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:610</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
       </notes>
       <segment>
         <source>Feuilles ODS → JSON</source>
@@ -16811,7 +16843,7 @@
     </unit>
     <unit id="tool_ods_sheets_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:610</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:627</note>
       </notes>
       <segment>
         <source>Lister les tables/feuilles (content.xml) et exporter la structure (noms, répétitions de colonnes/lignes).</source>
@@ -16819,7 +16851,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:611</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
       </notes>
       <segment>
         <source>Slides ODP → JSON</source>
@@ -16827,7 +16859,7 @@
     </unit>
     <unit id="tool_odp_slides_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:611</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
       </notes>
       <segment>
         <source>Lister les pages/diapos (content.xml) et exporter une structure exploitable (slides, shapes texte).</source>
@@ -16835,7 +16867,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:612</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:629</note>
       </notes>
       <segment>
         <source>Métadonnées ODF → JSON</source>
@@ -16843,7 +16875,7 @@
     </unit>
     <unit id="tool_odf_metadata_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:612</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:629</note>
       </notes>
       <segment>
         <source>Extraire meta.xml : titre, auteur, dates, générateur, mots-clés, et statistiques document.</source>
@@ -16851,7 +16883,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:616</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:633</note>
       </notes>
       <segment>
         <source>Validation &amp; audit</source>
@@ -16859,7 +16891,7 @@
     </unit>
     <unit id="dev_odf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:617</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:634</note>
       </notes>
       <segment>
         <source>Vérifier le manifest, les références de médias, et l&apos;intégrité des fichiers XML clés (content/styles/meta).</source>
@@ -16867,7 +16899,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:620</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
       </notes>
       <segment>
         <source>Vérifier le manifest ODF</source>
@@ -16875,7 +16907,7 @@
     </unit>
     <unit id="tool_odf_manifest_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:620</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
       </notes>
       <segment>
         <source>Contrôler META-INF/manifest.xml : fichiers référencés, media-types, et références manquantes.</source>
@@ -16883,7 +16915,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:624</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:641</note>
       </notes>
       <segment>
         <source>Transformation</source>
@@ -16891,7 +16923,7 @@
     </unit>
     <unit id="dev_odf_sg_transform_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:625</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:642</note>
       </notes>
       <segment>
         <source>Exporter vers texte/JSON, nettoyer des métadonnées, extraire médias, conversion simple (approximative).</source>
@@ -16899,7 +16931,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:645</note>
       </notes>
       <segment>
         <source>Nettoyer les métadonnées (ODF)</source>
@@ -16907,7 +16939,7 @@
     </unit>
     <unit id="tool_odf_sanitize_metadata_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:628</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:645</note>
       </notes>
       <segment>
         <source>Nettoyer meta.xml (auteur, générateur, historiques) et produire un ODF &quot;privacy-first&quot;.</source>
@@ -16915,7 +16947,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:629</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:646</note>
       </notes>
       <segment>
         <source>ODT → Markdown (approx)</source>
@@ -16923,7 +16955,7 @@
     </unit>
     <unit id="tool_odt_to_markdown_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:629</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:646</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; : titres, listes, tableaux simples, liens et images référencées.</source>
@@ -16931,7 +16963,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:633</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:650</note>
       </notes>
       <segment>
         <source>Internals &amp; debug</source>
@@ -16939,7 +16971,7 @@
     </unit>
     <unit id="dev_odf_sg_debug_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:634</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:651</note>
       </notes>
       <segment>
         <source>Inspecter content.xml/styles.xml et le manifest ODF, avec export JSON.</source>
@@ -16947,7 +16979,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:654</note>
       </notes>
       <segment>
         <source>Viewer XML OpenDocument</source>
@@ -16955,7 +16987,7 @@
     </unit>
     <unit id="tool_odf_xml_viewer_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:637</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:654</note>
       </notes>
       <segment>
         <source>Explorer content.xml/styles.xml/meta.xml/manifest.xml, rechercher dans le XML et exporter des extraits.</source>
@@ -16963,7 +16995,7 @@
     </unit>
     <unit id="group_dev_rtf_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:647</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:664</note>
       </notes>
       <segment>
         <source>RTF</source>
@@ -16971,7 +17003,7 @@
     </unit>
     <unit id="group_dev_rtf_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:648</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:665</note>
       </notes>
       <segment>
         <source>Outils legacy sur fichiers RTF : extraction texte, audit, conversion simple.</source>
@@ -16979,7 +17011,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:653</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:670</note>
       </notes>
       <segment>
         <source>Extraction</source>
@@ -16987,7 +17019,7 @@
     </unit>
     <unit id="dev_rtf_sg_extract_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:654</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:671</note>
       </notes>
       <segment>
         <source>Extraire le texte, détecter encodage, et récupérer des informations de base (polices, couleurs).</source>
@@ -16995,7 +17027,7 @@
     </unit>
     <unit id="tool_rtf_to_text_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:657</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:674</note>
       </notes>
       <segment>
         <source>RTF → texte</source>
@@ -17003,7 +17035,7 @@
     </unit>
     <unit id="tool_rtf_to_text_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:657</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:674</note>
       </notes>
       <segment>
         <source>Extraire le texte d&apos;un fichier RTF (best-effort) et exporter en TXT/JSON.</source>
@@ -17011,7 +17043,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:658</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:675</note>
       </notes>
       <segment>
         <source>Table des polices RTF → JSON</source>
@@ -17019,7 +17051,7 @@
     </unit>
     <unit id="tool_rtf_font_table_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:658</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:675</note>
       </notes>
       <segment>
         <source>Extraire la fonttbl (polices déclarées) et produire un inventaire.</source>
@@ -17027,7 +17059,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:662</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:679</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -17035,7 +17067,7 @@
     </unit>
     <unit id="dev_rtf_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:663</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:680</note>
       </notes>
       <segment>
         <source>Convertir RTF → texte/HTML/JSON simplifié (fidélité limitée).</source>
@@ -17043,7 +17075,7 @@
     </unit>
     <unit id="tool_rtf_to_html_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:666</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:683</note>
       </notes>
       <segment>
         <source>RTF → HTML (approx)</source>
@@ -17051,7 +17083,7 @@
     </unit>
     <unit id="tool_rtf_to_html_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:666</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:683</note>
       </notes>
       <segment>
         <source>Conversion &quot;best-effort&quot; vers HTML simple (paragraphes, gras/italique, listes limitées).</source>
@@ -17059,7 +17091,7 @@
     </unit>
     <unit id="tool_rtf_to_json_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:667</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:684</note>
       </notes>
       <segment>
         <source>RTF → JSON (structure)</source>
@@ -17067,7 +17099,7 @@
     </unit>
     <unit id="tool_rtf_to_json_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:667</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:684</note>
       </notes>
       <segment>
         <source>Parser RTF et exporter une structure (groupes, contrôles, texte) pour debug/traitement.</source>
@@ -17075,7 +17107,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:671</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:688</note>
       </notes>
       <segment>
         <source>Validation</source>
@@ -17083,7 +17115,7 @@
     </unit>
     <unit id="dev_rtf_sg_validate_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:672</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:689</note>
       </notes>
       <segment>
         <source>Détecter RTF corrompu, groupes non fermés, et anomalies de syntaxe courantes.</source>
@@ -17091,7 +17123,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:675</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:692</note>
       </notes>
       <segment>
         <source>Vérifier la syntaxe RTF</source>
@@ -17099,7 +17131,7 @@
     </unit>
     <unit id="tool_rtf_syntax_check_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:675</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:692</note>
       </notes>
       <segment>
         <source>Détecter anomalies courantes : groupes non fermés, contrôles invalides, encodage incohérent.</source>
@@ -17107,7 +17139,7 @@
     </unit>
     <unit id="group_dev_legacy_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:685</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:702</note>
       </notes>
       <segment>
         <source>Formats Office legacy</source>
@@ -17115,7 +17147,7 @@
     </unit>
     <unit id="group_dev_legacy_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:686</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:703</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT (binaires) : infos, détection et conversions.</source>
@@ -17123,7 +17155,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:691</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:708</note>
       </notes>
       <segment>
         <source>Identification</source>
@@ -17131,7 +17163,7 @@
     </unit>
     <unit id="dev_legacy_sg_identify_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:692</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:709</note>
       </notes>
       <segment>
         <source>Reconnaître DOC/XLS/PPT (CFBF/OLE), afficher infos de base et signatures.</source>
@@ -17139,7 +17171,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:695</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:712</note>
       </notes>
       <segment>
         <source>CFBF/OLE : infos fichier</source>
@@ -17147,7 +17179,7 @@
     </unit>
     <unit id="tool_ole_cfbf_file_info_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:695</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:712</note>
       </notes>
       <segment>
         <source>Détecter un conteneur OLE (DOC/XLS/PPT) et afficher header, FAT, streams et statistiques basiques.</source>
@@ -17155,7 +17187,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:696</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:713</note>
       </notes>
       <segment>
         <source>DOC/XLS/PPT : détecter le format</source>
@@ -17163,7 +17195,7 @@
     </unit>
     <unit id="tool_doc_xls_ppt_signature_detector_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:696</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:713</note>
       </notes>
       <segment>
         <source>Identifier DOC vs XLS vs PPT (best-effort) via streams/clsid et produire un rapport.</source>
@@ -17171,7 +17203,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:700</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:717</note>
       </notes>
       <segment>
         <source>Conversion</source>
@@ -17179,7 +17211,7 @@
     </unit>
     <unit id="dev_legacy_sg_convert_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:701</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:718</note>
       </notes>
       <segment>
         <source>Conversions vers formats modernes (souvent via backend) : DOC→DOCX, XLS→XLSX, PPT→PPTX.</source>
@@ -17187,7 +17219,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:704</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:721</note>
       </notes>
       <segment>
         <source>DOC → DOCX (conversion)</source>
@@ -17195,7 +17227,7 @@
     </unit>
     <unit id="tool_doc_to_docx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:704</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:721</note>
       </notes>
       <segment>
         <source>Convertir un DOC binaire vers DOCX (généralement via backend/outils externes).</source>
@@ -17203,7 +17235,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:705</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:722</note>
       </notes>
       <segment>
         <source>XLS → XLSX (conversion)</source>
@@ -17211,7 +17243,7 @@
     </unit>
     <unit id="tool_xls_to_xlsx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:705</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:722</note>
       </notes>
       <segment>
         <source>Convertir un XLS binaire vers XLSX (généralement via backend/outils externes).</source>
@@ -17219,7 +17251,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_title">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:706</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:723</note>
       </notes>
       <segment>
         <source>PPT → PPTX (conversion)</source>
@@ -17227,7 +17259,7 @@
     </unit>
     <unit id="tool_ppt_to_pptx_converter_desc">
       <notes>
-        <note category="location">src/app/data/catalog/dev.catalog.ts:706</note>
+        <note category="location">src/app/data/catalog/dev.catalog.ts:723</note>
       </notes>
       <segment>
         <source>Convertir un PPT binaire vers PPTX (généralement via backend/outils externes).</source>
@@ -24547,6 +24579,270 @@
       </notes>
       <segment>
         <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:6</note>
+      </notes>
+      <segment>
+        <source>Comparer deux JSON sans confondre formatage et changements réels</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_lead">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:7</note>
+      </notes>
+      <segment>
+        <source>Ce comparateur analyse localement la structure de deux documents JSON. Il distingue ajouts, suppressions, valeurs, types et déplacements, peut associer des objets de tableau par identifiant, exclut des chemins volatils et génère un patch JSON standard sans envoyer les données vers un serveur.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_use_cases">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:13</note>
+      </notes>
+      <segment>
+        <source>Quand utiliser un diff JSON structurel ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:17</note>
+      </notes>
+      <segment>
+        <source>Vérifier une réponse d’API</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:18</note>
+      </notes>
+      <segment>
+        <source>Comparez une réponse de référence et une nouvelle version sans être perturbé par l’ordre des propriétés ni l’indentation. Les changements sont rattachés à des chemins explicites plutôt qu’à des numéros de ligne fragiles.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:21</note>
+      </notes>
+      <segment>
+        <source>Relire une configuration avant déploiement</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:22</note>
+      </notes>
+      <segment>
+        <source>Isolez les options ajoutées, retirées ou dont le type a changé, puis téléchargez le rapport pour la revue. Les secrets restent locaux, mais ils figurent dans le rapport si vous ne les excluez pas.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:25</note>
+      </notes>
+      <segment>
+        <source>Comparer des collections dont l’ordre varie</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:26</note>
+      </notes>
+      <segment>
+        <source>Associez les objets d’un tableau avec une clé comme /id ou /meta/identifiant. Un objet déplacé reste le même élément et ses modifications internes sont comparées sous un chemin logique stable.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:33</note>
+      </notes>
+      <segment>
+        <source>Méthode recommandée</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:36</note>
+      </notes>
+      <segment>
+        <source>Commencez par une comparaison par index. Cette stratégie est prévisible pour les tableaux ordonnés et produit directement un patch JSON applicable au document gauche. L’ordre des propriétés d’un objet n’est jamais considéré comme une différence.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:37</note>
+      </notes>
+      <segment>
+        <source>Si un tableau représente une collection d’entités, activez l’association par clé et indiquez un JSON Pointer relatif à chaque objet. La clé doit être présente, scalaire et unique dans chaque tableau concerné. Les tableaux de chaînes, nombres ou booléens restent comparés par index.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:38</note>
+      </notes>
+      <segment>
+        <source>Ajoutez enfin les chemins volatils, un par ligne, par exemple /metadata/updatedAt. Le chemin et tout son sous-arbre sont retirés du diff comme du patch ; vérifiez donc cette liste avant de conclure que deux documents sont équivalents.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_outputs">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:44</note>
+      </notes>
+      <segment>
+        <source>Comprendre les deux sorties</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:48</note>
+      </notes>
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:49</note>
+      </notes>
+      <segment>
+        <source>Le patch contient des opérations add, remove et replace avec des chemins JSON Pointer échappés. Il transforme le document gauche vers le document droit pour les chemins inclus, même lorsque l’aperçu s’appuie sur une association de tableaux par clé.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:52</note>
+      </notes>
+      <segment>
+        <source>Rapport de revue</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:53</note>
+      </notes>
+      <segment>
+        <source>Le rapport conserve le résumé, les options et les valeurs avant/après de chaque différence. Traitez-le comme les documents d’origine : il peut contenir des informations sensibles et n’est jamais téléversé automatiquement.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:56</note>
+      </notes>
+      <segment>
+        <source>Lien sans données</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_text">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:57</note>
+      </notes>
+      <segment>
+        <source>Le bouton de partage copie uniquement l’adresse publique de l’outil. Les JSON, chemins ignorés, noms de fichiers et résultats ne sont placés ni dans l’URL ni dans le presse-papiers du lien.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limits">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:64</note>
+      </notes>
+      <segment>
+        <source>Précision, sécurité et limites</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:68</note>
+      </notes>
+      <segment>
+        <source>Chaque source est limitée à 2 millions de caractères ou 2 Mo par fichier. Le parseur accepte au plus 100 000 valeurs, 64 niveaux d’imbrication et 20 000 différences ; le rapport et le patch partagent un plafond de sortie de 16 millions de caractères.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:71</note>
+      </notes>
+      <segment>
+        <source>Les noms de propriétés dupliqués sont refusés au lieu de conserver silencieusement la dernière valeur. Les chaînes UTF-16 mal formées et les nombres qui seraient arrondis par JavaScript sont également rejetés pour éviter un diff trompeur.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:74</note>
+      </notes>
+      <segment>
+        <source>Le traitement s’effectue dans un Worker éphémère. L’outil compare les données, mais ne valide pas un schéma métier, une signature, des droits d’accès ou la sécurité du système qui consommera le patch.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_faq">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:81</note>
+      </notes>
+      <segment>
+        <source>Questions fréquentes</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:85</note>
+      </notes>
+      <segment>
+        <source>Pourquoi l’ordre des propriétés n’apparaît-il pas ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a1">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:86</note>
+      </notes>
+      <segment>
+        <source>Un objet JSON est comparé par noms de propriétés et non par ordre d’écriture. Deux objets possédant les mêmes clés et valeurs sont donc équivalents même si leurs propriétés sont réordonnées ou leur indentation différente.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:89</note>
+      </notes>
+      <segment>
+        <source>Le patch utilise-t-il les clés d’association des tableaux ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a2">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:90</note>
+      </notes>
+      <segment>
+        <source>Le rapport utilise les clés pour rendre les changements lisibles et signaler les déplacements. Le patch reste un document RFC 6902 standard fondé sur les index réels afin de pouvoir être appliqué par les bibliothèques compatibles.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:93</note>
+      </notes>
+      <segment>
+        <source>Pourquoi certains grands nombres sont-ils refusés ?</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a3">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:94</note>
+      </notes>
+      <segment>
+        <source>JavaScript ne représente pas exactement tous les entiers et décimaux JSON. Plutôt que de comparer deux valeurs déjà arrondies, l’outil demande de les encoder comme chaînes lorsque leur représentation exacte ne peut pas être conservée.</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip_title">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:101</note>
+      </notes>
+      <segment>
+        <source>Appliquer un patch sur une copie</source>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip">
+      <notes>
+        <note category="location">src/app/data/editorials/dev/data/json-diff.editorial.ts:104</note>
+      </notes>
+      <segment>
+        <source>Testez toujours le patch sur une copie, puis validez le résultat avec les règles métier du système cible. Un patch syntaxiquement correct peut rester inadapté à une API, une configuration ou une base de données particulière.</source>
       </segment>
     </unit>
     <unit id="ed_dev_ooxml_metadata_title">
@@ -45188,7 +45484,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="csv_json_source_json_label">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:45,48</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:45,47</note>
       </notes>
       <segment>
         <source>Source JSON</source>
@@ -45256,7 +45552,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="csv_json_trim">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:70,72</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:70,71</note>
       </notes>
       <segment>
         <source>Supprimer les espaces en bord de cellule</source>
@@ -45288,7 +45584,7 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
     </unit>
     <unit id="csv_json_bom">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:87,89</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:87,88</note>
       </notes>
       <segment>
         <source>Ajouter un BOM UTF-8 pour Excel</source>
@@ -45465,7 +45761,7 @@ email =&gt; contact</source>
     </unit>
     <unit id="csv_json_limit_security">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:186,190</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.html:186,189</note>
       </notes>
       <segment>
         <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
@@ -45492,7 +45788,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="csv_json_default_json">
       <notes>
-        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:39,50</note>
+        <note category="location">src/app/features/csv-json-converter/presentation/csv-json-converter-tool.component.ts:39,48</note>
         <note category="description">Exemple JSON initial du convertisseur</note>
       </notes>
       <segment>
@@ -47569,6 +47865,831 @@ Grace Hopper;grace@example.test;true;100</source>
       </notes>
       <segment>
         <source>Impossible de créer le PDF. Une image peut être endommagée ou non prise en charge par ce navigateur.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_back">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:4,7</note>
+      </notes>
+      <segment>
+        <source>Retour aux outils de données</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_eyebrow">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:10,11</note>
+      </notes>
+      <segment>
+        <source>Données structurées · traitement local</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_h1">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:11,12</note>
+      </notes>
+      <segment>
+        <source>Comparer deux JSON</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_intro">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:13,16</note>
+      </notes>
+      <segment>
+        <source> Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON. Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902. </source>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:19</note>
+      </notes>
+      <segment>
+        <source>Confidentialité</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:22,23</note>
+      </notes>
+      <segment>
+        <source>Vos JSON restent dans ce navigateur</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_text">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:24,27</note>
+      </notes>
+      <segment>
+        <source> La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur. </source>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_1">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:32,33</note>
+      </notes>
+      <segment>
+        <source>Étape 1</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_input_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:33,35</note>
+      </notes>
+      <segment>
+        <source>Collez ou chargez les deux documents</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_swap">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:38,40</note>
+      </notes>
+      <segment>
+        <source>Inverser</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_reset">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:42,44</note>
+      </notes>
+      <segment>
+        <source>Réinitialiser</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_badge">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:51,52</note>
+      </notes>
+      <segment>
+        <source>A · Avant</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_open_file">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:56,58</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:88,90</note>
+      </notes>
+      <segment>
+        <source>Ouvrir un fichier</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:66,68</note>
+      </notes>
+      <segment>
+        <source>Document JSON gauche</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_character_count">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:76,78</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:108,110</note>
+      </notes>
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractères </source>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_badge">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:83,84</note>
+      </notes>
+      <segment>
+        <source>B · Après</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:98,100</note>
+      </notes>
+      <segment>
+        <source>Document JSON droit</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_limit">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:112,113</note>
+      </notes>
+      <segment>
+        <source>Fichiers JSON ou TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum chacun.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_2">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:118,119</note>
+      </notes>
+      <segment>
+        <source>Étape 2</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_options_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:119,123</note>
+      </notes>
+      <segment>
+        <source>Choisissez la stratégie de comparaison</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_mode">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:125,126</note>
+      </notes>
+      <segment>
+        <source>Tableaux</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_index">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:127,128</note>
+      </notes>
+      <segment>
+        <source>Comparer par index</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_mode">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:128,130</note>
+      </notes>
+      <segment>
+        <source>Associer les objets par clé</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_help">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:130,133</note>
+      </notes>
+      <segment>
+        <source>Les tableaux de scalaires restent comparés par index.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:135,137</note>
+      </notes>
+      <segment>
+        <source>Clé d’association (JSON Pointer)</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_help">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:144,147</note>
+      </notes>
+      <segment>
+        <source>Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_summary">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:150,151</note>
+      </notes>
+      <segment>
+        <source>Ignorer des chemins volatils</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:151,153</note>
+      </notes>
+      <segment>
+        <source>Un JSON Pointer par ligne</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_help">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:160,163</note>
+      </notes>
+      <segment>
+        <source>Le chemin et tout son sous-arbre sont exclus du diff et du patch.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_comparing">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:167,169</note>
+      </notes>
+      <segment>
+        <source>Comparaison locale…</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:170,172</note>
+      </notes>
+      <segment>
+        <source>Comparer les JSON</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_link_copied">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:176,178</note>
+      </notes>
+      <segment>
+        <source>Lien copié</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_share">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:178,180</note>
+      </notes>
+      <segment>
+        <source>Partager l’outil sans les données</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_busy">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:185,186</note>
+      </notes>
+      <segment>
+        <source>Comparaison en cours.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_equal">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:186,187</note>
+      </notes>
+      <segment>
+        <source>Les documents sont équivalents avec ces options.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_done">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:187,188</note>
+      </notes>
+      <segment>
+        <source>Comparaison terminée avec des différences.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_error">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:188,191</note>
+      </notes>
+      <segment>
+        <source>La comparaison contient une erreur.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_3">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:202,203</note>
+      </notes>
+      <segment>
+        <source>Résultat</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_result_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:203,207</note>
+      </notes>
+      <segment>
+        <source>Diff structurel</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issues_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:209,211</note>
+      </notes>
+      <segment>
+        <source>La comparaison ne peut pas continuer</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:221,222</note>
+      </notes>
+      <segment>
+        <source>Aucune différence structurelle</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_text">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:222,224</note>
+      </notes>
+      <segment>
+        <source>Les documents sont équivalents après application des chemins ignorés.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:224,225</note>
+      </notes>
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> différences détectées</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_text">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:225,228</note>
+      </notes>
+      <segment>
+        <source>Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:230</note>
+      </notes>
+      <segment>
+        <source>Résumé des différences</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_added">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:231,232</note>
+      </notes>
+      <segment>
+        <source>Ajouts</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_removed">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:232,233</note>
+      </notes>
+      <segment>
+        <source>Suppressions</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_changed">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:233,234</note>
+      </notes>
+      <segment>
+        <source>Valeurs</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_types">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:234,235</note>
+      </notes>
+      <segment>
+        <source>Types</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_moved">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:235,238</note>
+      </notes>
+      <segment>
+        <source>Déplacements</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_caption">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:241,243</note>
+      </notes>
+      <segment>
+        <source>Aperçu des différences structurelles</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_change">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:244,245</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:253</note>
+      </notes>
+      <segment>
+        <source>Changement</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_path">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:245,246</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:257</note>
+      </notes>
+      <segment>
+        <source>Chemin</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_before">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:246,247</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:258</note>
+      </notes>
+      <segment>
+        <source>Avant</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_after">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:247,249</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:259</note>
+      </notes>
+      <segment>
+        <source>Après</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_truncated">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:266,270</note>
+      </notes>
+      <segment>
+        <source>L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:274,275</note>
+      </notes>
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_help">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:275,277</note>
+      </notes>
+      <segment>
+        <source>Applicable au document gauche avec les chemins ignorés exclus.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_copied">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:282,283</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:307,308</note>
+      </notes>
+      <segment>
+        <source>Copié</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_patch">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:284,286</note>
+      </notes>
+      <segment>
+        <source>Copier le patch</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_patch">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:289,291</note>
+      </notes>
+      <segment>
+        <source>Télécharger le patch</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_output_truncated">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:293,296</note>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:318,320</note>
+      </notes>
+      <segment>
+        <source>Aperçu tronqué ; le téléchargement contient la sortie complète.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_title">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:299,300</note>
+      </notes>
+      <segment>
+        <source>Rapport JSON complet</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_help">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:300,302</note>
+      </notes>
+      <segment>
+        <source>Résumé, options et différences avec valeurs avant/après.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_report">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:309,311</note>
+      </notes>
+      <segment>
+        <source>Copier le rapport</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_report">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.html:314,316</note>
+      </notes>
+      <segment>
+        <source>Télécharger le rapport</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_left">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:39,46</note>
+        <note category="description">Exemple JSON gauche du comparateur</note>
+      </notes>
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;ancienne&quot; }
+}</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_right">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:48,56</note>
+        <note category="description">Exemple JSON droit du comparateur</note>
+      </notes>
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;récente&quot; }
+}</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare_error">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:203</note>
+      </notes>
+      <segment>
+        <source>La comparaison a échoué dans le navigateur. Réessayez avec des documents plus petits.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_error">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:235</note>
+      </notes>
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_share_error">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:248</note>
+      </notes>
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_empty">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:254</note>
+      </notes>
+      <segment>
+        <source>Le document est vide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_source_large">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:255</note>
+      </notes>
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_invalid">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:256</note>
+      </notes>
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_duplicate">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:257</note>
+      </notes>
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_number">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:258</note>
+      </notes>
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_unicode">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:259</note>
+      </notes>
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_depth">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:260</note>
+      </notes>
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_nodes">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:261</note>
+      </notes>
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:262</note>
+      </notes>
+      <segment>
+        <source>Un chemin ignoré n’est pas un JSON Pointer valide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_required">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:263</note>
+      </notes>
+      <segment>
+        <source>Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_invalid">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:264</note>
+      </notes>
+      <segment>
+        <source>Un objet du tableau ne possède pas une clé d’association scalaire valide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_duplicate">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:265</note>
+      </notes>
+      <segment>
+        <source>Une même clé d’association apparaît plusieurs fois dans un tableau.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_changes">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:266</note>
+      </notes>
+      <segment>
+        <source>La comparaison dépasse la limite de 20 000 différences.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_output">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:267</note>
+      </notes>
+      <segment>
+        <source>Le rapport et le patch dépasseraient la limite de sortie.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_left">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:270</note>
+      </notes>
+      <segment>
+        <source> Document gauche.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_right">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:272</note>
+      </notes>
+      <segment>
+        <source> Document droit.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_path">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:275</note>
+      </notes>
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_position">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:279</note>
+      </notes>
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_added">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:285</note>
+      </notes>
+      <segment>
+        <source>Ajout</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_removed">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:286</note>
+      </notes>
+      <segment>
+        <source>Suppression</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_changed">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:287</note>
+      </notes>
+      <segment>
+        <source>Valeur modifiée</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_type">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:288</note>
+      </notes>
+      <segment>
+        <source>Type modifié</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_moved">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:289</note>
+      </notes>
+      <segment>
+        <source>Déplacement</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_move_label">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:296</note>
+      </notes>
+      <segment>
+        <source>Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_empty">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:339</note>
+      </notes>
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_large">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:341</note>
+      </notes>
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_format">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:343</note>
+      </notes>
+      <segment>
+        <source>Sélectionnez un fichier JSON ou TXT.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_encoding">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:344</note>
+      </notes>
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_error">
+      <notes>
+        <note category="location">src/app/features/json-diff/presentation/json-diff-tool.component.ts:346</note>
+      </notes>
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
       </segment>
     </unit>
     <unit id="ooxml_metadata_back">
