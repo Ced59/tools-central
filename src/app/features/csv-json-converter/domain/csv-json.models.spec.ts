@@ -510,6 +510,34 @@ describe('convertCsvJson', () => {
     }
   });
 
+  it('rejette trop de colonnes JSON pendant le préflight lexical', () => {
+    const members = Array.from(
+      { length: CSV_JSON_MAX_COLUMNS + 1 },
+      (_, index) => `"column_${String(index)}":${String(index)}`,
+    ).join(',');
+    const source = `[{${members}}]`;
+    const nestedMembers = Array.from(
+      { length: Math.ceil((CSV_JSON_MAX_COLUMNS + 1) / 2) },
+      (_, index) => `"nested_${String(index)}":${String(index)}`,
+    ).join(',');
+    const nestedSource = `[{"left":{${nestedMembers}},"right":{${nestedMembers}}}]`;
+    const parse = vi.spyOn(JSON, 'parse');
+
+    try {
+      const result = convertCsvJson(source, { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+      const nestedResult = convertCsvJson(nestedSource, { ...CSV_DEFAULTS, direction: 'json-to-csv' });
+
+      expect(result.ok).toBe(false);
+      expect(nestedResult.ok).toBe(false);
+      expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+      expect(nestedResult.issues.some(issue => issue.code === 'column-limit')).toBe(true);
+      expect(parse).not.toHaveBeenCalledWith(source);
+      expect(parse).not.toHaveBeenCalledWith(nestedSource);
+    } finally {
+      parse.mockRestore();
+    }
+  });
+
   it('tolère des largeurs irrégulières en les signalant et complète les cellules absentes', () => {
     const result = convertCsvJson('a,b,c\n1,2\n3,4,5,6', CSV_DEFAULTS);
 

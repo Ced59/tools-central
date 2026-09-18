@@ -96,6 +96,8 @@ type JsonContainerFrame =
     kind: 'object';
     state: 'key-or-end' | 'colon' | 'value' | 'comma-or-end';
     keys: Set<string>;
+    countsFlattenedColumns: boolean;
+    replacesParentColumn: boolean;
   }
   | {
     kind: 'array';
@@ -798,6 +800,7 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
   const stack: JsonContainerFrame[] = [];
   let index = 0;
   let rootArrayElements = 0;
+  let rowFlattenedColumns = 0;
 
   const skipWhitespace = (): void => {
     while (index < source.length && /[\t\n\r ]/u.test(source[index])) index += 1;
@@ -843,8 +846,19 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
         addIssue(state, 'json-depth-limit', 'error');
         return false;
       }
+      const parent = stack.at(-1);
+      const countsFlattenedColumns = character === '{' && (
+        (parent?.kind === 'array' && stack.length === 1)
+        || (parent?.kind === 'object' && parent.countsFlattenedColumns)
+      );
       stack.push(character === '{'
-        ? { kind: 'object', state: 'key-or-end', keys: new Set<string>() }
+        ? {
+          kind: 'object',
+          state: 'key-or-end',
+          keys: new Set<string>(),
+          countsFlattenedColumns,
+          replacesParentColumn: countsFlattenedColumns && parent.kind === 'object',
+        }
         : { kind: 'array', state: 'value-or-end' });
       index += 1;
       return true;
@@ -885,6 +899,17 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
           addIssue(state, 'json-invalid', 'error', null, null, `duplicate:${key.slice(0, 160)}`);
           return;
         }
+        if (frame.countsFlattenedColumns) {
+          if (frame.keys.size === 0 && frame.replacesParentColumn) {
+            rowFlattenedColumns -= 1;
+            frame.replacesParentColumn = false;
+          }
+          rowFlattenedColumns += 1;
+          if (rowFlattenedColumns > CSV_JSON_MAX_COLUMNS) {
+            addIssue(state, 'column-limit', 'error');
+            return;
+          }
+        }
         frame.keys.add(key);
         frame.state = 'colon';
         continue;
@@ -919,6 +944,7 @@ function validateUniqueJsonMemberNames(source: string, state: MutableConversionS
       } else {
         if (stack.length === 1) {
           rootArrayElements += 1;
+          rowFlattenedColumns = 0;
           if (rootArrayElements > CSV_JSON_MAX_ROWS) {
             addIssue(state, 'row-limit', 'error');
             return;
