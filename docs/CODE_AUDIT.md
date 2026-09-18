@@ -16,10 +16,10 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Angular | 21.0.x | 22.1.6 (`CLI/build/SSR` 22.1.8) |
 | TypeScript | génération précédente | 6.0.3, version exigée par Angular 22.1 |
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
-| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,15 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 301,86 kB transféré) |
+| Bundle initial de production | 656,90 kB lors du premier build corrigé | 658,81 kB brut, 166,17 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 301,97 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
 | Tests unitaires | suite non compilable | 140 fichiers, 570 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
-| Couverture | aucun seuil | 56,34 % statements, 46,97 % branches, 53,11 % fonctions, 60,36 % lignes |
+| Couverture | aucun seuil | 56,34 % statements, 46,95 % branches, 53,11 % fonctions, 60,35 % lignes |
 | E2E | aucun | 15 parcours Playwright verts, dont un scénario PDF de confidentialité réel |
 | Routes statiques | 2 | 2 465 pages prérendues ; 2 406 URL sont indexables et 145 variantes d’outils non relues sont omises des locales secondaires |
 | Catalogue | incohérences possibles | 4 catégories, 18 groupes, 176 outils, 70 disponibles en français et 65 dans les locales secondaires |
@@ -28,7 +28,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. T
 | Dette éditoriale source | 96 `TODO` | 0 `TODO` |
 | Inventaire SEO | absent | 297 opportunités + shortlist prioritaire de 30 |
 
-Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : LCP 2 200 ms, CLS 0,0043, `DOMContentLoaded` 437,1 ms et interaction thème 67,0 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
+Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : LCP 2 116 ms, CLS 0,0043, `DOMContentLoaded` 176,5 ms et interaction thème 83,7 ms. Ce sont des garde-fous de laboratoire, variables selon la machine, pas des Core Web Vitals terrain.
 
 ## Travaux réalisés
 
@@ -63,7 +63,7 @@ Dernière mesure Playwright locale en configuration CI sur l’accueil mobile : 
 - Les métadonnées déchiffrées des pièces jointes sont rapprochées sans exiger un type MIME de PDF.js 6.3.289, qui ne l’expose pas dans `FileSpec.serializable`. Un MIME structurel exact reste prioritaire ; son absence côté PDF.js est traitée comme une donnée inconnue et le MIME structurel enrichit l’unique résultat au lieu de créer un doublon. Les alias distincts de l’arbre de noms qui pointent vers le même FileSpec sérialisé sont regroupés après consommation du signal structurel, sans fusionner deux signaux structurels réellement distincts.
 - Une entrée `/Encrypt` indirecte est reconnue comme absente lorsque la xref active désigne autoritairement un objet `null`, y compris une entrée type 2 stockée dans un `/ObjStm` borné ; un objet introuvable, ambigu, remplacé ou non nul reste traité prudemment comme un chiffrement réel.
 - Le parseur brut accepte le signe positif explicite des entiers PDF non négatifs et saute atomiquement la valeur complète des clés d’extension — nom, référence, tableau ou dictionnaire — afin de ne jamais relire un nom homonyme comme une clé critique de flux. Il ignore notamment les noms de paramètres présents dans les extensions `DecodeParms`, sans relâcher la validation des paramètres directs.
-- La valeur `/Type` d’un flux peut être un nom direct, `null` ou une référence indirecte. Une référence n’est acceptée qu’après résolution du nom ou de `null` à l’offset autoritaire de la xref active ; une valeur absente reste ordinaire et une référence ambiguë échoue fermement avant PDF.js. Les scalaires `Predictor`, `Colors`, `BitsPerComponent`/`BPC`, `Columns` et `EarlyChange` de `DecodeParms` suivent la même résolution autoritative lorsqu’ils sont indirects, y compris pendant l’amorçage borné d’un flux xref.
+- La valeur `/Type` d’un flux peut être un nom direct, `null` ou une référence indirecte. Une référence n’est acceptée qu’après résolution du nom ou de `null` à l’offset autoritaire de la xref active ; une valeur absente reste ordinaire et une référence ambiguë échoue fermement avant PDF.js. Les scalaires `Predictor`, `Colors`, `BitsPerComponent`/`BPC`, `Columns` et `EarlyChange` de `DecodeParms` suivent la même résolution autoritative lorsqu’ils sont indirects, qu’ils soient des objets classiques ou des objets compressés désignés par une entrée xref de type 2, y compris pendant l’amorçage borné d’un flux xref lorsque cette référence peut être directe.
 - Un arbre `/Pages` valide avec `/Kids []` et `/Count 0` reste inspectable : les métadonnées, pièces jointes, actions documentaires, signatures et informations de chiffrement sont collectées sans tenter d’ouvrir une page inexistante.
 - Validation des fichiers PDF avant parsing : fichier non vide, MIME attendu et limite de 100 MB par défaut.
 - Fin de vie explicite ajoutée aux subscriptions du shell et des services SEO.

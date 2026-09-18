@@ -75,6 +75,14 @@ interface IndirectLengthCandidateIndex {
   encryptedFromCrossReference: boolean;
 }
 
+type DecodeParameterReferenceCandidates = Pick<
+  IndirectLengthCandidateIndex,
+  'authoritativeOffsets'
+> & Partial<Pick<
+  IndirectLengthCandidateIndex,
+  'authoritativeCompressedEntries' | 'compressedValues'
+>>;
+
 interface CompressedCrossReferenceEntry {
   objectStreamNumber: number;
   objectIndex: number;
@@ -3110,14 +3118,23 @@ function readDecodeParameterDictionary(
 function resolveDecodeParameterScalar(
   data: Uint8Array,
   value: number | RawPdfReference,
-  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+  candidates?: DecodeParameterReferenceCandidates,
 ): number | null {
   if (typeof value === 'number') return value;
-  const offset = candidates?.authoritativeOffsets.get(referenceKey(
-    value.objectNumber,
-    value.generationNumber,
-  ));
-  if (offset === undefined) return null;
+  const key = referenceKey(value.objectNumber, value.generationNumber);
+  const offset = candidates?.authoritativeOffsets.get(key);
+  if (offset === undefined) {
+    const compressedEntry = candidates?.authoritativeCompressedEntries?.get(key);
+    const compressedValues = candidates?.compressedValues?.get(key);
+    if (
+      value.generationNumber !== 0
+      || !compressedEntry
+      || !compressedValues
+      || compressedValues.size !== 1
+    ) return null;
+    const scalar = compressedValues.values().next().value;
+    return scalar === undefined ? null : scalar;
+  }
   const header = readIndirectObjectHeader(data, offset);
   if (
     !header
@@ -3135,7 +3152,7 @@ function resolveDecodeParameterScalar(
 function resolveDecodeParameterDictionary(
   data: Uint8Array,
   parameter: RawPdfFilterDecodeParameters,
-  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+  candidates?: DecodeParameterReferenceCandidates,
 ): PdfFilterDecodeParameters | null {
   const predictor = resolveDecodeParameterScalar(data, parameter.predictor, candidates);
   const colors = resolveDecodeParameterScalar(data, parameter.colors, candidates);
@@ -3159,7 +3176,7 @@ function resolveDecodeParameterDictionary(
 function resolveDecodeParameters(
   data: Uint8Array,
   parameters: PdfDecodeParameters | undefined,
-  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+  candidates?: DecodeParameterReferenceCandidates,
 ): readonly (PdfFilterDecodeParameters | undefined)[] | null | undefined {
   if (parameters === null || parameters === undefined) return parameters;
   if ('reference' in parameters) {

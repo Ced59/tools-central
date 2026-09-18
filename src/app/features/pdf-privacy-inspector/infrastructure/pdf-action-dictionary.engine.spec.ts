@@ -836,6 +836,39 @@ describe('inspectPdfStructuralSignals', () => {
       expect(() => validatePdfObjectStreamBudgets(indirectParameters)).not.toThrow();
     }
 
+    const compressedScalarTarget = deflate(plain);
+    const compressedScalarCarrier = new TextEncoder().encode('7 0 1');
+    const compressedScalarBody = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      '/Filter /FlateDecode /DecodeParms << /Predictor 7 0 R >> ',
+      `/Length ${String(compressedScalarTarget.byteLength)} >>\nstream\n`,
+      compressedScalarTarget,
+      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      `/Length ${String(compressedScalarCarrier.byteLength)} >>\nstream\n`,
+      compressedScalarCarrier,
+      '\nendstream\nendobj\n',
+    );
+    const compressedScalarXrefOffset = compressedScalarBody.byteLength;
+    const compressedScalarXref = joinBytes(
+      compressedScalarBody,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 7 2 10 1] ',
+      '/Length 28 >>\nstream\n',
+      encodeXrefEntry(1, findByteSequence(
+        compressedScalarBody,
+        new TextEncoder().encode('3 0 obj'),
+      )),
+      encodeXrefEntry(2, 8, 0),
+      encodeXrefEntry(1, findByteSequence(
+        compressedScalarBody,
+        new TextEncoder().encode('8 0 obj'),
+      )),
+      encodeXrefEntry(1, compressedScalarXrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(compressedScalarXrefOffset),
+      '\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(compressedScalarXref)).not.toThrow();
+
     const intermediateBytes = 22 * 1_024 * 1_024;
     const shrinkingIntermediate = new Uint8Array(intermediateBytes + 2);
     shrinkingIntermediate.fill(0x30);
