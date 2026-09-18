@@ -193,6 +193,25 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it.each([
+    'https://json-schema.org/draft/2019-09/schema',
+    'https://json-schema.org/draft/2020-12/schema',
+  ])('inspects schema-valued legacy dependencies retained by Ajv for %s', declaration => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: declaration,
+      dependencies: {
+        trigger: { properties: { value: { pattern } } },
+      },
+    }), '{"trigger":true,"value":"value"}', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/dependencies/trigger/properties/value/pattern',
+    });
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);

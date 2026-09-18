@@ -88476,8 +88476,8 @@ Grace Hopper;grace@example.test;true;100</target>
     </unit>
     <unit id="json_schema_limits_text">
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 500 erreurs affichées</source>
-        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> ανά αρχείο · 100 000 τιμές · βάθος 64 · 500 σφάλματα που εμφανίζονται</target>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> ανά αρχείο · 100 000 τιμές · βάθος 64 · 50 000 εκτιμώμενες λειτουργίες · 500 εμφανιζόμενα σφάλματα</target>
       </segment>
     </unit>
     <unit id="json_schema_validating">
@@ -89108,6 +89108,12 @@ Grace Hopper;grace@example.test;true;100</target>
       <segment>
         <source>Impossible de lire ce fichier localement.</source>
         <target state="translated">Αδύνατη η ανάγνωση αυτού του αρχείου τοπικά.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La combinaison du schéma et des données dépasse 50 000 opérations de validation estimées. Réduisez leur taille ou validez un fragment à la fois.</source>
+        <target state="translated">Ο συνδυασμός του σχήματος και των δεδομένων υπερβαίνει τις 50 000 εκτιμώμενες λειτουργίες επικύρωσης. Μειώστε το μέγεθός τους ή επικυρώστε ένα τμήμα τη φορά.</target>
       </segment>
     </unit>
   </file>

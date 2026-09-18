@@ -49281,7 +49281,7 @@ Grace Hopper;grace@example.test;true;100</source>
         <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.html:148,149</note>
       </notes>
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 500 erreurs affichées</source>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 50 000 opérations estimées · 500 erreurs affichées</source>
       </segment>
     </unit>
     <unit id="json_schema_validating">
@@ -49812,9 +49812,17 @@ Grace Hopper;grace@example.test;true;100</source>
         <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
       </segment>
     </unit>
-    <unit id="json_schema_issue_runtime">
+    <unit id="json_schema_issue_validation_limit">
       <notes>
         <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:289</note>
+      </notes>
+      <segment>
+        <source>La combinaison du schéma et des données dépasse 50 000 opérations de validation estimées. Réduisez leur taille ou validez un fragment à la fois.</source>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <notes>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:290</note>
       </notes>
       <segment>
         <source>Le moteur a interrompu la validation de ce schéma.</source>
@@ -49822,7 +49830,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_issue_output">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:290</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:291</note>
       </notes>
       <segment>
         <source>Le rapport dépasserait la limite de sortie.</source>
@@ -49830,7 +49838,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_side_schema">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:293</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:294</note>
       </notes>
       <segment>
         <source> Schéma.</source>
@@ -49838,7 +49846,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_side_instance">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:295</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:296</note>
       </notes>
       <segment>
         <source> Données.</source>
@@ -49846,7 +49854,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_issue_path">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:297</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:298</note>
       </notes>
       <segment>
         <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
@@ -49854,7 +49862,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_issue_position">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:300</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:301</note>
       </notes>
       <segment>
         <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
@@ -49862,7 +49870,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_issue_detail">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:301</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:302</note>
       </notes>
       <segment>
         <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
@@ -49870,7 +49878,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_required">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:311</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:312</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
@@ -49878,7 +49886,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_additional">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:312</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:313</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
@@ -49886,7 +49894,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_type">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:313</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:314</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
@@ -49894,7 +49902,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_enum">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:314</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:315</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
@@ -49902,7 +49910,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_const">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:315</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:316</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
@@ -49910,7 +49918,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_format">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:316</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:317</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
@@ -49918,7 +49926,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_pattern">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:317</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:318</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
@@ -49926,7 +49934,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_min_length">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:318</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:319</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
@@ -49934,7 +49942,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_max_length">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:319</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:320</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
@@ -49942,7 +49950,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_minimum">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:320</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:321</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
@@ -49950,7 +49958,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_maximum">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:321</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:322</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
@@ -49958,7 +49966,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_exclusive_min">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:322</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:323</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
@@ -49966,7 +49974,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_exclusive_max">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:323</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:324</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
@@ -49974,7 +49982,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_min_items">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:324</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:325</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
@@ -49982,7 +49990,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_max_items">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:325</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:326</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
@@ -49990,7 +49998,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_unique">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:326</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:327</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
@@ -49998,7 +50006,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_min_properties">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:327</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:328</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
@@ -50006,7 +50014,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_max_properties">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:328</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:329</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
@@ -50014,7 +50022,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_multiple">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:329</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:330</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
@@ -50022,7 +50030,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_any_of">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:330</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:331</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
@@ -50030,7 +50038,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_one_of">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:331</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:332</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
@@ -50038,7 +50046,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_all_of">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:332</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:333</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
@@ -50046,7 +50054,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_not">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:333</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:334</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
@@ -50054,7 +50062,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_false">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:334</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:335</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
@@ -50062,7 +50070,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_unevaluated">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:335</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:336</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
@@ -50070,7 +50078,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_error_generic">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:338</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:339</note>
       </notes>
       <segment>
         <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
@@ -50078,7 +50086,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_root_path">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:349</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:350</note>
       </notes>
       <segment>
         <source>Racine</source>
@@ -50086,7 +50094,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_file_empty">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:392</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:393</note>
       </notes>
       <segment>
         <source>Le fichier sélectionné est vide.</source>
@@ -50094,7 +50102,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_file_large">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:394</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:395</note>
       </notes>
       <segment>
         <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
@@ -50102,7 +50110,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_file_format">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:396</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:397</note>
       </notes>
       <segment>
         <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
@@ -50110,7 +50118,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_file_encoding">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:397</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:398</note>
       </notes>
       <segment>
         <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
@@ -50118,7 +50126,7 @@ Grace Hopper;grace@example.test;true;100</source>
     </unit>
     <unit id="json_schema_file_error">
       <notes>
-        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:399</note>
+        <note category="location">src/app/features/json-schema-validator/presentation/json-schema-validator-tool.component.ts:400</note>
       </notes>
       <segment>
         <source>Impossible de lire ce fichier localement.</source>

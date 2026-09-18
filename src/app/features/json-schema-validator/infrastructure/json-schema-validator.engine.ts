@@ -6,6 +6,7 @@ import addFormats from 'ajv-formats';
 import {
   JSON_SCHEMA_MAX_ERRORS,
   JSON_SCHEMA_MAX_OUTPUT_CHARACTERS,
+  JSON_SCHEMA_MAX_VALIDATION_OPERATIONS,
   prepareJsonSchemaValidation,
   serializeJsonSchemaReport,
   type JsonObject,
@@ -24,6 +25,7 @@ import { applySafeJsonSchemaCorrections } from '../domain/json-schema-correction
 const AJV_OPTIONS: Options = {
   allErrors: true,
   coerceTypes: false,
+  logger: false,
   messages: false,
   removeAdditional: false,
   strict: false,
@@ -41,6 +43,9 @@ export function validateJsonSchemaDocuments(
   const preparation = prepareJsonSchemaValidation(schemaSource, instanceSource, options);
   if (!preparation.ok) return preparation.result;
   const prepared = preparation.prepared;
+  if (prepared.stats.schemaNodes * prepared.stats.instanceNodes > JSON_SCHEMA_MAX_VALIDATION_OPERATIONS) {
+    return engineFailure(prepared, 'validation-limit');
+  }
 
   try {
     const validator = compileValidator(prepared, options.validateFormats);
@@ -164,7 +169,7 @@ function createCorrectionCandidate(
 
 function engineFailure(
   prepared: PreparedJsonSchemaValidation,
-  code: 'schema-invalid' | 'validation-failed' | 'output-too-large',
+  code: 'schema-invalid' | 'validation-limit' | 'validation-failed' | 'output-too-large',
   error?: unknown,
 ): JsonSchemaValidationResult {
   const issue: JsonSchemaIssue = {

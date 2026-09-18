@@ -88481,8 +88481,8 @@ Grace Hopper;grace@example.test;true;100</target>
     </unit>
     <unit id="json_schema_limits_text">
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 500 erreurs affichées</source>
-        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> dosya başına · 100.000 değer · derinlik 64 · 500 hata görüntüleniyor</target>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> dosya başına · 100 000 değer · derinlik 64 · 50 000 tahmini işlem · 500 hata görüntülendi</target>
       </segment>
     </unit>
     <unit id="json_schema_validating">
@@ -89113,6 +89113,12 @@ Grace Hopper;grace@example.test;true;100</target>
       <segment>
         <source>Impossible de lire ce fichier localement.</source>
         <target state="translated">Bu dosyayı yerel olarak okuyamıyorum.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La combinaison du schéma et des données dépasse 50 000 opérations de validation estimées. Réduisez leur taille ou validez un fragment à la fois.</source>
+        <target state="translated">Şemanın ve verilerin kombinasyonu, tahmini 50 000 doğrulama işlemini aşıyor. Boyutlarını azaltın veya bir seferde bir parça doğrulayın.</target>
       </segment>
     </unit>
   </file>

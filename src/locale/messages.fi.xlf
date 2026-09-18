@@ -88472,8 +88472,8 @@ Grace Hopper;grace@example.test;true;100</target>
     </unit>
     <unit id="json_schema_limits_text">
       <segment>
-        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 500 erreurs affichées</source>
-        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> tiedostoa kohti · 100 000 arvoa · syvyys 64 · 500 virhettä näytetään</target>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> per tiedosto · 100 000 arvoa · syvyys 64 · 50 000 arvioitua toimintoa · 500 virhettä näytetään</target>
       </segment>
     </unit>
     <unit id="json_schema_validating">
@@ -89104,6 +89104,12 @@ Grace Hopper;grace@example.test;true;100</target>
       <segment>
         <source>Impossible de lire ce fichier localement.</source>
         <target state="translated">Tätä tiedostoa ei voida lukea paikallisesti.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La combinaison du schéma et des données dépasse 50 000 opérations de validation estimées. Réduisez leur taille ou validez un fragment à la fois.</source>
+        <target state="translated">Kaavion ja tietojen yhdistelmä ylittää 50 000 arvioitua validoimistoimintoa. Vähennä niiden kokoa tai validoi osa kerrallaan.</target>
       </segment>
     </unit>
   </file>

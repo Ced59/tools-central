@@ -173,7 +173,7 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.correction).toBeNull();
   });
 
-  it('caps the exposed error collection while preserving the total', () => {
+  it('caps the exposed error collection while preserving the bounded total', () => {
     const properties = Object.fromEntries(
       Array.from({ length: JSON_SCHEMA_MAX_ERRORS + 1 }, (_, index) => [`field${String(index)}`, { type: 'string' }]),
     );
@@ -186,6 +186,21 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.errors).toHaveLength(JSON_SCHEMA_MAX_ERRORS);
     expect(result.totalErrors).toBe(JSON_SCHEMA_MAX_ERRORS + 1);
     expect(result.errorsTruncated).toBe(true);
+  });
+
+  it('bounds multiplicative array and allOf failures before Ajv materializes them all', () => {
+    const schema = JSON.stringify({
+      type: 'array',
+      items: {
+        allOf: Array.from({ length: 20 }, () => ({ type: 'string' })),
+      },
+    });
+    const instance = JSON.stringify(Array.from({ length: 2_000 }, () => 42));
+    const result = validateJsonSchemaDocuments(schema, instance, { draft: 'auto', validateFormats: true });
+    expect(result.ok).toBe(false);
+    expect(result.issues[0].code).toBe('validation-limit');
+    expect(result.totalErrors).toBe(0);
+    expect(result.errors).toEqual([]);
   });
 
   it('includes only normalized diagnostics in the report', () => {

@@ -16,6 +16,7 @@ export const JSON_SCHEMA_MAX_ERRORS = 500;
 export const JSON_SCHEMA_MAX_PATTERN_CHARACTERS = 500;
 export const JSON_SCHEMA_MAX_PATTERNS = 200;
 export const JSON_SCHEMA_MAX_OUTPUT_CHARACTERS = 4_000_000;
+export const JSON_SCHEMA_MAX_VALIDATION_OPERATIONS = 50_000;
 
 export type JsonSchemaDraftMode = 'auto' | JsonSchemaDraft;
 export type JsonSchemaDraft = 'draft-07' | 'draft-2019-09' | 'draft-2020-12';
@@ -35,6 +36,7 @@ export type JsonSchemaIssueCode =
   | 'external-reference'
   | 'pattern-limit'
   | 'schema-invalid'
+  | 'validation-limit'
   | 'validation-failed'
   | 'output-too-large';
 
@@ -436,10 +438,8 @@ function pushSubschemas(
     const value = schema[keyword];
     if (isObject(value)) pushSchemaMap(value, appendPointer(path, keyword), stack);
   }
-  if (draft === 'draft-07') {
-    const dependencies = schema['dependencies'];
-    if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
-  }
+  const dependencies = schema['dependencies'];
+  if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
 }
 
 function pushSchemaArray(
