@@ -367,33 +367,44 @@ class StrictJsonParser {
   }
 }
 
-function compareValues(left: JsonValue, right: JsonValue, path: string, state: ComparisonState): void {
-  if (isIgnored(path, state.ignoredPaths)) return;
+function compareValues(
+  left: JsonValue,
+  right: JsonValue,
+  path: string,
+  state: ComparisonState,
+  leftPath = path,
+  rightPath = path,
+): void {
+  if (isIgnored(leftPath, state.ignoredPaths) || isIgnored(rightPath, state.ignoredPaths)) return;
   const leftType = jsonType(left);
   const rightType = jsonType(right);
   if (leftType !== rightType) {
-    addChange(state, { kind: 'type-changed', path, before: left, after: right });
+    addChange(state, { kind: 'type-changed', path, before: left, after: right }, leftPath, rightPath);
     return;
   }
   if (Array.isArray(left) && Array.isArray(right)) {
     if (state.options.arrayMode === 'key' && shouldUseKeyMode(left, right)) {
-      compareArraysByKey(left, right, path, state);
+      compareArraysByKey(left, right, path, leftPath, rightPath, state);
     } else {
-      compareArraysByIndex(left, right, path, state);
+      compareArraysByIndex(left, right, path, leftPath, rightPath, state);
     }
     return;
   }
   if (isRecord(left) && isRecord(right)) {
-    compareObjects(left, right, path, state);
+    compareObjects(left, right, path, leftPath, rightPath, state);
     return;
   }
-  if (!Object.is(left, right)) addChange(state, { kind: 'changed', path, before: left, after: right });
+  if (!Object.is(left, right)) {
+    addChange(state, { kind: 'changed', path, before: left, after: right }, leftPath, rightPath);
+  }
 }
 
 function compareObjects(
   left: Readonly<Record<string, JsonValue>>,
   right: Readonly<Record<string, JsonValue>>,
   path: string,
+  leftPath: string,
+  rightPath: string,
   state: ComparisonState,
 ): void {
   const leftKeys = Object.keys(left).sort(compareText);
@@ -402,14 +413,20 @@ function compareObjects(
   const leftSet = new Set(leftKeys);
   for (const key of leftKeys) {
     const childPath = appendPointer(path, key);
-    if (isIgnored(childPath, state.ignoredPaths)) continue;
-    if (!rightSet.has(key)) addChange(state, { kind: 'removed', path: childPath, before: left[key] });
-    else compareValues(left[key], right[key], childPath, state);
+    const leftChildPath = appendPointer(leftPath, key);
+    const rightChildPath = appendPointer(rightPath, key);
+    if (isIgnored(leftChildPath, state.ignoredPaths)) continue;
+    if (!rightSet.has(key)) {
+      addChange(state, { kind: 'removed', path: childPath, before: left[key] }, leftChildPath);
+    } else {
+      compareValues(left[key], right[key], childPath, state, leftChildPath, rightChildPath);
+    }
   }
   for (const key of rightKeys) {
     const childPath = appendPointer(path, key);
-    if (!leftSet.has(key) && !isIgnored(childPath, state.ignoredPaths)) {
-      addChange(state, { kind: 'added', path: childPath, after: right[key] });
+    const rightChildPath = appendPointer(rightPath, key);
+    if (!leftSet.has(key) && !isIgnored(rightChildPath, state.ignoredPaths)) {
+      addChange(state, { kind: 'added', path: childPath, after: right[key] }, undefined, rightChildPath);
     }
   }
 }
@@ -418,22 +435,33 @@ function compareArraysByIndex(
   left: readonly JsonValue[],
   right: readonly JsonValue[],
   path: string,
+  leftPath: string,
+  rightPath: string,
   state: ComparisonState,
 ): void {
   const sharedLength = Math.min(left.length, right.length);
   for (let index = 0; index < sharedLength; index += 1) {
-    compareValues(left[index], right[index], appendPointer(path, String(index)), state);
+    compareValues(
+      left[index],
+      right[index],
+      appendPointer(path, String(index)),
+      state,
+      appendPointer(leftPath, String(index)),
+      appendPointer(rightPath, String(index)),
+    );
   }
   for (let index = left.length - 1; index >= right.length; index -= 1) {
     const childPath = appendPointer(path, String(index));
-    if (!isIgnored(childPath, state.ignoredPaths)) {
-      addChange(state, { kind: 'removed', path: childPath, before: left[index] });
+    const leftChildPath = appendPointer(leftPath, String(index));
+    if (!isIgnored(leftChildPath, state.ignoredPaths)) {
+      addChange(state, { kind: 'removed', path: childPath, before: left[index] }, leftChildPath);
     }
   }
   for (let index = left.length; index < right.length; index += 1) {
     const childPath = appendPointer(path, String(index));
-    if (!isIgnored(childPath, state.ignoredPaths)) {
-      addChange(state, { kind: 'added', path: childPath, after: right[index] });
+    const rightChildPath = appendPointer(rightPath, String(index));
+    if (!isIgnored(rightChildPath, state.ignoredPaths)) {
+      addChange(state, { kind: 'added', path: childPath, after: right[index] }, undefined, rightChildPath);
     }
   }
 }
@@ -442,21 +470,27 @@ function compareArraysByKey(
   left: readonly JsonValue[],
   right: readonly JsonValue[],
   path: string,
+  leftPath: string,
+  rightPath: string,
   state: ComparisonState,
 ): void {
-  const leftItems = indexArrayByKey(left, path, state.keySegments);
-  const rightItems = indexArrayByKey(right, path, state.keySegments);
+  const leftItems = indexArrayByKey(left, leftPath, state.keySegments);
+  const rightItems = indexArrayByKey(right, rightPath, state.keySegments);
   for (const item of leftItems.ordered) {
     const counterpart = rightItems.byKey.get(item.stableKey);
     const logicalPath = appendLogicalKey(path, state.options.arrayKey, item.displayKey);
-    if (isIgnored(path, state.ignoredPaths)) continue;
+    const leftItemPath = appendPointer(leftPath, String(item.index));
+    const rightItemPath = counterpart
+      ? appendPointer(rightPath, String(counterpart.index))
+      : leftItemPath;
+    if (isIgnored(leftItemPath, state.ignoredPaths) || isIgnored(rightItemPath, state.ignoredPaths)) continue;
     if (!counterpart) {
       addChange(state, {
         kind: 'removed',
         path: logicalPath,
         before: item.value,
         beforeIndex: item.index,
-      });
+      }, leftItemPath);
       continue;
     }
     if (item.index !== counterpart.index) {
@@ -467,16 +501,18 @@ function compareArraysByKey(
         afterIndex: counterpart.index,
       });
     }
-    compareValues(item.value, counterpart.value, logicalPath, state);
+    compareValues(item.value, counterpart.value, logicalPath, state, leftItemPath, rightItemPath);
   }
   for (const item of rightItems.ordered) {
     if (leftItems.byKey.has(item.stableKey)) continue;
+    const rightItemPath = appendPointer(rightPath, String(item.index));
+    if (isIgnored(rightItemPath, state.ignoredPaths)) continue;
     addChange(state, {
       kind: 'added',
       path: appendLogicalKey(path, state.options.arrayKey, item.displayKey),
       after: item.value,
       afterIndex: item.index,
-    });
+    }, undefined, rightItemPath);
   }
 }
 
@@ -500,7 +536,7 @@ function indexArrayByKey(
     if (byKey.has(stableKey)) {
       throw new JsonDiffError('array-key-duplicate', path, previewValue(key));
     }
-    const item = { stableKey, displayKey: previewValue(key), value, index };
+    const item = { stableKey, displayKey: JSON.stringify(key), value, index };
     ordered.push(item);
     byKey.set(stableKey, item);
   }
@@ -523,7 +559,7 @@ function buildPatch(left: JsonValue, right: JsonValue, path: string, state: Comp
     for (let index = left.length; index < right.length; index += 1) {
       const childPath = appendPointer(path, String(index));
       if (!isIgnored(childPath, state.ignoredPaths)) {
-        addPatch(state, { op: 'add', path: appendPointer(path, '-'), value: right[index] });
+        addPatch(state, { op: 'add', path: appendPointer(path, '-'), value: right[index] }, childPath);
       }
     }
     return;
@@ -553,14 +589,57 @@ function buildPatch(left: JsonValue, right: JsonValue, path: string, state: Comp
   if (!deepEqual(left, right)) addPatch(state, { op: 'replace', path, value: right });
 }
 
-function addChange(state: ComparisonState, change: FullChange): void {
+function addChange(
+  state: ComparisonState,
+  change: FullChange,
+  beforePath = change.path,
+  afterPath = change.path,
+): void {
   if (state.changes.length >= JSON_DIFF_MAX_CHANGES) throw new JsonDiffError('change-limit');
-  state.changes.push(change);
+  state.changes.push({
+    ...change,
+    ...(change.before === undefined
+      ? {}
+      : { before: sanitizeForExport(change.before, beforePath, state.ignoredPaths) }),
+    ...(change.after === undefined
+      ? {}
+      : { after: sanitizeForExport(change.after, afterPath, state.ignoredPaths) }),
+  });
 }
 
-function addPatch(state: ComparisonState, operation: JsonPatchOperation): void {
+function addPatch(
+  state: ComparisonState,
+  operation: JsonPatchOperation,
+  valuePath = operation.path,
+): void {
   if (state.patch.length >= JSON_DIFF_MAX_CHANGES) throw new JsonDiffError('change-limit');
-  state.patch.push(operation);
+  state.patch.push(operation.value === undefined
+    ? operation
+    : { ...operation, value: sanitizeForExport(operation.value, valuePath, state.ignoredPaths) });
+}
+
+function sanitizeForExport(
+  value: JsonValue,
+  path: string,
+  ignoredPaths: ReadonlySet<string>,
+): JsonValue {
+  if (Array.isArray(value)) {
+    return value.map((item, index) => {
+      const childPath = appendPointer(path, String(index));
+      return isIgnored(childPath, ignoredPaths)
+        ? null
+        : sanitizeForExport(item, childPath, ignoredPaths);
+    });
+  }
+  if (!isRecord(value)) return value;
+  const sanitized = Object.create(null) as Record<string, JsonValue>;
+  for (const key of Object.keys(value)) {
+    const childPath = appendPointer(path, key);
+    if (!isIgnored(childPath, ignoredPaths)) {
+      sanitized[key] = sanitizeForExport(value[key], childPath, ignoredPaths);
+    }
+  }
+  return sanitized;
 }
 
 function parsePointerList(source: string): ReadonlySet<string> {

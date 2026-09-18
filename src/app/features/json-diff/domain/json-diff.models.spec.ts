@@ -145,6 +145,58 @@ describe('compareJsonDocuments', () => {
     expect(result.patch).toBe('[]');
   });
 
+  it('retire les descendants ignorés des objets ajoutés dans le rapport et le patch', () => {
+    const result = compareJsonDocuments(
+      '{}',
+      '{"account":{"name":"Ada","secret":"secret-token"}}',
+      { ...DEFAULTS, ignoredPaths: '/account/secret' },
+    );
+
+    expect(result.ok).toBe(true);
+    expect(result.changes[0]).toMatchObject({
+      kind: 'added',
+      path: '/account',
+      after: '{"name":"Ada"}',
+    });
+    expect(JSON.parse(result.patch)).toEqual([
+      { op: 'add', path: '/account', value: { name: 'Ada' } },
+    ]);
+    expect(result.report).not.toContain('secret-token');
+    expect(result.patch).not.toContain('secret-token');
+  });
+
+  it('applique les chemins ignorés aux index réels avant de construire un chemin par clé', () => {
+    const result = compareJsonDocuments(
+      '[{"id":"a","secret":"avant","keep":1}]',
+      '[{"id":"a","secret":"après","keep":1}]',
+      { ...DEFAULTS, arrayMode: 'key', ignoredPaths: '/0/secret' },
+    );
+
+    expect(result.ok).toBe(true);
+    expect(result.equivalent).toBe(true);
+    expect(result.changes).toEqual([]);
+    expect(result.patch).toBe('[]');
+  });
+
+  it('conserve les identifiants complets et distincts dans les chemins des tableaux par clé', () => {
+    const prefix = 'x'.repeat(260);
+    const first = `${prefix}a`;
+    const second = `${prefix}b`;
+    const result = compareJsonDocuments(
+      JSON.stringify([{ id: first, value: 1 }, { id: second, value: 1 }]),
+      JSON.stringify([{ id: first, value: 2 }, { id: second, value: 2 }]),
+      { ...DEFAULTS, arrayMode: 'key' },
+    );
+    const report = JSON.parse(result.report) as { changes: Array<{ path: string }> };
+    const paths = report.changes.map(change => change.path);
+
+    expect(result.ok).toBe(true);
+    expect(paths).toHaveLength(2);
+    expect(new Set(paths).size).toBe(2);
+    expect(paths[0]).toContain(`${first}"/value`);
+    expect(paths[1]).toContain(`${second}"/value`);
+  });
+
   it('n’ajoute ni ne retire un élément de tableau dont le chemin est ignoré', () => {
     const added = compareJsonDocuments('["a"]', '["a","volatile"]', {
       ...DEFAULTS,
