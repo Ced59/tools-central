@@ -1057,6 +1057,23 @@ describe('inspectPdfStructuralSignals', () => {
     expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
   });
 
+  it('traite un index xref null comme la plage par défaut', () => {
+    const body = '%PDF-1.7\n';
+    const xrefOffset = body.length;
+    const pdf = joinBytes(
+      body,
+      '1 0 obj\n<< /Type /XRef /Size 2 /W [1 4 2] /Index null /Length 14 >>\n',
+      'stream\n',
+      encodeXrefRow(0, 0, 65_535),
+      encodeXrefRow(1, xrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    );
+
+    expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+  });
+
   it('résout un nom de filtre indirect compressé depuis la xref active', () => {
     const filteredPayload = deflate(new Uint8Array());
     const filterNameCarrier = new TextEncoder().encode('6 0 /FlateDecode');

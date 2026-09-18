@@ -3391,13 +3391,15 @@ function parseCriticalDictionary(
     if (xrefIndexValueStarts.length > 1) throw new Error('Invalid PDF xref index');
     if (xrefIndexValueStarts.length === 1) {
       const xrefIndexValueStart = xrefIndexValueStarts[0];
-      const value = readUnsignedIntegerArray(
-        data,
-        xrefIndexValueStart,
-        2 * (PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
-      );
-      if (value.values.length % 2 !== 0) throw new Error('Invalid PDF xref index');
-      xrefIndex = value.values;
+      if (!matchesKeyword(data, xrefIndexValueStart, 'null')) {
+        const value = readUnsignedIntegerArray(
+          data,
+          xrefIndexValueStart,
+          2 * (PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
+        );
+        if (value.values.length % 2 !== 0) throw new Error('Invalid PDF xref index');
+        xrefIndex = value.values;
+      }
     }
   }
   if (semanticType === 'Trailer' || semanticType === 'XRef') {
