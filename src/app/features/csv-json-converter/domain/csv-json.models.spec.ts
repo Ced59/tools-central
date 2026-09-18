@@ -144,6 +144,17 @@ describe('convertCsvJson', () => {
     expect(result.issues.some(issue => issue.code === 'column-limit')).toBe(true);
   });
 
+  it('applique la limite de cellule aux noms définis par le mapping', () => {
+    const result = convertCsvJson('value\nx', {
+      ...CSV_DEFAULTS,
+      mapping: `value => ${'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS + 1)}`,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues).toContainEqual(expect.objectContaining({ code: 'cell-limit', row: 1 }));
+  });
+
   it('interrompt la sérialisation avant de matérialiser une sortie trop grande', () => {
     const mapping = Array.from(
       { length: CSV_JSON_MAX_COLUMNS },
@@ -467,5 +478,16 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.output).toBe('');
     expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
+  });
+
+  it('protège aussi une formule précédée d’un saut de ligne', () => {
+    const result = convertCsvJson(JSON.stringify([{ valeur: '\n=2+2' }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(true);
+    expect(result.output).toContain('"\'\n=2+2"');
+    expect(result.issues.some(issue => issue.code === 'spreadsheet-formula-protected')).toBe(true);
   });
 });

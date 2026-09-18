@@ -562,6 +562,10 @@ function parseMapping(
   state: MutableConversionState,
 ): ColumnMapping[] {
   if (!rawMapping.trim()) return sourceHeaders.map(header => ({ source: header, output: header }));
+  if (rawMapping.length > CSV_JSON_MAX_SOURCE_CHARACTERS) {
+    addIssue(state, 'mapping-invalid', 'error');
+    return [];
+  }
   const sourceSet = new Set(sourceHeaders);
   const outputs = new Set<string>();
   const mapping: ColumnMapping[] = [];
@@ -573,6 +577,10 @@ function parseMapping(
       continue;
     }
     const { source, output } = parsedLine;
+    if (source.length > CSV_JSON_MAX_CELL_CHARACTERS || output.length > CSV_JSON_MAX_CELL_CHARACTERS) {
+      addIssue(state, 'cell-limit', 'error', index + 1);
+      continue;
+    }
     if (!sourceSet.has(source)) addIssue(state, 'mapping-source-missing', 'error', index + 1, null, source);
     if (outputs.has(output)) addIssue(state, 'mapping-output-duplicate', 'error', index + 1, null, output);
     if (mapping.length >= CSV_JSON_MAX_COLUMNS) {
@@ -827,7 +835,7 @@ function encodeCsvRowWithinLimit(
 }
 
 function isSpreadsheetFormula(cell: string, value: unknown): boolean {
-  return typeof value === 'string' && /^[\t\r ]*[=+\-@]/u.test(cell);
+  return typeof value === 'string' && /^[\t\r\n ]*[=+\-@]/u.test(cell);
 }
 
 function previewValue(value: unknown): string {
