@@ -317,4 +317,16 @@ describe('convertCsvJson', () => {
     expect(result.ok).toBe(false);
     expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
   });
+
+  it('inclut le préfixe de protection des formules dans la limite de cellule', () => {
+    const formula = `=${'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS - 1)}`;
+    const result = convertCsvJson(JSON.stringify([{ valeur: formula }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
+  });
 });

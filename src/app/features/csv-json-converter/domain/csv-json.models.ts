@@ -303,12 +303,12 @@ function convertJsonToCsv(
     const visibleValues = mapping.map((entry, columnIndex) => {
       const value = row[entry.source];
       const cell = csvScalar(value);
-      if (cell.length > CSV_JSON_MAX_CELL_CHARACTERS) {
-        addIssue(state, 'cell-limit', 'error', rowIndex + 1, columnIndex + 1);
-      }
       const protectedCell = options.protectSpreadsheetFormulas && isSpreadsheetFormula(cell, value)
         ? `'${cell}`
         : cell;
+      if (protectedCell.length > CSV_JSON_MAX_CELL_CHARACTERS) {
+        addIssue(state, 'cell-limit', 'error', rowIndex + 1, columnIndex + 1);
+      }
       if (protectedCell !== cell) protectedFormulaCount += 1;
       return protectedCell;
     });
