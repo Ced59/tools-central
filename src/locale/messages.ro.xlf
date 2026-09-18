@@ -86409,6 +86409,675 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Ecran</target>
       </segment>
     </unit>
+    <unit id="group_dev_data_title">
+      <segment>
+        <source>Données</source>
+        <target state="translated">Date</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_desc">
+      <segment>
+        <source>Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.</source>
+        <target state="translated">Convertiți, verificați și pregătiți formate de date structurate fără a trimite conținutul acestora.</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_title">
+      <segment>
+        <source>Conversion tabulaire</source>
+        <target state="translated">Conversie tabelară</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_desc">
+      <segment>
+        <source>Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.</source>
+        <target state="translated">Transformați tabele între formate, controlând coloanele, tipurile și erorile.</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">Convertor CSV ↔ JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_desc">
+      <segment>
+        <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
+        <target state="translated">Convertiți local CSV și JSON cu separator automat, mapare a coloanelor, tipuri sigure, diagnostice și protecția formulelor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_title">
+      <segment>
+        <source>Convertir CSV et JSON sans perdre le contrôle des colonnes</source>
+        <target state="translated">Convertiți CSV și JSON fără a pierde controlul coloanelor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_lead">
+      <segment>
+        <source>Ce convertisseur transforme localement un tableau CSV en objets JSON, ou un tableau d’objets JSON en CSV. Il détecte les séparateurs, respecte les champs multilignes, permet de sélectionner et renommer les colonnes, montre les anomalies avant export et n’envoie aucune valeur vers un serveur.</source>
+        <target state="translated">Acest convertor transformă local un tabel CSV în obiecte JSON sau un tabel de obiecte JSON în CSV. Detectează separatoarele, respectă câmpurile pe mai multe linii, permite selectarea și redenumirea coloanelor, arată anomaliile înainte de export și nu trimite nicio valoare către un server.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">Cazuri de utilizare</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_title">
+      <segment>
+        <source>Préparer un export CSV pour une API</source>
+        <target state="translated">Pregătiți un export CSV pentru o API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_text">
+      <segment>
+        <source>Transformez des lignes provenant d’un tableur en tableau JSON, conservez les identifiants à zéro initial et activez seulement l’inférence des nombres, booléens et valeurs nulles lorsque le schéma le permet.</source>
+        <target state="translated">Transformați rânduri dintr-un tabel într-un tabel JSON, păstrați identificatorii cu zero inițial și activați doar inferența numerelor, booleanilor și valorilor nule atunci când schema permite.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_title">
+      <segment>
+        <source>Rendre un JSON lisible dans un tableur</source>
+        <target state="translated">Faceți un JSON lizibil într-un tabel</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_text">
+      <segment>
+        <source>Aplatissez les objets imbriqués avec des chemins pointés, choisissez le séparateur attendu par votre environnement et ajoutez un BOM UTF-8 si le logiciel cible l’exige.</source>
+        <target state="translated">Aplatizați obiectele imbricate cu căi punctate, alegeți separatorul așteptat de mediu și adăugați un BOM UTF-8 dacă software-ul țintă o cere.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_title">
+      <segment>
+        <source>Renommer et filtrer sans script jetable</source>
+        <target state="translated">Redenumiți și filtrați fără scripturi de unică folosință</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_text">
+      <segment>
+        <source>Déclarez un mapping « source =&gt; sortie » pour sélectionner les colonnes utiles, les réordonner et produire des noms stables sans modifier le fichier d’origine.</source>
+        <target state="translated">Declarați o mapare „sursă => ieșire” pentru a selecta coloanele utile, a le reordona și a produce nume stabile fără a modifica fișierul original.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Metodă recomandată</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_1">
+      <segment>
+        <source>Commencez sans mapping et vérifiez le séparateur détecté, les en-têtes et l’aperçu. Les fichiers CSV européens utilisent souvent le point-virgule lorsque la virgule sert de séparateur décimal, tandis que les TSV utilisent une tabulation.</source>
+        <target state="translated">Începeți fără mapare și verificați separatorul detectat, anteturile și previzualizarea. Fișierele CSV europene folosesc adesea punct și virgulă atunci când virgula servește ca separator zecimal, în timp ce TSV folosesc o tabulare.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_2">
+      <segment>
+        <source>Examinez chaque diagnostic de largeur, d’en-tête vide ou dupliqué. L’outil complète les cellules absentes et crée des noms stables pour éviter l’écrasement, mais cette tolérance ne remplace pas la correction de la source.</source>
+        <target state="translated">Examinați fiecare diagnostic de lățime, antet gol sau duplicat. Instrumentul completează celulele lipsă și creează nume stabile pentru a evita suprascrierea, dar această toleranță nu înlocuiește corectarea sursei.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_3">
+      <segment>
+        <source>Ajoutez ensuite le mapping dans l’ordre attendu par le consommateur. Pour JSON vers CSV, utilisez les chemins pointés affichés dans l’aperçu, par exemple « profil.nom =&gt; nom ».</source>
+        <target state="translated">Adăugați apoi maparea în ordinea așteptată de consumator. Pentru JSON către CSV, utilizați căile punctate afișate în previzualizare, de exemplu „profil.nume => nume”.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing">
+      <segment>
+        <source>Types et fidélité</source>
+        <target state="translated">Tipuri și fidelitate</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_title">
+      <segment>
+        <source>Chaînes par défaut</source>
+        <target state="translated">Șiruri implicite</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_text">
+      <segment>
+        <source>Désactivez l’inférence lorsque les valeurs sont des codes, références ou numéros de téléphone. Une valeur comme 00123 reste toujours une chaîne afin de préserver ses zéros.</source>
+        <target state="translated">Dezactivați inferența atunci când valorile sunt coduri, referințe sau numere de telefon. O valoare precum 00123 rămâne întotdeauna un șir pentru a păstra zerourile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_title">
+      <segment>
+        <source>Inférence limitée</source>
+        <target state="translated">Inferență limitată</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_text">
+      <segment>
+        <source>Le mode typé reconnaît true, false, null et les nombres finis représentables sans perte d’entier. Les dates restent des chaînes : leur fuseau et leur calendrier ne sont jamais devinés.</source>
+        <target state="translated">Modul tipizat recunoaște true, false, null și numere finite reprezentabile fără pierdere de întreg. Datele rămân șiruri: fusul orar și calendarul lor nu sunt niciodată ghicite.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_title">
+      <segment>
+        <source>Objets imbriqués</source>
+        <target state="translated">Obiecte imbricate</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_text">
+      <segment>
+        <source>En JSON vers CSV, les objets deviennent des chemins pointés et les tableaux sont sérialisés dans une cellule JSON. La conversion inverse crée des clés plates, même si leur nom contient un point.</source>
+        <target state="translated">În JSON către CSV, obiectele devin căi punctate, iar tabelele sunt serializate într-o celulă JSON. Conversia inversă creează chei plate, chiar dacă numele lor conține un punct.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security">
+      <segment>
+        <source>Sécurité, limites et confidentialité</source>
+        <target state="translated">Securitate, limite și confidențialitate</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_1">
+      <segment>
+        <source>Le traitement s’effectue dans un Web Worker éphémère. Les fichiers restent dans le navigateur et aucune requête réseau n’est nécessaire pour convertir, copier ou télécharger la sortie.</source>
+        <target state="translated">Prelucrarea se desfășoară într-un Web Worker efemer. Fișierele rămân în browser și nu este necesară nicio cerere de rețea pentru a converti, copia sau descărca ieșirea.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_2">
+      <segment>
+        <source>La source est limitée à 4 millions de caractères ou 4 Mo pour un fichier, avec au plus 100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie.</source>
+        <target state="translated">Sursa este limitată la 4 milioane de caractere sau 4 MB pentru un fișier, cu maximum 100.000 de rânduri, 250 de coloane, 100.000 de caractere pe celulă și 16 milioane de caractere în ieșire.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_3">
+      <segment>
+        <source>Lors d’un export CSV, la protection optionnelle préfixe les textes commençant par =, +, - ou @. Elle réduit le risque d’exécution de formule à l’ouverture dans un tableur sans prétendre assainir un fichier pour tous les logiciels.</source>
+        <target state="translated">La un export CSV, protecția opțională prefixează textele care încep cu =, +, - sau @. Aceasta reduce riscul de execuție a formulei la deschiderea într-un tabel fără a pretinde că igienizează un fișier pentru toate software-urile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Întrebări frecvente</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q1">
+      <segment>
+        <source>Les retours de ligne dans une cellule CSV sont-ils conservés ?</source>
+        <target state="translated">Sunt păstrate liniile de întoarcere într-o celulă CSV?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a1">
+      <segment>
+        <source>Oui, lorsqu’ils se trouvent dans un champ entouré de guillemets doubles. Un guillemet littéral se note avec deux guillemets, conformément au format CSV courant.</source>
+        <target state="translated">Da, atunci când se află într-un câmp înconjurat de ghilimele duble. Un ghilimele literal se notează cu două ghilimele, conform formatului CSV obișnuit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q2">
+      <segment>
+        <source>Pourquoi mon JSON doit-il commencer par un tableau ?</source>
+        <target state="translated">De ce trebuie să înceapă JSON-ul meu cu un tablou?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a2">
+      <segment>
+        <source>Une feuille CSV représente une suite de lignes partageant des colonnes. Un objet JSON isolé ou un mélange de scalaires n’offre pas cette structure tabulaire ; la racine doit donc être un tableau d’objets.</source>
+        <target state="translated">O foaie CSV reprezintă o succesiune de rânduri care împărtășesc coloane. Un obiect JSON izolat sau un amestec de scalari nu oferă această structură tabulară; rădăcina trebuie să fie, așadar, un tablou de obiecte.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q3">
+      <segment>
+        <source>La conversion est-elle parfaitement réversible ?</source>
+        <target state="translated">Este conversia perfect reversibilă?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a3">
+      <segment>
+        <source>Non. CSV ne transporte ni schéma de types, ni structure imbriquée standard. Conservez le fichier source et vérifiez les types, valeurs nulles, tableaux et chemins aplatis avant d’utiliser la sortie.</source>
+        <target state="translated">Nu. CSV nu transportă nici schema de tipuri, nici structura imbricată standard. Păstrați fișierul sursă și verificați tipurile, valorile nule, tabelele și căile aplatizate înainte de a utiliza ieșirea.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip_title">
+      <segment>
+        <source>Tester un petit échantillon d’abord</source>
+        <target state="translated">Testați mai întâi un eșantion mic</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip">
+      <segment>
+        <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+        <target state="translated">Validați câteva rânduri reprezentative, inclusiv celulele goale, ghilimelele, separatoarele, liniile de întoarcere și identificatorii sensibili, apoi aplicați aceleași opțiuni fișierului complet.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">Convertor CSV ↔ JSON</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_subtitle">
+      <segment>
+        <source> Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée. </source>
+        <target state="translated">Convertiți, mapați și controlați tabelele local în mod local, cu previzualizarea erorilor și inferența tipurilor controlate.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_privacy">
+      <segment>
+        <source>Les fichiers et les valeurs restent dans votre navigateur.</source>
+        <target state="translated">Fișierele și valorile rămân în browserul dumneavoastră.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_title">
+      <segment>
+        <source>Préparer la conversion</source>
+        <target state="translated">Pregătiți conversia</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_subtitle">
+      <segment>
+        <source>Collez une source UTF-8 ou chargez un fichier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum.</source>
+        <target state="translated">Lipiciți o sursă UTF-8 sau încărcați un fișier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maxim.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_direction_aria">
+      <segment>
+        <source>Sens de conversion</source>
+        <target state="translated">Sensul conversiei</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_choose_file">
+      <segment>
+        <source>Choisir un fichier</source>
+        <target state="translated">Alegeți un fișier</target>
+      </segment>
+    </unit>
+
+    <unit id="csv_json_source_help">
+      <segment>
+        <source>UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</source>
+        <target state="translated">Numai UTF-8. Celulele, rândurile, coloanele și ieșirile sunt limitate înainte de procesare.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_label">
+      <segment>
+        <source>Séparateur CSV</source>
+        <target state="translated">Separator CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_auto">
+      <segment>
+        <source>Détection automatique</source>
+        <target state="translated">Detectare automată</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_comma">
+      <segment>
+        <source>Virgule</source>
+        <target state="translated">Virgulă</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_semicolon">
+      <segment>
+        <source>Point-virgule</source>
+        <target state="translated">Punct și virgulă</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_tab">
+      <segment>
+        <source>Tabulation</source>
+        <target state="translated">Tabulator</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_pipe">
+      <segment>
+        <source>Barre verticale</source>
+        <target state="translated">Bară verticală</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_trim">
+      <segment>
+        <source>Supprimer les espaces en bord de cellule</source>
+        <target state="translated">Eliminați spațiile de la marginea celulei</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_headers">
+      <segment>
+        <source>La première ligne contient les en-têtes</source>
+        <target state="translated">Primul rând conține antetele</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_types">
+      <segment>
+        <source>Inférer nombres, booléens et null</source>
+        <target state="translated">Inferați numere, booleeni și null</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_formulas">
+      <segment>
+        <source>Neutraliser les formules de tableur dans les textes</source>
+        <target state="translated">Neutralizați formulele de calcul în texte</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_bom">
+      <segment>
+        <source>Ajouter un BOM UTF-8 pour Excel</source>
+        <target state="translated">Adăugați un BOM UTF-8 pentru Excel</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_title">
+      <segment>
+        <source>Mapping, sélection et ordre des colonnes</source>
+        <target state="translated">Mapare, selecție și ordine a coloanelor</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_help">
+      <segment>
+        <source>Une règle par ligne au format « source =&gt; sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</source>
+        <target state="translated">O regulă pe linie în formatul „sursă => ieșire”. Lăsați gol pentru a păstra toate coloanele. Cărțile JSON imbricate folosesc un punct.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_placeholder">
+      <segment>
+        <source>profil.nom =&gt; nom
+email =&gt; contact</source>
+        <target state="translated">profil.nume => nume
+email => contact</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_convert">
+      <segment>
+        <source>Convertir localement</source>
+        <target state="translated">Convertiți local</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Anulați</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_processing">
+      <segment>
+        <source>Conversion dans un Worker dédié…</source>
+        <target state="translated">Conversie într-un Worker dedicat…</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_result_title">
+      <segment>
+        <source>Résultat et contrôle</source>
+        <target state="translated">Rezultatul și controlul</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_rows">
+      <segment>
+        <source> lignes</source>
+        <target state="translated">rânduri</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_columns">
+      <segment>
+        <source> colonnes</source>
+        <target state="translated">coloane</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_separator">
+      <segment>
+        <source>séparateur</source>
+        <target state="translated">separator</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Copiat</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiați</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_download">
+      <segment>
+        <source>Télécharger .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></source>
+        <target state="translated">Descărcați .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></target>
+      </segment>
+    </unit>
+    <unit id="csv_json_diagnostics">
+      <segment>
+        <source>Diagnostics</source>
+        <target state="translated">Diagnosticare</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_title">
+      <segment>
+        <source>Aperçu des premières lignes</source>
+        <target state="translated">Previzualizarea primelor rânduri</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_aria">
+      <segment>
+        <source>Aperçu tabulaire défilable</source>
+        <target state="translated">Previzualizare tabelară derulantă</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_title">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">Ieșire</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_truncated">
+      <segment>
+        <source>L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Previzualizarea textului este trunchiată la 50.000 de caractere; descărcarea conține ieșirea completă.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limits_title">
+      <segment>
+        <source>Formats, limites et confidentialité</source>
+        <target state="translated">Formate, limite și confidențialitate</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_csv">
+      <segment>
+        <source>CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</source>
+        <target state="translated">CSV conform cu ghilimelele duble, separatori virgulă, punct și virgulă, tabulator sau bară verticală, cu linii de întoarcere încorporate.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_json">
+      <segment>
+        <source>JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</source>
+        <target state="translated">JSON sub formă de tablou de obiecte. Obiectele imbricate sunt aplatizate cu căi punctate; tablourile rămân serializate în JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_security">
+      <segment>
+        <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
+        <target state="translated">100 000 de linii, 250 de coloane, 100 000 de caractere pe celulă și 16 milioane de caractere la ieșire. Niciun rețea nu este utilizată.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Înapoi la instrumentele de date</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_error_generic">
+      <segment>
+        <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
+        <target state="translated">Conversia a eșuat. Verificați sursa și încercați din nou.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_empty">
+      <segment>
+        <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
+        <target state="translated">Sursa este goală. Lipiți CSV sau JSON înainte de conversie.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_source_large">
+      <segment>
+        <source>La source dépasse la limite de 4 000 000 de caractères.</source>
+        <target state="translated">Sursa depășește limita de 4 000 000 de caractere.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_output_large">
+      <segment>
+        <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
+        <target state="translated">Ieșirea ar depăși limita de securitate de 16 000 000 de caractere.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_rows">
+      <segment>
+        <source>Le tableau dépasse la limite de 100 000 lignes.</source>
+        <target state="translated">Tabelul depășește limita de 100 000 de linii.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_columns">
+      <segment>
+        <source>Le tableau dépasse la limite de 250 colonnes.</source>
+        <target state="translated">Tabelul depășește limita de 250 de coloane.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_cell">
+      <segment>
+        <source>Une cellule dépasse la limite de 100 000 caractères.</source>
+        <target state="translated">O celulă depășește limita de 100 000 de caractere.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_open">
+      <segment>
+        <source>Un champ CSV entre guillemets n’est pas fermé.</source>
+        <target state="translated">Un câmp CSV între ghilimele nu este închis.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_tail">
+      <segment>
+        <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
+        <target state="translated">Un caracter neașteptat urmează închiderea unui câmp CSV.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_width">
+      <segment>
+        <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
+        <target state="translated">Această linie nu are același număr de coloane ca antetul. Celulele lipsă sunt lăsate goale.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_empty">
+      <segment>
+        <source>Un nom de colonne vide a reçu un identifiant stable.</source>
+        <target state="translated">Un nume de coloană gol a primit un identificator stabil.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_duplicate">
+      <segment>
+        <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
+        <target state="translated">Un nume de coloană duplicat a fost suffixat pentru a evita suprascrierea datelor.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_delimiter">
+      <segment>
+        <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
+        <target state="translated">Separatorul nu a putut fi detectat; virgula este utilizată implicit.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping">
+      <segment>
+        <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
+        <target state="translated">Mapping-ul trebuie să conțină o regulă „sursă =&gt; ieșire” pe linie.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_source">
+      <segment>
+        <source>Une colonne source du mapping n’existe pas dans les données.</source>
+        <target state="translated">O coloană sursă din mapping nu există în date.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_output">
+      <segment>
+        <source>Deux règles utilisent le même nom de sortie.</source>
+        <target state="translated">Două reguli folosesc același nume de ieșire.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_invalid">
+      <segment>
+        <source>La source n’est pas un document JSON valide.</source>
+        <target state="translated">Sursa nu este un document JSON valid.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_root">
+      <segment>
+        <source>La racine JSON doit être un tableau d’objets.</source>
+        <target state="translated">Rădăcina JSON trebuie să fie un tablou de obiecte.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_row">
+      <segment>
+        <source>Chaque élément du tableau JSON doit être un objet.</source>
+        <target state="translated">Fiecare element din tabloul JSON trebuie să fie un obiect.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_depth">
+      <segment>
+        <source>Un objet dépasse 12 niveaux d’imbrication.</source>
+        <target state="translated">Un obiect depășește 12 niveluri de imbricare.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_formula">
+      <segment>
+        <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
+        <target state="translated">Celulele care seamănă cu formulele au fost prefixate cu un apostrof pentru a limita execuția lor într-un tabel.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_row">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
+        <target state="translated">Linia <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_position">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
+        <target state="translated">Linia <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, coloana <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Fișierul selectat este gol.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Fișierul depășește limita de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_format">
+      <segment>
+        <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
+        <target state="translated">Selectați un fișier CSV, TSV, TXT sau JSON.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Fișierul nu este codificat în UTF-8 valid.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Imposibil de citit acest fișier local.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_csv_label">
+      <segment>
+        <source>Source CSV</source>
+        <target state="translated">Sursă CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_json_label">
+      <segment>
+        <source>Source JSON</source>
+        <target state="translated">Sursă JSON</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

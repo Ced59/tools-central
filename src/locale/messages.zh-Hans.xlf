@@ -58,7 +58,7 @@
       
       
                             </unit>
-    
+
     
     <unit id="tools_available_title">
       <notes>
@@ -86435,6 +86435,675 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
       <segment>
         <source>Écran</source>
         <target state="translated">屏幕</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_title">
+      <segment>
+        <source>Données</source>
+        <target state="translated">数据</target>
+      </segment>
+    </unit>
+    <unit id="group_dev_data_desc">
+      <segment>
+        <source>Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.</source>
+        <target state="translated">转换、控制和准备结构化数据格式，而无需发送其内容。</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_title">
+      <segment>
+        <source>Conversion tabulaire</source>
+        <target state="translated">表格转换</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_convert_desc">
+      <segment>
+        <source>Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.</source>
+        <target state="translated">在控制列、类型和错误的同时，将表格转换为不同格式。</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON 转换器</target>
+      </segment>
+    </unit>
+    <unit id="tool_csv_json_converter_desc">
+      <segment>
+        <source>Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.</source>
+        <target state="translated">本地转换 CSV 和 JSON，具有自动分隔符、列映射、安全类型、诊断和公式保护。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_title">
+      <segment>
+        <source>Convertir CSV et JSON sans perdre le contrôle des colonnes</source>
+        <target state="translated">在不失去列控制的情况下转换 CSV 和 JSON</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_lead">
+      <segment>
+        <source>Ce convertisseur transforme localement un tableau CSV en objets JSON, ou un tableau d’objets JSON en CSV. Il détecte les séparateurs, respecte les champs multilignes, permet de sélectionner et renommer les colonnes, montre les anomalies avant export et n’envoie aucune valeur vers un serveur.</source>
+        <target state="translated">此转换器在本地将 CSV 表格转换为 JSON 对象，或将 JSON 对象数组转换为 CSV。它检测分隔符，尊重多行字段，允许选择和重命名列，在导出前显示异常，并且不将任何值发送到服务器。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_use_cases">
+      <segment>
+        <source>Cas d’utilisation</source>
+        <target state="translated">用例</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_title">
+      <segment>
+        <source>Préparer un export CSV pour une API</source>
+        <target state="translated">为 API 准备 CSV 导出</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc1_text">
+      <segment>
+        <source>Transformez des lignes provenant d’un tableur en tableau JSON, conservez les identifiants à zéro initial et activez seulement l’inférence des nombres, booléens et valeurs nulles lorsque le schéma le permet.</source>
+        <target state="translated">将来自电子表格的行转换为 JSON 表格，保留初始零的标识符，并仅在模式允许时启用数字、布尔值和空值的推断。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_title">
+      <segment>
+        <source>Rendre un JSON lisible dans un tableur</source>
+        <target state="translated">在电子表格中使 JSON 可读</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc2_text">
+      <segment>
+        <source>Aplatissez les objets imbriqués avec des chemins pointés, choisissez le séparateur attendu par votre environnement et ajoutez un BOM UTF-8 si le logiciel cible l’exige.</source>
+        <target state="translated">使用点路径扁平化嵌套对象，选择您的环境所需的分隔符，并在目标软件要求时添加 UTF-8 BOM。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_title">
+      <segment>
+        <source>Renommer et filtrer sans script jetable</source>
+        <target state="translated">无一次性脚本重命名和过滤</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_uc3_text">
+      <segment>
+        <source>Déclarez un mapping « source =&gt; sortie » pour sélectionner les colonnes utiles, les réordonner et produire des noms stables sans modifier le fichier d’origine.</source>
+        <target state="translated">声明一个 "源 => 输出" 的映射，以选择有用的列，重新排序并生成稳定的名称，而不修改原始文件。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_1">
+      <segment>
+        <source>Commencez sans mapping et vérifiez le séparateur détecté, les en-têtes et l’aperçu. Les fichiers CSV européens utilisent souvent le point-virgule lorsque la virgule sert de séparateur décimal, tandis que les TSV utilisent une tabulation.</source>
+        <target state="translated">从没有映射开始，检查检测到的分隔符、标题和预览。欧洲的 CSV 文件通常使用分号，而逗号作为十进制分隔符，而 TSV 使用制表符。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_2">
+      <segment>
+        <source>Examinez chaque diagnostic de largeur, d’en-tête vide ou dupliqué. L’outil complète les cellules absentes et crée des noms stables pour éviter l’écrasement, mais cette tolérance ne remplace pas la correction de la source.</source>
+        <target state="translated">检查每个宽度、空或重复标题的诊断。该工具会填补缺失的单元格并创建稳定的名称以避免覆盖，但这种容忍并不能替代源的修正。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_method_3">
+      <segment>
+        <source>Ajoutez ensuite le mapping dans l’ordre attendu par le consommateur. Pour JSON vers CSV, utilisez les chemins pointés affichés dans l’aperçu, par exemple « profil.nom =&gt; nom ».</source>
+        <target state="translated">然后按消费者期望的顺序添加映射。对于 JSON 到 CSV，使用预览中显示的点路径，例如 "profile.name => name"。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing">
+      <segment>
+        <source>Types et fidélité</source>
+        <target state="translated">类型和准确性</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_title">
+      <segment>
+        <source>Chaînes par défaut</source>
+        <target state="translated">默认字符串</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_strings_text">
+      <segment>
+        <source>Désactivez l’inférence lorsque les valeurs sont des codes, références ou numéros de téléphone. Une valeur comme 00123 reste toujours une chaîne afin de préserver ses zéros.</source>
+        <target state="translated">当值为代码、引用或电话号码时，禁用推断。像 00123 这样的值始终保持为字符串，以保留其前导零。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_title">
+      <segment>
+        <source>Inférence limitée</source>
+        <target state="translated">有限推断</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_safe_text">
+      <segment>
+        <source>Le mode typé reconnaît true, false, null et les nombres finis représentables sans perte d’entier. Les dates restent des chaînes : leur fuseau et leur calendrier ne sont jamais devinés.</source>
+        <target state="translated">类型模式识别 true、false、null 和可表示的有限数字。日期保持为字符串：它们的时区和日历永远不会被猜测。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_title">
+      <segment>
+        <source>Objets imbriqués</source>
+        <target state="translated">嵌套对象</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_typing_nested_text">
+      <segment>
+        <source>En JSON vers CSV, les objets deviennent des chemins pointés et les tableaux sont sérialisés dans une cellule JSON. La conversion inverse crée des clés plates, même si leur nom contient un point.</source>
+        <target state="translated">在 JSON 到 CSV 中，对象变为点路径，数组序列化为 JSON 单元格。反向转换创建平面键，即使它们的名称包含点。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security">
+      <segment>
+        <source>Sécurité, limites et confidentialité</source>
+        <target state="translated">安全性、限制和隐私</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_1">
+      <segment>
+        <source>Le traitement s’effectue dans un Web Worker éphémère. Les fichiers restent dans le navigateur et aucune requête réseau n’est nécessaire pour convertir, copier ou télécharger la sortie.</source>
+        <target state="translated">处理在一个临时 Web Worker 中进行。文件保留在浏览器中，转换、复制或下载输出不需要网络请求。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_2">
+      <segment>
+        <source>La source est limitée à 4 millions de caractères ou 4 Mo pour un fichier, avec au plus 100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie.</source>
+        <target state="translated">源限制为 400 万字符或 4 MB 的文件，最多 100,000 行、250 列、每个单元格 100,000 字符和 1600 万字符的输出。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_security_3">
+      <segment>
+        <source>Lors d’un export CSV, la protection optionnelle préfixe les textes commençant par =, +, - ou @. Elle réduit le risque d’exécution de formule à l’ouverture dans un tableur sans prétendre assainir un fichier pour tous les logiciels.</source>
+        <target state="translated">在导出 CSV 时，选项保护会为以 =、+、- 或 @ 开头的文本添加前缀。它降低了在电子表格中打开时执行公式的风险，而不声称为所有软件清理文件。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q1">
+      <segment>
+        <source>Les retours de ligne dans une cellule CSV sont-ils conservés ?</source>
+        <target state="translated">CSV 单元格中的换行符是否会被保留？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a1">
+      <segment>
+        <source>Oui, lorsqu’ils se trouvent dans un champ entouré de guillemets doubles. Un guillemet littéral se note avec deux guillemets, conformément au format CSV courant.</source>
+        <target state="translated">是的，当它们位于用双引号括起来的字段中时。字面引号用两个引号表示，符合常见的 CSV 格式。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q2">
+      <segment>
+        <source>Pourquoi mon JSON doit-il commencer par un tableau ?</source>
+        <target state="translated">为什么我的 JSON 必须以数组开头？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a2">
+      <segment>
+        <source>Une feuille CSV représente une suite de lignes partageant des colonnes. Un objet JSON isolé ou un mélange de scalaires n’offre pas cette structure tabulaire ; la racine doit donc être un tableau d’objets.</source>
+        <target state="translated">CSV 表格表示一系列共享列的行。孤立的 JSON 对象或标量混合不提供这种表格结构；根必须是对象数组。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_q3">
+      <segment>
+        <source>La conversion est-elle parfaitement réversible ?</source>
+        <target state="translated">转换是否完全可逆？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_a3">
+      <segment>
+        <source>Non. CSV ne transporte ni schéma de types, ni structure imbriquée standard. Conservez le fichier source et vérifiez les types, valeurs nulles, tableaux et chemins aplatis avant d’utiliser la sortie.</source>
+        <target state="translated">不。CSV 不传输类型模式，也不传输标准嵌套结构。保留源文件，并在使用输出之前检查类型、空值、数组和扁平路径。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip_title">
+      <segment>
+        <source>Tester un petit échantillon d’abord</source>
+        <target state="translated">先测试小样本</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_csv_json_tip">
+      <segment>
+        <source>Validez quelques lignes représentatives, dont les cellules vides, guillemets, séparateurs, retours de ligne et identifiants sensibles, puis appliquez les mêmes options au fichier complet.</source>
+        <target state="translated">验证一些具有代表性的行，包括空单元格、引号、分隔符、换行符和敏感标识符，然后将相同的选项应用于完整文件。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_title">
+      <segment>
+        <source>Convertisseur CSV ↔ JSON</source>
+        <target state="translated">CSV ↔ JSON 转换器</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_subtitle">
+      <segment>
+        <source> Convertissez, mappez et contrôlez vos tableaux localement, avec aperçu des erreurs et inférence de types maîtrisée. </source>
+        <target state="translated">在本地转换、映射和控制您的表格，带有错误预览和类型推断控制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_privacy">
+      <segment>
+        <source>Les fichiers et les valeurs restent dans votre navigateur.</source>
+        <target state="translated">文件和数值保留在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_title">
+      <segment>
+        <source>Préparer la conversion</source>
+        <target state="translated">准备转换</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_workspace_subtitle">
+      <segment>
+        <source>Collez une source UTF-8 ou chargez un fichier de <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum.</source>
+        <target state="translated">粘贴一个 UTF-8 源或加载一个最大为 <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> 的文件。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_direction_aria">
+      <segment>
+        <source>Sens de conversion</source>
+        <target state="translated">转换方向</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_choose_file">
+      <segment>
+        <source>Choisir un fichier</source>
+        <target state="translated">选择文件</target>
+      </segment>
+    </unit>
+
+    <unit id="csv_json_source_help">
+      <segment>
+        <source>UTF-8 uniquement. Les cellules, lignes, colonnes et sorties sont bornées avant traitement.</source>
+        <target state="translated">仅支持 UTF-8。单元格、行、列和输出在处理前会被限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_label">
+      <segment>
+        <source>Séparateur CSV</source>
+        <target state="translated">CSV 分隔符</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_auto">
+      <segment>
+        <source>Détection automatique</source>
+        <target state="translated">自动检测</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_comma">
+      <segment>
+        <source>Virgule</source>
+        <target state="translated">逗号</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_semicolon">
+      <segment>
+        <source>Point-virgule</source>
+        <target state="translated">分号</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_tab">
+      <segment>
+        <source>Tabulation</source>
+        <target state="translated">制表符</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_delimiter_pipe">
+      <segment>
+        <source>Barre verticale</source>
+        <target state="translated">竖线</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_trim">
+      <segment>
+        <source>Supprimer les espaces en bord de cellule</source>
+        <target state="translated">删除单元格边缘的空格</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_headers">
+      <segment>
+        <source>La première ligne contient les en-têtes</source>
+        <target state="translated">第一行包含标题</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_types">
+      <segment>
+        <source>Inférer nombres, booléens et null</source>
+        <target state="translated">推断数字、布尔值和 null</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_formulas">
+      <segment>
+        <source>Neutraliser les formules de tableur dans les textes</source>
+        <target state="translated">在文本中中和电子表格公式</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_bom">
+      <segment>
+        <source>Ajouter un BOM UTF-8 pour Excel</source>
+        <target state="translated">为 Excel 添加 UTF-8 BOM</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_title">
+      <segment>
+        <source>Mapping, sélection et ordre des colonnes</source>
+        <target state="translated">映射、选择和列顺序</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_help">
+      <segment>
+        <source>Une règle par ligne au format « source =&gt; sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</source>
+        <target state="translated">每行一条规则，格式为 "源 =&gt; 输出"。留空以保留所有列。嵌套 JSON 路径使用点。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_mapping_placeholder">
+      <segment>
+        <source>profil.nom =&gt; nom
+email =&gt; contact</source>
+        <target state="translated">profile.name =&gt; name
+email =&gt; contact</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_convert">
+      <segment>
+        <source>Convertir localement</source>
+        <target state="translated">本地转换</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">取消</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_processing">
+      <segment>
+        <source>Conversion dans un Worker dédié…</source>
+        <target state="translated">在专用工作线程中转换…</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_result_title">
+      <segment>
+        <source>Résultat et contrôle</source>
+        <target state="translated">结果和控制</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_rows">
+      <segment>
+        <source> lignes</source>
+        <target state="translated">行</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_columns">
+      <segment>
+        <source> colonnes</source>
+        <target state="translated">列</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_separator">
+      <segment>
+        <source>séparateur</source>
+        <target state="translated">分隔符</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">已复制</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_copy">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_download">
+      <segment>
+        <source>Télécharger .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></source>
+        <target state="translated">下载 .<ph id="0" equiv="INTERPOLATION" disp="{{ conversion.outputExtension }}"/></target>
+      </segment>
+    </unit>
+    <unit id="csv_json_diagnostics">
+      <segment>
+        <source>Diagnostics</source>
+        <target state="translated">诊断</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_title">
+      <segment>
+        <source>Aperçu des premières lignes</source>
+        <target state="translated">前几行预览</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_preview_aria">
+      <segment>
+        <source>Aperçu tabulaire défilable</source>
+        <target state="translated">可滚动的表格预览</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_title">
+      <segment>
+        <source>Sortie</source>
+        <target state="translated">输出</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_output_truncated">
+      <segment>
+        <source>L’aperçu texte est tronqué à 50 000 caractères ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">文本预览被截断为 50,000 个字符；下载包含完整输出。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limits_title">
+      <segment>
+        <source>Formats, limites et confidentialité</source>
+        <target state="translated">格式、限制和隐私</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_csv">
+      <segment>
+        <source>CSV conforme aux guillemets doubles, séparateurs virgule, point-virgule, tabulation ou barre verticale, avec retours de ligne intégrés.</source>
+        <target state="translated">CSV 符合双引号、逗号、分号、制表符或竖线分隔符，带有嵌入的换行符。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_json">
+      <segment>
+        <source>JSON sous forme de tableau d’objets. Les objets imbriqués sont aplatis avec des chemins pointés ; les tableaux restent sérialisés en JSON.</source>
+        <target state="translated">JSON 以对象数组的形式。嵌套对象被扁平化，使用点路径；数组保持以 JSON 序列化。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_limit_security">
+      <segment>
+        <source>100 000 lignes, 250 colonnes, 100 000 caractères par cellule et 16 millions de caractères en sortie. Aucun réseau n’est utilisé.</source>
+        <target state="translated">100,000 行，250 列，每个单元格 100,000 个字符，输出 1,600 万个字符。未使用任何网络。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">返回数据工具</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_error_generic">
+      <segment>
+        <source>La conversion a échoué. Vérifiez la source et réessayez.</source>
+        <target state="translated">转换失败。请检查源并重试。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_empty">
+      <segment>
+        <source>La source est vide. Collez du CSV ou du JSON avant la conversion.</source>
+        <target state="translated">源为空。在转换之前粘贴 CSV 或 JSON。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_source_large">
+      <segment>
+        <source>La source dépasse la limite de 4 000 000 de caractères.</source>
+        <target state="translated">源超过 4,000,000 个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_output_large">
+      <segment>
+        <source>La sortie dépasserait la limite de sécurité de 16 000 000 de caractères.</source>
+        <target state="translated">输出将超过 16,000,000 个字符的安全限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_rows">
+      <segment>
+        <source>Le tableau dépasse la limite de 100 000 lignes.</source>
+        <target state="translated">表格超过 100,000 行的限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_columns">
+      <segment>
+        <source>Le tableau dépasse la limite de 250 colonnes.</source>
+        <target state="translated">表格超过 250 列的限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_cell">
+      <segment>
+        <source>Une cellule dépasse la limite de 100 000 caractères.</source>
+        <target state="translated">一个单元格超过 100,000 个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_open">
+      <segment>
+        <source>Un champ CSV entre guillemets n’est pas fermé.</source>
+        <target state="translated">一个用引号括起来的 CSV 字段未关闭。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_quote_tail">
+      <segment>
+        <source>Un caractère inattendu suit la fermeture d’un champ CSV.</source>
+        <target state="translated">在 CSV 字段关闭后跟随一个意外字符。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_width">
+      <segment>
+        <source>Cette ligne n’a pas le même nombre de colonnes que l’en-tête. Les cellules absentes sont laissées vides.</source>
+        <target state="translated">该行的列数与标题不一致。缺失的单元格将留空。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_empty">
+      <segment>
+        <source>Un nom de colonne vide a reçu un identifiant stable.</source>
+        <target state="translated">一个空列名已获得稳定标识符。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_header_duplicate">
+      <segment>
+        <source>Un nom de colonne dupliqué a été suffixé pour éviter l’écrasement de données.</source>
+        <target state="translated">一个重复的列名已被后缀以避免数据覆盖。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_delimiter">
+      <segment>
+        <source>Le séparateur n’a pas pu être détecté ; la virgule est utilisée par défaut.</source>
+        <target state="translated">无法检测到分隔符；默认使用逗号。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping">
+      <segment>
+        <source>Le mapping doit contenir une règle « source =&gt; sortie » par ligne.</source>
+        <target state="translated">映射必须包含每行一个 "源 =&gt; 输出 " 的规则。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_source">
+      <segment>
+        <source>Une colonne source du mapping n’existe pas dans les données.</source>
+        <target state="translated">映射中的一个源列在数据中不存在。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_mapping_output">
+      <segment>
+        <source>Deux règles utilisent le même nom de sortie.</source>
+        <target state="translated">两个规则使用相同的输出名称。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_invalid">
+      <segment>
+        <source>La source n’est pas un document JSON valide.</source>
+        <target state="translated">源不是有效的 JSON 文档。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_root">
+      <segment>
+        <source>La racine JSON doit être un tableau d’objets.</source>
+        <target state="translated">JSON 根必须是对象数组。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_json_row">
+      <segment>
+        <source>Chaque élément du tableau JSON doit être un objet.</source>
+        <target state="translated">JSON 数组中的每个元素必须是一个对象。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_depth">
+      <segment>
+        <source>Un objet dépasse 12 niveaux d’imbrication.</source>
+        <target state="translated">一个对象超过 12 层嵌套。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_formula">
+      <segment>
+        <source>Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.</source>
+        <target state="translated">看起来像公式的单元格已被前缀一个撇号，以限制其在电子表格中的执行。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_row">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</source>
+        <target state="translated">行 <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_issue_position">
+      <segment>
+        <source> Ligne <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>, colonne <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</source>
+        <target state="translated">行 <ph id="0" equiv="row" disp="this.formatNumber(issue.row)"/>，列 <ph id="1" equiv="column" disp="this.formatNumber(issue.column)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">所选文件为空。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">文件超过 <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/> 的限制。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_format">
+      <segment>
+        <source>Sélectionnez un fichier CSV, TSV, TXT ou JSON.</source>
+        <target state="translated">请选择一个 CSV、TSV、TXT 或 JSON 文件。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">文件未使用有效的 UTF-8 编码。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">无法在本地读取此文件。</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_csv_label">
+      <segment>
+        <source>Source CSV</source>
+        <target state="translated">源 CSV</target>
+      </segment>
+    </unit>
+    <unit id="csv_json_source_json_label">
+      <segment>
+        <source>Source JSON</source>
+        <target state="translated">源 JSON</target>
       </segment>
     </unit>
   </file>

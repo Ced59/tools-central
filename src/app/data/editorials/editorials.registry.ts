@@ -12,6 +12,10 @@ export interface EditorialRegistryEntry {
  * Run: npm run editorials:gen
  */
 export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
+  'dev/data/csv-json-converter': {
+    available: true,
+    load: () => import('./dev/data/csv-json-converter.editorial'),
+  },
   'dev/ooxml/ooxml-sanitize-metadata': {
     available: true,
     load: () => import('./dev/ooxml/ooxml-sanitize-metadata.editorial'),

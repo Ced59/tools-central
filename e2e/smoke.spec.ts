@@ -603,3 +603,45 @@ test('PDF privacy inspector inventories hidden signals locally and remains respo
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+test('CSV JSON converter maps both directions locally and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/data/csv-json-converter');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Convertisseur CSV ↔ JSON');
+  await page.locator('#csv-json-source').fill(
+    'nom;email;actif\n"Ada; Lovelace";ada@example.test;true\nGrace Hopper;grace@example.test;false',
+  );
+  await page.locator('.mapping-panel summary').click();
+  await page.locator('.mapping-panel textarea').fill('email => contact\nnom => personne');
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Convertir localement' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+  const result = page.getByTestId('csv-json-result');
+  await expect(result).toContainText('2 lignes');
+  await expect(result.locator('pre')).toContainText('"contact": "ada@example.test"');
+  await expect(result.locator('table')).toContainText('Ada; Lovelace');
+
+  const downloadPromise = page.waitForEvent('download');
+  await result.getByRole('button', { name: 'Télécharger .json' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('conversion-csv-json.json');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  expect(JSON.parse(await readFile(path as string, 'utf8'))).toEqual([
+    { contact: 'ada@example.test', personne: 'Ada; Lovelace' },
+    { contact: 'grace@example.test', personne: 'Grace Hopper' },
+  ]);
+
+  await page.getByRole('button', { name: 'JSON → CSV' }).click();
+  await page.locator('#csv-json-source').fill('[{"profil":{"nom":"Ada"},"note":"=2+2"}]');
+  await page.locator('#csv-json-delimiter').selectOption('semicolon');
+  await page.getByRole('button', { name: 'Convertir localement' }).click();
+  await expect(result.locator('pre')).toContainText("'=2+2");
+  await expect(result).toContainText('formules ont été préfixées');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/data/csv-json-converter');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});

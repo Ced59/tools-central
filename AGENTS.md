@@ -280,7 +280,7 @@ Une fonctionnalité est terminée seulement si :
 
 ## 15. État du socle et ordre des prochains chantiers
 
-Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, plusieurs tranches verticales en Clean Architecture, un premier moteur PDF en Web Worker et des traitements de fichiers chargés à la demande dans des Workers avec des limites mémoire explicites. Les outils SEO `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor` et `software-application-schema-builder`, ainsi que `pdf-to-images`, `images-to-pdf`, `ooxml-sanitize-metadata` et `pdf-privacy-inspector`, servent de références récentes.
+Le socle livré pendant l’audit comprend Angular 22, Vitest, ESLint, les frontières automatisées, Playwright, le validateur de catalogue, le contrôle SEO de la sortie statique, la couverture minimale, une vraie 404, les icônes locales, plusieurs tranches verticales en Clean Architecture, un premier moteur PDF en Web Worker et des traitements de fichiers chargés à la demande dans des Workers avec des limites mémoire explicites. Les outils SEO `serp-snippet-preview`, `robots-txt-builder`, `sitemap-xml-builder`, `hreflang-checker`, `structured-data-extractor`, `html-head-auditor` et `software-application-schema-builder`, ainsi que `pdf-to-images`, `images-to-pdf`, `ooxml-sanitize-metadata`, `pdf-privacy-inspector` et `csv-json-converter`, servent de références récentes.
 
 Chaque ligne restante doit être une PR distincte :
 

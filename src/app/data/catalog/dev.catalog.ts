@@ -343,6 +343,35 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
     },
 
     // -------------------------------------------------------------------------
+    // Data formats
+    // -------------------------------------------------------------------------
+    data: {
+      title: $localize`:@@group_dev_data_title:Données`,
+      description: $localize`:@@group_dev_data_desc:Convertir, contrôler et préparer des formats de données structurées sans envoyer leur contenu.`,
+      icon: 'tc-icon tc-icon-table',
+      available: true,
+      subGroups: {
+        convert: {
+          title: $localize`:@@dev_data_sg_convert_title:Conversion tabulaire`,
+          description: $localize`:@@dev_data_sg_convert_desc:Transformer des tableaux entre formats tout en maîtrisant colonnes, types et erreurs.`,
+          order: 1,
+          tools: {
+            'csv-json-converter': {
+              title: $localize`:@@tool_csv_json_converter_title:Convertisseur CSV ↔ JSON`,
+              description: $localize`:@@tool_csv_json_converter_desc:Convertir localement CSV et JSON avec séparateur automatique, mapping des colonnes, types sûrs, diagnostics et protection des formules.`,
+              icon: 'tc-icon tc-icon-code',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/csv-json-converter/presentation/csv-json-converter-tool.component')
+                  .then(m => m.CsvJsonConverterToolComponent),
+            },
+          },
+        },
+      },
+    },
+
+    // -------------------------------------------------------------------------
     // OOXML
     // -------------------------------------------------------------------------
     ooxml: {
