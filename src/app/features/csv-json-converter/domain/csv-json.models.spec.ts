@@ -34,7 +34,7 @@ describe('convertCsvJson', () => {
 
   it('infère seulement les types sûrs et conserve les identifiants à zéro initial', () => {
     const result = convertCsvJson(
-      'code,count,ratio,empty,nil,yes,no\n00123,42,1.25,,null,true,false',
+      'code,count,ratio,precise,tiny,empty,nil,yes,no\n00123,42,1.25,0.1234567890123456789,1e-400,,null,true,false',
       CSV_DEFAULTS,
     );
 
@@ -42,6 +42,8 @@ describe('convertCsvJson', () => {
       code: '00123',
       count: 42,
       ratio: 1.25,
+      precise: '0.1234567890123456789',
+      tiny: '1e-400',
       empty: '',
       nil: null,
       yes: true,
@@ -96,6 +98,22 @@ describe('convertCsvJson', () => {
     expect(result.output.startsWith('\ufeffpersonne;identifiant;etiquettes;note\r\n')).toBe(true);
     expect(result.output).toContain('Ada;1;"[""math"",""code""]";\'=2+2');
     expect(result.issues.some(issue => issue.code === 'spreadsheet-formula-protected')).toBe(true);
+  });
+
+  it('protège aussi les en-têtes CSV issus des clés ou du mapping', () => {
+    const keyResult = convertCsvJson('[{"=2+2":"value"}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+    const mappingResult = convertCsvJson('[{"safe":"value"}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping: 'safe => @commande',
+    });
+
+    expect(keyResult.output).toBe("'=2+2\r\nvalue");
+    expect(mappingResult.output).toBe("'@commande\r\nvalue");
+    expect(keyResult.issues[0]?.code).toBe('spreadsheet-formula-protected');
   });
 
   it('rejette un JSON invalide, une racine non tabulaire et un mapping incohérent', () => {

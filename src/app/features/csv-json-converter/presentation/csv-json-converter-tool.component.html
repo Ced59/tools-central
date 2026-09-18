@@ -88,9 +88,9 @@
       </div>
 
       <details class="mapping-panel">
-        <summary i18n="@@csv_json_mapping_title">Mapping, sélection et ordre des colonnes</summary>
+        <summary id="csv-json-mapping-label" i18n="@@csv_json_mapping_title">Mapping, sélection et ordre des colonnes</summary>
         <p i18n="@@csv_json_mapping_help">Une règle par ligne au format « source => sortie ». Laissez vide pour conserver toutes les colonnes. Les chemins JSON imbriqués utilisent un point.</p>
-        <textarea rows="5" spellcheck="false" [value]="options().mapping" (input)="updateMapping($event)" i18n-placeholder="@@csv_json_mapping_placeholder" placeholder="profil.nom => nom&#10;email => contact"></textarea>
+        <textarea rows="5" spellcheck="false" aria-labelledby="csv-json-mapping-label" [value]="options().mapping" (input)="updateMapping($event)" i18n-placeholder="@@csv_json_mapping_placeholder" placeholder="profil.nom => nom&#10;email => contact"></textarea>
       </details>
 
       <div class="actions">

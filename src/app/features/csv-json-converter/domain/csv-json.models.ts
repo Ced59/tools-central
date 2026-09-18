@@ -239,9 +239,16 @@ function convertJsonToCsv(
   const delimiter = selectedOutputDelimiter(options.delimiter);
   const delimiterCharacter = DELIMITERS[delimiter];
   const outputLines: string[] = [];
-  outputLines.push(mapping.map(entry => encodeCsvCell(entry.output, delimiterCharacter)).join(delimiterCharacter));
   const previewRows: string[][] = [];
   let protectedFormulaCount = 0;
+  const outputHeaders = mapping.map(entry => {
+    if (options.protectSpreadsheetFormulas && isSpreadsheetFormula(entry.output, entry.output)) {
+      protectedFormulaCount += 1;
+      return `'${entry.output}`;
+    }
+    return entry.output;
+  });
+  outputLines.push(outputHeaders.map(header => encodeCsvCell(header, delimiterCharacter)).join(delimiterCharacter));
   for (const [rowIndex, row] of flattenedRows.entries()) {
     const visibleValues = mapping.map((entry, columnIndex) => {
       const value = row[entry.source];
@@ -578,8 +585,7 @@ function inferCsvValue(value: string): string | number | boolean | null {
   if (value === 'false') return false;
   if (/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e[+-]?\d+)?$/iu.test(value)) {
     const numeric = Number(value);
-    const isUnsafeInteger = Number.isInteger(numeric) && !Number.isSafeInteger(numeric);
-    if (Number.isFinite(numeric) && !isUnsafeInteger) return numeric;
+    if (isLosslessJsonNumber(value)) return numeric;
   }
   return value;
 }

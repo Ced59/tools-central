@@ -26,6 +26,8 @@ describe('CsvJsonConverterToolComponent', () => {
     expect(host.querySelector('h1')?.textContent).toContain('CSV');
     expect(host.querySelector<HTMLTextAreaElement>('#csv-json-source')?.value).toContain('Ada');
     expect(host.querySelectorAll('[role="group"] button')).toHaveLength(2);
+    expect(host.querySelector('.mapping-panel textarea')?.getAttribute('aria-labelledby'))
+      .toBe('csv-json-mapping-label');
   });
 
   it('bascule vers JSON sans conserver un mapping incompatible', () => {
