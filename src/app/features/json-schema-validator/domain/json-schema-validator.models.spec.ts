@@ -136,6 +136,46 @@ describe('prepareJsonSchemaValidation', () => {
     expect(result.result.issues[0].code).toBe('external-reference');
   });
 
+  it.each([
+    'https://json-schema.org/draft/2019-09/schema',
+    'https://json-schema.org/draft/2020-12/schema',
+  ])('inspects local-reference targets in retained legacy containers for %s', declaration => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: declaration,
+      $ref: '#/definitions/value',
+      definitions: { value: { pattern } },
+    }), '"value"', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/definitions/value/pattern',
+    });
+  });
+
+  it('ignores Draft 7 reference siblings while inspecting the referenced target', () => {
+    const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
+    const accepted = prepareJsonSchemaValidation(JSON.stringify({
+      $ref: '#/definitions/value',
+      pattern,
+      properties: { ignored: { $ref: 'https://example.com/ignored' } },
+      definitions: { value: { type: 'string' } },
+    }), '"value"', OPTIONS);
+    expect(accepted.ok).toBe(true);
+
+    const rejected = prepareJsonSchemaValidation(JSON.stringify({
+      $ref: '#/definitions/value',
+      definitions: { value: { pattern } },
+    }), '"value"', OPTIONS);
+    expect(rejected.ok).toBe(false);
+    if (rejected.ok) return;
+    expect(rejected.result.issues[0]).toMatchObject({
+      code: 'pattern-limit',
+      path: '/definitions/value/pattern',
+    });
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);

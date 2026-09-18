@@ -265,12 +265,17 @@ function withoutDeclaredDraft(schema: JsonObject | boolean): JsonObject | boolea
 function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraft): number {
   if (typeof schema === 'boolean') return 0;
   let patterns = 0;
+  const visited = new Set<JsonObject>();
   const stack: Array<{ value: JsonValue; path: string }> = [{ value: schema, path: '' }];
   while (stack.length > 0) {
     const current = stack.pop();
     if (!current) break;
     if (!isObject(current.value)) continue;
+    if (visited.has(current.value)) continue;
+    visited.add(current.value);
     inspectReferences(current.value, current.path, draft);
+    pushLocalReferenceTargets(schema, current.value, draft, stack);
+    if (draft === 'draft-07' && typeof current.value['$ref'] === 'string') continue;
     patterns = inspectPatterns(current.value, current.path, patterns);
     pushSubschemas(current.value, current.path, draft, stack);
   }
@@ -278,17 +283,59 @@ function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraf
 }
 
 function inspectReferences(schema: JsonObject, path: string, draft: JsonSchemaDraft): void {
-  const keywords = draft === 'draft-2020-12'
-    ? ['$ref', '$dynamicRef'] as const
-    : draft === 'draft-2019-09'
-      ? ['$ref', '$recursiveRef'] as const
-      : ['$ref'] as const;
-  for (const keyword of keywords) {
+  for (const keyword of referenceKeywords(draft)) {
     const reference = schema[keyword];
     if (typeof reference === 'string' && !reference.startsWith('#')) {
       throw new SchemaSafetyError('external-reference', appendPointer(path, keyword), reference.slice(0, 240));
     }
   }
+}
+
+function pushLocalReferenceTargets(
+  root: JsonObject,
+  schema: JsonObject,
+  draft: JsonSchemaDraft,
+  stack: Array<{ value: JsonValue; path: string }>,
+): void {
+  for (const keyword of referenceKeywords(draft)) {
+    const reference = schema[keyword];
+    if (typeof reference !== 'string') continue;
+    const target = resolveLocalReference(root, reference);
+    if (target !== null) pushSchema(target.value, target.path, stack);
+  }
+}
+
+function resolveLocalReference(root: JsonObject, reference: string): { value: JsonValue; path: string } | null {
+  if (reference === '#') return { value: root, path: '' };
+  if (!reference.startsWith('#/')) return null;
+  let pointer: string;
+  try {
+    pointer = decodeURIComponent(reference.slice(1));
+  } catch {
+    return null;
+  }
+  let value: JsonValue = root;
+  for (const rawSegment of pointer.slice(1).split('/')) {
+    const segment = unescapePointer(rawSegment);
+    if (Array.isArray(value)) {
+      if (!/^\d+$/u.test(segment)) return null;
+      const index = Number(segment);
+      if (index >= value.length) return null;
+      value = value[index];
+    } else if (isObject(value)) {
+      if (!Object.hasOwn(value, segment)) return null;
+      value = value[segment];
+    } else {
+      return null;
+    }
+  }
+  return { value, path: pointer };
+}
+
+function referenceKeywords(draft: JsonSchemaDraft): readonly string[] {
+  if (draft === 'draft-2020-12') return ['$ref', '$dynamicRef'];
+  if (draft === 'draft-2019-09') return ['$ref', '$recursiveRef'];
+  return ['$ref'];
 }
 
 function inspectPatterns(schema: JsonObject, path: string, initialCount: number): number {
@@ -421,6 +468,10 @@ function issue(
 
 function appendPointer(path: string, segment: string): string {
   return `${path}/${segment.replace(/~/gu, '~0').replace(/\//gu, '~1')}`;
+}
+
+function unescapePointer(segment: string): string {
+  return segment.replace(/~1/gu, '/').replace(/~0/gu, '~');
 }
 
 function isObject(value: JsonValue | undefined): value is JsonObject {
