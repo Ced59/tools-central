@@ -5,6 +5,7 @@ export const JSON_DIFF_MAX_CHANGES = 20_000;
 export const JSON_DIFF_MAX_OUTPUT_CHARACTERS = 16_000_000;
 export const JSON_DIFF_PREVIEW_CHANGES = 500;
 export const JSON_DIFF_PREVIEW_VALUE_CHARACTERS = 240;
+const JSON_DIFF_OUTPUT_BASE_RESERVE = 250_000;
 
 export type JsonDiffArrayMode = 'index' | 'key';
 export type JsonDiffSide = 'left' | 'right' | null;
@@ -22,6 +23,7 @@ export type JsonDiffIssueCode =
   | 'array-key-required'
   | 'array-key-invalid'
   | 'array-key-duplicate'
+  | 'array-ignore-conflict'
   | 'change-limit'
   | 'output-too-large';
 
@@ -104,6 +106,7 @@ interface ComparisonState {
   keySegments: readonly string[];
   changes: FullChange[];
   patch: JsonPatchOperation[];
+  estimatedOutputCharacters: number;
 }
 
 interface KeyedArrayItem {
@@ -191,6 +194,7 @@ export function compareJsonDocuments(
       keySegments,
       changes: [],
       patch: [],
+      estimatedOutputCharacters: JSON_DIFF_OUTPUT_BASE_RESERVE,
     };
     compareValues(leftParsed.parsed.value, rightParsed.parsed.value, '', state);
     buildPatch(leftParsed.parsed.value, rightParsed.parsed.value, '', state);
@@ -598,6 +602,7 @@ function reportKey(
 function buildPatch(left: JsonValue, right: JsonValue, path: string, state: ComparisonState): void {
   if (isIgnored(path, state.ignoredPaths)) return;
   if (Array.isArray(left) && Array.isArray(right)) {
+    assertArrayTailPatchIsPossible(left.length, right.length, path, state.ignoredPaths);
     const sharedLength = Math.min(left.length, right.length);
     for (let index = 0; index < sharedLength; index += 1) {
       buildPatch(left[index], right[index], appendPointer(path, String(index)), state);
@@ -648,7 +653,7 @@ function addChange(
   afterPath = change.path,
 ): void {
   if (state.changes.length >= JSON_DIFF_MAX_CHANGES) throw new JsonDiffError('change-limit');
-  state.changes.push({
+  const sanitizedChange: FullChange = {
     ...change,
     ...(change.before === undefined
       ? {}
@@ -656,7 +661,9 @@ function addChange(
     ...(change.after === undefined
       ? {}
       : { after: sanitizeForExport(change.after, afterPath, state.ignoredPaths) }),
-  });
+  };
+  reserveOutput(state, sanitizedChange);
+  state.changes.push(sanitizedChange);
 }
 
 function addPatch(
@@ -665,9 +672,53 @@ function addPatch(
   valuePath = operation.path,
 ): void {
   if (state.patch.length >= JSON_DIFF_MAX_CHANGES) throw new JsonDiffError('change-limit');
-  state.patch.push(operation.value === undefined
+  const sanitizedOperation = operation.value === undefined
     ? operation
-    : { ...operation, value: sanitizeForExport(operation.value, valuePath, state.ignoredPaths) });
+    : { ...operation, value: sanitizeForExport(operation.value, valuePath, state.ignoredPaths) };
+  reserveOutput(state, sanitizedOperation);
+  state.patch.push(sanitizedOperation);
+}
+
+function assertArrayTailPatchIsPossible(
+  leftLength: number,
+  rightLength: number,
+  path: string,
+  ignoredPaths: ReadonlySet<string>,
+): void {
+  if (leftLength > rightLength) {
+    let lowerRemovalExists = false;
+    for (let index = rightLength; index < leftLength; index += 1) {
+      const childPath = appendPointer(path, String(index));
+      const ignored = isIgnored(childPath, ignoredPaths);
+      if (hasIgnoredDescendant(childPath, ignoredPaths) && !ignored) {
+        throw new JsonDiffError('array-ignore-conflict', path || '/');
+      }
+      if (ignored && lowerRemovalExists) {
+        throw new JsonDiffError('array-ignore-conflict', path || '/');
+      }
+      if (!ignored) lowerRemovalExists = true;
+    }
+  }
+  if (rightLength > leftLength) {
+    let ignoredGapExists = false;
+    for (let index = leftLength; index < rightLength; index += 1) {
+      const childPath = appendPointer(path, String(index));
+      if (isIgnored(childPath, ignoredPaths)) ignoredGapExists = true;
+      else if (ignoredGapExists) throw new JsonDiffError('array-ignore-conflict', path || '/');
+    }
+  }
+}
+
+function reserveOutput(state: ComparisonState, value: FullChange | JsonPatchOperation): void {
+  const serialized = JSON.stringify(value, null, 2);
+  let estimatedCharacters = serialized.length + 64;
+  for (let index = 0; index < serialized.length; index += 1) {
+    if (serialized[index] === '\n') estimatedCharacters += 8;
+  }
+  if (state.estimatedOutputCharacters + estimatedCharacters > JSON_DIFF_MAX_OUTPUT_CHARACTERS) {
+    throw new JsonDiffError('output-too-large');
+  }
+  state.estimatedOutputCharacters += estimatedCharacters;
 }
 
 function sanitizeForExport(
@@ -748,6 +799,13 @@ function shouldUseKeyMode(left: readonly JsonValue[], right: readonly JsonValue[
 function isIgnored(path: string, ignoredPaths: ReadonlySet<string>): boolean {
   for (const ignored of ignoredPaths) {
     if (path === ignored || path.startsWith(`${ignored}/`)) return true;
+  }
+  return false;
+}
+
+function hasIgnoredDescendant(path: string, ignoredPaths: ReadonlySet<string>): boolean {
+  for (const ignored of ignoredPaths) {
+    if (ignored.startsWith(`${path}/`)) return true;
   }
   return false;
 }

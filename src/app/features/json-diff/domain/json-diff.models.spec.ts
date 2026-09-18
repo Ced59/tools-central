@@ -262,6 +262,24 @@ describe('compareJsonDocuments', () => {
     expect(removed.patch).toBe('[]');
   });
 
+  it('rejette un patch dont les éditions déplaceraient un index ignoré', () => {
+    const removalConflict = compareJsonDocuments(
+      '["keep","remove-1","ignored","remove-3"]',
+      '["keep"]',
+      { ...DEFAULTS, ignoredPaths: '/2' },
+    );
+    const additionConflict = compareJsonDocuments(
+      '["keep"]',
+      '["keep","ignored","included"]',
+      { ...DEFAULTS, ignoredPaths: '/1' },
+    );
+
+    expect(removalConflict.issues[0]).toMatchObject({ code: 'array-ignore-conflict', path: '/' });
+    expect(additionConflict.issues[0]).toMatchObject({ code: 'array-ignore-conflict', path: '/' });
+    expect(removalConflict.patch).toBe('');
+    expect(additionConflict.patch).toBe('');
+  });
+
   it('normalise les échappements des chemins ignorés', () => {
     const result = compareJsonDocuments('{"a/b":{"x~y":1}}', '{"a/b":{"x~y":2}}', {
       ...DEFAULTS,
@@ -342,6 +360,22 @@ describe('compareJsonDocuments', () => {
     expect(result.issues[0]?.code).toBe('change-limit');
     expect(result.changes).toEqual([]);
     expect(result.patch).toBe('');
+  });
+
+  it('réserve le budget de sortie avant de sérialiser un rapport très répétitif', () => {
+    const id = 'k'.repeat(100_000);
+    const before = Object.fromEntries(Array.from({ length: 180 }, (_, index) => [`field-${String(index)}`, 0]));
+    const after = Object.fromEntries(Array.from({ length: 180 }, (_, index) => [`field-${String(index)}`, 1]));
+    const result = compareJsonDocuments(
+      JSON.stringify([{ id, ...before }]),
+      JSON.stringify([{ id, ...after }]),
+      { ...DEFAULTS, arrayMode: 'key' },
+    );
+
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]?.code).toBe('output-too-large');
+    expect(result.changes).toEqual([]);
+    expect(result.report).toBe('');
   });
 
   it('tronque uniquement l’aperçu et conserve le rapport complet', () => {
