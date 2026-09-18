@@ -159,7 +159,7 @@ export function prepareJsonSchemaValidation(
   }
 
   try {
-    stats.patterns = inspectSchemaSafety(schema);
+    stats.patterns = inspectSchemaSafety(schema, draft);
   } catch (error) {
     if (error instanceof SchemaSafetyError) {
       return failure(issue(error.code, 'schema', error.path, error.detail), stats);
@@ -262,7 +262,7 @@ function withoutDeclaredDraft(schema: JsonObject | boolean): JsonObject | boolea
   return clone;
 }
 
-function inspectSchemaSafety(schema: JsonObject | boolean): number {
+function inspectSchemaSafety(schema: JsonObject | boolean, draft: JsonSchemaDraft): number {
   if (typeof schema === 'boolean') return 0;
   let patterns = 0;
   const stack: Array<{ value: JsonValue; path: string }> = [{ value: schema, path: '' }];
@@ -270,15 +270,20 @@ function inspectSchemaSafety(schema: JsonObject | boolean): number {
     const current = stack.pop();
     if (!current) break;
     if (!isObject(current.value)) continue;
-    inspectReferences(current.value, current.path);
+    inspectReferences(current.value, current.path, draft);
     patterns = inspectPatterns(current.value, current.path, patterns);
-    pushSubschemas(current.value, current.path, stack);
+    pushSubschemas(current.value, current.path, draft, stack);
   }
   return patterns;
 }
 
-function inspectReferences(schema: JsonObject, path: string): void {
-  for (const keyword of ['$ref', '$dynamicRef', '$recursiveRef'] as const) {
+function inspectReferences(schema: JsonObject, path: string, draft: JsonSchemaDraft): void {
+  const keywords = draft === 'draft-2020-12'
+    ? ['$ref', '$dynamicRef'] as const
+    : draft === 'draft-2019-09'
+      ? ['$ref', '$recursiveRef'] as const
+      : ['$ref'] as const;
+  for (const keyword of keywords) {
     const reference = schema[keyword];
     if (typeof reference === 'string' && !reference.startsWith('#')) {
       throw new SchemaSafetyError('external-reference', appendPointer(path, keyword), reference.slice(0, 240));
@@ -311,24 +316,29 @@ function countPattern(pattern: string, path: string, currentCount: number): numb
 function pushSubschemas(
   schema: JsonObject,
   path: string,
+  draft: JsonSchemaDraft,
   stack: Array<{ value: JsonValue; path: string }>,
 ): void {
-  for (const keyword of SINGLE_SUBSCHEMA_KEYWORDS) {
+  for (const keyword of singleSubschemaKeywords(draft)) {
     const value = schema[keyword];
     const keywordPath = appendPointer(path, keyword);
-    if (keyword === 'items' && Array.isArray(value)) pushSchemaArray(value, keywordPath, stack);
+    if (keyword === 'items' && draft !== 'draft-2020-12' && Array.isArray(value)) {
+      pushSchemaArray(value, keywordPath, stack);
+    }
     else pushSchema(value, keywordPath, stack);
   }
-  for (const keyword of SCHEMA_ARRAY_KEYWORDS) {
+  for (const keyword of schemaArrayKeywords(draft)) {
     const value = schema[keyword];
     if (Array.isArray(value)) pushSchemaArray(value, appendPointer(path, keyword), stack);
   }
-  for (const keyword of SCHEMA_MAP_KEYWORDS) {
+  for (const keyword of schemaMapKeywords(draft)) {
     const value = schema[keyword];
     if (isObject(value)) pushSchemaMap(value, appendPointer(path, keyword), stack);
   }
-  const dependencies = schema['dependencies'];
-  if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
+  if (draft === 'draft-07') {
+    const dependencies = schema['dependencies'];
+    if (isObject(dependencies)) pushSchemaMap(dependencies, appendPointer(path, 'dependencies'), stack);
+  }
 }
 
 function pushSchemaArray(
@@ -357,23 +367,47 @@ function pushSchema(
   if (typeof value === 'boolean' || isObject(value)) stack.push({ value, path });
 }
 
-const SINGLE_SUBSCHEMA_KEYWORDS = [
-  'additionalItems',
+const COMMON_SINGLE_SUBSCHEMA_KEYWORDS = [
   'additionalProperties',
   'contains',
-  'contentSchema',
   'else',
   'if',
   'items',
   'not',
   'propertyNames',
   'then',
-  'unevaluatedItems',
-  'unevaluatedProperties',
 ] as const;
 
-const SCHEMA_ARRAY_KEYWORDS = ['allOf', 'anyOf', 'oneOf', 'prefixItems'] as const;
-const SCHEMA_MAP_KEYWORDS = ['$defs', 'definitions', 'dependentSchemas', 'patternProperties', 'properties'] as const;
+function singleSubschemaKeywords(draft: JsonSchemaDraft): readonly string[] {
+  if (draft === 'draft-07') return ['additionalItems', ...COMMON_SINGLE_SUBSCHEMA_KEYWORDS];
+  if (draft === 'draft-2019-09') {
+    return [
+      'additionalItems',
+      ...COMMON_SINGLE_SUBSCHEMA_KEYWORDS,
+      'contentSchema',
+      'unevaluatedItems',
+      'unevaluatedProperties',
+    ];
+  }
+  return [
+    ...COMMON_SINGLE_SUBSCHEMA_KEYWORDS,
+    'contentSchema',
+    'unevaluatedItems',
+    'unevaluatedProperties',
+  ];
+}
+
+function schemaArrayKeywords(draft: JsonSchemaDraft): readonly string[] {
+  return draft === 'draft-2020-12'
+    ? ['allOf', 'anyOf', 'oneOf', 'prefixItems']
+    : ['allOf', 'anyOf', 'oneOf'];
+}
+
+function schemaMapKeywords(draft: JsonSchemaDraft): readonly string[] {
+  return draft === 'draft-07'
+    ? ['definitions', 'patternProperties', 'properties']
+    : ['$defs', 'dependentSchemas', 'patternProperties', 'properties'];
+}
 
 function issue(
   code: JsonSchemaIssueCode,

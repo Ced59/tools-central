@@ -118,6 +118,24 @@ describe('prepareJsonSchemaValidation', () => {
     });
   });
 
+  it('ignores legacy subschema keywords that are annotations in Draft 2020-12', () => {
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2020-12/schema',
+      additionalItems: { $ref: 'https://example.com/ignored' },
+    }), '[]', OPTIONS);
+    expect(result.ok).toBe(true);
+  });
+
+  it('checks the same legacy subschema keyword in Draft 2019-09', () => {
+    const result = prepareJsonSchemaValidation(JSON.stringify({
+      $schema: 'https://json-schema.org/draft/2019-09/schema',
+      additionalItems: { $ref: 'https://example.com/rejected' },
+    }), '[]', OPTIONS);
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.result.issues[0].code).toBe('external-reference');
+  });
+
   it('rejects patterns beyond the explicit safety limit', () => {
     const pattern = 'a'.repeat(JSON_SCHEMA_MAX_PATTERN_CHARACTERS + 1);
     const result = prepareJsonSchemaValidation(JSON.stringify({ pattern }), '"a"', OPTIONS);
@@ -204,6 +222,29 @@ describe('applySafeJsonSchemaCorrections', () => {
     );
     expect(corrected.corrections).toEqual([]);
     expect(corrected.value).toEqual({ values: [], label: '' });
+  });
+
+  it('extends strings by Unicode code points', () => {
+    const corrected = applySafeJsonSchemaCorrections(
+      { type: 'string', minLength: 2 },
+      '😀',
+      [error('minLength', '', '#/minLength', '', '', 2)],
+    );
+    expect(corrected.value).toBe('😀a');
+    expect(corrected.corrections).toHaveLength(1);
+  });
+
+  it.each([
+    ['exclusiveMinimum', Number.MAX_VALUE, 0],
+    ['exclusiveMaximum', -Number.MAX_VALUE, 0],
+  ] as const)('skips non-finite %s corrections', (keyword, limit, value) => {
+    const corrected = applySafeJsonSchemaCorrections(
+      { type: 'number', [keyword]: limit },
+      value,
+      [error(keyword, '', `#/${keyword}`, '', '', limit)],
+    );
+    expect(corrected.corrections).toEqual([]);
+    expect(corrected.value).toBe(value);
   });
 });
 

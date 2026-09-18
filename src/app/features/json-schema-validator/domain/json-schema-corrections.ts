@@ -97,10 +97,12 @@ function applyCorrection(
 }
 
 function extendStringWithinBudget(current: string, targetLength: number): string | undefined {
+  const currentCodePoints = Array.from(current).length;
+  const missingCodePoints = targetLength - currentCodePoints;
   if (!Number.isSafeInteger(targetLength)
-    || targetLength < current.length
-    || targetLength > JSON_SCHEMA_MAX_OUTPUT_CHARACTERS) return undefined;
-  return current.padEnd(targetLength, 'a');
+    || missingCodePoints < 0
+    || current.length + missingCodePoints > JSON_SCHEMA_MAX_OUTPUT_CHARACTERS) return undefined;
+  return `${current}${'a'.repeat(missingCodePoints)}`;
 }
 
 function extendArrayWithinBudget(
@@ -239,10 +241,11 @@ function cloneJson<T extends JsonValue>(value: T): T {
   return clone as T;
 }
 
-function nextRepresentable(value: number, direction: 1 | -1): number {
+function nextRepresentable(value: number, direction: 1 | -1): number | undefined {
   if (Number.isInteger(value) && Number.isSafeInteger(value + direction)) return value + direction;
   const delta = Math.max(Math.abs(value) * Number.EPSILON, Number.MIN_VALUE);
-  return value + direction * delta;
+  const candidate = value + direction * delta;
+  return Number.isFinite(candidate) && candidate !== value ? candidate : undefined;
 }
 
 function appendPointer(path: string, segment: string): string {

@@ -125,6 +125,21 @@ describe('validateJsonSchemaDocuments', () => {
     });
   });
 
+  it('creates a valid minLength correction for astral Unicode characters', () => {
+    const result = validateJsonSchemaDocuments('{"type":"string","minLength":2}', '"😀"', {
+      draft: 'auto',
+      validateFormats: true,
+    });
+    expect(result.correction).toMatchObject({ valid: true, source: '"😀a"' });
+  });
+
+  it('does not advertise a non-finite exclusive-bound correction', () => {
+    const schema = JSON.stringify({ type: 'number', exclusiveMinimum: Number.MAX_VALUE });
+    const result = validateJsonSchemaDocuments(schema, '0', { draft: 'auto', validateFormats: true });
+    expect(result.valid).toBe(false);
+    expect(result.correction).toBeNull();
+  });
+
   it('caps the exposed error collection while preserving the total', () => {
     const properties = Object.fromEntries(
       Array.from({ length: JSON_SCHEMA_MAX_ERRORS + 1 }, (_, index) => [`field${String(index)}`, { type: 'string' }]),
