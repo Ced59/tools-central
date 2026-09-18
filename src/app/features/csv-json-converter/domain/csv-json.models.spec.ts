@@ -337,6 +337,22 @@ describe('convertCsvJson', () => {
     ]));
   });
 
+  it('rejette les noms de membres JSON dupliqués avant JSON.parse', () => {
+    const literalDuplicate = convertCsvJson('[{"x":1,"x":2}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+    const escapedDuplicate = convertCsvJson('[{"x":1,"\\u0078":2}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(literalDuplicate.ok).toBe(false);
+    expect(escapedDuplicate.ok).toBe(false);
+    expect(literalDuplicate.issues[0]?.code).toBe('json-invalid');
+    expect(escapedDuplicate.issues[0]?.code).toBe('json-invalid');
+  });
+
   it('rejette les nombres que JavaScript arrondirait ou rendrait infinis', () => {
     const unsafeInteger = convertCsvJson('[{"x":9007199254740993}]', {
       ...CSV_DEFAULTS,

@@ -91,6 +91,17 @@ interface ColumnMapping {
   output: string;
 }
 
+type JsonContainerFrame =
+  | {
+    kind: 'object';
+    state: 'key-or-end' | 'colon' | 'value' | 'comma-or-end';
+    keys: Set<string>;
+  }
+  | {
+    kind: 'array';
+    state: 'value-or-end' | 'comma-or-end';
+  };
+
 const DELIMITERS: Readonly<Record<Exclude<CsvJsonDelimiter, 'auto'>, string>> = {
   comma: ',',
   semicolon: ';',
@@ -212,6 +223,7 @@ function convertJsonToCsv(
   state: MutableConversionState,
 ): CsvJsonConversionResult {
   validateJsonNumbers(source, state);
+  if (!hasErrors(state)) validateUniqueJsonMemberNames(source, state);
   if (hasErrors(state)) {
     return emptyResult('json-to-csv', selectedOutputDelimiter(options.delimiter), source.length, state.issues);
   }
@@ -753,6 +765,140 @@ function validateJsonNumbers(source: string, state: MutableConversionState): voi
       return;
     }
     index += token.length - 1;
+  }
+}
+
+function validateUniqueJsonMemberNames(source: string, state: MutableConversionState): void {
+  const stack: JsonContainerFrame[] = [];
+  let index = 0;
+
+  const skipWhitespace = (): void => {
+    while (index < source.length && /[\t\n\r ]/u.test(source[index])) index += 1;
+  };
+  const completeValue = (): void => {
+    const parent = stack.at(-1);
+    if (!parent) {
+      index = source.length;
+    } else if (parent.kind === 'object') {
+      parent.state = 'comma-or-end';
+    } else {
+      parent.state = 'comma-or-end';
+    }
+  };
+  const readString = (decode: boolean): string | null | undefined => {
+    const start = index;
+    index += 1;
+    let escaped = false;
+    while (index < source.length) {
+      const character = source[index];
+      if (escaped) {
+        escaped = false;
+      } else if (character === '\\') {
+        escaped = true;
+      } else if (character === '"') {
+        index += 1;
+        if (!decode) return '';
+        try {
+          const parsed: unknown = JSON.parse(source.slice(start, index));
+          return typeof parsed === 'string' ? parsed : undefined;
+        } catch {
+          return undefined;
+        }
+      }
+      index += 1;
+    }
+    return null;
+  };
+  const startValue = (): boolean => {
+    const character = source[index];
+    if (character === '{' || character === '[') {
+      if (stack.length >= 14) return false;
+      stack.push(character === '{'
+        ? { kind: 'object', state: 'key-or-end', keys: new Set<string>() }
+        : { kind: 'array', state: 'value-or-end' });
+      index += 1;
+      return true;
+    }
+    if (character === '"') {
+      if (readString(false) === null) return false;
+      completeValue();
+      return true;
+    }
+    const start = index;
+    while (index < source.length && !/[\t\n\r ,\]}]/u.test(source[index])) index += 1;
+    if (index === start) return false;
+    completeValue();
+    return true;
+  };
+
+  while (index < source.length) {
+    skipWhitespace();
+    if (index >= source.length) return;
+    const frame = stack.at(-1);
+    if (!frame) {
+      if (!startValue()) return;
+      continue;
+    }
+    const character = source[index];
+    if (frame.kind === 'object') {
+      if (frame.state === 'key-or-end') {
+        if (character === '}') {
+          stack.pop();
+          index += 1;
+          completeValue();
+          continue;
+        }
+        if (character !== '"') return;
+        const key = readString(true);
+        if (key === null || key === undefined) return;
+        if (frame.keys.has(key)) {
+          addIssue(state, 'json-invalid', 'error', null, null, `duplicate:${key.slice(0, 160)}`);
+          return;
+        }
+        frame.keys.add(key);
+        frame.state = 'colon';
+        continue;
+      }
+      if (frame.state === 'colon') {
+        if (character !== ':') return;
+        frame.state = 'value';
+        index += 1;
+        continue;
+      }
+      if (frame.state === 'value') {
+        if (!startValue()) return;
+        continue;
+      }
+      if (character === ',') {
+        frame.state = 'key-or-end';
+        index += 1;
+      } else if (character === '}') {
+        stack.pop();
+        index += 1;
+        completeValue();
+      } else {
+        return;
+      }
+      continue;
+    }
+    if (frame.state === 'value-or-end') {
+      if (character === ']') {
+        stack.pop();
+        index += 1;
+        completeValue();
+      } else if (!startValue()) {
+        return;
+      }
+    } else if (character === ',') {
+      frame.state = 'value-or-end';
+      index += 1;
+    } else if (character === ']') {
+      stack.pop();
+      index += 1;
+      completeValue();
+    } else {
+      return;
+    }
   }
 }
 

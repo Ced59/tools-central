@@ -338,5 +338,10 @@ function isAbortError(error: unknown): boolean {
 }
 
 function formatBytes(value: number, locale: string): string {
-  return new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(value / 1_000_000) + ' Mo';
+  return new Intl.NumberFormat(locale, {
+    style: 'unit',
+    unit: 'megabyte',
+    unitDisplay: 'short',
+    maximumFractionDigits: 1,
+  }).format(value / 1_000_000);
 }
