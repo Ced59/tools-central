@@ -951,6 +951,24 @@ describe('inspectPdfStructuralSignals', () => {
     }
   });
 
+  it('ignore les clés xref privées présentes dans un flux ordinaire', () => {
+    const imagePayload = Uint8Array.of(0xff, 0xff, 0xff);
+    const pdf = joinBytes(
+      '%PDF-1.7\n1 0 obj\n<< /Type /XObject /Subtype /Image /Width 1 /Height 1 ',
+      `/W 1 /Index /VendorValue /Length ${String(imagePayload.byteLength)} >>\nstream\n`,
+      imagePayload,
+      '\nendstream\nendobj\n%%EOF\n',
+    );
+
+    expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
+
+    const malformedXref = joinBytes(
+      '%PDF-1.7\n2 0 obj\n<< /W 1 /Type /XRef /Size 3 /Length 0 >>\n',
+      'stream\n\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(malformedXref)).toThrow();
+  });
+
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
     const objectDeclarations = Array.from(
       { length: PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1 },

@@ -2649,6 +2649,10 @@ function parseCriticalDictionary(
   let xrefSize: number | undefined;
   let xrefWidths: readonly number[] | undefined;
   let xrefIndex: readonly number[] | undefined;
+  let xrefWidthsValueStart: number | undefined;
+  let xrefIndexValueStart: number | undefined;
+  let hasDuplicateXrefWidths = false;
+  let hasDuplicateXrefIndex = false;
   let previousXrefOffset: number | undefined;
   let supplementalXrefOffset: number | undefined;
   let hasType = false;
@@ -2764,23 +2768,14 @@ function parseCriticalDictionary(
         offset = valueStart + 1;
       }
     } else if (key.value === 'W' || key.value === 'Index') {
-      const value = readUnsignedIntegerArray(
-        data,
-        valueStart,
-        key.value === 'W' ? 3 : 2 * (PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
-      );
       if (key.value === 'W') {
-        if (xrefWidths !== undefined || value.values.length !== 3) {
-          throw new Error('Invalid PDF xref widths');
-        }
-        xrefWidths = value.values;
+        hasDuplicateXrefWidths ||= xrefWidthsValueStart !== undefined;
+        xrefWidthsValueStart ??= valueStart;
       } else {
-        if (xrefIndex !== undefined || value.values.length % 2 !== 0) {
-          throw new Error('Invalid PDF xref index');
-        }
-        xrefIndex = value.values;
+        hasDuplicateXrefIndex ||= xrefIndexValueStart !== undefined;
+        xrefIndexValueStart ??= valueStart;
       }
-      offset = value.end;
+      offset = skipPdfValue(data, valueStart, dictionaryEnd);
     } else if (
       key.value === 'N'
       || key.value === 'First'
@@ -2818,6 +2813,24 @@ function parseCriticalDictionary(
         else if (!matchesKeyword(data, valueStart, 'null')) hasEncryptionDictionary = true;
       }
       offset = skipPdfValue(data, valueStart, dictionaryEnd);
+    }
+  }
+  if (type === 'XRef') {
+    if (hasDuplicateXrefWidths) throw new Error('Invalid PDF xref widths');
+    if (xrefWidthsValueStart !== undefined) {
+      const value = readUnsignedIntegerArray(data, xrefWidthsValueStart, 3);
+      if (value.values.length !== 3) throw new Error('Invalid PDF xref widths');
+      xrefWidths = value.values;
+    }
+    if (hasDuplicateXrefIndex) throw new Error('Invalid PDF xref index');
+    if (xrefIndexValueStart !== undefined) {
+      const value = readUnsignedIntegerArray(
+        data,
+        xrefIndexValueStart,
+        2 * (PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
+      );
+      if (value.values.length % 2 !== 0) throw new Error('Invalid PDF xref index');
+      xrefIndex = value.values;
     }
   }
   return {
