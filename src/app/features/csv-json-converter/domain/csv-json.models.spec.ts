@@ -468,6 +468,18 @@ describe('convertCsvJson', () => {
     expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
   });
 
+  it('parcourt séquentiellement un grand tableau avant de signaler la limite de cellule', () => {
+    const result = convertCsvJson(JSON.stringify([{
+      valeurs: Array.from({ length: 50_001 }, () => 0),
+    }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]).toMatchObject({ code: 'cell-limit', row: 1, column: 1 });
+  });
+
   it('inclut le préfixe de protection des formules dans la limite de cellule', () => {
     const formula = `=${'x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS - 1)}`;
     const result = convertCsvJson(JSON.stringify([{ valeur: formula }]), {

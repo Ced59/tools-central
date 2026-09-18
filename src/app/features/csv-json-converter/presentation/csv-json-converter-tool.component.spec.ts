@@ -65,6 +65,14 @@ describe('CsvJsonConverterToolComponent', () => {
     expect(component.options().inferTypes).toBe(false);
   });
 
+  it('ne tronque pas silencieusement un mapping au seuil historique de 20 000 caractères', () => {
+    const mapping = 'x'.repeat(20_001);
+
+    component.updateMapping({ target: { value: mapping } } as unknown as Event);
+
+    expect(component.options().mapping).toBe(mapping);
+  });
+
   it('ramène aussi une conversion en cours à un état inactif quand une option change', () => {
     component.state.set('processing');
 

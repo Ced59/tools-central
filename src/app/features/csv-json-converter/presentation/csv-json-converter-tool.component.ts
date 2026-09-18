@@ -108,7 +108,10 @@ export class CsvJsonConverterToolComponent {
   }
 
   updateMapping(event: Event): void {
-    this.options.update(options => ({ ...options, mapping: readValue(event).slice(0, 20_000) }));
+    this.options.update(options => ({
+      ...options,
+      mapping: readValue(event).slice(0, CSV_JSON_MAX_SOURCE_CHARACTERS + 1),
+    }));
     this.clearResult();
   }
 

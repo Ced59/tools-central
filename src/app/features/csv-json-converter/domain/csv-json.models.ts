@@ -676,33 +676,40 @@ function validateJsonRowStructure(
   state: MutableConversionState,
   row: number,
 ): boolean {
-  const pending: Array<{ value: unknown; depth: number }> = [{ value: rowValue, depth: 0 }];
-  while (pending.length > 0) {
-    const current = pending.pop();
-    if (!current) break;
-    if (typeof current.value === 'string') {
-      if (!hasWellFormedUtf16(current.value)) {
-        addIssue(state, 'json-unicode-invalid', 'error', row);
-        return false;
-      }
-      continue;
-    }
-    if (!Array.isArray(current.value) && !isRecord(current.value)) continue;
-    if (current.depth > 12) {
-      addIssue(state, 'json-depth-limit', 'error', row);
+  return validateJsonValue(rowValue, state, row, 0);
+}
+
+function validateJsonValue(
+  value: unknown,
+  state: MutableConversionState,
+  row: number,
+  depth: number,
+): boolean {
+  if (typeof value === 'string') {
+    if (!hasWellFormedUtf16(value)) {
+      addIssue(state, 'json-unicode-invalid', 'error', row);
       return false;
     }
-    if (Array.isArray(current.value)) {
-      for (const value of current.value) pending.push({ value, depth: current.depth + 1 });
-      continue;
+    return true;
+  }
+  if (!Array.isArray(value) && !isRecord(value)) return true;
+  if (depth > 12) {
+    addIssue(state, 'json-depth-limit', 'error', row);
+    return false;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      if (!validateJsonValue(item, state, row, depth + 1)) return false;
     }
-    for (const [key, value] of Object.entries(current.value)) {
-      if (!hasWellFormedUtf16(key)) {
-        addIssue(state, 'json-unicode-invalid', 'error', row);
-        return false;
-      }
-      pending.push({ value, depth: current.depth + 1 });
+    return true;
+  }
+  for (const key in value) {
+    if (!Object.hasOwn(value, key)) continue;
+    if (!hasWellFormedUtf16(key)) {
+      addIssue(state, 'json-unicode-invalid', 'error', row);
+      return false;
     }
+    if (!validateJsonValue(value[key], state, row, depth + 1)) return false;
   }
   return true;
 }
