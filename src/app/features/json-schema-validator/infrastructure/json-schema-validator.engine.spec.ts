@@ -126,6 +126,27 @@ describe('validateJsonSchemaDocuments', () => {
     expect(result.valid).toBe(true);
   });
 
+  it('rejects near-multiples instead of applying an acceptance epsilon', () => {
+    const result = validateJsonSchemaDocuments(
+      '{"type":"number","multipleOf":0.1}',
+      '0.30000000000001',
+      { draft: 'auto', validateFormats: true },
+    );
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0]).toMatchObject({ keyword: 'multipleOf', limit: 0.1 });
+  });
+
+  it('applies exact decimal multiple checks at nested JSON Pointer paths', () => {
+    const result = validateJsonSchemaDocuments(
+      '{"type":"object","properties":{"ratio":{"multipleOf":0.1}}}',
+      '{"ratio":0.3}',
+      { draft: 'auto', validateFormats: true },
+    );
+    expect(result.ok).toBe(true);
+    expect(result.valid).toBe(true);
+  });
+
   it('preserves the multipleOf divisor in normalized diagnostics', () => {
     const result = validateJsonSchemaDocuments('{"type":"number","multipleOf":0.1}', '0.35', {
       draft: 'auto',

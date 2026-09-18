@@ -99,6 +99,10 @@ export class JsonSchemaValidatorToolComponent {
   );
   private readonly locale = inject(LOCALE_ID);
   private readonly numberFormatter = new Intl.NumberFormat(this.locale, { maximumFractionDigits: 0 });
+  private readonly limitFormatter = new Intl.NumberFormat(this.locale, {
+    maximumSignificantDigits: 21,
+    useGrouping: false,
+  });
   private taskRevision = 0;
   private abortController: AbortController | null = null;
   private copiedTimer: ReturnType<typeof setTimeout> | null = null;
@@ -307,7 +311,7 @@ export class JsonSchemaValidatorToolComponent {
     const path = this.displayPath(error.instancePath);
     const property = error.property || '';
     const expected = error.expected || '';
-    const limit = error.limit === null ? '' : this.formatNumber(error.limit);
+    const limit = error.limit === null ? '' : this.formatLimit(error.limit);
     const labels: Readonly<Record<string, string>> = {
       required: $localize`:@@json_schema_error_required:${path}:path: doit contenir la propriété obligatoire « ${property}:property: ».`,
       additionalProperties: $localize`:@@json_schema_error_additional:${path}:path: contient la propriété non autorisée « ${property}:property: ».`,
@@ -352,6 +356,10 @@ export class JsonSchemaValidatorToolComponent {
 
   formatNumber(value: number): string {
     return this.numberFormatter.format(value);
+  }
+
+  formatLimit(value: number): string {
+    return this.limitFormatter.format(value);
   }
 
   trackError(index: number, error: JsonSchemaValidationError): string {

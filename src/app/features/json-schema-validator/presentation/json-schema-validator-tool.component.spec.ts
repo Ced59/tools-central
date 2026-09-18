@@ -128,4 +128,26 @@ describe('JsonSchemaValidatorToolComponent', () => {
       limit: null,
     })).toContain('customRule');
   });
+
+  it('preserves fractional schema limits in localized diagnostics', () => {
+    const component = TestBed.createComponent(JsonSchemaValidatorToolComponent).componentInstance;
+    const multipleLabel = component.validationErrorLabel({
+      keyword: 'multipleOf',
+      instancePath: '/ratio',
+      schemaPath: '#/properties/ratio/multipleOf',
+      property: '',
+      expected: '',
+      limit: 0.1,
+    });
+    const minimumLabel = component.validationErrorLabel({
+      keyword: 'minimum',
+      instancePath: '/ratio',
+      schemaPath: '#/properties/ratio/minimum',
+      property: '',
+      expected: '',
+      limit: 0.5,
+    });
+    expect(multipleLabel).toContain('0,1');
+    expect(minimumLabel).toContain('0,5');
+  });
 });
