@@ -98,6 +98,26 @@ describe('convertCsvJson', () => {
     expect(result.issues.some(issue => issue.code === 'output-too-large')).toBe(true);
   });
 
+  it('arrête le mapping dès la première valeur JSON imbriquée hors limite', () => {
+    const mapping = Array.from(
+      { length: CSV_JSON_MAX_COLUMNS },
+      (_, index) => `value => output_${String(index + 1)}`,
+    ).join('\n');
+    const result = convertCsvJson(JSON.stringify([{
+      value: ['x'.repeat(CSV_JSON_MAX_CELL_CHARACTERS)],
+    }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping,
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues).toEqual([
+      expect.objectContaining({ code: 'cell-limit', row: 1, column: 1 }),
+    ]);
+  });
+
   it('borne aussi la sérialisation JSON avant de dupliquer les valeurs mappées', () => {
     const mapping = Array.from(
       { length: CSV_JSON_MAX_COLUMNS },

@@ -302,18 +302,26 @@ function convertJsonToCsv(
   outputLines.push(headerLine);
   let outputCharacters = bom.length + headerLine.length;
   for (const [rowIndex, row] of flattenedRows.entries()) {
-    const visibleValues = mapping.map((entry, columnIndex) => {
+    const serializedValues = new Map<string, string>();
+    const visibleValues: string[] = [];
+    for (let columnIndex = 0; columnIndex < mapping.length; columnIndex += 1) {
+      const entry = mapping[columnIndex];
       const value = row[entry.source];
-      const cell = csvScalar(value);
+      let cell = serializedValues.get(entry.source);
+      if (cell === undefined) {
+        cell = csvScalar(value);
+        serializedValues.set(entry.source, cell);
+      }
       const protectedCell = options.protectSpreadsheetFormulas && isSpreadsheetFormula(cell, value)
         ? `'${cell}`
         : cell;
       if (protectedCell.length > CSV_JSON_MAX_CELL_CHARACTERS) {
         addIssue(state, 'cell-limit', 'error', rowIndex + 1, columnIndex + 1);
+        break;
       }
       if (protectedCell !== cell) protectedFormulaCount += 1;
-      return protectedCell;
-    });
+      visibleValues.push(protectedCell);
+    }
     if (hasErrors(state)) break;
     const outputLine = encodeCsvRowWithinLimit(
       visibleValues,
