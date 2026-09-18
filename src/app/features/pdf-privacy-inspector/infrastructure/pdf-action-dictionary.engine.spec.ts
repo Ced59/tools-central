@@ -1134,6 +1134,84 @@ describe('inspectPdfStructuralSignals', () => {
       validatePdfObjectStreamBudgets(oversizedCompressedCount);
     }).toThrow('PDF compressed indirect object limit');
 
+    const buildIndirectObjectStreamScalars = (
+      objectCount: number,
+      firstObjectOffset: number,
+    ): Uint8Array => {
+      const header = '%PDF-1.7\n';
+      const objectStreamPayload = '4 0 null';
+      const objectStream = '1 0 obj\n<< /Type /ObjStm /N 2 0 R /First 3 0 R '
+        + `/Length ${String(objectStreamPayload.length)} >>\nstream\n`
+        + `${objectStreamPayload}\nendstream\nendobj\n`;
+      const countObject = `2 0 obj\n${String(objectCount)}\nendobj\n`;
+      const firstObject = `3 0 obj\n${String(firstObjectOffset)}\nendobj\n`;
+      const body = header + objectStream + countObject + firstObject;
+      const objectStreamOffset = header.length;
+      const countOffset = objectStreamOffset + objectStream.length;
+      const firstOffset = countOffset + countObject.length;
+      const xrefOffset = body.length;
+      return joinBytes(
+        body,
+        '5 0 obj\n<< /Type /XRef /Size 6 /W [1 4 2] /Index [1 5] /Length 35 >>\n',
+        'stream\n',
+        encodeXrefRow(1, objectStreamOffset),
+        encodeXrefRow(1, countOffset),
+        encodeXrefRow(1, firstOffset),
+        encodeXrefRow(2, 1, 0),
+        encodeXrefRow(1, xrefOffset),
+        '\nendstream\nendobj\nstartxref\n',
+        String(xrefOffset),
+        '\n%%EOF\n',
+      );
+    };
+    expect(() => validatePdfObjectStreamBudgets(
+      buildIndirectObjectStreamScalars(1, 4),
+    )).not.toThrow();
+    expect(() => validatePdfObjectStreamBudgets(
+      buildIndirectObjectStreamScalars(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1, 4),
+    )).toThrow('PDF compressed indirect object limit');
+    expect(() => validatePdfObjectStreamBudgets(
+      buildIndirectObjectStreamScalars(0, -1),
+    )).toThrow('Missing PDF first offset');
+
+    const buildCompressedObjectStreamScalars = (objectCount: number): Uint8Array => {
+      const header = '%PDF-1.7\n';
+      const targetPayload = '4 0 null';
+      const targetStream = '1 0 obj\n<< /Type /ObjStm /N 6 0 R /First 7 0 R '
+        + `/Length ${String(targetPayload.length)} >>\nstream\n`
+        + `${targetPayload}\nendstream\nendobj\n`;
+      const countValue = String(objectCount);
+      const scalarHeader = `6 0 7 ${String(countValue.length + 1)} `;
+      const scalarPayload = `${scalarHeader}${countValue} 4`;
+      const scalarStream = '8 0 obj\n<< /Type /ObjStm /N 2 '
+        + `/First ${String(scalarHeader.length)} /Length ${String(scalarPayload.length)} >>\n`
+        + `stream\n${scalarPayload}\nendstream\nendobj\n`;
+      const body = header + targetStream + scalarStream;
+      const targetOffset = header.length;
+      const scalarOffset = targetOffset + targetStream.length;
+      const xrefOffset = body.length;
+      return joinBytes(
+        body,
+        '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] ',
+        '/Index [1 1 4 1 6 3 10 1] /Length 42 >>\nstream\n',
+        encodeXrefRow(1, targetOffset),
+        encodeXrefRow(2, 1, 0),
+        encodeXrefRow(2, 8, 0),
+        encodeXrefRow(2, 8, 1),
+        encodeXrefRow(1, scalarOffset),
+        encodeXrefRow(1, xrefOffset),
+        '\nendstream\nendobj\nstartxref\n',
+        String(xrefOffset),
+        '\n%%EOF\n',
+      );
+    };
+    expect(() => validatePdfObjectStreamBudgets(
+      buildCompressedObjectStreamScalars(1),
+    )).not.toThrow();
+    expect(() => validatePdfObjectStreamBudgets(
+      buildCompressedObjectStreamScalars(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 1),
+    )).toThrow('PDF compressed indirect object limit');
+
     const oversizedXref = joinBytes(
       '%PDF-1.7\ntrailer\n<< /Size ',
       String(PDF_PRIVACY_MAX_CLASSIC_INDIRECT_OBJECTS + 2),

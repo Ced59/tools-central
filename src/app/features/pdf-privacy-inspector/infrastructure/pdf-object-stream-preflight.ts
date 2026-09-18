@@ -33,6 +33,8 @@ interface RawPdfReference {
   generationNumber: number;
 }
 
+type RawPdfUnsignedScalar = number | RawPdfReference;
+
 type RawPdfDecodeParameterValue = number | RawPdfReference | 'invalid';
 
 interface RawPdfFilterDecodeParameters {
@@ -119,8 +121,8 @@ interface ParsedDictionary {
   length?: number | RawPdfReference;
   filters?: PdfFilters;
   decodeParameters?: PdfDecodeParameters;
-  objectCount?: number;
-  firstObjectOffset?: number;
+  objectCount?: RawPdfUnsignedScalar;
+  firstObjectOffset?: RawPdfUnsignedScalar;
   xrefSize?: number;
   xrefWidths?: readonly number[];
   xrefIndex?: readonly number[];
@@ -331,8 +333,19 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
       );
       validateXrefSize(dictionary.xrefSize);
     } else {
-      if (dictionary.objectCount === undefined) throw new Error('Missing PDF object count');
-      compressedIndirectObjects += dictionary.objectCount;
+      const objectCount = resolveCriticalUnsignedScalar(
+        data,
+        dictionary.objectCount,
+        objectStreamSelection,
+      );
+      if (objectCount === undefined) throw new Error('Missing PDF object count');
+      const firstObjectOffset = resolveCriticalUnsignedScalar(
+        data,
+        dictionary.firstObjectOffset,
+        objectStreamSelection,
+      );
+      if (firstObjectOffset === undefined) throw new Error('Missing PDF first offset');
+      compressedIndirectObjects += objectCount;
       if (
         !Number.isSafeInteger(compressedIndirectObjects)
         || classicIndirectObjects + compressedIndirectObjects
@@ -1677,7 +1690,17 @@ function collectCompressedIndirectLengthCandidates(
           continue;
         }
       }
-      if (dictionary.objectCount === undefined || dictionary.firstObjectOffset === undefined) {
+      const objectCount = resolveCriticalUnsignedScalar(
+        data,
+        dictionary.objectCount,
+        candidates,
+      );
+      const firstObjectOffset = resolveCriticalUnsignedScalar(
+        data,
+        dictionary.firstObjectOffset,
+        candidates,
+      );
+      if (objectCount === undefined || firstObjectOffset === undefined) {
         continue;
       }
       const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
@@ -1723,8 +1746,8 @@ function collectCompressedIndirectLengthCandidates(
       if (!decoded) continue;
       const values = readCompressedObjectValues(
         decoded,
-        dictionary.objectCount,
-        dictionary.firstObjectOffset,
+        objectCount,
+        firstObjectOffset,
       );
       for (const value of values) {
         const key = referenceKey(value.objectNumber, 0);
@@ -2588,10 +2611,21 @@ function isAuthoritativeCompressedNullObject(
       return false;
     }
   }
+  const scalarCandidates = { authoritativeOffsets };
+  const objectCount = resolveCriticalUnsignedScalar(
+    data,
+    dictionary.objectCount,
+    scalarCandidates,
+  );
+  const firstObjectOffset = resolveCriticalUnsignedScalar(
+    data,
+    dictionary.firstObjectOffset,
+    scalarCandidates,
+  );
   if (
-    dictionary.objectCount === undefined
-    || dictionary.firstObjectOffset === undefined
-    || entry.objectIndex >= dictionary.objectCount
+    objectCount === undefined
+    || firstObjectOffset === undefined
+    || entry.objectIndex >= objectCount
   ) return false;
 
   const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
@@ -2628,8 +2662,8 @@ function isAuthoritativeCompressedNullObject(
   );
   return decoded !== undefined && compressedObjectIsNull(
     decoded,
-    dictionary.objectCount,
-    dictionary.firstObjectOffset,
+    objectCount,
+    firstObjectOffset,
     reference.objectNumber,
     entry.objectIndex,
   );
@@ -2748,6 +2782,20 @@ function resolveCriticalStreamType(
   return matchesKeyword(data, objectEnd, 'endobj') ? value.value : null;
 }
 
+function resolveCriticalUnsignedScalar(
+  data: Uint8Array,
+  value: RawPdfUnsignedScalar | undefined,
+  candidates: CompressedReferenceCandidates,
+): number | undefined {
+  if (value === undefined) return undefined;
+  const resolved = typeof value === 'number'
+    ? value
+    : resolveDecodeParameterScalar(data, value, candidates);
+  return resolved !== null && Number.isSafeInteger(resolved) && resolved >= 0
+    ? resolved
+    : undefined;
+}
+
 function parseCriticalDictionary(
   data: Uint8Array,
   dictionaryStart: number,
@@ -2758,8 +2806,8 @@ function parseCriticalDictionary(
   let length: number | RawPdfReference | undefined;
   let filters: PdfFilters | undefined = [];
   let decodeParameters: PdfDecodeParameters | undefined;
-  let objectCount: number | undefined;
-  let firstObjectOffset: number | undefined;
+  let objectCount: RawPdfUnsignedScalar | undefined;
+  let firstObjectOffset: RawPdfUnsignedScalar | undefined;
   let xrefSize: number | undefined;
   let xrefWidths: readonly number[] | undefined;
   let xrefIndex: readonly number[] | undefined;
@@ -2924,13 +2972,13 @@ function parseCriticalDictionary(
   const semanticType = forcedSemanticType
     ?? (type === 'ObjStm' || type === 'XRef' ? type : undefined);
   if (semanticType === 'ObjStm') {
-    objectCount = readUniqueUnsignedInteger(
+    objectCount = readUniqueUnsignedScalar(
       data,
       objectCountValueStarts,
       'Duplicate PDF object count',
       'Invalid PDF object count',
     );
-    firstObjectOffset = readUniqueUnsignedInteger(
+    firstObjectOffset = readUniqueUnsignedScalar(
       data,
       firstObjectOffsetValueStarts,
       'Duplicate PDF first offset',
@@ -2992,6 +3040,22 @@ function parseCriticalDictionary(
     hasEncryptionDictionary,
     encryptionReference,
   };
+}
+
+function readUniqueUnsignedScalar(
+  data: Uint8Array,
+  valueStarts: readonly number[],
+  duplicateMessage: string,
+  invalidMessage: string,
+): RawPdfUnsignedScalar | undefined {
+  if (valueStarts.length === 0) return undefined;
+  if (valueStarts.length > 1) throw new Error(duplicateMessage);
+  const valueStart = valueStarts[0];
+  const reference = readRawPdfReference(data, valueStart);
+  if (reference) return reference.reference;
+  const value = readUnsignedInteger(data, valueStart);
+  if (!value) throw new Error(invalidMessage);
+  return value.value;
 }
 
 function readUniqueUnsignedInteger(
