@@ -35,6 +35,19 @@ describe('convertCsvJson', () => {
     expect(result.stats).toMatchObject({ inputRows: 2, outputRows: 1, columns: 3 });
   });
 
+  it('privilégie la largeur de ligne cohérente au nombre brut de séparateurs', () => {
+    const result = convertCsvJson(
+      'first,last;desc,value\nAda,Lovelace;hello,world',
+      CSV_DEFAULTS,
+    );
+
+    expect(result.detectedDelimiter).toBe('semicolon');
+    expect(JSON.parse(result.output)).toEqual([{
+      'first,last': 'Ada,Lovelace',
+      'desc,value': 'hello,world',
+    }]);
+  });
+
   it('infère seulement les types sûrs et conserve les identifiants à zéro initial', () => {
     const result = convertCsvJson(
       'code,count,ratio,precise,tiny,empty,nil,yes,no\n00123,42,1.25,0.1234567890123456789,1e-400,,null,true,false',
@@ -77,6 +90,24 @@ describe('convertCsvJson', () => {
       identifier: 1,
       'sortie=>finale': 2,
     }]);
+  });
+
+  it('rejette les noms de mapping dont l’UTF-16 est mal formé', () => {
+    const quoted = convertCsvJson('[{"x":1}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping: 'x => "\\ud800"',
+    });
+    const unquoted = convertCsvJson('[{"x":1}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+      mapping: `x => ${String.fromCharCode(0xd800)}`,
+    });
+
+    expect(quoted.ok).toBe(false);
+    expect(unquoted.ok).toBe(false);
+    expect(quoted.issues[0]?.code).toBe('mapping-invalid');
+    expect(unquoted.issues[0]?.code).toBe('mapping-invalid');
   });
 
   it('rejette un mapping qui dépasserait la limite de colonnes', () => {

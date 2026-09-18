@@ -456,22 +456,32 @@ function detectDelimiter(
   state: MutableConversionState,
 ): Exclude<CsvJsonDelimiter, 'auto'> {
   let best: Exclude<CsvJsonDelimiter, 'auto'> = 'comma';
-  let bestScore = 0;
+  let bestConsistency = 0;
+  let bestDeviation = Number.POSITIVE_INFINITY;
+  let bestMode = Number.POSITIVE_INFINITY;
   for (const candidate of Object.keys(DELIMITERS) as Exclude<CsvJsonDelimiter, 'auto'>[]) {
     const counts = delimiterCounts(source, DELIMITERS[candidate]);
-    const nonZero = counts.filter(count => count > 0);
-    if (!nonZero.length) continue;
     const frequencies = new Map<number, number>();
-    for (const count of nonZero) frequencies.set(count, (frequencies.get(count) ?? 0) + 1);
-    const [mode, frequency] = [...frequencies.entries()]
-      .sort((left, right) => right[1] - left[1] || right[0] - left[0])[0];
-    const score = frequency * 100 + mode * 5 - Math.abs(nonZero.length - frequency) * 10;
-    if (score > bestScore) {
+    for (const count of counts) frequencies.set(count, (frequencies.get(count) ?? 0) + 1);
+    const modeEntry = [...frequencies.entries()]
+      .filter(([count]) => count > 0)
+      .sort((left, right) => right[1] - left[1] || left[0] - right[0])
+      .at(0);
+    if (!modeEntry) continue;
+    const [mode, frequency] = modeEntry;
+    const consistency = frequency / counts.length;
+    const deviation = counts.reduce((total, count) => total + Math.abs(count - mode), 0);
+    const isBetter = consistency > bestConsistency
+      || (consistency === bestConsistency && deviation < bestDeviation)
+      || (consistency === bestConsistency && deviation === bestDeviation && mode < bestMode);
+    if (isBetter) {
       best = candidate;
-      bestScore = score;
+      bestConsistency = consistency;
+      bestDeviation = deviation;
+      bestMode = mode;
     }
   }
-  if (bestScore === 0) addIssue(state, 'delimiter-fallback', 'warning');
+  if (bestConsistency === 0) addIssue(state, 'delimiter-fallback', 'warning');
   return best;
 }
 
@@ -479,20 +489,26 @@ function delimiterCounts(source: string, delimiter: string): number[] {
   const counts: number[] = [];
   let count = 0;
   let inQuotes = false;
+  let rowHasContent = false;
   for (let index = 0; index < source.length && counts.length < 20; index += 1) {
     const character = source[index];
     if (character === '"') {
+      rowHasContent = true;
       if (inQuotes && source[index + 1] === '"') index += 1;
       else inQuotes = !inQuotes;
     } else if (!inQuotes && character === delimiter) {
       count += 1;
+      rowHasContent = true;
     } else if (!inQuotes && (character === '\n' || character === '\r')) {
-      counts.push(count);
+      if (rowHasContent) counts.push(count);
       count = 0;
+      rowHasContent = false;
       if (character === '\r' && source[index + 1] === '\n') index += 1;
+    } else {
+      rowHasContent = true;
     }
   }
-  if (counts.length < 20 && count > 0) counts.push(count);
+  if (counts.length < 20 && rowHasContent) counts.push(count);
   return counts;
 }
 
@@ -594,10 +610,12 @@ function parseMappingLine(line: string): ColumnMapping | null {
 function parseMappingName(rawName: string): string | null {
   const name = rawName.trim();
   if (!name) return null;
-  if (!name.startsWith('"')) return name.includes('"') ? null : name;
+  if (!name.startsWith('"')) {
+    return name.includes('"') || !hasWellFormedUtf16(name) ? null : name;
+  }
   try {
     const parsed: unknown = JSON.parse(name);
-    return typeof parsed === 'string' && parsed.length > 0 ? parsed : null;
+    return typeof parsed === 'string' && parsed.length > 0 && hasWellFormedUtf16(parsed) ? parsed : null;
   } catch {
     return null;
   }
