@@ -55,7 +55,9 @@
         <div class="field">
           <label for="csv-json-delimiter" i18n="@@csv_json_delimiter_label">Séparateur CSV</label>
           <select id="csv-json-delimiter" [value]="options().delimiter" (change)="updateDelimiter($event)">
-            <option value="auto" i18n="@@csv_json_delimiter_auto">Détection automatique</option>
+            @if (options().direction === 'csv-to-json') {
+              <option value="auto" i18n="@@csv_json_delimiter_auto">Détection automatique</option>
+            }
             <option value="comma" i18n="@@csv_json_delimiter_comma">Virgule</option>
             <option value="semicolon" i18n="@@csv_json_delimiter_semicolon">Point-virgule</option>
             <option value="tab" i18n="@@csv_json_delimiter_tab">Tabulation</option>

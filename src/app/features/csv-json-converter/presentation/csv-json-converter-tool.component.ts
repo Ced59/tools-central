@@ -150,7 +150,9 @@ export class CsvJsonConverterToolComponent {
         : 'csv-to-json';
       this.options.set({
         ...createOptions(direction),
-        delimiter: file.name.toLowerCase().endsWith('.tsv') ? 'tab' : 'auto',
+        delimiter: direction === 'json-to-csv'
+          ? 'comma'
+          : file.name.toLowerCase().endsWith('.tsv') ? 'tab' : 'auto',
       });
       this.source.set(content.slice(0, CSV_JSON_MAX_SOURCE_CHARACTERS + 1));
       this.fileName.set(file.name);
@@ -260,7 +262,8 @@ export class CsvJsonConverterToolComponent {
       'json-root-not-array': $localize`:@@csv_json_issue_json_root:La racine JSON doit être un tableau d’objets.`,
       'json-row-not-object': $localize`:@@csv_json_issue_json_row:Chaque élément du tableau JSON doit être un objet.`,
       'json-no-columns': $localize`:@@csv_json_issue_json_no_columns:Le tableau JSON contient des lignes sans aucune propriété exportable. Ajoutez au moins une clé.`,
-      'json-depth-limit': $localize`:@@csv_json_issue_depth:Un objet dépasse 12 niveaux d’imbrication.`,
+      'json-unicode-invalid': $localize`:@@csv_json_issue_json_unicode:Une chaîne JSON contient un caractère UTF-16 non apparié qui serait altéré lors de l’export.`,
+      'json-depth-limit': $localize`:@@csv_json_issue_depth:Une valeur JSON dépasse 12 niveaux d’imbrication.`,
       'json-path-collision': $localize`:@@csv_json_issue_path_collision:Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.`,
       'spreadsheet-formula-protected': $localize`:@@csv_json_issue_formula:Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.`,
     };
@@ -313,7 +316,7 @@ export class CsvJsonConverterToolComponent {
 function createOptions(direction: CsvJsonDirection): CsvJsonConversionOptions {
   return {
     direction,
-    delimiter: 'auto',
+    delimiter: direction === 'csv-to-json' ? 'auto' : 'comma',
     firstRowHeaders: true,
     trimCells: false,
     inferTypes: true,

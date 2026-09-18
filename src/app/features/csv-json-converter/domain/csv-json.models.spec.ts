@@ -262,6 +262,30 @@ describe('convertCsvJson', () => {
     expect(result.issues[0]?.code).toBe('json-path-collision');
   });
 
+  it('applique la limite de profondeur aux tableaux imbriqués', () => {
+    let nested: unknown = 'value';
+    for (let depth = 0; depth < 13; depth += 1) nested = [nested];
+    const result = convertCsvJson(JSON.stringify([{ nested }]), {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues[0]?.code).toBe('json-depth-limit');
+  });
+
+  it('rejette les chaînes UTF-16 contenant un surrogate non apparié', () => {
+    const result = convertCsvJson('[{"x":"\\ud800"}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.output).toBe('');
+    expect(result.issues[0]?.code).toBe('json-unicode-invalid');
+  });
+
   it('arrête proprement une source vide, trop grande ou un champ CSV non fermé', () => {
     const empty = convertCsvJson('   ', CSV_DEFAULTS);
     const oversized = convertCsvJson('x'.repeat(CSV_JSON_MAX_SOURCE_CHARACTERS + 1), CSV_DEFAULTS);

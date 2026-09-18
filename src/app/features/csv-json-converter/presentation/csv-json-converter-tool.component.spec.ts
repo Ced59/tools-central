@@ -36,10 +36,13 @@ describe('CsvJsonConverterToolComponent', () => {
     component.options.update(options => ({ ...options, mapping: 'nom => name' }));
 
     component.selectDirection('json-to-csv');
+    fixture.detectChanges();
 
     expect(component.options().direction).toBe('json-to-csv');
+    expect(component.options().delimiter).toBe('comma');
     expect(component.options().mapping).toBe('');
     expect(component.source()).toContain('profil');
+    expect((fixture.nativeElement as HTMLElement).querySelector('option[value="auto"]')).toBeNull();
   });
 
   it('invalide un résultat lorsque les options changent', () => {

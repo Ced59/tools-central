@@ -31,6 +31,7 @@ export type CsvJsonIssueCode =
   | 'json-root-not-array'
   | 'json-row-not-object'
   | 'json-no-columns'
+  | 'json-unicode-invalid'
   | 'json-depth-limit'
   | 'json-path-collision'
   | 'spreadsheet-formula-protected';
@@ -239,6 +240,7 @@ function convertJsonToCsv(
       addIssue(state, 'json-row-not-object', 'error', rowIndex + 1);
       continue;
     }
+    if (!validateJsonRowStructure(row, state, rowIndex + 1)) break;
     const flattened = Object.create(null) as Record<string, unknown>;
     flattenRecord(row, '', flattened, state, rowIndex + 1, 0);
     flattenedRows.push(flattened);
@@ -580,6 +582,56 @@ function flattenRecord(
       target[path] = value;
     }
   }
+}
+
+function validateJsonRowStructure(
+  rowValue: Readonly<Record<string, unknown>>,
+  state: MutableConversionState,
+  row: number,
+): boolean {
+  const pending: Array<{ value: unknown; depth: number }> = [{ value: rowValue, depth: 0 }];
+  while (pending.length > 0) {
+    const current = pending.pop();
+    if (!current) break;
+    if (typeof current.value === 'string') {
+      if (!hasWellFormedUtf16(current.value)) {
+        addIssue(state, 'json-unicode-invalid', 'error', row);
+        return false;
+      }
+      continue;
+    }
+    if (!Array.isArray(current.value) && !isRecord(current.value)) continue;
+    if (current.depth > 12) {
+      addIssue(state, 'json-depth-limit', 'error', row);
+      return false;
+    }
+    if (Array.isArray(current.value)) {
+      for (const value of current.value) pending.push({ value, depth: current.depth + 1 });
+      continue;
+    }
+    for (const [key, value] of Object.entries(current.value)) {
+      if (!hasWellFormedUtf16(key)) {
+        addIssue(state, 'json-unicode-invalid', 'error', row);
+        return false;
+      }
+      pending.push({ value, depth: current.depth + 1 });
+    }
+  }
+  return true;
+}
+
+function hasWellFormedUtf16(value: string): boolean {
+  for (let index = 0; index < value.length; index += 1) {
+    const code = value.charCodeAt(index);
+    if (code >= 0xd800 && code <= 0xdbff) {
+      const next = value.charCodeAt(index + 1);
+      if (!(next >= 0xdc00 && next <= 0xdfff)) return false;
+      index += 1;
+    } else if (code >= 0xdc00 && code <= 0xdfff) {
+      return false;
+    }
+  }
+  return true;
 }
 
 function validateJsonNumbers(source: string, state: MutableConversionState): void {
