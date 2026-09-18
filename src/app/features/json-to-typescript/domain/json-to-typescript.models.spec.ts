@@ -168,6 +168,19 @@ describe('generateTypeScriptFromJson', () => {
     expect(result.warnings).toContainEqual({ code: 'date-inference', count: 2, detail: '' });
   });
 
+  it('enforces the ISO timezone offset boundary', () => {
+    const result = generateTypeScriptFromJson(`{
+      "maximumOffset": "2026-01-01T00:00:00+14:00",
+      "minutesPastMaximum": "2026-01-01T00:00:00+14:01",
+      "hoursPastMaximum": "2026-01-01T00:00:00+23:00"
+    }`, { ...DEFAULT_OPTIONS, inferDates: true });
+
+    expect(result.output).toContain('maximumOffset: Date;');
+    expect(result.output).toContain('minutesPastMaximum: string;');
+    expect(result.output).toContain('hoursPastMaximum: string;');
+    expect(result.stats.inferredDates).toBe(1);
+  });
+
   it('widens mixed date and ordinary strings without claiming a Date output', () => {
     const result = generateTypeScriptFromJson('[{"value":"2026-09-18"},{"value":"pending"}]', {
       ...DEFAULT_OPTIONS,

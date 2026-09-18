@@ -541,12 +541,15 @@ function isIsoDate(value: string): boolean {
     return false;
   }
   const [, year, month, day, hour, minute, second = '0', offsetHour = '0', offsetMinute = '0'] = dateTime;
+  const offsetHours = Number(offsetHour);
+  const offsetMinutes = Number(offsetMinute);
   if (!isValidCalendarDate(Number(year), Number(month), Number(day))
     || Number(hour) > 23
     || Number(minute) > 59
     || Number(second) > 59
-    || Number(offsetHour) > 23
-    || Number(offsetMinute) > 59) {
+    || offsetHours > 14
+    || offsetMinutes > 59
+    || (offsetHours === 14 && offsetMinutes !== 0)) {
     return false;
   }
   return Number.isFinite(Date.parse(value));

@@ -18,7 +18,7 @@ Le dépôt reste un produit en migration, pas une Clean Architecture achevée. S
 | Écosystème Prime | PrimeNG, thème et icônes | 0 dépendance et 0 usage source |
 | Bundle initial de production | 656,90 kB lors du premier build corrigé | 659,80 kB brut, 166,41 kB transféré estimé ; PDF.js et les moteurs documentaires restent dans des chunks lazy (Worker d’inspection PDF : 1,08 MB brut, 303,80 kB transféré) |
 | Vulnérabilités npm | 58, dont 5 critiques | 0 |
-| Tests unitaires | suite non compilable | 158 fichiers, 848 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
+| Tests unitaires | suite non compilable | 158 fichiers, 849 tests verts sous Vitest, plus 5 tests Node du Worker PDF.js généré |
 | Couverture | aucun seuil | 57,25 % statements, 48,27 % branches, 54,06 % fonctions, 61,24 % lignes |
 | E2E | aucun | 17 parcours Playwright verts, dont des scénarios PDF de confidentialité, CSV ↔ JSON et diff JSON réels |
 | Routes statiques | 2 | 2 496 pages prérendues ; 2 408 URL sont indexables et les variantes d’outils non relues sont omises des locales secondaires |
