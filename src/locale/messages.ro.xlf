@@ -87152,6 +87152,864 @@ Grace Hopper;grace@example.test;true;100</target>
 ]</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_compare_title">
+      <segment>
+        <source>Comparaison structurée</source>
+        <target state="translated">Comparare structurată</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_compare_desc">
+      <segment>
+        <source>Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.</source>
+        <target state="translated">Comparați documente structurate după cale, tip și valoare fără a expune conținutul acestora.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Compară două JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_desc">
+      <segment>
+        <source>Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.</source>
+        <target state="translated">Comparați local două JSON, asociați array-urile după cheie, ignorați căile volatile și exportați un patch RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON sans confondre formatage et changements réels</source>
+        <target state="translated">Compară două JSON fără a confunda formatarea și schimbările reale</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_lead">
+      <segment>
+        <source>Ce comparateur analyse localement la structure de deux documents JSON. Il distingue ajouts, suppressions, valeurs, types et déplacements, peut associer des objets de tableau par identifiant, exclut des chemins volatils et génère un patch JSON standard sans envoyer les données vers un serveur.</source>
+        <target state="translated">Acest comparator analizează local structura a două documente JSON. Distinge adăugările, ștergerile, valorile, tipurile și mutările, poate asocia obiecte din array după identificator, exclude căile volatile și generează un patch JSON standard fără a trimite datele către un server.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_use_cases">
+      <segment>
+        <source>Quand utiliser un diff JSON structurel ?</source>
+        <target state="translated">Când să folosiți un diff JSON structural?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_title">
+      <segment>
+        <source>Vérifier une réponse d’API</source>
+        <target state="translated">Verificați un răspuns API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_text">
+      <segment>
+        <source>Comparez une réponse de référence et une nouvelle version sans être perturbé par l’ordre des propriétés ni l’indentation. Les changements sont rattachés à des chemins explicites plutôt qu’à des numéros de ligne fragiles.</source>
+        <target state="translated">Comparați un răspuns de referință cu o nouă versiune fără a fi deranjați de ordinea proprietăților sau de indentare. Schimbările sunt legate de căi explicite mai degrabă decât de numere de linie fragile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_title">
+      <segment>
+        <source>Relire une configuration avant déploiement</source>
+        <target state="translated">Revizuiți o configurație înainte de desfășurare</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_text">
+      <segment>
+        <source>Isolez les options ajoutées, retirées ou dont le type a changé, puis téléchargez le rapport pour la revue. Les secrets restent locaux, mais ils figurent dans le rapport si vous ne les excluez pas.</source>
+        <target state="translated">Izolați opțiunile adăugate, eliminate sau ale căror tipuri s-au schimbat, apoi descărcați raportul pentru revizuire. Secretele rămân locale, dar apar în raport dacă nu le excludeți.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_title">
+      <segment>
+        <source>Comparer des collections dont l’ordre varie</source>
+        <target state="translated">Comparați colecții ale căror ordine variază</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_text">
+      <segment>
+        <source>Associez les objets d’un tableau avec une clé comme /id ou /meta/identifiant. Un objet déplacé reste le même élément et ses modifications internes sont comparées sous un chemin logique stable.</source>
+        <target state="translated">Asociați obiectele dintr-un array cu o cheie precum /id sau /meta/identificator. Un obiect mutat rămâne același element, iar modificările sale interne sunt comparate sub o cale logică stabilă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Metodă recomandată</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_1">
+      <segment>
+        <source>Commencez par une comparaison par index. Cette stratégie est prévisible pour les tableaux ordonnés et produit directement un patch JSON applicable au document gauche. L’ordre des propriétés d’un objet n’est jamais considéré comme une différence.</source>
+        <target state="translated">Începeți cu o comparație pe index. Această strategie este previzibilă pentru array-urile ordonate și produce direct un patch JSON aplicabil documentului din stânga. Ordinea proprietăților unui obiect nu este niciodată considerată o diferență.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_2">
+      <segment>
+        <source>Si un tableau représente une collection d’entités, activez l’association par clé et indiquez un JSON Pointer relatif à chaque objet. La clé doit être présente, scalaire et unique dans chaque tableau concerné. Les tableaux de chaînes, nombres ou booléens restent comparés par index.</source>
+        <target state="translated">Dacă un array reprezintă o colecție de entități, activați asocierea pe cheie și specificați un JSON Pointer relativ pentru fiecare obiect. Cheia trebuie să fie prezentă, scalară și unică în fiecare array relevant. Array-urile de șiruri, numere sau booleeni rămân comparate pe index.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_3">
+      <segment>
+        <source>Ajoutez enfin les chemins volatils, un par ligne, par exemple /metadata/updatedAt. Le chemin et tout son sous-arbre sont retirés du diff comme du patch ; vérifiez donc cette liste avant de conclure que deux documents sont équivalents.</source>
+        <target state="translated">Adăugați în cele din urmă căile volatile, câte una pe linie, de exemplu /metadata/updatedAt. Calea și tot subarborele său sunt eliminate din diff ca din patch; verificați deci această listă înainte de a concluziona că două documente sunt echivalente.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_outputs">
+      <segment>
+        <source>Comprendre les deux sorties</source>
+        <target state="translated">Înțelegeți cele două ieșiri</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">Patch JSON RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_text">
+      <segment>
+        <source>Le patch contient des opérations add, remove et replace avec des chemins JSON Pointer échappés. Il transforme le document gauche vers le document droit pour les chemins inclus, même lorsque l’aperçu s’appuie sur une association de tableaux par clé.</source>
+        <target state="translated">Patch-ul conține operațiuni add, remove și replace cu căi JSON Pointer escapate. Transformă documentul din stânga în documentul din dreapta pentru căile incluse, chiar și atunci când previzualizarea se bazează pe o asociere de array-uri pe cheie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_title">
+      <segment>
+        <source>Rapport de revue</source>
+        <target state="translated">Raport de revizuire</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_text">
+      <segment>
+        <source>Le rapport conserve le résumé, les options et les valeurs avant/après de chaque différence. Traitez-le comme les documents d’origine : il peut contenir des informations sensibles et n’est jamais téléversé automatiquement.</source>
+        <target state="translated">Raportul păstrează rezumatul, opțiunile și valorile înainte/după fiecare diferență. Tratați-l ca pe documentele originale: poate conține informații sensibile și nu este niciodată încărcat automat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_title">
+      <segment>
+        <source>Lien sans données</source>
+        <target state="translated">Link fără date</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_text">
+      <segment>
+        <source>Le bouton de partage copie uniquement l’adresse publique de l’outil. Les JSON, chemins ignorés, noms de fichiers et résultats ne sont placés ni dans l’URL ni dans le presse-papiers du lien.</source>
+        <target state="translated">Butonul de partajare copiază doar adresa publică a instrumentului. JSON-urile, căile ignorate, numele fișierelor și rezultatele nu sunt plasate nici în URL, nici în clipboard-ul linkului.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limits">
+      <segment>
+        <source>Précision, sécurité et limites</source>
+        <target state="translated">Precizie, securitate și limite</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_1">
+      <segment>
+        <source>Chaque source est limitée à 2 millions de caractères ou 2 Mo par fichier. Le parseur accepte au plus 100 000 valeurs, 64 niveaux d’imbrication et 20 000 différences ; le rapport et le patch partagent un plafond de sortie de 16 millions de caractères.</source>
+        <target state="translated">Fiecare sursă este limitată la 2 milioane de caractere sau 2 Mo pe fișier. Parserul acceptă maximum 100.000 de valori, 64 de niveluri de imbricare și 20.000 de diferențe; raportul și patch-ul împărtășesc un plafon de ieșire de 16 milioane de caractere.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_2">
+      <segment>
+        <source>Les noms de propriétés dupliqués sont refusés au lieu de conserver silencieusement la dernière valeur. Les chaînes UTF-16 mal formées et les nombres qui seraient arrondis par JavaScript sont également rejetés pour éviter un diff trompeur.</source>
+        <target state="translated">Numele de proprietăți duplicate sunt refuzate în loc să păstreze silențios ultima valoare. Șirurile UTF-16 malformate și numerele care ar fi rotunjite de JavaScript sunt, de asemenea, respinse pentru a evita un diff înșelător.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_3">
+      <segment>
+        <source>Le traitement s’effectue dans un Worker éphémère. L’outil compare les données, mais ne valide pas un schéma métier, une signature, des droits d’accès ou la sécurité du système qui consommera le patch.</source>
+        <target state="translated">Procesarea se efectuează într-un Worker efemer. Instrumentul compară datele, dar nu validează un schemă de afaceri, o semnătură, drepturi de acces sau securitatea sistemului care va consuma patch-ul.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Întrebări frecvente</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q1">
+      <segment>
+        <source>Pourquoi l’ordre des propriétés n’apparaît-il pas ?</source>
+        <target state="translated">De ce nu apare ordinea proprietăților?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a1">
+      <segment>
+        <source>Un objet JSON est comparé par noms de propriétés et non par ordre d’écriture. Deux objets possédant les mêmes clés et valeurs sont donc équivalents même si leurs propriétés sont réordonnées ou leur indentation différente.</source>
+        <target state="translated">Un obiect JSON este comparat după numele proprietăților și nu după ordinea de scriere. Două obiecte care au aceleași chei și valori sunt, prin urmare, echivalente chiar dacă proprietățile lor sunt reordonate sau indentarea diferă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q2">
+      <segment>
+        <source>Le patch utilise-t-il les clés d’association des tableaux ?</source>
+        <target state="translated">Patch-ul folosește cheile de asociere ale array-urilor?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a2">
+      <segment>
+        <source>Le rapport utilise les clés pour rendre les changements lisibles et signaler les déplacements. Le patch reste un document RFC 6902 standard fondé sur les index réels afin de pouvoir être appliqué par les bibliothèques compatibles.</source>
+        <target state="translated">Raportul folosește cheile pentru a face schimbările lizibile și a semnala mutările. Patch-ul rămâne un document standard RFC 6902 bazat pe indexurile reale pentru a putea fi aplicat de bibliotecile compatibile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q3">
+      <segment>
+        <source>Pourquoi certains grands nombres sont-ils refusés ?</source>
+        <target state="translated">De ce sunt refuzate unele numere mari?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a3">
+      <segment>
+        <source>JavaScript ne représente pas exactement tous les entiers et décimaux JSON. Plutôt que de comparer deux valeurs déjà arrondies, l’outil demande de les encoder comme chaînes lorsque leur représentation exacte ne peut pas être conservée.</source>
+        <target state="translated">JavaScript nu reprezintă exact toate numerele întregi și decimalele JSON. În loc să compare două valori deja rotunjite, instrumentul cere să fie codificate ca șiruri atunci când reprezentarea lor exactă nu poate fi păstrată.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip_title">
+      <segment>
+        <source>Appliquer un patch sur une copie</source>
+        <target state="translated">Aplicați un patch pe o copie</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip">
+      <segment>
+        <source>Testez toujours le patch sur une copie, puis validez le résultat avec les règles métier du système cible. Un patch syntaxiquement correct peut rester inadapté à une API, une configuration ou une base de données particulière.</source>
+        <target state="translated">Testați întotdeauna patch-ul pe o copie, apoi validați rezultatul cu regulile de afaceri ale sistemului țintă. Un patch sintactic corect poate rămâne inadecvat pentru o API, o configurație sau o bază de date particulară.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Înapoi la instrumentele de date</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_eyebrow">
+      <segment>
+        <source>Données structurées · traitement local</source>
+        <target state="translated">Date structurate · procesare locală</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_h1">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Compară două JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_intro">
+      <segment>
+        <source> Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON. Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902. </source>
+        <target state="translated">Identificați adăugările, eliminările, modificările de valoare, tipuri și mutările din două documente JSON. Asociați tablourile după index sau după cheie, ignorați căile volatile și exportați un patch JSON RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Confidențialitate</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_title">
+      <segment>
+        <source>Vos JSON restent dans ce navigateur</source>
+        <target state="translated">JSON-urile dumneavoastră rămân în acest browser</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_text">
+      <segment>
+        <source> La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur. </source>
+        <target state="translated">Compararea se execută într-un Worker local. Niciun document, nume de fișier sau rezultat nu este trimis pe un server.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_1">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Pasul 1</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_input_title">
+      <segment>
+        <source>Collez ou chargez les deux documents</source>
+        <target state="translated">Lipiciți sau încărcați cele două documente</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_swap">
+      <segment>
+        <source>Inverser</source>
+        <target state="translated">Inversare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Resetare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_badge">
+      <segment>
+        <source>A · Avant</source>
+        <target state="translated">A · Înainte</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_open_file">
+      <segment>
+        <source>Ouvrir un fichier</source>
+        <target state="translated">Deschideți un fișier</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_label">
+      <segment>
+        <source>Document JSON gauche</source>
+        <target state="translated">Document JSON stâng</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_character_count">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractères </source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractere</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_badge">
+      <segment>
+        <source>B · Après</source>
+        <target state="translated">B · După</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_label">
+      <segment>
+        <source>Document JSON droit</source>
+        <target state="translated">Document JSON drept</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_limit">
+      <segment>
+        <source>Fichiers JSON ou TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum chacun.</source>
+        <target state="translated">Fișiere JSON sau TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum fiecare.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_2">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Pasul 2</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_options_title">
+      <segment>
+        <source>Choisissez la stratégie de comparaison</source>
+        <target state="translated">Alegeți strategia de comparare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_mode">
+      <segment>
+        <source>Tableaux</source>
+        <target state="translated">Tabele</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_index">
+      <segment>
+        <source>Comparer par index</source>
+        <target state="translated">Comparare după index</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_mode">
+      <segment>
+        <source>Associer les objets par clé</source>
+        <target state="translated">Asociați obiectele după cheie</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_help">
+      <segment>
+        <source>Les tableaux de scalaires restent comparés par index.</source>
+        <target state="translated">Tabelele de scalari rămân comparate după index.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key">
+      <segment>
+        <source>Clé d’association (JSON Pointer)</source>
+        <target state="translated">Cheia de asociere (JSON Pointer)</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_help">
+      <segment>
+        <source>Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</source>
+        <target state="translated">Exemple: /id sau /meta/identificator. Cheia trebuie să fie unică și scalară.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_summary">
+      <segment>
+        <source>Ignorer des chemins volatils</source>
+        <target state="translated">Ignorați căile volatile</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_label">
+      <segment>
+        <source>Un JSON Pointer par ligne</source>
+        <target state="translated">Un JSON Pointer pe linie</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_help">
+      <segment>
+        <source>Le chemin et tout son sous-arbre sont exclus du diff et du patch.</source>
+        <target state="translated">Calea și tot subarborele său sunt excluse din diff și patch.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_comparing">
+      <segment>
+        <source>Comparaison locale…</source>
+        <target state="translated">Comparare locală…</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare">
+      <segment>
+        <source>Comparer les JSON</source>
+        <target state="translated">Compară JSON-urile</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_link_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Link copiat</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share">
+      <segment>
+        <source>Partager l’outil sans les données</source>
+        <target state="translated">Partajați instrumentul fără datele</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_busy">
+      <segment>
+        <source>Comparaison en cours.</source>
+        <target state="translated">Comparare în curs.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_equal">
+      <segment>
+        <source>Les documents sont équivalents avec ces options.</source>
+        <target state="translated">Documentele sunt echivalente cu aceste opțiuni.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_done">
+      <segment>
+        <source>Comparaison terminée avec des différences.</source>
+        <target state="translated">Compararea s-a terminat cu diferențe.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_error">
+      <segment>
+        <source>La comparaison contient une erreur.</source>
+        <target state="translated">Compararea conține o eroare.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_3">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Rezultatul</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_result_title">
+      <segment>
+        <source>Diff structurel</source>
+        <target state="translated">Diferență structurală</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issues_title">
+      <segment>
+        <source>La comparaison ne peut pas continuer</source>
+        <target state="translated">Compararea nu poate continua</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_title">
+      <segment>
+        <source>Aucune différence structurelle</source>
+        <target state="translated">Nicio diferență structurală</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_text">
+      <segment>
+        <source>Les documents sont équivalents après application des chemins ignorés.</source>
+        <target state="translated">Documentele sunt echivalente după aplicarea căilor ignorate.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> différences détectées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> diferențe detectate</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_text">
+      <segment>
+        <source>Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</source>
+        <target state="translated">Raportul detaliază căile, iar patch-ul transformă documentul din stânga în documentul din dreapta.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_label">
+      <segment>
+        <source>Résumé des différences</source>
+        <target state="translated">Rezumatul diferențelor</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_added">
+      <segment>
+        <source>Ajouts</source>
+        <target state="translated">Adăugiri</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_removed">
+      <segment>
+        <source>Suppressions</source>
+        <target state="translated">Ștergeri</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_changed">
+      <segment>
+        <source>Valeurs</source>
+        <target state="translated">Valori</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_types">
+      <segment>
+        <source>Types</source>
+        <target state="translated">Tipuri</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_moved">
+      <segment>
+        <source>Déplacements</source>
+        <target state="translated">Mutări</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_caption">
+      <segment>
+        <source>Aperçu des différences structurelles</source>
+        <target state="translated">Prezentare generală a diferențelor structurale</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_change">
+      <segment>
+        <source>Changement</source>
+        <target state="translated">Schimbare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_path">
+      <segment>
+        <source>Chemin</source>
+        <target state="translated">Cale</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_before">
+      <segment>
+        <source>Avant</source>
+        <target state="translated">Înainte</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_after">
+      <segment>
+        <source>Après</source>
+        <target state="translated">După</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_truncated">
+      <segment>
+        <source>L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</source>
+        <target state="translated">Prezentarea este limitată la primele 500 de diferențe. Raportul descărcat rămâne complet.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">Patch JSON RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_help">
+      <segment>
+        <source>Applicable au document gauche avec les chemins ignorés exclus.</source>
+        <target state="translated">Aplicabil documentului din stânga cu căile ignorate excluse.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Copiat</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_patch">
+      <segment>
+        <source>Copier le patch</source>
+        <target state="translated">Copiază patch-ul</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_patch">
+      <segment>
+        <source>Télécharger le patch</source>
+        <target state="translated">Descarcă patch-ul</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_output_truncated">
+      <segment>
+        <source>Aperçu tronqué ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Prezentare trunchiată; descărcarea conține ieșirea completă.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_title">
+      <segment>
+        <source>Rapport JSON complet</source>
+        <target state="translated">Raport JSON complet</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_help">
+      <segment>
+        <source>Résumé, options et différences avec valeurs avant/après.</source>
+        <target state="translated">Rezumat, opțiuni și diferențe cu valori înainte/după.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Copiază raportul</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Descarcă raportul</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_left">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;ancienne&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilizatori&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administrare&quot;, &quot;oraș&quot;: &quot;Londra&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;dezvoltare&quot;, &quot;oraș&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;veche&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_right">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;récente&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilizatori&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;arhitectură&quot;, &quot;oraș&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administrare&quot;, &quot;oraș&quot;: &quot;Londra&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;cercetare&quot;, &quot;oraș&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;recentă&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare_error">
+      <segment>
+        <source>La comparaison a échoué dans le navigateur. Réessayez avec des documents plus petits.</source>
+        <target state="translated">Comparația a eșuat în browser. Încercați cu documente mai mici.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Copiere automată imposibilă. Selectați ieșirea și copiați-o manual.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Imposibil de copiat linkul. Copiați adresa paginii din browserul dumneavoastră.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Documentul este gol.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Documentul depășește limita de 2.000.000 de caractere.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Documentul nu este un JSON valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Un obiect conține de două ori același nume de proprietate.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Un număr ar fi rotunjit sau ar deveni infinit în JavaScript. Transformați-l într-un șir pentru a-i păstra valoarea exactă.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Un șir conține un caracter UTF-16 neapariționat.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Documentul depășește 64 de niveluri de imbricare.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Documentul depășește 100.000 de valori JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore">
+      <segment>
+        <source>Un chemin ignoré n’est pas un JSON Pointer valide.</source>
+        <target state="translated">O cale ignorată nu este un JSON Pointer valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_required">
+      <segment>
+        <source>Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.</source>
+        <target state="translated">Indicați cheia de asociere sub formă de JSON Pointer, de exemplu /id.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_invalid">
+      <segment>
+        <source>Un objet du tableau ne possède pas une clé d’association scalaire valide.</source>
+        <target state="translated">Un obiect din array nu are o cheie de asociere scalară validă.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_duplicate">
+      <segment>
+        <source>Une même clé d’association apparaît plusieurs fois dans un tableau.</source>
+        <target state="translated">O aceeași cheie de asociere apare de mai multe ori într-un array.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_changes">
+      <segment>
+        <source>La comparaison dépasse la limite de 20 000 différences.</source>
+        <target state="translated">Compararea depășește limita de 20.000 de diferențe.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_output">
+      <segment>
+        <source>Le rapport et le patch dépasseraient la limite de sortie.</source>
+        <target state="translated">Raportul și patch-ul ar depăși limita de ieșire.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_left">
+      <segment>
+        <source> Document gauche.</source>
+        <target state="translated">Document stâng.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_right">
+      <segment>
+        <source> Document droit.</source>
+        <target state="translated">Document drept.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Cale <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Poziție <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_added">
+      <segment>
+        <source>Ajout</source>
+        <target state="translated">Adăugare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_removed">
+      <segment>
+        <source>Suppression</source>
+        <target state="translated">Ștergere</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_changed">
+      <segment>
+        <source>Valeur modifiée</source>
+        <target state="translated">Valoare modificată</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_type">
+      <segment>
+        <source>Type modifié</source>
+        <target state="translated">Tip modificat</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_moved">
+      <segment>
+        <source>Déplacement</source>
+        <target state="translated">Mutare</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_move_label">
+      <segment>
+        <source>Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></source>
+        <target state="translated">Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Fișierul selectat este gol.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Fișierul depășește limita de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON ou TXT.</source>
+        <target state="translated">Selectați un fișier JSON sau TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Fișierul nu este codificat în UTF-8 valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Nu se poate citi acest fișier local.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore_patch_conflict">
+      <segment>
+        <source>Ces exclusions sont incompatibles avec un patch sans perte. Ignorez le conteneur entier ou retirez les chemins en conflit.</source>
+        <target state="translated">Aceste excluzii sunt incompatibile cu un patch fără pierderi. Ignorați întregul container sau eliminați căile în conflict.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

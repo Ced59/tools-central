@@ -645,3 +645,45 @@ test('CSV JSON converter maps both directions locally and remains responsive', a
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+test('JSON diff matches arrays by key, exports a standard patch and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/data/json-diff');
+
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Comparer deux JSON');
+  await page.locator('#json-diff-left').fill(
+    '{"items":[{"id":"a","value":1},{"id":"b","value":2}],"meta":{"time":"old"}}',
+  );
+  await page.locator('#json-diff-right').fill(
+    '{"items":[{"id":"b","value":3},{"id":"a","value":1},{"id":"c","value":4}],"meta":{"time":"new"}}',
+  );
+  await page.locator('#json-diff-array-mode').selectOption('key');
+  await page.locator('#json-diff-array-key').fill('/id');
+  await page.locator('.ignore-panel summary').click();
+  await page.locator('#json-diff-ignored').fill('/meta/time');
+
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Comparer les JSON' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+
+  const result = page.getByTestId('json-diff-result');
+  await expect(result).toContainText('4 différences détectées');
+  await expect(result).toContainText('/@~1id="b"/value');
+  await expect(result.locator('.changes-table-wrap')).not.toContainText('/meta/time');
+  await expect(result.locator('.output-card').first().locator('pre')).not.toContainText('/meta/time');
+
+  const downloadPromise = page.waitForEvent('download');
+  await result.getByRole('button', { name: 'Télécharger le patch' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('json-diff.patch.json');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const patch = JSON.parse(await readFile(path as string, 'utf8')) as Array<{ op: string; path: string }>;
+  expect(patch.length).toBeGreaterThan(0);
+  expect(patch.every(operation => !operation.path.startsWith('/meta/time'))).toBe(true);
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/data/json-diff');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});

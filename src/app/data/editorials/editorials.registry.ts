@@ -16,6 +16,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/data/csv-json-converter.editorial'),
   },
+  'dev/data/json-diff': {
+    available: true,
+    load: () => import('./dev/data/json-diff.editorial'),
+  },
   'dev/ooxml/ooxml-sanitize-metadata': {
     available: true,
     load: () => import('./dev/ooxml/ooxml-sanitize-metadata.editorial'),

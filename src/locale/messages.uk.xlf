@@ -87152,6 +87152,864 @@ Grace Hopper;grace@example.test;true;100</source>
 ]</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_compare_title">
+      <segment>
+        <source>Comparaison structurée</source>
+        <target state="translated">Структуроване порівняння</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_compare_desc">
+      <segment>
+        <source>Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.</source>
+        <target state="translated">Порівняйте структуровані документи за шляхом, типом та значенням, не розкриваючи їх вміст.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Порівняти два JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_desc">
+      <segment>
+        <source>Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.</source>
+        <target state="translated">Локально порівняйте два JSON, зв'яжіть масиви за ключем, ігноруйте нестабільні шляхи та експортуйте патч RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON sans confondre formatage et changements réels</source>
+        <target state="translated">Порівняти два JSON, не плутаючи форматування та реальні зміни</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_lead">
+      <segment>
+        <source>Ce comparateur analyse localement la structure de deux documents JSON. Il distingue ajouts, suppressions, valeurs, types et déplacements, peut associer des objets de tableau par identifiant, exclut des chemins volatils et génère un patch JSON standard sans envoyer les données vers un serveur.</source>
+        <target state="translated">Цей порівнювач локально аналізує структуру двох документів JSON. Він розрізняє додавання, видалення, значення, типи та переміщення, може зв'язувати об'єкти масиву за ідентифікатором, виключає нестабільні шляхи та генерує стандартний JSON патч без відправлення даних на сервер.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_use_cases">
+      <segment>
+        <source>Quand utiliser un diff JSON structurel ?</source>
+        <target state="translated">Коли використовувати структурне порівняння JSON?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_title">
+      <segment>
+        <source>Vérifier une réponse d’API</source>
+        <target state="translated">Перевірити відповідь API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_text">
+      <segment>
+        <source>Comparez une réponse de référence et une nouvelle version sans être perturbé par l’ordre des propriétés ni l’indentation. Les changements sont rattachés à des chemins explicites plutôt qu’à des numéros de ligne fragiles.</source>
+        <target state="translated">Порівняйте еталонну відповідь та нову версію, не відволікаючись на порядок властивостей чи відступи. Зміни пов'язані з явними шляхами, а не з крихкими номерами рядків.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_title">
+      <segment>
+        <source>Relire une configuration avant déploiement</source>
+        <target state="translated">Переглянути конфігурацію перед розгортанням</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_text">
+      <segment>
+        <source>Isolez les options ajoutées, retirées ou dont le type a changé, puis téléchargez le rapport pour la revue. Les secrets restent locaux, mais ils figurent dans le rapport si vous ne les excluez pas.</source>
+        <target state="translated">Виділіть додані, видалені або змінені за типом опції, а потім завантажте звіт для перегляду. Секрети залишаються локальними, але вони з'являються у звіті, якщо ви їх не виключите.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_title">
+      <segment>
+        <source>Comparer des collections dont l’ordre varie</source>
+        <target state="translated">Порівняти колекції з різним порядком</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_text">
+      <segment>
+        <source>Associez les objets d’un tableau avec une clé comme /id ou /meta/identifiant. Un objet déplacé reste le même élément et ses modifications internes sont comparées sous un chemin logique stable.</source>
+        <target state="translated">Зв'яжіть об'єкти масиву за ключем, таким як /id або /meta/ідентифікатор. Переміщений об'єкт залишається тим самим елементом, а його внутрішні зміни порівнюються за стабільним логічним шляхом.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Рекомендований метод</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_1">
+      <segment>
+        <source>Commencez par une comparaison par index. Cette stratégie est prévisible pour les tableaux ordonnés et produit directement un patch JSON applicable au document gauche. L’ordre des propriétés d’un objet n’est jamais considéré comme une différence.</source>
+        <target state="translated">Почніть з порівняння за індексом. Ця стратегія є передбачуваною для впорядкованих масивів і безпосередньо генерує JSON патч, застосовний до лівого документа. Порядок властивостей об'єкта ніколи не вважається відмінністю.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_2">
+      <segment>
+        <source>Si un tableau représente une collection d’entités, activez l’association par clé et indiquez un JSON Pointer relatif à chaque objet. La clé doit être présente, scalaire et unique dans chaque tableau concerné. Les tableaux de chaînes, nombres ou booléens restent comparés par index.</source>
+        <target state="translated">Якщо масив представляє колекцію сутностей, активуйте зв'язування за ключем і вкажіть відносний JSON Pointer для кожного об'єкта. Ключ має бути присутнім, скалярним і унікальним у кожному відповідному масиві. Масиви рядків, чисел або булевих значень залишаються порівнянними за індексом.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_3">
+      <segment>
+        <source>Ajoutez enfin les chemins volatils, un par ligne, par exemple /metadata/updatedAt. Le chemin et tout son sous-arbre sont retirés du diff comme du patch ; vérifiez donc cette liste avant de conclure que deux documents sont équivalents.</source>
+        <target state="translated">Нарешті, додайте нестабільні шляхи, по одному на рядок, наприклад /metadata/updatedAt. Шлях та весь його піддерево видаляються з порівняння як з патчу; тому перевірте цей список перед тим, як зробити висновок, що два документи є еквівалентними.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_outputs">
+      <segment>
+        <source>Comprendre les deux sorties</source>
+        <target state="translated">Зрозуміти два виходи</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">JSON патч RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_text">
+      <segment>
+        <source>Le patch contient des opérations add, remove et replace avec des chemins JSON Pointer échappés. Il transforme le document gauche vers le document droit pour les chemins inclus, même lorsque l’aperçu s’appuie sur une association de tableaux par clé.</source>
+        <target state="translated">Патч містить операції add, remove та replace з екранізованими шляхами JSON Pointer. Він перетворює лівий документ на правий для включених шляхів, навіть коли попередній перегляд спирається на зв'язування масивів за ключем.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_title">
+      <segment>
+        <source>Rapport de revue</source>
+        <target state="translated">Звіт про перегляд</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_text">
+      <segment>
+        <source>Le rapport conserve le résumé, les options et les valeurs avant/après de chaque différence. Traitez-le comme les documents d’origine : il peut contenir des informations sensibles et n’est jamais téléversé automatiquement.</source>
+        <target state="translated">Звіт зберігає резюме, опції та значення до/після кожної відмінності. Ставтеся до нього як до оригінальних документів: він може містити чутливу інформацію і ніколи не завантажується автоматично.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_title">
+      <segment>
+        <source>Lien sans données</source>
+        <target state="translated">Посилання без даних</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_text">
+      <segment>
+        <source>Le bouton de partage copie uniquement l’adresse publique de l’outil. Les JSON, chemins ignorés, noms de fichiers et résultats ne sont placés ni dans l’URL ni dans le presse-papiers du lien.</source>
+        <target state="translated">Кнопка спільного доступу копіює лише публічну адресу інструменту. JSON, ігноровані шляхи, імена файлів та результати не розміщуються ні в URL, ні в буфері обміну посилання.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limits">
+      <segment>
+        <source>Précision, sécurité et limites</source>
+        <target state="translated">Точність, безпека та обмеження</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_1">
+      <segment>
+        <source>Chaque source est limitée à 2 millions de caractères ou 2 Mo par fichier. Le parseur accepte au plus 100 000 valeurs, 64 niveaux d’imbrication et 20 000 différences ; le rapport et le patch partagent un plafond de sortie de 16 millions de caractères.</source>
+        <target state="translated">Кожне джерело обмежене 2 мільйонами символів або 2 Мб на файл. Парсер приймає не більше 100 000 значень, 64 рівні вкладеності та 20 000 відмінностей; звіт та патч мають спільний ліміт виходу в 16 мільйонів символів.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_2">
+      <segment>
+        <source>Les noms de propriétés dupliqués sont refusés au lieu de conserver silencieusement la dernière valeur. Les chaînes UTF-16 mal formées et les nombres qui seraient arrondis par JavaScript sont également rejetés pour éviter un diff trompeur.</source>
+        <target state="translated">Дубльовані імена властивостей відхиляються замість тихого збереження останнього значення. Неправильно сформовані рядки UTF-16 та числа, які можуть бути округлені JavaScript, також відхиляються, щоб уникнути оманливого порівняння.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_3">
+      <segment>
+        <source>Le traitement s’effectue dans un Worker éphémère. L’outil compare les données, mais ne valide pas un schéma métier, une signature, des droits d’accès ou la sécurité du système qui consommera le patch.</source>
+        <target state="translated">Обробка відбувається в епhemeral Worker. Інструмент порівнює дані, але не перевіряє бізнес-схему, підпис, права доступу або безпеку системи, яка споживатиме патч.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Часті запитання</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q1">
+      <segment>
+        <source>Pourquoi l’ordre des propriétés n’apparaît-il pas ?</source>
+        <target state="translated">Чому порядок властивостей не з'являється?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a1">
+      <segment>
+        <source>Un objet JSON est comparé par noms de propriétés et non par ordre d’écriture. Deux objets possédant les mêmes clés et valeurs sont donc équivalents même si leurs propriétés sont réordonnées ou leur indentation différente.</source>
+        <target state="translated">JSON об'єкт порівнюється за іменами властивостей, а не за порядком запису. Два об'єкти з однаковими ключами та значеннями є еквівалентними, навіть якщо їх властивості перепорядковані або їх відступи різні.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q2">
+      <segment>
+        <source>Le patch utilise-t-il les clés d’association des tableaux ?</source>
+        <target state="translated">Чи використовує патч ключі зв'язування масивів?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a2">
+      <segment>
+        <source>Le rapport utilise les clés pour rendre les changements lisibles et signaler les déplacements. Le patch reste un document RFC 6902 standard fondé sur les index réels afin de pouvoir être appliqué par les bibliothèques compatibles.</source>
+        <target state="translated">Звіт використовує ключі, щоб зробити зміни читабельними та вказати на переміщення. Патч залишається стандартним документом RFC 6902, заснованим на фактичних індексах, щоб його могли застосовувати сумісні бібліотеки.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q3">
+      <segment>
+        <source>Pourquoi certains grands nombres sont-ils refusés ?</source>
+        <target state="translated">Чому деякі великі числа відхиляються?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a3">
+      <segment>
+        <source>JavaScript ne représente pas exactement tous les entiers et décimaux JSON. Plutôt que de comparer deux valeurs déjà arrondies, l’outil demande de les encoder comme chaînes lorsque leur représentation exacte ne peut pas être conservée.</source>
+        <target state="translated">JavaScript не точно представляє всі цілі та десяткові JSON. Замість того, щоб порівнювати вже округлені значення, інструмент просить закодувати їх як рядки, коли їх точне представлення не може бути збережене.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip_title">
+      <segment>
+        <source>Appliquer un patch sur une copie</source>
+        <target state="translated">Застосувати патч на копії</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip">
+      <segment>
+        <source>Testez toujours le patch sur une copie, puis validez le résultat avec les règles métier du système cible. Un patch syntaxiquement correct peut rester inadapté à une API, une configuration ou une base de données particulière.</source>
+        <target state="translated">Завжди тестуйте патч на копії, а потім перевірте результат за бізнес-правилами цільової системи. Синтаксично правильний патч може залишитися непридатним для конкретного API, конфігурації або бази даних.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Повернутися до інструментів даних</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_eyebrow">
+      <segment>
+        <source>Données structurées · traitement local</source>
+        <target state="translated">Структуровані дані · локальна обробка</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_h1">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Порівняти два JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_intro">
+      <segment>
+        <source> Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON. Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902. </source>
+        <target state="translated">Визначте додавання, видалення, зміни значень, типів та переміщення в двох документах JSON. Зв'яжіть масиви за індексом або ключем, ігноруйте нестабільні шляхи та експортуйте патч JSON RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Конфіденційність</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_title">
+      <segment>
+        <source>Vos JSON restent dans ce navigateur</source>
+        <target state="translated">Ваші JSON залишаються в цьому браузері</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_text">
+      <segment>
+        <source> La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur. </source>
+        <target state="translated">Порівняння виконується в локальному Worker. Жоден документ, ім'я файлу чи результат не надсилаються на сервер.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_1">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Крок 1</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_input_title">
+      <segment>
+        <source>Collez ou chargez les deux documents</source>
+        <target state="translated">Вставте або завантажте два документи</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_swap">
+      <segment>
+        <source>Inverser</source>
+        <target state="translated">Поміняти місцями</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Скинути</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_badge">
+      <segment>
+        <source>A · Avant</source>
+        <target state="translated">A · До</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_open_file">
+      <segment>
+        <source>Ouvrir un fichier</source>
+        <target state="translated">Відкрити файл</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_label">
+      <segment>
+        <source>Document JSON gauche</source>
+        <target state="translated">Лівий документ JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_character_count">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractères </source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> символів</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_badge">
+      <segment>
+        <source>B · Après</source>
+        <target state="translated">B · Після</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_label">
+      <segment>
+        <source>Document JSON droit</source>
+        <target state="translated">Правий документ JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_limit">
+      <segment>
+        <source>Fichiers JSON ou TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum chacun.</source>
+        <target state="translated">Файли JSON або TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> максимум кожен.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_2">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Крок 2</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_options_title">
+      <segment>
+        <source>Choisissez la stratégie de comparaison</source>
+        <target state="translated">Виберіть стратегію порівняння</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_mode">
+      <segment>
+        <source>Tableaux</source>
+        <target state="translated">Масиви</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_index">
+      <segment>
+        <source>Comparer par index</source>
+        <target state="translated">Порівнювати за індексом</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_mode">
+      <segment>
+        <source>Associer les objets par clé</source>
+        <target state="translated">Зв'язати об'єкти за ключем</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_help">
+      <segment>
+        <source>Les tableaux de scalaires restent comparés par index.</source>
+        <target state="translated">Масиви скалярів залишаються порівняними за індексом.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key">
+      <segment>
+        <source>Clé d’association (JSON Pointer)</source>
+        <target state="translated">Ключ зв'язування (JSON Pointer)</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_help">
+      <segment>
+        <source>Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</source>
+        <target state="translated">Приклади: /id або /meta/ідентифікатор. Ключ має бути унікальним і скалярним.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_summary">
+      <segment>
+        <source>Ignorer des chemins volatils</source>
+        <target state="translated">Ігнорувати нестабільні шляхи</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_label">
+      <segment>
+        <source>Un JSON Pointer par ligne</source>
+        <target state="translated">Один JSON Pointer на рядок</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_help">
+      <segment>
+        <source>Le chemin et tout son sous-arbre sont exclus du diff et du patch.</source>
+        <target state="translated">Шлях і все його піддерево виключаються з дифу та патчу.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_comparing">
+      <segment>
+        <source>Comparaison locale…</source>
+        <target state="translated">Порівняння локально…</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare">
+      <segment>
+        <source>Comparer les JSON</source>
+        <target state="translated">Порівняти JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_link_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Посилання скопійовано</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share">
+      <segment>
+        <source>Partager l’outil sans les données</source>
+        <target state="translated">Поділитися інструментом без даних</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_busy">
+      <segment>
+        <source>Comparaison en cours.</source>
+        <target state="translated">Порівняння триває.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_equal">
+      <segment>
+        <source>Les documents sont équivalents avec ces options.</source>
+        <target state="translated">Документи еквівалентні з цими опціями.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_done">
+      <segment>
+        <source>Comparaison terminée avec des différences.</source>
+        <target state="translated">Порівняння завершено з відмінностями.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_error">
+      <segment>
+        <source>La comparaison contient une erreur.</source>
+        <target state="translated">Порівняння містить помилку.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_3">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Результат</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_result_title">
+      <segment>
+        <source>Diff structurel</source>
+        <target state="translated">Структурний диф</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issues_title">
+      <segment>
+        <source>La comparaison ne peut pas continuer</source>
+        <target state="translated">Порівняння не може продовжитися</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_title">
+      <segment>
+        <source>Aucune différence structurelle</source>
+        <target state="translated">Немає структурних відмінностей</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_text">
+      <segment>
+        <source>Les documents sont équivalents après application des chemins ignorés.</source>
+        <target state="translated">Документи еквівалентні після застосування ігнорованих шляхів.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> différences détectées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> виявлених відмінностей</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_text">
+      <segment>
+        <source>Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</source>
+        <target state="translated">Звіт деталізує шляхи, а патч перетворює лівий документ на правий документ.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_label">
+      <segment>
+        <source>Résumé des différences</source>
+        <target state="translated">Резюме відмінностей</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_added">
+      <segment>
+        <source>Ajouts</source>
+        <target state="translated">Додано</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_removed">
+      <segment>
+        <source>Suppressions</source>
+        <target state="translated">Видалено</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_changed">
+      <segment>
+        <source>Valeurs</source>
+        <target state="translated">Значення</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_types">
+      <segment>
+        <source>Types</source>
+        <target state="translated">Типи</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_moved">
+      <segment>
+        <source>Déplacements</source>
+        <target state="translated">Переміщення</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_caption">
+      <segment>
+        <source>Aperçu des différences structurelles</source>
+        <target state="translated">Огляд структурних відмінностей</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_change">
+      <segment>
+        <source>Changement</source>
+        <target state="translated">Зміна</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_path">
+      <segment>
+        <source>Chemin</source>
+        <target state="translated">Шлях</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_before">
+      <segment>
+        <source>Avant</source>
+        <target state="translated">До</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_after">
+      <segment>
+        <source>Après</source>
+        <target state="translated">Після</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_truncated">
+      <segment>
+        <source>L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</source>
+        <target state="translated">Огляд обмежений першими 500 відмінностями. Завантажений звіт залишається повним.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">Патч JSON RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_help">
+      <segment>
+        <source>Applicable au document gauche avec les chemins ignorés exclus.</source>
+        <target state="translated">Застосовується до лівого документа з виключеними ігнорованими шляхами.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Скопійовано</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_patch">
+      <segment>
+        <source>Copier le patch</source>
+        <target state="translated">Скопіювати патч</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_patch">
+      <segment>
+        <source>Télécharger le patch</source>
+        <target state="translated">Завантажити патч</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_output_truncated">
+      <segment>
+        <source>Aperçu tronqué ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Огляд скорочений; завантаження містить повний вихід.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_title">
+      <segment>
+        <source>Rapport JSON complet</source>
+        <target state="translated">Повний звіт JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_help">
+      <segment>
+        <source>Résumé, options et différences avec valeurs avant/après.</source>
+        <target state="translated">Резюме, параметри та відмінності зі значеннями до/після.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Скопіювати звіт</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Завантажити звіт</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_left">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;ancienne&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;адміністрування&quot;, &quot;ville&quot;: &quot;Лондон&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;розробка&quot;, &quot;ville&quot;: &quot;Нью-Йорк&quot; }
+  ],
+  &quot;мétadonnées&quot;: { &quot;miseÀJour&quot;: &quot;стара&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_right">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;récente&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;архітектура&quot;, &quot;ville&quot;: &quot;Нью-Йорк&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;адміністрування&quot;, &quot;ville&quot;: &quot;Лондон&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;дослідження&quot;, &quot;ville&quot;: &quot;Вашингтон&quot; }
+  ],
+  &quot;мétadonnées&quot;: { &quot;miseÀJour&quot;: &quot;недавня&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare_error">
+      <segment>
+        <source>La comparaison a échoué dans le navigateur. Réessayez avec des documents plus petits.</source>
+        <target state="translated">Порівняння не вдалося в браузері. Спробуйте з меншими документами.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Автоматичне копіювання неможливе. Виберіть вихідні дані та скопіюйте їх вручну.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Неможливо скопіювати посилання. Скопіюйте адресу сторінки з вашого браузера.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Документ порожній.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Документ перевищує ліміт у 2 000 000 символів.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Документ не є дійсним JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Об'єкт містить двічі однакову назву властивості.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Число буде округлено або перетворено в нескінченність JavaScript. Перетворіть його на рядок, щоб зберегти його точне значення.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Рядок містить непарний символ UTF-16.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Документ перевищує 64 рівні вкладеності.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Документ перевищує 100 000 значень JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore">
+      <segment>
+        <source>Un chemin ignoré n’est pas un JSON Pointer valide.</source>
+        <target state="translated">Ігнорований шлях не є дійсним JSON Pointer.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_required">
+      <segment>
+        <source>Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.</source>
+        <target state="translated">Вкажіть ключ асоціації у вигляді JSON Pointer, наприклад /id.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_invalid">
+      <segment>
+        <source>Un objet du tableau ne possède pas une clé d’association scalaire valide.</source>
+        <target state="translated">Об'єкт масиву не має дійсного скалярного ключа асоціації.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_duplicate">
+      <segment>
+        <source>Une même clé d’association apparaît plusieurs fois dans un tableau.</source>
+        <target state="translated">Одна й та ж асоціація ключа з'являється кілька разів у масиві.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_changes">
+      <segment>
+        <source>La comparaison dépasse la limite de 20 000 différences.</source>
+        <target state="translated">Порівняння перевищує межу в 20 000 відмінностей.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_output">
+      <segment>
+        <source>Le rapport et le patch dépasseraient la limite de sortie.</source>
+        <target state="translated">Звіт і патч перевищують межу виходу.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_left">
+      <segment>
+        <source> Document gauche.</source>
+        <target state="translated">Лівий документ.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_right">
+      <segment>
+        <source> Document droit.</source>
+        <target state="translated">Правий документ.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Шлях <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Позиція <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_added">
+      <segment>
+        <source>Ajout</source>
+        <target state="translated">Додано</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_removed">
+      <segment>
+        <source>Suppression</source>
+        <target state="translated">Видалено</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_changed">
+      <segment>
+        <source>Valeur modifiée</source>
+        <target state="translated">Значення змінено</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_type">
+      <segment>
+        <source>Type modifié</source>
+        <target state="translated">Тип змінено</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_moved">
+      <segment>
+        <source>Déplacement</source>
+        <target state="translated">Переміщено</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_move_label">
+      <segment>
+        <source>Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></source>
+        <target state="translated">Індекс <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Вибраний файл порожній.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Файл перевищує межу <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON ou TXT.</source>
+        <target state="translated">Виберіть файл JSON або TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Файл не закодований у дійсному UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Не вдалося прочитати цей файл локально.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore_patch_conflict">
+      <segment>
+        <source>Ces exclusions sont incompatibles avec un patch sans perte. Ignorez le conteneur entier ou retirez les chemins en conflit.</source>
+        <target state="translated">Ці виключення несумісні з патчем без втрат. Ігноруйте весь контейнер або видаліть конфліктні шляхи.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -87180,6 +87180,864 @@ Grace Hopper;grace@example.test;true;100</source>
 ]</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_compare_title">
+      <segment>
+        <source>Comparaison structurée</source>
+        <target state="translated">结构化比较</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_compare_desc">
+      <segment>
+        <source>Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.</source>
+        <target state="translated">通过路径、类型和值比较结构化文档，而不暴露其内容。</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">比较两个 JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_desc">
+      <segment>
+        <source>Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.</source>
+        <target state="translated">本地比较两个 JSON，通过键关联数组，忽略易变路径并导出 RFC 6902 补丁。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON sans confondre formatage et changements réels</source>
+        <target state="translated">比较两个 JSON 而不混淆格式和实际变化</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_lead">
+      <segment>
+        <source>Ce comparateur analyse localement la structure de deux documents JSON. Il distingue ajouts, suppressions, valeurs, types et déplacements, peut associer des objets de tableau par identifiant, exclut des chemins volatils et génère un patch JSON standard sans envoyer les données vers un serveur.</source>
+        <target state="translated">此比较器本地分析两个 JSON 文档的结构。它区分添加、删除、值、类型和移动，可以通过标识符关联数组对象，排除易变路径并生成标准 JSON 补丁，而无需将数据发送到服务器。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_use_cases">
+      <segment>
+        <source>Quand utiliser un diff JSON structurel ?</source>
+        <target state="translated">何时使用结构化 JSON 差异？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_title">
+      <segment>
+        <source>Vérifier une réponse d’API</source>
+        <target state="translated">验证 API 响应</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_text">
+      <segment>
+        <source>Comparez une réponse de référence et une nouvelle version sans être perturbé par l’ordre des propriétés ni l’indentation. Les changements sont rattachés à des chemins explicites plutôt qu’à des numéros de ligne fragiles.</source>
+        <target state="translated">比较参考响应和新版本，而不受属性顺序或缩进的干扰。更改与明确路径相关联，而不是脆弱的行号。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_title">
+      <segment>
+        <source>Relire une configuration avant déploiement</source>
+        <target state="translated">在部署前审查配置</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_text">
+      <segment>
+        <source>Isolez les options ajoutées, retirées ou dont le type a changé, puis téléchargez le rapport pour la revue. Les secrets restent locaux, mais ils figurent dans le rapport si vous ne les excluez pas.</source>
+        <target state="translated">隔离添加、删除或类型已更改的选项，然后下载报告以供审查。机密信息保持本地，但如果不排除，它们会出现在报告中。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_title">
+      <segment>
+        <source>Comparer des collections dont l’ordre varie</source>
+        <target state="translated">比较顺序变化的集合</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_text">
+      <segment>
+        <source>Associez les objets d’un tableau avec une clé comme /id ou /meta/identifiant. Un objet déplacé reste le même élément et ses modifications internes sont comparées sous un chemin logique stable.</source>
+        <target state="translated">通过键如 /id 或 /meta/identifier 关联数组中的对象。移动的对象仍然是同一元素，其内部更改在稳定的逻辑路径下进行比较。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">推荐的方法</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_1">
+      <segment>
+        <source>Commencez par une comparaison par index. Cette stratégie est prévisible pour les tableaux ordonnés et produit directement un patch JSON applicable au document gauche. L’ordre des propriétés d’un objet n’est jamais considéré comme une différence.</source>
+        <target state="translated">首先进行索引比较。此策略对于有序数组是可预测的，并直接生成适用于左侧文档的 JSON 补丁。对象的属性顺序从不被视为差异。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_2">
+      <segment>
+        <source>Si un tableau représente une collection d’entités, activez l’association par clé et indiquez un JSON Pointer relatif à chaque objet. La clé doit être présente, scalaire et unique dans chaque tableau concerné. Les tableaux de chaînes, nombres ou booléens restent comparés par index.</source>
+        <target state="translated">如果数组表示实体集合，请启用键关联，并为每个对象指定相对 JSON Pointer。键必须在每个相关数组中存在、标量且唯一。字符串、数字或布尔值数组仍按索引进行比较。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_3">
+      <segment>
+        <source>Ajoutez enfin les chemins volatils, un par ligne, par exemple /metadata/updatedAt. Le chemin et tout son sous-arbre sont retirés du diff comme du patch ; vérifiez donc cette liste avant de conclure que deux documents sont équivalents.</source>
+        <target state="translated">最后添加易变路径，每行一个，例如 /metadata/updatedAt。路径及其所有子树将从差异中移除作为补丁；因此在得出两个文档等效之前，请检查此列表。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_outputs">
+      <segment>
+        <source>Comprendre les deux sorties</source>
+        <target state="translated">理解两个输出</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">JSON RFC 6902 补丁</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_text">
+      <segment>
+        <source>Le patch contient des opérations add, remove et replace avec des chemins JSON Pointer échappés. Il transforme le document gauche vers le document droit pour les chemins inclus, même lorsque l’aperçu s’appuie sur une association de tableaux par clé.</source>
+        <target state="translated">补丁包含带有转义 JSON Pointer 路径的 add、remove 和 replace 操作。它将左侧文档转换为右侧文档，适用于包含的路径，即使预览依赖于通过键关联的数组。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_title">
+      <segment>
+        <source>Rapport de revue</source>
+        <target state="translated">审查报告</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_text">
+      <segment>
+        <source>Le rapport conserve le résumé, les options et les valeurs avant/après de chaque différence. Traitez-le comme les documents d’origine : il peut contenir des informations sensibles et n’est jamais téléversé automatiquement.</source>
+        <target state="translated">报告保留每个差异的摘要、选项和前后值。将其视为原始文档：它可能包含敏感信息，且从不自动上传。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_title">
+      <segment>
+        <source>Lien sans données</source>
+        <target state="translated">无数据链接</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_text">
+      <segment>
+        <source>Le bouton de partage copie uniquement l’adresse publique de l’outil. Les JSON, chemins ignorés, noms de fichiers et résultats ne sont placés ni dans l’URL ni dans le presse-papiers du lien.</source>
+        <target state="translated">分享按钮仅复制工具的公共地址。JSON、忽略的路径、文件名和结果不会放入 URL 或链接的剪贴板中。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limits">
+      <segment>
+        <source>Précision, sécurité et limites</source>
+        <target state="translated">准确性、安全性和限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_1">
+      <segment>
+        <source>Chaque source est limitée à 2 millions de caractères ou 2 Mo par fichier. Le parseur accepte au plus 100 000 valeurs, 64 niveaux d’imbrication et 20 000 différences ; le rapport et le patch partagent un plafond de sortie de 16 millions de caractères.</source>
+        <target state="translated">每个源限制为 200 万字符或每个文件 2MB。解析器最多接受 100,000 个值、64 层嵌套和 20,000 个差异；报告和补丁共享 1600 万字符的输出上限。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_2">
+      <segment>
+        <source>Les noms de propriétés dupliqués sont refusés au lieu de conserver silencieusement la dernière valeur. Les chaînes UTF-16 mal formées et les nombres qui seraient arrondis par JavaScript sont également rejetés pour éviter un diff trompeur.</source>
+        <target state="translated">重复的属性名称被拒绝，而不是静默保留最后一个值。格式不正确的 UTF-16 字符串和可能被 JavaScript 四舍五入的数字也会被拒绝，以避免误导性的差异。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_3">
+      <segment>
+        <source>Le traitement s’effectue dans un Worker éphémère. L’outil compare les données, mais ne valide pas un schéma métier, une signature, des droits d’accès ou la sécurité du système qui consommera le patch.</source>
+        <target state="translated">处理在一个临时 Worker 中进行。工具比较数据，但不验证业务模式、签名、访问权限或将使用补丁的系统的安全性。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q1">
+      <segment>
+        <source>Pourquoi l’ordre des propriétés n’apparaît-il pas ?</source>
+        <target state="translated">为什么属性的顺序不出现？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a1">
+      <segment>
+        <source>Un objet JSON est comparé par noms de propriétés et non par ordre d’écriture. Deux objets possédant les mêmes clés et valeurs sont donc équivalents même si leurs propriétés sont réordonnées ou leur indentation différente.</source>
+        <target state="translated">JSON 对象是通过属性名称而不是书写顺序进行比较的。因此，即使两个对象的属性顺序不同或缩进不同，只要它们具有相同的键和值，它们就是等效的。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q2">
+      <segment>
+        <source>Le patch utilise-t-il les clés d’association des tableaux ?</source>
+        <target state="translated">补丁是否使用数组的关联键？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a2">
+      <segment>
+        <source>Le rapport utilise les clés pour rendre les changements lisibles et signaler les déplacements. Le patch reste un document RFC 6902 standard fondé sur les index réels afin de pouvoir être appliqué par les bibliothèques compatibles.</source>
+        <target state="translated">报告使用键来使更改可读并指示移动。补丁仍然是基于实际索引的标准 RFC 6902 文档，以便可以由兼容的库应用。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q3">
+      <segment>
+        <source>Pourquoi certains grands nombres sont-ils refusés ?</source>
+        <target state="translated">为什么某些大数字被拒绝？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a3">
+      <segment>
+        <source>JavaScript ne représente pas exactement tous les entiers et décimaux JSON. Plutôt que de comparer deux valeurs déjà arrondies, l’outil demande de les encoder comme chaînes lorsque leur représentation exacte ne peut pas être conservée.</source>
+        <target state="translated">JavaScript 并不精确表示所有 JSON 整数和小数。与其比较两个已经四舍五入的值，工具要求在无法保留其精确表示时将其编码为字符串。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip_title">
+      <segment>
+        <source>Appliquer un patch sur une copie</source>
+        <target state="translated">在副本上应用补丁</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip">
+      <segment>
+        <source>Testez toujours le patch sur une copie, puis validez le résultat avec les règles métier du système cible. Un patch syntaxiquement correct peut rester inadapté à une API, une configuration ou une base de données particulière.</source>
+        <target state="translated">始终在副本上测试补丁，然后使用目标系统的业务规则验证结果。语法正确的补丁可能仍不适合特定的 API、配置或数据库。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">返回数据工具</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_eyebrow">
+      <segment>
+        <source>Données structurées · traitement local</source>
+        <target state="translated">结构化数据 · 本地处理</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_h1">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">比较两个 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_intro">
+      <segment>
+        <source> Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON. Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902. </source>
+        <target state="translated">识别两个 JSON 文档中的添加、删除、值变化、类型和移动。通过索引或键关联数组，忽略不稳定的路径，并导出一个 JSON RFC 6902 补丁。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">隐私</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_title">
+      <segment>
+        <source>Vos JSON restent dans ce navigateur</source>
+        <target state="translated">您的 JSON 保留在此浏览器中</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_text">
+      <segment>
+        <source> La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur. </source>
+        <target state="translated">比较在本地 Worker 中执行。没有文档、文件名或结果被发送到服务器。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_1">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">步骤 1</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_input_title">
+      <segment>
+        <source>Collez ou chargez les deux documents</source>
+        <target state="translated">粘贴或加载两个文档</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_swap">
+      <segment>
+        <source>Inverser</source>
+        <target state="translated">交换</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">重置</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_badge">
+      <segment>
+        <source>A · Avant</source>
+        <target state="translated">A · 之前</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_open_file">
+      <segment>
+        <source>Ouvrir un fichier</source>
+        <target state="translated">打开文件</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_label">
+      <segment>
+        <source>Document JSON gauche</source>
+        <target state="translated">左侧 JSON 文档</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_character_count">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractères </source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> 字符</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_badge">
+      <segment>
+        <source>B · Après</source>
+        <target state="translated">B · 之后</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_label">
+      <segment>
+        <source>Document JSON droit</source>
+        <target state="translated">右侧 JSON 文档</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_limit">
+      <segment>
+        <source>Fichiers JSON ou TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum chacun.</source>
+        <target state="translated">JSON 或 TXT UTF-8 文件，每个最大 <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_2">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">步骤 2</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_options_title">
+      <segment>
+        <source>Choisissez la stratégie de comparaison</source>
+        <target state="translated">选择比较策略</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_mode">
+      <segment>
+        <source>Tableaux</source>
+        <target state="translated">数组</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_index">
+      <segment>
+        <source>Comparer par index</source>
+        <target state="translated">按索引比较</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_mode">
+      <segment>
+        <source>Associer les objets par clé</source>
+        <target state="translated">按键关联对象</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_help">
+      <segment>
+        <source>Les tableaux de scalaires restent comparés par index.</source>
+        <target state="translated">标量数组仍按索引比较.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key">
+      <segment>
+        <source>Clé d’association (JSON Pointer)</source>
+        <target state="translated">关联键 (JSON Pointer)</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_help">
+      <segment>
+        <source>Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</source>
+        <target state="translated">示例：/id 或 /meta/identifier。键必须是唯一的和标量的.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_summary">
+      <segment>
+        <source>Ignorer des chemins volatils</source>
+        <target state="translated">忽略不稳定的路径</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_label">
+      <segment>
+        <source>Un JSON Pointer par ligne</source>
+        <target state="translated">每行一个 JSON Pointer</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_help">
+      <segment>
+        <source>Le chemin et tout son sous-arbre sont exclus du diff et du patch.</source>
+        <target state="translated">路径及其所有子树将被排除在 diff 和补丁之外.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_comparing">
+      <segment>
+        <source>Comparaison locale…</source>
+        <target state="translated">正在本地比较…</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare">
+      <segment>
+        <source>Comparer les JSON</source>
+        <target state="translated">比较 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_link_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">链接已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share">
+      <segment>
+        <source>Partager l’outil sans les données</source>
+        <target state="translated">分享工具而不包含数据</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_busy">
+      <segment>
+        <source>Comparaison en cours.</source>
+        <target state="translated">正在进行比较.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_equal">
+      <segment>
+        <source>Les documents sont équivalents avec ces options.</source>
+        <target state="translated">文档在这些选项下是等效的.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_done">
+      <segment>
+        <source>Comparaison terminée avec des différences.</source>
+        <target state="translated">比较完成，有差异.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_error">
+      <segment>
+        <source>La comparaison contient une erreur.</source>
+        <target state="translated">比较中出现错误.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_3">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">结果</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_result_title">
+      <segment>
+        <source>Diff structurel</source>
+        <target state="translated">结构差异</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issues_title">
+      <segment>
+        <source>La comparaison ne peut pas continuer</source>
+        <target state="translated">比较无法继续</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_title">
+      <segment>
+        <source>Aucune différence structurelle</source>
+        <target state="translated">没有结构差异</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_text">
+      <segment>
+        <source>Les documents sont équivalents après application des chemins ignorés.</source>
+        <target state="translated">在应用忽略路径后，文档是等效的.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> différences détectées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> 个差异被检测到</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_text">
+      <segment>
+        <source>Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</source>
+        <target state="translated">报告详细说明了路径，补丁将左侧文档转换为右侧文档。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_label">
+      <segment>
+        <source>Résumé des différences</source>
+        <target state="translated">差异摘要</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_added">
+      <segment>
+        <source>Ajouts</source>
+        <target state="translated">添加项</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_removed">
+      <segment>
+        <source>Suppressions</source>
+        <target state="translated">删除项</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_changed">
+      <segment>
+        <source>Valeurs</source>
+        <target state="translated">值</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_types">
+      <segment>
+        <source>Types</source>
+        <target state="translated">类型</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_moved">
+      <segment>
+        <source>Déplacements</source>
+        <target state="translated">移动项</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_caption">
+      <segment>
+        <source>Aperçu des différences structurelles</source>
+        <target state="translated">结构差异概览</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_change">
+      <segment>
+        <source>Changement</source>
+        <target state="translated">变化</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_path">
+      <segment>
+        <source>Chemin</source>
+        <target state="translated">路径</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_before">
+      <segment>
+        <source>Avant</source>
+        <target state="translated">之前</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_after">
+      <segment>
+        <source>Après</source>
+        <target state="translated">之后</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_truncated">
+      <segment>
+        <source>L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</source>
+        <target state="translated">预览限制为前500个差异。下载的报告保持完整。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">JSON补丁RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_help">
+      <segment>
+        <source>Applicable au document gauche avec les chemins ignorés exclus.</source>
+        <target state="translated">适用于左侧文档，排除忽略的路径。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_patch">
+      <segment>
+        <source>Copier le patch</source>
+        <target state="translated">复制补丁</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_patch">
+      <segment>
+        <source>Télécharger le patch</source>
+        <target state="translated">下载补丁</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_output_truncated">
+      <segment>
+        <source>Aperçu tronqué ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">预览被截断；下载包含完整输出。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_title">
+      <segment>
+        <source>Rapport JSON complet</source>
+        <target state="translated">完整JSON报告</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_help">
+      <segment>
+        <source>Résumé, options et différences avec valeurs avant/après.</source>
+        <target state="translated">摘要、选项和前后值的差异。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">复制报告</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">下载报告</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_left">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;ancienne&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;伦敦&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;纽约&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;旧版&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_right">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;récente&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;纽约&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;伦敦&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;华盛顿&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;新版&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare_error">
+      <segment>
+        <source>La comparaison a échoué dans le navigateur. Réessayez avec des documents plus petits.</source>
+        <target state="translated">比较在浏览器中失败。请尝试使用更小的文档。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择输出并复制。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">无法复制链接。请从浏览器中复制页面地址。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">文档为空。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">文档超过2,000,000个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">文档不是有效的JSON。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">一个对象包含两个相同的属性名称。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">一个数字将被JavaScript四舍五入或变为无穷大。请将其转换为字符串以保留其精确值。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">一个字符串包含一个未配对的UTF-16字符。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">文档超过64层嵌套。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">文档超过100,000个JSON值。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore">
+      <segment>
+        <source>Un chemin ignoré n’est pas un JSON Pointer valide.</source>
+        <target state="translated">一个被忽略的路径不是有效的JSON指针。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_required">
+      <segment>
+        <source>Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.</source>
+        <target state="translated">请以JSON指针的形式提供关联键，例如/id。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_invalid">
+      <segment>
+        <source>Un objet du tableau ne possède pas une clé d’association scalaire valide.</source>
+        <target state="translated">数组中的一个对象没有有效的标量关联键。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_duplicate">
+      <segment>
+        <source>Une même clé d’association apparaît plusieurs fois dans un tableau.</source>
+        <target state="translated">同一个关联键在数组中出现多次。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_changes">
+      <segment>
+        <source>La comparaison dépasse la limite de 20 000 différences.</source>
+        <target state="translated">比较超过 20,000 个差异的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_output">
+      <segment>
+        <source>Le rapport et le patch dépasseraient la limite de sortie.</source>
+        <target state="translated">报告和补丁将超过输出限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_left">
+      <segment>
+        <source> Document gauche.</source>
+        <target state="translated">左侧文档。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_right">
+      <segment>
+        <source> Document droit.</source>
+        <target state="translated">右侧文档。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">路径 <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">位置 <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_added">
+      <segment>
+        <source>Ajout</source>
+        <target state="translated">添加</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_removed">
+      <segment>
+        <source>Suppression</source>
+        <target state="translated">删除</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_changed">
+      <segment>
+        <source>Valeur modifiée</source>
+        <target state="translated">值已修改</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_type">
+      <segment>
+        <source>Type modifié</source>
+        <target state="translated">类型已修改</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_moved">
+      <segment>
+        <source>Déplacement</source>
+        <target state="translated">移动</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_move_label">
+      <segment>
+        <source>Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></source>
+        <target state="translated">索引 <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">所选文件为空。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">文件超过 <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/> 的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON ou TXT.</source>
+        <target state="translated">请选择 JSON 或 TXT 文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">文件未以有效的 UTF-8 编码。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">无法在本地读取此文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore_patch_conflict">
+      <segment>
+        <source>Ces exclusions sont incompatibles avec un patch sans perte. Ignorez le conteneur entier ou retirez les chemins en conflit.</source>
+        <target state="translated">这些排除与无损补丁不兼容。请忽略整个容器或移除冲突路径。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

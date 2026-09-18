@@ -87152,6 +87152,864 @@ Grace Hopper;grace@example.test;true;100</target>
 ]</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_compare_title">
+      <segment>
+        <source>Comparaison structurée</source>
+        <target state="translated">Comparación estructurada</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_compare_desc">
+      <segment>
+        <source>Comparer des documents structurés par chemin, type et valeur sans exposer leur contenu.</source>
+        <target state="translated">Comparar documentos estructurados por ruta, tipo y valor sin exponer su contenido.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Comparar dos JSON</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_diff_desc">
+      <segment>
+        <source>Comparer localement deux JSON, associer les tableaux par clé, ignorer des chemins volatils et exporter un patch RFC 6902.</source>
+        <target state="translated">Comparar localmente dos JSON, asociar arreglos por clave, ignorar rutas volátiles y exportar un parche RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_title">
+      <segment>
+        <source>Comparer deux JSON sans confondre formatage et changements réels</source>
+        <target state="translated">Comparar dos JSON sin confundir formato y cambios reales</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_lead">
+      <segment>
+        <source>Ce comparateur analyse localement la structure de deux documents JSON. Il distingue ajouts, suppressions, valeurs, types et déplacements, peut associer des objets de tableau par identifiant, exclut des chemins volatils et génère un patch JSON standard sans envoyer les données vers un serveur.</source>
+        <target state="translated">Este comparador analiza localmente la estructura de dos documentos JSON. Distingue adiciones, eliminaciones, valores, tipos y desplazamientos, puede asociar objetos de arreglos por identificador, excluye rutas volátiles y genera un parche JSON estándar sin enviar los datos a un servidor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_use_cases">
+      <segment>
+        <source>Quand utiliser un diff JSON structurel ?</source>
+        <target state="translated">¿Cuándo usar un diff JSON estructural?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_title">
+      <segment>
+        <source>Vérifier une réponse d’API</source>
+        <target state="translated">Verificar una respuesta de API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc1_text">
+      <segment>
+        <source>Comparez une réponse de référence et une nouvelle version sans être perturbé par l’ordre des propriétés ni l’indentation. Les changements sont rattachés à des chemins explicites plutôt qu’à des numéros de ligne fragiles.</source>
+        <target state="translated">Compare una respuesta de referencia y una nueva versión sin verse afectado por el orden de las propiedades ni la indentación. Los cambios se vinculan a rutas explícitas en lugar de números de línea frágiles.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_title">
+      <segment>
+        <source>Relire une configuration avant déploiement</source>
+        <target state="translated">Revisar una configuración antes del despliegue</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc2_text">
+      <segment>
+        <source>Isolez les options ajoutées, retirées ou dont le type a changé, puis téléchargez le rapport pour la revue. Les secrets restent locaux, mais ils figurent dans le rapport si vous ne les excluez pas.</source>
+        <target state="translated">Aísle las opciones añadidas, eliminadas o cuyo tipo ha cambiado, y luego descargue el informe para su revisión. Los secretos permanecen locales, pero aparecen en el informe si no los excluye.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_title">
+      <segment>
+        <source>Comparer des collections dont l’ordre varie</source>
+        <target state="translated">Comparar colecciones cuyo orden varía</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_uc3_text">
+      <segment>
+        <source>Associez les objets d’un tableau avec une clé comme /id ou /meta/identifiant. Un objet déplacé reste le même élément et ses modifications internes sont comparées sous un chemin logique stable.</source>
+        <target state="translated">Asocie los objetos de un arreglo con una clave como /id o /meta/identificador. Un objeto desplazado sigue siendo el mismo elemento y sus modificaciones internas se comparan bajo una ruta lógica estable.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method">
+      <segment>
+        <source>Méthode recommandée</source>
+        <target state="translated">Método recomendado</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_1">
+      <segment>
+        <source>Commencez par une comparaison par index. Cette stratégie est prévisible pour les tableaux ordonnés et produit directement un patch JSON applicable au document gauche. L’ordre des propriétés d’un objet n’est jamais considéré comme une différence.</source>
+        <target state="translated">Comience con una comparación por índice. Esta estrategia es predecible para arreglos ordenados y produce directamente un parche JSON aplicable al documento izquierdo. El orden de las propiedades de un objeto nunca se considera una diferencia.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_2">
+      <segment>
+        <source>Si un tableau représente une collection d’entités, activez l’association par clé et indiquez un JSON Pointer relatif à chaque objet. La clé doit être présente, scalaire et unique dans chaque tableau concerné. Les tableaux de chaînes, nombres ou booléens restent comparés par index.</source>
+        <target state="translated">Si un arreglo representa una colección de entidades, active la asociación por clave e indique un JSON Pointer relativo a cada objeto. La clave debe estar presente, ser escalar y única en cada arreglo correspondiente. Los arreglos de cadenas, números o booleanos se comparan por índice.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_method_3">
+      <segment>
+        <source>Ajoutez enfin les chemins volatils, un par ligne, par exemple /metadata/updatedAt. Le chemin et tout son sous-arbre sont retirés du diff comme du patch ; vérifiez donc cette liste avant de conclure que deux documents sont équivalents.</source>
+        <target state="translated">Finalmente, agregue las rutas volátiles, una por línea, por ejemplo /metadata/updatedAt. La ruta y todo su subárbol se eliminan del diff como del parche; así que verifique esta lista antes de concluir que dos documentos son equivalentes.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_outputs">
+      <segment>
+        <source>Comprendre les deux sorties</source>
+        <target state="translated">Entender las dos salidas</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">Parche JSON RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_patch_text">
+      <segment>
+        <source>Le patch contient des opérations add, remove et replace avec des chemins JSON Pointer échappés. Il transforme le document gauche vers le document droit pour les chemins inclus, même lorsque l’aperçu s’appuie sur une association de tableaux par clé.</source>
+        <target state="translated">El parche contiene operaciones add, remove y replace con rutas JSON Pointer escapadas. Transforma el documento izquierdo al documento derecho para las rutas incluidas, incluso cuando la vista previa se basa en una asociación de arreglos por clave.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_title">
+      <segment>
+        <source>Rapport de revue</source>
+        <target state="translated">Informe de revisión</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_report_text">
+      <segment>
+        <source>Le rapport conserve le résumé, les options et les valeurs avant/après de chaque différence. Traitez-le comme les documents d’origine : il peut contenir des informations sensibles et n’est jamais téléversé automatiquement.</source>
+        <target state="translated">El informe conserva el resumen, las opciones y los valores antes/después de cada diferencia. Trátelo como los documentos originales: puede contener información sensible y nunca se sube automáticamente.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_title">
+      <segment>
+        <source>Lien sans données</source>
+        <target state="translated">Enlace sin datos</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_share_text">
+      <segment>
+        <source>Le bouton de partage copie uniquement l’adresse publique de l’outil. Les JSON, chemins ignorés, noms de fichiers et résultats ne sont placés ni dans l’URL ni dans le presse-papiers du lien.</source>
+        <target state="translated">El botón de compartir copia solo la dirección pública de la herramienta. Los JSON, rutas ignoradas, nombres de archivos y resultados no se colocan ni en la URL ni en el portapapeles del enlace.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limits">
+      <segment>
+        <source>Précision, sécurité et limites</source>
+        <target state="translated">Precisión, seguridad y límites</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_1">
+      <segment>
+        <source>Chaque source est limitée à 2 millions de caractères ou 2 Mo par fichier. Le parseur accepte au plus 100 000 valeurs, 64 niveaux d’imbrication et 20 000 différences ; le rapport et le patch partagent un plafond de sortie de 16 millions de caractères.</source>
+        <target state="translated">Cada fuente está limitada a 2 millones de caracteres o 2 MB por archivo. El analizador acepta un máximo de 100,000 valores, 64 niveles de anidamiento y 20,000 diferencias; el informe y el parche comparten un límite de salida de 16 millones de caracteres.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_2">
+      <segment>
+        <source>Les noms de propriétés dupliqués sont refusés au lieu de conserver silencieusement la dernière valeur. Les chaînes UTF-16 mal formées et les nombres qui seraient arrondis par JavaScript sont également rejetés pour éviter un diff trompeur.</source>
+        <target state="translated">Los nombres de propiedades duplicados son rechazados en lugar de conservar silenciosamente el último valor. Las cadenas UTF-16 mal formadas y los números que serían redondeados por JavaScript también son rechazados para evitar un diff engañoso.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_limit_3">
+      <segment>
+        <source>Le traitement s’effectue dans un Worker éphémère. L’outil compare les données, mais ne valide pas un schéma métier, une signature, des droits d’accès ou la sécurité du système qui consommera le patch.</source>
+        <target state="translated">El procesamiento se realiza en un Worker efímero. La herramienta compara los datos, pero no valida un esquema de negocio, una firma, derechos de acceso o la seguridad del sistema que consumirá el parche.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Preguntas frecuentes</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q1">
+      <segment>
+        <source>Pourquoi l’ordre des propriétés n’apparaît-il pas ?</source>
+        <target state="translated">¿Por qué no aparece el orden de las propiedades?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a1">
+      <segment>
+        <source>Un objet JSON est comparé par noms de propriétés et non par ordre d’écriture. Deux objets possédant les mêmes clés et valeurs sont donc équivalents même si leurs propriétés sont réordonnées ou leur indentation différente.</source>
+        <target state="translated">Un objeto JSON se compara por nombres de propiedades y no por orden de escritura. Por lo tanto, dos objetos que tienen las mismas claves y valores son equivalentes incluso si sus propiedades están reordenadas o su indentación es diferente.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q2">
+      <segment>
+        <source>Le patch utilise-t-il les clés d’association des tableaux ?</source>
+        <target state="translated">¿El parche utiliza las claves de asociación de los arreglos?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a2">
+      <segment>
+        <source>Le rapport utilise les clés pour rendre les changements lisibles et signaler les déplacements. Le patch reste un document RFC 6902 standard fondé sur les index réels afin de pouvoir être appliqué par les bibliothèques compatibles.</source>
+        <target state="translated">El informe utiliza las claves para hacer que los cambios sean legibles y señalar los desplazamientos. El parche sigue siendo un documento RFC 6902 estándar basado en los índices reales para que pueda ser aplicado por bibliotecas compatibles.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_q3">
+      <segment>
+        <source>Pourquoi certains grands nombres sont-ils refusés ?</source>
+        <target state="translated">¿Por qué se rechazan algunos números grandes?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_a3">
+      <segment>
+        <source>JavaScript ne représente pas exactement tous les entiers et décimaux JSON. Plutôt que de comparer deux valeurs déjà arrondies, l’outil demande de les encoder comme chaînes lorsque leur représentation exacte ne peut pas être conservée.</source>
+        <target state="translated">JavaScript no representa exactamente todos los enteros y decimales JSON. En lugar de comparar dos valores ya redondeados, la herramienta solicita que se codifiquen como cadenas cuando su representación exacta no puede ser conservada.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip_title">
+      <segment>
+        <source>Appliquer un patch sur une copie</source>
+        <target state="translated">Aplicar un parche sobre una copia</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_diff_tip">
+      <segment>
+        <source>Testez toujours le patch sur une copie, puis validez le résultat avec les règles métier du système cible. Un patch syntaxiquement correct peut rester inadapté à une API, une configuration ou une base de données particulière.</source>
+        <target state="translated">Siempre pruebe el parche en una copia, luego valide el resultado con las reglas de negocio del sistema objetivo. Un parche sintácticamente correcto puede seguir siendo inapropiado para una API, configuración o base de datos particular.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_back">
+      <segment>
+        <source>Retour aux outils de données</source>
+        <target state="translated">Volver a las herramientas de datos</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_eyebrow">
+      <segment>
+        <source>Données structurées · traitement local</source>
+        <target state="translated">Datos estructurados · procesamiento local</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_h1">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Comparar dos JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_intro">
+      <segment>
+        <source> Repérez les ajouts, suppressions, changements de valeur, types et déplacements dans deux documents JSON. Associez les tableaux par index ou par clé, ignorez les chemins volatils et exportez un patch JSON RFC 6902. </source>
+        <target state="translated">Identifique las adiciones, eliminaciones, cambios de valor, tipos y desplazamientos en dos documentos JSON. Asocie los arrays por índice o por clave, ignore las rutas volátiles y exporte un parche JSON RFC 6902.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Confidencialidad</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_title">
+      <segment>
+        <source>Vos JSON restent dans ce navigateur</source>
+        <target state="translated">Sus JSON permanecen en este navegador</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_privacy_text">
+      <segment>
+        <source> La comparaison s’exécute dans un Worker local. Aucun document, nom de fichier ni résultat n’est envoyé à un serveur. </source>
+        <target state="translated">La comparación se ejecuta en un Worker local. Ningún documento, nombre de archivo ni resultado se envía a un servidor.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_1">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Paso 1</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_input_title">
+      <segment>
+        <source>Collez ou chargez les deux documents</source>
+        <target state="translated">Pegue o cargue los dos documentos</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_swap">
+      <segment>
+        <source>Inverser</source>
+        <target state="translated">Invertir</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Restablecer</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_badge">
+      <segment>
+        <source>A · Avant</source>
+        <target state="translated">A · Antes</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_open_file">
+      <segment>
+        <source>Ouvrir un fichier</source>
+        <target state="translated">Abrir un archivo</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_left_label">
+      <segment>
+        <source>Document JSON gauche</source>
+        <target state="translated">Documento JSON izquierdo</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_character_count">
+      <segment>
+        <source> <ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caractères </source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(leftSource().length) }}"/> / <ph id="1" equiv="INTERPOLATION_1" disp="{{ formatNumber(maxSourceCharacters) }}"/> caracteres</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_badge">
+      <segment>
+        <source>B · Après</source>
+        <target state="translated">B · Después</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_right_label">
+      <segment>
+        <source>Document JSON droit</source>
+        <target state="translated">Documento JSON derecho</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_limit">
+      <segment>
+        <source>Fichiers JSON ou TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum chacun.</source>
+        <target state="translated">Archivos JSON o TXT UTF-8, <ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> como máximo cada uno.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_2">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Paso 2</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_options_title">
+      <segment>
+        <source>Choisissez la stratégie de comparaison</source>
+        <target state="translated">Elija la estrategia de comparación</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_mode">
+      <segment>
+        <source>Tableaux</source>
+        <target state="translated">Arrays</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_index">
+      <segment>
+        <source>Comparer par index</source>
+        <target state="translated">Comparar por índice</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_mode">
+      <segment>
+        <source>Associer les objets par clé</source>
+        <target state="translated">Asociar objetos por clave</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_help">
+      <segment>
+        <source>Les tableaux de scalaires restent comparés par index.</source>
+        <target state="translated">Los arrays de escalares se comparan por índice.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key">
+      <segment>
+        <source>Clé d’association (JSON Pointer)</source>
+        <target state="translated">Clave de asociación (JSON Pointer)</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_array_key_help">
+      <segment>
+        <source>Exemples : /id ou /meta/identifiant. La clé doit être unique et scalaire.</source>
+        <target state="translated">Ejemplos: /id o /meta/identificador. La clave debe ser única y escalar.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_summary">
+      <segment>
+        <source>Ignorer des chemins volatils</source>
+        <target state="translated">Ignorar rutas volátiles</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_label">
+      <segment>
+        <source>Un JSON Pointer par ligne</source>
+        <target state="translated">Un JSON Pointer por línea</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_ignore_help">
+      <segment>
+        <source>Le chemin et tout son sous-arbre sont exclus du diff et du patch.</source>
+        <target state="translated">La ruta y todo su subárbol se excluyen del diff y del parche.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_comparing">
+      <segment>
+        <source>Comparaison locale…</source>
+        <target state="translated">Comparando localmente…</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare">
+      <segment>
+        <source>Comparer les JSON</source>
+        <target state="translated">Comparar los JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_link_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Enlace copiado</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share">
+      <segment>
+        <source>Partager l’outil sans les données</source>
+        <target state="translated">Compartir la herramienta sin los datos</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_busy">
+      <segment>
+        <source>Comparaison en cours.</source>
+        <target state="translated">Comparación en curso.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_equal">
+      <segment>
+        <source>Les documents sont équivalents avec ces options.</source>
+        <target state="translated">Los documentos son equivalentes con estas opciones.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_done">
+      <segment>
+        <source>Comparaison terminée avec des différences.</source>
+        <target state="translated">Comparación terminada con diferencias.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_live_error">
+      <segment>
+        <source>La comparaison contient une erreur.</source>
+        <target state="translated">La comparación contiene un error.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_step_3">
+      <segment>
+        <source>Résultat</source>
+        <target state="translated">Resultado</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_result_title">
+      <segment>
+        <source>Diff structurel</source>
+        <target state="translated">Diff estructural</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issues_title">
+      <segment>
+        <source>La comparaison ne peut pas continuer</source>
+        <target state="translated">La comparación no puede continuar</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_title">
+      <segment>
+        <source>Aucune différence structurelle</source>
+        <target state="translated">No hay diferencias estructurales</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_equal_text">
+      <segment>
+        <source>Les documents sont équivalents après application des chemins ignorés.</source>
+        <target state="translated">Los documentos son equivalentes después de aplicar las rutas ignoradas.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> différences détectées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(comparison.summary.total) }}"/> diferencias detectadas</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_different_text">
+      <segment>
+        <source>Le rapport détaille les chemins et le patch transforme le document gauche vers le document droit.</source>
+        <target state="translated">El informe detalla los caminos y el parche transforma el documento izquierdo en el documento derecho.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_label">
+      <segment>
+        <source>Résumé des différences</source>
+        <target state="translated">Resumen de diferencias</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_added">
+      <segment>
+        <source>Ajouts</source>
+        <target state="translated">Adiciones</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_removed">
+      <segment>
+        <source>Suppressions</source>
+        <target state="translated">Supresiones</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_changed">
+      <segment>
+        <source>Valeurs</source>
+        <target state="translated">Valores</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_types">
+      <segment>
+        <source>Types</source>
+        <target state="translated">Tipos</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_summary_moved">
+      <segment>
+        <source>Déplacements</source>
+        <target state="translated">Movimientos</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_caption">
+      <segment>
+        <source>Aperçu des différences structurelles</source>
+        <target state="translated">Vista general de las diferencias estructurales</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_change">
+      <segment>
+        <source>Changement</source>
+        <target state="translated">Cambio</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_path">
+      <segment>
+        <source>Chemin</source>
+        <target state="translated">Camino</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_before">
+      <segment>
+        <source>Avant</source>
+        <target state="translated">Antes</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_col_after">
+      <segment>
+        <source>Après</source>
+        <target state="translated">Después</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_changes_truncated">
+      <segment>
+        <source>L’aperçu est limité aux 500 premières différences. Le rapport téléchargé reste complet.</source>
+        <target state="translated">La vista previa está limitada a las primeras 500 diferencias. El informe descargado permanece completo.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_title">
+      <segment>
+        <source>Patch JSON RFC 6902</source>
+        <target state="translated">Parche JSON RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_patch_help">
+      <segment>
+        <source>Applicable au document gauche avec les chemins ignorés exclus.</source>
+        <target state="translated">Aplicable al documento izquierdo con los caminos ignorados excluidos.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copied">
+      <segment>
+        <source>Copié</source>
+        <target state="translated">Copiado</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_patch">
+      <segment>
+        <source>Copier le patch</source>
+        <target state="translated">Copiar el parche</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_patch">
+      <segment>
+        <source>Télécharger le patch</source>
+        <target state="translated">Descargar el parche</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_output_truncated">
+      <segment>
+        <source>Aperçu tronqué ; le téléchargement contient la sortie complète.</source>
+        <target state="translated">Vista previa truncada; la descarga contiene la salida completa.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_title">
+      <segment>
+        <source>Rapport JSON complet</source>
+        <target state="translated">Informe JSON completo</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_report_help">
+      <segment>
+        <source>Résumé, options et différences avec valeurs avant/après.</source>
+        <target state="translated">Resumen, opciones y diferencias con valores antes/después.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Copiar el informe</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Descargar el informe</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_left">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;développement&quot;, &quot;ville&quot;: &quot;New York&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;ancienne&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;1&quot;,
+  &quot;usuarios&quot;: [
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rol&quot;: &quot;administración&quot;, &quot;ciudad&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rol&quot;: &quot;desarrollo&quot;, &quot;ciudad&quot;: &quot;Nueva York&quot; }
+  ],
+  &quot;metadatos&quot;: { &quot;actualización&quot;: &quot;antigua&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_default_right">
+      <segment>
+        <source>{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;utilisateurs&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rôle&quot;: &quot;architecture&quot;, &quot;ville&quot;: &quot;New York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rôle&quot;: &quot;administration&quot;, &quot;ville&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rôle&quot;: &quot;recherche&quot;, &quot;ville&quot;: &quot;Washington&quot; }
+  ],
+  &quot;métadonnées&quot;: { &quot;miseÀJour&quot;: &quot;récente&quot; }
+}</source>
+        <target state="translated">{
+  &quot;version&quot;: &quot;2&quot;,
+  &quot;usuarios&quot;: [
+    { &quot;id&quot;: &quot;grace&quot;, &quot;rol&quot;: &quot;arquitectura&quot;, &quot;ciudad&quot;: &quot;Nueva York&quot; },
+    { &quot;id&quot;: &quot;ada&quot;, &quot;rol&quot;: &quot;administración&quot;, &quot;ciudad&quot;: &quot;Londres&quot; },
+    { &quot;id&quot;: &quot;margaret&quot;, &quot;rol&quot;: &quot;investigación&quot;, &quot;ciudad&quot;: &quot;Washington&quot; }
+  ],
+  &quot;metadatos&quot;: { &quot;actualización&quot;: &quot;reciente&quot; }
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_compare_error">
+      <segment>
+        <source>La comparaison a échoué dans le navigateur. Réessayez avec des documents plus petits.</source>
+        <target state="translated">La comparación falló en el navegador. Intente nuevamente con documentos más pequeños.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">No se pudo copiar automáticamente. Seleccione la salida y cópiela manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">No se pudo copiar el enlace. Copie la dirección de la página desde su navegador.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">El documento está vacío.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">El documento excede el límite de 2,000,000 caracteres.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">El documento no es un JSON válido.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Un objeto contiene el mismo nombre de propiedad dos veces.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Un número sería redondeado o convertido en infinito por JavaScript. Transforme en cadena para preservar su valor exacto.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Una cadena contiene un carácter UTF-16 no emparejado.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">El documento excede 64 niveles de anidamiento.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">El documento excede 100,000 valores JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore">
+      <segment>
+        <source>Un chemin ignoré n’est pas un JSON Pointer valide.</source>
+        <target state="translated">Un camino ignorado no es un puntero JSON válido.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_required">
+      <segment>
+        <source>Indiquez la clé d’association sous forme de JSON Pointer, par exemple /id.</source>
+        <target state="translated">Indique la clave de asociación en forma de puntero JSON, por ejemplo /id.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_invalid">
+      <segment>
+        <source>Un objet du tableau ne possède pas une clé d’association scalaire valide.</source>
+        <target state="translated">Un objeto del arreglo no tiene una clave de asociación escalar válida.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_key_duplicate">
+      <segment>
+        <source>Une même clé d’association apparaît plusieurs fois dans un tableau.</source>
+        <target state="translated">Una misma clave de asociación aparece varias veces en un arreglo.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_changes">
+      <segment>
+        <source>La comparaison dépasse la limite de 20 000 différences.</source>
+        <target state="translated">La comparación supera el límite de 20,000 diferencias.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_output">
+      <segment>
+        <source>Le rapport et le patch dépasseraient la limite de sortie.</source>
+        <target state="translated">El informe y el parche superarían el límite de salida.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_left">
+      <segment>
+        <source> Document gauche.</source>
+        <target state="translated">Documento izquierdo.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_side_right">
+      <segment>
+        <source> Document droit.</source>
+        <target state="translated">Documento derecho.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Ruta <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Posición <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_added">
+      <segment>
+        <source>Ajout</source>
+        <target state="translated">Adición</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_removed">
+      <segment>
+        <source>Suppression</source>
+        <target state="translated">Eliminación</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_changed">
+      <segment>
+        <source>Valeur modifiée</source>
+        <target state="translated">Valor modificado</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_type">
+      <segment>
+        <source>Type modifié</source>
+        <target state="translated">Tipo modificado</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_kind_moved">
+      <segment>
+        <source>Déplacement</source>
+        <target state="translated">Movimiento</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_move_label">
+      <segment>
+        <source>Indice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></source>
+        <target state="translated">Índice <ph id="0" equiv="before" disp="this.formatNumber(change.beforeIndex)"/> → <ph id="1" equiv="after" disp="this.formatNumber(change.afterIndex)"/></target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">El archivo seleccionado está vacío.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">El archivo supera el límite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON ou TXT.</source>
+        <target state="translated">Seleccione un archivo JSON o TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">El archivo no está codificado en UTF-8 válido.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">No se puede leer este archivo localmente.</target>
+      </segment>
+    </unit>
+    <unit id="json_diff_issue_ignore_patch_conflict">
+      <segment>
+        <source>Ces exclusions sont incompatibles avec un patch sans perte. Ignorez le conteneur entier ou retirez les chemins en conflit.</source>
+        <target state="translated">Estas exclusiones son incompatibles con un parche sin pérdida. Ignora todo el contenedor o elimina las rutas en conflicto.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
