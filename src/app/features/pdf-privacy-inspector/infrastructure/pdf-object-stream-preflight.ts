@@ -119,6 +119,8 @@ interface ParsedDictionary {
   encryptionReference?: RawPdfReference;
 }
 
+type CriticalDictionarySemanticType = 'ObjStm' | 'Trailer' | 'XRef';
+
 interface CriticalStreamDescriptor {
   type: 'ObjStm' | 'XRef';
   contents: Uint8Array;
@@ -249,7 +251,12 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     if (rawSyntaxBudget.containerDepth !== initialContainerDepth) {
       throw new Error('Invalid PDF container nesting');
     }
-    const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+    let dictionary = parseCriticalDictionary(
+      data,
+      dictionaryStart,
+      dictionaryEnd,
+      expectTrailerDictionary ? 'Trailer' : undefined,
+    );
     if (expectTrailerDictionary) {
       encrypted ||= dictionaryDeclaresEncryption(
         data,
@@ -297,6 +304,9 @@ export function validatePdfObjectStreamBudgets(data: Uint8Array): PdfObjectStrea
     const streamType = resolveCriticalStreamType(data, dictionary.type, objectStreamSelection);
     if (streamType === null) throw new Error('Invalid PDF stream type');
     if (streamType !== 'ObjStm' && streamType !== 'XRef') continue;
+    if (typeof dictionary.type !== 'string') {
+      dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd, streamType);
+    }
     if (
       streamType === 'ObjStm'
       && streamObjectHeader
@@ -854,7 +864,12 @@ function detectEncryptionBeforeObjectStreamDiscovery(
     }
     let dictionary: ParsedDictionary;
     try {
-      dictionary = parseCriticalDictionary(data, offset, dictionaryEnd);
+      dictionary = parseCriticalDictionary(
+        data,
+        offset,
+        dictionaryEnd,
+        expectTrailerDictionary ? 'Trailer' : undefined,
+      );
     } catch {
       offset = dictionaryEnd;
       continue;
@@ -1502,7 +1517,12 @@ function readClassicCrossReferenceSection(
       const dictionaryEnd = findDictionaryEnd(data, dictionaryStart);
       if (dictionaryEnd === undefined || dictionaryEnd > lastStartXrefOffset) return undefined;
       try {
-        const dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd);
+        const dictionary = parseCriticalDictionary(
+          data,
+          dictionaryStart,
+          dictionaryEnd,
+          'Trailer',
+        );
         return {
           kind: 'classic',
           objectOffsets,
@@ -1631,11 +1651,18 @@ function collectCompressedIndirectLengthCandidates(
       } catch {
         continue;
       }
-      if (
-        resolveCriticalStreamType(data, dictionary.type, candidates) !== 'ObjStm'
-        || dictionary.objectCount === undefined
-        || dictionary.firstObjectOffset === undefined
-      ) continue;
+      const streamType = resolveCriticalStreamType(data, dictionary.type, candidates);
+      if (streamType !== 'ObjStm') continue;
+      if (typeof dictionary.type !== 'string') {
+        try {
+          dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd, streamType);
+        } catch {
+          continue;
+        }
+      }
+      if (dictionary.objectCount === undefined || dictionary.firstObjectOffset === undefined) {
+        continue;
+      }
       const streamKeyword = skipWhitespaceAndComments(data, dictionaryEnd);
       if (!matchesKeyword(data, streamKeyword, 'stream')) continue;
       let streamStart: number;
@@ -2476,13 +2503,21 @@ function isAuthoritativeCompressedNullObject(
   } catch {
     return false;
   }
+  const streamType = resolveCriticalStreamType(
+    data,
+    dictionary.type,
+    { authoritativeOffsets },
+  );
+  if (streamType !== 'ObjStm') return false;
+  if (typeof dictionary.type !== 'string') {
+    try {
+      dictionary = parseCriticalDictionary(data, dictionaryStart, dictionaryEnd, streamType);
+    } catch {
+      return false;
+    }
+  }
   if (
-    resolveCriticalStreamType(
-      data,
-      dictionary.type,
-      { authoritativeOffsets },
-    ) !== 'ObjStm'
-    || dictionary.objectCount === undefined
+    dictionary.objectCount === undefined
     || dictionary.firstObjectOffset === undefined
     || entry.objectIndex >= dictionary.objectCount
   ) return false;
@@ -2639,6 +2674,7 @@ function parseCriticalDictionary(
   data: Uint8Array,
   dictionaryStart: number,
   dictionaryEnd: number,
+  forcedSemanticType?: CriticalDictionarySemanticType,
 ): ParsedDictionary {
   let type: string | RawPdfReference | undefined;
   let length: number | RawPdfReference | undefined;
@@ -2649,12 +2685,15 @@ function parseCriticalDictionary(
   let xrefSize: number | undefined;
   let xrefWidths: readonly number[] | undefined;
   let xrefIndex: readonly number[] | undefined;
-  let xrefWidthsValueStart: number | undefined;
-  let xrefIndexValueStart: number | undefined;
-  let hasDuplicateXrefWidths = false;
-  let hasDuplicateXrefIndex = false;
   let previousXrefOffset: number | undefined;
   let supplementalXrefOffset: number | undefined;
+  const objectCountValueStarts: number[] = [];
+  const firstObjectOffsetValueStarts: number[] = [];
+  const xrefSizeValueStarts: number[] = [];
+  const xrefWidthsValueStarts: number[] = [];
+  const xrefIndexValueStarts: number[] = [];
+  const previousXrefOffsetValueStarts: number[] = [];
+  const supplementalXrefOffsetValueStarts: number[] = [];
   let hasType = false;
   let hasFilter = false;
   let hasDecodeParameters = false;
@@ -2769,11 +2808,9 @@ function parseCriticalDictionary(
       }
     } else if (key.value === 'W' || key.value === 'Index') {
       if (key.value === 'W') {
-        hasDuplicateXrefWidths ||= xrefWidthsValueStart !== undefined;
-        xrefWidthsValueStart ??= valueStart;
+        xrefWidthsValueStarts.push(valueStart);
       } else {
-        hasDuplicateXrefIndex ||= xrefIndexValueStart !== undefined;
-        xrefIndexValueStart ??= valueStart;
+        xrefIndexValueStarts.push(valueStart);
       }
       offset = skipPdfValue(data, valueStart, dictionaryEnd);
     } else if (
@@ -2783,27 +2820,18 @@ function parseCriticalDictionary(
       || key.value === 'Prev'
       || key.value === 'XRefStm'
     ) {
-      const value = readUnsignedInteger(data, valueStart);
-      if (!value) throw new Error('Invalid PDF object count');
       if (key.value === 'N') {
-        if (objectCount !== undefined) throw new Error('Duplicate PDF object count');
-        objectCount = value.value;
+        objectCountValueStarts.push(valueStart);
       } else if (key.value === 'First') {
-        if (firstObjectOffset !== undefined) throw new Error('Duplicate PDF first offset');
-        firstObjectOffset = value.value;
+        firstObjectOffsetValueStarts.push(valueStart);
       } else if (key.value === 'Size') {
-        if (xrefSize !== undefined) throw new Error('Duplicate PDF xref size');
-        xrefSize = value.value;
+        xrefSizeValueStarts.push(valueStart);
       } else if (key.value === 'Prev') {
-        if (previousXrefOffset !== undefined) throw new Error('Duplicate PDF previous xref');
-        previousXrefOffset = value.value;
+        previousXrefOffsetValueStarts.push(valueStart);
       } else {
-        if (supplementalXrefOffset !== undefined) {
-          throw new Error('Duplicate PDF supplemental xref');
-        }
-        supplementalXrefOffset = value.value;
+        supplementalXrefOffsetValueStarts.push(valueStart);
       }
-      offset = value.end;
+      offset = skipPdfValue(data, valueStart, dictionaryEnd);
     } else {
       if (key.value === 'Encrypt') {
         if (hasEncryptionEntry) throw new Error('Duplicate PDF encryption dictionary');
@@ -2815,15 +2843,33 @@ function parseCriticalDictionary(
       offset = skipPdfValue(data, valueStart, dictionaryEnd);
     }
   }
-  if (type === 'XRef') {
-    if (hasDuplicateXrefWidths) throw new Error('Invalid PDF xref widths');
-    if (xrefWidthsValueStart !== undefined) {
+  const semanticType = forcedSemanticType
+    ?? (type === 'ObjStm' || type === 'XRef' ? type : undefined);
+  if (semanticType === 'ObjStm') {
+    objectCount = readUniqueUnsignedInteger(
+      data,
+      objectCountValueStarts,
+      'Duplicate PDF object count',
+      'Invalid PDF object count',
+    );
+    firstObjectOffset = readUniqueUnsignedInteger(
+      data,
+      firstObjectOffsetValueStarts,
+      'Duplicate PDF first offset',
+      'Invalid PDF first offset',
+    );
+  }
+  if (semanticType === 'XRef') {
+    if (xrefWidthsValueStarts.length > 1) throw new Error('Invalid PDF xref widths');
+    if (xrefWidthsValueStarts.length === 1) {
+      const xrefWidthsValueStart = xrefWidthsValueStarts[0];
       const value = readUnsignedIntegerArray(data, xrefWidthsValueStart, 3);
       if (value.values.length !== 3) throw new Error('Invalid PDF xref widths');
       xrefWidths = value.values;
     }
-    if (hasDuplicateXrefIndex) throw new Error('Invalid PDF xref index');
-    if (xrefIndexValueStart !== undefined) {
+    if (xrefIndexValueStarts.length > 1) throw new Error('Invalid PDF xref index');
+    if (xrefIndexValueStarts.length === 1) {
+      const xrefIndexValueStart = xrefIndexValueStarts[0];
       const value = readUnsignedIntegerArray(
         data,
         xrefIndexValueStart,
@@ -2832,6 +2878,26 @@ function parseCriticalDictionary(
       if (value.values.length % 2 !== 0) throw new Error('Invalid PDF xref index');
       xrefIndex = value.values;
     }
+  }
+  if (semanticType === 'Trailer' || semanticType === 'XRef') {
+    xrefSize = readUniqueUnsignedInteger(
+      data,
+      xrefSizeValueStarts,
+      'Duplicate PDF xref size',
+      'Invalid PDF xref size',
+    );
+    previousXrefOffset = readUniqueUnsignedInteger(
+      data,
+      previousXrefOffsetValueStarts,
+      'Duplicate PDF previous xref',
+      'Invalid PDF previous xref',
+    );
+    supplementalXrefOffset = readUniqueUnsignedInteger(
+      data,
+      supplementalXrefOffsetValueStarts,
+      'Duplicate PDF supplemental xref',
+      'Invalid PDF supplemental xref',
+    );
   }
   return {
     type,
@@ -2848,6 +2914,20 @@ function parseCriticalDictionary(
     hasEncryptionDictionary,
     encryptionReference,
   };
+}
+
+function readUniqueUnsignedInteger(
+  data: Uint8Array,
+  valueStarts: readonly number[],
+  duplicateMessage: string,
+  invalidMessage: string,
+): number | undefined {
+  if (valueStarts.length === 0) return undefined;
+  if (valueStarts.length > 1) throw new Error(duplicateMessage);
+  const valueStart = valueStarts[0];
+  const value = readUnsignedInteger(data, valueStart);
+  if (!value) throw new Error(invalidMessage);
+  return value.value;
 }
 
 function skipPdfValue(data: Uint8Array, start: number, end: number): number {
@@ -3019,7 +3099,7 @@ function readFilters(
 function resolveFilters(
   data: Uint8Array,
   filters: PdfFilters | undefined,
-  candidates?: Pick<IndirectLengthCandidateIndex, 'authoritativeOffsets'>,
+  candidates?: CompressedReferenceCandidates,
 ): readonly string[] | undefined {
   if (filters === undefined) return undefined;
   if ('reference' in filters) {
@@ -3028,7 +3108,19 @@ function resolveFilters(
       reference.objectNumber,
       reference.generationNumber,
     ));
-    if (offset === undefined) return undefined;
+    if (offset === undefined) {
+      const key = referenceKey(reference.objectNumber, reference.generationNumber);
+      if (
+        reference.generationNumber !== 0
+        || !candidates?.authoritativeCompressedEntries?.has(key)
+      ) return undefined;
+      const names = candidates.compressedNames?.get(key);
+      const isNull = candidates.compressedNullObjects?.has(key) ?? false;
+      if ((names?.size ?? 0) + (isNull ? 1 : 0) !== 1) return undefined;
+      if (isNull) return [];
+      const name = names?.values().next().value;
+      return name === undefined ? undefined : [name];
+    }
     const header = readIndirectObjectHeader(data, offset);
     if (
       !header
@@ -3057,7 +3149,21 @@ function resolveFilters(
       filter.objectNumber,
       filter.generationNumber,
     ));
-    if (offset === undefined) return undefined;
+    if (offset === undefined) {
+      const key = referenceKey(filter.objectNumber, filter.generationNumber);
+      if (
+        filter.generationNumber !== 0
+        || !candidates?.authoritativeCompressedEntries?.has(key)
+      ) return undefined;
+      const names = candidates.compressedNames?.get(key);
+      if ((names?.size ?? 0) !== 1 || candidates.compressedNullObjects?.has(key)) {
+        return undefined;
+      }
+      const name = names?.values().next().value;
+      if (name === undefined) return undefined;
+      resolved.push(name);
+      continue;
+    }
     const header = readIndirectObjectHeader(data, offset);
     if (
       !header

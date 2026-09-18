@@ -955,7 +955,9 @@ describe('inspectPdfStructuralSignals', () => {
     const imagePayload = Uint8Array.of(0xff, 0xff, 0xff);
     const pdf = joinBytes(
       '%PDF-1.7\n1 0 obj\n<< /Type /XObject /Subtype /Image /Width 1 /Height 1 ',
-      `/W 1 /Index /VendorValue /Length ${String(imagePayload.byteLength)} >>\nstream\n`,
+      '/W 1 /Index /VendorValue /N /VendorN /First [/VendorFirst] ',
+      '/Size /VendorSize /Prev /VendorPrev /XRefStm /VendorXRefStm ',
+      `/Length ${String(imagePayload.byteLength)} >>\nstream\n`,
       imagePayload,
       '\nendstream\nendobj\n%%EOF\n',
     );
@@ -967,6 +969,49 @@ describe('inspectPdfStructuralSignals', () => {
       'stream\n\nendstream\nendobj\n%%EOF\n',
     );
     expect(() => validatePdfObjectStreamBudgets(malformedXref)).toThrow();
+
+    const malformedObjectStream = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /N /VendorN /Type /ObjStm /First 0 /Length 0 >>\n',
+      'stream\n\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(malformedObjectStream))
+      .toThrow('Invalid PDF object count');
+
+    const malformedPreviousXref = joinBytes(
+      '%PDF-1.7\n4 0 obj\n<< /Prev /VendorPrev /Type /XRef /Size 5 ',
+      '/W [1 4 2] /Length 0 >>\nstream\n\nendstream\nendobj\n%%EOF\n',
+    );
+    expect(() => validatePdfObjectStreamBudgets(malformedPreviousXref))
+      .toThrow('Invalid PDF previous xref');
+  });
+
+  it('résout un nom de filtre indirect compressé depuis la xref active', () => {
+    const filteredPayload = deflate(new Uint8Array());
+    const filterNameCarrier = new TextEncoder().encode('6 0 /FlateDecode');
+    const body = joinBytes(
+      '%PDF-1.7\n3 0 obj\n<< /Type /ObjStm /N 0 /First 0 /Filter 6 0 R ',
+      `/Length ${String(filteredPayload.byteLength)} >>\nstream\n`,
+      filteredPayload,
+      '\nendstream\nendobj\n8 0 obj\n<< /Type /ObjStm /N 1 /First 4 ',
+      `/Length ${String(filterNameCarrier.byteLength)} >>\nstream\n`,
+      filterNameCarrier,
+      '\nendstream\nendobj\n',
+    );
+    const xrefOffset = body.byteLength;
+    const pdf = joinBytes(
+      body,
+      '10 0 obj\n<< /Type /XRef /Size 11 /W [1 4 2] /Index [3 1 6 1 8 1 10 1] ',
+      '/Length 28 >>\nstream\n',
+      encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('3 0 obj'))),
+      encodeXrefRow(2, 8, 0),
+      encodeXrefRow(1, findByteSequence(body, new TextEncoder().encode('8 0 obj'))),
+      encodeXrefRow(1, xrefOffset),
+      '\nendstream\nendobj\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    );
+
+    expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
   });
 
   it('borne les objets indirects classiques avant le chargement par pdf-lib', () => {
@@ -2795,6 +2840,18 @@ function findByteSequence(haystack: Uint8Array, needle: Uint8Array): number {
     if (matches) return start;
   }
   return -1;
+}
+
+function encodeXrefRow(type: number, fieldOne: number, fieldTwo = 0): Uint8Array {
+  return Uint8Array.of(
+    type,
+    (fieldOne >>> 24) & 0xff,
+    (fieldOne >>> 16) & 0xff,
+    (fieldOne >>> 8) & 0xff,
+    fieldOne & 0xff,
+    (fieldTwo >>> 8) & 0xff,
+    fieldTwo & 0xff,
+  );
 }
 
 function joinBytes(...parts: readonly (Uint8Array | string)[]): Uint8Array {
