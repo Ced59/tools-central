@@ -263,23 +263,38 @@ function mergeMany(nodes: TypeNode[], mergeObjects: boolean): TypeNode {
 
 function mergeTypes(left: TypeNode, right: TypeNode, mergeObjects: boolean): TypeNode {
   if (nodeSignature(left) === nodeSignature(right)) return left;
-  if (left.kind === 'date' && right.kind === 'string') return { kind: 'string' };
-  if (left.kind === 'string' && right.kind === 'date') return { kind: 'string' };
-  if (left.kind === 'array' && right.kind === 'array') {
-    return { kind: 'array', element: mergeTypes(left.element, right.element, mergeObjects) };
+
+  let variants: TypeNode[] = [left, right]
+    .flatMap(node => node.kind === 'union' ? node.variants : [node]);
+  if (variants.some(node => node.kind === 'unknown') && variants.length > 1) {
+    variants = variants.filter(node => node.kind !== 'unknown');
   }
+  if (variants.some(node => node.kind === 'date') && variants.some(node => node.kind === 'string')) {
+    variants = variants.filter(node => node.kind !== 'date');
+  }
+
+  const arrayVariants = variants.filter((node): node is ArrayTypeNode => node.kind === 'array');
+  if (arrayVariants.length > 1) {
+    const mergedElement = arrayVariants
+      .slice(1)
+      .reduce((element, node) => mergeTypes(element, node.element, mergeObjects), arrayVariants[0].element);
+    variants = [
+      { kind: 'array', element: mergedElement },
+      ...variants.filter(node => node.kind !== 'array'),
+    ];
+  }
+
   if (mergeObjects) {
-    const variants = [left, right].flatMap(node => node.kind === 'union' ? node.variants : [node]);
     const objectVariants = variants.filter((node): node is ObjectTypeNode => node.kind === 'object');
     if (objectVariants.length > 1) {
       const mergedObject = objectVariants.slice(1).reduce(mergeObjectTypes, objectVariants[0]);
-      return makeUnion([
+      variants = [
         mergedObject,
         ...variants.filter(node => node.kind !== 'object'),
-      ]);
+      ];
     }
   }
-  return makeUnion([left, right]);
+  return makeUnion(variants);
 }
 
 function mergeObjectTypes(left: ObjectTypeNode, right: ObjectTypeNode): ObjectTypeNode {

@@ -88,6 +88,15 @@ describe('generateTypeScriptFromJson', () => {
     expect(result.output).toBe('export type Values = Array<Array<boolean> | string | number | null>;\n');
   });
 
+  it('merges array evidence across intervening union members', () => {
+    const result = generateTypeScriptFromJson('[[1],null,["two"]]', {
+      ...DEFAULT_OPTIONS,
+      rootName: 'Values',
+    });
+
+    expect(result.output).toBe('export type Values = Array<Array<string | number> | null>;\n');
+  });
+
   it('emits readonly properties and type aliases', () => {
     const result = generateTypeScriptFromJson('{"value":1}', {
       ...DEFAULT_OPTIONS,
@@ -151,6 +160,27 @@ describe('generateTypeScriptFromJson', () => {
     expect(result.output).not.toContain('Date');
     expect(result.stats.inferredDates).toBe(0);
     expect(result.warnings.map(warning => warning.code)).not.toContain('date-inference');
+  });
+
+  it('widens dates separated from strings by another union member', () => {
+    const result = generateTypeScriptFromJson(`[
+      {"value":"2026-09-18"},
+      {"value":null},
+      {"value":"pending"}
+    ]`, { ...DEFAULT_OPTIONS, inferDates: true });
+
+    expect(result.output).toContain('value: string | null;');
+    expect(result.output).not.toContain('Date');
+    expect(result.stats.inferredDates).toBe(0);
+    expect(result.warnings.map(warning => warning.code)).not.toContain('date-inference');
+  });
+
+  it('uses populated arrays as evidence when another sample is empty', () => {
+    const result = generateTypeScriptFromJson('[{"items":[]},{"items":[1]}]', DEFAULT_OPTIONS);
+
+    expect(result.output).toContain('items: Array<number>;');
+    expect(result.output).not.toContain('number | unknown');
+    expect(result.warnings).toContainEqual({ code: 'empty-array', count: 1, detail: '' });
   });
 
   it('falls back to unknown for empty arrays and reports empty shapes', () => {
