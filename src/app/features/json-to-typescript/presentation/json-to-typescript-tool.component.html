@@ -1,0 +1,296 @@
+<main class="json-ts-tool">
+  <header class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow" i18n="@@json_ts_eyebrow">Développement · Contrats de données</p>
+      <h1 i18n="@@json_ts_h1">Générer des types TypeScript depuis JSON</h1>
+      <p class="hero__lead" i18n="@@json_ts_lead">
+        Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes.
+      </p>
+      <div class="trust-row" aria-label="Garanties de l’outil" i18n-aria-label="@@json_ts_trust_label">
+        <span><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><ng-container i18n="@@json_ts_trust_local">100 % local</ng-container></span>
+        <span><i class="tc-icon tc-icon-bolt" aria-hidden="true"></i><ng-container i18n="@@json_ts_trust_worker">Worker annulable</ng-container></span>
+        <span><i class="tc-icon tc-icon-code" aria-hidden="true"></i><ng-container i18n="@@json_ts_trust_export">Export .ts</ng-container></span>
+      </div>
+    </div>
+    <div class="hero__actions">
+      <button type="button" class="button button--secondary" (click)="loadExample('order')" i18n="@@json_ts_example_order">Exemple commande</button>
+      <button type="button" class="button button--ghost" (click)="loadExample('api')" i18n="@@json_ts_example_api">Exemple API</button>
+      <button type="button" class="button button--ghost" (click)="copyShareLink()">
+        <i class="tc-icon tc-icon-link" aria-hidden="true"></i>
+        @if (copiedTarget() === 'share') {
+          <ng-container i18n="@@json_ts_share_copied">Lien copié</ng-container>
+        } @else {
+          <ng-container i18n="@@json_ts_share">Partager l’outil</ng-container>
+        }
+      </button>
+    </div>
+  </header>
+
+  <section class="privacy-note" aria-label="Confidentialité" i18n-aria-label="@@json_ts_privacy_label">
+    <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+    <div>
+      <strong i18n="@@json_ts_privacy_title">Le JSON reste sur cet appareil.</strong>
+      <p i18n="@@json_ts_privacy_text">Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</p>
+    </div>
+  </section>
+
+  <section class="workspace" aria-labelledby="json-ts-workspace-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow" i18n="@@json_ts_workspace_eyebrow">Source</p>
+        <h2 id="json-ts-workspace-title" i18n="@@json_ts_workspace_title">Collez un exemple JSON représentatif</h2>
+      </div>
+      <p class="section-heading__hint" i18n="@@json_ts_workspace_hint">Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</p>
+    </div>
+
+    <div class="input-layout">
+      <article class="editor-card">
+        <div class="editor-card__header">
+          <div>
+            <span class="step">1</span>
+            <h3 i18n="@@json_ts_source_title">Données JSON</h3>
+          </div>
+          <label class="file-button" for="json-ts-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <ng-container i18n="@@json_ts_import">Importer</ng-container>
+          </label>
+          <input
+            id="json-ts-file"
+            class="visually-hidden"
+            type="file"
+            accept=".json,.txt,application/json,text/plain"
+            (change)="loadFile($event)"
+          >
+        </div>
+        @if (fileName()) {
+          <p class="file-name"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>{{ fileName() }}</p>
+        }
+        <label class="visually-hidden" for="json-ts-source" i18n="@@json_ts_source_label">JSON utilisé pour générer les types</label>
+        <textarea
+          id="json-ts-source"
+          class="code-input"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          [value]="source()"
+          aria-describedby="json-ts-source-help"
+          (input)="updateSource($event)"
+        ></textarea>
+        <div class="editor-card__footer" id="json-ts-source-help">
+          <span i18n="@@json_ts_source_help">Objet, tableau ou valeur JSON · UTF-8 strict</span>
+          <span>{{ formatNumber(source().length) }} / {{ formatNumber(maxSourceCharacters) }}</span>
+        </div>
+      </article>
+
+      <aside class="options-card" aria-labelledby="json-ts-options-title">
+        <div class="options-card__heading">
+          <span class="step">2</span>
+          <div>
+            <h3 id="json-ts-options-title" i18n="@@json_ts_options_title">Options TypeScript</h3>
+            <p i18n="@@json_ts_options_help">Les réglages modifient seulement le code produit, jamais le JSON.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="json-ts-root-name" i18n="@@json_ts_root_name_label">Nom du type racine</label>
+          <input
+            id="json-ts-root-name"
+            type="text"
+            maxlength="120"
+            [value]="options().rootName"
+            (input)="updateRootName($event)"
+          >
+          <small i18n="@@json_ts_root_name_help">Le nom est converti en identifiant PascalCase valide.</small>
+        </div>
+
+        <div class="field">
+          <label for="json-ts-declaration" i18n="@@json_ts_declaration_label">Style de déclaration</label>
+          <select id="json-ts-declaration" [value]="options().declarationKind" (change)="updateDeclarationKind($event)">
+            <option value="interface" i18n="@@json_ts_declaration_interface">Interfaces exportées</option>
+            <option value="type" i18n="@@json_ts_declaration_type">Aliases de types exportés</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="json-ts-array-mode" i18n="@@json_ts_array_mode_label">Objets différents dans un tableau</label>
+          <select id="json-ts-array-mode" [value]="options().arrayObjectMode" (change)="updateArrayObjectMode($event)">
+            <option value="merge" i18n="@@json_ts_array_merge">Fusionner et rendre les champs absents optionnels</option>
+            <option value="union" i18n="@@json_ts_array_union">Conserver une union de formes distinctes</option>
+          </select>
+        </div>
+
+        <label class="check-field">
+          <input type="checkbox" [checked]="options().inferDates" (change)="updateInferDates($event)">
+          <span>
+            <strong i18n="@@json_ts_dates_title">Inférer les dates ISO en <code>Date</code></strong>
+            <small i18n="@@json_ts_dates_help">À activer seulement si votre application hydrate réellement les chaînes reçues.</small>
+          </span>
+        </label>
+
+        <label class="check-field">
+          <input type="checkbox" [checked]="options().readonlyProperties" (change)="updateReadonlyProperties($event)">
+          <span>
+            <strong i18n="@@json_ts_readonly_title">Propriétés <code>readonly</code></strong>
+            <small i18n="@@json_ts_readonly_help">Empêche leur réaffectation dans le typage généré.</small>
+          </span>
+        </label>
+
+        <div class="limits">
+          <strong i18n="@@json_ts_limits_title">Limites de sécurité</strong>
+          <span i18n="@@json_ts_limits_text">{{ maxFileSizeLabel }} par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</span>
+        </div>
+      </aside>
+    </div>
+
+    <div class="primary-actions">
+      <button type="button" class="button button--primary button--large" [disabled]="!canGenerate()" (click)="generate()">
+        <i class="tc-icon tc-icon-code" aria-hidden="true"></i>
+        @if (isLoading()) {
+          <ng-container i18n="@@json_ts_loading">Lecture du fichier…</ng-container>
+        } @else if (isProcessing()) {
+          <ng-container i18n="@@json_ts_processing">Génération en cours…</ng-container>
+        } @else {
+          <ng-container i18n="@@json_ts_generate">Générer les types TypeScript</ng-container>
+        }
+      </button>
+      @if (isProcessing()) {
+        <button type="button" class="button button--secondary" (click)="cancelGeneration()" i18n="@@json_ts_cancel">Annuler</button>
+      }
+    </div>
+  </section>
+
+  <div class="live-region" aria-live="polite" aria-atomic="true">
+    @if (isLoading()) {
+      <span i18n="@@json_ts_live_loading">Lecture locale du fichier en cours.</span>
+    } @else if (isProcessing()) {
+      <span i18n="@@json_ts_live_processing">Génération locale des types en cours.</span>
+    } @else if (result()?.ok) {
+      <span i18n="@@json_ts_live_done">Les types TypeScript sont prêts.</span>
+    } @else if (state() === 'error') {
+      <span i18n="@@json_ts_live_error">La génération n’a pas pu aboutir.</span>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert--error" role="alert">
+      <i class="tc-icon tc-icon-warning" aria-hidden="true"></i>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (result(); as generationResult) {
+    @if (generationResult.issues.length > 0) {
+      <section class="alert alert--error" role="alert" data-testid="json-ts-issues">
+        <i class="tc-icon tc-icon-warning" aria-hidden="true"></i>
+        <div>
+          <strong i18n="@@json_ts_blocked_title">Génération impossible</strong>
+          <ul>
+            @for (issue of generationResult.issues; track issue.code + issue.position) {
+              <li>{{ issueLabel(issue) }}</li>
+            }
+          </ul>
+        </div>
+      </section>
+    } @else {
+      <section class="results" aria-labelledby="json-ts-results-title" data-testid="json-ts-result">
+        <div class="result-hero">
+          <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+          <div>
+            <p class="eyebrow" i18n="@@json_ts_result_eyebrow">Résultat local</p>
+            <h2 id="json-ts-results-title" i18n="@@json_ts_result_title">Types générés pour {{ generationResult.normalizedRootName }}</h2>
+            <p i18n="@@json_ts_result_text">Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</p>
+          </div>
+        </div>
+
+        <div class="stats" aria-label="Statistiques" i18n-aria-label="@@json_ts_stats_label">
+          <div><strong>{{ formatNumber(generationResult.stats.declarations) }}</strong><span i18n="@@json_ts_stat_declarations">déclarations</span></div>
+          <div><strong>{{ formatNumber(generationResult.stats.properties) }}</strong><span i18n="@@json_ts_stat_properties">propriétés</span></div>
+          <div><strong>{{ formatNumber(generationResult.stats.optionalProperties) }}</strong><span i18n="@@json_ts_stat_optional">optionnelles</span></div>
+          <div><strong>{{ formatNumber(generationResult.stats.unions) }}</strong><span i18n="@@json_ts_stat_unions">unions</span></div>
+          <div><strong>{{ formatNumber(generationResult.stats.inferredDates) }}</strong><span i18n="@@json_ts_stat_dates">dates inférées</span></div>
+        </div>
+
+        @if (generationResult.warnings.length > 0) {
+          <section class="warnings" aria-labelledby="json-ts-warnings-title">
+            <h3 id="json-ts-warnings-title" i18n="@@json_ts_warnings_title">Points à vérifier</h3>
+            <ul>
+              @for (warning of generationResult.warnings; track warning.code) {
+                <li><i class="tc-icon tc-icon-info-circle" aria-hidden="true"></i><span>{{ warningLabel(warning) }}</span></li>
+              }
+            </ul>
+          </section>
+        }
+
+        <section class="output-card" aria-labelledby="json-ts-output-title">
+          <div class="output-card__header">
+            <div>
+              <p class="eyebrow" i18n="@@json_ts_output_eyebrow">Code prêt à intégrer</p>
+              <h3 id="json-ts-output-title" i18n="@@json_ts_output_title">Déclarations TypeScript</h3>
+            </div>
+            <span class="file-badge">{{ generationResult.normalizedRootName }}.ts</span>
+          </div>
+          <pre tabindex="0"><code>{{ outputPreview() }}</code></pre>
+          @if (outputPreviewTruncated()) {
+            <p class="preview-note" i18n="@@json_ts_output_truncated">L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</p>
+          }
+          <div class="output-actions">
+            <button type="button" class="button button--primary" (click)="copyArtifact('typescript')">
+              @if (copiedTarget() === 'typescript') {
+                <ng-container i18n="@@json_ts_output_copied">Code copié</ng-container>
+              } @else {
+                <ng-container i18n="@@json_ts_copy_output">Copier le code</ng-container>
+              }
+            </button>
+            <button type="button" class="button button--secondary" (click)="downloadArtifact('typescript')" i18n="@@json_ts_download_output">Télécharger le fichier .ts</button>
+          </div>
+        </section>
+
+        <details class="output-card report-card">
+          <summary i18n="@@json_ts_report_summary">Rapport d’inférence JSON</summary>
+          <pre tabindex="0"><code>{{ reportPreview() }}</code></pre>
+          @if (reportPreviewTruncated()) {
+            <p class="preview-note" i18n="@@json_ts_report_truncated">L’aperçu est tronqué ; le téléchargement contient le rapport complet.</p>
+          }
+          <div class="output-actions">
+            <button type="button" class="button button--secondary" (click)="copyArtifact('report')">
+              @if (copiedTarget() === 'report') {
+                <ng-container i18n="@@json_ts_report_copied">Rapport copié</ng-container>
+              } @else {
+                <ng-container i18n="@@json_ts_copy_report">Copier le rapport</ng-container>
+              }
+            </button>
+            <button type="button" class="button button--secondary" (click)="downloadArtifact('report')" i18n="@@json_ts_download_report">Télécharger le rapport</button>
+          </div>
+        </details>
+      </section>
+    }
+  }
+
+  <section class="guide" aria-labelledby="json-ts-guide-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow" i18n="@@json_ts_guide_eyebrow">Mode d’emploi</p>
+        <h2 id="json-ts-guide-title" i18n="@@json_ts_guide_title">Obtenir un contrat utile, sans surinterpréter un exemple</h2>
+      </div>
+    </div>
+    <div class="guide-grid">
+      <article><span>1</span><h3 i18n="@@json_ts_guide_one_title">Variez les échantillons</h3><p i18n="@@json_ts_guide_one_text">Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</p></article>
+      <article><span>2</span><h3 i18n="@@json_ts_guide_two_title">Choisissez fusion ou union</h3><p i18n="@@json_ts_guide_two_text">La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</p></article>
+      <article><span>3</span><h3 i18n="@@json_ts_guide_three_title">Validez avec le contrat API</h3><p i18n="@@json_ts_guide_three_text">L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</p></article>
+    </div>
+  </section>
+
+  <nav class="related" aria-labelledby="json-ts-related-title">
+    <h2 id="json-ts-related-title" i18n="@@json_ts_related_title">Continuer avec vos données</h2>
+    <div>
+      <a routerLink="/categories/dev/data/json-schema-validator">
+        <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+        <span><strong i18n="@@json_ts_related_schema_title">Valider avec JSON Schema</strong><small i18n="@@json_ts_related_schema_text">Contrôler les données avec un contrat explicite</small></span>
+      </a>
+      <a routerLink="/categories/dev/data/json-diff">
+        <i class="tc-icon tc-icon-code" aria-hidden="true"></i>
+        <span><strong i18n="@@json_ts_related_diff_title">Comparer deux JSON</strong><small i18n="@@json_ts_related_diff_text">Repérer les changements de structure et de type</small></span>
+      </a>
+    </div>
+  </nav>
+</main>

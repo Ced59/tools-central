@@ -89124,6 +89124,920 @@ Grace Hopper;grace@example.test;true;100</source>
         <target state="translated">正在本地加载文件。</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_type_title">
+      <segment>
+        <source>Inférence de types</source>
+        <target state="translated">类型推断</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_type_desc">
+      <segment>
+        <source>Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.</source>
+        <target state="translated">从结构化样本生成可读的开发合同，具有明确的限制和假设。</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_title">
+      <segment>
+        <source>JSON vers TypeScript</source>
+        <target state="translated">JSON 转 TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_desc">
+      <segment>
+        <source>Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.</source>
+        <target state="translated">从 JSON 本地生成 TypeScript 接口或类型，支持联合、可空性、可选性、日期和 .ts 导出。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_title">
+      <segment>
+        <source>Passer d’un exemple JSON à des types TypeScript réellement relisibles</source>
+        <target state="translated">从 JSON 示例转换为可读的 TypeScript 类型</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_lead">
+      <segment>
+        <source>Ce générateur analyse votre JSON dans un Worker local puis produit des interfaces ou aliases exportés. Il fusionne les échantillons, signale les hypothèses fragiles et conserve les unions, valeurs nulles et propriétés absentes sans envoyer le contenu au serveur.</source>
+        <target state="translated">该生成器在本地 Worker 中分析您的 JSON，然后生成导出的接口或别名。它合并样本，标记脆弱假设，并在不将内容发送到服务器的情况下保留联合、空值和缺失属性。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_use_cases">
+      <segment>
+        <source>Quand générer des types depuis JSON ?</source>
+        <target state="translated">何时从 JSON 生成类型？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_title">
+      <segment>
+        <source>Démarrer une intégration d’API</source>
+        <target state="translated">开始 API 集成</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_text">
+      <segment>
+        <source>Collez plusieurs réponses représentatives pour obtenir rapidement les objets imbriqués, tableaux et types primitifs. Le résultat fournit une base à relire avec la documentation de l’API, pas une preuve que toutes les réponses futures auront cette forme.</source>
+        <target state="translated">粘贴多个代表性响应以快速获取嵌套对象、数组和基本类型。结果提供了一个可与 API 文档对照的基础，而不是证明所有未来响应都将具有这种形式。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_title">
+      <segment>
+        <source>Typer une configuration ou une fixture</source>
+        <target state="translated">为配置或夹具打类型</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_text">
+      <segment>
+        <source>Transformez un fichier de configuration, une fixture de test ou un export local en déclarations nommées. Les noms de propriétés non compatibles avec un identifiant TypeScript sont conservés entre guillemets.</source>
+        <target state="translated">将配置文件、测试夹具或本地导出转换为命名声明。与 TypeScript 标识符不兼容的属性名称将保留在引号中。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_title">
+      <segment>
+        <source>Comparer plusieurs variantes d’un objet</source>
+        <target state="translated">比较对象的多个变体</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_text">
+      <segment>
+        <source>Placez les variantes dans un tableau. Le mode fusion rend optionnels les champs absents de certains éléments ; le mode union préserve chaque forme structurelle distincte.</source>
+        <target state="translated">将变体放入数组中。合并模式使某些元素缺失的字段变为可选；联合模式保留每种独特的结构形式。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference">
+      <segment>
+        <source>Comment fonctionne l’inférence</source>
+        <target state="translated">推断是如何工作的</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_1">
+      <segment>
+        <source>Chaque valeur JSON devient un type TypeScript : chaîne, nombre, booléen, null, tableau ou objet. Les objets imbriqués reçoivent des noms déterministes dérivés du chemin de propriété. Les collisions de noms sont résolues par un suffixe stable afin que le même document produise le même fichier.</source>
+        <target state="translated">每个 JSON 值变为一个 TypeScript 类型：字符串、数字、布尔值、null、数组或对象。嵌套对象获得来自属性路径的确定性名称。名称冲突通过稳定后缀解决，以便相同文档生成相同文件。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_2">
+      <segment>
+        <source>Dans un tableau fusionné, deux objets partageant une propriété combinent le type de cette propriété. Un champ présent dans un seul échantillon devient optionnel. Des primitives différentes forment une union, par exemple string | number | null.</source>
+        <target state="translated">在合并数组中，共享属性的两个对象组合该属性的类型。仅在一个样本中存在的字段变为可选。不同的基本类型形成一个联合，例如 string | number | null。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_3">
+      <segment>
+        <source>Un tableau vide devient Array&lt;unknown&gt;, car aucune valeur ne permet d’inférer son élément. Un objet vide produit une déclaration sans propriété. Ces deux situations sont signalées dans l’interface et doivent être précisées manuellement.</source>
+        <target state="translated">空数组变为 Array&lt;unknown&gt;，因为没有值可以推断其元素。空对象生成没有属性的声明。这两种情况在接口中被标记，必须手动指定。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_modes">
+      <segment>
+        <source>Fusion ou union : quelle stratégie choisir ?</source>
+        <target state="translated">合并或联合：选择哪种策略？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_title">
+      <segment>
+        <source>Fusionner des ressources semblables</source>
+        <target state="translated">合并相似资源</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_text">
+      <segment>
+        <source>Choisissez la fusion pour une liste d’utilisateurs, produits ou événements qui partagent un même modèle. Les propriétés manquantes deviennent optionnelles et les types observés sont réunis.</source>
+        <target state="translated">对于共享相同模型的用户、产品或事件列表，选择合并。缺失的属性变为可选，观察到的类型被合并。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_title">
+      <segment>
+        <source>Préserver des variantes distinctes</source>
+        <target state="translated">保留不同的变体</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_text">
+      <segment>
+        <source>Choisissez l’union lorsqu’un tableau contient plusieurs objets métier, par exemple un cercle et un carré ou plusieurs types d’événements. Chaque forme reçoit alors sa propre déclaration.</source>
+        <target state="translated">当数组包含多个业务对象时，例如圆形和方形或多种事件类型，选择联合。每种形式将获得自己的声明。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_title">
+      <segment>
+        <source>Ajouter ensuite un discriminant précis</source>
+        <target state="translated">然后添加一个精确的判别符</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_text">
+      <segment>
+        <source>Le générateur infère string pour une valeur comme « circle » car un seul exemple ne prouve pas que cette chaîne est un littéral fermé. Après vérification du contrat, remplacez-la manuellement par une union de littéraux si elle constitue un discriminant.</source>
+        <target state="translated">生成器推断 string 作为 "circle" 的值，因为单个示例并不能证明该字符串是一个封闭字面量。验证合同后，如果它是一个判别符，请手动将其替换为字面量的联合。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates">
+      <segment>
+        <source>Pourquoi l’inférence des dates est optionnelle</source>
+        <target state="translated">为什么日期推断是可选的</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_1">
+      <segment>
+        <source>JSON ne possède pas de type date : une date ISO arrive toujours sous forme de chaîne. L’option reconnaît uniquement une date civile valide ou un date-time ISO avec fuseau explicite, puis génère Date pour faciliter un modèle déjà hydraté.</source>
+        <target state="translated">JSON 没有日期类型：ISO 日期始终以字符串形式到达。该选项仅识别有效的公历日期或带有明确时区的 ISO 日期时间，然后生成 Date 以便于已经水合的模型。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_2">
+      <segment>
+        <source>Si votre code utilise directement la réponse de fetch ou JSON.parse, conservez string. TypeScript n’exécute aucune conversion à l’exécution ; déclarer Date sans transformer la valeur donnerait une assurance incorrecte et ferait échouer les méthodes comme getTime.</source>
+        <target state="translated">如果您的代码直接使用 fetch 或 JSON.parse 的响应，请保留 string。TypeScript 在运行时不执行任何转换；声明 Date 而不转换值将给出不正确的保证，并使 getTime 等方法失败。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limits">
+      <segment>
+        <source>Confidentialité, précision et limites</source>
+        <target state="translated">隐私、准确性和限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_1">
+      <segment>
+        <source>Le fichier reste dans le navigateur et est décodé en UTF-8 strict. Le lien de partage ne contient ni source ni résultat. Le rapport exporté contient les options, avertissements et statistiques, sans recopier les valeurs du JSON.</source>
+        <target state="translated">文件保留在浏览器中，并以严格的 UTF-8 解码。共享链接不包含源或结果。导出的报告包含选项、警告和统计信息，而不复制 JSON 的值。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_2">
+      <segment>
+        <source>La source est limitée à 2 millions de caractères, le fichier à 4 Mo, le document à 100 000 valeurs et 64 niveaux. Le Worker est interrompu après 5 secondes ; les sorties trop grandes ou structures excessives sont refusées.</source>
+        <target state="translated">源限制为 200 万个字符，文件限制为 4MB，文档限制为 100,000 个值和 64 层。Worker 在 5 秒后中断；过大的输出或过于复杂的结构将被拒绝。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_3">
+      <segment>
+        <source>Les clés dupliquées, chaînes Unicode mal formées et nombres qui perdraient leur représentation JavaScript sont rejetés. Le générateur ne déduit ni contraintes numériques, ni formats métier, ni validation d’autorisation.</source>
+        <target state="translated">重复的键、格式不正确的 Unicode 字符串和可能失去其 JavaScript 表示的数字将被拒绝。生成器不推断数字约束、业务格式或授权验证。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q1">
+      <segment>
+        <source>Pourquoi une propriété est-elle optionnelle ?</source>
+        <target state="translated">为什么某个属性是可选的？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a1">
+      <segment>
+        <source>En mode fusion, elle était absente d’au moins un objet du tableau. Cela décrit les échantillons fournis. Si le contrat garantit cette propriété, retirez le point d’interrogation après avoir vérifié la documentation ou le JSON Schema.</source>
+        <target state="translated">在合并模式下，它在数组中的至少一个对象中缺失。这描述了提供的样本。如果合同保证该属性，请在验证文档或 JSON Schema 后删除问号。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q2">
+      <segment>
+        <source>Pourquoi le générateur n’utilise-t-il pas les valeurs comme littéraux ?</source>
+        <target state="translated">为什么生成器不使用值作为字面量？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a2">
+      <segment>
+        <source>Une valeur observée ne prouve pas qu’elle est la seule autorisée. Générer automatiquement « admin » au lieu de string rendrait souvent le type trop étroit. Ajoutez des littéraux uniquement lorsque le contrat les définit explicitement.</source>
+        <target state="translated">观察到的值并不能证明它是唯一被允许的。自动生成 "admin" 而不是 string 通常会使类型过于狭窄。仅在合同明确规定时添加字面量。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q3">
+      <segment>
+        <source>Ce fichier remplace-t-il un schéma de validation ?</source>
+        <target state="translated">该文件是否替代验证模式？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a3">
+      <segment>
+        <source>Non. Les types TypeScript disparaissent à l’exécution et ne valident pas une réponse réseau. Utilisez JSON Schema, une bibliothèque de validation ou un parseur métier à la frontière de votre application.</source>
+        <target state="translated">不。TypeScript 类型在运行时消失，并不验证网络响应。使用 JSON Schema、验证库或业务解析器在您的应用程序边界。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip_title">
+      <segment>
+        <source>Conserver les exemples comme tests</source>
+        <target state="translated">将示例保留为测试</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip">
+      <segment>
+        <source>Après avoir relu le type généré, gardez plusieurs réponses anonymisées comme fixtures et validez-les automatiquement. Une nouvelle forme d’objet ou une propriété devenue nullable sera alors détectée avant de casser l’interface.</source>
+        <target state="translated">在审核生成的类型后，保留多个匿名响应作为夹具并自动验证它们。新的对象形式或变为可空的属性将在破坏接口之前被检测到。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_eyebrow">
+      <segment>
+        <source>Développement · Contrats de données</source>
+        <target state="translated">开发 · 数据合同</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_h1">
+      <segment>
+        <source>Générer des types TypeScript depuis JSON</source>
+        <target state="translated">从 JSON 生成 TypeScript 类型</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_lead">
+      <segment>
+        <source> Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes. </source>
+        <target state="translated">将一个示例 JSON 转换为可读的 TypeScript 接口或类型，包含联合、可空性、可选属性和异构数组。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">工具保证</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100% 本地</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">可取消的工作者</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_export">
+      <segment>
+        <source>Export .ts</source>
+        <target state="translated">导出 .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_order">
+      <segment>
+        <source>Exemple commande</source>
+        <target state="translated">示例订单</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_api">
+      <segment>
+        <source>Exemple API</source>
+        <target state="translated">示例 API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">链接已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">分享工具</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">隐私</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_title">
+      <segment>
+        <source>Le JSON reste sur cet appareil.</source>
+        <target state="translated">JSON 保留在此设备上。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_text">
+      <segment>
+        <source>Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</source>
+        <target state="translated">没有内容、文件名或结果被发送到服务器。分享链接永远不包含您的数据。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_eyebrow">
+      <segment>
+        <source>Source</source>
+        <target state="translated">来源</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_title">
+      <segment>
+        <source>Collez un exemple JSON représentatif</source>
+        <target state="translated">粘贴一个代表性的 JSON 示例</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_hint">
+      <segment>
+        <source>Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</source>
+        <target state="translated">要推断可选性，请将多个代表性对象放在同一个数组中。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON 数据</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_import">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">导入</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_label">
+      <segment>
+        <source>JSON utilisé pour générer les types</source>
+        <target state="translated">用于生成类型的 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON · UTF-8 strict</source>
+        <target state="translated">对象、数组或 JSON 值 · 严格 UTF-8</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_title">
+      <segment>
+        <source>Options TypeScript</source>
+        <target state="translated">TypeScript 选项</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_help">
+      <segment>
+        <source>Les réglages modifient seulement le code produit, jamais le JSON.</source>
+        <target state="translated">设置仅修改生成的代码，而不修改 JSON。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_label">
+      <segment>
+        <source>Nom du type racine</source>
+        <target state="translated">根类型名称</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_help">
+      <segment>
+        <source>Le nom est converti en identifiant PascalCase valide.</source>
+        <target state="translated">名称被转换为有效的 PascalCase 标识符。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_label">
+      <segment>
+        <source>Style de déclaration</source>
+        <target state="translated">声明样式</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_interface">
+      <segment>
+        <source>Interfaces exportées</source>
+        <target state="translated">导出的接口</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_type">
+      <segment>
+        <source>Aliases de types exportés</source>
+        <target state="translated">导出的类型别名</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_mode_label">
+      <segment>
+        <source>Objets différents dans un tableau</source>
+        <target state="translated">数组中的不同对象</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_merge">
+      <segment>
+        <source>Fusionner et rendre les champs absents optionnels</source>
+        <target state="translated">合并并使缺失字段可选</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_union">
+      <segment>
+        <source>Conserver une union de formes distinctes</source>
+        <target state="translated">保留不同形状的联合</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_title">
+      <segment>
+        <source>Inférer les dates ISO en <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Date</pc></source>
+        <target state="translated">推断 ISO 日期为 <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">日期</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_help">
+      <segment>
+        <source>À activer seulement si votre application hydrate réellement les chaînes reçues.</source>
+        <target state="translated">仅在您的应用程序实际处理接收到的字符串时启用。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_title">
+      <segment>
+        <source>Propriétés <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></source>
+        <target state="translated"><pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">只读</pc> 属性</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_help">
+      <segment>
+        <source>Empêche leur réaffectation dans le typage généré.</source>
+        <target state="translated">防止在生成的类型中重新赋值。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">安全限制</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> 每个文件 · 2,000,000 字符 · 100,000 值 · 深度 64 · 最多 5 秒</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_loading">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">正在读取文件…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_processing">
+      <segment>
+        <source>Génération en cours…</source>
+        <target state="translated">正在生成…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generate">
+      <segment>
+        <source>Générer les types TypeScript</source>
+        <target state="translated">生成 TypeScript 类型</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">取消</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">正在本地读取文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_processing">
+      <segment>
+        <source>Génération locale des types en cours.</source>
+        <target state="translated">正在本地生成类型。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_done">
+      <segment>
+        <source>Les types TypeScript sont prêts.</source>
+        <target state="translated">TypeScript 类型已准备好。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_error">
+      <segment>
+        <source>La génération n’a pas pu aboutir.</source>
+        <target state="translated">生成未能成功。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_blocked_title">
+      <segment>
+        <source>Génération impossible</source>
+        <target state="translated">无法生成</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">本地结果</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_title">
+      <segment>
+        <source>Types générés pour <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></source>
+        <target state="translated">为 <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/> 生成的类型</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_text">
+      <segment>
+        <source>Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</source>
+        <target state="translated">请检查类型：它们描述提供的示例，而不是您 API 的所有可能响应。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">统计信息</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_declarations">
+      <segment>
+        <source>déclarations</source>
+        <target state="translated">声明</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">属性</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_optional">
+      <segment>
+        <source>optionnelles</source>
+        <target state="translated">可选的</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_unions">
+      <segment>
+        <source>unions</source>
+        <target state="translated">联合</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_dates">
+      <segment>
+        <source>dates inférées</source>
+        <target state="translated">推断日期</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warnings_title">
+      <segment>
+        <source>Points à vérifier</source>
+        <target state="translated">待检查事项</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_eyebrow">
+      <segment>
+        <source>Code prêt à intégrer</source>
+        <target state="translated">准备集成的代码</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_title">
+      <segment>
+        <source>Déclarations TypeScript</source>
+        <target state="translated">TypeScript 声明</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</source>
+        <target state="translated">预览被截断；复制和下载包含完整代码。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_copied">
+      <segment>
+        <source>Code copié</source>
+        <target state="translated">代码已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_output">
+      <segment>
+        <source>Copier le code</source>
+        <target state="translated">复制代码</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_output">
+      <segment>
+        <source>Télécharger le fichier .ts</source>
+        <target state="translated">下载 .ts 文件</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_summary">
+      <segment>
+        <source>Rapport d’inférence JSON</source>
+        <target state="translated">JSON 推断报告</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">预览被截断；下载包含完整报告。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">报告已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">复制报告</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">下载报告</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">使用说明</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_title">
+      <segment>
+        <source>Obtenir un contrat utile, sans surinterpréter un exemple</source>
+        <target state="translated">获取有用的合同，而不对示例进行过度解释</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_title">
+      <segment>
+        <source>Variez les échantillons</source>
+        <target state="translated">多样化示例</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_text">
+      <segment>
+        <source>Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</source>
+        <target state="translated">包括带有和不带可选字段的对象、空值和不同形式的数组。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_title">
+      <segment>
+        <source>Choisissez fusion ou union</source>
+        <target state="translated">选择合并或联合</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_text">
+      <segment>
+        <source>La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</source>
+        <target state="translated">合并适用于相似资源；联合保留真正不同的结构变体。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_title">
+      <segment>
+        <source>Validez avec le contrat API</source>
+        <target state="translated">与 API 合同进行验证</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_text">
+      <segment>
+        <source>L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</source>
+        <target state="translated">推断加快了启动，但只有 API 的文档或模式定义了所有可能的情况。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">继续使用您的数据</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_title">
+      <segment>
+        <source>Valider avec JSON Schema</source>
+        <target state="translated">与 JSON Schema 验证</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_text">
+      <segment>
+        <source>Contrôler les données avec un contrat explicite</source>
+        <target state="translated">使用明确的合同检查数据</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">比较两个 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_text">
+      <segment>
+        <source>Repérer les changements de structure et de type</source>
+        <target state="translated">识别结构和类型的变化</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_default_source">
+      <segment>
+        <source>{
+  &quot;id&quot;: &quot;cmd_2026_001&quot;,
+  &quot;createdAt&quot;: &quot;2026-09-18T14:30:00Z&quot;,
+  &quot;customer&quot;: {
+    &quot;name&quot;: &quot;Ada Lovelace&quot;,
+    &quot;email&quot;: &quot;ada@example.test&quot;
+  },
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BOOK-01&quot;, &quot;quantity&quot;: 2, &quot;discount&quot;: null },
+    { &quot;sku&quot;: &quot;PEN-02&quot;, &quot;quantity&quot;: 4, &quot;note&quot;: &quot;Livraison rapide&quot; }
+  ],
+  &quot;paid&quot;: true
+}</source>
+        <target state="translated">{
+  "id": "cmd_2026_001",
+  "createdAt": "2026-09-18T14:30:00Z",
+  "customer": {
+    "name": "艾达·洛夫莱斯",
+    "email": "ada@example.test"
+  },
+  "items": [
+    { "sku": "BOOK-01", "quantity": 2, "discount": null },
+    { "sku": "PEN-02", "quantity": 4, "note": "快速交货" }
+  ],
+  "paid": true
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_api_source">
+      <segment>
+        <source>[
+  { &quot;id&quot;: 1, &quot;role&quot;: &quot;admin&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Ada&quot; } },
+  { &quot;id&quot;: 2, &quot;role&quot;: &quot;editor&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Grace&quot;, &quot;avatarUrl&quot;: null } },
+  { &quot;id&quot;: 3, &quot;role&quot;: null }
+]</source>
+        <target state="translated">[
+  { "id": 1, "role": "admin", "profile": { "displayName": "艾达" } },
+  { "id": 2, "role": "editor", "profile": { "displayName": "格蕾丝", "avatarUrl": null } },
+  { "id": 3, "role": null }
+]</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generation_error">
+      <segment>
+        <source>La génération a échoué dans le navigateur. Réessayez avec un document plus petit.</source>
+        <target state="translated">在浏览器中生成失败。请尝试使用更小的文档重新生成。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择输出并复制。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse depuis votre navigateur.</source>
+        <target state="translated">无法复制链接。请从浏览器中复制地址。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_empty">
+      <segment>
+        <source>Le document JSON est vide.</source>
+        <target state="translated">JSON文档为空。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">文档超过2,000,000个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">文档不是有效的JSON。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">一个对象包含两个相同的属性名称。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_number">
+      <segment>
+        <source>Un nombre ne peut pas être représenté exactement en JavaScript.</source>
+        <target state="translated">一个数字不能在JavaScript中精确表示。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_unicode">
+      <segment>
+        <source>Une chaîne contient une séquence Unicode invalide.</source>
+        <target state="translated">字符串包含无效的Unicode序列。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_depth">
+      <segment>
+        <source>Le document dépasse la profondeur maximale de 64 niveaux.</source>
+        <target state="translated">文档超过最大深度64级。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_nodes">
+      <segment>
+        <source>Le document dépasse la limite de 100 000 valeurs.</source>
+        <target state="translated">文档超过100,000个值的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_complexity">
+      <segment>
+        <source>La structure contient trop de déclarations ou de propriétés pour un export sûr.</source>
+        <target state="translated">结构包含过多的声明或属性，无法安全导出。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_output">
+      <segment>
+        <source>Le code généré dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">生成的代码超过2,000,000个字符的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_position">
+      <segment>
+        <source>Position</source>
+        <target state="translated">位置</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_name">
+      <segment>
+        <source>Le nom de racine a été normalisé en <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</source>
+        <target state="translated">根名称已被规范化为<ph id="0" equiv="normalizedName" disp="warning.detail"/>。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_dates">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> chaîne(s) ISO ont été typées Date. Le JSON reçu contient toujours des chaînes : hydratez-les avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/>个ISO字符串已被标记为日期。接收到的JSON仍包含字符串：在使用前请进行水合处理。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_array">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) vide(s) utilisent unknown faute d’échantillon.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/>个空数组因缺少样本而使用unknown。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_object">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> objet(s) vide(s) ne permettent pas d’inférer de propriétés.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/>个空对象无法推断属性。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_optional">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> propriété(s) absente(s) de certains échantillons ont été rendues optionnelles.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/>个缺失的属性在某些样本中已被标记为可选。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_heterogeneous">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) hétérogène(s) ont nécessité une fusion ou une union.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/>个异构数组需要合并或联合。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_unknown">
+      <segment>
+        <source>Le fichier n’a pas pu être lu localement.</source>
+        <target state="translated">无法在本地读取文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">所选文件为空。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">文件超过<ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_type">
+      <segment>
+        <source>Choisissez un fichier .json ou .txt.</source>
+        <target state="translated">请选择一个.json或.txt文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_utf8">
+      <segment>
+        <source>Le fichier n’est pas un texte UTF-8 valide.</source>
+        <target state="translated">文件不是有效的UTF-8文本。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

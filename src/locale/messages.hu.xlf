@@ -89096,6 +89096,920 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Fájl helyi betöltése folyamatban.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_type_title">
+      <segment>
+        <source>Inférence de types</source>
+        <target state="translated">Típusok következtetése</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_type_desc">
+      <segment>
+        <source>Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.</source>
+        <target state="translated">Fejlesztési szerződések előállítása strukturált mintákból, kifejezett korlátokkal és feltételezésekkel.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_title">
+      <segment>
+        <source>JSON vers TypeScript</source>
+        <target state="translated">JSON-ból TypeScript-be</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_desc">
+      <segment>
+        <source>Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.</source>
+        <target state="translated">Helyben generáljon TypeScript interfészeket vagy típusokat JSON-ból, uniókkal, nullabilitással, opcionálissággal, dátumokkal és .ts exportálással.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_title">
+      <segment>
+        <source>Passer d’un exemple JSON à des types TypeScript réellement relisibles</source>
+        <target state="translated">Átmenet egy JSON példából valódi TypeScript típusokra</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_lead">
+      <segment>
+        <source>Ce générateur analyse votre JSON dans un Worker local puis produit des interfaces ou aliases exportés. Il fusionne les échantillons, signale les hypothèses fragiles et conserve les unions, valeurs nulles et propriétés absentes sans envoyer le contenu au serveur.</source>
+        <target state="translated">Ez a generátor elemzi a JSON-ját egy helyi Worker-ben, majd interfészeket vagy exportált aliasokat hoz létre. Összevonja a mintákat, jelzi a gyenge feltételezéseket, és megőrzi az uniókat, a null értékeket és a hiányzó tulajdonságokat anélkül, hogy a tartalmat a szerverre küldené.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_use_cases">
+      <segment>
+        <source>Quand générer des types depuis JSON ?</source>
+        <target state="translated">Mikor generáljunk típusokat JSON-ból?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_title">
+      <segment>
+        <source>Démarrer une intégration d’API</source>
+        <target state="translated">API integráció indítása</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_text">
+      <segment>
+        <source>Collez plusieurs réponses représentatives pour obtenir rapidement les objets imbriqués, tableaux et types primitifs. Le résultat fournit une base à relire avec la documentation de l’API, pas une preuve que toutes les réponses futures auront cette forme.</source>
+        <target state="translated">Illesszen be több reprezentatív választ, hogy gyorsan megkapja a beágyazott objektumokat, tömböket és primitív típusokat. Az eredmény egy alapot ad a dokumentációval való átnézéshez, nem bizonyíték arra, hogy minden jövőbeli válasz ennek a formának felel meg.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_title">
+      <segment>
+        <source>Typer une configuration ou une fixture</source>
+        <target state="translated">Egy konfiguráció vagy fixture típusozása</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_text">
+      <segment>
+        <source>Transformez un fichier de configuration, une fixture de test ou un export local en déclarations nommées. Les noms de propriétés non compatibles avec un identifiant TypeScript sont conservés entre guillemets.</source>
+        <target state="translated">Alakítson át egy konfigurációs fájlt, egy tesztelési fixture-t vagy egy helyi exportot névvel ellátott deklarációkká. A TypeScript azonosítóval nem kompatibilis tulajdonságneveket idézőjelek között megőrzi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_title">
+      <segment>
+        <source>Comparer plusieurs variantes d’un objet</source>
+        <target state="translated">Több változat összehasonlítása egy objektumból</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_text">
+      <segment>
+        <source>Placez les variantes dans un tableau. Le mode fusion rend optionnels les champs absents de certains éléments ; le mode union préserve chaque forme structurelle distincte.</source>
+        <target state="translated">Helyezze a változatokat egy tömbbe. Az összevonási mód opcionálissá teszi a hiányzó mezőket egyes elemekből; az uniós mód megőrzi minden különböző struktúrát.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference">
+      <segment>
+        <source>Comment fonctionne l’inférence</source>
+        <target state="translated">Hogyan működik a következtetés?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_1">
+      <segment>
+        <source>Chaque valeur JSON devient un type TypeScript : chaîne, nombre, booléen, null, tableau ou objet. Les objets imbriqués reçoivent des noms déterministes dérivés du chemin de propriété. Les collisions de noms sont résolues par un suffixe stable afin que le même document produise le même fichier.</source>
+        <target state="translated">Minden JSON érték TypeScript típussá válik: string, number, boolean, null, array vagy object. A beágyazott objektumok determinisztikus neveket kapnak a tulajdonság útvonalából származóan. A névütközéseket stabil utótaggal oldják meg, így ugyanaz a dokumentum ugyanazt a fájlt hozza létre.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_2">
+      <segment>
+        <source>Dans un tableau fusionné, deux objets partageant une propriété combinent le type de cette propriété. Un champ présent dans un seul échantillon devient optionnel. Des primitives différentes forment une union, par exemple string | number | null.</source>
+        <target state="translated">Egy összevont tömbben két objektum, amely közös tulajdonsággal rendelkezik, kombinálja ennek a tulajdonságnak a típusát. Egy mező, amely csak egy mintában van jelen, opcionálissá válik. Különböző primitívek uniót alkotnak, például string | number | null.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_3">
+      <segment>
+        <source>Un tableau vide devient Array&lt;unknown&gt;, car aucune valeur ne permet d’inférer son élément. Un objet vide produit une déclaration sans propriété. Ces deux situations sont signalées dans l’interface et doivent être précisées manuellement.</source>
+        <target state="translated">Egy üres tömb Array&lt;unknown&gt;-t eredményez, mivel nincs olyan érték, amely lehetővé tenné az elem következtetését. Egy üres objektum tulajdonság nélküli deklarációt hoz létre. Ezek a helyzetek az interfészen belül jelezve vannak, és manuálisan kell pontosítani.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_modes">
+      <segment>
+        <source>Fusion ou union : quelle stratégie choisir ?</source>
+        <target state="translated">Összevonás vagy unió: melyik stratégiát válasszuk?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_title">
+      <segment>
+        <source>Fusionner des ressources semblables</source>
+        <target state="translated">Hasonló erőforrások összevonása</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_text">
+      <segment>
+        <source>Choisissez la fusion pour une liste d’utilisateurs, produits ou événements qui partagent un même modèle. Les propriétés manquantes deviennent optionnelles et les types observés sont réunis.</source>
+        <target state="translated">Válassza az összevonást egy olyan felhasználói, termék- vagy eseménylistához, amely ugyanazt a modellt osztja meg. A hiányzó tulajdonságok opcionálissá válnak, és a megfigyelt típusok összevonódnak.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_title">
+      <segment>
+        <source>Préserver des variantes distinctes</source>
+        <target state="translated">Megkülönböztetni a különböző változatokat</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_text">
+      <segment>
+        <source>Choisissez l’union lorsqu’un tableau contient plusieurs objets métier, par exemple un cercle et un carré ou plusieurs types d’événements. Chaque forme reçoit alors sa propre déclaration.</source>
+        <target state="translated">Válassza az uniót, amikor egy tömb több üzleti objektumot tartalmaz, például egy kört és egy négyzetet, vagy több eseménytípust. Minden forma saját deklarációt kap.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_title">
+      <segment>
+        <source>Ajouter ensuite un discriminant précis</source>
+        <target state="translated">Ezután adjon hozzá egy pontos diszkriminánst</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_text">
+      <segment>
+        <source>Le générateur infère string pour une valeur comme « circle » car un seul exemple ne prouve pas que cette chaîne est un littéral fermé. Après vérification du contrat, remplacez-la manuellement par une union de littéraux si elle constitue un discriminant.</source>
+        <target state="translated">A generátor string-et következtet egy olyan értékre, mint a „circle”, mivel egyetlen példa nem bizonyítja, hogy ez a szöveg zárt literál. A szerződés ellenőrzése után manuálisan cserélje le egy literálok uniójára, ha diszkrimináns.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates">
+      <segment>
+        <source>Pourquoi l’inférence des dates est optionnelle</source>
+        <target state="translated">Miért opcionális a dátumok következtetése?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_1">
+      <segment>
+        <source>JSON ne possède pas de type date : une date ISO arrive toujours sous forme de chaîne. L’option reconnaît uniquement une date civile valide ou un date-time ISO avec fuseau explicite, puis génère Date pour faciliter un modèle déjà hydraté.</source>
+        <target state="translated">A JSON-nak nincs dátum típusa: egy ISO dátum mindig string formájában érkezik. Az opció csak érvényes polgári dátumot vagy ISO dátum-idő formátumot ismer el explicit időzónával, majd Date-t generál a már hidratált modell megkönnyítése érdekében.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_2">
+      <segment>
+        <source>Si votre code utilise directement la réponse de fetch ou JSON.parse, conservez string. TypeScript n’exécute aucune conversion à l’exécution ; déclarer Date sans transformer la valeur donnerait une assurance incorrecte et ferait échouer les méthodes comme getTime.</source>
+        <target state="translated">Ha a kód közvetlenül a fetch vagy JSON.parse válaszát használja, tartsa meg a string-et. A TypeScript nem végez semmilyen átalakítást futásidőben; a Date deklarálása anélkül, hogy az értéket átalakítaná, helytelen biztosítékot adna, és meghiúsítaná az olyan módszereket, mint a getTime.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limits">
+      <segment>
+        <source>Confidentialité, précision et limites</source>
+        <target state="translated">Adatvédelem, pontosság és korlátok</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_1">
+      <segment>
+        <source>Le fichier reste dans le navigateur et est décodé en UTF-8 strict. Le lien de partage ne contient ni source ni résultat. Le rapport exporté contient les options, avertissements et statistiques, sans recopier les valeurs du JSON.</source>
+        <target state="translated">A fájl a böngészőben marad, és szigorúan UTF-8 formátumban van dekódolva. A megosztási link nem tartalmaz forrást vagy eredményt. Az exportált jelentés tartalmazza az opciókat, figyelmeztetéseket és statisztikákat, anélkül, hogy a JSON értékeket átmásolná.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_2">
+      <segment>
+        <source>La source est limitée à 2 millions de caractères, le fichier à 4 Mo, le document à 100 000 valeurs et 64 niveaux. Le Worker est interrompu après 5 secondes ; les sorties trop grandes ou structures excessives sont refusées.</source>
+        <target state="translated">A forrás 2 millió karakterre, a fájl 4 MB-ra, a dokumentum 100 000 értékre és 64 szintre van korlátozva. A Worker 5 másodperc után leáll; a túl nagy kimenetek vagy a túlzott struktúrák elutasításra kerülnek.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_3">
+      <segment>
+        <source>Les clés dupliquées, chaînes Unicode mal formées et nombres qui perdraient leur représentation JavaScript sont rejetés. Le générateur ne déduit ni contraintes numériques, ni formats métier, ni validation d’autorisation.</source>
+        <target state="translated">A duplikált kulcsok, a hibás Unicode karakterláncok és a JavaScript reprezentációját elvesztő számok elutasításra kerülnek. A generátor nem dedukál semmilyen numerikus korlátozást, sem üzleti formát, sem engedélyezési validálást.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Gyakran ismételt kérdések</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q1">
+      <segment>
+        <source>Pourquoi une propriété est-elle optionnelle ?</source>
+        <target state="translated">Miért opcionális egy tulajdonság?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a1">
+      <segment>
+        <source>En mode fusion, elle était absente d’au moins un objet du tableau. Cela décrit les échantillons fournis. Si le contrat garantit cette propriété, retirez le point d’interrogation après avoir vérifié la documentation ou le JSON Schema.</source>
+        <target state="translated">Összevonási módban legalább egy objektumból hiányzott a tömbben. Ez leírja a megadott mintákat. Ha a szerződés garantálja ezt a tulajdonságot, távolítsa el a kérdőjelet, miután ellenőrizte a dokumentációt vagy a JSON Schémát.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q2">
+      <segment>
+        <source>Pourquoi le générateur n’utilise-t-il pas les valeurs comme littéraux ?</source>
+        <target state="translated">Miért nem használja a generátor az értékeket literálként?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a2">
+      <segment>
+        <source>Une valeur observée ne prouve pas qu’elle est la seule autorisée. Générer automatiquement « admin » au lieu de string rendrait souvent le type trop étroit. Ajoutez des littéraux uniquement lorsque le contrat les définit explicitement.</source>
+        <target state="translated">Egy megfigyelt érték nem bizonyítja, hogy ez az egyetlen engedélyezett. Az automatikus „admin” generálása a string helyett gyakran túl szűk típust eredményezne. Csak akkor adjon hozzá literálokat, ha a szerződés kifejezetten meghatározza azokat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q3">
+      <segment>
+        <source>Ce fichier remplace-t-il un schéma de validation ?</source>
+        <target state="translated">Helyettesíti ez a fájl a validálási sémát?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a3">
+      <segment>
+        <source>Non. Les types TypeScript disparaissent à l’exécution et ne valident pas une réponse réseau. Utilisez JSON Schema, une bibliothèque de validation ou un parseur métier à la frontière de votre application.</source>
+        <target state="translated">Nem. A TypeScript típusok futásidőben eltűnnek, és nem validálják a hálózati választ. Használjon JSON Schémát, validálási könyvtárat vagy üzleti elemzőt az alkalmazása határán.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip_title">
+      <segment>
+        <source>Conserver les exemples comme tests</source>
+        <target state="translated">Tartsa meg a példákat tesztként</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip">
+      <segment>
+        <source>Après avoir relu le type généré, gardez plusieurs réponses anonymisées comme fixtures et validez-les automatiquement. Une nouvelle forme d’objet ou une propriété devenue nullable sera alors détectée avant de casser l’interface.</source>
+        <target state="translated">Miután átnézte a generált típust, tartson meg több anonimizált választ fixture-ként, és érvényesítse őket automatikusan. Egy új objektumforma vagy egy nullable tulajdonság észlelésre kerül, mielőtt megszakítaná az interfészt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_eyebrow">
+      <segment>
+        <source>Développement · Contrats de données</source>
+        <target state="translated">Fejlesztés · Adat szerződések</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_h1">
+      <segment>
+        <source>Générer des types TypeScript depuis JSON</source>
+        <target state="translated">Generálj TypeScript típusokat JSON-ból</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_lead">
+      <segment>
+        <source> Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes. </source>
+        <target state="translated">Alakítsd át a JSON példát olvasható TypeScript interfészekké vagy típusokká, uniókkal, nullabilitással, opcionális tulajdonságokkal és heterogén tömbökkel.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Az eszköz garanciái</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % helyi</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Munkás visszavonható</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_export">
+      <segment>
+        <source>Export .ts</source>
+        <target state="translated">Export .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_order">
+      <segment>
+        <source>Exemple commande</source>
+        <target state="translated">Példa rendelés</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_api">
+      <segment>
+        <source>Exemple API</source>
+        <target state="translated">Példa API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Link másolva</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Oszd meg az eszközt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Adatvédelem</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_title">
+      <segment>
+        <source>Le JSON reste sur cet appareil.</source>
+        <target state="translated">A JSON ezen az eszközön marad.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_text">
+      <segment>
+        <source>Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</source>
+        <target state="translated">Egyetlen tartalom, fájlnév vagy eredmény sem kerül elküldésre a szerverre. A megosztási link soha nem tartalmazza az adataidat.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_eyebrow">
+      <segment>
+        <source>Source</source>
+        <target state="translated">Forrás</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_title">
+      <segment>
+        <source>Collez un exemple JSON représentatif</source>
+        <target state="translated">Illessz be egy reprezentatív JSON példát</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_hint">
+      <segment>
+        <source>Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</source>
+        <target state="translated">Az optionalitás infálásához helyezz el több reprezentatív objektumot egy tömbben.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON adatok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_import">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importálás</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_label">
+      <segment>
+        <source>JSON utilisé pour générer les types</source>
+        <target state="translated">A típusok generálásához használt JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON · UTF-8 strict</source>
+        <target state="translated">Objektum, tömb vagy JSON érték · UTF-8 szigorúan</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_title">
+      <segment>
+        <source>Options TypeScript</source>
+        <target state="translated">TypeScript opciók</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_help">
+      <segment>
+        <source>Les réglages modifient seulement le code produit, jamais le JSON.</source>
+        <target state="translated">A beállítások csak a létrehozott kódot módosítják, soha nem a JSON-t.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_label">
+      <segment>
+        <source>Nom du type racine</source>
+        <target state="translated">Gyökér típus neve</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_help">
+      <segment>
+        <source>Le nom est converti en identifiant PascalCase valide.</source>
+        <target state="translated">A név érvényes PascalCase azonosítóra van átkonvertálva.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_label">
+      <segment>
+        <source>Style de déclaration</source>
+        <target state="translated">Deklarációs stílus</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_interface">
+      <segment>
+        <source>Interfaces exportées</source>
+        <target state="translated">Exportált interfészek</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_type">
+      <segment>
+        <source>Aliases de types exportés</source>
+        <target state="translated">Exportált típusaliasok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_mode_label">
+      <segment>
+        <source>Objets différents dans un tableau</source>
+        <target state="translated">Különböző objektumok egy tömbben</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_merge">
+      <segment>
+        <source>Fusionner et rendre les champs absents optionnels</source>
+        <target state="translated">Egyesíti és opcionálissá teszi a hiányzó mezőket</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_union">
+      <segment>
+        <source>Conserver une union de formes distinctes</source>
+        <target state="translated">Megőrzi a különböző formák unióját</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_title">
+      <segment>
+        <source>Inférer les dates ISO en <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Date</pc></source>
+        <target state="translated">ISO dátumok infálása <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Dátum</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_help">
+      <segment>
+        <source>À activer seulement si votre application hydrate réellement les chaînes reçues.</source>
+        <target state="translated">Csak akkor aktiváld, ha az alkalmazásod valóban hidratálja a kapott karakterláncokat.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_title">
+      <segment>
+        <source>Propriétés <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></source>
+        <target state="translated"><pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc> tulajdonságok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_help">
+      <segment>
+        <source>Empêche leur réaffectation dans le typage généré.</source>
+        <target state="translated">Megakadályozza azok újrahozzárását a generált típusban.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Biztonsági korlátok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> fájlonként · 2 000 000 karakter · 100 000 érték · mélység 64 · maximum 5 másodperc</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_loading">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Fájl olvasása…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_processing">
+      <segment>
+        <source>Génération en cours…</source>
+        <target state="translated">Generálás folyamatban…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generate">
+      <segment>
+        <source>Générer les types TypeScript</source>
+        <target state="translated">TypeScript típusok generálása</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Mégse</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">A fájl helyi betöltése folyamatban.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_processing">
+      <segment>
+        <source>Génération locale des types en cours.</source>
+        <target state="translated">A típusok helyi generálása folyamatban.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_done">
+      <segment>
+        <source>Les types TypeScript sont prêts.</source>
+        <target state="translated">A TypeScript típusok készen állnak.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_error">
+      <segment>
+        <source>La génération n’a pas pu aboutir.</source>
+        <target state="translated">A generálás nem tudott befejeződni.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_blocked_title">
+      <segment>
+        <source>Génération impossible</source>
+        <target state="translated">Generálás lehetetlen</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Helyi eredmény</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_title">
+      <segment>
+        <source>Types générés pour <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></source>
+        <target state="translated">Generált típusok a <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/> számára</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_text">
+      <segment>
+        <source>Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</source>
+        <target state="translated">Ellenőrizze a típusokat: ezek a megadott mintákat írják le, nem az API-jának minden lehetséges válaszát.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Statisztikák</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_declarations">
+      <segment>
+        <source>déclarations</source>
+        <target state="translated">deklarációk</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">tulajdonságok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_optional">
+      <segment>
+        <source>optionnelles</source>
+        <target state="translated">opcionális</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_unions">
+      <segment>
+        <source>unions</source>
+        <target state="translated">uniók</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_dates">
+      <segment>
+        <source>dates inférées</source>
+        <target state="translated">következtetett dátumok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warnings_title">
+      <segment>
+        <source>Points à vérifier</source>
+        <target state="translated">Ellenőrizendő pontok</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_eyebrow">
+      <segment>
+        <source>Code prêt à intégrer</source>
+        <target state="translated">Kód készen áll az integrálásra</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_title">
+      <segment>
+        <source>Déclarations TypeScript</source>
+        <target state="translated">TypeScript deklarációk</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</source>
+        <target state="translated">A nézet levágva; a másolat és a letöltés a teljes kódot tartalmazza.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_copied">
+      <segment>
+        <source>Code copié</source>
+        <target state="translated">Kód másolva</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_output">
+      <segment>
+        <source>Copier le code</source>
+        <target state="translated">Másolja a kódot</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_output">
+      <segment>
+        <source>Télécharger le fichier .ts</source>
+        <target state="translated">Töltse le a .ts fájlt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_summary">
+      <segment>
+        <source>Rapport d’inférence JSON</source>
+        <target state="translated">JSON következtetési jelentés</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">A nézet levágva; a letöltés a teljes jelentést tartalmazza.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Jelentés másolva</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Másolja a jelentést</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Töltse le a jelentést</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Használati útmutató</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_title">
+      <segment>
+        <source>Obtenir un contrat utile, sans surinterpréter un exemple</source>
+        <target state="translated">Hasznos szerződés megszerzése, anélkül hogy túlértelmeznénk egy példát</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_title">
+      <segment>
+        <source>Variez les échantillons</source>
+        <target state="translated">Változtassa a mintákat</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_text">
+      <segment>
+        <source>Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</source>
+        <target state="translated">Tartalmazza az objektumokat opcionális mezőkkel és anélkül, a null értékeket és a különböző tömbformákat.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_title">
+      <segment>
+        <source>Choisissez fusion ou union</source>
+        <target state="translated">Válassza a fúziót vagy az uniót</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_text">
+      <segment>
+        <source>La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</source>
+        <target state="translated">A fúzió hasonló erőforrásokhoz illik; az unió valóban eltérő strukturális variánsokat őriz meg.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_title">
+      <segment>
+        <source>Validez avec le contrat API</source>
+        <target state="translated">Érvényesítse az API szerződéssel</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_text">
+      <segment>
+        <source>L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</source>
+        <target state="translated">A következtetés felgyorsítja a kezdést, de csak a dokumentáció vagy az API séma határozza meg az összes lehetséges esetet.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Folytassa az adataival</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_title">
+      <segment>
+        <source>Valider avec JSON Schema</source>
+        <target state="translated">Érvényesítse a JSON sémával</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_text">
+      <segment>
+        <source>Contrôler les données avec un contrat explicite</source>
+        <target state="translated">Ellenőrizze az adatokat egy egyértelmű szerződéssel</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Két JSON összehasonlítása</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_text">
+      <segment>
+        <source>Repérer les changements de structure et de type</source>
+        <target state="translated">Az struktúra és típus változásainak észlelése</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_default_source">
+      <segment>
+        <source>{
+  &quot;id&quot;: &quot;cmd_2026_001&quot;,
+  &quot;createdAt&quot;: &quot;2026-09-18T14:30:00Z&quot;,
+  &quot;customer&quot;: {
+    &quot;name&quot;: &quot;Ada Lovelace&quot;,
+    &quot;email&quot;: &quot;ada@example.test&quot;
+  },
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BOOK-01&quot;, &quot;quantity&quot;: 2, &quot;discount&quot;: null },
+    { &quot;sku&quot;: &quot;PEN-02&quot;, &quot;quantity&quot;: 4, &quot;note&quot;: &quot;Livraison rapide&quot; }
+  ],
+  &quot;paid&quot;: true
+}</source>
+        <target state="translated">{
+  "id": "cmd_2026_001",
+  "createdAt": "2026-09-18T14:30:00Z",
+  "customer": {
+    "name": "Ada Lovelace",
+    "email": "ada@example.test"
+  },
+  "items": [
+    { "sku": "BOOK-01", "quantity": 2, "discount": null },
+    { "sku": "PEN-02", "quantity": 4, "note": "Gyors szállítás" }
+  ],
+  "paid": true
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_api_source">
+      <segment>
+        <source>[
+  { &quot;id&quot;: 1, &quot;role&quot;: &quot;admin&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Ada&quot; } },
+  { &quot;id&quot;: 2, &quot;role&quot;: &quot;editor&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Grace&quot;, &quot;avatarUrl&quot;: null } },
+  { &quot;id&quot;: 3, &quot;role&quot;: null }
+]</source>
+        <target state="translated">[
+  { "id": 1, "role": "admin", "profile": { "displayName": "Ada" } },
+  { "id": 2, "role": "editor", "profile": { "displayName": "Grace", "avatarUrl": null } },
+  { "id": 3, "role": null }
+]</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generation_error">
+      <segment>
+        <source>La génération a échoué dans le navigateur. Réessayez avec un document plus petit.</source>
+        <target state="translated">A generálás a böngészőben meghiúsult. Próbálja meg egy kisebb dokumentummal.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Automatikus másolás nem lehetséges. Kérjük, válassza ki a kimenetet, és másolja azt manuálisan.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse depuis votre navigateur.</source>
+        <target state="translated">A link másolása nem lehetséges. Másolja a címet a böngészőből.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_empty">
+      <segment>
+        <source>Le document JSON est vide.</source>
+        <target state="translated">A JSON dokumentum üres.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">A dokumentum meghaladja a 2 000 000 karakteres korlátot.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">A dokumentum nem érvényes JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Egy objektum kétszer tartalmazza ugyanazt a tulajdonságnevet.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_number">
+      <segment>
+        <source>Un nombre ne peut pas être représenté exactement en JavaScript.</source>
+        <target state="translated">Egy szám nem ábrázolható pontosan JavaScript-ben.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_unicode">
+      <segment>
+        <source>Une chaîne contient une séquence Unicode invalide.</source>
+        <target state="translated">Egy karakterlánc érvénytelen Unicode szekvenciát tartalmaz.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_depth">
+      <segment>
+        <source>Le document dépasse la profondeur maximale de 64 niveaux.</source>
+        <target state="translated">A dokumentum meghaladja a maximális 64 szint mélységet.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_nodes">
+      <segment>
+        <source>Le document dépasse la limite de 100 000 valeurs.</source>
+        <target state="translated">A dokumentum meghaladja a 100 000 érték korlátot.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_complexity">
+      <segment>
+        <source>La structure contient trop de déclarations ou de propriétés pour un export sûr.</source>
+        <target state="translated">A struktúra túl sok deklarációt vagy tulajdonságot tartalmaz a biztonságos exporthoz.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_output">
+      <segment>
+        <source>Le code généré dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">A generált kód meghaladja a 2 000 000 karakteres korlátot.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_position">
+      <segment>
+        <source>Position</source>
+        <target state="translated">Pozíció</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_name">
+      <segment>
+        <source>Le nom de racine a été normalisé en <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</source>
+        <target state="translated">A gyökér neve normalizálva lett <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_dates">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> chaîne(s) ISO ont été typées Date. Le JSON reçu contient toujours des chaînes : hydratez-les avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> ISO karakterlánc(ok) dátumként lett(ek) tipizálva. A kapott JSON még mindig karakterláncokat tartalmaz: hidratálja őket használat előtt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_array">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) vide(s) utilisent unknown faute d’échantillon.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> üres tömb(ök) használják az unknown-t minta hiányában.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_object">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> objet(s) vide(s) ne permettent pas d’inférer de propriétés.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> üres objektum(ok) nem teszik lehetővé a tulajdonságok következtetését.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_optional">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> propriété(s) absente(s) de certains échantillons ont été rendues optionnelles.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> hiányzó tulajdonság(ok) néhány mintából opcionálissá váltak.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_heterogeneous">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) hétérogène(s) ont nécessité une fusion ou une union.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> heterogén tömb(ök) egyesítést vagy uniót igényeltek.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_unknown">
+      <segment>
+        <source>Le fichier n’a pas pu être lu localement.</source>
+        <target state="translated">A fájl nem olvasható helyben.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">A kiválasztott fájl üres.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">A fájl meghaladja a <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/> korlátot.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_type">
+      <segment>
+        <source>Choisissez un fichier .json ou .txt.</source>
+        <target state="translated">Válasszon egy .json vagy .txt fájlt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_utf8">
+      <segment>
+        <source>Le fichier n’est pas un texte UTF-8 valide.</source>
+        <target state="translated">A fájl nem érvényes UTF-8 szöveg.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

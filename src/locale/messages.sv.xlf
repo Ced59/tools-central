@@ -89124,6 +89124,920 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Läser in filen lokalt.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_type_title">
+      <segment>
+        <source>Inférence de types</source>
+        <target state="translated">Typinferens</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_type_desc">
+      <segment>
+        <source>Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.</source>
+        <target state="translated">Generera läsbara utvecklingskontrakt från strukturerade exempel, med gränser och explicita antaganden.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_title">
+      <segment>
+        <source>JSON vers TypeScript</source>
+        <target state="translated">JSON till TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_desc">
+      <segment>
+        <source>Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.</source>
+        <target state="translated">Generera lokalt TypeScript-gränssnitt eller typer från JSON, med unioner, nullbarhet, valfrihet, datum och export .ts.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_title">
+      <segment>
+        <source>Passer d’un exemple JSON à des types TypeScript réellement relisibles</source>
+        <target state="translated">Gå från ett JSON-exempel till verkligt läsbara TypeScript-typer</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_lead">
+      <segment>
+        <source>Ce générateur analyse votre JSON dans un Worker local puis produit des interfaces ou aliases exportés. Il fusionne les échantillons, signale les hypothèses fragiles et conserve les unions, valeurs nulles et propriétés absentes sans envoyer le contenu au serveur.</source>
+        <target state="translated">Denna generator analyserar din JSON i en lokal arbetare och producerar sedan exporterade gränssnitt eller alias. Den slår samman exempel, rapporterar svaga antaganden och bevarar unioner, nullvärden och saknade egenskaper utan att skicka innehållet till servern.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_use_cases">
+      <segment>
+        <source>Quand générer des types depuis JSON ?</source>
+        <target state="translated">När ska man generera typer från JSON?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_title">
+      <segment>
+        <source>Démarrer une intégration d’API</source>
+        <target state="translated">Börja en API-integration</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_text">
+      <segment>
+        <source>Collez plusieurs réponses représentatives pour obtenir rapidement les objets imbriqués, tableaux et types primitifs. Le résultat fournit une base à relire avec la documentation de l’API, pas une preuve que toutes les réponses futures auront cette forme.</source>
+        <target state="translated">Klistra in flera representativa svar för att snabbt få de inbäddade objekten, arrayer och primitiva typer. Resultatet ger en grund att läsa igenom med API-dokumentationen, inte ett bevis på att alla framtida svar kommer att ha denna form.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_title">
+      <segment>
+        <source>Typer une configuration ou une fixture</source>
+        <target state="translated">Typa en konfiguration eller fixture</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_text">
+      <segment>
+        <source>Transformez un fichier de configuration, une fixture de test ou un export local en déclarations nommées. Les noms de propriétés non compatibles avec un identifiant TypeScript sont conservés entre guillemets.</source>
+        <target state="translated">Transformera en konfigurationsfil, en testfixture eller en lokal export till namngivna deklarationer. Egenskapsnamn som inte är kompatibla med en TypeScript-identifierare bevaras inom citattecken.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_title">
+      <segment>
+        <source>Comparer plusieurs variantes d’un objet</source>
+        <target state="translated">Jämför flera varianter av ett objekt</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_text">
+      <segment>
+        <source>Placez les variantes dans un tableau. Le mode fusion rend optionnels les champs absents de certains éléments ; le mode union préserve chaque forme structurelle distincte.</source>
+        <target state="translated">Placera varianterna i en array. Sammanfogningsläget gör fält som saknas i vissa element valfria; unionsläget bevarar varje distinkt strukturell form.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference">
+      <segment>
+        <source>Comment fonctionne l’inférence</source>
+        <target state="translated">Hur fungerar inferens?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_1">
+      <segment>
+        <source>Chaque valeur JSON devient un type TypeScript : chaîne, nombre, booléen, null, tableau ou objet. Les objets imbriqués reçoivent des noms déterministes dérivés du chemin de propriété. Les collisions de noms sont résolues par un suffixe stable afin que le même document produise le même fichier.</source>
+        <target state="translated">Varje JSON-värde blir en TypeScript-typ: sträng, nummer, boolean, null, array eller objekt. Inbäddade objekt får deterministiska namn härledda från egenskapsvägen. Namnkonflikter löses med ett stabilt suffix så att samma dokument producerar samma fil.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_2">
+      <segment>
+        <source>Dans un tableau fusionné, deux objets partageant une propriété combinent le type de cette propriété. Un champ présent dans un seul échantillon devient optionnel. Des primitives différentes forment une union, par exemple string | number | null.</source>
+        <target state="translated">I en sammanfogad array kombinerar två objekt som delar en egenskap typen för den egenskapen. Ett fält som finns i endast ett exempel blir valfritt. Olika primitiva typer bildar en union, till exempel string | number | null.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_3">
+      <segment>
+        <source>Un tableau vide devient Array&lt;unknown&gt;, car aucune valeur ne permet d’inférer son élément. Un objet vide produit une déclaration sans propriété. Ces deux situations sont signalées dans l’interface et doivent être précisées manuellement.</source>
+        <target state="translated">En tom array blir Array&lt;unknown&gt;, eftersom inget värde tillåter att inferera dess element. Ett tomt objekt producerar en deklaration utan egenskaper. Dessa två situationer rapporteras i gränssnittet och måste specificeras manuellt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_modes">
+      <segment>
+        <source>Fusion ou union : quelle stratégie choisir ?</source>
+        <target state="translated">Sammanfogning eller union: vilken strategi ska man välja?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_title">
+      <segment>
+        <source>Fusionner des ressources semblables</source>
+        <target state="translated">Sammanfoga liknande resurser</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_text">
+      <segment>
+        <source>Choisissez la fusion pour une liste d’utilisateurs, produits ou événements qui partagent un même modèle. Les propriétés manquantes deviennent optionnelles et les types observés sont réunis.</source>
+        <target state="translated">Välj sammanfogning för en lista av användare, produkter eller händelser som delar en gemensam modell. Saknade egenskaper blir valfria och observerade typer slås samman.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_title">
+      <segment>
+        <source>Préserver des variantes distinctes</source>
+        <target state="translated">Bevara distinkta varianter</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_text">
+      <segment>
+        <source>Choisissez l’union lorsqu’un tableau contient plusieurs objets métier, par exemple un cercle et un carré ou plusieurs types d’événements. Chaque forme reçoit alors sa propre déclaration.</source>
+        <target state="translated">Välj union när en array innehåller flera affärsobjekt, till exempel en cirkel och en kvadrat eller flera typer av händelser. Varje form får då sin egen deklaration.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_title">
+      <segment>
+        <source>Ajouter ensuite un discriminant précis</source>
+        <target state="translated">Lägg sedan till en specifik diskriminant</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_text">
+      <segment>
+        <source>Le générateur infère string pour une valeur comme « circle » car un seul exemple ne prouve pas que cette chaîne est un littéral fermé. Après vérification du contrat, remplacez-la manuellement par une union de littéraux si elle constitue un discriminant.</source>
+        <target state="translated">Generatorn infererar string för ett värde som "circle" eftersom ett enda exempel inte bevisar att denna sträng är en sluten litteral. Efter att kontraktet har verifierats, ersätt det manuellt med en union av litteraler om det utgör en diskriminant.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates">
+      <segment>
+        <source>Pourquoi l’inférence des dates est optionnelle</source>
+        <target state="translated">Varför är datuminferens valfri?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_1">
+      <segment>
+        <source>JSON ne possède pas de type date : une date ISO arrive toujours sous forme de chaîne. L’option reconnaît uniquement une date civile valide ou un date-time ISO avec fuseau explicite, puis génère Date pour faciliter un modèle déjà hydraté.</source>
+        <target state="translated">JSON har ingen datatyp: ett ISO-datum kommer alltid som en sträng. Alternativet känner endast igen ett giltigt civilt datum eller ett ISO-datum-tid med explicit tidszon, och genererar sedan Date för att underlätta en redan hydratiserad modell.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_2">
+      <segment>
+        <source>Si votre code utilise directement la réponse de fetch ou JSON.parse, conservez string. TypeScript n’exécute aucune conversion à l’exécution ; déclarer Date sans transformer la valeur donnerait une assurance incorrecte et ferait échouer les méthodes comme getTime.</source>
+        <target state="translated">Om din kod använder svaret från fetch eller JSON.parse direkt, behåll string. TypeScript utför ingen konvertering vid körning; att deklarera Date utan att omvandla värdet skulle ge en felaktig försäkran och få metoder som getTime att misslyckas.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limits">
+      <segment>
+        <source>Confidentialité, précision et limites</source>
+        <target state="translated">Sekretess, noggrannhet och begränsningar</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_1">
+      <segment>
+        <source>Le fichier reste dans le navigateur et est décodé en UTF-8 strict. Le lien de partage ne contient ni source ni résultat. Le rapport exporté contient les options, avertissements et statistiques, sans recopier les valeurs du JSON.</source>
+        <target state="translated">Filen förblir i webbläsaren och avkodas i strikt UTF-8. Dela-länken innehåller varken källan eller resultatet. Den exporterade rapporten innehåller alternativ, varningar och statistik, utan att kopiera värdena från JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_2">
+      <segment>
+        <source>La source est limitée à 2 millions de caractères, le fichier à 4 Mo, le document à 100 000 valeurs et 64 niveaux. Le Worker est interrompu après 5 secondes ; les sorties trop grandes ou structures excessives sont refusées.</source>
+        <target state="translated">Källan är begränsad till 2 miljoner tecken, filen till 4 MB, dokumentet till 100 000 värden och 64 nivåer. Arbetaren avbryts efter 5 sekunder; för stora utdata eller överdrivna strukturer avvisas.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_3">
+      <segment>
+        <source>Les clés dupliquées, chaînes Unicode mal formées et nombres qui perdraient leur représentation JavaScript sont rejetés. Le générateur ne déduit ni contraintes numériques, ni formats métier, ni validation d’autorisation.</source>
+        <target state="translated">Duplicerade nycklar, felaktiga Unicode-strängar och nummer som skulle förlora sin JavaScript-representation avvisas. Generatorn härleder varken numeriska begränsningar, affärsformat eller validering av behörighet.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Vanliga frågor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q1">
+      <segment>
+        <source>Pourquoi une propriété est-elle optionnelle ?</source>
+        <target state="translated">Varför är en egenskap valfri?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a1">
+      <segment>
+        <source>En mode fusion, elle était absente d’au moins un objet du tableau. Cela décrit les échantillons fournis. Si le contrat garantit cette propriété, retirez le point d’interrogation après avoir vérifié la documentation ou le JSON Schema.</source>
+        <target state="translated">I sammanfogningsläge var den frånvarande i minst ett objekt i arrayen. Detta beskriver de tillhandahållna exemplen. Om kontraktet garanterar denna egenskap, ta bort frågetecknet efter att ha verifierat dokumentationen eller JSON-schemat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q2">
+      <segment>
+        <source>Pourquoi le générateur n’utilise-t-il pas les valeurs comme littéraux ?</source>
+        <target state="translated">Varför använder inte generatorn värden som litteraler?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a2">
+      <segment>
+        <source>Une valeur observée ne prouve pas qu’elle est la seule autorisée. Générer automatiquement « admin » au lieu de string rendrait souvent le type trop étroit. Ajoutez des littéraux uniquement lorsque le contrat les définit explicitement.</source>
+        <target state="translated">Ett observerat värde bevisar inte att det är det enda tillåtna. Att automatiskt generera "admin" istället för string skulle ofta göra typen för snäv. Lägg till litteraler endast när kontraktet definierar dem explicit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q3">
+      <segment>
+        <source>Ce fichier remplace-t-il un schéma de validation ?</source>
+        <target state="translated">Ersätter denna fil ett valideringsschema?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a3">
+      <segment>
+        <source>Non. Les types TypeScript disparaissent à l’exécution et ne valident pas une réponse réseau. Utilisez JSON Schema, une bibliothèque de validation ou un parseur métier à la frontière de votre application.</source>
+        <target state="translated">Nej. TypeScript-typer försvinner vid körning och validerar inte ett nätverksvar. Använd JSON-schema, ett valideringsbibliotek eller en affärsparsing vid gränsen av din applikation.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip_title">
+      <segment>
+        <source>Conserver les exemples comme tests</source>
+        <target state="translated">Bevara exempel som tester</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip">
+      <segment>
+        <source>Après avoir relu le type généré, gardez plusieurs réponses anonymisées comme fixtures et validez-les automatiquement. Une nouvelle forme d’objet ou une propriété devenue nullable sera alors détectée avant de casser l’interface.</source>
+        <target state="translated">Efter att ha läst igenom den genererade typen, behåll flera anonymiserade svar som fixtures och validera dem automatiskt. En ny form av objekt eller en egenskap som blivit nullable kommer då att upptäckas innan den bryter gränssnittet.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_eyebrow">
+      <segment>
+        <source>Développement · Contrats de données</source>
+        <target state="translated">Utveckling · Datakontrakt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_h1">
+      <segment>
+        <source>Générer des types TypeScript depuis JSON</source>
+        <target state="translated">Generera TypeScript-typer från JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_lead">
+      <segment>
+        <source> Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes. </source>
+        <target state="translated">Transformera ett exempel JSON till läsbara TypeScript-gränssnitt eller typer, med unioner, nullbarhet, valfria egenskaper och heterogena arrayer.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Verktygets garantier</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % lokal</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Arbetare kan avbrytas</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_export">
+      <segment>
+        <source>Export .ts</source>
+        <target state="translated">Exportera .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_order">
+      <segment>
+        <source>Exemple commande</source>
+        <target state="translated">Exempelbeställning</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_api">
+      <segment>
+        <source>Exemple API</source>
+        <target state="translated">Exempel API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Länk kopierad</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Dela verktyget</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Integritet</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_title">
+      <segment>
+        <source>Le JSON reste sur cet appareil.</source>
+        <target state="translated">JSON förblir på denna enhet.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_text">
+      <segment>
+        <source>Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</source>
+        <target state="translated">Inga innehåll, filnamn eller resultat skickas till servern. Dela-länken innehåller aldrig dina data.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_eyebrow">
+      <segment>
+        <source>Source</source>
+        <target state="translated">Källa</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_title">
+      <segment>
+        <source>Collez un exemple JSON représentatif</source>
+        <target state="translated">Klistra in ett representativt exempel JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_hint">
+      <segment>
+        <source>Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</source>
+        <target state="translated">För att härleda valbarhet, placera flera representativa objekt i samma array.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON-data</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_import">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importera</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_label">
+      <segment>
+        <source>JSON utilisé pour générer les types</source>
+        <target state="translated">JSON som används för att generera typer</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON · UTF-8 strict</source>
+        <target state="translated">Objekt, array eller JSON-värde · Strikt UTF-8</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_title">
+      <segment>
+        <source>Options TypeScript</source>
+        <target state="translated">TypeScript-alternativ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_help">
+      <segment>
+        <source>Les réglages modifient seulement le code produit, jamais le JSON.</source>
+        <target state="translated">Inställningarna ändrar endast den producerade koden, aldrig JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_label">
+      <segment>
+        <source>Nom du type racine</source>
+        <target state="translated">Namn på rot-typ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_help">
+      <segment>
+        <source>Le nom est converti en identifiant PascalCase valide.</source>
+        <target state="translated">Namnet konverteras till en giltig PascalCase-identifierare.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_label">
+      <segment>
+        <source>Style de déclaration</source>
+        <target state="translated">Deklarationsstil</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_interface">
+      <segment>
+        <source>Interfaces exportées</source>
+        <target state="translated">Exporterade gränssnitt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_type">
+      <segment>
+        <source>Aliases de types exportés</source>
+        <target state="translated">Exporterade typaliaser</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_mode_label">
+      <segment>
+        <source>Objets différents dans un tableau</source>
+        <target state="translated">Olika objekt i en array</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_merge">
+      <segment>
+        <source>Fusionner et rendre les champs absents optionnels</source>
+        <target state="translated">Slå samman och gör saknade fält valfria</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_union">
+      <segment>
+        <source>Conserver une union de formes distinctes</source>
+        <target state="translated">Behåll en union av distinkta former</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_title">
+      <segment>
+        <source>Inférer les dates ISO en <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Date</pc></source>
+        <target state="translated">Härleda ISO-datum i <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Datum</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_help">
+      <segment>
+        <source>À activer seulement si votre application hydrate réellement les chaînes reçues.</source>
+        <target state="translated">Aktivera endast om din applikation faktiskt hydratiserar de mottagna strängarna.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_title">
+      <segment>
+        <source>Propriétés <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></source>
+        <target state="translated"><pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc> egenskaper</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_help">
+      <segment>
+        <source>Empêche leur réaffectation dans le typage généré.</source>
+        <target state="translated">Förhindrar deras omallokering i den genererade typningen.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Säkerhetsgränser</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> per fil · 2 000 000 tecken · 100 000 värden · djup 64 · högst 5 sekunder</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_loading">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Läser in filen…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_processing">
+      <segment>
+        <source>Génération en cours…</source>
+        <target state="translated">Genererar…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generate">
+      <segment>
+        <source>Générer les types TypeScript</source>
+        <target state="translated">Generera TypeScript-typer</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Avbryt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Läser in filen lokalt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_processing">
+      <segment>
+        <source>Génération locale des types en cours.</source>
+        <target state="translated">Genererar typer lokalt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_done">
+      <segment>
+        <source>Les types TypeScript sont prêts.</source>
+        <target state="translated">TypeScript-typerna är klara.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_error">
+      <segment>
+        <source>La génération n’a pas pu aboutir.</source>
+        <target state="translated">Genereringen kunde inte slutföras.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_blocked_title">
+      <segment>
+        <source>Génération impossible</source>
+        <target state="translated">Generering omöjlig</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Lokalt resultat</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_title">
+      <segment>
+        <source>Types générés pour <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></source>
+        <target state="translated">Genererade typer för <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_text">
+      <segment>
+        <source>Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</source>
+        <target state="translated">Granska typerna: de beskriver de tillhandahållna exemplen, inte alla möjliga svar från din API.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Statistik</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_declarations">
+      <segment>
+        <source>déclarations</source>
+        <target state="translated">deklarationer</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">egenskaper</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_optional">
+      <segment>
+        <source>optionnelles</source>
+        <target state="translated">valfria</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_unions">
+      <segment>
+        <source>unions</source>
+        <target state="translated">unioner</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_dates">
+      <segment>
+        <source>dates inférées</source>
+        <target state="translated">infererade datum</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warnings_title">
+      <segment>
+        <source>Points à vérifier</source>
+        <target state="translated">Kontrollpunkter</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_eyebrow">
+      <segment>
+        <source>Code prêt à intégrer</source>
+        <target state="translated">Kod redo att integreras</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_title">
+      <segment>
+        <source>Déclarations TypeScript</source>
+        <target state="translated">TypeScript-deklarationer</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</source>
+        <target state="translated">Förhandsvisningen är avskuren; kopian och nedladdningen innehåller hela koden.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_copied">
+      <segment>
+        <source>Code copié</source>
+        <target state="translated">Kod kopierad</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_output">
+      <segment>
+        <source>Copier le code</source>
+        <target state="translated">Kopiera koden</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_output">
+      <segment>
+        <source>Télécharger le fichier .ts</source>
+        <target state="translated">Ladda ner .ts-filen</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_summary">
+      <segment>
+        <source>Rapport d’inférence JSON</source>
+        <target state="translated">JSON-inferensrapport</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Förhandsvisningen är avskuren; nedladdningen innehåller hela rapporten.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Rapport kopierad</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Kopiera rapporten</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Ladda ner rapporten</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Användarmanual</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_title">
+      <segment>
+        <source>Obtenir un contrat utile, sans surinterpréter un exemple</source>
+        <target state="translated">Få ett användbart kontrakt utan att övertolka ett exempel</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_title">
+      <segment>
+        <source>Variez les échantillons</source>
+        <target state="translated">Variera exemplen</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_text">
+      <segment>
+        <source>Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</source>
+        <target state="translated">Inkludera objekt med och utan valfria fält, null-värden och olika former av arrayer.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_title">
+      <segment>
+        <source>Choisissez fusion ou union</source>
+        <target state="translated">Välj sammanslagning eller union</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_text">
+      <segment>
+        <source>La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</source>
+        <target state="translated">Sammanslagning passar för liknande resurser; union bevarar verkligt distinkta strukturella varianter.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_title">
+      <segment>
+        <source>Validez avec le contrat API</source>
+        <target state="translated">Validera med API-kontrakt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_text">
+      <segment>
+        <source>L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</source>
+        <target state="translated">Inferensen påskyndar starten, men endast dokumentationen eller API-schemat definierar alla möjliga fall.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Fortsätt med dina data</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_title">
+      <segment>
+        <source>Valider avec JSON Schema</source>
+        <target state="translated">Validera med JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_text">
+      <segment>
+        <source>Contrôler les données avec un contrat explicite</source>
+        <target state="translated">Kontrollera data med ett tydligt kontrakt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Jämför två JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_text">
+      <segment>
+        <source>Repérer les changements de structure et de type</source>
+        <target state="translated">Identifiera förändringar i struktur och typ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_default_source">
+      <segment>
+        <source>{
+  &quot;id&quot;: &quot;cmd_2026_001&quot;,
+  &quot;createdAt&quot;: &quot;2026-09-18T14:30:00Z&quot;,
+  &quot;customer&quot;: {
+    &quot;name&quot;: &quot;Ada Lovelace&quot;,
+    &quot;email&quot;: &quot;ada@example.test&quot;
+  },
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BOOK-01&quot;, &quot;quantity&quot;: 2, &quot;discount&quot;: null },
+    { &quot;sku&quot;: &quot;PEN-02&quot;, &quot;quantity&quot;: 4, &quot;note&quot;: &quot;Livraison rapide&quot; }
+  ],
+  &quot;paid&quot;: true
+}</source>
+        <target state="translated">{
+  "id": "cmd_2026_001",
+  "createdAt": "2026-09-18T14:30:00Z",
+  "customer": {
+    "name": "Ada Lovelace",
+    "email": "ada@example.test"
+  },
+  "items": [
+    { "sku": "BOOK-01", "quantity": 2, "discount": null },
+    { "sku": "PEN-02", "quantity": 4, "note": "Snabb leverans" }
+  ],
+  "paid": true
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_api_source">
+      <segment>
+        <source>[
+  { &quot;id&quot;: 1, &quot;role&quot;: &quot;admin&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Ada&quot; } },
+  { &quot;id&quot;: 2, &quot;role&quot;: &quot;editor&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Grace&quot;, &quot;avatarUrl&quot;: null } },
+  { &quot;id&quot;: 3, &quot;role&quot;: null }
+]</source>
+        <target state="translated">[
+  { "id": 1, "role": "admin", "profile": { "displayName": "Ada" } },
+  { "id": 2, "role": "editor", "profile": { "displayName": "Grace", "avatarUrl": null } },
+  { "id": 3, "role": null }
+]</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generation_error">
+      <segment>
+        <source>La génération a échoué dans le navigateur. Réessayez avec un document plus petit.</source>
+        <target state="translated">Genereringen misslyckades i webbläsaren. Försök igen med ett mindre dokument.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Automatisk kopiering misslyckades. Vänligen markera utdata och kopiera den manuellt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse depuis votre navigateur.</source>
+        <target state="translated">Det gick inte att kopiera länken. Kopiera adressen från din webbläsare.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_empty">
+      <segment>
+        <source>Le document JSON est vide.</source>
+        <target state="translated">JSON-dokumentet är tomt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Dokumentet överskrider gränsen på 2 000 000 tecken.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Dokumentet är inte en giltig JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Ett objekt innehåller två gånger samma egenskapsnamn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_number">
+      <segment>
+        <source>Un nombre ne peut pas être représenté exactement en JavaScript.</source>
+        <target state="translated">Ett tal kan inte representeras exakt i JavaScript.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_unicode">
+      <segment>
+        <source>Une chaîne contient une séquence Unicode invalide.</source>
+        <target state="translated">En sträng innehåller en ogiltig Unicode-sekvens.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_depth">
+      <segment>
+        <source>Le document dépasse la profondeur maximale de 64 niveaux.</source>
+        <target state="translated">Dokumentet överskrider den maximala djupgränsen på 64 nivåer.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_nodes">
+      <segment>
+        <source>Le document dépasse la limite de 100 000 valeurs.</source>
+        <target state="translated">Dokumentet överskrider gränsen på 100 000 värden.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_complexity">
+      <segment>
+        <source>La structure contient trop de déclarations ou de propriétés pour un export sûr.</source>
+        <target state="translated">Strukturen innehåller för många deklarationer eller egenskaper för en säker export.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_output">
+      <segment>
+        <source>Le code généré dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Den genererade koden överskrider gränsen på 2 000 000 tecken.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_position">
+      <segment>
+        <source>Position</source>
+        <target state="translated">Position</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_name">
+      <segment>
+        <source>Le nom de racine a été normalisé en <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</source>
+        <target state="translated">Rotnamnet har normaliserats till <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_dates">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> chaîne(s) ISO ont été typées Date. Le JSON reçu contient toujours des chaînes : hydratez-les avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> ISO-sträng(ar) har typats som Datum. Den mottagna JSON innehåller fortfarande strängar: hydrera dem innan användning.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_array">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) vide(s) utilisent unknown faute d’échantillon.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> tom(a) array(s) använder unknown på grund av brist på exempel.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_object">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> objet(s) vide(s) ne permettent pas d’inférer de propriétés.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> tom(a) objekt(s) tillåter inte att inferera egenskaper.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_optional">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> propriété(s) absente(s) de certains échantillons ont été rendues optionnelles.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> egenskap(er) som saknas i vissa exempel har gjorts valfria.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_heterogeneous">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) hétérogène(s) ont nécessité une fusion ou une union.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> heterogena array(s) har krävt en sammanslagning eller union.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_unknown">
+      <segment>
+        <source>Le fichier n’a pas pu être lu localement.</source>
+        <target state="translated">Filen kunde inte läsas lokalt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Den valda filen är tom.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Filen överskrider gränsen på <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_type">
+      <segment>
+        <source>Choisissez un fichier .json ou .txt.</source>
+        <target state="translated">Vänligen välj en .json eller .txt fil.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_utf8">
+      <segment>
+        <source>Le fichier n’est pas un texte UTF-8 valide.</source>
+        <target state="translated">Filen är inte en giltig UTF-8 text.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

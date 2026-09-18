@@ -89124,6 +89124,920 @@ Grace Hopper;grace@example.test;true;100</source>
         <target state="translated">Текущо локално четене на файла.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_type_title">
+      <segment>
+        <source>Inférence de types</source>
+        <target state="translated">Типова инференция</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_type_desc">
+      <segment>
+        <source>Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.</source>
+        <target state="translated">Производство на четими договори за разработка от структурирани примери, с ясни ограничения и предположения.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_title">
+      <segment>
+        <source>JSON vers TypeScript</source>
+        <target state="translated">JSON към TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_desc">
+      <segment>
+        <source>Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.</source>
+        <target state="translated">Генерирайте локално интерфейси или типове TypeScript от JSON, с обединения, нулевост, опционалност, дати и .ts експортиране.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_title">
+      <segment>
+        <source>Passer d’un exemple JSON à des types TypeScript réellement relisibles</source>
+        <target state="translated">Преминаване от JSON пример към действително четими TypeScript типове</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_lead">
+      <segment>
+        <source>Ce générateur analyse votre JSON dans un Worker local puis produit des interfaces ou aliases exportés. Il fusionne les échantillons, signale les hypothèses fragiles et conserve les unions, valeurs nulles et propriétés absentes sans envoyer le contenu au serveur.</source>
+        <target state="translated">Този генератор анализира вашия JSON в локален Worker и след това произвежда експортирани интерфейси или алиаси. Той обединява примерите, сигнализира крехките предположения и запазва обединения, нулеви стойности и отсъстващи свойства, без да изпраща съдържанието на сървъра.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_use_cases">
+      <segment>
+        <source>Quand générer des types depuis JSON ?</source>
+        <target state="translated">Кога да генерирате типове от JSON?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_title">
+      <segment>
+        <source>Démarrer une intégration d’API</source>
+        <target state="translated">Започнете интеграция на API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_text">
+      <segment>
+        <source>Collez plusieurs réponses représentatives pour obtenir rapidement les objets imbriqués, tableaux et types primitifs. Le résultat fournit une base à relire avec la documentation de l’API, pas une preuve que toutes les réponses futures auront cette forme.</source>
+        <target state="translated">Поставете няколко представителни отговора, за да получите бързо вложените обекти, масиви и примитивни типове. Резултатът предоставя основа за преглед с документацията на API, а не доказателство, че всички бъдещи отговори ще имат тази форма.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_title">
+      <segment>
+        <source>Typer une configuration ou une fixture</source>
+        <target state="translated">Типизиране на конфигурация или фикстура</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_text">
+      <segment>
+        <source>Transformez un fichier de configuration, une fixture de test ou un export local en déclarations nommées. Les noms de propriétés non compatibles avec un identifiant TypeScript sont conservés entre guillemets.</source>
+        <target state="translated">Преобразувайте файл с конфигурация, тестова фикстура или локален експорт в именувани декларации. Имената на свойствата, несъвместими с идентификатор на TypeScript, се запазват в кавички.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_title">
+      <segment>
+        <source>Comparer plusieurs variantes d’un objet</source>
+        <target state="translated">Сравняване на няколко варианта на обект</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_text">
+      <segment>
+        <source>Placez les variantes dans un tableau. Le mode fusion rend optionnels les champs absents de certains éléments ; le mode union préserve chaque forme structurelle distincte.</source>
+        <target state="translated">Поставете вариантите в масив. Режимът на обединение прави полетата, отсъстващи от някои елементи, опционални; режимът на обединение запазва всяка отделна структурна форма.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference">
+      <segment>
+        <source>Comment fonctionne l’inférence</source>
+        <target state="translated">Как работи инференцията?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_1">
+      <segment>
+        <source>Chaque valeur JSON devient un type TypeScript : chaîne, nombre, booléen, null, tableau ou objet. Les objets imbriqués reçoivent des noms déterministes dérivés du chemin de propriété. Les collisions de noms sont résolues par un suffixe stable afin que le même document produise le même fichier.</source>
+        <target state="translated">Всяка JSON стойност става TypeScript тип: низ, число, булев, null, масив или обект. Вложените обекти получават детерминирани имена, произтичащи от пътя на свойството. Колизиите на имената се разрешават с помощта на стабилен суфикс, така че един и същ документ да произвежда един и същ файл.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_2">
+      <segment>
+        <source>Dans un tableau fusionné, deux objets partageant une propriété combinent le type de cette propriété. Un champ présent dans un seul échantillon devient optionnel. Des primitives différentes forment une union, par exemple string | number | null.</source>
+        <target state="translated">В обединен масив, два обекта, споделящи свойство, комбинират типа на това свойство. Поле, присъстващо само в един пример, става опционално. Различни примитиви образуват обединение, например string | number | null.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_3">
+      <segment>
+        <source>Un tableau vide devient Array&lt;unknown&gt;, car aucune valeur ne permet d’inférer son élément. Un objet vide produit une déclaration sans propriété. Ces deux situations sont signalées dans l’interface et doivent être précisées manuellement.</source>
+        <target state="translated">Празен масив става Array&lt;unknown&gt;, тъй като няма стойност, която да позволи инференция на елемента. Празен обект произвежда декларация без свойства. Тези две ситуации се сигнализират в интерфейса и трябва да бъдат уточнени ръчно.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_modes">
+      <segment>
+        <source>Fusion ou union : quelle stratégie choisir ?</source>
+        <target state="translated">Обединение или обединение: коя стратегия да изберете?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_title">
+      <segment>
+        <source>Fusionner des ressources semblables</source>
+        <target state="translated">Обединяване на подобни ресурси</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_text">
+      <segment>
+        <source>Choisissez la fusion pour une liste d’utilisateurs, produits ou événements qui partagent un même modèle. Les propriétés manquantes deviennent optionnelles et les types observés sont réunis.</source>
+        <target state="translated">Изберете обединение за списък с потребители, продукти или събития, които споделят един и същ модел. Липсващите свойства стават опционални и наблюдаваните типове се обединяват.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_title">
+      <segment>
+        <source>Préserver des variantes distinctes</source>
+        <target state="translated">Запазване на отделни варианти</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_text">
+      <segment>
+        <source>Choisissez l’union lorsqu’un tableau contient plusieurs objets métier, par exemple un cercle et un carré ou plusieurs types d’événements. Chaque forme reçoit alors sa propre déclaration.</source>
+        <target state="translated">Изберете обединение, когато масивът съдържа няколко бизнес обекта, например кръг и квадрат или няколко типа събития. Всяка форма получава своя собствена декларация.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_title">
+      <segment>
+        <source>Ajouter ensuite un discriminant précis</source>
+        <target state="translated">След това добавете точен дискриминант</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_text">
+      <segment>
+        <source>Le générateur infère string pour une valeur comme « circle » car un seul exemple ne prouve pas que cette chaîne est un littéral fermé. Après vérification du contrat, remplacez-la manuellement par une union de littéraux si elle constitue un discriminant.</source>
+        <target state="translated">Генераторът инферира string за стойност като « circle », тъй като един единствен пример не доказва, че тази низ е затворен литерал. След проверка на договора, заменете я ръчно с обединение от литерали, ако тя представлява дискриминант.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates">
+      <segment>
+        <source>Pourquoi l’inférence des dates est optionnelle</source>
+        <target state="translated">Защо инференцията на дати е опционална?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_1">
+      <segment>
+        <source>JSON ne possède pas de type date : une date ISO arrive toujours sous forme de chaîne. L’option reconnaît uniquement une date civile valide ou un date-time ISO avec fuseau explicite, puis génère Date pour faciliter un modèle déjà hydraté.</source>
+        <target state="translated">JSON няма тип дата: ISO дата винаги идва под формата на низ. Опцията разпознава само валидна гражданска дата или ISO дата-време с явен часови пояс, след което генерира Date, за да улесни вече хидратиран модел.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_2">
+      <segment>
+        <source>Si votre code utilise directement la réponse de fetch ou JSON.parse, conservez string. TypeScript n’exécute aucune conversion à l’exécution ; déclarer Date sans transformer la valeur donnerait une assurance incorrecte et ferait échouer les méthodes comme getTime.</source>
+        <target state="translated">Ако вашият код използва директно отговора от fetch или JSON.parse, запазете string. TypeScript не извършва никаква конверсия при изпълнение; декларирането на Date без преобразуване на стойността би дало неправилна сигурност и би провалило методи като getTime.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limits">
+      <segment>
+        <source>Confidentialité, précision et limites</source>
+        <target state="translated">Конфиденциалност, точност и ограничения</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_1">
+      <segment>
+        <source>Le fichier reste dans le navigateur et est décodé en UTF-8 strict. Le lien de partage ne contient ni source ni résultat. Le rapport exporté contient les options, avertissements et statistiques, sans recopier les valeurs du JSON.</source>
+        <target state="translated">Файлът остава в браузъра и се декодира в строг UTF-8. Споделеният линк не съдържа нито източник, нито резултат. Експортираният отчет съдържа опциите, предупрежденията и статистиките, без да копира стойностите от JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_2">
+      <segment>
+        <source>La source est limitée à 2 millions de caractères, le fichier à 4 Mo, le document à 100 000 valeurs et 64 niveaux. Le Worker est interrompu après 5 secondes ; les sorties trop grandes ou structures excessives sont refusées.</source>
+        <target state="translated">Източникът е ограничен до 2 милиона знака, файл до 4 MB, документ до 100 000 стойности и 64 нива. Worker-ът се прекратява след 5 секунди; твърде големи изходи или прекомерни структури се отказват.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_3">
+      <segment>
+        <source>Les clés dupliquées, chaînes Unicode mal formées et nombres qui perdraient leur représentation JavaScript sont rejetés. Le générateur ne déduit ni contraintes numériques, ni formats métier, ni validation d’autorisation.</source>
+        <target state="translated">Дублираните ключове, неправилно форматираните Unicode низове и числа, които биха загубили своята JavaScript представяне, се отхвърлят. Генераторът не извежда нито числови ограничения, нито бизнес формати, нито валидиране на разрешения.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Често задавани въпроси</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q1">
+      <segment>
+        <source>Pourquoi une propriété est-elle optionnelle ?</source>
+        <target state="translated">Защо едно свойство е опционално?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a1">
+      <segment>
+        <source>En mode fusion, elle était absente d’au moins un objet du tableau. Cela décrit les échantillons fournis. Si le contrat garantit cette propriété, retirez le point d’interrogation après avoir vérifié la documentation ou le JSON Schema.</source>
+        <target state="translated">В режим на обединение, то беше отсъстващо от поне един обект в масива. Това описва предоставените примери. Ако договорът гарантира това свойство, премахнете въпросителния знак след проверка на документацията или JSON Schema.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q2">
+      <segment>
+        <source>Pourquoi le générateur n’utilise-t-il pas les valeurs comme littéraux ?</source>
+        <target state="translated">Защо генераторът не използва стойностите като литерали?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a2">
+      <segment>
+        <source>Une valeur observée ne prouve pas qu’elle est la seule autorisée. Générer automatiquement « admin » au lieu de string rendrait souvent le type trop étroit. Ajoutez des littéraux uniquement lorsque le contrat les définit explicitement.</source>
+        <target state="translated">Наблюдаваната стойност не доказва, че е единствено разрешената. Автоматичното генериране на « admin » вместо string често би направило типа твърде тесен. Добавяйте литерали само когато договорът ги определя изрично.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q3">
+      <segment>
+        <source>Ce fichier remplace-t-il un schéma de validation ?</source>
+        <target state="translated">Замества ли този файл схема за валидиране?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a3">
+      <segment>
+        <source>Non. Les types TypeScript disparaissent à l’exécution et ne valident pas une réponse réseau. Utilisez JSON Schema, une bibliothèque de validation ou un parseur métier à la frontière de votre application.</source>
+        <target state="translated">Не. TypeScript типовете изчезват при изпълнение и не валидират мрежов отговор. Използвайте JSON Schema, библиотека за валидиране или бизнес парсер на границата на вашето приложение.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip_title">
+      <segment>
+        <source>Conserver les exemples comme tests</source>
+        <target state="translated">Запазете примерите като тестове</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip">
+      <segment>
+        <source>Après avoir relu le type généré, gardez plusieurs réponses anonymisées comme fixtures et validez-les automatiquement. Une nouvelle forme d’objet ou une propriété devenue nullable sera alors détectée avant de casser l’interface.</source>
+        <target state="translated">След преглед на генерирания тип, запазете няколко анонимизирани отговора като фикстури и ги валидирайте автоматично. Нова форма на обект или свойство, станало nullable, ще бъде открито преди да счупи интерфейса.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_eyebrow">
+      <segment>
+        <source>Développement · Contrats de données</source>
+        <target state="translated">Разработка · Договори за данни</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_h1">
+      <segment>
+        <source>Générer des types TypeScript depuis JSON</source>
+        <target state="translated">Генериране на TypeScript типове от JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_lead">
+      <segment>
+        <source> Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes. </source>
+        <target state="translated">Превърнете примерен JSON в четими интерфейси или TypeScript типове, с обединения, нулевост, опционални свойства и хетерогенни масиви.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Гаранции на инструмента</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % локален</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Работник, който може да бъде отменен</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_export">
+      <segment>
+        <source>Export .ts</source>
+        <target state="translated">Експорт .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_order">
+      <segment>
+        <source>Exemple commande</source>
+        <target state="translated">Примерна поръчка</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_api">
+      <segment>
+        <source>Exemple API</source>
+        <target state="translated">Пример API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Линкът е копиран</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Споделете инструмента</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Поверителност</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_title">
+      <segment>
+        <source>Le JSON reste sur cet appareil.</source>
+        <target state="translated">JSON остава на това устройство.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_text">
+      <segment>
+        <source>Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</source>
+        <target state="translated">Никакво съдържание, име на файл или резултат не се изпраща на сървъра. Линкът за споделяне никога не съдържа вашите данни.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_eyebrow">
+      <segment>
+        <source>Source</source>
+        <target state="translated">Източник</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_title">
+      <segment>
+        <source>Collez un exemple JSON représentatif</source>
+        <target state="translated">Поставете представителен пример JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_hint">
+      <segment>
+        <source>Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</source>
+        <target state="translated">За да се инферира опционалността, поставете няколко представителни обекта в един и същи масив.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON данни</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_import">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Импортиране</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_label">
+      <segment>
+        <source>JSON utilisé pour générer les types</source>
+        <target state="translated">JSON, използван за генериране на типовете</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON · UTF-8 strict</source>
+        <target state="translated">Обект, масив или JSON стойност · Строг UTF-8</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_title">
+      <segment>
+        <source>Options TypeScript</source>
+        <target state="translated">TypeScript опции</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_help">
+      <segment>
+        <source>Les réglages modifient seulement le code produit, jamais le JSON.</source>
+        <target state="translated">Настройките променят само генерирания код, никога JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_label">
+      <segment>
+        <source>Nom du type racine</source>
+        <target state="translated">Име на кореновия тип</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_help">
+      <segment>
+        <source>Le nom est converti en identifiant PascalCase valide.</source>
+        <target state="translated">Името се преобразува в валиден идентификатор PascalCase.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_label">
+      <segment>
+        <source>Style de déclaration</source>
+        <target state="translated">Стил на декларация</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_interface">
+      <segment>
+        <source>Interfaces exportées</source>
+        <target state="translated">Експортирани интерфейси</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_type">
+      <segment>
+        <source>Aliases de types exportés</source>
+        <target state="translated">Експортирани типови псевдоними</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_mode_label">
+      <segment>
+        <source>Objets différents dans un tableau</source>
+        <target state="translated">Различни обекти в масив</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_merge">
+      <segment>
+        <source>Fusionner et rendre les champs absents optionnels</source>
+        <target state="translated">Сливане и правене на отсъстващите полета опционални</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_union">
+      <segment>
+        <source>Conserver une union de formes distinctes</source>
+        <target state="translated">Запазване на обединение от различни форми</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_title">
+      <segment>
+        <source>Inférer les dates ISO en <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Date</pc></source>
+        <target state="translated">Инфериране на ISO дати в <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Дата</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_help">
+      <segment>
+        <source>À activer seulement si votre application hydrate réellement les chaînes reçues.</source>
+        <target state="translated">Да се активира само ако вашето приложение наистина хидратира получените низове.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_title">
+      <segment>
+        <source>Propriétés <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></source>
+        <target state="translated"><pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc> свойства</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_help">
+      <segment>
+        <source>Empêche leur réaffectation dans le typage généré.</source>
+        <target state="translated">Предотвратява повторното им присвояване в генерирания тип.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Ограничения за сигурност</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> на файл · 2 000 000 знака · 100 000 стойности · дълбочина 64 · максимум 5 секунди</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_loading">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Четене на файла…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_processing">
+      <segment>
+        <source>Génération en cours…</source>
+        <target state="translated">Генериране на…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generate">
+      <segment>
+        <source>Générer les types TypeScript</source>
+        <target state="translated">Генериране на TypeScript типове</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Отмяна</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Текущо локално четене на файла.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_processing">
+      <segment>
+        <source>Génération locale des types en cours.</source>
+        <target state="translated">Текуща локална генерация на типовете.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_done">
+      <segment>
+        <source>Les types TypeScript sont prêts.</source>
+        <target state="translated">Типовете TypeScript са готови.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_error">
+      <segment>
+        <source>La génération n’a pas pu aboutir.</source>
+        <target state="translated">Генерацията не можа да завърши.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_blocked_title">
+      <segment>
+        <source>Génération impossible</source>
+        <target state="translated">Генерацията е невъзможна</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Локален резултат</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_title">
+      <segment>
+        <source>Types générés pour <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></source>
+        <target state="translated">Генерирани типове за <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_text">
+      <segment>
+        <source>Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</source>
+        <target state="translated">Прегледайте типовете: те описват предоставените примери, а не всички възможни отговори от вашето API.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Статистика</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_declarations">
+      <segment>
+        <source>déclarations</source>
+        <target state="translated">декларации</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">свойства</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_optional">
+      <segment>
+        <source>optionnelles</source>
+        <target state="translated">по избор</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_unions">
+      <segment>
+        <source>unions</source>
+        <target state="translated">съюзи</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_dates">
+      <segment>
+        <source>dates inférées</source>
+        <target state="translated">изведени дати</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warnings_title">
+      <segment>
+        <source>Points à vérifier</source>
+        <target state="translated">Проверки</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_eyebrow">
+      <segment>
+        <source>Code prêt à intégrer</source>
+        <target state="translated">Код готов за интеграция</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_title">
+      <segment>
+        <source>Déclarations TypeScript</source>
+        <target state="translated">Декларации TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</source>
+        <target state="translated">Прегледът е съкратен; копирането и изтеглянето съдържат целия код.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_copied">
+      <segment>
+        <source>Code copié</source>
+        <target state="translated">Кодът е копиран</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_output">
+      <segment>
+        <source>Copier le code</source>
+        <target state="translated">Копирайте кода</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_output">
+      <segment>
+        <source>Télécharger le fichier .ts</source>
+        <target state="translated">Изтеглете файла .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_summary">
+      <segment>
+        <source>Rapport d’inférence JSON</source>
+        <target state="translated">Доклад за JSON инференция</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Прегледът е съкратен; изтеглянето съдържа целия доклад.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Докладът е копиран</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Копирайте доклада</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Изтеглете доклада</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Ръководство</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_title">
+      <segment>
+        <source>Obtenir un contrat utile, sans surinterpréter un exemple</source>
+        <target state="translated">Получаване на полезен договор, без да се интерпретира прекалено пример</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_title">
+      <segment>
+        <source>Variez les échantillons</source>
+        <target state="translated">Разнообразете примерите</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_text">
+      <segment>
+        <source>Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</source>
+        <target state="translated">Включете обекти с и без опционални полета, нулеви стойности и различни форми на масиви.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_title">
+      <segment>
+        <source>Choisissez fusion ou union</source>
+        <target state="translated">Изберете сливане или съюз</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_text">
+      <segment>
+        <source>La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</source>
+        <target state="translated">Сливането е подходящо за подобни ресурси; съюзът запазва наистина различни структурни варианти.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_title">
+      <segment>
+        <source>Validez avec le contrat API</source>
+        <target state="translated">Валидирайте с API договора</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_text">
+      <segment>
+        <source>L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</source>
+        <target state="translated">Инференцията ускорява стартирането, но само документацията или схемата на API определят всички възможни случаи.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Продължете с вашите данни</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_title">
+      <segment>
+        <source>Valider avec JSON Schema</source>
+        <target state="translated">Валидирайте с JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_text">
+      <segment>
+        <source>Contrôler les données avec un contrat explicite</source>
+        <target state="translated">Проверете данните с явен договор</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Сравнете два JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_text">
+      <segment>
+        <source>Repérer les changements de structure et de type</source>
+        <target state="translated">Открийте промените в структурата и типа</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_default_source">
+      <segment>
+        <source>{
+  &quot;id&quot;: &quot;cmd_2026_001&quot;,
+  &quot;createdAt&quot;: &quot;2026-09-18T14:30:00Z&quot;,
+  &quot;customer&quot;: {
+    &quot;name&quot;: &quot;Ada Lovelace&quot;,
+    &quot;email&quot;: &quot;ada@example.test&quot;
+  },
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BOOK-01&quot;, &quot;quantity&quot;: 2, &quot;discount&quot;: null },
+    { &quot;sku&quot;: &quot;PEN-02&quot;, &quot;quantity&quot;: 4, &quot;note&quot;: &quot;Livraison rapide&quot; }
+  ],
+  &quot;paid&quot;: true
+}</source>
+        <target state="translated">{
+  "id": "cmd_2026_001",
+  "createdAt": "2026-09-18T14:30:00Z",
+  "customer": {
+    "name": "Ада Лавлейс",
+    "email": "ada@example.test"
+  },
+  "items": [
+    { "sku": "BOOK-01", "quantity": 2, "discount": null },
+    { "sku": "PEN-02", "quantity": 4, "note": "Бърза доставка" }
+  ],
+  "paid": true
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_api_source">
+      <segment>
+        <source>[
+  { &quot;id&quot;: 1, &quot;role&quot;: &quot;admin&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Ada&quot; } },
+  { &quot;id&quot;: 2, &quot;role&quot;: &quot;editor&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Grace&quot;, &quot;avatarUrl&quot;: null } },
+  { &quot;id&quot;: 3, &quot;role&quot;: null }
+]</source>
+        <target state="translated">[
+  { "id": 1, "role": "admin", "profile": { "displayName": "Ада" } },
+  { "id": 2, "role": "editor", "profile": { "displayName": "Грейс", "avatarUrl": null } },
+  { "id": 3, "role": null }
+]</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generation_error">
+      <segment>
+        <source>La génération a échoué dans le navigateur. Réessayez avec un document plus petit.</source>
+        <target state="translated">Генерирането не успя в браузъра. Опитайте отново с по-малък документ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Автоматичното копиране е невъзможно. Изберете изхода и го копирайте ръчно.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse depuis votre navigateur.</source>
+        <target state="translated">Не може да се копира връзката. Копирайте адреса от браузъра си.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_empty">
+      <segment>
+        <source>Le document JSON est vide.</source>
+        <target state="translated">Документът JSON е празен.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Документът надвишава лимита от 2 000 000 символа.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Документът не е валиден JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Обект съдържа два пъти същото име на свойство.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_number">
+      <segment>
+        <source>Un nombre ne peut pas être représenté exactement en JavaScript.</source>
+        <target state="translated">Число не може да бъде представено точно в JavaScript.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_unicode">
+      <segment>
+        <source>Une chaîne contient une séquence Unicode invalide.</source>
+        <target state="translated">Стрингът съдържа невалидна Unicode последователност.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_depth">
+      <segment>
+        <source>Le document dépasse la profondeur maximale de 64 niveaux.</source>
+        <target state="translated">Документът надвишава максималната дълбочина от 64 нива.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_nodes">
+      <segment>
+        <source>Le document dépasse la limite de 100 000 valeurs.</source>
+        <target state="translated">Документът надвишава лимита от 100 000 стойности.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_complexity">
+      <segment>
+        <source>La structure contient trop de déclarations ou de propriétés pour un export sûr.</source>
+        <target state="translated">Структурата съдържа твърде много декларации или свойства за безопасен експорт.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_output">
+      <segment>
+        <source>Le code généré dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Генерираният код надвишава лимита от 2 000 000 символа.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_position">
+      <segment>
+        <source>Position</source>
+        <target state="translated">Позиция</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_name">
+      <segment>
+        <source>Le nom de racine a été normalisé en <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</source>
+        <target state="translated">Името на корена е нормализирано в <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_dates">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> chaîne(s) ISO ont été typées Date. Le JSON reçu contient toujours des chaînes : hydratez-les avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> ISO низ(ове) са типизирани като Дата. Полученият JSON все още съдържа низове: хидратирайте ги преди употреба.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_array">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) vide(s) utilisent unknown faute d’échantillon.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> празен(и) масив(и) използват unknown поради липса на пример.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_object">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> objet(s) vide(s) ne permettent pas d’inférer de propriétés.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> празен(и) обект(и) не позволяват извеждане на свойства.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_optional">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> propriété(s) absente(s) de certains échantillons ont été rendues optionnelles.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> свойство(та) отсъстващи от някои примери са направени опционални.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_heterogeneous">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) hétérogène(s) ont nécessité une fusion ou une union.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> хетерогенен(и) масив(и) изискват сливане или обединение.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_unknown">
+      <segment>
+        <source>Le fichier n’a pas pu être lu localement.</source>
+        <target state="translated">Файлът не можа да бъде прочетен локално.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Избраният файл е празен.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Файлът надвишава лимита от <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_type">
+      <segment>
+        <source>Choisissez un fichier .json ou .txt.</source>
+        <target state="translated">Изберете файл .json или .txt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_utf8">
+      <segment>
+        <source>Le fichier n’est pas un texte UTF-8 valide.</source>
+        <target state="translated">Файлът не е валиден UTF-8 текст.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

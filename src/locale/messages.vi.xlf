@@ -89124,6 +89124,920 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Đang đọc tệp cục bộ.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_type_title">
+      <segment>
+        <source>Inférence de types</source>
+        <target state="translated">Suy diễn kiểu</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_type_desc">
+      <segment>
+        <source>Produire des contrats de développement lisibles depuis des échantillons structurés, avec limites et hypothèses explicites.</source>
+        <target state="translated">Tạo ra các hợp đồng phát triển dễ đọc từ các mẫu cấu trúc, với các giới hạn và giả định rõ ràng.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_title">
+      <segment>
+        <source>JSON vers TypeScript</source>
+        <target state="translated">JSON sang TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_to_typescript_desc">
+      <segment>
+        <source>Générer localement des interfaces ou types TypeScript depuis JSON, avec unions, nullabilité, optionalité, dates et export .ts.</source>
+        <target state="translated">Tạo ra các giao diện hoặc kiểu TypeScript cục bộ từ JSON, với các union, khả năng null, tùy chọn, ngày tháng và xuất .ts.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_title">
+      <segment>
+        <source>Passer d’un exemple JSON à des types TypeScript réellement relisibles</source>
+        <target state="translated">Chuyển từ một ví dụ JSON sang các kiểu TypeScript thực sự dễ đọc</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_lead">
+      <segment>
+        <source>Ce générateur analyse votre JSON dans un Worker local puis produit des interfaces ou aliases exportés. Il fusionne les échantillons, signale les hypothèses fragiles et conserve les unions, valeurs nulles et propriétés absentes sans envoyer le contenu au serveur.</source>
+        <target state="translated">Trình tạo này phân tích JSON của bạn trong một Worker cục bộ và sau đó tạo ra các giao diện hoặc alias được xuất. Nó hợp nhất các mẫu, báo cáo các giả định yếu và giữ lại các union, giá trị null và thuộc tính vắng mặt mà không gửi nội dung đến máy chủ.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_use_cases">
+      <segment>
+        <source>Quand générer des types depuis JSON ?</source>
+        <target state="translated">Khi nào nên tạo kiểu từ JSON?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_title">
+      <segment>
+        <source>Démarrer une intégration d’API</source>
+        <target state="translated">Bắt đầu tích hợp API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc1_text">
+      <segment>
+        <source>Collez plusieurs réponses représentatives pour obtenir rapidement les objets imbriqués, tableaux et types primitifs. Le résultat fournit une base à relire avec la documentation de l’API, pas une preuve que toutes les réponses futures auront cette forme.</source>
+        <target state="translated">Dán nhiều phản hồi đại diện để nhanh chóng có được các đối tượng lồng nhau, mảng và kiểu nguyên thủy. Kết quả cung cấp một cơ sở để xem lại với tài liệu API, không phải là bằng chứng rằng tất cả các phản hồi trong tương lai sẽ có hình thức này.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_title">
+      <segment>
+        <source>Typer une configuration ou une fixture</source>
+        <target state="translated">Đánh kiểu một cấu hình hoặc một fixture</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc2_text">
+      <segment>
+        <source>Transformez un fichier de configuration, une fixture de test ou un export local en déclarations nommées. Les noms de propriétés non compatibles avec un identifiant TypeScript sont conservés entre guillemets.</source>
+        <target state="translated">Chuyển đổi một tệp cấu hình, một fixture thử nghiệm hoặc một xuất cục bộ thành các khai báo có tên. Các tên thuộc tính không tương thích với một định danh TypeScript được giữ trong dấu ngoặc kép.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_title">
+      <segment>
+        <source>Comparer plusieurs variantes d’un objet</source>
+        <target state="translated">So sánh nhiều biến thể của một đối tượng</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_uc3_text">
+      <segment>
+        <source>Placez les variantes dans un tableau. Le mode fusion rend optionnels les champs absents de certains éléments ; le mode union préserve chaque forme structurelle distincte.</source>
+        <target state="translated">Đặt các biến thể vào một mảng. Chế độ hợp nhất làm cho các trường vắng mặt của một số phần tử trở nên tùy chọn; chế độ union giữ lại mỗi hình thức cấu trúc riêng biệt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference">
+      <segment>
+        <source>Comment fonctionne l’inférence</source>
+        <target state="translated">Suy diễn hoạt động như thế nào?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_1">
+      <segment>
+        <source>Chaque valeur JSON devient un type TypeScript : chaîne, nombre, booléen, null, tableau ou objet. Les objets imbriqués reçoivent des noms déterministes dérivés du chemin de propriété. Les collisions de noms sont résolues par un suffixe stable afin que le même document produise le même fichier.</source>
+        <target state="translated">Mỗi giá trị JSON trở thành một kiểu TypeScript: chuỗi, số, boolean, null, mảng hoặc đối tượng. Các đối tượng lồng nhau nhận được các tên xác định được lấy từ đường dẫn thuộc tính. Các xung đột tên được giải quyết bằng một hậu tố ổn định để cùng một tài liệu tạo ra cùng một tệp.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_2">
+      <segment>
+        <source>Dans un tableau fusionné, deux objets partageant une propriété combinent le type de cette propriété. Un champ présent dans un seul échantillon devient optionnel. Des primitives différentes forment une union, par exemple string | number | null.</source>
+        <target state="translated">Trong một mảng hợp nhất, hai đối tượng chia sẻ một thuộc tính kết hợp kiểu của thuộc tính đó. Một trường có mặt trong một mẫu duy nhất trở thành tùy chọn. Các kiểu nguyên thủy khác nhau tạo thành một union, ví dụ string | number | null.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_inference_3">
+      <segment>
+        <source>Un tableau vide devient Array&lt;unknown&gt;, car aucune valeur ne permet d’inférer son élément. Un objet vide produit une déclaration sans propriété. Ces deux situations sont signalées dans l’interface et doivent être précisées manuellement.</source>
+        <target state="translated">Một mảng rỗng trở thành Array&lt;unknown&gt;, vì không có giá trị nào cho phép suy diễn phần tử của nó. Một đối tượng rỗng tạo ra một khai báo không có thuộc tính. Cả hai tình huống này đều được báo cáo trong giao diện và cần được xác định thủ công.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_modes">
+      <segment>
+        <source>Fusion ou union : quelle stratégie choisir ?</source>
+        <target state="translated">Hợp nhất hay union: chiến lược nào nên chọn?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_title">
+      <segment>
+        <source>Fusionner des ressources semblables</source>
+        <target state="translated">Hợp nhất các tài nguyên tương tự</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_merge_text">
+      <segment>
+        <source>Choisissez la fusion pour une liste d’utilisateurs, produits ou événements qui partagent un même modèle. Les propriétés manquantes deviennent optionnelles et les types observés sont réunis.</source>
+        <target state="translated">Chọn hợp nhất cho một danh sách người dùng, sản phẩm hoặc sự kiện chia sẻ cùng một mẫu. Các thuộc tính thiếu trở thành tùy chọn và các kiểu quan sát được được hợp nhất.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_title">
+      <segment>
+        <source>Préserver des variantes distinctes</source>
+        <target state="translated">Bảo tồn các biến thể khác nhau</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_union_text">
+      <segment>
+        <source>Choisissez l’union lorsqu’un tableau contient plusieurs objets métier, par exemple un cercle et un carré ou plusieurs types d’événements. Chaque forme reçoit alors sa propre déclaration.</source>
+        <target state="translated">Chọn union khi một mảng chứa nhiều đối tượng nghiệp vụ, chẳng hạn như một hình tròn và một hình vuông hoặc nhiều loại sự kiện. Mỗi hình thức sẽ nhận được khai báo riêng.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_title">
+      <segment>
+        <source>Ajouter ensuite un discriminant précis</source>
+        <target state="translated">Sau đó thêm một phân biệt chính xác</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_discriminant_text">
+      <segment>
+        <source>Le générateur infère string pour une valeur comme « circle » car un seul exemple ne prouve pas que cette chaîne est un littéral fermé. Après vérification du contrat, remplacez-la manuellement par une union de littéraux si elle constitue un discriminant.</source>
+        <target state="translated">Trình tạo suy diễn string cho một giá trị như « circle » vì một ví dụ duy nhất không chứng minh rằng chuỗi này là một literal đóng. Sau khi kiểm tra hợp đồng, hãy thay thế nó bằng một union của các literals nếu nó là một phân biệt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates">
+      <segment>
+        <source>Pourquoi l’inférence des dates est optionnelle</source>
+        <target state="translated">Tại sao suy diễn ngày tháng là tùy chọn?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_1">
+      <segment>
+        <source>JSON ne possède pas de type date : une date ISO arrive toujours sous forme de chaîne. L’option reconnaît uniquement une date civile valide ou un date-time ISO avec fuseau explicite, puis génère Date pour faciliter un modèle déjà hydraté.</source>
+        <target state="translated">JSON không có kiểu ngày: một ngày ISO luôn đến dưới dạng chuỗi. Tùy chọn chỉ nhận diện một ngày dương lịch hợp lệ hoặc một date-time ISO với múi giờ rõ ràng, sau đó tạo ra Date để dễ dàng cho một mẫu đã được hydrat hóa.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_dates_2">
+      <segment>
+        <source>Si votre code utilise directement la réponse de fetch ou JSON.parse, conservez string. TypeScript n’exécute aucune conversion à l’exécution ; déclarer Date sans transformer la valeur donnerait une assurance incorrecte et ferait échouer les méthodes comme getTime.</source>
+        <target state="translated">Nếu mã của bạn sử dụng trực tiếp phản hồi từ fetch hoặc JSON.parse, hãy giữ lại string. TypeScript không thực hiện bất kỳ chuyển đổi nào tại thời điểm thực thi; khai báo Date mà không chuyển đổi giá trị sẽ tạo ra sự đảm bảo không chính xác và làm cho các phương thức như getTime thất bại.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limits">
+      <segment>
+        <source>Confidentialité, précision et limites</source>
+        <target state="translated">Bảo mật, độ chính xác và giới hạn</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_1">
+      <segment>
+        <source>Le fichier reste dans le navigateur et est décodé en UTF-8 strict. Le lien de partage ne contient ni source ni résultat. Le rapport exporté contient les options, avertissements et statistiques, sans recopier les valeurs du JSON.</source>
+        <target state="translated">Tệp vẫn ở trong trình duyệt và được giải mã theo UTF-8 nghiêm ngặt. Liên kết chia sẻ không chứa nguồn hoặc kết quả. Báo cáo xuất khẩu chứa các tùy chọn, cảnh báo và thống kê, mà không sao chép các giá trị từ JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_2">
+      <segment>
+        <source>La source est limitée à 2 millions de caractères, le fichier à 4 Mo, le document à 100 000 valeurs et 64 niveaux. Le Worker est interrompu après 5 secondes ; les sorties trop grandes ou structures excessives sont refusées.</source>
+        <target state="translated">Nguồn bị giới hạn ở 2 triệu ký tự, tệp ở 4 Mo, tài liệu ở 100.000 giá trị và 64 cấp độ. Worker sẽ bị ngắt sau 5 giây; các đầu ra quá lớn hoặc cấu trúc quá mức sẽ bị từ chối.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_limit_3">
+      <segment>
+        <source>Les clés dupliquées, chaînes Unicode mal formées et nombres qui perdraient leur représentation JavaScript sont rejetés. Le générateur ne déduit ni contraintes numériques, ni formats métier, ni validation d’autorisation.</source>
+        <target state="translated">Các khóa trùng lặp, chuỗi Unicode bị định dạng sai và số sẽ mất đi đại diện JavaScript của chúng sẽ bị từ chối. Trình tạo không suy diễn bất kỳ ràng buộc số nào, định dạng nghiệp vụ nào, hay xác thực quyền.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Câu hỏi thường gặp</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q1">
+      <segment>
+        <source>Pourquoi une propriété est-elle optionnelle ?</source>
+        <target state="translated">Tại sao một thuộc tính lại là tùy chọn?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a1">
+      <segment>
+        <source>En mode fusion, elle était absente d’au moins un objet du tableau. Cela décrit les échantillons fournis. Si le contrat garantit cette propriété, retirez le point d’interrogation après avoir vérifié la documentation ou le JSON Schema.</source>
+        <target state="translated">Trong chế độ hợp nhất, nó đã vắng mặt trong ít nhất một đối tượng trong mảng. Điều này mô tả các mẫu đã cung cấp. Nếu hợp đồng đảm bảo thuộc tính này, hãy xóa dấu hỏi sau khi kiểm tra tài liệu hoặc JSON Schema.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q2">
+      <segment>
+        <source>Pourquoi le générateur n’utilise-t-il pas les valeurs comme littéraux ?</source>
+        <target state="translated">Tại sao trình tạo không sử dụng các giá trị như literals?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a2">
+      <segment>
+        <source>Une valeur observée ne prouve pas qu’elle est la seule autorisée. Générer automatiquement « admin » au lieu de string rendrait souvent le type trop étroit. Ajoutez des littéraux uniquement lorsque le contrat les définit explicitement.</source>
+        <target state="translated">Một giá trị quan sát không chứng minh rằng nó là giá trị duy nhất được phép. Tự động tạo « admin » thay vì string thường sẽ làm cho kiểu quá hẹp. Chỉ thêm literals khi hợp đồng định nghĩa chúng một cách rõ ràng.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_q3">
+      <segment>
+        <source>Ce fichier remplace-t-il un schéma de validation ?</source>
+        <target state="translated">Tệp này có thay thế một schema xác thực không?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_a3">
+      <segment>
+        <source>Non. Les types TypeScript disparaissent à l’exécution et ne valident pas une réponse réseau. Utilisez JSON Schema, une bibliothèque de validation ou un parseur métier à la frontière de votre application.</source>
+        <target state="translated">Không. Các kiểu TypeScript biến mất tại thời điểm thực thi và không xác thực một phản hồi mạng. Sử dụng JSON Schema, một thư viện xác thực hoặc một trình phân tích nghiệp vụ ở biên giới của ứng dụng của bạn.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip_title">
+      <segment>
+        <source>Conserver les exemples comme tests</source>
+        <target state="translated">Giữ các ví dụ như các bài kiểm tra</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_ts_tip">
+      <segment>
+        <source>Après avoir relu le type généré, gardez plusieurs réponses anonymisées comme fixtures et validez-les automatiquement. Une nouvelle forme d’objet ou une propriété devenue nullable sera alors détectée avant de casser l’interface.</source>
+        <target state="translated">Sau khi xem lại kiểu được tạo, hãy giữ lại nhiều phản hồi ẩn danh như các fixtures và tự động xác thực chúng. Một hình thức đối tượng mới hoặc một thuộc tính trở thành nullable sẽ được phát hiện trước khi làm hỏng giao diện.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_eyebrow">
+      <segment>
+        <source>Développement · Contrats de données</source>
+        <target state="translated">Phát triển · Hợp đồng dữ liệu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_h1">
+      <segment>
+        <source>Générer des types TypeScript depuis JSON</source>
+        <target state="translated">Tạo kiểu TypeScript từ JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_lead">
+      <segment>
+        <source> Transformez un exemple JSON en interfaces ou types TypeScript lisibles, avec unions, nullabilité, propriétés optionnelles et tableaux hétérogènes. </source>
+        <target state="translated">Chuyển đổi một ví dụ JSON thành các giao diện hoặc kiểu TypeScript có thể đọc được, với các union, tính khả dụng null, thuộc tính tùy chọn và mảng không đồng nhất.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Đảm bảo của công cụ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % địa phương</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Worker có thể hủy bỏ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_trust_export">
+      <segment>
+        <source>Export .ts</source>
+        <target state="translated">Xuất .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_order">
+      <segment>
+        <source>Exemple commande</source>
+        <target state="translated">Ví dụ đơn hàng</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_example_api">
+      <segment>
+        <source>Exemple API</source>
+        <target state="translated">Ví dụ API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Liên kết đã được sao chép</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Chia sẻ công cụ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Quyền riêng tư</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_title">
+      <segment>
+        <source>Le JSON reste sur cet appareil.</source>
+        <target state="translated">JSON vẫn trên thiết bị này.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_privacy_text">
+      <segment>
+        <source>Aucun contenu, nom de fichier ni résultat n’est envoyé au serveur. Le lien de partage ne contient jamais vos données.</source>
+        <target state="translated">Không có nội dung, tên tệp hoặc kết quả nào được gửi đến máy chủ. Liên kết chia sẻ không bao giờ chứa dữ liệu của bạn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_eyebrow">
+      <segment>
+        <source>Source</source>
+        <target state="translated">Nguồn</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_title">
+      <segment>
+        <source>Collez un exemple JSON représentatif</source>
+        <target state="translated">Dán một ví dụ JSON đại diện</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_workspace_hint">
+      <segment>
+        <source>Pour inférer l’optionalité, placez plusieurs objets représentatifs dans un même tableau.</source>
+        <target state="translated">Để suy diễn tính tùy chọn, hãy đặt nhiều đối tượng đại diện trong cùng một mảng.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">Dữ liệu JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_import">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Nhập khẩu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_label">
+      <segment>
+        <source>JSON utilisé pour générer les types</source>
+        <target state="translated">JSON được sử dụng để tạo các kiểu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_source_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON · UTF-8 strict</source>
+        <target state="translated">Đối tượng, mảng hoặc giá trị JSON · UTF-8 nghiêm ngặt</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_title">
+      <segment>
+        <source>Options TypeScript</source>
+        <target state="translated">Tùy chọn TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_options_help">
+      <segment>
+        <source>Les réglages modifient seulement le code produit, jamais le JSON.</source>
+        <target state="translated">Các cài đặt chỉ thay đổi mã được tạo ra, không bao giờ thay đổi JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_label">
+      <segment>
+        <source>Nom du type racine</source>
+        <target state="translated">Tên kiểu gốc</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_root_name_help">
+      <segment>
+        <source>Le nom est converti en identifiant PascalCase valide.</source>
+        <target state="translated">Tên được chuyển đổi thành một định danh PascalCase hợp lệ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_label">
+      <segment>
+        <source>Style de déclaration</source>
+        <target state="translated">Kiểu khai báo</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_interface">
+      <segment>
+        <source>Interfaces exportées</source>
+        <target state="translated">Giao diện xuất khẩu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_declaration_type">
+      <segment>
+        <source>Aliases de types exportés</source>
+        <target state="translated">Biệt danh kiểu xuất khẩu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_mode_label">
+      <segment>
+        <source>Objets différents dans un tableau</source>
+        <target state="translated">Các đối tượng khác nhau trong một mảng</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_merge">
+      <segment>
+        <source>Fusionner et rendre les champs absents optionnels</source>
+        <target state="translated">Gộp và làm cho các trường không có trở thành tùy chọn</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_array_union">
+      <segment>
+        <source>Conserver une union de formes distinctes</source>
+        <target state="translated">Giữ lại một union của các hình thức khác nhau</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_title">
+      <segment>
+        <source>Inférer les dates ISO en <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Date</pc></source>
+        <target state="translated">Suy diễn các ngày ISO thành <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">Ngày</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_dates_help">
+      <segment>
+        <source>À activer seulement si votre application hydrate réellement les chaînes reçues.</source>
+        <target state="translated">Chỉ nên kích hoạt nếu ứng dụng của bạn thực sự làm mới các chuỗi nhận được.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_title">
+      <segment>
+        <source>Propriétés <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></source>
+        <target state="translated">Thuộc tính <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">readonly</pc></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_readonly_help">
+      <segment>
+        <source>Empêche leur réaffectation dans le typage généré.</source>
+        <target state="translated">Ngăn chặn việc gán lại của chúng trong kiểu được tạo ra.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Giới hạn bảo mật</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 2 000 000 caractères · 100 000 valeurs · profondeur 64 · 5 secondes maximum</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> mỗi tệp · 2 000 000 ký tự · 100 000 giá trị · độ sâu 64 · tối đa 5 giây</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_loading">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Đang đọc tệp…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_processing">
+      <segment>
+        <source>Génération en cours…</source>
+        <target state="translated">Đang tạo…</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generate">
+      <segment>
+        <source>Générer les types TypeScript</source>
+        <target state="translated">Tạo các kiểu TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Hủy bỏ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Đang đọc tệp cục bộ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_processing">
+      <segment>
+        <source>Génération locale des types en cours.</source>
+        <target state="translated">Đang tạo các kiểu cục bộ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_done">
+      <segment>
+        <source>Les types TypeScript sont prêts.</source>
+        <target state="translated">Các kiểu TypeScript đã sẵn sàng.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_live_error">
+      <segment>
+        <source>La génération n’a pas pu aboutir.</source>
+        <target state="translated">Việc tạo không thể hoàn tất.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_blocked_title">
+      <segment>
+        <source>Génération impossible</source>
+        <target state="translated">Không thể tạo</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Kết quả cục bộ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_title">
+      <segment>
+        <source>Types générés pour <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></source>
+        <target state="translated">Các kiểu đã được tạo cho <ph id="0" equiv="INTERPOLATION" disp="{{ generationResult.normalizedRootName }}"/></target>
+      </segment>
+    </unit>
+    <unit id="json_ts_result_text">
+      <segment>
+        <source>Relisez les types : ils décrivent les échantillons fournis, pas toutes les réponses possibles de votre API.</source>
+        <target state="translated">Vui lòng xem lại các kiểu: chúng mô tả các mẫu đã cung cấp, không phải tất cả các phản hồi có thể từ API của bạn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Thống kê</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_declarations">
+      <segment>
+        <source>déclarations</source>
+        <target state="translated">khai báo</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_properties">
+      <segment>
+        <source>propriétés</source>
+        <target state="translated">thuộc tính</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_optional">
+      <segment>
+        <source>optionnelles</source>
+        <target state="translated">tùy chọn</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_unions">
+      <segment>
+        <source>unions</source>
+        <target state="translated">hợp nhất</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_stat_dates">
+      <segment>
+        <source>dates inférées</source>
+        <target state="translated">ngày suy diễn</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warnings_title">
+      <segment>
+        <source>Points à vérifier</source>
+        <target state="translated">Các điểm cần kiểm tra</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_eyebrow">
+      <segment>
+        <source>Code prêt à intégrer</source>
+        <target state="translated">Mã đã sẵn sàng để tích hợp</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_title">
+      <segment>
+        <source>Déclarations TypeScript</source>
+        <target state="translated">Khai báo TypeScript</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; la copie et le téléchargement contiennent le code complet.</source>
+        <target state="translated">Bản xem trước bị cắt ngắn; sao chép và tải xuống chứa mã đầy đủ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_output_copied">
+      <segment>
+        <source>Code copié</source>
+        <target state="translated">Mã đã được sao chép</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_output">
+      <segment>
+        <source>Copier le code</source>
+        <target state="translated">Sao chép mã</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_output">
+      <segment>
+        <source>Télécharger le fichier .ts</source>
+        <target state="translated">Tải xuống tệp .ts</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_summary">
+      <segment>
+        <source>Rapport d’inférence JSON</source>
+        <target state="translated">Báo cáo suy diễn JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_truncated">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Bản xem trước bị cắt ngắn; tải xuống chứa báo cáo đầy đủ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Báo cáo đã được sao chép</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Sao chép báo cáo</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Tải xuống báo cáo</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Hướng dẫn sử dụng</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_title">
+      <segment>
+        <source>Obtenir un contrat utile, sans surinterpréter un exemple</source>
+        <target state="translated">Lấy một hợp đồng hữu ích, không giải thích quá mức một ví dụ</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_title">
+      <segment>
+        <source>Variez les échantillons</source>
+        <target state="translated">Đa dạng hóa các mẫu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_one_text">
+      <segment>
+        <source>Incluez les objets avec et sans champs facultatifs, les valeurs nulles et les différentes formes de tableaux.</source>
+        <target state="translated">Bao gồm các đối tượng có và không có trường tùy chọn, các giá trị null và các dạng mảng khác nhau.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_title">
+      <segment>
+        <source>Choisissez fusion ou union</source>
+        <target state="translated">Chọn hợp nhất hoặc union</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_two_text">
+      <segment>
+        <source>La fusion convient aux ressources semblables ; l’union préserve des variantes structurelles réellement distinctes.</source>
+        <target state="translated">Hợp nhất phù hợp với các tài nguyên tương tự; union bảo tồn các biến thể cấu trúc thực sự khác biệt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_title">
+      <segment>
+        <source>Validez avec le contrat API</source>
+        <target state="translated">Xác thực với hợp đồng API</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_guide_three_text">
+      <segment>
+        <source>L’inférence accélère le démarrage, mais seule la documentation ou le schéma de l’API définit tous les cas possibles.</source>
+        <target state="translated">Suy diễn giúp tăng tốc khởi động, nhưng chỉ tài liệu hoặc sơ đồ của API mới xác định tất cả các trường hợp có thể.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Tiếp tục với dữ liệu của bạn</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_title">
+      <segment>
+        <source>Valider avec JSON Schema</source>
+        <target state="translated">Xác thực với JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_schema_text">
+      <segment>
+        <source>Contrôler les données avec un contrat explicite</source>
+        <target state="translated">Kiểm tra dữ liệu với một hợp đồng rõ ràng</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">So sánh hai JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_related_diff_text">
+      <segment>
+        <source>Repérer les changements de structure et de type</source>
+        <target state="translated">Phát hiện sự thay đổi về cấu trúc và kiểu</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_default_source">
+      <segment>
+        <source>{
+  &quot;id&quot;: &quot;cmd_2026_001&quot;,
+  &quot;createdAt&quot;: &quot;2026-09-18T14:30:00Z&quot;,
+  &quot;customer&quot;: {
+    &quot;name&quot;: &quot;Ada Lovelace&quot;,
+    &quot;email&quot;: &quot;ada@example.test&quot;
+  },
+  &quot;items&quot;: [
+    { &quot;sku&quot;: &quot;BOOK-01&quot;, &quot;quantity&quot;: 2, &quot;discount&quot;: null },
+    { &quot;sku&quot;: &quot;PEN-02&quot;, &quot;quantity&quot;: 4, &quot;note&quot;: &quot;Livraison rapide&quot; }
+  ],
+  &quot;paid&quot;: true
+}</source>
+        <target state="translated">{
+  "id": "cmd_2026_001",
+  "createdAt": "2026-09-18T14:30:00Z",
+  "customer": {
+    "name": "Ada Lovelace",
+    "email": "ada@example.test"
+  },
+  "items": [
+    { "sku": "BOOK-01", "quantity": 2, "discount": null },
+    { "sku": "PEN-02", "quantity": 4, "note": "Giao hàng nhanh" }
+  ],
+  "paid": true
+}</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_api_source">
+      <segment>
+        <source>[
+  { &quot;id&quot;: 1, &quot;role&quot;: &quot;admin&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Ada&quot; } },
+  { &quot;id&quot;: 2, &quot;role&quot;: &quot;editor&quot;, &quot;profile&quot;: { &quot;displayName&quot;: &quot;Grace&quot;, &quot;avatarUrl&quot;: null } },
+  { &quot;id&quot;: 3, &quot;role&quot;: null }
+]</source>
+        <target state="translated">[
+  { "id": 1, "role": "admin", "profile": { "displayName": "Ada" } },
+  { "id": 2, "role": "editor", "profile": { "displayName": "Grace", "avatarUrl": null } },
+  { "id": 3, "role": null }
+]</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_generation_error">
+      <segment>
+        <source>La génération a échoué dans le navigateur. Réessayez avec un document plus petit.</source>
+        <target state="translated">Việc tạo ra đã thất bại trong trình duyệt. Vui lòng thử lại với một tài liệu nhỏ hơn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Không thể sao chép tự động. Vui lòng chọn đầu ra và sao chép thủ công.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse depuis votre navigateur.</source>
+        <target state="translated">Không thể sao chép liên kết. Vui lòng sao chép địa chỉ từ trình duyệt của bạn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_empty">
+      <segment>
+        <source>Le document JSON est vide.</source>
+        <target state="translated">Tài liệu JSON trống.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Tài liệu vượt quá giới hạn 2.000.000 ký tự.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_invalid">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Tài liệu không phải là JSON hợp lệ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Một đối tượng chứa hai lần cùng một tên thuộc tính.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_number">
+      <segment>
+        <source>Un nombre ne peut pas être représenté exactement en JavaScript.</source>
+        <target state="translated">Một số không thể được biểu diễn chính xác trong JavaScript.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_unicode">
+      <segment>
+        <source>Une chaîne contient une séquence Unicode invalide.</source>
+        <target state="translated">Một chuỗi chứa một chuỗi Unicode không hợp lệ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_depth">
+      <segment>
+        <source>Le document dépasse la profondeur maximale de 64 niveaux.</source>
+        <target state="translated">Tài liệu vượt quá độ sâu tối đa 64 cấp.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_nodes">
+      <segment>
+        <source>Le document dépasse la limite de 100 000 valeurs.</source>
+        <target state="translated">Tài liệu vượt quá giới hạn 100.000 giá trị.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_complexity">
+      <segment>
+        <source>La structure contient trop de déclarations ou de propriétés pour un export sûr.</source>
+        <target state="translated">Cấu trúc chứa quá nhiều khai báo hoặc thuộc tính cho một xuất an toàn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_issue_output">
+      <segment>
+        <source>Le code généré dépasse la limite de 2 000 000 de caractères.</source>
+        <target state="translated">Mã được tạo ra vượt quá giới hạn 2.000.000 ký tự.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_position">
+      <segment>
+        <source>Position</source>
+        <target state="translated">Vị trí</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_name">
+      <segment>
+        <source>Le nom de racine a été normalisé en <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</source>
+        <target state="translated">Tên gốc đã được chuẩn hóa thành <ph id="0" equiv="normalizedName" disp="warning.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_dates">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> chaîne(s) ISO ont été typées Date. Le JSON reçu contient toujours des chaînes : hydratez-les avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> chuỗi ISO đã được gán kiểu Date. JSON nhận được vẫn chứa chuỗi: hãy làm giàu chúng trước khi sử dụng.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_array">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) vide(s) utilisent unknown faute d’échantillon.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> mảng(rỗng) sử dụng unknown do thiếu mẫu.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_empty_object">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> objet(s) vide(s) ne permettent pas d’inférer de propriétés.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> đối tượng(rỗng) không cho phép suy diễn thuộc tính.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_optional">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> propriété(s) absente(s) de certains échantillons ont été rendues optionnelles.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> thuộc tính(bị thiếu) của một số mẫu đã được làm tùy chọn.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_warning_heterogeneous">
+      <segment>
+        <source><ph id="0" equiv="count" disp="count"/> tableau(x) hétérogène(s) ont nécessité une fusion ou une union.</source>
+        <target state="translated"><ph id="0" equiv="count" disp="count"/> mảng(rỗng) không đồng nhất đã yêu cầu một sự hợp nhất hoặc một sự kết hợp.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_unknown">
+      <segment>
+        <source>Le fichier n’a pas pu être lu localement.</source>
+        <target state="translated">Tệp không thể được đọc cục bộ.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Tệp đã chọn là rỗng.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Tệp vượt quá giới hạn <ph id="0" equiv="maxFileSize" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_type">
+      <segment>
+        <source>Choisissez un fichier .json ou .txt.</source>
+        <target state="translated">Vui lòng chọn tệp .json hoặc .txt.</target>
+      </segment>
+    </unit>
+    <unit id="json_ts_file_utf8">
+      <segment>
+        <source>Le fichier n’est pas un texte UTF-8 valide.</source>
+        <target state="translated">Tệp không phải là văn bản UTF-8 hợp lệ.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -735,3 +735,42 @@ test('JSON Schema validator localizes errors, verifies its correction and remain
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
 });
+
+test('JSON to TypeScript infers optional fields, exports code and remains responsive', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 844 });
+  await page.goto('/fr/categories/dev/data/json-to-typescript');
+
+  await expect(page.getByRole('heading', { level: 1 }))
+    .toHaveText('Générer des types TypeScript depuis JSON');
+  await page.locator('#json-ts-source').fill(JSON.stringify([
+    { id: 1, name: 'Ada', createdAt: '2026-09-18T14:30:00Z', secret: 'private-token-123' },
+    { id: 2, name: null, active: true },
+  ]));
+  await page.locator('#json-ts-root-name').fill('Users');
+
+  const workerResponse = page.waitForResponse(response => /\/worker-[\w-]+\.js$/u.test(response.url()));
+  await page.getByRole('button', { name: 'Générer les types TypeScript' }).click();
+  await expect((await workerResponse).ok()).toBe(true);
+
+  const result = page.getByTestId('json-ts-result');
+  await expect(result).toContainText('Types générés pour Users');
+  await expect(result.locator('.output-card').first().locator('pre')).toContainText('export type Users = Array<User>;');
+  await expect(result.locator('.output-card').first().locator('pre')).toContainText('name: string | null;');
+  await expect(result.locator('.output-card').first().locator('pre')).toContainText('active?: boolean;');
+  await expect(result).toContainText('propriété(s) absente(s)');
+
+  const downloadPromise = page.waitForEvent('download');
+  await result.getByRole('button', { name: 'Télécharger le fichier .ts' }).click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toBe('Users.ts');
+  const path = await download.path();
+  expect(path).not.toBeNull();
+  const source = await readFile(path as string, 'utf8');
+  expect(source).toContain('createdAt?: Date;');
+  expect(source).not.toContain('private-token-123');
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+
+  await page.goto('/en/categories/dev/data/json-to-typescript');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tool unavailable');
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex,follow');
+});
