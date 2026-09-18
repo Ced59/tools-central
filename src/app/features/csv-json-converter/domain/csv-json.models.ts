@@ -26,9 +26,11 @@ export type CsvJsonIssueCode =
   | 'mapping-source-missing'
   | 'mapping-output-duplicate'
   | 'json-invalid'
+  | 'json-number-unsafe'
   | 'json-root-not-array'
   | 'json-row-not-object'
   | 'json-depth-limit'
+  | 'json-path-collision'
   | 'spreadsheet-formula-protected';
 
 export interface CsvJsonConversionOptions {
@@ -184,6 +186,10 @@ function convertJsonToCsv(
   options: CsvJsonConversionOptions,
   state: MutableConversionState,
 ): CsvJsonConversionResult {
+  validateJsonNumbers(source, state);
+  if (hasErrors(state)) {
+    return emptyResult('json-to-csv', selectedOutputDelimiter(options.delimiter), source.length, state.issues);
+  }
   let parsed: unknown;
   try {
     parsed = JSON.parse(source);
@@ -419,7 +425,7 @@ function createHeaders(
   state: MutableConversionState,
 ): string[] {
   const headers: string[] = [];
-  const occurrences = new Map<string, number>();
+  const usedHeaders = new Set<string>();
   if (hasHeaderRow && provided.length !== width) {
     addIssue(
       state,
@@ -437,13 +443,14 @@ function createHeaders(
       header = `colonne_${String(index + 1)}`;
       if (hasHeaderRow) addIssue(state, 'empty-header', 'warning', 1, index + 1, header);
     }
-    const count = (occurrences.get(header) ?? 0) + 1;
-    occurrences.set(header, count);
-    if (count > 1) {
+    if (usedHeaders.has(header)) {
       const original = header;
-      header = `${header}_${String(count)}`;
+      let suffix = 2;
+      while (usedHeaders.has(`${original}_${String(suffix)}`)) suffix += 1;
+      header = `${original}_${String(suffix)}`;
       addIssue(state, 'duplicate-header', 'warning', 1, index + 1, `${original}=>${header}`);
     }
+    usedHeaders.add(header);
     headers.push(header);
   }
   return headers;
@@ -494,9 +501,75 @@ function flattenRecord(
   }
   for (const [key, value] of Object.entries(record)) {
     const path = prefix ? `${prefix}.${key}` : key;
-    if (isRecord(value)) flattenRecord(value, path, target, state, row, depth + 1);
-    else target[path] = value;
+    if (isRecord(value)) {
+      flattenRecord(value, path, target, state, row, depth + 1);
+    } else if (Object.hasOwn(target, path)) {
+      addIssue(state, 'json-path-collision', 'error', row, null, path.slice(0, 160));
+    } else {
+      target[path] = value;
+    }
   }
+}
+
+function validateJsonNumbers(source: string, state: MutableConversionState): void {
+  let inString = false;
+  let escaped = false;
+  const numberPattern = /-?(?:0|[1-9]\d*)(?:\.\d+)?(?:e[+-]?\d+)?/iy;
+  for (let index = 0; index < source.length; index += 1) {
+    const character = source[index];
+    if (inString) {
+      if (escaped) escaped = false;
+      else if (character === '\\') escaped = true;
+      else if (character === '"') inString = false;
+      continue;
+    }
+    if (character === '"') {
+      inString = true;
+      continue;
+    }
+    if (character !== '-' && (character < '0' || character > '9')) continue;
+    numberPattern.lastIndex = index;
+    const token = numberPattern.exec(source)?.[0];
+    if (!token) continue;
+    if (!isLosslessJsonNumber(token)) {
+      addIssue(state, 'json-number-unsafe', 'error', null, null, token.slice(0, 160));
+      return;
+    }
+    index += token.length - 1;
+  }
+}
+
+function isLosslessJsonNumber(token: string): boolean {
+  if (token.length > 128) return false;
+  const numeric = Number(token);
+  if (!Number.isFinite(numeric)) return false;
+  const sourceDecimal = canonicalDecimal(token);
+  const numericDecimal = canonicalDecimal(String(numeric));
+  return sourceDecimal !== null
+    && numericDecimal !== null
+    && sourceDecimal.coefficient === numericDecimal.coefficient
+    && sourceDecimal.scale === numericDecimal.scale;
+}
+
+function canonicalDecimal(value: string): { coefficient: bigint; scale: number } | null {
+  if (!/^-?\d+(?:\.\d+)?(?:e[+-]?\d+)?$/iu.test(value)) return null;
+  const exponentIndex = value.search(/[eE]/u);
+  const mantissa = exponentIndex < 0 ? value : value.slice(0, exponentIndex);
+  const exponent = exponentIndex < 0 ? 0 : Number(value.slice(exponentIndex + 1));
+  if (!Number.isSafeInteger(exponent) || Math.abs(exponent) > 1_000) return null;
+  const negative = mantissa.startsWith('-');
+  const unsignedMantissa = negative ? mantissa.slice(1) : mantissa;
+  const dotIndex = unsignedMantissa.indexOf('.');
+  const integer = dotIndex < 0 ? unsignedMantissa : unsignedMantissa.slice(0, dotIndex);
+  const fraction = dotIndex < 0 ? '' : unsignedMantissa.slice(dotIndex + 1);
+  let coefficient = BigInt(`${negative ? '-' : ''}${integer}${fraction}`);
+  let scale = fraction.length - exponent;
+  if (coefficient === 0n) return { coefficient: 0n, scale: 0 };
+  while (coefficient % 10n === 0n) {
+    coefficient /= 10n;
+    scale -= 1;
+  }
+  return { coefficient, scale };
 }
 
 function inferCsvValue(value: string): string | number | boolean | null {

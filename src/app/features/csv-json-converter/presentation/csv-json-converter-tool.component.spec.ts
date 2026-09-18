@@ -80,4 +80,24 @@ describe('CsvJsonConverterToolComponent', () => {
     expect(label).toContain('2');
     expect(label).toContain('3');
   });
+
+  it('annonce les diagnostics en erreur aux technologies d’assistance', () => {
+    component.result.set({
+      ok: false,
+      direction: 'json-to-csv',
+      output: '',
+      outputMediaType: 'text/csv;charset=utf-8',
+      outputExtension: 'csv',
+      detectedDelimiter: 'comma',
+      previewHeaders: [],
+      previewRows: [],
+      issues: [{ code: 'json-invalid', severity: 'error', row: null, column: null, detail: '' }],
+      stats: { inputRows: 0, outputRows: 0, columns: 0, inputCharacters: 1, outputCharacters: 0 },
+    });
+    fixture.detectChanges();
+
+    const alert = (fixture.nativeElement as HTMLElement).querySelector('[role="alert"]');
+    expect(alert?.getAttribute('aria-live')).toBe('assertive');
+    expect(alert?.textContent).toContain('JSON valide');
+  });
 });

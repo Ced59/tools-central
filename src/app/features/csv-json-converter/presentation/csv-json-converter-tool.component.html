@@ -136,7 +136,7 @@
         </div>
 
         @if (conversion.issues.length) {
-          <div class="diagnostics" [class.has-errors]="errorCount() > 0">
+          <div class="diagnostics" [class.has-errors]="errorCount() > 0" [attr.role]="errorCount() > 0 ? 'alert' : 'status'" [attr.aria-live]="errorCount() > 0 ? 'assertive' : 'polite'" aria-atomic="true">
             <h3>
               <span i18n="@@csv_json_diagnostics">Diagnostics</span>
               <span class="badge">{{ errorCount() }} / {{ warningCount() }}</span>

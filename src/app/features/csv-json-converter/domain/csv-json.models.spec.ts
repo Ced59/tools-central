@@ -73,6 +73,13 @@ describe('convertCsvJson', () => {
     ]);
   });
 
+  it('désambiguïse aussi les suffixes qui existent déjà dans la source', () => {
+    const result = convertCsvJson('a,a,a_2\n1,2,3', CSV_DEFAULTS);
+
+    expect(result.ok).toBe(true);
+    expect(JSON.parse(result.output)).toEqual([{ a: 1, a_2: 2, a_2_2: 3 }]);
+  });
+
   it('aplatit les objets JSON, sérialise les tableaux et protège les formules de tableur', () => {
     const result = convertCsvJson(JSON.stringify([
       { id: 1, profile: { name: 'Ada' }, tags: ['math', 'code'], note: '=2+2' },
@@ -110,6 +117,35 @@ describe('convertCsvJson', () => {
       'mapping-source-missing',
       'mapping-output-duplicate',
     ]));
+  });
+
+  it('rejette les nombres que JavaScript arrondirait ou rendrait infinis', () => {
+    const unsafeInteger = convertCsvJson('[{"x":9007199254740993}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+    const overflowingExponent = convertCsvJson('[{"x":1e400}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+    const preciseDecimal = convertCsvJson('[{"x":0.1234567890123456789}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(unsafeInteger.issues[0]?.code).toBe('json-number-unsafe');
+    expect(overflowingExponent.issues[0]?.code).toBe('json-number-unsafe');
+    expect(preciseDecimal.issues[0]?.code).toBe('json-number-unsafe');
+  });
+
+  it('rejette une collision entre une clé pointée et un chemin imbriqué', () => {
+    const result = convertCsvJson('[{"a.b":1,"a":{"b":2}}]', {
+      ...CSV_DEFAULTS,
+      direction: 'json-to-csv',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.issues[0]?.code).toBe('json-path-collision');
   });
 
   it('arrête proprement une source vide, trop grande ou un champ CSV non fermé', () => {

@@ -252,9 +252,11 @@ export class CsvJsonConverterToolComponent {
       'mapping-source-missing': $localize`:@@csv_json_issue_mapping_source:Une colonne source du mapping n’existe pas dans les données.`,
       'mapping-output-duplicate': $localize`:@@csv_json_issue_mapping_output:Deux règles utilisent le même nom de sortie.`,
       'json-invalid': $localize`:@@csv_json_issue_json_invalid:La source n’est pas un document JSON valide.`,
+      'json-number-unsafe': $localize`:@@csv_json_issue_json_number:Un nombre JSON serait arrondi ou rendu infini par JavaScript. Convertissez-le en chaîne pour préserver sa valeur exacte.`,
       'json-root-not-array': $localize`:@@csv_json_issue_json_root:La racine JSON doit être un tableau d’objets.`,
       'json-row-not-object': $localize`:@@csv_json_issue_json_row:Chaque élément du tableau JSON doit être un objet.`,
       'json-depth-limit': $localize`:@@csv_json_issue_depth:Un objet dépasse 12 niveaux d’imbrication.`,
+      'json-path-collision': $localize`:@@csv_json_issue_path_collision:Une clé contenant un point entre en collision avec un chemin d’objet imbriqué. Renommez l’une des clés.`,
       'spreadsheet-formula-protected': $localize`:@@csv_json_issue_formula:Les cellules ressemblant à des formules ont été préfixées par une apostrophe pour limiter leur exécution dans un tableur.`,
     };
     const position = issue.row === null
