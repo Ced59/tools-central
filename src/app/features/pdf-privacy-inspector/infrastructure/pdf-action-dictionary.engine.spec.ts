@@ -659,6 +659,17 @@ describe('inspectPdfStructuralSignals', () => {
         payload: deflate(plain),
       },
       {
+        filterDictionary: [
+          '/Filter /FlateDecode',
+          '/DecodeParms << /Predictor null /Colors null /BitsPerComponent null /Columns null >>',
+        ].join(' '),
+        payload: deflate(plain),
+      },
+      {
+        filterDictionary: '/Filter /LZWDecode /DecodeParms << /EarlyChange null >>',
+        payload: encodeLzwLiteral(plain),
+      },
+      {
         filterDictionary: '/Filter /ASCIIHexDecode /DecodeParms << /Predictor 99 >>',
         payload: encodeAsciiHex(plain),
       },
@@ -992,6 +1003,20 @@ describe('inspectPdfStructuralSignals', () => {
     );
     expect(() => validatePdfObjectStreamBudgets(malformedPreviousXref))
       .toThrow('Invalid PDF previous xref');
+  });
+
+  it('traite les offsets xref optionnels null comme absents', () => {
+    const body = '%PDF-1.7\n';
+    const xrefOffset = body.length;
+    const pdf = joinBytes(
+      body,
+      'xref\n0 1\n0000000000 65535 f \n',
+      'trailer\n<< /Size 1 /Prev null /XRefStm null >>\nstartxref\n',
+      String(xrefOffset),
+      '\n%%EOF\n',
+    );
+
+    expect(() => validatePdfObjectStreamBudgets(pdf)).not.toThrow();
   });
 
   it('résout un nom de filtre indirect compressé depuis la xref active', () => {

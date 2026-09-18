@@ -3412,12 +3412,14 @@ function parseCriticalDictionary(
       previousXrefOffsetValueStarts,
       'Duplicate PDF previous xref',
       'Invalid PDF previous xref',
+      true,
     );
     supplementalXrefOffset = readUniqueUnsignedInteger(
       data,
       supplementalXrefOffsetValueStarts,
       'Duplicate PDF supplemental xref',
       'Invalid PDF supplemental xref',
+      true,
     );
   }
   return {
@@ -3458,10 +3460,12 @@ function readUniqueUnsignedInteger(
   valueStarts: readonly number[],
   duplicateMessage: string,
   invalidMessage: string,
+  nullMeansUndefined = false,
 ): number | undefined {
   if (valueStarts.length === 0) return undefined;
   if (valueStarts.length > 1) throw new Error(duplicateMessage);
   const valueStart = valueStarts[0];
+  if (nullMeansUndefined && matchesKeyword(data, valueStart, 'null')) return undefined;
   const value = readUnsignedInteger(data, valueStart);
   if (!value) throw new Error(invalidMessage);
   return value.value;
@@ -3772,6 +3776,7 @@ function readDecodeParameterDictionary(
   end: number,
 ): RawPdfFilterDecodeParameters {
   const values = new Map<string, RawPdfDecodeParameterValue>();
+  const seenKeys = new Set<string>();
   let depth = 0;
   let arrayDepth = 0;
   let offset = start;
@@ -3810,9 +3815,14 @@ function readDecodeParameterDictionary(
         continue;
       }
       const valueStart = skipWhitespaceAndComments(data, offset);
-      if (values.has(key.value)) {
+      if (seenKeys.has(key.value)) {
         values.set(key.value, 'invalid');
         offset = skipPdfValue(data, valueStart, end);
+        continue;
+      }
+      seenKeys.add(key.value);
+      if (matchesKeyword(data, valueStart, 'null')) {
+        offset = valueStart + 4;
         continue;
       }
       const reference = readRawPdfReference(data, valueStart);
