@@ -88010,6 +88010,1092 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Tyto vyloučení jsou nekompatibilní s patch bez ztráty. Ignorujte celý kontejner nebo odstraňte konfliktní cesty.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_validate_title">
+      <segment>
+        <source>Validation de contrats</source>
+        <target state="translated">Ověření smluv</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_validate_desc">
+      <segment>
+        <source>Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.</source>
+        <target state="translated">Zkontrolujte, zda JSON data splňují explicitní smlouvu, bez tichého převodu nebo síťového přenosu.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_title">
+      <segment>
+        <source>Validateur JSON Schema</source>
+        <target state="translated">Validátor JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_desc">
+      <segment>
+        <source>Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.</source>
+        <target state="translated">Ověřte JSON lokálně pomocí Draft 7, 2019-09 nebo 2020-12, lokalizujte chyby a vygenerujte opatrný opravený návrh.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_title">
+      <segment>
+        <source>Valider un JSON avec un contrat explicite et des erreurs exploitables</source>
+        <target state="translated">Ověřte JSON s explicitní smlouvou a využitelnými chybami</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_lead">
+      <segment>
+        <source>Ce validateur exécute JSON Schema dans un Worker local, sans convertir les types ni supprimer les propriétés qui échouent. Il prend en charge Draft 7, 2019-09 et 2020-12, localise chaque règle en échec avec un JSON Pointer et peut proposer un exemple corrigé lorsque la modification reste prudente.</source>
+        <target state="translated">Tento validátor provádí JSON Schema v lokálním Workeru, aniž by převáděl typy nebo odstraňoval vlastnosti, které selhaly. Podporuje Draft 7, 2019-09 a 2020-12, lokalizuje každé pravidlo, které selhalo, pomocí JSON Pointer a může navrhnout opravený příklad, když změna zůstává opatrná.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_use_cases">
+      <segment>
+        <source>Quand valider des données avec JSON Schema ?</source>
+        <target state="translated">Kdy ověřit data pomocí JSON Schema?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_title">
+      <segment>
+        <source>Tester un payload d’API</source>
+        <target state="translated">Testování API payloadu</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_text">
+      <segment>
+        <source>Vérifiez avant intégration que les champs obligatoires, types, formats et valeurs autorisées correspondent au contrat. Un chemin comme /utilisateur/email désigne directement la donnée à corriger, sans dépendre de son numéro de ligne.</source>
+        <target state="translated">Zkontrolujte před integrací, že povinná pole, typy, formáty a povolené hodnoty odpovídají smlouvě. Cesta jako /uživatel/email přímo označuje data k opravě, aniž by závisela na čísle řádku.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_title">
+      <segment>
+        <source>Contrôler un fichier de configuration</source>
+        <target state="translated">Kontrola konfiguračního souboru</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_text">
+      <segment>
+        <source>Repérez les options inconnues avec additionalProperties, les tableaux incomplets et les contraintes numériques avant un déploiement. Le moteur ne remplace aucune valeur dans l’entrée pendant le diagnostic.</source>
+        <target state="translated">Identifikujte neznámé možnosti pomocí additionalProperties, neúplné pole a číselné omezení před nasazením. Motor během diagnostiky nenahrazuje žádnou hodnotu ve vstupu.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_title">
+      <segment>
+        <source>Comparer un producteur à son contrat</source>
+        <target state="translated">Porovnání producenta se smlouvou</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_text">
+      <segment>
+        <source>Collez un exemple produit par un formulaire, un export ou un service puis exportez le rapport technique. Le rapport contient les chemins et règles, pas une copie automatique du JSON d’origine.</source>
+        <target state="translated">Vložte příklad vytvořený formulářem, exportem nebo službou a poté exportujte technickou zprávu. Zpráva obsahuje cesty a pravidla, nikoli automatickou kopii původního JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts">
+      <segment>
+        <source>Choisir le bon brouillon</source>
+        <target state="translated">Výběr správného návrhu</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_1">
+      <segment>
+        <source>En détection automatique, la propriété $schema sélectionne Draft 7, 2019-09 ou 2020-12. Lorsqu’elle est absente, Draft 7 est utilisé pour rester compatible avec les nombreux schémas historiques qui reposent sur definitions et les anciens comportements de tuples.</source>
+        <target state="translated">Při automatickém zjišťování vlastnost $schema vybírá Draft 7, 2019-09 nebo 2020-12. Když chybí, používá se Draft 7, aby zůstal kompatibilní s mnoha historickými schématy, která se spoléhají na definitions a staré chování n-tic.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_2">
+      <segment>
+        <source>Un choix explicite remplace seulement la déclaration pendant la compilation locale ; le texte collé n’est pas réécrit. Cette option aide à tester un schéma sans URI $schema, mais ne convertit pas automatiquement les mots-clés d’un brouillon vers un autre.</source>
+        <target state="translated">Explicitní volba pouze nahrazuje deklaraci během lokální kompilace; vložený text není přepsán. Tato možnost pomáhá testovat schéma bez URI $schema, ale automaticky nepřevádí klíčová slova z jednoho návrhu na druhý.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_3">
+      <segment>
+        <source>Les références internes comme #/$defs/adresse ou #/definitions/adresse sont résolues. Les références HTTP, HTTPS ou relatives vers d’autres fichiers sont refusées afin que la validation reste prévisible, hors ligne et sans fuite de l’URL référencée.</source>
+        <target state="translated">Interní odkazy jako #/$defs/adresa nebo #/definitions/adresa jsou vyřešeny. HTTP, HTTPS nebo relativní odkazy na jiné soubory jsou odmítnuty, aby zůstala validace předvídatelná, offline a bez úniku odkazované URL.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diagnostics">
+      <segment>
+        <source>Lire le diagnostic</source>
+        <target state="translated">Přečtěte si diagnostiku</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_title">
+      <segment>
+        <source>Chemin des données</source>
+        <target state="translated">Cesta dat</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_text">
+      <segment>
+        <source>Le JSON Pointer d’instance indique la valeur concernée. Une erreur required reste attachée à l’objet parent et nomme séparément la propriété manquante ; une erreur à la racine affiche explicitement « Racine ».</source>
+        <target state="translated">JSON Pointer instance ukazuje na dotčenou hodnotu. Chyba required zůstává připojena k rodičovskému objektu a samostatně pojmenovává chybějící vlastnost; chyba na kořeni explicitně zobrazuje "Kořen".</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_title">
+      <segment>
+        <source>Chemin de la règle</source>
+        <target state="translated">Cesta pravidla</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_text">
+      <segment>
+        <source>Le chemin de schéma montre la contrainte appliquée, par exemple #/properties/age/minimum. Le mot-clé technique est conservé dans le rapport pour faciliter une recherche dans la spécification.</source>
+        <target state="translated">Cesta schématu ukazuje na aplikované omezení, například #/properties/age/minimum. Technické klíčové slovo je v zprávě zachováno pro usnadnění vyhledávání ve specifikaci.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_title">
+      <segment>
+        <source>Formats standards</source>
+        <target state="translated">Standardní formáty</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_text">
+      <segment>
+        <source>La vérification optionnelle couvre notamment email, date, date-time, URI, hostname, UUID, IPv4 et IPv6. Un format vérifie une syntaxe ; il ne prouve pas qu’une adresse existe, qu’un domaine répond ou qu’une ressource est sûre.</source>
+        <target state="translated">Volitelná kontrola zahrnuje zejména email, datum, datum-čas, URI, hostname, UUID, IPv4 a IPv6. Formát kontroluje syntaxi; neprokazuje, že adresa existuje, že doména odpovídá nebo že je zdroj bezpečný.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction">
+      <segment>
+        <source>Ce que corrige la proposition automatique</source>
+        <target state="translated">Co automatický návrh opravuje</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_1">
+      <segment>
+        <source>La proposition peut ajouter une propriété required lorsqu’un default, un example, une constante, une valeur enum ou un type simple fournit une valeur déterministe. Elle peut aussi retirer une propriété explicitement interdite, appliquer une borne numérique, compléter ou tronquer une chaîne ou un tableau et remplacer quelques formats par un exemple syntaxique.</source>
+        <target state="translated">Návrh může přidat povinnost required, když default, example, constant, enum nebo jednoduchý typ poskytuje deterministickou hodnotu. Může také odstranit explicitně zakázanou vlastnost, aplikovat číselné omezení, doplnit nebo zkrátit řetězec nebo pole a nahradit některé formáty syntaktickým příkladem.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_2">
+      <segment>
+        <source>Chaque proposition est revalidée avec le même schéma et le même brouillon. Le badge distingue une proposition devenue valide d’une aide encore incomplète. Les règles conditionnelles, les expressions régulières et les variantes anyOf ou oneOf ne sont pas devinées.</source>
+        <target state="translated">Každý návrh je znovu validován stejným schématem a stejným návrhem. Odznak odlišuje platný návrh od stále neúplné pomoci. Podmínková pravidla, regulární výrazy a varianty anyOf nebo oneOf nejsou odhadovány.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_3">
+      <segment>
+        <source>Une valeur techniquement valide peut rester fausse pour votre métier. Relisez le JSON proposé, remplacez les exemples génériques et ne l’utilisez jamais comme migration automatique de données sans tests propres à votre application.</source>
+        <target state="translated">Technicky platná hodnota může zůstat neplatná pro vaše podnikání. Přečtěte si navrhovaný JSON, nahraďte generické příklady a nikdy jej nepoužívejte jako automatickou migraci dat bez testů specifických pro vaši aplikaci.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limits">
+      <segment>
+        <source>Sécurité, précision et limites</source>
+        <target state="translated">Bezpečnost, přesnost a omezení</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_1">
+      <segment>
+        <source>Le schéma est limité à 500 000 caractères, les données à 2 millions de caractères et chaque fichier à 2 Mo. Le parseur accepte au plus 100 000 valeurs et 64 niveaux d’imbrication ; l’interface affiche au maximum 500 erreurs.</source>
+        <target state="translated">Schéma je omezeno na 500 000 znaků, data na 2 miliony znaků a každý soubor na 2 MB. Parser akceptuje maximálně 100 000 hodnot a 64 úrovní vnoření; rozhraní zobrazuje maximálně 500 chyb.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_2">
+      <segment>
+        <source>Les clés dupliquées, chaînes UTF-16 mal formées et nombres qui perdraient leur représentation JavaScript sont refusés avant validation. Les expressions régulières sont plafonnées en nombre et en longueur, puis exécutées dans un Worker annulable.</source>
+        <target state="translated">Duplicitní klíče, špatně formované UTF-16 řetězce a čísla, která by ztratila svou reprezentaci JavaScriptu, jsou odmítnuty před validací. Regulární výrazy jsou omezeny počtem a délkou a poté prováděny v zrušitelném Workeru.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_3">
+      <segment>
+        <source>JSON Schema décrit la forme et certaines relations entre valeurs. Il ne vérifie ni une signature, ni des droits d’accès, ni l’existence d’un compte, ni la sécurité du code qui consommera les données.</source>
+        <target state="translated">JSON Schema popisuje formu a některé vztahy mezi hodnotami. Neověřuje ani podpis, ani přístupová práva, ani existenci účtu, ani bezpečnost kódu, který bude data konzumovat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Časté dotazy</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q1">
+      <segment>
+        <source>Pourquoi « 42 » n’est-il pas accepté comme nombre ?</source>
+        <target state="translated">Proč "42" není akceptováno jako číslo?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a1">
+      <segment>
+        <source>Le validateur désactive la coercition. Une chaîne reste une chaîne, même si son contenu ressemble à un nombre. Cette rigueur évite qu’un test réussi dans l’outil masque une incompatibilité réelle dans un consommateur qui ne convertit pas les types.</source>
+        <target state="translated">Validátor deaktivuje koercici. Řetězec zůstává řetězcem, i když jeho obsah vypadá jako číslo. Tato přísnost zabraňuje tomu, aby úspěšný test v nástroji zakryl skutečnou nekompatibilitu v konzumentovi, který nepřevádí typy.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q2">
+      <segment>
+        <source>Pourquoi une référence distante est-elle refusée ?</source>
+        <target state="translated">Proč je odmítnut vzdálený odkaz?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a2">
+      <segment>
+        <source>Charger une référence distante rendrait le résultat dépendant du réseau et révélerait l’URL demandée au serveur distant. Regroupez les définitions nécessaires dans $defs ou definitions et utilisez des références locales.</source>
+        <target state="translated">Načtení vzdáleného odkazu by učinilo výsledek závislým na síti a odhalilo by požadovanou URL vzdálenému serveru. Skupinové potřebné definice do $defs nebo definitions a používejte místní odkazy.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q3">
+      <segment>
+        <source>Une validation réussie garantit-elle que le JSON est sûr ?</source>
+        <target state="translated">Zda úspěšná validace zaručuje, že JSON je bezpečný?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a3">
+      <segment>
+        <source>Non. Elle garantit seulement le respect des règles exprimées par le schéma. Le contenu doit encore être traité comme non fiable : contrôles d’autorisation, échappement, limites métier et protections propres au système restent nécessaires.</source>
+        <target state="translated">Ne. Zaručuje pouze dodržování pravidel vyjádřených schématem. Obsah musí být stále považován za nedůvěryhodný: kontroly oprávnění, escapování, obchodní limity a ochrany specifické pro systém zůstávají nezbytné.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip_title">
+      <segment>
+        <source>Versionner le schéma avec les données</source>
+        <target state="translated">Verzování schématu s daty</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip">
+      <segment>
+        <source>Conservez le brouillon, le schéma et des exemples valides/invalides dans le même dépôt que le producteur. Une validation locale ponctuelle aide au diagnostic ; des tests automatisés empêchent le contrat de dériver au fil des versions.</source>
+        <target state="translated">Uložte koncept, schéma a platné/neplatné příklady ve stejném úložišti jako producent. Místní jednorázová validace pomáhá při diagnostice; automatizované testy zabraňují odchylce smlouvy v průběhu verzí.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_eyebrow">
+      <segment>
+        <source>Développement · Données structurées</source>
+        <target state="translated">Vývoj · Strukturovaná data</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_h1">
+      <segment>
+        <source>Valider un JSON avec JSON Schema</source>
+        <target state="translated">Validace JSON pomocí JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_lead">
+      <segment>
+        <source> Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur. </source>
+        <target state="translated">Přesně identifikujte neplatná data pomocí Draft 7, 2019-09 nebo 2020-12. Schéma a JSON zůstávají ve vašem prohlížeči.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Záruky nástroje</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % místní</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Zrušitelný pracovník</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_no_mutation">
+      <segment>
+        <source>Aucune coercition</source>
+        <target state="translated">Žádná coercion</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_invalid">
+      <segment>
+        <source> Charger un exemple invalide </source>
+        <target state="translated">Načíst neplatný příklad</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_valid">
+      <segment>
+        <source> Exemple valide </source>
+        <target state="translated">Platný příklad</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Odkaz zkopírován</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Sdílet nástroj</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Ochrana soukromí</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_title">
+      <segment>
+        <source>Vos données ne quittent pas cet appareil.</source>
+        <target state="translated">Vaše data neopouštějí toto zařízení.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_text">
+      <segment>
+        <source>Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</source>
+        <target state="translated">Žádné schéma, JSON, název souboru ani výsledek nejsou odesílány na server. Vzdálené odkazy jsou záměrně deaktivovány.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_eyebrow">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">Vstupy</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_title">
+      <segment>
+        <source>Collez le schéma et les données à vérifier</source>
+        <target state="translated">Vložte schéma a data k ověření</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_hint">
+      <segment>
+        <source>Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</source>
+        <target state="translated">JSON a TXT soubory jsou čteny lokálně v přísném UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_title">
+      <segment>
+        <source>Schéma JSON</source>
+        <target state="translated">JSON schéma</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_schema">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importovat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_label">
+      <segment>
+        <source>Schéma JSON à utiliser</source>
+        <target state="translated">JSON schéma k použití</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_help">
+      <segment>
+        <source>Objet ou booléen JSON Schema</source>
+        <target state="translated">JSON Schema objekt nebo boolean</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON data</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_instance">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importovat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_label">
+      <segment>
+        <source>Données JSON à valider</source>
+        <target state="translated">JSON data k validaci</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON</source>
+        <target state="translated">JSON objekt, pole nebo hodnota</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_label">
+      <segment>
+        <source>Brouillon JSON Schema</source>
+        <target state="translated">JSON Schema koncept</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_auto">
+      <segment>
+        <source>Détection automatique (Draft 7 si absent)</source>
+        <target state="translated">Automatické zjištění (Draft 7, pokud chybí)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_help">
+      <segment>
+        <source>Un choix explicite remplace la propriété <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> sans modifier le texte saisi.</source>
+        <target state="translated">Explicitní volba nahrazuje vlastnost <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> aniž by měnila zadaný text.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_title">
+      <segment>
+        <source>Vérifier les formats standards</source>
+        <target state="translated">Ověřit standardní formáty</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_help">
+      <segment>
+        <source>E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</source>
+        <target state="translated">E-mail, datum, datum-čas, URI, UUID, IPv4, IPv6 a další formáty Ajv.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Bezpečnostní limity</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> na soubor · 100 000 hodnot · hloubka 64 · maximálně 5 sekund · komplexní diagnostika až do 50 000 odhadovaných operací · 500 zobrazených chyb</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validating">
+      <segment>
+        <source>Validation en cours…</source>
+        <target state="translated">Probíhá validace…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate">
+      <segment>
+        <source>Valider le JSON</source>
+        <target state="translated">Validovat JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Zrušit</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_processing">
+      <segment>
+        <source>Validation locale en cours.</source>
+        <target state="translated">Probíhá místní validace.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_valid">
+      <segment>
+        <source>Le document est valide.</source>
+        <target state="translated">Dokument je platný.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_invalid">
+      <segment>
+        <source>Le document contient <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erreurs de validation.</source>
+        <target state="translated">Dokument obsahuje <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> chyb validace.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_error">
+      <segment>
+        <source>La validation n’a pas pu aboutir.</source>
+        <target state="translated">Validace se nezdařila.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_blocked_title">
+      <segment>
+        <source>Validation impossible</source>
+        <target state="translated">Ověření nemožné</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Místní výsledek</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_title">
+      <segment>
+        <source>Le JSON est valide</source>
+        <target state="translated">JSON je platný</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_text">
+      <segment>
+        <source>Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</source>
+        <target state="translated">Všechna pravidla vybraného schématu jsou dodržena, bez tichého převodu hodnot.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> erreur(s) détectée(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> chyba(y) zjištěna(y)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_text">
+      <segment>
+        <source>Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</source>
+        <target state="translated">Opravit uvedené cesty a poté znovu spustit ověření. Automatický návrh je poskytován pouze pro opatrné opravy.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Statistiky</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_schema_nodes">
+      <segment>
+        <source>valeurs dans le schéma</source>
+        <target state="translated">hodnoty ve schématu</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_instance_nodes">
+      <segment>
+        <source>valeurs vérifiées</source>
+        <target state="translated">ověřené hodnoty</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_patterns">
+      <segment>
+        <source>expressions régulières</source>
+        <target state="translated">regulární výrazy</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">chyby</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_eyebrow">
+      <segment>
+        <source>Diagnostic</source>
+        <target state="translated">Diagnostika</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_title">
+      <segment>
+        <source>Erreurs par chemin</source>
+        <target state="translated">Chyby podle cesty</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_truncated">
+      <segment>
+        <source>Aperçu limité aux 500 premières erreurs</source>
+        <target state="translated">Náhled omezen na prvních 500 chyb</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_rule_label">
+      <segment>
+        <source>Règle</source>
+        <target state="translated">Pravidlo</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_eyebrow">
+      <segment>
+        <source>Aide à la correction</source>
+        <target state="translated">Nápověda k opravě</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_title">
+      <segment>
+        <source>Proposition corrigée</source>
+        <target state="translated">Opravený návrh</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> opatrná oprava(y) aplikována(y). Vždy zkontrolujte obchodní smysl před použitím.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_valid">
+      <segment>
+        <source>Proposition valide</source>
+        <target state="translated">Platný návrh</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_remaining">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> erreur(s) restante(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> zbývající chyba(y)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient la proposition complète.</source>
+        <target state="translated">Náhled je zkrácen; stažení obsahuje kompletní návrh.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_apply_correction">
+      <segment>
+        <source>Remplacer les données</source>
+        <target state="translated">Nahradit data</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_copied">
+      <segment>
+        <source>Proposition copiée</source>
+        <target state="translated">Návrh zkopírován</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_correction">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Kopírovat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_correction">
+      <segment>
+        <source>Télécharger le JSON</source>
+        <target state="translated">Stáhnout JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_summary">
+      <segment>
+        <source>Rapport technique JSON</source>
+        <target state="translated">Technická zpráva JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Náhled je zkrácen; stažení obsahuje kompletní zprávu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Zpráva zkopírována</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Kopírovat zprávu</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Stáhnout zprávu</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Návod</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_title">
+      <segment>
+        <source>Valider sans masquer les problèmes de données</source>
+        <target state="translated">Ověřit bez skrývání problémů s daty</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_title">
+      <segment>
+        <source>Fournissez le contrat</source>
+        <target state="translated">Poskytněte smlouvu</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_text">
+      <segment>
+        <source>Collez un schéma complet. Les références locales <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fonctionnent ; aucune ressource distante n’est chargée.</source>
+        <target state="translated">Vložte kompletní schéma. Místní odkazy <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fungují; žádný vzdálený zdroj není načten.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_title">
+      <segment>
+        <source>Gardez les types exacts</source>
+        <target state="translated">Udržujte přesné typy</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_text">
+      <segment>
+        <source>Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</source>
+        <target state="translated">Motor nepřevede „42“ na 42, neodstraní žádný atribut a během diagnostiky nepřidá žádné výchozí hodnoty.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_title">
+      <segment>
+        <source>Relisez la proposition</source>
+        <target state="translated">Přečtěte si návrh</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_text">
+      <segment>
+        <source>Les corrections utilisent seulement les valeurs <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ou des ajustements bornés.</source>
+        <target state="translated">Opravy používají pouze hodnoty <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> nebo omezené úpravy.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Pokračovat s vašimi daty</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Porovnat dva JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_text">
+      <segment>
+        <source>Diff structurel et patch RFC 6902</source>
+        <target state="translated">Strukturální rozdíl a patch RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_title">
+      <segment>
+        <source>Convertir CSV et JSON</source>
+        <target state="translated">Převést CSV a JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_text">
+      <segment>
+        <source>Mapping, types et export local</source>
+        <target state="translated">Mapování, typy a místní export</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate_error">
+      <segment>
+        <source>La validation a échoué dans le navigateur. Réessayez avec des documents plus petits ou simplifiez les expressions régulières.</source>
+        <target state="translated">Ověření selhalo v prohlížeči. Zkuste to znovu s menšími dokumenty nebo zjednodušte regulární výrazy.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Automatické kopírování není možné. Vyberte výstup a zkopírujte jej ručně.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Nelze zkopírovat odkaz. Zkopírujte adresu stránky z vašeho prohlížeče.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Dokument je prázdný.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite autorisée.</source>
+        <target state="translated">Dokument překračuje povolený limit.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_invalid_json">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Dokument není platný JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Objekt obsahuje dvakrát stejné jméno vlastnosti.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Číslo by bylo zaokrouhleno nebo by se stalo nekonečným v JavaScriptu. Převěďte ho na řetězec, abyste zachovali jeho přesnou hodnotu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Řetězec obsahuje nepárovaný znak UTF-16.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Dokument překračuje 64 úrovní vnoření.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Dokument překračuje 100 000 hodnot JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_root">
+      <segment>
+        <source>Un schéma JSON doit être un objet ou une valeur booléenne.</source>
+        <target state="translated">JSON schéma musí být objekt nebo boolean.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_draft">
+      <segment>
+        <source>La déclaration $schema ne correspond pas à un brouillon pris en charge. Choisissez explicitement un brouillon pour la remplacer.</source>
+        <target state="translated">Deklarace $schema neodpovídá podporovanému návrhu. Výslovně vyberte návrh, aby jej nahradil.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_reference">
+      <segment>
+        <source>Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.</source>
+        <target state="translated">Vzdálené odkazy jsou zakázány. Seskupte definice do schématu a použijte místní odkaz začínající na #.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_pattern">
+      <segment>
+        <source>Le schéma contient trop d’expressions régulières ou une expression trop longue.</source>
+        <target state="translated">Schéma obsahuje příliš mnoho regulárních výrazů nebo příliš dlouhý výraz.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_schema">
+      <segment>
+        <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
+        <target state="translated">Schéma není platné pro vybraný návrh.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <segment>
+        <source>Le moteur a interrompu la validation de ce schéma.</source>
+        <target state="translated">Motor přerušil ověřování tohoto schématu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_output">
+      <segment>
+        <source>Le rapport dépasserait la limite de sortie.</source>
+        <target state="translated">Zpráva by překročila limit výstupu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_schema">
+      <segment>
+        <source> Schéma.</source>
+        <target state="translated">Schéma.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_instance">
+      <segment>
+        <source> Données.</source>
+        <target state="translated">Data.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Cesta <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Pozice <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_detail">
+      <segment>
+        <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
+        <target state="translated">Detail: <ph id="0" equiv="detail" disp="issue.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_required">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí obsahovat povinnou vlastnost „<ph id="1" equiv="property" disp="property"/>“.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_additional">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> obsahuje nepovolenou vlastnost „<ph id="1" equiv="property" disp="property"/>“.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_type">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být typu <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_enum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí odpovídat jedné z povolených hodnot <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_const">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí odpovídat očekávané konstantní hodnotě.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_format">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> neodpovídá formátu <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_pattern">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> neodpovídá regulárnímu výrazu schématu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí obsahovat alespoň <ph id="1" equiv="limit" disp="limit"/> znaků.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí obsahovat maximálně <ph id="1" equiv="limit" disp="limit"/> znaků.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_minimum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být větší nebo rovno <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_maximum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být menší nebo rovno <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_min">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být přísně větší než <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_max">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být přísně menší než <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí obsahovat alespoň <ph id="1" equiv="limit" disp="limit"/> položek.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> může obsahovat maximálně <ph id="1" equiv="limit" disp="limit"/> prvků.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unique">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nesmí obsahovat duplicity.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí obsahovat alespoň <ph id="1" equiv="limit" disp="limit"/> vlastností.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> může obsahovat maximálně <ph id="1" equiv="limit" disp="limit"/> vlastností.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_multiple">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí být násobkem <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_any_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí splňovat alespoň jednu variantu anyOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_one_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí splňovat přesně jednu variantu oneOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_all_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> musí splňovat všechny varianty allOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_not">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> splňuje variantu zakázanou pomocí not.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_false">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> je zakázáno schématem.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unevaluated">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> obsahuje vlastnost, která nebyla schématem vyhodnocena.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_generic">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nesplňuje pravidlo „<ph id="1" equiv="keyword" disp="error.keyword"/>“ schématu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_root_path">
+      <segment>
+        <source>Racine</source>
+        <target state="translated">Kořen</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Vybraný soubor je prázdný.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Soubor překračuje limit <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
+        <target state="translated">Vyberte soubor JSON, SCHEMA nebo TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Soubor není správně kódován v UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Nelze tento soubor přečíst lokálně.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.</source>
+        <target state="translated">Složitost nebo doba validace překračuje bezpečnostní limit. Zmenšete dokument, zjednodušte schéma nebo validujte fragment po fragmentu.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_loading_file">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Načítání souboru…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Probíhá místní načítání souboru.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

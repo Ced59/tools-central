@@ -88010,6 +88010,1092 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Aceste excluzii sunt incompatibile cu un patch fără pierderi. Ignorați întregul container sau eliminați căile în conflict.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_validate_title">
+      <segment>
+        <source>Validation de contrats</source>
+        <target state="translated">Validarea contractelor</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_validate_desc">
+      <segment>
+        <source>Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.</source>
+        <target state="translated">Verificați dacă datele JSON respectă un contract explicit, fără conversie silențioasă sau transfer de rețea.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_title">
+      <segment>
+        <source>Validateur JSON Schema</source>
+        <target state="translated">Validator JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_desc">
+      <segment>
+        <source>Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.</source>
+        <target state="translated">Validați local un JSON cu Draft 7, 2019-09 sau 2020-12, localizați erorile și generați o propunere corectivă prudentă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_title">
+      <segment>
+        <source>Valider un JSON avec un contrat explicite et des erreurs exploitables</source>
+        <target state="translated">Validați un JSON cu un contract explicit și erori exploatabile</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_lead">
+      <segment>
+        <source>Ce validateur exécute JSON Schema dans un Worker local, sans convertir les types ni supprimer les propriétés qui échouent. Il prend en charge Draft 7, 2019-09 et 2020-12, localise chaque règle en échec avec un JSON Pointer et peut proposer un exemple corrigé lorsque la modification reste prudente.</source>
+        <target state="translated">Acest validator execută JSON Schema într-un Worker local, fără a converti tipurile sau a elimina proprietățile care eșuează. Suportă Draft 7, 2019-09 și 2020-12, localizează fiecare regulă eșuată cu un JSON Pointer și poate propune un exemplu corectat atunci când modificarea rămâne prudentă.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_use_cases">
+      <segment>
+        <source>Quand valider des données avec JSON Schema ?</source>
+        <target state="translated">Când să validați datele cu JSON Schema?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_title">
+      <segment>
+        <source>Tester un payload d’API</source>
+        <target state="translated">Testați un payload API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_text">
+      <segment>
+        <source>Vérifiez avant intégration que les champs obligatoires, types, formats et valeurs autorisées correspondent au contrat. Un chemin comme /utilisateur/email désigne directement la donnée à corriger, sans dépendre de son numéro de ligne.</source>
+        <target state="translated">Verificați înainte de integrare că câmpurile obligatorii, tipurile, formatele și valorile permise corespund contractului. Un drum precum /utilizator/email indică direct datele de corectat, fără a depinde de numărul său de linie.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_title">
+      <segment>
+        <source>Contrôler un fichier de configuration</source>
+        <target state="translated">Controlați un fișier de configurare</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_text">
+      <segment>
+        <source>Repérez les options inconnues avec additionalProperties, les tableaux incomplets et les contraintes numériques avant un déploiement. Le moteur ne remplace aucune valeur dans l’entrée pendant le diagnostic.</source>
+        <target state="translated">Identificați opțiunile necunoscute cu additionalProperties, liste incomplete și constrângeri numerice înainte de un deployment. Motorul nu înlocuiește nicio valoare în intrare în timpul diagnosticării.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_title">
+      <segment>
+        <source>Comparer un producteur à son contrat</source>
+        <target state="translated">Comparați un producător cu contractul său</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_text">
+      <segment>
+        <source>Collez un exemple produit par un formulaire, un export ou un service puis exportez le rapport technique. Le rapport contient les chemins et règles, pas une copie automatique du JSON d’origine.</source>
+        <target state="translated">Lipiciți un exemplu generat de un formular, un export sau un serviciu și apoi exportați raportul tehnic. Raportul conține drumurile și regulile, nu o copie automată a JSON-ului original.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts">
+      <segment>
+        <source>Choisir le bon brouillon</source>
+        <target state="translated">Alegeți brouionul corect</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_1">
+      <segment>
+        <source>En détection automatique, la propriété $schema sélectionne Draft 7, 2019-09 ou 2020-12. Lorsqu’elle est absente, Draft 7 est utilisé pour rester compatible avec les nombreux schémas historiques qui reposent sur definitions et les anciens comportements de tuples.</source>
+        <target state="translated">În detectarea automată, proprietatea $schema selectează Draft 7, 2019-09 sau 2020-12. Când este absentă, se folosește Draft 7 pentru a rămâne compatibil cu numeroasele scheme istorice care se bazează pe definitions și comportamentele anterioare ale tuplelor.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_2">
+      <segment>
+        <source>Un choix explicite remplace seulement la déclaration pendant la compilation locale ; le texte collé n’est pas réécrit. Cette option aide à tester un schéma sans URI $schema, mais ne convertit pas automatiquement les mots-clés d’un brouillon vers un autre.</source>
+        <target state="translated">O alegere explicită înlocuiește doar declarația în timpul compilării locale; textul lipit nu este rescris. Această opțiune ajută la testarea unei scheme fără URI $schema, dar nu convertește automat cuvintele cheie dintr-un brouion în altul.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_3">
+      <segment>
+        <source>Les références internes comme #/$defs/adresse ou #/definitions/adresse sont résolues. Les références HTTP, HTTPS ou relatives vers d’autres fichiers sont refusées afin que la validation reste prévisible, hors ligne et sans fuite de l’URL référencée.</source>
+        <target state="translated">Referințele interne precum #/$defs/adresa sau #/definitions/adresa sunt rezolvate. Referințele HTTP, HTTPS sau relative către alte fișiere sunt refuzate pentru ca validarea să rămână previzibilă, offline și fără scurgeri ale URL-ului referit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diagnostics">
+      <segment>
+        <source>Lire le diagnostic</source>
+        <target state="translated">Citiți diagnosticul</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_title">
+      <segment>
+        <source>Chemin des données</source>
+        <target state="translated">Calea datelor</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_text">
+      <segment>
+        <source>Le JSON Pointer d’instance indique la valeur concernée. Une erreur required reste attachée à l’objet parent et nomme séparément la propriété manquante ; une erreur à la racine affiche explicitement « Racine ».</source>
+        <target state="translated">JSON Pointer-ul de instanță indică valoarea în cauză. O eroare required rămâne atașată de obiectul părinte și numește separat proprietatea lipsă; o eroare la rădăcină afișează explicit „Rădăcină”.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_title">
+      <segment>
+        <source>Chemin de la règle</source>
+        <target state="translated">Calea regulii</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_text">
+      <segment>
+        <source>Le chemin de schéma montre la contrainte appliquée, par exemple #/properties/age/minimum. Le mot-clé technique est conservé dans le rapport pour faciliter une recherche dans la spécification.</source>
+        <target state="translated">Calea schemei arată constrângerea aplicată, de exemplu #/properties/age/minimum. Cuvântul cheie tehnic este păstrat în raport pentru a facilita căutarea în specificație.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_title">
+      <segment>
+        <source>Formats standards</source>
+        <target state="translated">Formate standard</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_text">
+      <segment>
+        <source>La vérification optionnelle couvre notamment email, date, date-time, URI, hostname, UUID, IPv4 et IPv6. Un format vérifie une syntaxe ; il ne prouve pas qu’une adresse existe, qu’un domaine répond ou qu’une ressource est sûre.</source>
+        <target state="translated">Verificarea opțională acoperă în special email, dată, dată-timp, URI, hostname, UUID, IPv4 și IPv6. Un format verifică o sintaxă; nu dovedește că o adresă există, că un domeniu răspunde sau că o resursă este sigură.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction">
+      <segment>
+        <source>Ce que corrige la proposition automatique</source>
+        <target state="translated">Ce corectează propunerea automată</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_1">
+      <segment>
+        <source>La proposition peut ajouter une propriété required lorsqu’un default, un example, une constante, une valeur enum ou un type simple fournit une valeur déterministe. Elle peut aussi retirer une propriété explicitement interdite, appliquer une borne numérique, compléter ou tronquer une chaîne ou un tableau et remplacer quelques formats par un exemple syntaxique.</source>
+        <target state="translated">Propunerea poate adăuga o proprietate required atunci când un default, un example, o constantă, o valoare enum sau un tip simplu oferă o valoare deterministă. De asemenea, poate elimina o proprietate explicit interzisă, aplica o limită numerică, completa sau tăia un șir sau un tablou și înlocui câteva formate cu un exemplu sintactic.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_2">
+      <segment>
+        <source>Chaque proposition est revalidée avec le même schéma et le même brouillon. Le badge distingue une proposition devenue valide d’une aide encore incomplète. Les règles conditionnelles, les expressions régulières et les variantes anyOf ou oneOf ne sont pas devinées.</source>
+        <target state="translated">Fiecare propunere este revalidată cu aceeași schemă și același brouion. Badge-ul distinge o propunere devenită validă de o asistență încă incompletă. Regulile condiționale, expresiile regulate și variantele anyOf sau oneOf nu sunt ghicite.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_3">
+      <segment>
+        <source>Une valeur techniquement valide peut rester fausse pour votre métier. Relisez le JSON proposé, remplacez les exemples génériques et ne l’utilisez jamais comme migration automatique de données sans tests propres à votre application.</source>
+        <target state="translated">O valoare tehnic validă poate rămâne falsă pentru afacerea dumneavoastră. Recitiți JSON-ul propus, înlocuiți exemplele generice și nu îl folosiți niciodată ca migrare automată a datelor fără teste specifice aplicației dumneavoastră.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limits">
+      <segment>
+        <source>Sécurité, précision et limites</source>
+        <target state="translated">Securitate, precizie și limite</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_1">
+      <segment>
+        <source>Le schéma est limité à 500 000 caractères, les données à 2 millions de caractères et chaque fichier à 2 Mo. Le parseur accepte au plus 100 000 valeurs et 64 niveaux d’imbrication ; l’interface affiche au maximum 500 erreurs.</source>
+        <target state="translated">Schema este limitată la 500.000 de caractere, datele la 2 milioane de caractere și fiecare fișier la 2 Mo. Parserul acceptă cel mult 100.000 de valori și 64 de niveluri de imbricare; interfața afișează maximum 500 de erori.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_2">
+      <segment>
+        <source>Les clés dupliquées, chaînes UTF-16 mal formées et nombres qui perdraient leur représentation JavaScript sont refusés avant validation. Les expressions régulières sont plafonnées en nombre et en longueur, puis exécutées dans un Worker annulable.</source>
+        <target state="translated">Cheile duplicate, șirurile UTF-16 mal formate și numerele care și-ar pierde reprezentarea JavaScript sunt refuzate înainte de validare. Expresiile regulate sunt plafonate ca număr și lungime, apoi executate într-un Worker anulabil.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_3">
+      <segment>
+        <source>JSON Schema décrit la forme et certaines relations entre valeurs. Il ne vérifie ni une signature, ni des droits d’accès, ni l’existence d’un compte, ni la sécurité du code qui consommera les données.</source>
+        <target state="translated">JSON Schema descrie forma și anumite relații între valori. Nu verifică o semnătură, drepturi de acces, existența unui cont sau securitatea codului care va consuma datele.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Întrebări frecvente</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q1">
+      <segment>
+        <source>Pourquoi « 42 » n’est-il pas accepté comme nombre ?</source>
+        <target state="translated">De ce „42” nu este acceptat ca număr?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a1">
+      <segment>
+        <source>Le validateur désactive la coercition. Une chaîne reste une chaîne, même si son contenu ressemble à un nombre. Cette rigueur évite qu’un test réussi dans l’outil masque une incompatibilité réelle dans un consommateur qui ne convertit pas les types.</source>
+        <target state="translated">Validatorul dezactivează coercitia. Un șir rămâne un șir, chiar dacă conținutul său seamănă cu un număr. Această rigurozitate evită ca un test reușit în instrument să mascheze o incompatibilitate reală într-un consumator care nu convertește tipurile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q2">
+      <segment>
+        <source>Pourquoi une référence distante est-elle refusée ?</source>
+        <target state="translated">De ce o referință la distanță este refuzată?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a2">
+      <segment>
+        <source>Charger une référence distante rendrait le résultat dépendant du réseau et révélerait l’URL demandée au serveur distant. Regroupez les définitions nécessaires dans $defs ou definitions et utilisez des références locales.</source>
+        <target state="translated">Încărcarea unei referințe la distanță ar face ca rezultatul să depindă de rețea și ar dezvălui URL-ul solicitat serverului la distanță. Grupează definițiile necesare în $defs sau definitions și folosește referințe locale.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q3">
+      <segment>
+        <source>Une validation réussie garantit-elle que le JSON est sûr ?</source>
+        <target state="translated">O validare reușită garantează că JSON-ul este sigur?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a3">
+      <segment>
+        <source>Non. Elle garantit seulement le respect des règles exprimées par le schéma. Le contenu doit encore être traité comme non fiable : contrôles d’autorisation, échappement, limites métier et protections propres au système restent nécessaires.</source>
+        <target state="translated">Nu. Aceasta garantează doar respectarea regulilor exprimate de schemă. Conținutul trebuie să fie tratat în continuare ca nesigur: controalele de autorizare, escaparea, limitele de afaceri și protecțiile specifice sistemului rămân necesare.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip_title">
+      <segment>
+        <source>Versionner le schéma avec les données</source>
+        <target state="translated">Versiunea schema cu datele</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip">
+      <segment>
+        <source>Conservez le brouillon, le schéma et des exemples valides/invalides dans le même dépôt que le producteur. Une validation locale ponctuelle aide au diagnostic ; des tests automatisés empêchent le contrat de dériver au fil des versions.</source>
+        <target state="translated">Păstrați schița, schema și exemplele valide/invalide în același depozit cu producătorul. O validare locală punctuală ajută la diagnosticare; testele automate împiedică contractul să devieze pe parcursul versiunilor.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_eyebrow">
+      <segment>
+        <source>Développement · Données structurées</source>
+        <target state="translated">Dezvoltare · Date structurate</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_h1">
+      <segment>
+        <source>Valider un JSON avec JSON Schema</source>
+        <target state="translated">Validați un JSON cu JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_lead">
+      <segment>
+        <source> Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur. </source>
+        <target state="translated">Identificați cu precizie datele invalide cu Draft 7, 2019-09 sau 2020-12. Schema și JSON-ul rămân în browserul dumneavoastră.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Garanții ale instrumentului</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % local</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Worker anulabil</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_no_mutation">
+      <segment>
+        <source>Aucune coercition</source>
+        <target state="translated">Nicio coercție</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_invalid">
+      <segment>
+        <source> Charger un exemple invalide </source>
+        <target state="translated">Încărcați un exemplu invalid</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_valid">
+      <segment>
+        <source> Exemple valide </source>
+        <target state="translated">Exemplu valid</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Link copiat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Partajați instrumentul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Confidențialitate</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_title">
+      <segment>
+        <source>Vos données ne quittent pas cet appareil.</source>
+        <target state="translated">Datele dumneavoastră nu părăsesc acest dispozitiv.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_text">
+      <segment>
+        <source>Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</source>
+        <target state="translated">Nicio schemă, JSON, nume de fișier sau rezultat nu este trimis la server. Referințele externe sunt dezactivate intenționat.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_eyebrow">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">Intrări</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_title">
+      <segment>
+        <source>Collez le schéma et les données à vérifier</source>
+        <target state="translated">Lipirea schemei și a datelor de verificat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_hint">
+      <segment>
+        <source>Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</source>
+        <target state="translated">Fișierele JSON și TXT sunt citite local în UTF-8 strict.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_title">
+      <segment>
+        <source>Schéma JSON</source>
+        <target state="translated">Schema JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_schema">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importați</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_label">
+      <segment>
+        <source>Schéma JSON à utiliser</source>
+        <target state="translated">Schema JSON de utilizat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_help">
+      <segment>
+        <source>Objet ou booléen JSON Schema</source>
+        <target state="translated">Obiect sau boolean JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">Date JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_instance">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importați</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_label">
+      <segment>
+        <source>Données JSON à valider</source>
+        <target state="translated">Date JSON de validat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON</source>
+        <target state="translated">Obiect, array sau valoare JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_label">
+      <segment>
+        <source>Brouillon JSON Schema</source>
+        <target state="translated">Brouillon JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_auto">
+      <segment>
+        <source>Détection automatique (Draft 7 si absent)</source>
+        <target state="translated">Detectare automată (Draft 7 dacă este absent)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_help">
+      <segment>
+        <source>Un choix explicite remplace la propriété <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> sans modifier le texte saisi.</source>
+        <target state="translated">O alegere explicită înlocuiește proprietatea <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> fără a modifica textul introdus.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_title">
+      <segment>
+        <source>Vérifier les formats standards</source>
+        <target state="translated">Verificați formatele standard</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_help">
+      <segment>
+        <source>E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</source>
+        <target state="translated">E-mail, dată, dată-timp, URI, UUID, IPv4, IPv6 și alte formate Ajv.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Limite de securitate</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> per file · 100,000 values · depth 64 · maximum 5 seconds · exhaustive diagnostic up to 50,000 estimated operations · 500 errors displayed</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validating">
+      <segment>
+        <source>Validation en cours…</source>
+        <target state="translated">Validare în curs…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate">
+      <segment>
+        <source>Valider le JSON</source>
+        <target state="translated">Validați JSON-ul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Anulați</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_processing">
+      <segment>
+        <source>Validation locale en cours.</source>
+        <target state="translated">Validare locală în curs.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_valid">
+      <segment>
+        <source>Le document est valide.</source>
+        <target state="translated">Documentul este valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_invalid">
+      <segment>
+        <source>Le document contient <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erreurs de validation.</source>
+        <target state="translated">Documentul conține <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erori de validare.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_error">
+      <segment>
+        <source>La validation n’a pas pu aboutir.</source>
+        <target state="translated">Validarea nu a putut fi finalizată.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_blocked_title">
+      <segment>
+        <source>Validation impossible</source>
+        <target state="translated">Validare imposibilă</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Rezultatul local</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_title">
+      <segment>
+        <source>Le JSON est valide</source>
+        <target state="translated">JSON-ul este valid</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_text">
+      <segment>
+        <source>Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</source>
+        <target state="translated">Toate regulile schemei selectate sunt respectate, fără conversie silențioasă a valorilor.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> erreur(s) détectée(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> eroare(e) detectată(e)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_text">
+      <segment>
+        <source>Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</source>
+        <target state="translated">Corectați căile indicate și reluați validarea. O propunere automată este furnizată doar pentru corecții prudente.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Statistici</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_schema_nodes">
+      <segment>
+        <source>valeurs dans le schéma</source>
+        <target state="translated">valori în schemă</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_instance_nodes">
+      <segment>
+        <source>valeurs vérifiées</source>
+        <target state="translated">valori verificate</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_patterns">
+      <segment>
+        <source>expressions régulières</source>
+        <target state="translated">expresii regulate</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">erori</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_eyebrow">
+      <segment>
+        <source>Diagnostic</source>
+        <target state="translated">Diagnostic</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_title">
+      <segment>
+        <source>Erreurs par chemin</source>
+        <target state="translated">Erori pe cale</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_truncated">
+      <segment>
+        <source>Aperçu limité aux 500 premières erreurs</source>
+        <target state="translated">Previzualizare limitată la primele 500 de erori</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_rule_label">
+      <segment>
+        <source>Règle</source>
+        <target state="translated">Regulă</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_eyebrow">
+      <segment>
+        <source>Aide à la correction</source>
+        <target state="translated">Asistență pentru corectare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_title">
+      <segment>
+        <source>Proposition corrigée</source>
+        <target state="translated">Propunere corectată</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> corectare(i) prudent(e) aplicată(e). Verificați întotdeauna sensul de afaceri înainte de utilizare.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_valid">
+      <segment>
+        <source>Proposition valide</source>
+        <target state="translated">Propunere validă</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_remaining">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> erreur(s) restante(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> eroare(e) rămasă(e)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient la proposition complète.</source>
+        <target state="translated">Previzualizarea este tăiată; descărcarea conține propunerea completă.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_apply_correction">
+      <segment>
+        <source>Remplacer les données</source>
+        <target state="translated">Înlocuiți datele</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_copied">
+      <segment>
+        <source>Proposition copiée</source>
+        <target state="translated">Propunere copiată</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_correction">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiază</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_correction">
+      <segment>
+        <source>Télécharger le JSON</source>
+        <target state="translated">Descarcă JSON-ul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_summary">
+      <segment>
+        <source>Rapport technique JSON</source>
+        <target state="translated">Raport tehnic JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Previzualizarea este tăiată; descărcarea conține raportul complet.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Raport copiat</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Copiază raportul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Descarcă raportul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Mod de utilizare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_title">
+      <segment>
+        <source>Valider sans masquer les problèmes de données</source>
+        <target state="translated">Validați fără a ascunde problemele de date</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_title">
+      <segment>
+        <source>Fournissez le contrat</source>
+        <target state="translated">Furnizați contractul</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_text">
+      <segment>
+        <source>Collez un schéma complet. Les références locales <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fonctionnent ; aucune ressource distante n’est chargée.</source>
+        <target state="translated">Lipiti o schemă completă. Referințele locale <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> funcționează; nu se încarcă resurse externe.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_title">
+      <segment>
+        <source>Gardez les types exacts</source>
+        <target state="translated">Păstrați tipurile exacte</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_text">
+      <segment>
+        <source>Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</source>
+        <target state="translated">Motorul nu convertește „42” în 42, nu elimină nicio proprietate și nu adaugă nicio eroare în timpul diagnosticării.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_title">
+      <segment>
+        <source>Relisez la proposition</source>
+        <target state="translated">Recitiți propunerea</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_text">
+      <segment>
+        <source>Les corrections utilisent seulement les valeurs <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ou des ajustements bornés.</source>
+        <target state="translated">Corecțiile folosesc doar valorile <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> sau ajustări limitate.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Continuați cu datele dvs.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Compară două JSON-uri</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_text">
+      <segment>
+        <source>Diff structurel et patch RFC 6902</source>
+        <target state="translated">Structură de diffs și patch RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_title">
+      <segment>
+        <source>Convertir CSV et JSON</source>
+        <target state="translated">Convertire CSV și JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_text">
+      <segment>
+        <source>Mapping, types et export local</source>
+        <target state="translated">Mapare, tipuri și export local</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate_error">
+      <segment>
+        <source>La validation a échoué dans le navigateur. Réessayez avec des documents plus petits ou simplifiez les expressions régulières.</source>
+        <target state="translated">Validarea a eșuat în browser. Încercați cu documente mai mici sau simplificați expresiile regulate.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Copiere automată imposibilă. Selectați ieșirea și copiați-o manual.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Imposibil de copiat linkul. Copiați adresa paginii din browser.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Documentul este gol.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite autorisée.</source>
+        <target state="translated">Documentul depășește limita permisă.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_invalid_json">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Documentul nu este un JSON valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Un obiect conține același nume de proprietate de două ori.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Un număr ar fi rotunjit sau ar deveni infinit în JavaScript. Transformați-l într-un șir pentru a-i păstra valoarea exactă.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Un șir conține un caracter UTF-16 neasociat.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Documentul depășește 64 de niveluri de imbricare.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Documentul depășește 100.000 de valori JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_root">
+      <segment>
+        <source>Un schéma JSON doit être un objet ou une valeur booléenne.</source>
+        <target state="translated">Un schemă JSON trebuie să fie un obiect sau o valoare booleană.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_draft">
+      <segment>
+        <source>La déclaration $schema ne correspond pas à un brouillon pris en charge. Choisissez explicitement un brouillon pour la remplacer.</source>
+        <target state="translated">Declarația $schema nu corespunde unui draft acceptat. Alegeți explicit un draft pentru a-l înlocui.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_reference">
+      <segment>
+        <source>Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.</source>
+        <target state="translated">Referințele externe sunt dezactivate. Grupează definițiile în schemă și folosește o referință locală care începe cu #.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_pattern">
+      <segment>
+        <source>Le schéma contient trop d’expressions régulières ou une expression trop longue.</source>
+        <target state="translated">Schema conține prea multe expresii regulate sau o expresie prea lungă.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_schema">
+      <segment>
+        <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
+        <target state="translated">Schema nu este validă pentru draftul selectat.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <segment>
+        <source>Le moteur a interrompu la validation de ce schéma.</source>
+        <target state="translated">Motorul a întrerupt validarea acestei scheme.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_output">
+      <segment>
+        <source>Le rapport dépasserait la limite de sortie.</source>
+        <target state="translated">Raportul ar depăși limita de ieșire.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_schema">
+      <segment>
+        <source> Schéma.</source>
+        <target state="translated">Schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_instance">
+      <segment>
+        <source> Données.</source>
+        <target state="translated">Date.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Cale <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Poziție <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_detail">
+      <segment>
+        <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
+        <target state="translated">Detaliu: <ph id="0" equiv="detail" disp="issue.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_required">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină proprietatea obligatorie „<ph id="1" equiv="property" disp="property"/>”.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_additional">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> conține proprietatea nepermisă „<ph id="1" equiv="property" disp="property"/>”.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_type">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie de tip <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_enum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să corespundă uneia dintre valorile permise <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_const">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să corespundă valorii constante așteptate.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_format">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nu respectă formatul <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_pattern">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nu respectă expresia regulată a schemei.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină cel puțin <ph id="1" equiv="limit" disp="limit"/> caractere.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină cel mult <ph id="1" equiv="limit" disp="limit"/> caractere.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_minimum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie mai mare sau egal cu <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_maximum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie mai mic sau egal cu <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_min">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie strict mai mare decât <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_max">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie strict mai mic decât <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină cel puțin <ph id="1" equiv="limit" disp="limit"/> elemente.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină maximum <ph id="1" equiv="limit" disp="limit"/> elemente.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unique">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nu trebuie să conțină duplicate.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină cel puțin <ph id="1" equiv="limit" disp="limit"/> proprietăți.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să conțină maximum <ph id="1" equiv="limit" disp="limit"/> proprietăți.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_multiple">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să fie un multiplu de <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_any_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să respecte cel puțin o variantă anyOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_one_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să respecte exact o variantă oneOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_all_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> trebuie să respecte toate variantele allOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_not">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> respectă o variantă interzisă prin not.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_false">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> este interzis de schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unevaluated">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> conține o proprietate neevaluată de schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_generic">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> nu respectă regula „<ph id="1" equiv="keyword" disp="error.keyword"/>” a schemei.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_root_path">
+      <segment>
+        <source>Racine</source>
+        <target state="translated">Rădăcină</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Fișierul selectat este gol.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Fișierul depășește limita de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
+        <target state="translated">Selectați un fișier JSON, SCHEMA sau TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Fișierul nu este codificat în UTF-8 valid.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Nu se poate citi acest fișier local.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.</source>
+        <target state="translated">The complexity or duration of validation exceeds the safety limit. Reduce the document, simplify the schema, or validate one fragment at a time.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_loading_file">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Încărcarea fișierului…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Încărcarea locală a fișierului în curs.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

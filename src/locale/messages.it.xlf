@@ -88010,6 +88010,1092 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Queste esclusioni sono incompatibili con una patch senza perdita. Ignora l'intero contenitore o rimuovi i percorsi in conflitto.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_validate_title">
+      <segment>
+        <source>Validation de contrats</source>
+        <target state="translated">Validazione dei contratti</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_validate_desc">
+      <segment>
+        <source>Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.</source>
+        <target state="translated">Verifica che i dati JSON rispettino un contratto esplicito, senza conversione silenziosa o trasferimento di rete.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_title">
+      <segment>
+        <source>Validateur JSON Schema</source>
+        <target state="translated">Validatore JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_desc">
+      <segment>
+        <source>Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.</source>
+        <target state="translated">Valida localmente un JSON con Draft 7, 2019-09 o 2020-12, localizza gli errori e genera una proposta corretta cauta.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_title">
+      <segment>
+        <source>Valider un JSON avec un contrat explicite et des erreurs exploitables</source>
+        <target state="translated">Valida un JSON con un contratto esplicito e errori sfruttabili</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_lead">
+      <segment>
+        <source>Ce validateur exécute JSON Schema dans un Worker local, sans convertir les types ni supprimer les propriétés qui échouent. Il prend en charge Draft 7, 2019-09 et 2020-12, localise chaque règle en échec avec un JSON Pointer et peut proposer un exemple corrigé lorsque la modification reste prudente.</source>
+        <target state="translated">Questo validatore esegue JSON Schema in un Worker locale, senza convertire i tipi o rimuovere le proprietà che falliscono. Supporta Draft 7, 2019-09 e 2020-12, localizza ogni regola fallita con un JSON Pointer e può proporre un esempio corretto quando la modifica rimane cauta.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_use_cases">
+      <segment>
+        <source>Quand valider des données avec JSON Schema ?</source>
+        <target state="translated">Quando validare i dati con JSON Schema?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_title">
+      <segment>
+        <source>Tester un payload d’API</source>
+        <target state="translated">Testare un payload API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_text">
+      <segment>
+        <source>Vérifiez avant intégration que les champs obligatoires, types, formats et valeurs autorisées correspondent au contrat. Un chemin comme /utilisateur/email désigne directement la donnée à corriger, sans dépendre de son numéro de ligne.</source>
+        <target state="translated">Controlla prima dell'integrazione che i campi obbligatori, i tipi, i formati e i valori consentiti corrispondano al contratto. Un percorso come /utente/email indica direttamente il dato da correggere, senza dipendere dal suo numero di riga.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_title">
+      <segment>
+        <source>Contrôler un fichier de configuration</source>
+        <target state="translated">Controllare un file di configurazione</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_text">
+      <segment>
+        <source>Repérez les options inconnues avec additionalProperties, les tableaux incomplets et les contraintes numériques avant un déploiement. Le moteur ne remplace aucune valeur dans l’entrée pendant le diagnostic.</source>
+        <target state="translated">Identifica le opzioni sconosciute con additionalProperties, gli array incompleti e i vincoli numerici prima di un deployment. Il motore non sostituisce alcun valore nell'input durante il diagnostic.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_title">
+      <segment>
+        <source>Comparer un producteur à son contrat</source>
+        <target state="translated">Confrontare un produttore con il suo contratto</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_text">
+      <segment>
+        <source>Collez un exemple produit par un formulaire, un export ou un service puis exportez le rapport technique. Le rapport contient les chemins et règles, pas une copie automatique du JSON d’origine.</source>
+        <target state="translated">Incolla un esempio prodotto da un modulo, un export o un servizio e poi esporta il rapporto tecnico. Il rapporto contiene i percorsi e le regole, non una copia automatica del JSON originale.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts">
+      <segment>
+        <source>Choisir le bon brouillon</source>
+        <target state="translated">Scegliere la bozza giusta</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_1">
+      <segment>
+        <source>En détection automatique, la propriété $schema sélectionne Draft 7, 2019-09 ou 2020-12. Lorsqu’elle est absente, Draft 7 est utilisé pour rester compatible avec les nombreux schémas historiques qui reposent sur definitions et les anciens comportements de tuples.</source>
+        <target state="translated">Nella rilevazione automatica, la proprietà $schema seleziona Draft 7, 2019-09 o 2020-12. Quando è assente, viene utilizzato Draft 7 per rimanere compatibile con i numerosi schemi storici che si basano su definitions e i vecchi comportamenti dei tuple.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_2">
+      <segment>
+        <source>Un choix explicite remplace seulement la déclaration pendant la compilation locale ; le texte collé n’est pas réécrit. Cette option aide à tester un schéma sans URI $schema, mais ne convertit pas automatiquement les mots-clés d’un brouillon vers un autre.</source>
+        <target state="translated">Una scelta esplicita sostituisce solo la dichiarazione durante la compilazione locale; il testo incollato non viene riscritto. Questa opzione aiuta a testare uno schema senza URI $schema, ma non converte automaticamente le parole chiave da una bozza all'altra.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_3">
+      <segment>
+        <source>Les références internes comme #/$defs/adresse ou #/definitions/adresse sont résolues. Les références HTTP, HTTPS ou relatives vers d’autres fichiers sont refusées afin que la validation reste prévisible, hors ligne et sans fuite de l’URL référencée.</source>
+        <target state="translated">Le referenze interne come #/$defs/indirizzo o #/definitions/indirizzo vengono risolte. Le referenze HTTP, HTTPS o relative ad altri file sono rifiutate affinché la validazione rimanga prevedibile, offline e senza fuga dell'URL referenziato.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diagnostics">
+      <segment>
+        <source>Lire le diagnostic</source>
+        <target state="translated">Leggere il diagnostic</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_title">
+      <segment>
+        <source>Chemin des données</source>
+        <target state="translated">Percorso dei dati</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_text">
+      <segment>
+        <source>Le JSON Pointer d’instance indique la valeur concernée. Une erreur required reste attachée à l’objet parent et nomme séparément la propriété manquante ; une erreur à la racine affiche explicitement « Racine ».</source>
+        <target state="translated">Il JSON Pointer di istanza indica il valore interessato. Un errore required rimane attaccato all'oggetto padre e nomina separatamente la proprietà mancante; un errore alla radice visualizza esplicitamente "Radice".</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_title">
+      <segment>
+        <source>Chemin de la règle</source>
+        <target state="translated">Percorso della regola</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_text">
+      <segment>
+        <source>Le chemin de schéma montre la contrainte appliquée, par exemple #/properties/age/minimum. Le mot-clé technique est conservé dans le rapport pour faciliter une recherche dans la spécification.</source>
+        <target state="translated">Il percorso dello schema mostra il vincolo applicato, ad esempio #/properties/age/minimum. La parola chiave tecnica è conservata nel rapporto per facilitare una ricerca nella specifica.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_title">
+      <segment>
+        <source>Formats standards</source>
+        <target state="translated">Formati standard</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_text">
+      <segment>
+        <source>La vérification optionnelle couvre notamment email, date, date-time, URI, hostname, UUID, IPv4 et IPv6. Un format vérifie une syntaxe ; il ne prouve pas qu’une adresse existe, qu’un domaine répond ou qu’une ressource est sûre.</source>
+        <target state="translated">La verifica opzionale copre in particolare email, data, data-ora, URI, hostname, UUID, IPv4 e IPv6. Un formato verifica una sintassi; non prova che un indirizzo esista, che un dominio risponda o che una risorsa sia sicura.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction">
+      <segment>
+        <source>Ce que corrige la proposition automatique</source>
+        <target state="translated">Cosa corregge la proposta automatica</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_1">
+      <segment>
+        <source>La proposition peut ajouter une propriété required lorsqu’un default, un example, une constante, une valeur enum ou un type simple fournit une valeur déterministe. Elle peut aussi retirer une propriété explicitement interdite, appliquer une borne numérique, compléter ou tronquer une chaîne ou un tableau et remplacer quelques formats par un exemple syntaxique.</source>
+        <target state="translated">La proposta può aggiungere una proprietà required quando un default, un example, una costante, un valore enum o un tipo semplice forniscono un valore deterministico. Può anche rimuovere una proprietà esplicitamente vietata, applicare un limite numerico, completare o troncare una stringa o un array e sostituire alcuni formati con un esempio sintattico.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_2">
+      <segment>
+        <source>Chaque proposition est revalidée avec le même schéma et le même brouillon. Le badge distingue une proposition devenue valide d’une aide encore incomplète. Les règles conditionnelles, les expressions régulières et les variantes anyOf ou oneOf ne sont pas devinées.</source>
+        <target state="translated">Ogni proposta viene rivalidata con lo stesso schema e la stessa bozza. Il badge distingue una proposta diventata valida da un aiuto ancora incompleto. Le regole condizionali, le espressioni regolari e le varianti anyOf o oneOf non vengono indovinate.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_3">
+      <segment>
+        <source>Une valeur techniquement valide peut rester fausse pour votre métier. Relisez le JSON proposé, remplacez les exemples génériques et ne l’utilisez jamais comme migration automatique de données sans tests propres à votre application.</source>
+        <target state="translated">Un valore tecnicamente valido può rimanere errato per il tuo business. Rileggi il JSON proposto, sostituisci gli esempi generici e non utilizzarlo mai come migrazione automatica dei dati senza test specifici per la tua applicazione.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limits">
+      <segment>
+        <source>Sécurité, précision et limites</source>
+        <target state="translated">Sicurezza, precisione e limiti</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_1">
+      <segment>
+        <source>Le schéma est limité à 500 000 caractères, les données à 2 millions de caractères et chaque fichier à 2 Mo. Le parseur accepte au plus 100 000 valeurs et 64 niveaux d’imbrication ; l’interface affiche au maximum 500 erreurs.</source>
+        <target state="translated">Lo schema è limitato a 500.000 caratteri, i dati a 2 milioni di caratteri e ogni file a 2 MB. Il parser accetta al massimo 100.000 valori e 64 livelli di nidificazione; l'interfaccia visualizza al massimo 500 errori.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_2">
+      <segment>
+        <source>Les clés dupliquées, chaînes UTF-16 mal formées et nombres qui perdraient leur représentation JavaScript sont refusés avant validation. Les expressions régulières sont plafonnées en nombre et en longueur, puis exécutées dans un Worker annulable.</source>
+        <target state="translated">Le chiavi duplicate, le stringhe UTF-16 malformate e i numeri che perderebbero la loro rappresentazione JavaScript vengono rifiutati prima della validazione. Le espressioni regolari sono limitate in numero e lunghezza, quindi eseguite in un Worker annullabile.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_3">
+      <segment>
+        <source>JSON Schema décrit la forme et certaines relations entre valeurs. Il ne vérifie ni une signature, ni des droits d’accès, ni l’existence d’un compte, ni la sécurité du code qui consommera les données.</source>
+        <target state="translated">JSON Schema descrive la forma e alcune relazioni tra valori. Non verifica né una firma, né diritti di accesso, né l'esistenza di un account, né la sicurezza del codice che consumerà i dati.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Domande frequenti</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q1">
+      <segment>
+        <source>Pourquoi « 42 » n’est-il pas accepté comme nombre ?</source>
+        <target state="translated">Perché "42" non è accettato come numero?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a1">
+      <segment>
+        <source>Le validateur désactive la coercition. Une chaîne reste une chaîne, même si son contenu ressemble à un nombre. Cette rigueur évite qu’un test réussi dans l’outil masque une incompatibilité réelle dans un consommateur qui ne convertit pas les types.</source>
+        <target state="translated">Il validatore disabilita la coercizione. Una stringa rimane una stringa, anche se il suo contenuto assomiglia a un numero. Questa rigidità evita che un test riuscito nello strumento mascheri un'incompatibilità reale in un consumatore che non converte i tipi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q2">
+      <segment>
+        <source>Pourquoi une référence distante est-elle refusée ?</source>
+        <target state="translated">Perché una referenza remota è rifiutata?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a2">
+      <segment>
+        <source>Charger une référence distante rendrait le résultat dépendant du réseau et révélerait l’URL demandée au serveur distant. Regroupez les définitions nécessaires dans $defs ou definitions et utilisez des références locales.</source>
+        <target state="translated">Caricare una referenza remota renderebbe il risultato dipendente dalla rete e rivelerebbe l'URL richiesto al server remoto. Raggruppa le definizioni necessarie in $defs o definitions e utilizza referenze locali.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q3">
+      <segment>
+        <source>Une validation réussie garantit-elle que le JSON est sûr ?</source>
+        <target state="translated">Una validazione riuscita garantisce che il JSON sia sicuro?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a3">
+      <segment>
+        <source>Non. Elle garantit seulement le respect des règles exprimées par le schéma. Le contenu doit encore être traité comme non fiable : contrôles d’autorisation, échappement, limites métier et protections propres au système restent nécessaires.</source>
+        <target state="translated">No. Garantisce solo il rispetto delle regole espresse dallo schema. Il contenuto deve ancora essere trattato come non affidabile: controlli di autorizzazione, escaping, limiti di business e protezioni specifiche del sistema rimangono necessari.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip_title">
+      <segment>
+        <source>Versionner le schéma avec les données</source>
+        <target state="translated">Versionare lo schema con i dati</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip">
+      <segment>
+        <source>Conservez le brouillon, le schéma et des exemples valides/invalides dans le même dépôt que le producteur. Une validation locale ponctuelle aide au diagnostic ; des tests automatisés empêchent le contrat de dériver au fil des versions.</source>
+        <target state="translated">Conserva la bozza, lo schema e esempi validi/invalidi nello stesso deposito del produttore. Una validazione locale occasionale aiuta nella diagnosi; i test automatizzati impediscono al contratto di deviare nel tempo.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_eyebrow">
+      <segment>
+        <source>Développement · Données structurées</source>
+        <target state="translated">Sviluppo · Dati strutturati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_h1">
+      <segment>
+        <source>Valider un JSON avec JSON Schema</source>
+        <target state="translated">Valida un JSON con JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_lead">
+      <segment>
+        <source> Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur. </source>
+        <target state="translated">Identifica precisamente i dati non validi con Draft 7, 2019-09 o 2020-12. Lo schema e il JSON rimangono nel tuo browser.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Garanzie dello strumento</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % locale</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Worker annullabile</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_no_mutation">
+      <segment>
+        <source>Aucune coercition</source>
+        <target state="translated">Nessuna coercizione</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_invalid">
+      <segment>
+        <source> Charger un exemple invalide </source>
+        <target state="translated">Carica un esempio non valido</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_valid">
+      <segment>
+        <source> Exemple valide </source>
+        <target state="translated">Esempio valido</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Link copiato</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Condividi lo strumento</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Privacy</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_title">
+      <segment>
+        <source>Vos données ne quittent pas cet appareil.</source>
+        <target state="translated">I tuoi dati non lasciano questo dispositivo.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_text">
+      <segment>
+        <source>Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</source>
+        <target state="translated">Nessuno schema, JSON, nome file o risultato viene inviato al server. I riferimenti remoti sono volutamente disabilitati.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_eyebrow">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">Ingressi</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_title">
+      <segment>
+        <source>Collez le schéma et les données à vérifier</source>
+        <target state="translated">Incolla lo schema e i dati da verificare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_hint">
+      <segment>
+        <source>Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</source>
+        <target state="translated">I file JSON e TXT vengono letti localmente in UTF-8 rigoroso.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_title">
+      <segment>
+        <source>Schéma JSON</source>
+        <target state="translated">Schema JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_schema">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importa</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_label">
+      <segment>
+        <source>Schéma JSON à utiliser</source>
+        <target state="translated">Schema JSON da utilizzare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_help">
+      <segment>
+        <source>Objet ou booléen JSON Schema</source>
+        <target state="translated">Oggetto o booleano JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">Dati JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_instance">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Importa</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_label">
+      <segment>
+        <source>Données JSON à valider</source>
+        <target state="translated">Dati JSON da validare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON</source>
+        <target state="translated">Oggetto, array o valore JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_label">
+      <segment>
+        <source>Brouillon JSON Schema</source>
+        <target state="translated">Bozza JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_auto">
+      <segment>
+        <source>Détection automatique (Draft 7 si absent)</source>
+        <target state="translated">Rilevamento automatico (Draft 7 se assente)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_help">
+      <segment>
+        <source>Un choix explicite remplace la propriété <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> sans modifier le texte saisi.</source>
+        <target state="translated">Una scelta esplicita sostituisce la proprietà <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> senza modificare il testo inserito.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_title">
+      <segment>
+        <source>Vérifier les formats standards</source>
+        <target state="translated">Controlla i formati standard</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_help">
+      <segment>
+        <source>E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</source>
+        <target state="translated">E-mail, data, data-ora, URI, UUID, IPv4, IPv6 e altri formati Ajv.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Limiti di sicurezza</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> per file · 100 000 valori · profondità 64 · massimo 5 secondi · diagnostica completa fino a 50 000 operazioni stimate · 500 errori visualizzati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validating">
+      <segment>
+        <source>Validation en cours…</source>
+        <target state="translated">Validazione in corso…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate">
+      <segment>
+        <source>Valider le JSON</source>
+        <target state="translated">Valida il JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Annulla</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_processing">
+      <segment>
+        <source>Validation locale en cours.</source>
+        <target state="translated">Validazione locale in corso.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_valid">
+      <segment>
+        <source>Le document est valide.</source>
+        <target state="translated">Il documento è valido.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_invalid">
+      <segment>
+        <source>Le document contient <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erreurs de validation.</source>
+        <target state="translated">Il documento contiene <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> errori di validazione.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_error">
+      <segment>
+        <source>La validation n’a pas pu aboutir.</source>
+        <target state="translated">La validazione non è riuscita.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_blocked_title">
+      <segment>
+        <source>Validation impossible</source>
+        <target state="translated">Validazione impossibile</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Risultato locale</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_title">
+      <segment>
+        <source>Le JSON est valide</source>
+        <target state="translated">Il JSON è valido</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_text">
+      <segment>
+        <source>Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</source>
+        <target state="translated">Tutte le regole dello schema selezionato sono rispettate, senza conversione silenziosa dei valori.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> erreur(s) détectée(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> errore(i) rilevato(i)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_text">
+      <segment>
+        <source>Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</source>
+        <target state="translated">Correggi i percorsi indicati e poi ripeti la validazione. Una proposta automatica è fornita solo per le correzioni prudenti.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Statistiche</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_schema_nodes">
+      <segment>
+        <source>valeurs dans le schéma</source>
+        <target state="translated">valori nello schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_instance_nodes">
+      <segment>
+        <source>valeurs vérifiées</source>
+        <target state="translated">valori verificati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_patterns">
+      <segment>
+        <source>expressions régulières</source>
+        <target state="translated">espressioni regolari</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">errori</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_eyebrow">
+      <segment>
+        <source>Diagnostic</source>
+        <target state="translated">Diagnostica</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_title">
+      <segment>
+        <source>Erreurs par chemin</source>
+        <target state="translated">Errori per percorso</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_truncated">
+      <segment>
+        <source>Aperçu limité aux 500 premières erreurs</source>
+        <target state="translated">Anteprima limitata ai primi 500 errori</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_rule_label">
+      <segment>
+        <source>Règle</source>
+        <target state="translated">Regola</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_eyebrow">
+      <segment>
+        <source>Aide à la correction</source>
+        <target state="translated">Aiuto alla correzione</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_title">
+      <segment>
+        <source>Proposition corrigée</source>
+        <target state="translated">Proposta corretta</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correzione(i) prudente(i) applicata(e). Controlla sempre il significato aziendale prima dell'uso.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_valid">
+      <segment>
+        <source>Proposition valide</source>
+        <target state="translated">Proposta valida</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_remaining">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> erreur(s) restante(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> errore(i) rimanente(i)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient la proposition complète.</source>
+        <target state="translated">L'anteprima è troncata; il download contiene la proposta completa.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_apply_correction">
+      <segment>
+        <source>Remplacer les données</source>
+        <target state="translated">Sostituire i dati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_copied">
+      <segment>
+        <source>Proposition copiée</source>
+        <target state="translated">Proposta copiata</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_correction">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Copiare</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_correction">
+      <segment>
+        <source>Télécharger le JSON</source>
+        <target state="translated">Scarica il JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_summary">
+      <segment>
+        <source>Rapport technique JSON</source>
+        <target state="translated">Rapporto tecnico JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">L'anteprima è troncata; il download contiene il rapporto completo.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Rapporto copiato</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Copia il rapporto</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Scarica il rapporto</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Guida all'uso</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_title">
+      <segment>
+        <source>Valider sans masquer les problèmes de données</source>
+        <target state="translated">Validare senza nascondere i problemi di dati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_title">
+      <segment>
+        <source>Fournissez le contrat</source>
+        <target state="translated">Fornire il contratto</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_text">
+      <segment>
+        <source>Collez un schéma complet. Les références locales <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fonctionnent ; aucune ressource distante n’est chargée.</source>
+        <target state="translated">Incolla uno schema completo. I riferimenti locali <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> funzionano; nessuna risorsa remota viene caricata.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_title">
+      <segment>
+        <source>Gardez les types exacts</source>
+        <target state="translated">Mantenere i tipi esatti</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_text">
+      <segment>
+        <source>Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</source>
+        <target state="translated">Il motore non converte « 42 » in 42, non rimuove alcuna proprietà e non aggiunge difetti durante la diagnostica.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_title">
+      <segment>
+        <source>Relisez la proposition</source>
+        <target state="translated">Rileggere la proposta</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_text">
+      <segment>
+        <source>Les corrections utilisent seulement les valeurs <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ou des ajustements bornés.</source>
+        <target state="translated">Le correzioni utilizzano solo i valori <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> o aggiustamenti limitati.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Continuare con i tuoi dati</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Confrontare due JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_text">
+      <segment>
+        <source>Diff structurel et patch RFC 6902</source>
+        <target state="translated">Struttura diff e patch RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_title">
+      <segment>
+        <source>Convertir CSV et JSON</source>
+        <target state="translated">Convertire CSV e JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_text">
+      <segment>
+        <source>Mapping, types et export local</source>
+        <target state="translated">Mapping, tipi ed esportazione locale</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate_error">
+      <segment>
+        <source>La validation a échoué dans le navigateur. Réessayez avec des documents plus petits ou simplifiez les expressions régulières.</source>
+        <target state="translated">La convalida è fallita nel browser. Riprova con documenti più piccoli o semplifica le espressioni regolari.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Impossibile copiare automaticamente. Seleziona l'output e copialo manualmente.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Impossibile copiare il link. Copia l'indirizzo della pagina dal tuo browser.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Il documento è vuoto.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite autorisée.</source>
+        <target state="translated">Il documento supera il limite consentito.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_invalid_json">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Il documento non è un JSON valido.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Un oggetto contiene due volte lo stesso nome di proprietà.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Un numero verrebbe arrotondato o reso infinito da JavaScript. Trasformalo in una stringa per preservare il suo valore esatto.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Una stringa contiene un carattere UTF-16 non abbinato.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Il documento supera 64 livelli di annidamento.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Il documento supera 100.000 valori JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_root">
+      <segment>
+        <source>Un schéma JSON doit être un objet ou une valeur booléenne.</source>
+        <target state="translated">Uno schema JSON deve essere un oggetto o un valore booleano.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_draft">
+      <segment>
+        <source>La déclaration $schema ne correspond pas à un brouillon pris en charge. Choisissez explicitement un brouillon pour la remplacer.</source>
+        <target state="translated">La dichiarazione $schema non corrisponde a una bozza supportata. Scegli esplicitamente una bozza per sostituirla.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_reference">
+      <segment>
+        <source>Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.</source>
+        <target state="translated">I riferimenti remoti sono disabilitati. Raggruppa le definizioni nello schema e utilizza un riferimento locale che inizia con #.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_pattern">
+      <segment>
+        <source>Le schéma contient trop d’expressions régulières ou une expression trop longue.</source>
+        <target state="translated">Lo schema contiene troppe espressioni regolari o un'espressione troppo lunga.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_schema">
+      <segment>
+        <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
+        <target state="translated">Lo schema non è valido per la bozza selezionata.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <segment>
+        <source>Le moteur a interrompu la validation de ce schéma.</source>
+        <target state="translated">Il motore ha interrotto la convalida di questo schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_output">
+      <segment>
+        <source>Le rapport dépasserait la limite de sortie.</source>
+        <target state="translated">Il rapporto supererebbe il limite di output.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_schema">
+      <segment>
+        <source> Schéma.</source>
+        <target state="translated">Schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_instance">
+      <segment>
+        <source> Données.</source>
+        <target state="translated">Dati.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Percorso <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Posizione <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_detail">
+      <segment>
+        <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
+        <target state="translated">Dettaglio: <ph id="0" equiv="detail" disp="issue.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_required">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere la proprietà obbligatoria « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_additional">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> contiene la proprietà non autorizzata « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_type">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere del tipo <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_enum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve corrispondere a una delle valori autorizzati <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_const">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve corrispondere al valore costante atteso.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_format">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> non rispetta il formato <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_pattern">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> non rispetta l'espressione regolare dello schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere almeno <ph id="1" equiv="limit" disp="limit"/> caratteri.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere al massimo <ph id="1" equiv="limit" disp="limit"/> caratteri.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_minimum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere maggiore o uguale a <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_maximum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere minore o uguale a <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_min">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere strettamente maggiore di <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_max">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere strettamente minore di <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere almeno <ph id="1" equiv="limit" disp="limit"/> elementi.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> può contenere al massimo <ph id="1" equiv="limit" disp="limit"/> elementi.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unique">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> non deve contenere duplicati.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere almeno <ph id="1" equiv="limit" disp="limit"/> proprietà.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve contenere al massimo <ph id="1" equiv="limit" disp="limit"/> proprietà.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_multiple">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve essere un multiplo di <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_any_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve rispettare almeno una variante anyOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_one_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve rispettare esattamente una variante oneOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_all_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> deve rispettare tutte le varianti allOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_not">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> rispetta una variante vietata da not.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_false">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> è vietato dallo schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unevaluated">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> contiene una proprietà non valutata dallo schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_generic">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> non rispetta la regola « <ph id="1" equiv="keyword" disp="error.keyword"/> » dello schema.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_root_path">
+      <segment>
+        <source>Racine</source>
+        <target state="translated">Radice</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Il file selezionato è vuoto.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Il file supera il limite di <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
+        <target state="translated">Seleziona un file JSON, SCHEMA o TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Il file non è codificato in UTF-8 valido.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Impossibile leggere questo file localmente.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.</source>
+        <target state="translated">La complessità o la durata della validazione supera il limite di sicurezza. Riduci il documento, semplifica lo schema o valida un frammento alla volta.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_loading_file">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Caricamento del file…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Caricamento locale del file in corso.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

@@ -88038,6 +88038,1092 @@ Grace Hopper;grace@example.test;true;100</source>
         <target state="translated">这些排除与无损补丁不兼容。请忽略整个容器或移除冲突路径。</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_validate_title">
+      <segment>
+        <source>Validation de contrats</source>
+        <target state="translated">合同验证</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_validate_desc">
+      <segment>
+        <source>Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.</source>
+        <target state="translated">检查 JSON 数据是否符合明确的合同，没有静默转换或网络传输。</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_title">
+      <segment>
+        <source>Validateur JSON Schema</source>
+        <target state="translated">JSON Schema 验证器</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_desc">
+      <segment>
+        <source>Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.</source>
+        <target state="translated">使用 Draft 7、2019-09 或 2020-12 在本地验证 JSON，定位错误并生成谨慎的修正建议。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_title">
+      <segment>
+        <source>Valider un JSON avec un contrat explicite et des erreurs exploitables</source>
+        <target state="translated">使用明确合同和可利用错误验证 JSON</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_lead">
+      <segment>
+        <source>Ce validateur exécute JSON Schema dans un Worker local, sans convertir les types ni supprimer les propriétés qui échouent. Il prend en charge Draft 7, 2019-09 et 2020-12, localise chaque règle en échec avec un JSON Pointer et peut proposer un exemple corrigé lorsque la modification reste prudente.</source>
+        <target state="translated">该验证器在本地 Worker 中执行 JSON Schema，不会转换类型或删除失败的属性。它支持 Draft 7、2019-09 和 2020-12，使用 JSON Pointer 定位每个失败的规则，并在修改保持谨慎时可以提供修正示例。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_use_cases">
+      <segment>
+        <source>Quand valider des données avec JSON Schema ?</source>
+        <target state="translated">何时使用 JSON Schema 验证数据？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_title">
+      <segment>
+        <source>Tester un payload d’API</source>
+        <target state="translated">测试 API 负载</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_text">
+      <segment>
+        <source>Vérifiez avant intégration que les champs obligatoires, types, formats et valeurs autorisées correspondent au contrat. Un chemin comme /utilisateur/email désigne directement la donnée à corriger, sans dépendre de son numéro de ligne.</source>
+        <target state="translated">在集成之前检查必填字段、类型、格式和允许值是否符合合同。像 /用户/邮箱 这样的路径直接指向需要修正的数据，而不依赖于其行号。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_title">
+      <segment>
+        <source>Contrôler un fichier de configuration</source>
+        <target state="translated">检查配置文件</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_text">
+      <segment>
+        <source>Repérez les options inconnues avec additionalProperties, les tableaux incomplets et les contraintes numériques avant un déploiement. Le moteur ne remplace aucune valeur dans l’entrée pendant le diagnostic.</source>
+        <target state="translated">在部署之前识别未知选项、未完成的数组和数字约束。引擎在诊断期间不会替换输入中的任何值。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_title">
+      <segment>
+        <source>Comparer un producteur à son contrat</source>
+        <target state="translated">将生产者与其合同进行比较</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_text">
+      <segment>
+        <source>Collez un exemple produit par un formulaire, un export ou un service puis exportez le rapport technique. Le rapport contient les chemins et règles, pas une copie automatique du JSON d’origine.</source>
+        <target state="translated">粘贴由表单、导出或服务生成的示例，然后导出技术报告。报告包含路径和规则，而不是原始 JSON 的自动副本。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts">
+      <segment>
+        <source>Choisir le bon brouillon</source>
+        <target state="translated">选择正确的草稿</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_1">
+      <segment>
+        <source>En détection automatique, la propriété $schema sélectionne Draft 7, 2019-09 ou 2020-12. Lorsqu’elle est absente, Draft 7 est utilisé pour rester compatible avec les nombreux schémas historiques qui reposent sur definitions et les anciens comportements de tuples.</source>
+        <target state="translated">在自动检测中，$schema 属性选择 Draft 7、2019-09 或 2020-12。当缺失时，使用 Draft 7 以保持与依赖于 definitions 和旧元组行为的众多历史模式的兼容性。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_2">
+      <segment>
+        <source>Un choix explicite remplace seulement la déclaration pendant la compilation locale ; le texte collé n’est pas réécrit. Cette option aide à tester un schéma sans URI $schema, mais ne convertit pas automatiquement les mots-clés d’un brouillon vers un autre.</source>
+        <target state="translated">显式选择仅在本地编译期间替换声明；粘贴的文本不会被重写。此选项有助于测试没有 URI $schema 的模式，但不会自动将一个草稿的关键字转换为另一个。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_3">
+      <segment>
+        <source>Les références internes comme #/$defs/adresse ou #/definitions/adresse sont résolues. Les références HTTP, HTTPS ou relatives vers d’autres fichiers sont refusées afin que la validation reste prévisible, hors ligne et sans fuite de l’URL référencée.</source>
+        <target state="translated">内部引用如 #/$defs/地址 或 #/definitions/地址 会被解析。对其他文件的 HTTP、HTTPS 或相对引用会被拒绝，以确保验证保持可预测、离线且不泄露引用的 URL。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diagnostics">
+      <segment>
+        <source>Lire le diagnostic</source>
+        <target state="translated">读取诊断</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_title">
+      <segment>
+        <source>Chemin des données</source>
+        <target state="translated">数据路径</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_text">
+      <segment>
+        <source>Le JSON Pointer d’instance indique la valeur concernée. Une erreur required reste attachée à l’objet parent et nomme séparément la propriété manquante ; une erreur à la racine affiche explicitement « Racine ».</source>
+        <target state="translated">实例的 JSON Pointer 指示相关值。required 错误附加在父对象上，并单独命名缺失的属性；根部的错误明确显示“根”。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_title">
+      <segment>
+        <source>Chemin de la règle</source>
+        <target state="translated">规则路径</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_text">
+      <segment>
+        <source>Le chemin de schéma montre la contrainte appliquée, par exemple #/properties/age/minimum. Le mot-clé technique est conservé dans le rapport pour faciliter une recherche dans la spécification.</source>
+        <target state="translated">模式路径显示应用的约束，例如 #/properties/age/minimum。技术关键字在报告中保留，以便于在规范中查找。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_title">
+      <segment>
+        <source>Formats standards</source>
+        <target state="translated">标准格式</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_text">
+      <segment>
+        <source>La vérification optionnelle couvre notamment email, date, date-time, URI, hostname, UUID, IPv4 et IPv6. Un format vérifie une syntaxe ; il ne prouve pas qu’une adresse existe, qu’un domaine répond ou qu’une ressource est sûre.</source>
+        <target state="translated">可选检查涵盖 email、date、date-time、URI、hostname、UUID、IPv4 和 IPv6。格式检查语法；它并不证明地址存在、域名响应或资源安全。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction">
+      <segment>
+        <source>Ce que corrige la proposition automatique</source>
+        <target state="translated">自动建议修正的内容</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_1">
+      <segment>
+        <source>La proposition peut ajouter une propriété required lorsqu’un default, un example, une constante, une valeur enum ou un type simple fournit une valeur déterministe. Elle peut aussi retirer une propriété explicitement interdite, appliquer une borne numérique, compléter ou tronquer une chaîne ou un tableau et remplacer quelques formats par un exemple syntaxique.</source>
+        <target state="translated">当 default、example、constant、enum 值或简单类型提供确定性值时，建议可以添加 required 属性。它还可以删除明确禁止的属性、应用数字边界、补全或截断字符串或数组，并用语法示例替换某些格式。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_2">
+      <segment>
+        <source>Chaque proposition est revalidée avec le même schéma et le même brouillon. Le badge distingue une proposition devenue valide d’une aide encore incomplète. Les règles conditionnelles, les expressions régulières et les variantes anyOf ou oneOf ne sont pas devinées.</source>
+        <target state="translated">每个建议都使用相同的模式和草稿重新验证。徽章区分已变为有效的建议与仍不完整的帮助。条件规则、正则表达式和 anyOf 或 oneOf 变体不会被猜测。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_3">
+      <segment>
+        <source>Une valeur techniquement valide peut rester fausse pour votre métier. Relisez le JSON proposé, remplacez les exemples génériques et ne l’utilisez jamais comme migration automatique de données sans tests propres à votre application.</source>
+        <target state="translated">一个在技术上有效的值可能对您的业务仍然是错误的。仔细阅读建议的 JSON，替换通用示例，并且绝不要将其用作没有您应用的特定测试的自动数据迁移。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limits">
+      <segment>
+        <source>Sécurité, précision et limites</source>
+        <target state="translated">安全性、准确性和限制</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_1">
+      <segment>
+        <source>Le schéma est limité à 500 000 caractères, les données à 2 millions de caractères et chaque fichier à 2 Mo. Le parseur accepte au plus 100 000 valeurs et 64 niveaux d’imbrication ; l’interface affiche au maximum 500 erreurs.</source>
+        <target state="translated">模式限制为 500,000 个字符，数据限制为 2,000,000 个字符，每个文件限制为 2 MB。解析器最多接受 100,000 个值和 64 层嵌套；界面最多显示 500 个错误。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_2">
+      <segment>
+        <source>Les clés dupliquées, chaînes UTF-16 mal formées et nombres qui perdraient leur représentation JavaScript sont refusés avant validation. Les expressions régulières sont plafonnées en nombre et en longueur, puis exécutées dans un Worker annulable.</source>
+        <target state="translated">重复的键、格式不正确的 UTF-16 字符串和可能失去其 JavaScript 表示的数字在验证之前会被拒绝。正则表达式的数量和长度有限制，并在可取消的 Worker 中执行。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_3">
+      <segment>
+        <source>JSON Schema décrit la forme et certaines relations entre valeurs. Il ne vérifie ni une signature, ni des droits d’accès, ni l’existence d’un compte, ni la sécurité du code qui consommera les données.</source>
+        <target state="translated">JSON Schema 描述值之间的形式和某些关系。它不检查签名、访问权限、账户存在性或消费数据的代码的安全性。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">常见问题</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q1">
+      <segment>
+        <source>Pourquoi « 42 » n’est-il pas accepté comme nombre ?</source>
+        <target state="translated">为什么“42”不被接受为数字？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a1">
+      <segment>
+        <source>Le validateur désactive la coercition. Une chaîne reste une chaîne, même si son contenu ressemble à un nombre. Cette rigueur évite qu’un test réussi dans l’outil masque une incompatibilité réelle dans un consommateur qui ne convertit pas les types.</source>
+        <target state="translated">验证器禁用强制转换。字符串仍然是字符串，即使其内容看起来像数字。这种严格性避免了工具中的成功测试掩盖了在不转换类型的消费者中存在的实际不兼容性。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q2">
+      <segment>
+        <source>Pourquoi une référence distante est-elle refusée ?</source>
+        <target state="translated">为什么拒绝远程引用？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a2">
+      <segment>
+        <source>Charger une référence distante rendrait le résultat dépendant du réseau et révélerait l’URL demandée au serveur distant. Regroupez les définitions nécessaires dans $defs ou definitions et utilisez des références locales.</source>
+        <target state="translated">加载远程引用会使结果依赖于网络，并向远程服务器泄露请求的 URL。将所需的定义组合在 $defs 或 definitions 中，并使用本地引用。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q3">
+      <segment>
+        <source>Une validation réussie garantit-elle que le JSON est sûr ?</source>
+        <target state="translated">成功的验证是否保证 JSON 是安全的？</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a3">
+      <segment>
+        <source>Non. Elle garantit seulement le respect des règles exprimées par le schéma. Le contenu doit encore être traité comme non fiable : contrôles d’autorisation, échappement, limites métier et protections propres au système restent nécessaires.</source>
+        <target state="translated">不。它仅保证遵循模式所表达的规则。内容仍需被视为不可靠：授权检查、转义、业务限制和系统特定的保护仍然是必要的。</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip_title">
+      <segment>
+        <source>Versionner le schéma avec les données</source>
+        <target state="translated">使用数据版本化模式</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip">
+      <segment>
+        <source>Conservez le brouillon, le schéma et des exemples valides/invalides dans le même dépôt que le producteur. Une validation locale ponctuelle aide au diagnostic ; des tests automatisés empêchent le contrat de dériver au fil des versions.</source>
+        <target state="translated">将草稿、模式和有效/无效示例保存在与生产者相同的存储库中。局部的即时验证有助于诊断；自动化测试防止合同在版本中漂移。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_eyebrow">
+      <segment>
+        <source>Développement · Données structurées</source>
+        <target state="translated">开发 · 结构化数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_h1">
+      <segment>
+        <source>Valider un JSON avec JSON Schema</source>
+        <target state="translated">使用 JSON Schema 验证 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_lead">
+      <segment>
+        <source> Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur. </source>
+        <target state="translated">准确定位无效数据，使用 Draft 7、2019-09 或 2020-12。模式和 JSON 保留在您的浏览器中。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">工具保证</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100% 本地</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">可取消的工作者</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_no_mutation">
+      <segment>
+        <source>Aucune coercition</source>
+        <target state="translated">无强制性</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_invalid">
+      <segment>
+        <source> Charger un exemple invalide </source>
+        <target state="translated">加载无效示例</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_valid">
+      <segment>
+        <source> Exemple valide </source>
+        <target state="translated">有效示例</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">链接已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">分享工具</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">隐私</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_title">
+      <segment>
+        <source>Vos données ne quittent pas cet appareil.</source>
+        <target state="translated">您的数据不会离开此设备。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_text">
+      <segment>
+        <source>Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</source>
+        <target state="translated">没有模式、JSON、文件名或结果被发送到服务器。远程引用被故意禁用。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_eyebrow">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">输入</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_title">
+      <segment>
+        <source>Collez le schéma et les données à vérifier</source>
+        <target state="translated">粘贴要验证的模式和数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_hint">
+      <segment>
+        <source>Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</source>
+        <target state="translated">JSON 和 TXT 文件以严格的 UTF-8 本地读取。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_title">
+      <segment>
+        <source>Schéma JSON</source>
+        <target state="translated">JSON 模式</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_schema">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">导入</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_label">
+      <segment>
+        <source>Schéma JSON à utiliser</source>
+        <target state="translated">要使用的 JSON 模式</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_help">
+      <segment>
+        <source>Objet ou booléen JSON Schema</source>
+        <target state="translated">JSON Schema 对象或布尔值</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">JSON 数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_instance">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">导入</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_label">
+      <segment>
+        <source>Données JSON à valider</source>
+        <target state="translated">要验证的 JSON 数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON</source>
+        <target state="translated">JSON 对象、数组或值</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_label">
+      <segment>
+        <source>Brouillon JSON Schema</source>
+        <target state="translated">JSON 模式草稿</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_auto">
+      <segment>
+        <source>Détection automatique (Draft 7 si absent)</source>
+        <target state="translated">自动检测（如果缺失则为 Draft 7）</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_help">
+      <segment>
+        <source>Un choix explicite remplace la propriété <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> sans modifier le texte saisi.</source>
+        <target state="translated">显式选择替代 <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> 属性，而不修改输入的文本。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_title">
+      <segment>
+        <source>Vérifier les formats standards</source>
+        <target state="translated">检查标准格式</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_help">
+      <segment>
+        <source>E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</source>
+        <target state="translated">电子邮件、日期、日期时间、URI、UUID、IPv4、IPv6 和其他 Ajv 格式。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">安全限制</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> 每个文件 · 100,000 个值 · 深度 64 · 最多 5 秒 · 详细诊断最多 50,000 次估计操作 · 显示 500 个错误</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validating">
+      <segment>
+        <source>Validation en cours…</source>
+        <target state="translated">正在验证…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate">
+      <segment>
+        <source>Valider le JSON</source>
+        <target state="translated">验证 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">取消</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_processing">
+      <segment>
+        <source>Validation locale en cours.</source>
+        <target state="translated">正在进行本地验证。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_valid">
+      <segment>
+        <source>Le document est valide.</source>
+        <target state="translated">文档是有效的。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_invalid">
+      <segment>
+        <source>Le document contient <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erreurs de validation.</source>
+        <target state="translated">文档包含 <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> 个验证错误。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_error">
+      <segment>
+        <source>La validation n’a pas pu aboutir.</source>
+        <target state="translated">验证未能完成。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_blocked_title">
+      <segment>
+        <source>Validation impossible</source>
+        <target state="translated">验证不可能</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">本地结果</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_title">
+      <segment>
+        <source>Le JSON est valide</source>
+        <target state="translated">JSON 是有效的</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_text">
+      <segment>
+        <source>Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</source>
+        <target state="translated">所有选定模式的规则均已遵守，没有值的静默转换。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> erreur(s) détectée(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> 个错误被检测到</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_text">
+      <segment>
+        <source>Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</source>
+        <target state="translated">请修正所示路径，然后重新启动验证。仅为谨慎的修正提供自动建议。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">统计信息</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_schema_nodes">
+      <segment>
+        <source>valeurs dans le schéma</source>
+        <target state="translated">模式中的值</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_instance_nodes">
+      <segment>
+        <source>valeurs vérifiées</source>
+        <target state="translated">已验证的值</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_patterns">
+      <segment>
+        <source>expressions régulières</source>
+        <target state="translated">正则表达式</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">错误</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_eyebrow">
+      <segment>
+        <source>Diagnostic</source>
+        <target state="translated">诊断</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_title">
+      <segment>
+        <source>Erreurs par chemin</source>
+        <target state="translated">按路径的错误</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_truncated">
+      <segment>
+        <source>Aperçu limité aux 500 premières erreurs</source>
+        <target state="translated">预览限制为前 500 个错误</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_rule_label">
+      <segment>
+        <source>Règle</source>
+        <target state="translated">规则</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_eyebrow">
+      <segment>
+        <source>Aide à la correction</source>
+        <target state="translated">修正帮助</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_title">
+      <segment>
+        <source>Proposition corrigée</source>
+        <target state="translated">修正建议</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> 个谨慎的修正已应用。使用前请始终检查业务含义。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_valid">
+      <segment>
+        <source>Proposition valide</source>
+        <target state="translated">有效建议</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_remaining">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> erreur(s) restante(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> 个剩余错误</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient la proposition complète.</source>
+        <target state="translated">预览被截断；下载包含完整建议。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_apply_correction">
+      <segment>
+        <source>Remplacer les données</source>
+        <target state="translated">替换数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_copied">
+      <segment>
+        <source>Proposition copiée</source>
+        <target state="translated">建议已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_correction">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">复制</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_correction">
+      <segment>
+        <source>Télécharger le JSON</source>
+        <target state="translated">下载 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_summary">
+      <segment>
+        <source>Rapport technique JSON</source>
+        <target state="translated">JSON 技术报告</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">预览被截断；下载包含完整报告。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">报告已复制</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">复制报告</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">下载报告</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">使用说明</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_title">
+      <segment>
+        <source>Valider sans masquer les problèmes de données</source>
+        <target state="translated">验证而不隐藏数据问题</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_title">
+      <segment>
+        <source>Fournissez le contrat</source>
+        <target state="translated">提供合同</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_text">
+      <segment>
+        <source>Collez un schéma complet. Les références locales <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fonctionnent ; aucune ressource distante n’est chargée.</source>
+        <target state="translated">粘贴完整模式。地方引用 <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> 有效；不会加载任何远程资源。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_title">
+      <segment>
+        <source>Gardez les types exacts</source>
+        <target state="translated">保持精确类型</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_text">
+      <segment>
+        <source>Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</source>
+        <target state="translated">引擎不会将 "42" 转换为 42，不会删除任何属性，也不会在诊断期间添加任何缺陷。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_title">
+      <segment>
+        <source>Relisez la proposition</source>
+        <target state="translated">重新审阅建议</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_text">
+      <segment>
+        <source>Les corrections utilisent seulement les valeurs <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ou des ajustements bornés.</source>
+        <target state="translated">修正仅使用 <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>、<pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>、<pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>、<pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> 或有界调整的值。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">继续使用您的数据</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">比较两个 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_text">
+      <segment>
+        <source>Diff structurel et patch RFC 6902</source>
+        <target state="translated">结构差异和补丁 RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_title">
+      <segment>
+        <source>Convertir CSV et JSON</source>
+        <target state="translated">转换 CSV 和 JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_text">
+      <segment>
+        <source>Mapping, types et export local</source>
+        <target state="translated">映射、类型和本地导出</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate_error">
+      <segment>
+        <source>La validation a échoué dans le navigateur. Réessayez avec des documents plus petits ou simplifiez les expressions régulières.</source>
+        <target state="translated">浏览器中的验证失败。请尝试使用更小的文档或简化正则表达式.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">无法自动复制。请手动选择输出并复制.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">无法复制链接。请从浏览器中复制页面地址.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">文档为空.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite autorisée.</source>
+        <target state="translated">文档超出允许的限制.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_invalid_json">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">文档不是有效的 JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">一个对象包含两个相同的属性名称.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">一个数字会被 JavaScript 四舍五入或变为无穷大。请将其转换为字符串以保留其精确值.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">字符串包含一个未配对的 UTF-16 字符.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">文档超过 64 层嵌套.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">文档超过 100,000 个 JSON 值.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_root">
+      <segment>
+        <source>Un schéma JSON doit être un objet ou une valeur booléenne.</source>
+        <target state="translated">JSON 模式必须是一个对象或布尔值.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_draft">
+      <segment>
+        <source>La déclaration $schema ne correspond pas à un brouillon pris en charge. Choisissez explicitement un brouillon pour la remplacer.</source>
+        <target state="translated">$schema 声明与支持的草案不匹配。请明确选择一个草案以替换.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_reference">
+      <segment>
+        <source>Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.</source>
+        <target state="translated">远程引用已禁用。请将定义组合在模式中，并使用以 # 开头的本地引用.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_pattern">
+      <segment>
+        <source>Le schéma contient trop d’expressions régulières ou une expression trop longue.</source>
+        <target state="translated">模式包含过多的正则表达式或一个过长的表达式.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_schema">
+      <segment>
+        <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
+        <target state="translated">模式对于所选草案无效.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <segment>
+        <source>Le moteur a interrompu la validation de ce schéma.</source>
+        <target state="translated">引擎已中止对该模式的验证.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_output">
+      <segment>
+        <source>Le rapport dépasserait la limite de sortie.</source>
+        <target state="translated">报告将超过输出限制.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_schema">
+      <segment>
+        <source> Schéma.</source>
+        <target state="translated">模式.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_instance">
+      <segment>
+        <source> Données.</source>
+        <target state="translated">数据.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">路径 <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">位置 <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_detail">
+      <segment>
+        <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
+        <target state="translated">详细信息： <ph id="0" equiv="detail" disp="issue.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_required">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须包含必需属性 « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_additional">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 包含不允许的属性 « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_type">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须是 <ph id="1" equiv="expected" disp="expected"/> 类型.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_enum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须匹配允许的值之一 <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_const">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须匹配预期的常量值.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_format">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 不符合格式 <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_pattern">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 不符合模式的正则表达式.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须至少包含 <ph id="1" equiv="limit" disp="limit"/> 个字符.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须最多包含 <ph id="1" equiv="limit" disp="limit"/> 个字符.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_minimum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须大于或等于 <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_maximum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须小于或等于 <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_min">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须严格大于 <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_max">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须严格小于 <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须至少包含 <ph id="1" equiv="limit" disp="limit"/> 个元素.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 最多只能包含 <ph id="1" equiv="limit" disp="limit"/> 个元素。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unique">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 不能包含重复项。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 至少需要包含 <ph id="1" equiv="limit" disp="limit"/> 个属性。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 最多只能包含 <ph id="1" equiv="limit" disp="limit"/> 个属性。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_multiple">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须是 <ph id="1" equiv="limit" disp="limit"/> 的倍数。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_any_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须符合至少一个 anyOf 变体。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_one_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须符合恰好一个 oneOf 变体。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_all_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 必须符合所有 allOf 变体。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_not">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 符合 not 所禁止的变体。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_false">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 被模式禁止。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unevaluated">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 包含模式未评估的属性。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_generic">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> 不符合模式的规则 « <ph id="1" equiv="keyword" disp="error.keyword"/> »。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_root_path">
+      <segment>
+        <source>Racine</source>
+        <target state="translated">根</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">所选文件为空。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">文件超过 <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/> 的限制。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
+        <target state="translated">请选择一个 JSON、SCHEMA 或 TXT 文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">文件未使用有效的 UTF-8 编码。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">无法在本地读取此文件。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.</source>
+        <target state="translated">验证的复杂性或持续时间超过安全限制。请减少文档、简化模式或一次验证一个片段。</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_loading_file">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">正在加载文件…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">正在本地加载文件。</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

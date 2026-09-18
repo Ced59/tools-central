@@ -1,0 +1,341 @@
+<main class="schema-tool">
+  <header class="hero">
+    <div class="hero__copy">
+      <p class="eyebrow" i18n="@@json_schema_eyebrow">Développement · Données structurées</p>
+      <h1 i18n="@@json_schema_h1">Valider un JSON avec JSON Schema</h1>
+      <p class="hero__lead" i18n="@@json_schema_lead">
+        Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur.
+      </p>
+      <div class="trust-row" aria-label="Garanties de l’outil" i18n-aria-label="@@json_schema_trust_label">
+        <span><i class="tc-icon tc-icon-shield" aria-hidden="true"></i><ng-container i18n="@@json_schema_trust_local">100 % local</ng-container></span>
+        <span><i class="tc-icon tc-icon-bolt" aria-hidden="true"></i><ng-container i18n="@@json_schema_trust_worker">Worker annulable</ng-container></span>
+        <span><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i><ng-container i18n="@@json_schema_trust_no_mutation">Aucune coercition</ng-container></span>
+      </div>
+    </div>
+    <div class="hero__actions">
+      <button type="button" class="button button--secondary" (click)="loadExample('invalid')" i18n="@@json_schema_load_invalid">
+        Charger un exemple invalide
+      </button>
+      <button type="button" class="button button--ghost" (click)="loadExample('valid')" i18n="@@json_schema_load_valid">
+        Exemple valide
+      </button>
+      <button type="button" class="button button--ghost" (click)="copyShareLink()">
+        <i class="tc-icon tc-icon-link" aria-hidden="true"></i>
+        @if (copiedTarget() === 'share') {
+          <ng-container i18n="@@json_schema_share_copied">Lien copié</ng-container>
+        } @else {
+          <ng-container i18n="@@json_schema_share">Partager l’outil</ng-container>
+        }
+      </button>
+    </div>
+  </header>
+
+  <section class="privacy-note" aria-label="Confidentialité" i18n-aria-label="@@json_schema_privacy_label">
+    <i class="tc-icon tc-icon-lock" aria-hidden="true"></i>
+    <div>
+      <strong i18n="@@json_schema_privacy_title">Vos données ne quittent pas cet appareil.</strong>
+      <p i18n="@@json_schema_privacy_text">Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</p>
+    </div>
+  </section>
+
+  <section class="workspace" aria-labelledby="json-schema-workspace-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow" i18n="@@json_schema_workspace_eyebrow">Entrées</p>
+        <h2 id="json-schema-workspace-title" i18n="@@json_schema_workspace_title">Collez le schéma et les données à vérifier</h2>
+      </div>
+      <p class="section-heading__hint" i18n="@@json_schema_workspace_hint">Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</p>
+    </div>
+
+    <div class="editors">
+      <article class="editor-card">
+        <div class="editor-card__header">
+          <div>
+            <span class="step">1</span>
+            <h3 i18n="@@json_schema_schema_title">Schéma JSON</h3>
+          </div>
+          <label class="file-button" for="json-schema-schema-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <ng-container i18n="@@json_schema_import_schema">Importer</ng-container>
+          </label>
+          <input
+            id="json-schema-schema-file"
+            class="visually-hidden"
+            type="file"
+            accept=".json,.schema,.txt,application/json,text/plain"
+            (change)="loadFile('schema', $event)"
+          >
+        </div>
+        @if (schemaFileName()) {
+          <p class="file-name"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>{{ schemaFileName() }}</p>
+        }
+        <label class="visually-hidden" for="json-schema-schema" i18n="@@json_schema_schema_label">Schéma JSON à utiliser</label>
+        <textarea
+          id="json-schema-schema"
+          class="code-input"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          [value]="schemaSource()"
+          [attr.aria-describedby]="'json-schema-schema-help'"
+          (input)="updateSource('schema', $event)"
+        ></textarea>
+        <div class="editor-card__footer" id="json-schema-schema-help">
+          <span i18n="@@json_schema_schema_help">Objet ou booléen JSON Schema</span>
+          <span>{{ formatNumber(schemaSource().length) }} / {{ formatNumber(maxSchemaCharacters) }}</span>
+        </div>
+      </article>
+
+      <article class="editor-card">
+        <div class="editor-card__header">
+          <div>
+            <span class="step">2</span>
+            <h3 i18n="@@json_schema_instance_title">Données JSON</h3>
+          </div>
+          <label class="file-button" for="json-schema-instance-file">
+            <i class="tc-icon tc-icon-file" aria-hidden="true"></i>
+            <ng-container i18n="@@json_schema_import_instance">Importer</ng-container>
+          </label>
+          <input
+            id="json-schema-instance-file"
+            class="visually-hidden"
+            type="file"
+            accept=".json,.txt,application/json,text/plain"
+            (change)="loadFile('instance', $event)"
+          >
+        </div>
+        @if (instanceFileName()) {
+          <p class="file-name"><i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>{{ instanceFileName() }}</p>
+        }
+        <label class="visually-hidden" for="json-schema-instance" i18n="@@json_schema_instance_label">Données JSON à valider</label>
+        <textarea
+          id="json-schema-instance"
+          class="code-input"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          [value]="instanceSource()"
+          [attr.aria-describedby]="'json-schema-instance-help'"
+          (input)="updateSource('instance', $event)"
+        ></textarea>
+        <div class="editor-card__footer" id="json-schema-instance-help">
+          <span i18n="@@json_schema_instance_help">Objet, tableau ou valeur JSON</span>
+          <span>{{ formatNumber(instanceSource().length) }} / {{ formatNumber(maxInstanceCharacters) }}</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="options-card">
+      <div class="field">
+        <label for="json-schema-draft" i18n="@@json_schema_draft_label">Brouillon JSON Schema</label>
+        <select id="json-schema-draft" [value]="options().draft" (change)="updateDraft($event)">
+          <option value="auto" i18n="@@json_schema_draft_auto">Détection automatique (Draft 7 si absent)</option>
+          <option value="draft-07">Draft 7</option>
+          <option value="draft-2019-09">Draft 2019-09</option>
+          <option value="draft-2020-12">Draft 2020-12</option>
+        </select>
+        <p i18n="@@json_schema_draft_help">Un choix explicite remplace la propriété <code>$schema</code> sans modifier le texte saisi.</p>
+      </div>
+      <label class="check-field">
+        <input type="checkbox" [checked]="options().validateFormats" (change)="updateFormats($event)">
+        <span>
+          <strong i18n="@@json_schema_formats_title">Vérifier les formats standards</strong>
+          <small i18n="@@json_schema_formats_help">E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</small>
+        </span>
+      </label>
+      <div class="options-card__limits">
+        <strong i18n="@@json_schema_limits_title">Limites de sécurité</strong>
+        <span i18n="@@json_schema_limits_text">{{ maxFileSizeLabel }} par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</span>
+      </div>
+    </div>
+
+    <div class="primary-actions">
+      <button
+        type="button"
+        class="button button--primary button--large"
+        [disabled]="!canValidate()"
+        (click)="validate()"
+      >
+        <i class="tc-icon tc-icon-check-circle" aria-hidden="true"></i>
+        @if (isLoading()) {
+          <ng-container i18n="@@json_schema_loading_file">Lecture du fichier…</ng-container>
+        } @else if (isBusy()) {
+          <ng-container i18n="@@json_schema_validating">Validation en cours…</ng-container>
+        } @else {
+          <ng-container i18n="@@json_schema_validate">Valider le JSON</ng-container>
+        }
+      </button>
+      @if (isBusy()) {
+        <button type="button" class="button button--secondary" (click)="cancelValidation()" i18n="@@json_schema_cancel">Annuler</button>
+      }
+    </div>
+  </section>
+
+  <div class="live-region" aria-live="polite" aria-atomic="true">
+    @if (isLoading()) {
+      <span i18n="@@json_schema_live_loading">Lecture locale du fichier en cours.</span>
+    } @else if (isBusy()) {
+      <span i18n="@@json_schema_live_processing">Validation locale en cours.</span>
+    } @else if (result()?.ok && result()?.valid) {
+      <span i18n="@@json_schema_live_valid">Le document est valide.</span>
+    } @else if (result()?.ok && !result()?.valid) {
+      <span i18n="@@json_schema_live_invalid">Le document contient {{ result()?.totalErrors }} erreurs de validation.</span>
+    } @else if (state() === 'error') {
+      <span i18n="@@json_schema_live_error">La validation n’a pas pu aboutir.</span>
+    }
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert--error" role="alert">
+      <i class="tc-icon tc-icon-warning" aria-hidden="true"></i>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (result(); as validationResult) {
+    @if (validationResult.issues.length > 0) {
+      <section class="alert alert--error" role="alert" data-testid="json-schema-issues">
+        <i class="tc-icon tc-icon-warning" aria-hidden="true"></i>
+        <div>
+          <strong i18n="@@json_schema_blocked_title">Validation impossible</strong>
+          <ul>
+            @for (issue of validationResult.issues; track issue.code + issue.side + issue.path) {
+              <li>{{ issueLabel(issue) }}</li>
+            }
+          </ul>
+        </div>
+      </section>
+    } @else {
+      <section class="results" aria-labelledby="json-schema-results-title" data-testid="json-schema-result">
+        <div class="result-hero" [class.result-hero--valid]="validationResult.valid" [class.result-hero--invalid]="!validationResult.valid">
+          <div class="result-hero__icon" aria-hidden="true">
+            <i class="tc-icon" [class.tc-icon-check-circle]="validationResult.valid" [class.tc-icon-warning]="!validationResult.valid"></i>
+          </div>
+          <div>
+            <p class="eyebrow" i18n="@@json_schema_result_eyebrow">Résultat local</p>
+            @if (validationResult.valid) {
+              <h2 id="json-schema-results-title" i18n="@@json_schema_valid_title">Le JSON est valide</h2>
+              <p i18n="@@json_schema_valid_text">Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</p>
+            } @else {
+              <h2 id="json-schema-results-title" i18n="@@json_schema_invalid_title">{{ formatNumber(validationResult.totalErrors) }} erreur(s) détectée(s)</h2>
+              <p i18n="@@json_schema_invalid_text">Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</p>
+            }
+          </div>
+          <span class="draft-badge">{{ draftLabel(validationResult.draft) }}</span>
+        </div>
+
+        <div class="stats" aria-label="Statistiques" i18n-aria-label="@@json_schema_stats_label">
+          <div><strong>{{ formatNumber(validationResult.stats.schemaNodes) }}</strong><span i18n="@@json_schema_stat_schema_nodes">valeurs dans le schéma</span></div>
+          <div><strong>{{ formatNumber(validationResult.stats.instanceNodes) }}</strong><span i18n="@@json_schema_stat_instance_nodes">valeurs vérifiées</span></div>
+          <div><strong>{{ formatNumber(validationResult.stats.patterns) }}</strong><span i18n="@@json_schema_stat_patterns">expressions régulières</span></div>
+          <div><strong>{{ formatNumber(validationResult.totalErrors) }}</strong><span i18n="@@json_schema_stat_errors">erreurs</span></div>
+        </div>
+
+        @if (validationResult.errors.length > 0) {
+          <section class="error-list" aria-labelledby="json-schema-errors-title">
+            <div class="result-section-heading">
+              <div>
+                <p class="eyebrow" i18n="@@json_schema_errors_eyebrow">Diagnostic</p>
+                <h3 id="json-schema-errors-title" i18n="@@json_schema_errors_title">Erreurs par chemin</h3>
+              </div>
+              @if (validationResult.errorsTruncated) {
+                <span class="warning-badge" i18n="@@json_schema_errors_truncated">Aperçu limité aux 500 premières erreurs</span>
+              }
+            </div>
+            <ol>
+              @for (error of validationResult.errors; track trackError($index, error)) {
+                <li>
+                  <code>{{ displayPath(error.instancePath) }}</code>
+                  <div>
+                    <strong>{{ validationErrorLabel(error) }}</strong>
+                    <span><ng-container i18n="@@json_schema_rule_label">Règle</ng-container> <code>{{ error.keyword }}</code> · <code>{{ error.schemaPath }}</code></span>
+                  </div>
+                </li>
+              }
+            </ol>
+          </section>
+        }
+
+        @if (validationResult.correction; as correction) {
+          <section class="output-card" aria-labelledby="json-schema-correction-title">
+            <div class="output-card__header">
+              <div>
+                <p class="eyebrow" i18n="@@json_schema_correction_eyebrow">Aide à la correction</p>
+                <h3 id="json-schema-correction-title" i18n="@@json_schema_correction_title">Proposition corrigée</h3>
+                <p i18n="@@json_schema_correction_text">{{ formatNumber(correction.corrections.length) }} correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</p>
+              </div>
+              <span class="status-badge" [class.status-badge--valid]="correction.valid">
+                @if (correction.valid) {
+                  <ng-container i18n="@@json_schema_correction_valid">Proposition valide</ng-container>
+                } @else {
+                  <ng-container i18n="@@json_schema_correction_remaining">{{ formatNumber(correction.remainingErrors) }} erreur(s) restante(s)</ng-container>
+                }
+              </span>
+            </div>
+            <pre><code>{{ correctionPreview() }}</code></pre>
+            @if (correctionPreviewTruncated()) {
+              <p class="preview-note" i18n="@@json_schema_correction_preview_limit">L’aperçu est tronqué ; le téléchargement contient la proposition complète.</p>
+            }
+            <div class="output-actions">
+              <button type="button" class="button button--primary" (click)="applyCorrection()" i18n="@@json_schema_apply_correction">Remplacer les données</button>
+              <button type="button" class="button button--secondary" (click)="copyArtifact('correction')">
+                @if (copiedTarget() === 'correction') {
+                  <ng-container i18n="@@json_schema_correction_copied">Proposition copiée</ng-container>
+                } @else {
+                  <ng-container i18n="@@json_schema_copy_correction">Copier</ng-container>
+                }
+              </button>
+              <button type="button" class="button button--secondary" (click)="downloadArtifact('correction')" i18n="@@json_schema_download_correction">Télécharger le JSON</button>
+            </div>
+          </section>
+        }
+
+        <details class="output-card report-card">
+          <summary i18n="@@json_schema_report_summary">Rapport technique JSON</summary>
+          <pre><code>{{ reportPreview() }}</code></pre>
+          @if (reportPreviewTruncated()) {
+            <p class="preview-note" i18n="@@json_schema_report_preview_limit">L’aperçu est tronqué ; le téléchargement contient le rapport complet.</p>
+          }
+          <div class="output-actions">
+            <button type="button" class="button button--secondary" (click)="copyArtifact('report')">
+              @if (copiedTarget() === 'report') {
+                <ng-container i18n="@@json_schema_report_copied">Rapport copié</ng-container>
+              } @else {
+                <ng-container i18n="@@json_schema_copy_report">Copier le rapport</ng-container>
+              }
+            </button>
+            <button type="button" class="button button--secondary" (click)="downloadArtifact('report')" i18n="@@json_schema_download_report">Télécharger le rapport</button>
+          </div>
+        </details>
+      </section>
+    }
+  }
+
+  <section class="guide" aria-labelledby="json-schema-guide-title">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow" i18n="@@json_schema_guide_eyebrow">Mode d’emploi</p>
+        <h2 id="json-schema-guide-title" i18n="@@json_schema_guide_title">Valider sans masquer les problèmes de données</h2>
+      </div>
+    </div>
+    <div class="guide-grid">
+      <article><span>1</span><h3 i18n="@@json_schema_guide_one_title">Fournissez le contrat</h3><p i18n="@@json_schema_guide_one_text">Collez un schéma complet. Les références locales <code>#/$defs/…</code> fonctionnent ; aucune ressource distante n’est chargée.</p></article>
+      <article><span>2</span><h3 i18n="@@json_schema_guide_two_title">Gardez les types exacts</h3><p i18n="@@json_schema_guide_two_text">Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</p></article>
+      <article><span>3</span><h3 i18n="@@json_schema_guide_three_title">Relisez la proposition</h3><p i18n="@@json_schema_guide_three_text">Les corrections utilisent seulement les valeurs <code>default</code>, <code>examples</code>, <code>const</code>, <code>enum</code> ou des ajustements bornés.</p></article>
+    </div>
+  </section>
+
+  <nav class="related" aria-labelledby="json-schema-related-title">
+    <h2 id="json-schema-related-title" i18n="@@json_schema_related_title">Continuer avec vos données</h2>
+    <div>
+      <a routerLink="/categories/dev/data/json-diff">
+        <i class="tc-icon tc-icon-code" aria-hidden="true"></i>
+        <span><strong i18n="@@json_schema_related_diff_title">Comparer deux JSON</strong><small i18n="@@json_schema_related_diff_text">Diff structurel et patch RFC 6902</small></span>
+      </a>
+      <a routerLink="/categories/dev/data/csv-json-converter">
+        <i class="tc-icon tc-icon-table" aria-hidden="true"></i>
+        <span><strong i18n="@@json_schema_related_csv_title">Convertir CSV et JSON</strong><small i18n="@@json_schema_related_csv_text">Mapping, types et export local</small></span>
+      </a>
+    </div>
+  </nav>
+</main>

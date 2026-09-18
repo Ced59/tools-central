@@ -88042,6 +88042,1092 @@ Grace Hopper;grace@example.test;true;100</target>
         <target state="translated">Αυτές οι εξαιρέσεις είναι ασύμβατες με μια αναβάθμιση χωρίς απώλειες. Αγνοήστε ολόκληρο το δοχείο ή αφαιρέστε τις συγκρουόμενες διαδρομές.</target>
       </segment>
     </unit>
+    <unit id="dev_data_sg_validate_title">
+      <segment>
+        <source>Validation de contrats</source>
+        <target state="translated">Επικύρωση συμβολαίων</target>
+      </segment>
+    </unit>
+    <unit id="dev_data_sg_validate_desc">
+      <segment>
+        <source>Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.</source>
+        <target state="translated">Ελέγξτε ότι τα δεδομένα JSON πληρούν μια ρητή σύμβαση, χωρίς σιωπηλή μετατροπή ή μεταφορά δικτύου.</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_title">
+      <segment>
+        <source>Validateur JSON Schema</source>
+        <target state="translated">Επικυρωτής JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="tool_json_schema_validator_desc">
+      <segment>
+        <source>Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.</source>
+        <target state="translated">Επικυρώστε τοπικά ένα JSON με Draft 7, 2019-09 ή 2020-12, εντοπίστε τα σφάλματα και δημιουργήστε μια προσεκτική διορθωτική πρόταση.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_title">
+      <segment>
+        <source>Valider un JSON avec un contrat explicite et des erreurs exploitables</source>
+        <target state="translated">Επικυρώστε ένα JSON με μια ρητή σύμβαση και εκμεταλλεύσιμα σφάλματα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_lead">
+      <segment>
+        <source>Ce validateur exécute JSON Schema dans un Worker local, sans convertir les types ni supprimer les propriétés qui échouent. Il prend en charge Draft 7, 2019-09 et 2020-12, localise chaque règle en échec avec un JSON Pointer et peut proposer un exemple corrigé lorsque la modification reste prudente.</source>
+        <target state="translated">Αυτός ο επικυρωτής εκτελεί το JSON Schema σε έναν τοπικό Worker, χωρίς να μετατρέπει τους τύπους ή να αφαιρεί τις ιδιότητες που αποτυγχάνουν. Υποστηρίζει το Draft 7, 2019-09 και 2020-12, εντοπίζει κάθε κανόνα που αποτυγχάνει με έναν JSON Pointer και μπορεί να προτείνει ένα διορθωμένο παράδειγμα όταν η τροποποίηση παραμένει προσεκτική.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_use_cases">
+      <segment>
+        <source>Quand valider des données avec JSON Schema ?</source>
+        <target state="translated">Πότε να επικυρώσετε δεδομένα με JSON Schema;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_title">
+      <segment>
+        <source>Tester un payload d’API</source>
+        <target state="translated">Δοκιμάστε ένα payload API</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc1_text">
+      <segment>
+        <source>Vérifiez avant intégration que les champs obligatoires, types, formats et valeurs autorisées correspondent au contrat. Un chemin comme /utilisateur/email désigne directement la donnée à corriger, sans dépendre de son numéro de ligne.</source>
+        <target state="translated">Ελέγξτε πριν από την ενσωμάτωση ότι τα υποχρεωτικά πεδία, οι τύποι, οι μορφές και οι επιτρεπόμενες τιμές αντιστοιχούν στη σύμβαση. Ένας δρόμος όπως /χρήστης/email υποδεικνύει άμεσα τα δεδομένα που πρέπει να διορθωθούν, χωρίς να εξαρτάται από τον αριθμό γραμμής του.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_title">
+      <segment>
+        <source>Contrôler un fichier de configuration</source>
+        <target state="translated">Ελέγξτε ένα αρχείο ρυθμίσεων</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc2_text">
+      <segment>
+        <source>Repérez les options inconnues avec additionalProperties, les tableaux incomplets et les contraintes numériques avant un déploiement. Le moteur ne remplace aucune valeur dans l’entrée pendant le diagnostic.</source>
+        <target state="translated">Εντοπίστε τις άγνωστες επιλογές με additionalProperties, τις ελλιπείς πίνακες και τους αριθμητικούς περιορισμούς πριν από μια ανάπτυξη. Ο κινητήρας δεν αντικαθιστά καμία τιμή στην είσοδο κατά τη διάρκεια της διάγνωσης.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_title">
+      <segment>
+        <source>Comparer un producteur à son contrat</source>
+        <target state="translated">Συγκρίνετε έναν παραγωγό με τη σύμβασή του</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_uc3_text">
+      <segment>
+        <source>Collez un exemple produit par un formulaire, un export ou un service puis exportez le rapport technique. Le rapport contient les chemins et règles, pas une copie automatique du JSON d’origine.</source>
+        <target state="translated">Επικολλήστε ένα παράδειγμα που παράγεται από μια φόρμα, μια εξαγωγή ή μια υπηρεσία και στη συνέχεια εξάγετε την τεχνική αναφορά. Η αναφορά περιέχει τους δρόμους και τους κανόνες, όχι μια αυτόματη αντιγραφή του αρχικού JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts">
+      <segment>
+        <source>Choisir le bon brouillon</source>
+        <target state="translated">Επιλέξτε το σωστό προσχέδιο</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_1">
+      <segment>
+        <source>En détection automatique, la propriété $schema sélectionne Draft 7, 2019-09 ou 2020-12. Lorsqu’elle est absente, Draft 7 est utilisé pour rester compatible avec les nombreux schémas historiques qui reposent sur definitions et les anciens comportements de tuples.</source>
+        <target state="translated">Στην αυτόματη ανίχνευση, η ιδιότητα $schema επιλέγει το Draft 7, 2019-09 ή 2020-12. Όταν απουσιάζει, χρησιμοποιείται το Draft 7 για να παραμείνει συμβατό με τα πολλά ιστορικά σχήματα που βασίζονται σε definitions και τις παλιές συμπεριφορές tuples.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_2">
+      <segment>
+        <source>Un choix explicite remplace seulement la déclaration pendant la compilation locale ; le texte collé n’est pas réécrit. Cette option aide à tester un schéma sans URI $schema, mais ne convertit pas automatiquement les mots-clés d’un brouillon vers un autre.</source>
+        <target state="translated">Μια ρητή επιλογή αντικαθιστά μόνο τη δήλωση κατά τη διάρκεια της τοπικής σύνταξης. Το επικολλημένο κείμενο δεν ξαναγράφεται. Αυτή η επιλογή βοηθά στη δοκιμή ενός σχήματος χωρίς URI $schema, αλλά δεν μετατρέπει αυτόματα τα keywords από ένα προσχέδιο σε άλλο.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_drafts_3">
+      <segment>
+        <source>Les références internes comme #/$defs/adresse ou #/definitions/adresse sont résolues. Les références HTTP, HTTPS ou relatives vers d’autres fichiers sont refusées afin que la validation reste prévisible, hors ligne et sans fuite de l’URL référencée.</source>
+        <target state="translated">Οι εσωτερικές αναφορές όπως #/$defs/διεύθυνση ή #/definitions/διεύθυνση επιλύονται. Οι HTTP, HTTPS ή σχετικές αναφορές σε άλλα αρχεία απορρίπτονται ώστε η επικύρωση να παραμένει προβλέψιμη, εκτός σύνδεσης και χωρίς διαρροή της αναφερόμενης διεύθυνσης URL.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diagnostics">
+      <segment>
+        <source>Lire le diagnostic</source>
+        <target state="translated">Διαβάστε τη διάγνωση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_title">
+      <segment>
+        <source>Chemin des données</source>
+        <target state="translated">Δρόμος δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_path_text">
+      <segment>
+        <source>Le JSON Pointer d’instance indique la valeur concernée. Une erreur required reste attachée à l’objet parent et nomme séparément la propriété manquante ; une erreur à la racine affiche explicitement « Racine ».</source>
+        <target state="translated">Ο JSON Pointer της περίπτωσης υποδεικνύει την επηρεαζόμενη τιμή. Ένα σφάλμα required παραμένει συνδεδεμένο με το γονικό αντικείμενο και ονομάζει ξεχωριστά την ελλείπουσα ιδιότητα. Ένα σφάλμα στη ρίζα εμφανίζει ρητά «Ρίζα».</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_title">
+      <segment>
+        <source>Chemin de la règle</source>
+        <target state="translated">Δρόμος κανόνα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_rule_text">
+      <segment>
+        <source>Le chemin de schéma montre la contrainte appliquée, par exemple #/properties/age/minimum. Le mot-clé technique est conservé dans le rapport pour faciliter une recherche dans la spécification.</source>
+        <target state="translated">Ο δρόμος του σχήματος δείχνει τον επιβαλλόμενο περιορισμό, για παράδειγμα #/properties/age/minimum. Το τεχνικό keyword διατηρείται στην αναφορά για να διευκολύνει την αναζήτηση στην προδιαγραφή.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_title">
+      <segment>
+        <source>Formats standards</source>
+        <target state="translated">Τυπικές μορφές</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_diag_format_text">
+      <segment>
+        <source>La vérification optionnelle couvre notamment email, date, date-time, URI, hostname, UUID, IPv4 et IPv6. Un format vérifie une syntaxe ; il ne prouve pas qu’une adresse existe, qu’un domaine répond ou qu’une ressource est sûre.</source>
+        <target state="translated">Η προαιρετική επαλήθευση καλύπτει μεταξύ άλλων email, ημερομηνία, ημερομηνία-ώρα, URI, hostname, UUID, IPv4 και IPv6. Μια μορφή ελέγχει μια σύνταξη; δεν αποδεικνύει ότι μια διεύθυνση υπάρχει, ότι ένα domain απαντά ή ότι μια πηγή είναι ασφαλής.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction">
+      <segment>
+        <source>Ce que corrige la proposition automatique</source>
+        <target state="translated">Τι διορθώνει η αυτόματη πρόταση</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_1">
+      <segment>
+        <source>La proposition peut ajouter une propriété required lorsqu’un default, un example, une constante, une valeur enum ou un type simple fournit une valeur déterministe. Elle peut aussi retirer une propriété explicitement interdite, appliquer une borne numérique, compléter ou tronquer une chaîne ou un tableau et remplacer quelques formats par un exemple syntaxique.</source>
+        <target state="translated">Η πρόταση μπορεί να προσθέσει μια απαιτούμενη ιδιότητα όταν μια default, ένα example, μια σταθερά, μια τιμή enum ή ένας απλός τύπος παρέχει μια καθορισμένη τιμή. Μπορεί επίσης να αφαιρέσει μια ρητά απαγορευμένη ιδιότητα, να εφαρμόσει έναν αριθμητικό περιορισμό, να συμπληρώσει ή να κόψει μια αλυσίδα ή έναν πίνακα και να αντικαταστήσει ορισμένες μορφές με ένα συντακτικό παράδειγμα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_2">
+      <segment>
+        <source>Chaque proposition est revalidée avec le même schéma et le même brouillon. Le badge distingue une proposition devenue valide d’une aide encore incomplète. Les règles conditionnelles, les expressions régulières et les variantes anyOf ou oneOf ne sont pas devinées.</source>
+        <target state="translated">Κάθε πρόταση επαναεπικυρώνεται με το ίδιο σχήμα και το ίδιο προσχέδιο. Το badge διακρίνει μια πρόταση που έχει γίνει έγκυρη από μια βοήθεια που είναι ακόμη ελλιπής. Οι συνθήκες κανόνες, οι κανονικές εκφράσεις και οι παραλλαγές anyOf ή oneOf δεν μαντεύονται.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_correction_3">
+      <segment>
+        <source>Une valeur techniquement valide peut rester fausse pour votre métier. Relisez le JSON proposé, remplacez les exemples génériques et ne l’utilisez jamais comme migration automatique de données sans tests propres à votre application.</source>
+        <target state="translated">Μια τεχνικά έγκυρη τιμή μπορεί να παραμείνει λανθασμένη για την επιχείρησή σας. Διαβάστε ξανά το προτεινόμενο JSON, αντικαταστήστε τα γενικά παραδείγματα και μην το χρησιμοποιήσετε ποτέ ως αυτόματη μετανάστευση δεδομένων χωρίς δοκιμές που σχετίζονται με την εφαρμογή σας.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limits">
+      <segment>
+        <source>Sécurité, précision et limites</source>
+        <target state="translated">Ασφάλεια, ακρίβεια και περιορισμοί</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_1">
+      <segment>
+        <source>Le schéma est limité à 500 000 caractères, les données à 2 millions de caractères et chaque fichier à 2 Mo. Le parseur accepte au plus 100 000 valeurs et 64 niveaux d’imbrication ; l’interface affiche au maximum 500 erreurs.</source>
+        <target state="translated">Το σχήμα περιορίζεται σε 500.000 χαρακτήρες, τα δεδομένα σε 2 εκατομμύρια χαρακτήρες και κάθε αρχείο σε 2 MB. Ο αναλυτής δέχεται το πολύ 100.000 τιμές και 64 επίπεδα εμφωλευμένων; η διεπαφή εμφανίζει το πολύ 500 σφάλματα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_2">
+      <segment>
+        <source>Les clés dupliquées, chaînes UTF-16 mal formées et nombres qui perdraient leur représentation JavaScript sont refusés avant validation. Les expressions régulières sont plafonnées en nombre et en longueur, puis exécutées dans un Worker annulable.</source>
+        <target state="translated">Οι διπλές κλειδιά, οι κακώς σχηματισμένες UTF-16 αλυσίδες και οι αριθμοί που θα έχαναν την αναπαράστασή τους JavaScript απορρίπτονται πριν από την επικύρωση. Οι κανονικές εκφράσεις περιορίζονται σε αριθμό και μήκος και εκτελούνται σε έναν αναστρέψιμο Worker.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_limit_3">
+      <segment>
+        <source>JSON Schema décrit la forme et certaines relations entre valeurs. Il ne vérifie ni une signature, ni des droits d’accès, ni l’existence d’un compte, ni la sécurité du code qui consommera les données.</source>
+        <target state="translated">Το JSON Schema περιγράφει τη μορφή και ορισμένες σχέσεις μεταξύ τιμών. Δεν ελέγχει ούτε μια υπογραφή, ούτε δικαιώματα πρόσβασης, ούτε την ύπαρξη ενός λογαριασμού, ούτε την ασφάλεια του κώδικα που θα καταναλώσει τα δεδομένα.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_faq">
+      <segment>
+        <source>Questions fréquentes</source>
+        <target state="translated">Συχνές ερωτήσεις</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q1">
+      <segment>
+        <source>Pourquoi « 42 » n’est-il pas accepté comme nombre ?</source>
+        <target state="translated">Γιατί το «42» δεν γίνεται αποδεκτό ως αριθμός;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a1">
+      <segment>
+        <source>Le validateur désactive la coercition. Une chaîne reste une chaîne, même si son contenu ressemble à un nombre. Cette rigueur évite qu’un test réussi dans l’outil masque une incompatibilité réelle dans un consommateur qui ne convertit pas les types.</source>
+        <target state="translated">Ο επικυρωτής απενεργοποιεί την αναγκαστική μετατροπή. Μια αλυσίδα παραμένει αλυσίδα, ακόμη και αν το περιεχόμενό της μοιάζει με αριθμό. Αυτή η αυστηρότητα αποτρέπει το να περάσει μια επιτυχής δοκιμή στο εργαλείο να κρύψει μια πραγματική ασυμβατότητα σε έναν καταναλωτή που δεν μετατρέπει τους τύπους.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q2">
+      <segment>
+        <source>Pourquoi une référence distante est-elle refusée ?</source>
+        <target state="translated">Γιατί απορρίπτεται μια απομακρυσμένη αναφορά;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a2">
+      <segment>
+        <source>Charger une référence distante rendrait le résultat dépendant du réseau et révélerait l’URL demandée au serveur distant. Regroupez les définitions nécessaires dans $defs ou definitions et utilisez des références locales.</source>
+        <target state="translated">Η φόρτωση μιας απομακρυσμένης αναφοράς θα καθιστούσε το αποτέλεσμα εξαρτώμενο από το δίκτυο και θα αποκάλυπτε τη ζητούμενη διεύθυνση URL στον απομακρυσμένο διακομιστή. Ομαδοποιήστε τις απαραίτητες ορισμούς στο $defs ή definitions και χρησιμοποιήστε τοπικές αναφορές.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_q3">
+      <segment>
+        <source>Une validation réussie garantit-elle que le JSON est sûr ?</source>
+        <target state="translated">Μια επιτυχής επικύρωση εγγυάται ότι το JSON είναι ασφαλές;</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_a3">
+      <segment>
+        <source>Non. Elle garantit seulement le respect des règles exprimées par le schéma. Le contenu doit encore être traité comme non fiable : contrôles d’autorisation, échappement, limites métier et protections propres au système restent nécessaires.</source>
+        <target state="translated">Όχι. Εγγυάται μόνο τη συμμόρφωση με τους κανόνες που εκφράζονται από το σχήμα. Το περιεχόμενο πρέπει να αντιμετωπίζεται ως μη αξιόπιστο: οι έλεγχοι εξουσιοδότησης, η διαφυγή, οι επιχειρηματικοί περιορισμοί και οι προστασίες του συστήματος παραμένουν απαραίτητες.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip_title">
+      <segment>
+        <source>Versionner le schéma avec les données</source>
+        <target state="translated">Εκδόστε το σχήμα με τα δεδομένα</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_data_json_schema_tip">
+      <segment>
+        <source>Conservez le brouillon, le schéma et des exemples valides/invalides dans le même dépôt que le producteur. Une validation locale ponctuelle aide au diagnostic ; des tests automatisés empêchent le contrat de dériver au fil des versions.</source>
+        <target state="translated">Διατηρήστε το προσχέδιο, το σχήμα και έγκυρα/μη έγκυρα παραδείγματα στο ίδιο αποθετήριο με τον παραγωγό. Μια τοπική επικύρωση βοηθά στη διάγνωση; οι αυτοματοποιημένες δοκιμές αποτρέπουν τη σύμβαση από το να αποκλίνει με την πάροδο των εκδόσεων.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_eyebrow">
+      <segment>
+        <source>Développement · Données structurées</source>
+        <target state="translated">Ανάπτυξη · Δομημένα δεδομένα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_h1">
+      <segment>
+        <source>Valider un JSON avec JSON Schema</source>
+        <target state="translated">Επικύρωση ενός JSON με JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_lead">
+      <segment>
+        <source> Repérez précisément les données invalides avec Draft 7, 2019-09 ou 2020-12. Le schéma et le JSON restent dans votre navigateur. </source>
+        <target state="translated">Εντοπίστε ακριβώς τα μη έγκυρα δεδομένα με το Draft 7, 2019-09 ή 2020-12. Το σχήμα και το JSON παραμένουν στον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_label">
+      <segment>
+        <source>Garanties de l’outil</source>
+        <target state="translated">Εγγυήσεις εργαλείου</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_local">
+      <segment>
+        <source>100 % local</source>
+        <target state="translated">100 % τοπικό</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_worker">
+      <segment>
+        <source>Worker annulable</source>
+        <target state="translated">Ακυρώσιμος εργαζόμενος</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_trust_no_mutation">
+      <segment>
+        <source>Aucune coercition</source>
+        <target state="translated">Καμία καταναγκαστική αλλαγή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_invalid">
+      <segment>
+        <source> Charger un exemple invalide </source>
+        <target state="translated">Φόρτωση μη έγκυρου παραδείγματος</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_load_valid">
+      <segment>
+        <source> Exemple valide </source>
+        <target state="translated">Έγκυρο παράδειγμα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_copied">
+      <segment>
+        <source>Lien copié</source>
+        <target state="translated">Αντίγραφο συνδέσμου</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share">
+      <segment>
+        <source>Partager l’outil</source>
+        <target state="translated">Μοιραστείτε το εργαλείο</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_label">
+      <segment>
+        <source>Confidentialité</source>
+        <target state="translated">Απόρρητο</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_title">
+      <segment>
+        <source>Vos données ne quittent pas cet appareil.</source>
+        <target state="translated">Τα δεδομένα σας δεν φεύγουν από αυτή τη συσκευή.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_privacy_text">
+      <segment>
+        <source>Aucun schéma, JSON, nom de fichier ou résultat n’est envoyé au serveur. Les références distantes sont volontairement désactivées.</source>
+        <target state="translated">Κανένα σχήμα, JSON, όνομα αρχείου ή αποτέλεσμα δεν αποστέλλεται στον διακομιστή. Οι απομακρυσμένες αναφορές είναι σκόπιμα απενεργοποιημένες.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_eyebrow">
+      <segment>
+        <source>Entrées</source>
+        <target state="translated">Είσοδοι</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_title">
+      <segment>
+        <source>Collez le schéma et les données à vérifier</source>
+        <target state="translated">Επικολλήστε το σχήμα και τα δεδομένα προς έλεγχο</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_workspace_hint">
+      <segment>
+        <source>Les fichiers JSON et TXT sont lus localement en UTF-8 strict.</source>
+        <target state="translated">Τα αρχεία JSON και TXT διαβάζονται τοπικά σε αυστηρό UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_title">
+      <segment>
+        <source>Schéma JSON</source>
+        <target state="translated">JSON Schema</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_schema">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Εισαγωγή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_label">
+      <segment>
+        <source>Schéma JSON à utiliser</source>
+        <target state="translated">JSON Schema προς χρήση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_schema_help">
+      <segment>
+        <source>Objet ou booléen JSON Schema</source>
+        <target state="translated">JSON Schema αντικείμενο ή boolean</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_title">
+      <segment>
+        <source>Données JSON</source>
+        <target state="translated">Δεδομένα JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_import_instance">
+      <segment>
+        <source>Importer</source>
+        <target state="translated">Εισαγωγή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_label">
+      <segment>
+        <source>Données JSON à valider</source>
+        <target state="translated">Δεδομένα JSON προς επικύρωση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_instance_help">
+      <segment>
+        <source>Objet, tableau ou valeur JSON</source>
+        <target state="translated">JSON αντικείμενο, πίνακας ή τιμή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_label">
+      <segment>
+        <source>Brouillon JSON Schema</source>
+        <target state="translated">JSON Schema προσχέδιο</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_auto">
+      <segment>
+        <source>Détection automatique (Draft 7 si absent)</source>
+        <target state="translated">Αυτόματη ανίχνευση (Draft 7 αν απουσιάζει)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_draft_help">
+      <segment>
+        <source>Un choix explicite remplace la propriété <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> sans modifier le texte saisi.</source>
+        <target state="translated">Μια ρητή επιλογή αντικαθιστά την ιδιότητα <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">$schema</pc> χωρίς να τροποποιεί το κείμενο που έχει εισαχθεί.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_title">
+      <segment>
+        <source>Vérifier les formats standards</source>
+        <target state="translated">Ελέγξτε τα πρότυπα μορφών</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_formats_help">
+      <segment>
+        <source>E-mail, date, date-time, URI, UUID, IPv4, IPv6 et autres formats Ajv.</source>
+        <target state="translated">E-mail, ημερομηνία, ημερομηνία-ώρα, URI, UUID, IPv4, IPv6 και άλλες μορφές Ajv.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_title">
+      <segment>
+        <source>Limites de sécurité</source>
+        <target state="translated">Όρια ασφαλείας</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_limits_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> par fichier · 100 000 valeurs · profondeur 64 · 5 secondes maximum · diagnostic exhaustif jusqu’à 50 000 opérations estimées · 500 erreurs affichées</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> ανά αρχείο · 100 000 τιμές · βάθος 64 · μέγιστο 5 δευτερόλεπτα · πλήρης διάγνωση έως 50 000 εκτιμώμενες λειτουργίες · 500 σφάλματα εμφανίζονται</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validating">
+      <segment>
+        <source>Validation en cours…</source>
+        <target state="translated">Επικύρωση σε εξέλιξη…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate">
+      <segment>
+        <source>Valider le JSON</source>
+        <target state="translated">Επικύρωση του JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Ακύρωση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_processing">
+      <segment>
+        <source>Validation locale en cours.</source>
+        <target state="translated">Τοπική επικύρωση σε εξέλιξη.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_valid">
+      <segment>
+        <source>Le document est valide.</source>
+        <target state="translated">Το έγγραφο είναι έγκυρο.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_invalid">
+      <segment>
+        <source>Le document contient <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> erreurs de validation.</source>
+        <target state="translated">Το έγγραφο περιέχει <ph id="0" equiv="INTERPOLATION" disp="{{ result()?.totalErrors }}"/> σφάλματα επικύρωσης.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_error">
+      <segment>
+        <source>La validation n’a pas pu aboutir.</source>
+        <target state="translated">Η επικύρωση δεν μπόρεσε να ολοκληρωθεί.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_blocked_title">
+      <segment>
+        <source>Validation impossible</source>
+        <target state="translated">Αδύνατη η επικύρωση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_result_eyebrow">
+      <segment>
+        <source>Résultat local</source>
+        <target state="translated">Τοπικό αποτέλεσμα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_title">
+      <segment>
+        <source>Le JSON est valide</source>
+        <target state="translated">Το JSON είναι έγκυρο</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_valid_text">
+      <segment>
+        <source>Toutes les règles du schéma sélectionné sont respectées, sans conversion silencieuse des valeurs.</source>
+        <target state="translated">Όλοι οι κανόνες του επιλεγμένου σχήματος τηρούνται, χωρίς σιωπηρή μετατροπή των τιμών.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_title">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> erreur(s) détectée(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(validationResult.totalErrors) }}"/> σφάλμα(τα) ανιχνεύθηκε(αν)</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_invalid_text">
+      <segment>
+        <source>Corrigez les chemins indiqués puis relancez la validation. Une proposition automatique est fournie uniquement pour les corrections prudentes.</source>
+        <target state="translated">Διορθώστε τα αναφερόμενα μονοπάτια και επανεκκινήστε την επικύρωση. Μια αυτόματη πρόταση παρέχεται μόνο για προσεκτικές διορθώσεις.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stats_label">
+      <segment>
+        <source>Statistiques</source>
+        <target state="translated">Στατιστικά</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_schema_nodes">
+      <segment>
+        <source>valeurs dans le schéma</source>
+        <target state="translated">τιμές στο σχήμα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_instance_nodes">
+      <segment>
+        <source>valeurs vérifiées</source>
+        <target state="translated">ελεγμένες τιμές</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_patterns">
+      <segment>
+        <source>expressions régulières</source>
+        <target state="translated">κανονικές εκφράσεις</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_stat_errors">
+      <segment>
+        <source>erreurs</source>
+        <target state="translated">σφάλματα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_eyebrow">
+      <segment>
+        <source>Diagnostic</source>
+        <target state="translated">Διάγνωση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_title">
+      <segment>
+        <source>Erreurs par chemin</source>
+        <target state="translated">Σφάλματα ανά μονοπάτι</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_errors_truncated">
+      <segment>
+        <source>Aperçu limité aux 500 premières erreurs</source>
+        <target state="translated">Περιορισμένη προεπισκόπηση στις 500 πρώτες σφάλματα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_rule_label">
+      <segment>
+        <source>Règle</source>
+        <target state="translated">Κανόνας</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_eyebrow">
+      <segment>
+        <source>Aide à la correction</source>
+        <target state="translated">Βοήθεια διόρθωσης</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_title">
+      <segment>
+        <source>Proposition corrigée</source>
+        <target state="translated">Διορθωμένη πρόταση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_text">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> correction(s) prudente(s) appliquée(s). Vérifiez toujours le sens métier avant utilisation.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.corrections.length) }}"/> προσεκτική(ές) διόρθωση(εις) εφαρμόστηκε(αν). Ελέγξτε πάντα την επιχειρηματική σημασία πριν από τη χρήση.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_valid">
+      <segment>
+        <source>Proposition valide</source>
+        <target state="translated">Έγκυρη πρόταση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_remaining">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> erreur(s) restante(s)</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ formatNumber(correction.remainingErrors) }}"/> σφάλμα(τα) που απομένουν</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient la proposition complète.</source>
+        <target state="translated">Η προεπισκόπηση είναι περικομμένη; η λήψη περιέχει την πλήρη πρόταση.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_apply_correction">
+      <segment>
+        <source>Remplacer les données</source>
+        <target state="translated">Αντικατάσταση δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_correction_copied">
+      <segment>
+        <source>Proposition copiée</source>
+        <target state="translated">Αντίγραφο πρότασης</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_correction">
+      <segment>
+        <source>Copier</source>
+        <target state="translated">Αντιγραφή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_correction">
+      <segment>
+        <source>Télécharger le JSON</source>
+        <target state="translated">Λήψη του JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_summary">
+      <segment>
+        <source>Rapport technique JSON</source>
+        <target state="translated">Τεχνική αναφορά JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_preview_limit">
+      <segment>
+        <source>L’aperçu est tronqué ; le téléchargement contient le rapport complet.</source>
+        <target state="translated">Η προεπισκόπηση είναι περικομμένη; η λήψη περιέχει την πλήρη αναφορά.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_report_copied">
+      <segment>
+        <source>Rapport copié</source>
+        <target state="translated">Αντίγραφο αναφοράς</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_report">
+      <segment>
+        <source>Copier le rapport</source>
+        <target state="translated">Αντιγραφή αναφοράς</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_download_report">
+      <segment>
+        <source>Télécharger le rapport</source>
+        <target state="translated">Λήψη αναφοράς</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_eyebrow">
+      <segment>
+        <source>Mode d’emploi</source>
+        <target state="translated">Οδηγίες χρήσης</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_title">
+      <segment>
+        <source>Valider sans masquer les problèmes de données</source>
+        <target state="translated">Επικύρωση χωρίς να αποκρύπτονται τα προβλήματα δεδομένων</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_title">
+      <segment>
+        <source>Fournissez le contrat</source>
+        <target state="translated">Παρέχετε τη σύμβαση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_one_text">
+      <segment>
+        <source>Collez un schéma complet. Les références locales <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> fonctionnent ; aucune ressource distante n’est chargée.</source>
+        <target state="translated">Επικολλήστε ένα πλήρες σχήμα. Οι τοπικές αναφορές <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">#/$defs/…</pc> λειτουργούν; καμία απομακρυσμένη πηγή δεν φορτώνεται.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_title">
+      <segment>
+        <source>Gardez les types exacts</source>
+        <target state="translated">Διατηρήστε τους ακριβείς τύπους</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_two_text">
+      <segment>
+        <source>Le moteur ne convertit pas « 42 » en 42, ne supprime aucune propriété et n’ajoute aucun défaut pendant le diagnostic.</source>
+        <target state="translated">Ο κινητήρας δεν μετατρέπει το « 42 » σε 42, δεν αφαιρεί καμία ιδιότητα και δεν προσθέτει καμία ελάττωμα κατά τη διάγνωση.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_title">
+      <segment>
+        <source>Relisez la proposition</source>
+        <target state="translated">Διαβάστε ξανά την πρόταση</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_guide_three_text">
+      <segment>
+        <source>Les corrections utilisent seulement les valeurs <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ou des ajustements bornés.</source>
+        <target state="translated">Οι διορθώσεις χρησιμοποιούν μόνο τις τιμές <pc id="0" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">default</pc>, <pc id="1" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">examples</pc>, <pc id="2" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">const</pc>, <pc id="3" equivStart="START_TAG_CODE" equivEnd="CLOSE_TAG_CODE" type="other" dispStart="&lt;code&gt;" dispEnd="&lt;/code&gt;">enum</pc> ή περιορισμένες προσαρμογές.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_title">
+      <segment>
+        <source>Continuer avec vos données</source>
+        <target state="translated">Συνεχίστε με τα δεδομένα σας</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_title">
+      <segment>
+        <source>Comparer deux JSON</source>
+        <target state="translated">Σύγκριση δύο JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_diff_text">
+      <segment>
+        <source>Diff structurel et patch RFC 6902</source>
+        <target state="translated">Δομή diff και patch RFC 6902</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_title">
+      <segment>
+        <source>Convertir CSV et JSON</source>
+        <target state="translated">Μετατροπή CSV και JSON</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_related_csv_text">
+      <segment>
+        <source>Mapping, types et export local</source>
+        <target state="translated">Χαρτογράφηση, τύποι και τοπική εξαγωγή</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_validate_error">
+      <segment>
+        <source>La validation a échoué dans le navigateur. Réessayez avec des documents plus petits ou simplifiez les expressions régulières.</source>
+        <target state="translated">Η επικύρωση απέτυχε στον περιηγητή. Δοκιμάστε ξανά με μικρότερα έγγραφα ή απλοποιήστε τις κανονικές εκφράσεις.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_copy_error">
+      <segment>
+        <source>Copie automatique impossible. Sélectionnez la sortie et copiez-la manuellement.</source>
+        <target state="translated">Αυτόματη αντιγραφή αδύνατη. Επιλέξτε την έξοδο και αντιγράψτε την χειροκίνητα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_share_error">
+      <segment>
+        <source>Impossible de copier le lien. Copiez l’adresse de la page depuis votre navigateur.</source>
+        <target state="translated">Αδύνατη η αντιγραφή του συνδέσμου. Αντιγράψτε τη διεύθυνση της σελίδας από τον περιηγητή σας.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_empty">
+      <segment>
+        <source>Le document est vide.</source>
+        <target state="translated">Το έγγραφο είναι κενό.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_source_large">
+      <segment>
+        <source>Le document dépasse la limite autorisée.</source>
+        <target state="translated">Το έγγραφο υπερβαίνει το επιτρεπόμενο όριο.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_invalid_json">
+      <segment>
+        <source>Le document n’est pas un JSON valide.</source>
+        <target state="translated">Το έγγραφο δεν είναι έγκυρο JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_duplicate">
+      <segment>
+        <source>Un objet contient deux fois le même nom de propriété.</source>
+        <target state="translated">Ένα αντικείμενο περιέχει δύο φορές το ίδιο όνομα ιδιότητας.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_number">
+      <segment>
+        <source>Un nombre serait arrondi ou rendu infini par JavaScript. Transformez-le en chaîne pour préserver sa valeur exacte.</source>
+        <target state="translated">Ένας αριθμός θα στρογγυλοποιηθεί ή θα γίνει άπειρος από το JavaScript. Μετατρέψτε τον σε συμβολοσειρά για να διατηρήσετε την ακριβή του τιμή.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_unicode">
+      <segment>
+        <source>Une chaîne contient un caractère UTF-16 non apparié.</source>
+        <target state="translated">Μια συμβολοσειρά περιέχει έναν μη ζευγαρωμένο χαρακτήρα UTF-16.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_depth">
+      <segment>
+        <source>Le document dépasse 64 niveaux d’imbrication.</source>
+        <target state="translated">Το έγγραφο υπερβαίνει τα 64 επίπεδα εμφωλευσης.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_nodes">
+      <segment>
+        <source>Le document dépasse 100 000 valeurs JSON.</source>
+        <target state="translated">Το έγγραφο υπερβαίνει τις 100.000 τιμές JSON.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_root">
+      <segment>
+        <source>Un schéma JSON doit être un objet ou une valeur booléenne.</source>
+        <target state="translated">Ένα σχήμα JSON πρέπει να είναι ένα αντικείμενο ή μια boolean τιμή.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_draft">
+      <segment>
+        <source>La déclaration $schema ne correspond pas à un brouillon pris en charge. Choisissez explicitement un brouillon pour la remplacer.</source>
+        <target state="translated">Η δήλωση $schema δεν αντιστοιχεί σε υποστηριζόμενο προσχέδιο. Επιλέξτε ρητά ένα προσχέδιο για να το αντικαταστήσετε.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_reference">
+      <segment>
+        <source>Les références distantes sont désactivées. Regroupez les définitions dans le schéma et utilisez une référence locale commençant par #.</source>
+        <target state="translated">Οι απομακρυσμένες αναφορές είναι απενεργοποιημένες. Ομαδοποιήστε τους ορισμούς στο σχήμα και χρησιμοποιήστε μια τοπική αναφορά που ξεκινά με #.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_pattern">
+      <segment>
+        <source>Le schéma contient trop d’expressions régulières ou une expression trop longue.</source>
+        <target state="translated">Το σχήμα περιέχει πάρα πολλές κανονικές εκφράσεις ή μια πολύ μεγάλη έκφραση.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_schema">
+      <segment>
+        <source>Le schéma n’est pas valide pour le brouillon sélectionné.</source>
+        <target state="translated">Το σχήμα δεν είναι έγκυρο για το επιλεγμένο προσχέδιο.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_runtime">
+      <segment>
+        <source>Le moteur a interrompu la validation de ce schéma.</source>
+        <target state="translated">Ο κινητήρας διέκοψε την επικύρωση αυτού του σχήματος.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_output">
+      <segment>
+        <source>Le rapport dépasserait la limite de sortie.</source>
+        <target state="translated">Η αναφορά θα υπερβαίνει το όριο εξόδου.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_schema">
+      <segment>
+        <source> Schéma.</source>
+        <target state="translated">Σχήμα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_side_instance">
+      <segment>
+        <source> Données.</source>
+        <target state="translated">Δεδομένα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_path">
+      <segment>
+        <source> Chemin <ph id="0" equiv="path" disp="issue.path"/>.</source>
+        <target state="translated">Διαδρομή <ph id="0" equiv="path" disp="issue.path"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_position">
+      <segment>
+        <source> Position <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</source>
+        <target state="translated">Θέση <ph id="0" equiv="position" disp="this.formatNumber(issue.position + 1)"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_detail">
+      <segment>
+        <source> Détail : <ph id="0" equiv="detail" disp="issue.detail"/>.</source>
+        <target state="translated">Λεπτομέρεια: <ph id="0" equiv="detail" disp="issue.detail"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_required">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir la propriété obligatoire « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει την υποχρεωτική ιδιότητα « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_additional">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient la propriété non autorisée « <ph id="1" equiv="property" disp="property"/> ».</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> περιέχει την μη επιτρεπόμενη ιδιότητα « <ph id="1" equiv="property" disp="property"/> ».</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_type">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être du type <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι του τύπου <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_enum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à l’une des valeurs autorisées <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να αντιστοιχεί σε μία από τις επιτρεπόμενες τιμές <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_const">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit correspondre à la valeur constante attendue.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να αντιστοιχεί στην αναμενόμενη σταθερή τιμή.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_format">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas le format <ph id="1" equiv="expected" disp="expected"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> δεν συμμορφώνεται με τη μορφή <ph id="1" equiv="expected" disp="expected"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_pattern">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas l’expression régulière du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> δεν συμμορφώνεται με την κανονική έκφραση του σχήματος.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει τουλάχιστον <ph id="1" equiv="limit" disp="limit"/> χαρακτήρες.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_length">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> caractères.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει το πολύ <ph id="1" equiv="limit" disp="limit"/> χαρακτήρες.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_minimum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être supérieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι μεγαλύτερο ή ίσο με <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_maximum">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être inférieur ou égal à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι μικρότερο ή ίσο με <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_min">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement supérieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι αυστηρά μεγαλύτερο από <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_exclusive_max">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être strictement inférieur à <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι αυστηρά μικρότερο από <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει τουλάχιστον <ph id="1" equiv="limit" disp="limit"/> στοιχεία.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_items">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> éléments.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει το πολύ <ph id="1" equiv="limit" disp="limit"/> στοιχεία.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unique">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne doit pas contenir de doublons.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> δεν πρέπει να περιέχει διπλότυπα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_min_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au moins <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει τουλάχιστον <ph id="1" equiv="limit" disp="limit"/> ιδιότητες.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_max_properties">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit contenir au maximum <ph id="1" equiv="limit" disp="limit"/> propriétés.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να περιέχει το πολύ <ph id="1" equiv="limit" disp="limit"/> ιδιότητες.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_multiple">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit être un multiple de <ph id="1" equiv="limit" disp="limit"/>.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να είναι πολλαπλάσιο του <ph id="1" equiv="limit" disp="limit"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_any_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter au moins une variante anyOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να πληροί τουλάχιστον μία παραλλαγή anyOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_one_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter exactement une variante oneOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να πληροί ακριβώς μία παραλλαγή oneOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_all_of">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> doit respecter toutes les variantes allOf.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πρέπει να πληροί όλες τις παραλλαγές allOf.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_not">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> respecte une variante interdite par not.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> πληροί μία παραλλαγή που απαγορεύεται από το not.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_false">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> est interdit par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> απαγορεύεται από το σχήμα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_unevaluated">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> contient une propriété non évaluée par le schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> περιέχει μία ιδιότητα που δεν έχει αξιολογηθεί από το σχήμα.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_error_generic">
+      <segment>
+        <source><ph id="0" equiv="path" disp="path"/> ne respecte pas la règle « <ph id="1" equiv="keyword" disp="error.keyword"/> » du schéma.</source>
+        <target state="translated"><ph id="0" equiv="path" disp="path"/> δεν πληροί τον κανόνα « <ph id="1" equiv="keyword" disp="error.keyword"/> » του σχήματος.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_root_path">
+      <segment>
+        <source>Racine</source>
+        <target state="translated">Ρίζα</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Το επιλεγμένο αρχείο είναι κενό.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_large">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Το αρχείο υπερβαίνει το όριο των <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_format">
+      <segment>
+        <source>Sélectionnez un fichier JSON, SCHEMA ou TXT.</source>
+        <target state="translated">Επιλέξτε ένα αρχείο JSON, SCHEMA ή TXT.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_encoding">
+      <segment>
+        <source>Le fichier n’est pas encodé en UTF-8 valide.</source>
+        <target state="translated">Το αρχείο δεν είναι κωδικοποιημένο σε έγκυρο UTF-8.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_file_error">
+      <segment>
+        <source>Impossible de lire ce fichier localement.</source>
+        <target state="translated">Αδύνατη η ανάγνωση αυτού του αρχείου τοπικά.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_issue_validation_limit">
+      <segment>
+        <source>La complexité ou la durée de validation dépasse la limite de sécurité. Réduisez le document, simplifiez le schéma ou validez un fragment à la fois.</source>
+        <target state="translated">Η πολυπλοκότητα ή η διάρκεια επικύρωσης υπερβαίνει το όριο ασφαλείας. Μειώστε το έγγραφο, απλοποιήστε το σχήμα ή επικυρώστε ένα τμήμα τη φορά.</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_loading_file">
+      <segment>
+        <source>Lecture du fichier…</source>
+        <target state="translated">Ανάγνωση αρχείου…</target>
+      </segment>
+    </unit>
+    <unit id="json_schema_live_loading">
+      <segment>
+        <source>Lecture locale du fichier en cours.</source>
+        <target state="translated">Ανάγνωση τοπικού αρχείου σε εξέλιξη.</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

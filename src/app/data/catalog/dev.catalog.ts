@@ -385,6 +385,23 @@ export const DEV_CATEGORY: CatalogCategoryDefinition = {
             },
           },
         },
+        validate: {
+          title: $localize`:@@dev_data_sg_validate_title:Validation de contrats`,
+          description: $localize`:@@dev_data_sg_validate_desc:Vérifier que des données JSON respectent un contrat explicite, sans conversion silencieuse ni transfert réseau.`,
+          order: 3,
+          tools: {
+            'json-schema-validator': {
+              title: $localize`:@@tool_json_schema_validator_title:Validateur JSON Schema`,
+              description: $localize`:@@tool_json_schema_validator_desc:Valider localement un JSON avec Draft 7, 2019-09 ou 2020-12, localiser les erreurs et générer une proposition corrigée prudente.`,
+              icon: 'tc-icon tc-icon-check-circle',
+              available: true,
+              reviewedLocales: ['fr'],
+              loadComponent: () =>
+                import('../../features/json-schema-validator/presentation/json-schema-validator-tool.component')
+                  .then(m => m.JsonSchemaValidatorToolComponent),
+            },
+          },
+        },
       },
     },
 
