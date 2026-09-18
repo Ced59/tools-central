@@ -84,6 +84,10 @@ export const EDITORIAL_REGISTRY: Record<string, EditorialRegistryEntry> = {
     available: true,
     load: () => import('./dev/pdf/pdf-pages-to-json.editorial'),
   },
+  'dev/pdf/pdf-privacy-inspector': {
+    available: true,
+    load: () => import('./dev/pdf/pdf-privacy-inspector.editorial'),
+  },
   'dev/pdf/pdf-sanitize': {
     available: true,
     load: () => import('./dev/pdf/pdf-sanitize.editorial'),

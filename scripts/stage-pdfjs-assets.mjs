@@ -23,5 +23,9 @@ for (const directory of ['cmaps', 'standard_fonts', 'wasm']) {
   cpSync(join(packageRoot, directory), join(targetRoot, directory), { recursive: true });
 }
 cpSync(join(packageRoot, 'build', 'pdf.worker.min.mjs'), join(targetRoot, 'pdf.worker.min.mjs'));
+cpSync(
+  join(projectRoot, '.generated', 'pdfjs', 'pdf.worker.privacy-bounded.mjs'),
+  join(targetRoot, 'pdf.worker.privacy-bounded.mjs'),
+);
 
 console.log(`[assets] PDF.js resources staged once in ${targetRoot}`);

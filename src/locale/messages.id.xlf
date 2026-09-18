@@ -85741,6 +85741,702 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Tipe konten</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_privacy_inspector_title">
+      <segment>
+        <source>Inspecteur de confidentialité PDF</source>
+        <target state="translated">Inspektur Privasi PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_privacy_inspector_desc">
+      <segment>
+        <source>Repérer localement métadonnées, pièces jointes, JavaScript, liens, formulaires, signatures et chiffrement avant partage.</source>
+        <target state="translated">Temukan metadata, lampiran, JavaScript, tautan, formulir, tanda tangan, dan enkripsi secara lokal sebelum berbagi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_title">
+      <segment>
+        <source>Contrôler les traces cachées d’un PDF avant de le partager</source>
+        <target state="translated">Periksa jejak tersembunyi dari PDF sebelum membagikannya</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_lead">
+      <segment>
+        <source>Un PDF peut conserver le nom de son auteur, une pièce jointe, un formulaire rempli, une URL de suivi ou du code déclenché par certains lecteurs. Cet inspecteur rassemble ces signaux dans un rapport local, lisible et exportable, sans ouvrir les fichiers embarqués ni contacter les liens détectés.</source>
+        <target state="translated">Sebuah PDF dapat menyimpan nama penulisnya, lampiran, formulir yang diisi, URL pelacakan, atau kode yang dipicu oleh pembaca tertentu. Inspektur ini mengumpulkan sinyal-sinyal ini dalam laporan lokal yang dapat dibaca dan diekspor, tanpa membuka file yang disematkan atau menghubungi tautan yang terdeteksi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_use_cases">
+      <segment>
+        <source>Quand inspecter la confidentialité d’un PDF ?</source>
+        <target state="translated">Kapan memeriksa privasi sebuah PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_title">
+      <segment>
+        <source>Avant un envoi externe</source>
+        <target state="translated">Sebelum pengiriman eksternal</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_text">
+      <segment>
+        <source>Contrôlez un contrat, un rapport ou une présentation convertie en PDF avant de l’envoyer à un client, un candidat, une administration ou un partenaire.</source>
+        <target state="translated">Periksa kontrak, laporan, atau presentasi yang dikonversi ke PDF sebelum mengirimkannya kepada klien, kandidat, instansi, atau mitra.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_title">
+      <segment>
+        <source>À la réception d’un document complexe</source>
+        <target state="translated">Saat menerima dokumen kompleks</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_text">
+      <segment>
+        <source>Repérez les pièces jointes, scripts et actions automatiques avant d’ouvrir le fichier dans un lecteur riche. L’inspecteur n’exécute jamais ces éléments.</source>
+        <target state="translated">Temukan lampiran, skrip, dan tindakan otomatis sebelum membuka file di pembaca kaya. Inspektur tidak pernah menjalankan elemen-elemen ini.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_title">
+      <segment>
+        <source>Pour documenter une revue</source>
+        <target state="translated">Untuk mendokumentasikan tinjauan</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_text">
+      <segment>
+        <source>Téléchargez le JSON afin de conserver la version PDF, le nombre de pages, les catégories trouvées, leur sévérité et les limites explicites de l’analyse.</source>
+        <target state="translated">Unduh JSON untuk menyimpan versi PDF, jumlah halaman, kategori yang ditemukan, tingkat keparahan, dan batasan eksplisit dari analisis.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage">
+      <segment>
+        <source>Ce que le rapport examine réellement</source>
+        <target state="translated">Apa yang sebenarnya diperiksa dalam laporan</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_1">
+      <segment>
+        <source>Les dictionnaires d’information et les propriétés XMP peuvent révéler auteur, logiciel, dates, mots-clés ou identifiants documentaires. Le rapport affiche uniquement les valeurs pertinentes et les borne pour préserver la réactivité.</source>
+        <target state="translated">Kamus informasi dan properti XMP dapat mengungkapkan penulis, perangkat lunak, tanggal, kata kunci, atau pengenal dokumen. Laporan hanya menampilkan nilai yang relevan dan membatasi untuk menjaga responsivitas.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_2">
+      <segment>
+        <source>Les fichiers embarqués, URL externes, champs AcroForm ou XFA et signatures sont inventoriés sans extraire leurs données sensibles. Une valeur de formulaire est comptée comme présente, mais n’est jamais recopiée dans le rapport.</source>
+        <target state="translated">File yang disematkan, URL eksternal, bidang AcroForm atau XFA, dan tanda tangan diinventarisasi tanpa mengekstrak data sensitif mereka. Nilai formulir dihitung sebagai ada, tetapi tidak pernah disalin ke dalam laporan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_3">
+      <segment>
+        <source>PDF.js détecte les actions JavaScript au niveau du document, des pages et des formulaires. Leur code n’est ni affiché, ni évalué, ni transmis. Les actions d’ouverture ou de lancement connues sont signalées séparément.</source>
+        <target state="translated">PDF.js mendeteksi tindakan JavaScript di tingkat dokumen, halaman, dan formulir. Kode mereka tidak ditampilkan, dievaluasi, atau dikirim. Tindakan pembukaan atau peluncuran yang dikenal dilaporkan secara terpisah.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_interpretation">
+      <segment>
+        <source>Interpréter les niveaux d’attention</source>
+        <target state="translated">Menginterpretasikan tingkat perhatian</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_title">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Perhatian tinggi</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_text">
+      <segment>
+        <source>JavaScript, action automatique sensible ou fichier embarqué demande une revue avant diffusion. Leur présence n’établit pas à elle seule une intention malveillante.</source>
+        <target state="translated">JavaScript, tindakan otomatis yang sensitif, atau file yang disematkan memerlukan tinjauan sebelum disebarluaskan. Kehadiran mereka tidak secara otomatis menunjukkan niat jahat.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_title">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Perlu diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_text">
+      <segment>
+        <source>Les liens externes, formulaires remplis et structures XFA peuvent transmettre ou conserver des informations selon le lecteur et l’usage du document.</source>
+        <target state="translated">Tautan eksternal, formulir yang diisi, dan struktur XFA dapat mentransmisikan atau menyimpan informasi tergantung pada pembaca dan penggunaan dokumen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_title">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Jejak ditemukan</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_text">
+      <segment>
+        <source>Une métadonnée ou l’identité associée à une signature peut être légitime, mais mérite une décision consciente avant publication.</source>
+        <target state="translated">Sebuah metadata atau identitas yang terkait dengan tanda tangan dapat sah, tetapi memerlukan keputusan yang sadar sebelum publikasi.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">Pengolahan lokal dan batasan keamanan</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_1">
+      <segment>
+        <source>Le fichier et son éventuel mot de passe restent dans la mémoire du navigateur. L’analyse s’exécute dans un Worker et les ressources PDF.js sont servies par Tools Central.</source>
+        <target state="translated">File dan kata sandi yang mungkin ada tetap dalam memori browser. Analisis dijalankan dalam Worker dan sumber daya PDF.js disajikan oleh Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_2">
+      <segment>
+        <source>La taille est limitée à 50 Mio, le document à 1 000 pages et le nombre d’éléments distincts à 10 000. L’affichage est borné à 200 lignes tandis que les totaux complets restent dans le rapport.</source>
+        <target state="translated">Ukuran dibatasi hingga 50 MB, dokumen hingga 1.000 halaman, dan jumlah elemen yang berbeda hingga 10.000. Tampilan dibatasi hingga 200 baris sementara total lengkap tetap dalam laporan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_3">
+      <segment>
+        <source>Ce contrôle structurel n’est ni un antivirus, ni une analyse du texte ou des images visibles, ni une preuve cryptographique de validité des signatures. Un résultat vide n’est donc pas un certificat d’innocuité.</source>
+        <target state="translated">Kontrol struktural ini bukan antivirus, bukan analisis teks atau gambar yang terlihat, dan bukan bukti kriptografis dari keabsahan tanda tangan. Hasil kosong tidak dianggap sebagai sertifikat keamanan.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_faq">
+      <segment>
+        <source>Questions fréquentes sur la confidentialité des PDF</source>
+        <target state="translated">Pertanyaan yang Sering Diajukan tentang Privasi PDF</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q1">
+      <segment>
+        <source>Le mot de passe de mon PDF est-il enregistré ?</source>
+        <target state="translated">Apakah kata sandi PDF saya disimpan?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a1">
+      <segment>
+        <source>Non. Il est transmis uniquement au Worker local pour déchiffrer la structure, puis disparaît avec l’état de la page, une réinitialisation ou la fermeture de l’onglet. Il n’est jamais inclus dans le JSON.</source>
+        <target state="translated">Tidak. Kata sandi hanya dikirim ke Worker lokal untuk mendekripsi struktur, kemudian menghilang dengan status halaman, reset, atau penutupan tab. Itu tidak pernah disertakan dalam JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q2">
+      <segment>
+        <source>Un JavaScript détecté signifie-t-il que le PDF est dangereux ?</source>
+        <target state="translated">Apakah JavaScript yang terdeteksi berarti PDF berbahaya?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a2">
+      <segment>
+        <source>Pas nécessairement. Des formulaires légitimes utilisent JavaScript pour calculer ou valider des champs. Sa présence justifie toutefois une revue et l’ouverture dans un environnement adapté à la provenance du fichier.</source>
+        <target state="translated">Belum tentu. Formulir yang sah menggunakan JavaScript untuk menghitung atau memvalidasi bidang. Kehadirannya tetap memerlukan tinjauan dan pembukaan dalam lingkungan yang sesuai dengan asal file.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q3">
+      <segment>
+        <source>Pourquoi une signature n’est-elle pas marquée comme valide ou invalide ?</source>
+        <target state="translated">Mengapa tanda tangan tidak ditandai sebagai valid atau tidak valid?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a3">
+      <segment>
+        <source>Une validation fiable doit vérifier la chaîne de certificats, la révocation, l’horodatage et les octets signés. L’outil décrit seulement la présence, l’identité déclarée et la couverture exposées par le PDF.</source>
+        <target state="translated">Validasi yang dapat diandalkan harus memeriksa rantai sertifikat, pencabutan, cap waktu, dan byte yang ditandatangani. Alat ini hanya menggambarkan kehadiran, identitas yang dinyatakan, dan cakupan yang diungkapkan oleh PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Kembali ke alat PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_title">
+      <segment>
+        <source>Inspecter la confidentialité d’un PDF</source>
+        <target state="translated">Periksa privasi PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_subtitle">
+      <segment>
+        <source>Repérez métadonnées, pièces jointes, JavaScript, actions automatiques, liens, formulaires, signatures et protection avant de partager un document.</source>
+        <target state="translated">Temukan metadata, lampiran, JavaScript, tindakan otomatis, tautan, formulir, tanda tangan, dan perlindungan sebelum membagikan dokumen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_local">
+      <segment>
+        <source>Aucun envoi et aucun lien suivi : l’analyse s’exécute localement dans un Worker.</source>
+        <target state="translated">Tidak ada pengiriman dan tidak ada tautan yang dilacak: analisis dijalankan secara lokal dalam Worker.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Langkah 1</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_source_title">
+      <segment>
+        <source>Choisir le PDF à contrôler</source>
+        <target state="translated">Pilih PDF untuk diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick">
+      <segment>
+        <source>Sélectionner un fichier PDF</source>
+        <target state="translated">Pilih file PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick_help">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · 1 000 pages · traitement local</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maksimum · 1 000 halaman · pemrosesan lokal</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Berkas</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Ukuran</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_label">
+      <segment>
+        <source>Mot de passe du PDF</source>
+        <target state="translated">Kata sandi PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_help">
+      <segment>
+        <source>Le mot de passe reste en mémoire le temps de l’analyse et n’est ni enregistré ni inclus dans le rapport.</source>
+        <target state="translated">Kata sandi akan diingat selama analisis dan tidak disimpan atau dimasukkan dalam laporan.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_inspect">
+      <segment>
+        <source>Inspecter le PDF</source>
+        <target state="translated">Periksa PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Atur ulang</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_processing">
+      <segment>
+        <source>Inspection structurelle locale…</source>
+        <target state="translated">Pemeriksaan struktural lokal…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Batalkan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Langkah 2</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_result_title">
+      <segment>
+        <source>Rapport de confidentialité</source>
+        <target state="translated">Laporan Privasi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_download">
+      <segment>
+        <source>Télécharger le rapport JSON</source>
+        <target state="translated">Unduh laporan JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pages">
+      <segment>
+        <source>Pages inspectées</source>
+        <target state="translated">Halaman yang diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_total">
+      <segment>
+        <source>Occurrences détectées</source>
+        <target state="translated">Kejadian yang terdeteksi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_high_count">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Perhatian tinggi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_medium_count">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Perlu diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_report_scope">
+      <segment>
+        <source>PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · détection structurelle sans exécution du contenu actif.</source>
+        <target state="translated">PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · deteksi struktural tanpa menjalankan konten aktif.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_clear_state">
+      <segment>
+        <source>Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</source>
+        <target state="translated">Tidak ada jejak yang didukung terdeteksi. Hasil ini tidak merupakan sertifikasi keamanan: periksa juga konten yang terlihat sebelum dibagikan.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_label">
+      <segment>
+        <source>Filtrer le rapport</source>
+        <target state="translated">Saring laporan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_all">
+      <segment>
+        <source>Tout</source>
+        <target state="translated">Semua</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_empty">
+      <segment>
+        <source>Aucun élément affichable dans cette catégorie.</source>
+        <target state="translated">Tidak ada item yang dapat ditampilkan dalam kategori ini.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> résultat(s) supplémentaire(s) restent comptés dans le rapport, mais ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> hasil tambahan tetap dihitung dalam laporan, tetapi tidak ditampilkan untuk menjaga responsivitas.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guidance">
+      <segment>
+        <source>Portée du contrôle</source>
+        <target state="translated">Lingkup pemeriksaan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active">
+      <segment>
+        <source>Le code n’est jamais exécuté</source>
+        <target state="translated">Kode tidak pernah dijalankan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active_text">
+      <segment>
+        <source>Le moteur inventorie JavaScript et actions automatiques sans lancer le script, ouvrir une pièce jointe ni visiter une URL.</source>
+        <target state="translated">Mesin menginventarisasi JavaScript dan tindakan otomatis tanpa menjalankan skrip, membuka lampiran, atau mengunjungi URL.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature">
+      <segment>
+        <source>Présence, pas validation</source>
+        <target state="translated">Kehadiran, bukan validasi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature_text">
+      <segment>
+        <source>Une signature est décrite par ses métadonnées et sa couverture. Son certificat et son intégrité cryptographique ne sont pas vérifiés.</source>
+        <target state="translated">Sebuah tanda tangan dijelaskan oleh metadata dan cakupannya. Sertifikat dan integritas kriptografisnya tidak diverifikasi.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next">
+      <segment>
+        <source>Nettoyer ensuite</source>
+        <target state="translated">Bersihkan selanjutnya</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next_text">
+      <segment>
+        <source>L’inspecteur ne modifie jamais le document.</source>
+        <target state="translated">Inspektur tidak pernah mengubah dokumen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_sanitize_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF.</source>
+        <target state="translated">Buka pembersih PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_metadata">
+      <segment>
+        <source>Métadonnées</source>
+        <target state="translated">Metadata</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_active">
+      <segment>
+        <source>Contenu actif</source>
+        <target state="translated">Konten aktif</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_attachments">
+      <segment>
+        <source>Pièces jointes</source>
+        <target state="translated">Lampiran</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_links">
+      <segment>
+        <source>Liens externes</source>
+        <target state="translated">Tautan eksternal</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_forms">
+      <segment>
+        <source>Formulaires</source>
+        <target state="translated">Formulir</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_signatures">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Tanda tangan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_encryption">
+      <segment>
+        <source>Chiffrement</source>
+        <target state="translated">Enkripsi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_document_metadata">
+      <segment>
+        <source>Métadonnée du document</source>
+        <target state="translated">Metadata dokumen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xmp_metadata">
+      <segment>
+        <source>Métadonnée XMP</source>
+        <target state="translated">Metadata XMP</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_javascript">
+      <segment>
+        <source>JavaScript embarqué</source>
+        <target state="translated">JavaScript terbenam</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_automatic_action">
+      <segment>
+        <source>Action automatique</source>
+        <target state="translated">Tindakan otomatis</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_embedded_file">
+      <segment>
+        <source>Fichier embarqué</source>
+        <target state="translated">File tersemat</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_external_link">
+      <segment>
+        <source>Lien externe</source>
+        <target state="translated">Tautan eksternal</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_form_fields">
+      <segment>
+        <source>Champs de formulaire</source>
+        <target state="translated">Bidang formulir</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xfa_form">
+      <segment>
+        <source>Formulaire XFA dynamique</source>
+        <target state="translated">Formulir XFA dinamis</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_signature">
+      <segment>
+        <source>Signature numérique</source>
+        <target state="translated">Tanda tangan digital</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_encryption">
+      <segment>
+        <source>Protection du PDF</source>
+        <target state="translated">Perlindungan PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Perhatian tinggi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_medium">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Perlu diperiksa</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_low">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Jejak ditemukan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_info">
+      <segment>
+        <source>Information</source>
+        <target state="translated">Informasi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Perhatian tinggi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_medium">
+      <segment>
+        <source>Vérifications nécessaires</source>
+        <target state="translated">Pemeriksaan diperlukan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_low">
+      <segment>
+        <source>Traces de confidentialité détectées</source>
+        <target state="translated">Jejak privasi terdeteksi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_clear">
+      <segment>
+        <source>Aucune trace prise en charge détectée</source>
+        <target state="translated">Tidak ada jejak yang terdeteksi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_encrypted_label">
+      <segment>
+        <source>protégé et déchiffré localement</source>
+        <target state="translated">terproteksi dan didekripsi secara lokal</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_unencrypted_label">
+      <segment>
+        <source>non chiffré</source>
+        <target state="translated">tidak terenkripsi</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_page_context">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></source>
+        <target state="translated">Halaman <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_occurrences_context">
+      <segment>
+        <source><ph id="0" equiv="count" disp="finding.occurrences"/> occurrence(s)</source>
+        <target state="translated"><ph id="0" equiv="count" disp="finding.occurrences"/> kejadian</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">File yang dipilih kosong.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">File melebihi batas <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_format">
+      <segment>
+        <source>Sélectionnez un fichier portant l’extension PDF.</source>
+        <target state="translated">Pilih file dengan ekstensi PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_length">
+      <segment>
+        <source>Le mot de passe dépasse la limite de sécurité de 128 caractères.</source>
+        <target state="translated">Kata sandi melebihi batas keamanan 128 karakter.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_required">
+      <segment>
+        <source>Ce PDF est protégé. Saisissez son mot de passe pour poursuivre l’inspection locale.</source>
+        <target state="translated">PDF ini dilindungi. Masukkan kata sandinya untuk melanjutkan pemeriksaan lokal.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_incorrect">
+      <segment>
+        <source>Le mot de passe ne permet pas d’ouvrir ce PDF.</source>
+        <target state="translated">Kata sandi tidak dapat membuka PDF ini.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_pages">
+      <segment>
+        <source>Le document dépasse la limite de 1 000 pages inspectables.</source>
+        <target state="translated">Dokumen melebihi batas 1.000 halaman yang dapat diperiksa.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_limit">
+      <segment>
+        <source>Le document contient trop d’éléments distincts pour produire un rapport fiable dans les limites locales.</source>
+        <target state="translated">Dokumen mengandung terlalu banyak elemen berbeda untuk menghasilkan laporan yang dapat diandalkan dalam batas lokal.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_invalid">
+      <segment>
+        <source>Le fichier ne contient pas une structure PDF valide.</source>
+        <target state="translated">File tidak mengandung struktur PDF yang valid.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_generic">
+      <segment>
+        <source>Impossible d’inspecter ce PDF. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Tidak dapat memeriksa PDF ini. Mungkin rusak atau menggunakan fitur yang tidak didukung.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_target_too_long">
+      <segment>
+        <source>Cible trop longue pour être affichée</source>
+        <target state="translated">Target terlalu panjang untuk ditampilkan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_contact">
+      <segment>
+        <source>Contact</source>
+        <target state="translated">Kontak</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_location">
+      <segment>
+        <source>Lieu</source>
+        <target state="translated">Tempat</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_reason">
+      <segment>
+        <source>Motif</source>
+        <target state="translated">Alasan</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_sound">
+      <segment>
+        <source>Son</source>
+        <target state="translated">Suara</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_video">
+      <segment>
+        <source>Vidéo</source>
+        <target state="translated">Video</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_screen">
+      <segment>
+        <source>Écran</source>
+        <target state="translated">Layar</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

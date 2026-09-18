@@ -85713,6 +85713,702 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Тип вмісту</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_privacy_inspector_title">
+      <segment>
+        <source>Inspecteur de confidentialité PDF</source>
+        <target state="translated">Інспектор конфіденційності PDF</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_privacy_inspector_desc">
+      <segment>
+        <source>Repérer localement métadonnées, pièces jointes, JavaScript, liens, formulaires, signatures et chiffrement avant partage.</source>
+        <target state="translated">Виявлення метаданих, вкладень, JavaScript, посилань, форм, підписів та шифрування перед поширенням.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_title">
+      <segment>
+        <source>Contrôler les traces cachées d’un PDF avant de le partager</source>
+        <target state="translated">Перевірка прихованих слідів PDF перед його поширенням</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_lead">
+      <segment>
+        <source>Un PDF peut conserver le nom de son auteur, une pièce jointe, un formulaire rempli, une URL de suivi ou du code déclenché par certains lecteurs. Cet inspecteur rassemble ces signaux dans un rapport local, lisible et exportable, sans ouvrir les fichiers embarqués ni contacter les liens détectés.</source>
+        <target state="translated">PDF може зберігати ім'я автора, вкладення, заповнені форми, URL для відстеження або код, що виконується деякими читачами. Цей інспектор збирає ці сигнали в локальний, читабельний та експортований звіт, не відкриваючи вбудовані файли та не контактує з виявленими посиланнями.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_use_cases">
+      <segment>
+        <source>Quand inspecter la confidentialité d’un PDF ?</source>
+        <target state="translated">Коли перевіряти конфіденційність PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_title">
+      <segment>
+        <source>Avant un envoi externe</source>
+        <target state="translated">Перед зовнішньою відправкою</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_text">
+      <segment>
+        <source>Contrôlez un contrat, un rapport ou une présentation convertie en PDF avant de l’envoyer à un client, un candidat, une administration ou un partenaire.</source>
+        <target state="translated">Перевірте контракт, звіт або презентацію, конвертовану в PDF, перед відправкою клієнту, кандидату, адміністрації або партнеру.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_title">
+      <segment>
+        <source>À la réception d’un document complexe</source>
+        <target state="translated">При отриманні складного документа</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_text">
+      <segment>
+        <source>Repérez les pièces jointes, scripts et actions automatiques avant d’ouvrir le fichier dans un lecteur riche. L’inspecteur n’exécute jamais ces éléments.</source>
+        <target state="translated">Виявляйте вкладення, скрипти та автоматичні дії перед відкриттям файлу в розширеному читачі. Інспектор ніколи не виконує ці елементи.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_title">
+      <segment>
+        <source>Pour documenter une revue</source>
+        <target state="translated">Для документування огляду</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_text">
+      <segment>
+        <source>Téléchargez le JSON afin de conserver la version PDF, le nombre de pages, les catégories trouvées, leur sévérité et les limites explicites de l’analyse.</source>
+        <target state="translated">Завантажте JSON, щоб зберегти версію PDF, кількість сторінок, виявлені категорії, їхню серйозність та явні межі аналізу.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage">
+      <segment>
+        <source>Ce que le rapport examine réellement</source>
+        <target state="translated">Що насправді перевіряє звіт</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_1">
+      <segment>
+        <source>Les dictionnaires d’information et les propriétés XMP peuvent révéler auteur, logiciel, dates, mots-clés ou identifiants documentaires. Le rapport affiche uniquement les valeurs pertinentes et les borne pour préserver la réactivité.</source>
+        <target state="translated">Словники інформації та властивості XMP можуть розкрити автора, програмне забезпечення, дати, ключові слова або документальні ідентифікатори. Звіт відображає лише відповідні значення та обмежує їх, щоб зберегти чутливість.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_2">
+      <segment>
+        <source>Les fichiers embarqués, URL externes, champs AcroForm ou XFA et signatures sont inventoriés sans extraire leurs données sensibles. Une valeur de formulaire est comptée comme présente, mais n’est jamais recopiée dans le rapport.</source>
+        <target state="translated">Вбудовані файли, зовнішні URL, поля AcroForm або XFA та підписи інвентаризуються без вилучення їх чутливих даних. Значення форми враховується як присутнє, але ніколи не копіюється в звіт.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_3">
+      <segment>
+        <source>PDF.js détecte les actions JavaScript au niveau du document, des pages et des formulaires. Leur code n’est ni affiché, ni évalué, ni transmis. Les actions d’ouverture ou de lancement connues sont signalées séparément.</source>
+        <target state="translated">PDF.js виявляє дії JavaScript на рівні документа, сторінок та форм. Їхній код не відображається, не оцінюється і не передається. Відомі дії відкриття або запуску повідомляються окремо.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_interpretation">
+      <segment>
+        <source>Interpréter les niveaux d’attention</source>
+        <target state="translated">Інтерпретація рівнів уваги</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_title">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Висока увага</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_text">
+      <segment>
+        <source>JavaScript, action automatique sensible ou fichier embarqué demande une revue avant diffusion. Leur présence n’établit pas à elle seule une intention malveillante.</source>
+        <target state="translated">JavaScript, чутлива автоматична дія або вбудований файл вимагає перевірки перед поширенням. Їхня присутність не встановлює наміру злочинності.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_title">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Потрібно перевірити</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_text">
+      <segment>
+        <source>Les liens externes, formulaires remplis et structures XFA peuvent transmettre ou conserver des informations selon le lecteur et l’usage du document.</source>
+        <target state="translated">Зовнішні посилання, заповнені форми та структури XFA можуть передавати або зберігати інформацію залежно від читача та використання документа.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_title">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Знайдено слід</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_text">
+      <segment>
+        <source>Une métadonnée ou l’identité associée à une signature peut être légitime, mais mérite une décision consciente avant publication.</source>
+        <target state="translated">Метадані або особа, пов'язана з підписом, можуть бути легітимними, але заслуговують на свідоме рішення перед публікацією.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">Локальна обробка та обмеження безпеки</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_1">
+      <segment>
+        <source>Le fichier et son éventuel mot de passe restent dans la mémoire du navigateur. L’analyse s’exécute dans un Worker et les ressources PDF.js sont servies par Tools Central.</source>
+        <target state="translated">Файл та його можливий пароль залишаються в пам'яті браузера. Аналіз виконується в Worker, а ресурси PDF.js надаються Tools Central.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_2">
+      <segment>
+        <source>La taille est limitée à 50 Mio, le document à 1 000 pages et le nombre d’éléments distincts à 10 000. L’affichage est borné à 200 lignes tandis que les totaux complets restent dans le rapport.</source>
+        <target state="translated">Розмір обмежений 50 МБ, документ - 1000 сторінок, а кількість окремих елементів - 10000. Відображення обмежене 200 рядками, тоді як загальні підсумки залишаються в звіті.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_3">
+      <segment>
+        <source>Ce contrôle structurel n’est ni un antivirus, ni une analyse du texte ou des images visibles, ni une preuve cryptographique de validité des signatures. Un résultat vide n’est donc pas un certificat d’innocuité.</source>
+        <target state="translated">Ця структурна перевірка не є антивірусом, не аналізує текст або видимі зображення, і не є криптографічним доказом дійсності підписів. Отже, порожній результат не є сертифікатом безпеки.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_faq">
+      <segment>
+        <source>Questions fréquentes sur la confidentialité des PDF</source>
+        <target state="translated">Часті запитання про конфіденційність PDF</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q1">
+      <segment>
+        <source>Le mot de passe de mon PDF est-il enregistré ?</source>
+        <target state="translated">Чи зберігається пароль мого PDF?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a1">
+      <segment>
+        <source>Non. Il est transmis uniquement au Worker local pour déchiffrer la structure, puis disparaît avec l’état de la page, une réinitialisation ou la fermeture de l’onglet. Il n’est jamais inclus dans le JSON.</source>
+        <target state="translated">Ні. Він передається лише локальному Worker для розшифрування структури, а потім зникає з стану сторінки, скидання або закриття вкладки. Він ніколи не включається в JSON.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q2">
+      <segment>
+        <source>Un JavaScript détecté signifie-t-il que le PDF est dangereux ?</source>
+        <target state="translated">Чи означає виявлений JavaScript, що PDF небезпечний?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a2">
+      <segment>
+        <source>Pas nécessairement. Des formulaires légitimes utilisent JavaScript pour calculer ou valider des champs. Sa présence justifie toutefois une revue et l’ouverture dans un environnement adapté à la provenance du fichier.</source>
+        <target state="translated">Не обов'язково. Легітимні форми використовують JavaScript для обчислення або перевірки полів. Однак його присутність виправдовує перевірку та відкриття в середовищі, відповідному походженню файлу.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q3">
+      <segment>
+        <source>Pourquoi une signature n’est-elle pas marquée comme valide ou invalide ?</source>
+        <target state="translated">Чому підпис не позначений як дійсний або недійсний?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a3">
+      <segment>
+        <source>Une validation fiable doit vérifier la chaîne de certificats, la révocation, l’horodatage et les octets signés. L’outil décrit seulement la présence, l’identité déclarée et la couverture exposées par le PDF.</source>
+        <target state="translated">Надійна перевірка повинна перевіряти ланцюг сертифікатів, відкликання, часові мітки та підписані байти. Інструмент описує лише присутність, заявлену особу та охоплення, представлене PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Повернутися до інструментів PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_title">
+      <segment>
+        <source>Inspecter la confidentialité d’un PDF</source>
+        <target state="translated">Перевірка конфіденційності PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_subtitle">
+      <segment>
+        <source>Repérez métadonnées, pièces jointes, JavaScript, actions automatiques, liens, formulaires, signatures et protection avant de partager un document.</source>
+        <target state="translated">Виявлення метаданих, вкладень, JavaScript, автоматичних дій, посилань, форм, підписів та захисту перед поширенням документа.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_local">
+      <segment>
+        <source>Aucun envoi et aucun lien suivi : l’analyse s’exécute localement dans un Worker.</source>
+        <target state="translated">Без відправки та без відстежуваних посилань: аналіз виконується локально в Worker.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Крок 1</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_source_title">
+      <segment>
+        <source>Choisir le PDF à contrôler</source>
+        <target state="translated">Вибрати PDF для перевірки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick">
+      <segment>
+        <source>Sélectionner un fichier PDF</source>
+        <target state="translated">Вибрати файл PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick_help">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · 1 000 pages · traitement local</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> максимальний · 1 000 сторінок · локальна обробка</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Файл</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Розмір</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_label">
+      <segment>
+        <source>Mot de passe du PDF</source>
+        <target state="translated">Пароль PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_help">
+      <segment>
+        <source>Le mot de passe reste en mémoire le temps de l’analyse et n’est ni enregistré ni inclus dans le rapport.</source>
+        <target state="translated">Пароль зберігається в пам'яті під час аналізу і не зберігається, і не включається в звіт.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_inspect">
+      <segment>
+        <source>Inspecter le PDF</source>
+        <target state="translated">Перевірити PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Скинути</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_processing">
+      <segment>
+        <source>Inspection structurelle locale…</source>
+        <target state="translated">Локальна структурна перевірка…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Скасувати</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Крок 2</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_result_title">
+      <segment>
+        <source>Rapport de confidentialité</source>
+        <target state="translated">Звіт про конфіденційність</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_download">
+      <segment>
+        <source>Télécharger le rapport JSON</source>
+        <target state="translated">Завантажити звіт JSON</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pages">
+      <segment>
+        <source>Pages inspectées</source>
+        <target state="translated">Перевірені сторінки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_total">
+      <segment>
+        <source>Occurrences détectées</source>
+        <target state="translated">Виявлені випадки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_high_count">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Висока увага</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_medium_count">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Потрібно перевірити</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_report_scope">
+      <segment>
+        <source>PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · détection structurelle sans exécution du contenu actif.</source>
+        <target state="translated">PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · структурна перевірка без виконання активного контенту.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_clear_state">
+      <segment>
+        <source>Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</source>
+        <target state="translated">Не виявлено жодних підтримуваних слідів. Цей результат не є сертифікацією безпеки: також перевірте видимий вміст перед поширенням.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_label">
+      <segment>
+        <source>Filtrer le rapport</source>
+        <target state="translated">Фільтрувати звіт</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_all">
+      <segment>
+        <source>Tout</source>
+        <target state="translated">Усе</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_empty">
+      <segment>
+        <source>Aucun élément affichable dans cette catégorie.</source>
+        <target state="translated">Немає жодного елемента для відображення в цій категорії.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> résultat(s) supplémentaire(s) restent comptés dans le rapport, mais ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> додаткових результатів залишаються врахованими в звіті, але не відображаються для збереження швидкості.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guidance">
+      <segment>
+        <source>Portée du contrôle</source>
+        <target state="translated">Обсяг перевірки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active">
+      <segment>
+        <source>Le code n’est jamais exécuté</source>
+        <target state="translated">Код ніколи не виконується</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active_text">
+      <segment>
+        <source>Le moteur inventorie JavaScript et actions automatiques sans lancer le script, ouvrir une pièce jointe ni visiter une URL.</source>
+        <target state="translated">Двигун інвентаризує JavaScript та автоматичні дії без запуску скрипту, відкриття вкладення або відвідування URL.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature">
+      <segment>
+        <source>Présence, pas validation</source>
+        <target state="translated">Присутність, не валідація</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature_text">
+      <segment>
+        <source>Une signature est décrite par ses métadonnées et sa couverture. Son certificat et son intégrité cryptographique ne sont pas vérifiés.</source>
+        <target state="translated">Підпис описується його метаданими та охопленням. Його сертифікат та криптографічна цілісність не перевіряються.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next">
+      <segment>
+        <source>Nettoyer ensuite</source>
+        <target state="translated">Потім очистити</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next_text">
+      <segment>
+        <source>L’inspecteur ne modifie jamais le document.</source>
+        <target state="translated">Інспектор ніколи не змінює документ.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_sanitize_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF.</source>
+        <target state="translated">Відкрити PDF-очисник.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_metadata">
+      <segment>
+        <source>Métadonnées</source>
+        <target state="translated">Метадані</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_active">
+      <segment>
+        <source>Contenu actif</source>
+        <target state="translated">Активний вміст</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_attachments">
+      <segment>
+        <source>Pièces jointes</source>
+        <target state="translated">Вкладення</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_links">
+      <segment>
+        <source>Liens externes</source>
+        <target state="translated">Зовнішні посилання</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_forms">
+      <segment>
+        <source>Formulaires</source>
+        <target state="translated">Форми</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_signatures">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Підписи</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_encryption">
+      <segment>
+        <source>Chiffrement</source>
+        <target state="translated">Шифрування</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_document_metadata">
+      <segment>
+        <source>Métadonnée du document</source>
+        <target state="translated">Метадані документа</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xmp_metadata">
+      <segment>
+        <source>Métadonnée XMP</source>
+        <target state="translated">Метадані XMP</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_javascript">
+      <segment>
+        <source>JavaScript embarqué</source>
+        <target state="translated">Вбудований JavaScript</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_automatic_action">
+      <segment>
+        <source>Action automatique</source>
+        <target state="translated">Автоматична дія</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_embedded_file">
+      <segment>
+        <source>Fichier embarqué</source>
+        <target state="translated">Вбудований файл</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_external_link">
+      <segment>
+        <source>Lien externe</source>
+        <target state="translated">Зовнішнє посилання</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_form_fields">
+      <segment>
+        <source>Champs de formulaire</source>
+        <target state="translated">Поля форми</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xfa_form">
+      <segment>
+        <source>Formulaire XFA dynamique</source>
+        <target state="translated">Динамічна форма XFA</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_signature">
+      <segment>
+        <source>Signature numérique</source>
+        <target state="translated">Цифровий підпис</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_encryption">
+      <segment>
+        <source>Protection du PDF</source>
+        <target state="translated">Захист PDF</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Високий рівень уваги</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_medium">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Потрібна перевірка</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_low">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Знайдена ознака</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_info">
+      <segment>
+        <source>Information</source>
+        <target state="translated">Інформація</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Високий рівень уваги</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_medium">
+      <segment>
+        <source>Vérifications nécessaires</source>
+        <target state="translated">Потрібні перевірки</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_low">
+      <segment>
+        <source>Traces de confidentialité détectées</source>
+        <target state="translated">Виявлені ознаки конфіденційності</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_clear">
+      <segment>
+        <source>Aucune trace prise en charge détectée</source>
+        <target state="translated">Не виявлено жодних підтримуваних ознак</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_encrypted_label">
+      <segment>
+        <source>protégé et déchiffré localement</source>
+        <target state="translated">захищений та розшифрований локально</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_unencrypted_label">
+      <segment>
+        <source>non chiffré</source>
+        <target state="translated">незахищений</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_page_context">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></source>
+        <target state="translated">Сторінка <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_occurrences_context">
+      <segment>
+        <source><ph id="0" equiv="count" disp="finding.occurrences"/> occurrence(s)</source>
+        <target state="translated"><ph id="0" equiv="count" disp="finding.occurrences"/> випадків</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Вибраний файл порожній.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Файл перевищує ліміт <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_format">
+      <segment>
+        <source>Sélectionnez un fichier portant l’extension PDF.</source>
+        <target state="translated">Виберіть файл з розширенням PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_length">
+      <segment>
+        <source>Le mot de passe dépasse la limite de sécurité de 128 caractères.</source>
+        <target state="translated">Пароль перевищує безпечний ліміт у 128 символів.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_required">
+      <segment>
+        <source>Ce PDF est protégé. Saisissez son mot de passe pour poursuivre l’inspection locale.</source>
+        <target state="translated">Цей PDF захищений. Введіть його пароль, щоб продовжити локальну перевірку.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_incorrect">
+      <segment>
+        <source>Le mot de passe ne permet pas d’ouvrir ce PDF.</source>
+        <target state="translated">Пароль не дозволяє відкрити цей PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_pages">
+      <segment>
+        <source>Le document dépasse la limite de 1 000 pages inspectables.</source>
+        <target state="translated">Документ перевищує ліміт у 1 000 перевіряємих сторінок.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_limit">
+      <segment>
+        <source>Le document contient trop d’éléments distincts pour produire un rapport fiable dans les limites locales.</source>
+        <target state="translated">Документ містить занадто багато окремих елементів для створення надійного звіту в локальних межах.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_invalid">
+      <segment>
+        <source>Le fichier ne contient pas une structure PDF valide.</source>
+        <target state="translated">Файл не містить дійсної структури PDF.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_generic">
+      <segment>
+        <source>Impossible d’inspecter ce PDF. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Не вдалося перевірити цей PDF. Він може бути пошкоджений або використовувати непідтримувану функцію.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_target_too_long">
+      <segment>
+        <source>Cible trop longue pour être affichée</source>
+        <target state="translated">Ціль занадто довга, щоб її відобразити</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_contact">
+      <segment>
+        <source>Contact</source>
+        <target state="translated">Контакт</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_location">
+      <segment>
+        <source>Lieu</source>
+        <target state="translated">Місце</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_reason">
+      <segment>
+        <source>Motif</source>
+        <target state="translated">Причина</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_sound">
+      <segment>
+        <source>Son</source>
+        <target state="translated">Звук</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_video">
+      <segment>
+        <source>Vidéo</source>
+        <target state="translated">Відео</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_screen">
+      <segment>
+        <source>Écran</source>
+        <target state="translated">Екран</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>

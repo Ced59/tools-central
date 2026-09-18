@@ -85713,6 +85713,702 @@ Pour interpréter correctement un pourcentage, identifie toujours clairement ce 
         <target state="translated">Inhaltstyp</target>
       </segment>
     </unit>
+    <unit id="tool_pdf_privacy_inspector_title">
+      <segment>
+        <source>Inspecteur de confidentialité PDF</source>
+        <target state="translated">PDF-Datenschutzinspektor</target>
+      </segment>
+    </unit>
+    <unit id="tool_pdf_privacy_inspector_desc">
+      <segment>
+        <source>Repérer localement métadonnées, pièces jointes, JavaScript, liens, formulaires, signatures et chiffrement avant partage.</source>
+        <target state="translated">Lokale Erkennung von Metadaten, Anhängen, JavaScript, Links, Formularen, Signaturen und Verschlüsselung vor dem Teilen.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_title">
+      <segment>
+        <source>Contrôler les traces cachées d’un PDF avant de le partager</source>
+        <target state="translated">Versteckte Spuren eines PDFs vor dem Teilen überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_lead">
+      <segment>
+        <source>Un PDF peut conserver le nom de son auteur, une pièce jointe, un formulaire rempli, une URL de suivi ou du code déclenché par certains lecteurs. Cet inspecteur rassemble ces signaux dans un rapport local, lisible et exportable, sans ouvrir les fichiers embarqués ni contacter les liens détectés.</source>
+        <target state="translated">Ein PDF kann den Namen seines Autors, einen Anhang, ein ausgefülltes Formular, eine Tracking-URL oder Code enthalten, der von bestimmten Lesern ausgelöst wird. Dieser Inspektor sammelt diese Signale in einem lokalen, lesbaren und exportierbaren Bericht, ohne die eingebetteten Dateien zu öffnen oder die erkannten Links zu kontaktieren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_use_cases">
+      <segment>
+        <source>Quand inspecter la confidentialité d’un PDF ?</source>
+        <target state="translated">Wann die Privatsphäre eines PDFs überprüfen?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_title">
+      <segment>
+        <source>Avant un envoi externe</source>
+        <target state="translated">Vor einem externen Versand</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc1_text">
+      <segment>
+        <source>Contrôlez un contrat, un rapport ou une présentation convertie en PDF avant de l’envoyer à un client, un candidat, une administration ou un partenaire.</source>
+        <target state="translated">Überprüfen Sie einen Vertrag, einen Bericht oder eine Präsentation, die in PDF umgewandelt wurde, bevor Sie sie an einen Kunden, einen Bewerber, eine Behörde oder einen Partner senden.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_title">
+      <segment>
+        <source>À la réception d’un document complexe</source>
+        <target state="translated">Beim Empfang eines komplexen Dokuments</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc2_text">
+      <segment>
+        <source>Repérez les pièces jointes, scripts et actions automatiques avant d’ouvrir le fichier dans un lecteur riche. L’inspecteur n’exécute jamais ces éléments.</source>
+        <target state="translated">Erkennen Sie Anhänge, Skripte und automatische Aktionen, bevor Sie die Datei in einem Rich-Reader öffnen. Der Inspektor führt diese Elemente niemals aus.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_title">
+      <segment>
+        <source>Pour documenter une revue</source>
+        <target state="translated">Zur Dokumentation einer Überprüfung</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_uc3_text">
+      <segment>
+        <source>Téléchargez le JSON afin de conserver la version PDF, le nombre de pages, les catégories trouvées, leur sévérité et les limites explicites de l’analyse.</source>
+        <target state="translated">Laden Sie das JSON herunter, um die PDF-Version, die Seitenanzahl, die gefundenen Kategorien, deren Schweregrad und die expliziten Grenzen der Analyse zu speichern.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage">
+      <segment>
+        <source>Ce que le rapport examine réellement</source>
+        <target state="translated">Was der Bericht tatsächlich untersucht</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_1">
+      <segment>
+        <source>Les dictionnaires d’information et les propriétés XMP peuvent révéler auteur, logiciel, dates, mots-clés ou identifiants documentaires. Le rapport affiche uniquement les valeurs pertinentes et les borne pour préserver la réactivité.</source>
+        <target state="translated">Informationsdictionaries und XMP-Eigenschaften können Autor, Software, Daten, Schlüsselwörter oder Dokumenten-IDs offenbaren. Der Bericht zeigt nur die relevanten Werte an und begrenzt sie, um die Reaktivität zu wahren.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_2">
+      <segment>
+        <source>Les fichiers embarqués, URL externes, champs AcroForm ou XFA et signatures sont inventoriés sans extraire leurs données sensibles. Une valeur de formulaire est comptée comme présente, mais n’est jamais recopiée dans le rapport.</source>
+        <target state="translated">Eingebettete Dateien, externe URLs, AcroForm- oder XFA-Felder und Signaturen werden inventarisiert, ohne ihre sensiblen Daten zu extrahieren. Ein Formularwert wird als vorhanden gezählt, aber niemals im Bericht wiedergegeben.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_coverage_3">
+      <segment>
+        <source>PDF.js détecte les actions JavaScript au niveau du document, des pages et des formulaires. Leur code n’est ni affiché, ni évalué, ni transmis. Les actions d’ouverture ou de lancement connues sont signalées séparément.</source>
+        <target state="translated">PDF.js erkennt JavaScript-Aktionen auf Dokumenten-, Seiten- und Formularebene. Ihr Code wird weder angezeigt, noch bewertet oder übermittelt. Bekannte Öffnungs- oder Startaktionen werden separat gemeldet.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_interpretation">
+      <segment>
+        <source>Interpréter les niveaux d’attention</source>
+        <target state="translated">Die Aufmerksamkeitsebenen interpretieren</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_title">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Hohe Aufmerksamkeit</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_high_text">
+      <segment>
+        <source>JavaScript, action automatique sensible ou fichier embarqué demande une revue avant diffusion. Leur présence n’établit pas à elle seule une intention malveillante.</source>
+        <target state="translated">JavaScript, sensible automatische Aktionen oder eingebettete Dateien erfordern eine Überprüfung vor der Verbreitung. Ihre Anwesenheit allein stellt nicht unbedingt eine böswillige Absicht dar.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_title">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Zu überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_medium_text">
+      <segment>
+        <source>Les liens externes, formulaires remplis et structures XFA peuvent transmettre ou conserver des informations selon le lecteur et l’usage du document.</source>
+        <target state="translated">Externe Links, ausgefüllte Formulare und XFA-Strukturen können Informationen je nach Leser und Nutzung des Dokuments übermitteln oder speichern.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_title">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Spur gefunden</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_level_low_text">
+      <segment>
+        <source>Une métadonnée ou l’identité associée à une signature peut être légitime, mais mérite une décision consciente avant publication.</source>
+        <target state="translated">Eine Metadaten oder die Identität, die mit einer Signatur verbunden ist, kann legitim sein, verdient jedoch eine bewusste Entscheidung vor der Veröffentlichung.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security">
+      <segment>
+        <source>Traitement local et limites de sécurité</source>
+        <target state="translated">Lokale Verarbeitung und Sicherheitsgrenzen</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_1">
+      <segment>
+        <source>Le fichier et son éventuel mot de passe restent dans la mémoire du navigateur. L’analyse s’exécute dans un Worker et les ressources PDF.js sont servies par Tools Central.</source>
+        <target state="translated">Die Datei und ihr möglicher Passwort bleiben im Speicher des Browsers. Die Analyse wird in einem Worker ausgeführt und die Ressourcen von PDF.js werden von Tools Central bereitgestellt.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_2">
+      <segment>
+        <source>La taille est limitée à 50 Mio, le document à 1 000 pages et le nombre d’éléments distincts à 10 000. L’affichage est borné à 200 lignes tandis que les totaux complets restent dans le rapport.</source>
+        <target state="translated">Die Größe ist auf 50 MB, das Dokument auf 1.000 Seiten und die Anzahl der unterschiedlichen Elemente auf 10.000 begrenzt. Die Anzeige ist auf 200 Zeilen begrenzt, während die Gesamtsummen im Bericht verbleiben.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_security_3">
+      <segment>
+        <source>Ce contrôle structurel n’est ni un antivirus, ni une analyse du texte ou des images visibles, ni une preuve cryptographique de validité des signatures. Un résultat vide n’est donc pas un certificat d’innocuité.</source>
+        <target state="translated">Diese strukturelle Kontrolle ist weder ein Antivirus, noch eine Analyse des sichtbaren Textes oder der Bilder, noch ein kryptografischer Nachweis der Gültigkeit von Signaturen. Ein leeres Ergebnis ist daher kein Zertifikat für Unbedenklichkeit.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_faq">
+      <segment>
+        <source>Questions fréquentes sur la confidentialité des PDF</source>
+        <target state="translated">Häufig gestellte Fragen zum Datenschutz von PDFs</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q1">
+      <segment>
+        <source>Le mot de passe de mon PDF est-il enregistré ?</source>
+        <target state="translated">Wird das Passwort meines PDFs gespeichert?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a1">
+      <segment>
+        <source>Non. Il est transmis uniquement au Worker local pour déchiffrer la structure, puis disparaît avec l’état de la page, une réinitialisation ou la fermeture de l’onglet. Il n’est jamais inclus dans le JSON.</source>
+        <target state="translated">Nein. Es wird nur an den lokalen Worker übermittelt, um die Struktur zu entschlüsseln, und verschwindet dann mit dem Seitenstatus, einer Zurücksetzung oder dem Schließen des Tabs. Es wird niemals im JSON enthalten.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q2">
+      <segment>
+        <source>Un JavaScript détecté signifie-t-il que le PDF est dangereux ?</source>
+        <target state="translated">Bedeutet ein erkanntes JavaScript, dass das PDF gefährlich ist?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a2">
+      <segment>
+        <source>Pas nécessairement. Des formulaires légitimes utilisent JavaScript pour calculer ou valider des champs. Sa présence justifie toutefois une revue et l’ouverture dans un environnement adapté à la provenance du fichier.</source>
+        <target state="translated">Nicht unbedingt. Legitime Formulare verwenden JavaScript, um Felder zu berechnen oder zu validieren. Seine Anwesenheit rechtfertigt jedoch eine Überprüfung und das Öffnen in einer geeigneten Umgebung für die Herkunft der Datei.</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_q3">
+      <segment>
+        <source>Pourquoi une signature n’est-elle pas marquée comme valide ou invalide ?</source>
+        <target state="translated">Warum wird eine Signatur nicht als gültig oder ungültig gekennzeichnet?</target>
+      </segment>
+    </unit>
+    <unit id="ed_dev_pdf_privacy_a3">
+      <segment>
+        <source>Une validation fiable doit vérifier la chaîne de certificats, la révocation, l’horodatage et les octets signés. L’outil décrit seulement la présence, l’identité déclarée et la couverture exposées par le PDF.</source>
+        <target state="translated">Eine zuverlässige Validierung muss die Zertifikatskette, die Widerrufung, die Zeitstempelung und die signierten Bytes überprüfen. Das Tool beschreibt nur die Anwesenheit, die erklärte Identität und die im PDF offengelegten Abdeckungen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_back">
+      <segment>
+        <source>Retour aux outils PDF</source>
+        <target state="translated">Zurück zu den PDF-Tools</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_title">
+      <segment>
+        <source>Inspecter la confidentialité d’un PDF</source>
+        <target state="translated">Die Privatsphäre eines PDFs überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_subtitle">
+      <segment>
+        <source>Repérez métadonnées, pièces jointes, JavaScript, actions automatiques, liens, formulaires, signatures et protection avant de partager un document.</source>
+        <target state="translated">Erkennen Sie Metadaten, Anhänge, JavaScript, automatische Aktionen, Links, Formulare, Signaturen und Schutz, bevor Sie ein Dokument teilen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_local">
+      <segment>
+        <source>Aucun envoi et aucun lien suivi : l’analyse s’exécute localement dans un Worker.</source>
+        <target state="translated">Kein Versand und kein verfolgter Link: Die Analyse erfolgt lokal in einem Worker.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_one">
+      <segment>
+        <source>Étape 1</source>
+        <target state="translated">Schritt 1</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_source_title">
+      <segment>
+        <source>Choisir le PDF à contrôler</source>
+        <target state="translated">Wählen Sie das PDF zur Überprüfung aus</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick">
+      <segment>
+        <source>Sélectionner un fichier PDF</source>
+        <target state="translated">Eine PDF-Datei auswählen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pick_help">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximum · 1 000 pages · traitement local</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ maxFileSizeLabel }}"/> maximal · 1 000 Seiten · lokale Verarbeitung</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_name">
+      <segment>
+        <source>Fichier</source>
+        <target state="translated">Datei</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_file_size">
+      <segment>
+        <source>Taille</source>
+        <target state="translated">Größe</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_label">
+      <segment>
+        <source>Mot de passe du PDF</source>
+        <target state="translated">PDF-Passwort</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_password_help">
+      <segment>
+        <source>Le mot de passe reste en mémoire le temps de l’analyse et n’est ni enregistré ni inclus dans le rapport.</source>
+        <target state="translated">Das Passwort bleibt während der Analyse im Speicher und wird weder gespeichert noch im Bericht enthalten.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_inspect">
+      <segment>
+        <source>Inspecter le PDF</source>
+        <target state="translated">PDF inspizieren</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_reset">
+      <segment>
+        <source>Réinitialiser</source>
+        <target state="translated">Zurücksetzen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_processing">
+      <segment>
+        <source>Inspection structurelle locale…</source>
+        <target state="translated">Lokale strukturelle Inspektion…</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_cancel">
+      <segment>
+        <source>Annuler</source>
+        <target state="translated">Abbrechen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_step_two">
+      <segment>
+        <source>Étape 2</source>
+        <target state="translated">Schritt 2</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_result_title">
+      <segment>
+        <source>Rapport de confidentialité</source>
+        <target state="translated">Datenschutzbericht</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_download">
+      <segment>
+        <source>Télécharger le rapport JSON</source>
+        <target state="translated">JSON-Bericht herunterladen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_pages">
+      <segment>
+        <source>Pages inspectées</source>
+        <target state="translated">Untersuchte Seiten</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_total">
+      <segment>
+        <source>Occurrences détectées</source>
+        <target state="translated">Erkannte Vorkommen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_high_count">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Hohe Warnung</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_medium_count">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Zu überprüfen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_report_scope">
+      <segment>
+        <source>PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · détection structurelle sans exécution du contenu actif.</source>
+        <target state="translated">PDF <ph id="0" equiv="INTERPOLATION" disp="{{ report.pdfVersion }}"/> · <ph id="1" equiv="INTERPOLATION_1" disp="{{ encryptionLabel(report) }}"/> · strukturelle Erkennung ohne Ausführung aktiver Inhalte.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_clear_state">
+      <segment>
+        <source>Aucune trace prise en charge n’a été détectée. Ce résultat ne constitue pas une certification d’innocuité : vérifiez aussi le contenu visible avant partage.</source>
+        <target state="translated">Es wurden keine unterstützten Spuren erkannt. Dieses Ergebnis stellt keine Sicherheitszertifizierung dar: Überprüfen Sie auch den sichtbaren Inhalt vor der Weitergabe.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_label">
+      <segment>
+        <source>Filtrer le rapport</source>
+        <target state="translated">Bericht filtern</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_all">
+      <segment>
+        <source>Tout</source>
+        <target state="translated">Alle</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_filter_empty">
+      <segment>
+        <source>Aucun élément affichable dans cette catégorie.</source>
+        <target state="translated">Keine anzeigbaren Elemente in dieser Kategorie.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_truncated">
+      <segment>
+        <source><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> résultat(s) supplémentaire(s) restent comptés dans le rapport, mais ne sont pas affichés pour préserver la réactivité.</source>
+        <target state="translated"><ph id="0" equiv="INTERPOLATION" disp="{{ report.truncatedFindingCount }}"/> zusätzliche(n) Ergebnis(se) bleiben im Bericht gezählt, werden jedoch nicht angezeigt, um die Reaktionsfähigkeit zu erhalten.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guidance">
+      <segment>
+        <source>Portée du contrôle</source>
+        <target state="translated">Umfang der Kontrolle</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active">
+      <segment>
+        <source>Le code n’est jamais exécuté</source>
+        <target state="translated">Der Code wird niemals ausgeführt</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_active_text">
+      <segment>
+        <source>Le moteur inventorie JavaScript et actions automatiques sans lancer le script, ouvrir une pièce jointe ni visiter une URL.</source>
+        <target state="translated">Die Engine inventarisiert JavaScript und automatische Aktionen, ohne das Skript auszuführen, einen Anhang zu öffnen oder eine URL zu besuchen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature">
+      <segment>
+        <source>Présence, pas validation</source>
+        <target state="translated">Präsenz, keine Validierung</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_signature_text">
+      <segment>
+        <source>Une signature est décrite par ses métadonnées et sa couverture. Son certificat et son intégrité cryptographique ne sont pas vérifiés.</source>
+        <target state="translated">Eine Signatur wird durch ihre Metadaten und ihre Abdeckung beschrieben. Ihr Zertifikat und ihre kryptografische Integrität werden nicht überprüft.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next">
+      <segment>
+        <source>Nettoyer ensuite</source>
+        <target state="translated">Danach bereinigen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_guide_next_text">
+      <segment>
+        <source>L’inspecteur ne modifie jamais le document.</source>
+        <target state="translated">Der Inspektor ändert das Dokument niemals.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_sanitize_link">
+      <segment>
+        <source>Ouvrir le nettoyeur PDF.</source>
+        <target state="translated">PDF-Reiniger öffnen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_metadata">
+      <segment>
+        <source>Métadonnées</source>
+        <target state="translated">Metadaten</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_active">
+      <segment>
+        <source>Contenu actif</source>
+        <target state="translated">Aktiver Inhalt</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_attachments">
+      <segment>
+        <source>Pièces jointes</source>
+        <target state="translated">Anhänge</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_links">
+      <segment>
+        <source>Liens externes</source>
+        <target state="translated">Externe Links</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_forms">
+      <segment>
+        <source>Formulaires</source>
+        <target state="translated">Formulare</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_signatures">
+      <segment>
+        <source>Signatures</source>
+        <target state="translated">Signaturen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_category_encryption">
+      <segment>
+        <source>Chiffrement</source>
+        <target state="translated">Verschlüsselung</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_document_metadata">
+      <segment>
+        <source>Métadonnée du document</source>
+        <target state="translated">Dokumentmetadaten</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xmp_metadata">
+      <segment>
+        <source>Métadonnée XMP</source>
+        <target state="translated">XMP-Metadaten</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_javascript">
+      <segment>
+        <source>JavaScript embarqué</source>
+        <target state="translated">Eingebettetes JavaScript</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_automatic_action">
+      <segment>
+        <source>Action automatique</source>
+        <target state="translated">Automatische Aktion</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_embedded_file">
+      <segment>
+        <source>Fichier embarqué</source>
+        <target state="translated">Eingebettete Datei</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_external_link">
+      <segment>
+        <source>Lien externe</source>
+        <target state="translated">Externer Link</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_form_fields">
+      <segment>
+        <source>Champs de formulaire</source>
+        <target state="translated">Formularfelder</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_xfa_form">
+      <segment>
+        <source>Formulaire XFA dynamique</source>
+        <target state="translated">Dynamisches XFA-Formular</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_signature">
+      <segment>
+        <source>Signature numérique</source>
+        <target state="translated">Digitale Unterschrift</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_finding_encryption">
+      <segment>
+        <source>Protection du PDF</source>
+        <target state="translated">PDF-Schutz</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Hohe Aufmerksamkeit</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_medium">
+      <segment>
+        <source>À vérifier</source>
+        <target state="translated">Überprüfung erforderlich</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_low">
+      <segment>
+        <source>Trace trouvée</source>
+        <target state="translated">Gefundene Spur</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_severity_info">
+      <segment>
+        <source>Information</source>
+        <target state="translated">Information</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_high">
+      <segment>
+        <source>Attention forte</source>
+        <target state="translated">Hohe Aufmerksamkeit</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_medium">
+      <segment>
+        <source>Vérifications nécessaires</source>
+        <target state="translated">Überprüfungen erforderlich</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_low">
+      <segment>
+        <source>Traces de confidentialité détectées</source>
+        <target state="translated">Erkannte Datenschutzspuren</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_attention_clear">
+      <segment>
+        <source>Aucune trace prise en charge détectée</source>
+        <target state="translated">Keine erkannten Spuren vorhanden</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_encrypted_label">
+      <segment>
+        <source>protégé et déchiffré localement</source>
+        <target state="translated">lokal geschützt und entschlüsselt</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_unencrypted_label">
+      <segment>
+        <source>non chiffré</source>
+        <target state="translated">nicht verschlüsselt</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_page_context">
+      <segment>
+        <source>Page <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></source>
+        <target state="translated">Seite <ph id="0" equiv="pageNumber" disp="finding.pageNumber"/></target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_occurrences_context">
+      <segment>
+        <source><ph id="0" equiv="count" disp="finding.occurrences"/> occurrence(s)</source>
+        <target state="translated"><ph id="0" equiv="count" disp="finding.occurrences"/> Vorkommen</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_empty">
+      <segment>
+        <source>Le fichier sélectionné est vide.</source>
+        <target state="translated">Die ausgewählte Datei ist leer.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_size">
+      <segment>
+        <source>Le fichier dépasse la limite de <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</source>
+        <target state="translated">Die Datei überschreitet das Limit von <ph id="0" equiv="limit" disp="this.maxFileSizeLabel"/>.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_format">
+      <segment>
+        <source>Sélectionnez un fichier portant l’extension PDF.</source>
+        <target state="translated">Wählen Sie eine Datei mit der PDF-Erweiterung aus.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_length">
+      <segment>
+        <source>Le mot de passe dépasse la limite de sécurité de 128 caractères.</source>
+        <target state="translated">Das Passwort überschreitet das Sicherheitslimit von 128 Zeichen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_required">
+      <segment>
+        <source>Ce PDF est protégé. Saisissez son mot de passe pour poursuivre l’inspection locale.</source>
+        <target state="translated">Dieses PDF ist geschützt. Geben Sie das Passwort ein, um die lokale Inspektion fortzusetzen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_password_incorrect">
+      <segment>
+        <source>Le mot de passe ne permet pas d’ouvrir ce PDF.</source>
+        <target state="translated">Das Passwort kann dieses PDF nicht öffnen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_pages">
+      <segment>
+        <source>Le document dépasse la limite de 1 000 pages inspectables.</source>
+        <target state="translated">Das Dokument überschreitet das Limit von 1.000 überprüfbaren Seiten.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_limit">
+      <segment>
+        <source>Le document contient trop d’éléments distincts pour produire un rapport fiable dans les limites locales.</source>
+        <target state="translated">Das Dokument enthält zu viele unterschiedliche Elemente, um einen zuverlässigen Bericht innerhalb der lokalen Grenzen zu erstellen.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_invalid">
+      <segment>
+        <source>Le fichier ne contient pas une structure PDF valide.</source>
+        <target state="translated">Die Datei enthält keine gültige PDF-Struktur.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_error_generic">
+      <segment>
+        <source>Impossible d’inspecter ce PDF. Il peut être endommagé ou utiliser une fonctionnalité non prise en charge.</source>
+        <target state="translated">Dieses PDF kann nicht inspiziert werden. Es könnte beschädigt sein oder eine nicht unterstützte Funktion verwenden.</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_target_too_long">
+      <segment>
+        <source>Cible trop longue pour être affichée</source>
+        <target state="translated">Ziel zu lang, um angezeigt zu werden</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_contact">
+      <segment>
+        <source>Contact</source>
+        <target state="translated">Kontakt</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_location">
+      <segment>
+        <source>Lieu</source>
+        <target state="translated">Ort</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_signature_reason">
+      <segment>
+        <source>Motif</source>
+        <target state="translated">Grund</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_sound">
+      <segment>
+        <source>Son</source>
+        <target state="translated">Ton</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_video">
+      <segment>
+        <source>Vidéo</source>
+        <target state="translated">Video</target>
+      </segment>
+    </unit>
+    <unit id="pdf_privacy_media_screen">
+      <segment>
+        <source>Écran</source>
+        <target state="translated">Bildschirm</target>
+      </segment>
+    </unit>
   </file>
 
   </xliff>
