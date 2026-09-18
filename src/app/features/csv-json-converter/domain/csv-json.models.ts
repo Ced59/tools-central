@@ -477,8 +477,10 @@ function detectDelimiter(
   let bestConsistency = 0;
   let bestDeviation = Number.POSITIVE_INFINITY;
   let equallyConsistentCandidates: Exclude<CsvJsonDelimiter, 'auto'>[] = [];
+  const headerCandidates: Exclude<CsvJsonDelimiter, 'auto'>[] = [];
   for (const candidate of Object.keys(DELIMITERS) as Exclude<CsvJsonDelimiter, 'auto'>[]) {
     const counts = delimiterCounts(source, DELIMITERS[candidate]);
+    if ((counts[0] ?? 0) > 0) headerCandidates.push(candidate);
     const frequencies = new Map<number, number>();
     for (const count of counts) frequencies.set(count, (frequencies.get(count) ?? 0) + 1);
     const modeEntry = [...frequencies.entries()]
@@ -500,9 +502,12 @@ function detectDelimiter(
       equallyConsistentCandidates.push(candidate);
     }
   }
-  if (bestConsistency === 0 || equallyConsistentCandidates.length > 1) {
+  const ambiguousCandidates = headerCandidates.length > 1
+    ? headerCandidates
+    : equallyConsistentCandidates;
+  if (bestConsistency === 0 || ambiguousCandidates.length > 1) {
     best = 'comma';
-    addIssue(state, 'delimiter-fallback', 'warning', null, null, equallyConsistentCandidates.join(','));
+    addIssue(state, 'delimiter-fallback', 'warning', null, null, ambiguousCandidates.join(','));
   }
   return best;
 }

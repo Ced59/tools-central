@@ -47,13 +47,23 @@ describe('convertCsvJson', () => {
       CSV_DEFAULTS,
     );
     const noCommaCandidate = convertCsvJson('a;b\tc\n1;2\t3', CSV_DEFAULTS);
+    const irregularCommaCandidate = convertCsvJson(
+      'a,b,c;note\n1,2;foo\n3,4,5;bar',
+      CSV_DEFAULTS,
+    );
 
     expect(semicolonCandidate.detectedDelimiter).toBe('comma');
     expect(commaCandidate.detectedDelimiter).toBe('comma');
     expect(noCommaCandidate.detectedDelimiter).toBe('comma');
+    expect(irregularCommaCandidate.detectedDelimiter).toBe('comma');
     expect(semicolonCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
     expect(commaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
     expect(noCommaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
+    expect(irregularCommaCandidate.issues.some(issue => issue.code === 'delimiter-fallback')).toBe(true);
+    expect(JSON.parse(irregularCommaCandidate.output)).toEqual([
+      { a: 1, b: '2;foo', 'c;note': '' },
+      { a: 3, b: 4, 'c;note': '5;bar' },
+    ]);
   });
 
   it('respecte le choix de conserver ou supprimer les espaces des en-têtes', () => {
